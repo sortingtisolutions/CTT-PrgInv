@@ -26,10 +26,10 @@ class WhOutputContentController extends Controller
 
 
 // Lista los proyectos
-public function listProjects($request_params)
+public function listProjects()
 {
     $params =  $this->session->get('user');
-    $result = $this->model->listProjects($request_params);
+    $result = $this->model->listProjects();
     $i = 0;
     while($row = $result->fetch_assoc()){
         $rowdata[$i] = $row;
@@ -44,10 +44,10 @@ public function listProjects($request_params)
 }
 
 // Lista los productos
-     public function listDetailProds($request_params)
+     public function listDetailProds()
      {
          $params =  $this->session->get('user');
-         $result = $this->model->listDetailProds($request_params);
+         $result = $this->model->listDetailProds();
          $i = 0;
          while($row = $result->fetch_assoc()){
              $rowdata[$i] = $row;

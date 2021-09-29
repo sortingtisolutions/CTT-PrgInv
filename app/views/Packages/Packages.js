@@ -13,6 +13,7 @@ function inicial() {
     getSubcategory();
     getProducts();
     getPackages();
+    console.log('PASO 1');
     $('#txtPackageName').on('change', function () {
         validator_part01();
     });

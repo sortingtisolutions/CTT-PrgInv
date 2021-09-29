@@ -10,8 +10,6 @@
     <div class="contenido">
             
         <div class="row mvst_group">
-
-
             <div class="mvst_panel">
                 <div class="form-group">
                 <div class="form_primary">
@@ -115,21 +113,21 @@
 
 
             <div class="mvst_table">
-                <h1>Detalles</h1>
-                    <h3>Asignacion de Productos</h3>
-                    <table class="display compact nowrap"  id="tblAsignedProd">
-                        <thead>
-                             <tr>
+			<h1> </h1>
+                        <h3>Asignacion de Productos</h3>
+                        <table class="display compact nowrap"  id="tblAsignedProd">
+                            <thead>
+                                <tr>
                                     <th style="width:  40px"></th>
-                                    <th style="width:  90px">SKU</th>
-                                    <th style="width:  Auto">Descripcion</th>
-                                    <th style="width:  90px">Num. Serie</th>
+                                    <th style="width:  70px">SKU</th>
+                                    <th style="width:  auto">Descripcion</th>
+                                    <th style="width:  70px">Num. Serie</th>
 									<th style="width:  70px">Cantidad</th>
-									<th style="width:  70px">Tipo de Producto</th>
-                             </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                                    <th style="width:  70px">Tipo Producto</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
             </div>           
         </div>
     </div>
@@ -188,6 +186,6 @@
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
-<script src="<?=  PATH_VIEWS . 'Packages/Packages.js' ?>"></script>
+<script src="<?=  PATH_VIEWS . 'WhOutputContent/WhOutputContent.js' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
