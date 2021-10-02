@@ -403,23 +403,10 @@ public function saveBudgetList($params)
 
     public function SettingSeries($params)
     {
-        $prodId        = $this->db->real_escape_string($params['prodId']);
-        $pjetId        = $this->db->real_escape_string($params['pjetId']);
-        $dtinic        = $this->db->real_escape_string($params['dtinic']);
-        $dtfinl        = $this->db->real_escape_string($params['dtfinl']);
-        $bdgsku        = $this->db->real_escape_string($params['bdgsku']);
-        $bdgnme        = $this->db->real_escape_string($params['bdgnme']);
-        $bdgprc        = $this->db->real_escape_string($params['bdgprc']);
-        $bdglvl        = $this->db->real_escape_string($params['bdglvl']);
-        $bdgqty        = $this->db->real_escape_string($params['bdgqty']);
-        $dybase        = $this->db->real_escape_string($params['dybase']);
-        $dsbase        = $this->db->real_escape_string($params['dsbase']);
-        $dytrip        = $this->db->real_escape_string($params['dytrip']);
-        $dstrip        = $this->db->real_escape_string($params['dstrip']);
-        $dytest        = $this->db->real_escape_string($params['dytest']);
-        $dstest        = $this->db->real_escape_string($params['dstest']);
-        $bdgIns        = $this->db->real_escape_string($params['bdgIns']);
-        $versId        = $this->db->real_escape_string($params['versId']);
+        $prodId   = $this->db->real_escape_string($params['prodId']);
+        $dtinic   = $this->db->real_escape_string($params['dtinic']);
+        $dtfinl   = $this->db->real_escape_string($params['dtfinl']);
+        $pjetId   = $this->db->real_escape_string($params['pjetId']);
 
         $qry = "SELECT ser_id, ser_sku FROM ctt_series WHERE prd_id = $prodId 
                 AND ser_reserve_start is null AND ser_reserve_end is null
@@ -436,7 +423,7 @@ public function saveBudgetList($params)
                             ser_reserve_start = '$dtinic', 
                             ser_reserve_end   = '$dtfinl', 
                             ser_reserve_count = ser_reserve_count + 1, 
-                            pjtdt_id = $pjetId WHERE ser_id = $serie;";
+                            pjtcn_id = $pjetId WHERE ser_id = $serie;";
             $this->db->query($qry1);
 
         }else {
@@ -446,12 +433,10 @@ public function saveBudgetList($params)
 
         
         $qry2 = "INSERT INTO ctt_projects_detail (
-            pjtdt_prod_sku, pjtdt_prod_name, pjtdt_prod_price, pjtdt_prod_level, pjtdt_quantity, pjtdt_days_base, pjtdt_discount_base, pjtdt_days_trip, 
-            pjtdt_discount_trip, pjtdt_days_test, pjtdt_discount_test, pjtdt_insured, ser_id, pjtcn_id
-        ) VALUES (
-            '$sersku', '$bdgnme', '$bdgprc', '$bdglvl', '$bdgqty', '$dybase', '$dsbase', '$dytrip', 
-            '$dstrip', '$dytest', '$dstest', '$bdgIns', '$serie',  '$pjetId'
-        );        ";
+                    pjtdt_prod_sku, ser_id, prd_id, pjtcn_id
+                ) VALUES (
+                    '$sersku', '$serie',  '$prodId',  '$pjetId'
+                );        ";
 
         $this->db->query($qry2);
         return  $serie;

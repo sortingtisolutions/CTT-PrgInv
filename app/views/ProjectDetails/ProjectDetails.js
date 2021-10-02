@@ -108,9 +108,9 @@ function get_discounts() {
 }
 
 /**  Obtiene el listado de proyectos */
-function get_products(word) {
+function get_products(word, dstr, dend) {
     var pagina = 'ProjectDetails/listProducts';
-    var par = `[{"word":"${word}"}]`;
+    var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = put_products;
     caching_events('get_products');
@@ -201,7 +201,6 @@ function put_rel_projects(dt) {
 }
 /**  Llena el listado de versiones */
 function put_version(dt) {
-    console.log(dt);
     caching_events('put_version');
     let H = `
     <div class="full text_center">
@@ -249,7 +248,7 @@ function put_budgets(dt) {
     if (dt[0].pjtcn_id > 0) {
         $.each(dt, function (v, u) {
             let jsn = JSON.stringify(u);
-            fill_budget_prods(jsn, days);
+            fill_budget_prods(jsn, days, '1');
         });
     } else {
         console.log('no budgets there are');
@@ -276,7 +275,7 @@ function put_products(dt) {
         }
         if (u.prd_name != undefined) {
             let H = `
-                <li data_indx ="${v}" data_content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}">
+                <li data_indx ="${v}" data_content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.srv_id}">
                     <div class="prodName">${u.prd_name}</div>
                     <div class="prodStock">${u.stock}</div>
                     <div class="prodLevel">${level}</div>
@@ -286,10 +285,12 @@ function put_products(dt) {
         }
     });
 
-    $('.list_products ul li').on('click', function () {
-        let inx = $(this).attr('data_indx');
-        fill_budget(prod[inx], vers, inx);
-    });
+    $('.list_products ul li')
+        .unbind('click')
+        .on('click', function () {
+            let inx = $(this).attr('data_indx');
+            fill_budget(prod[inx], inx);
+        });
 }
 
 /**  Activa los botones de acciones */
@@ -698,7 +699,7 @@ function build_menu_control() {
                 break;
             case 'printr':
                 alert('Imprimir proyecto');
-                print_project()
+                print_project();
                 break;
             case 'expexl':
                 alert('Exportar proyecto a Excel');
@@ -919,10 +920,9 @@ function resp_budget(dt) {
 }
 
 /**  +++++ Guarda el producto en la cotización +++++ */
-function fill_budget(pr, vr, ix) {
+function fill_budget(pr, ix) {
     caching_events('fill_budget');
     // console.log(pr);
-    // console.log(vr);
     // console.log(ix);
 
     $('#Products .sel_product').text('');
@@ -936,7 +936,6 @@ function fill_budget(pr, vr, ix) {
         "prdPrice"  : "${pr.prd_price}",
         "prdId"     : "${pr.prd_id}",
         "prdInsur"  : "${insurance}",
-        "verId"     : "${vr}",
         "indx"      : "${ix}"
     }]
     `;
@@ -955,25 +954,28 @@ function load_budget(inx, bdgId) {
     let days = get_days_period();
 
     let par = `{
-        "bdg_id"            : "${bdgId}",
-        "bdg_prod_sku"      : "${prod[inx].prd_sku}",
-        "bdg_prod_name"     : "${produ}",
-        "bdg_prod_price"    : "${prod[inx].prd_price}",
-        "bdg_quantity"      : "1",
-        "bdg_days_base"     : "${days}",
-        "bdg_discount_base" : "0",
-        "bdg_days_trip"     : "0",
-        "bdg_discount_trip" : "0",
-        "bdg_days_test"     : "0",
-        "bdg_discount_test" : "0",
-        "bdg_insured"       : "${insurance}",
-        "bdg_prod_level"    : "${prod[inx].prd_level}",
-        "prd_id"            : "${prod[inx].prd_id}"
+        "pjtcn_id"            : "${bdgId}",
+        "pjtcn_prod_sku"      : "${prod[inx].prd_sku}",
+        "pjtcn_prod_name"     : "${produ}",
+        "pjtcn_prod_price"    : "${prod[inx].prd_price}",
+        "pjtcn_quantity"      : "1",
+        "pjtcn_days_base"     : "${days}",
+        "pjtcn_discount_base" : "0",
+        "pjtcn_days_trip"     : "0",
+        "pjtcn_discount_trip" : "0",
+        "pjtcn_days_test"     : "0",
+        "pjtcn_discount_test" : "0",
+        "pjtcn_insured"       : "${insurance}",
+        "pjtcn_prod_level"    : "${prod[inx].prd_level}",
+        "prd_id"              : "${prod[inx].prd_id}",
+        "srv_id"              : "${prod[inx].srv_id}"
     }
     `;
+
     let ky = registered_product('bdg' + prod[inx].prd_id);
     if (ky == 0) {
-        fill_budget_prods(par, days);
+        //fill_budget_prods(par, days, '2');
+        add_new_product(par);
     }
 }
 
@@ -982,7 +984,12 @@ function registered_product(id) {
     $('.frame_content table tbody tr').each(function () {
         let idp = $(this).attr('id');
         if (id == idp) {
-            let qty = parseInt($(this).children('td.qtybase').text()) + 1;
+            console.log(id);
+            let qty = parseInt($(this).children('td.qtybase').text()) + 1; // Nueva cantidad
+            let pjtcnId = $(this).attr('data_project'); // Id de la linea del contenido del proyecto
+            let prdId = id.substring(3, id.length); // Id del producto
+            let level = $(this).attr('data_level'); // Tipo de producto
+            let qtyAnt = parseInt($(this).children('td.qtybase').attr('qty_base')); // Cantidad Anterior
             $(this).children('td.qtybase').text(qty);
             update_totals();
             $('.sel_product').text('');
@@ -991,28 +998,37 @@ function registered_product(id) {
                 $(`#Products .list_products ul`).html('');
             });
             ky = 1;
+            // alert('incrementa uno la cantidad de productos ');
+            updating_quantity($(this), qty, qtyAnt);
         }
     });
     return ky;
 }
 
 /** ++++++ Llena la tabla de cotizaciones */
-function fill_budget_prods(pd, days) {
+function fill_budget_prods(pd, days, st) {
     caching_events('fill_budget_prods');
     let pds = JSON.parse(pd);
-
+    // console.log(pds);
+    let prodName = pds.pjtcn_prod_name.toString().replace(/°/g, '"');
     let H = `
-    <tr id="bdg${pds.prd_id}" class="bdg${pds.prd_id}" data_sku="${pds.pjtcn_prod_sku}" data_insured="${pds.pjtcn_insured}" data_level="${pds.pjtcn_prod_level}">
-        <td class="w1 product"><i class="fas fa-ellipsis-v"></i>${pds.pjtcn_prod_name.replace(/°/g, '"')}<i class="fas fa-bars minimenu"></i></td>
-        <td class="w2 zone_01 quantity qtybase" contenteditable="true">${pds.pjtcn_quantity}</td>
+    <tr id="bdg${pds.prd_id}" class="bdg${pds.prd_id}" 
+        data_sku="${pds.pjtcn_prod_sku}" 
+        data_insured="${pds.pjtcn_insured}" 
+        data_level="${pds.pjtcn_prod_level}" 
+        data_project="${pds.pjtcn_id}" 
+        data_service="${pds.srv_id}" 
+    >
+        <td class="w1 product"><i class="fas fa-ellipsis-v"></i>${prodName}<i class="fas fa-bars minimenu"></i></td>
+        <td class="w2 zone_01 quantity qtybase editable" qty_base="${pds.pjtcn_quantity}">${pds.pjtcn_quantity}</td>
         <td class="w3 zone_01 price prcbase">${mkn(pds.pjtcn_prod_price, 'n')}</td>
-        <td class="w2 zone_01 days daybase" contenteditable="true">${pds.pjtcn_days_base}</td>
+        <td class="w2 zone_01 days daybase editable" >${pds.pjtcn_days_base}</td>
         <td class="w2 zone_01 desct desbase sel"><i class="fas fa-caret-left" id="dscbase${pds.prd_id}"></i><span>${mkn(pds.pjtcn_discount_base, 'n')}</span>%</td>
         <td class="w3 zone_01 cost costbase">0.00</td>
-        <td class="w2 zone_02 days daytrip" contenteditable="true">${pds.pjtcn_days_trip}</td>
+        <td class="w2 zone_02 days daytrip editable" >${pds.pjtcn_days_trip}</td>
         <td class="w2 zone_02 desct destrip sel"><i class="fas fa-caret-left" id="dsctrip${pds.prd_id}"></i><span>${mkn(pds.pjtcn_discount_trip, 'n')}</span>%</td>
         <td class="w3 zone_02 cost costtrip">0.00</td>
-        <td class="w2 zone_03 days daytest" contenteditable="true">${pds.pjtcn_days_test}</td>
+        <td class="w2 zone_03 days daytest editable" >${pds.pjtcn_days_test}</td>
         <td class="w2 zone_03 desct destest sel"><i class="fas fa-caret-left" id="dsctest${pds.prd_id}"></i><span>${mkn(pds.pjtcn_discount_test, 'n')}</span>%</td>
         <td class="w3 zone_03 cost costtest">0.00</td>
     </tr>
@@ -1020,6 +1036,12 @@ function fill_budget_prods(pd, days) {
     $('.table_control tbody tr:last-child').before(H);
 
     editable_disable('tbl_dynamic');
+
+    $('.editable')
+        .unbind('click')
+        .on('click', function () {
+            $(this).attr('contenteditable', true).trigger('focus');
+        });
 
     $('.sel_product').text('');
     $('.box_list_products').slideUp(200, function () {
@@ -1044,10 +1066,14 @@ function fill_budget_prods(pd, days) {
 
     update_totals();
 
-    $('.quantity').on('blur', function () {
-        hide_control_menu('none');
-        update_totals();
-    });
+    $('.quantity')
+        .unbind('blur')
+        .on('blur', function () {
+            hide_control_menu('none');
+            console.log($(this));
+            update_totals();
+            $(this).attr('contenteditable', false);
+        });
     $('.days').on('blur', function () {
         hide_control_menu('none');
         let dy = $(this).attr('class');
@@ -1548,30 +1574,16 @@ function close_modal() {
 function sel_product(res, sele) {
     if (res.length > 3) {
         $(`#${sele} .list_products ul`).html('');
-        get_products(res);
+        let dstrO = $('#PeriodProject').text().split(' - ')[0];
+        let dendO = $('#PeriodProject').text().split(' - ')[1];
+        let dstr = moment(dstrO, 'DD/MM/YYYY').format('YYYY-MM-DD');
+        let dend = moment(dendO, 'DD/MM/YYYY').format('YYYY-MM-DD');
+        get_products(res, dstr, dend);
         $('.list_products').css({display: 'block'});
     } else {
         $(`#Products .list_products ul`).html('');
         $(`.list_products`).css({display: 'none'});
     }
-}
-function x_sel_product(res, sele) {
-    if (res.length < 1) {
-        $(`#${sele} .list_products ul li`).css({display: 'block'});
-    } else {
-        $(`#${sele} .list_products ul li`).css({display: 'none'});
-    }
-
-    $(`#${sele} .list_products ul li`).each(function () {
-        var cm = $(this).attr('data_content').toUpperCase();
-
-        cm = omitirAcentos(cm);
-        var cr = cm.indexOf(res);
-        if (cr > -1) {
-            //            alert($(this).children().html())
-            $(this).css({display: 'block'});
-        }
-    });
 }
 
 /**  ++++ Omite acentos para su facil consulta */
@@ -1643,21 +1655,121 @@ function mkn(cf, tp) {
     return nm;
 }
 
-
-
 function make_project() {
     let projectId = $('#IdProject').val();
     let versionId = $('.menu_version').attr('data_content');
     console.log(projectId, versionId);
 }
 
-function print_project(){}
-
-
-
-
+function print_project() {}
 
 /**  +++++ Cachando eventos   */
 function caching_events(ev) {
-    console.log(ev);
+    // console.log(ev);
+}
+
+/**  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  */
+/**  +++++ PROCESO DE MOVIMIENTOS EN EL PROYECTO                                 */
+/**  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  */
+
+/* ++++ Modificación de la cantidad  ++++ */
+function updating_quantity(rw, qn, qa) {
+    console.log(rw);
+
+    let pjtcnid = rw[0].attributes[5].value;
+    let pjtserv = rw[0].attributes[6].value;
+    let produid = rw[0].attributes[0].value.substring(3, 100);
+    let prdlevl = rw[0].attributes[4].value;
+    let pjtcqty = 1;
+    let dytritt = daytrip / 2;
+    let daysini = dytritt + daytest;
+    let daysfnl = dytritt + daybase;
+
+    let prjDStr = moment(proj[0].pjt_date_start, 'DD/MM/YYYY').subtract('days', daysini).format('YYYYMMDD');
+    let prjDEnd = moment(proj[0].pjt_date_end, 'DD/MM/YYYY').add('days', daysfnl).format('YYYYMMDD');
+
+    let par = `[{
+                "pjtcn_id"          : "${pjtcnid}",
+                "prd_id"            : "${produid}",
+                "pjtcn_quantity"    : "${pjtcqty}",
+                "srv_id"            : "${pjtserv}",
+                "serReserveStart"   : "${prjDStr}",
+                "serReserveEnd"     : "${prjDEnd}",
+                "level"             : "${prdlevl}"
+            }]
+            `;
+    console.log(par);
+    var pagina = 'ProjectDetails/increaseQuantity';
+    var tipo = 'html';
+    var selector = show_increase_quantity;
+    caching_events('updating_quantity-increase');
+    fillField(pagina, par, tipo, selector);
+}
+
+function show_increase_quantity(dt) {
+    console.log(dt);
+}
+
+/* ++++ Agregar producto nuevo  ++++ ++++ */
+function add_new_product(pd) {
+    let pds = JSON.parse(pd);
+    let pjtcsku = pds.pjtcn_prod_sku;
+    let pjtcnnm = pds.pjtcn_prod_name;
+    let pjprice = parseFloat(pds.pjtcn_prod_price.replace(/,/g, ''));
+    let pjtcqty = parseInt(pds.pjtcn_quantity);
+    let daybase = parseInt(pds.pjtcn_days_base);
+    let dscbase = parseFloat(pds.pjtcn_discount_base);
+    let daytrip = parseInt(pds.pjtcn_days_trip);
+    let dsctrip = parseFloat(pds.pjtcn_discount_trip);
+    let daytest = parseInt(pds.pjtcn_days_test);
+    let dsctest = parseFloat(pds.pjtcn_discount_test);
+    let pjtinsr = pds.pjtcn_insured;
+    let prodlvl = pds.pjtcn_prod_level;
+    let prodsrv = pds.srv_id;
+    let produid = pds.prd_id;
+    let prjetid = proj[0].pjt_id;
+
+    let dytritt = daytrip / 2;
+    let daysini = dytritt + daytest;
+    let daysfnl = dytritt + daybase;
+
+    let prjDStr = moment(proj[0].pjt_date_start, 'DD/MM/YYYY').subtract('days', daysini).format('YYYYMMDD');
+    let prjDEnd = moment(proj[0].pjt_date_end, 'DD/MM/YYYY').add('days', daysfnl).format('YYYYMMDD');
+
+    let par = `[{
+        "pjtId"                 : "${prjetid}",
+        "pjtcnProdSku"          : "${pjtcsku}",
+        "pjtcnProdName"         : "${pjtcnnm}",
+        "pjtcnProdPrice"        : "${pjprice}",
+        "pjtcnQuantity"         : "${pjtcqty}",
+        "pjtcnDaysBase"         : "${daybase}",
+        "pjtcnDiscountBase"     : "${dscbase}",
+        "pjtcnDaysTrip"         : "${daytrip}",
+        "pjtcnDiscountTrip"     : "${dsctrip}",
+        "pjtcnDaysTest"         : "${daytest}",
+        "pjtcnDiscountTest"     : "${dsctest}",
+        "pjtcnInsured"          : "${pjtinsr}",
+        "pjtcnProdLevel"        : "${prodlvl}",
+        "prdId"                 : "${produid}",
+        "srvId"                 : "${prodsrv}",
+        "serReserveStart"       : "${prjDStr}",
+        "serReserveEnd"         : "${prjDEnd}"
+    }]
+    `;
+    var pagina = 'ProjectDetails/addNewProduct';
+    var tipo = 'json';
+    var selector = shownewproducts;
+    caching_events('add_new_product');
+    fillField(pagina, par, tipo, selector);
+}
+
+function shownewproducts(dt) {
+    let days = get_days_period();
+
+    if (dt[0].pjtcn_id > 0) {
+        $.each(dt, function (v, u) {
+            let jsn = JSON.stringify(u);
+            fill_budget_prods(jsn, days, '1');
+        });
+    }
 }

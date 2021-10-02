@@ -218,6 +218,15 @@
 <!-- End Modales -->
 
 
+<!-- Start Modales -->
+<div class="box_loading_deep">
+    <div class="box_loading">
+    <i class="fas fa-spinner"></i> Promoviendo Cotización ...
+    </div>
+</div>
+<!-- End Modales -->
+
+
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>

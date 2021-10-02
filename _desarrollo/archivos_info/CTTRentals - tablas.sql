@@ -338,7 +338,6 @@ CREATE TABLE `cttapp_cire`.`ctt_projects_content` (
     `ver_id`                    INT NOT NULL                   COMMENT 'FK Id de la version relación ctt_version',
     `prd_id`                    INT NOT NULL                   COMMENT 'FK Id del producto relación ctt_products',
     `pjt_id`                    INT NOT NULL                   COMMENT 'FK Id del proyecto relación ctt_proyect',
-
 PRIMARY KEY (`pjtcn_id`)) 
 COMMENT='Contenido del proyecto cotización promovida';
 
@@ -347,21 +346,9 @@ DROP TABLE `cttapp_cire`.`ctt_projects_detail`;
 CREATE TABLE `cttapp_cire`.`ctt_projects_detail` (
     `pjtdt_id`                   INT NOT NULL AUTO_INCREMENT    COMMENT 'Id del detalle de proyecto',
     `pjtdt_prod_sku`             VARCHAR(15)  NULL              COMMENT 'SKU identificador del producto',
-    `pjtdt_prod_name`            VARCHAR(100) NULL              COMMENT 'Nombre del producto',
-    `pjtdt_prod_price`           DECIMAL(10,2) NULL             COMMENT 'Precio unitario del producto',
-    `pjtdt_prod_level`           VARCHAR(1) DEFAULT 'P'         COMMENT 'Nivel del producto  K=Kit, P=Producto',
-    `pjtdt_quantity`             INT NULL                       COMMENT 'Cantidad de productos',
-    `pjtdt_days_base`            INT NULL                       COMMENT 'Días solicitados en renta',
-    `pjtdt_discount_base`        DECIMAL(10,2) NULL             COMMENT 'Descuento aplicado a la renta',
-    `pjtdt_days_trip`            INT NULL                       COMMENT 'Días solicitados en viaje',
-    `pjtdt_discount_trip`        DECIMAL(10,2) NULL             COMMENT 'Descuento aplicado al viaje',
-    `pjtdt_days_test`            INT NULL                       COMMENT 'Días solicitados en prueba',
-    `pjtdt_discount_test`        DECIMAL(10,2) NULL             COMMENT 'Descuento aplicado en prueba',
-    `pjtdt_insured`              DECIMAL(10,2) NULL DEFAULT .1  COMMENT 'Porcentaje de seguro',
-    `pjtdt_status`               VARCHAR(1) NULL DEFAULT 1      COMMENT 'Estatus de la serie 1-Activo, 0-Inactivo',
     `ser_id`                     INT NOT NULL                   COMMENT 'FK Id de la serie relación ctt_series',
+    `prd_id`                     INT NOT NULL                   COMMENT 'Id del producto relación con ctt_products',
     `pjtcm_id`                   INT NOT NULL                   COMMENT 'FK Id del proyecto relación ctt_projects_content',
-
 PRIMARY KEY (`pjtdt_id`)) 
 COMMENT='Detalle del proyecto, cotización promovida';
 
@@ -374,7 +361,6 @@ CREATE TABLE `cttapp_cire`.`ctt_projects_type` (
     `pjttp_max_download`    INT(11) NOT NULL                COMMENT 'Horas maximas requeridos para carga/descarga',
 PRIMARY KEY (`pjttp_id`))
 COMMENT='Tipos de proyectos o eventos que se ofrecen y siministran';
-
 
 
 DROP TABLE `cttapp_cire`.`ctt_series`;
@@ -396,10 +382,9 @@ CREATE TABLE `cttapp_cire`.`ctt_series` (
     `prd_id`                INT NULL                        COMMENT 'Id del producto relacion ctt_productos',
     `sup_id`                INT NULL                        COMMENT 'Id de la proveedor relacion ctt_suppliers',
     `cin_id`                INT NULL                        COMMENT 'Id del tipo de moneda relacion ctt_coins',
-    `pjtdt_id`              INT NULL                        COMMENT 'Id del detalle de proyecto relacion ctt_projects_detail',
+    `pjtcn_id`              INT NULL                        COMMENT 'Id del detalle de proyecto relacion ctt_projects_content',
 PRIMARY KEY (`ser_id`))
 COMMENT = 'Numero serie de productos correspondientes a un modelo.';
-
 
 
 DROP TABLE `cttapp_cire`.`ctt_services`;
@@ -412,7 +397,6 @@ PRIMARY KEY (`srv_id`))
 COMMENT = 'Tipificación de los servicios.';
 
 
-
 DROP TABLE `cttapp_cire`.`ctt_stores`;
 CREATE TABLE `cttapp_cire`.`ctt_stores` (
     `str_id`                INT NOT NULL AUTO_INCREMENT     COMMENT 'Id del almacén',
@@ -422,7 +406,6 @@ CREATE TABLE `cttapp_cire`.`ctt_stores` (
     `emp_id`                INT NULL                        COMMENT 'Id del empleado relacion ctt_employees',
 PRIMARY KEY (`str_id`))
 COMMENT = 'Listado de almacenes.';
-
 
 
 DROP TABLE `cttapp_cire`.`ctt_stores_exchange`;
@@ -445,8 +428,6 @@ PRIMARY KEY (`exc_id`))
 COMMENT = 'Movimientos de productos entre almacenes';
 
 
-
-
 DROP TABLE `cttapp_cire`.`ctt_stores_products`;
 CREATE TABLE `cttapp_cire`.`ctt_stores_products` (
     `stp_id`              INT NOT NULL AUTO_INCREMENT     COMMENT 'Id del registro',
@@ -455,9 +436,6 @@ CREATE TABLE `cttapp_cire`.`ctt_stores_products` (
     `ser_id`              INT NOT NULL                    COMMENT 'Id del numero de serie relacion ctt_series',
 PRIMARY KEY (`stp_id`))
 COMMENT='Tabla de cantidad de productos en almacen';
-
-
-
 
 
 DROP TABLE `cttapp_cire`.`ctt_subcategories`;
@@ -470,8 +448,6 @@ CREATE TABLE `cttapp_cire`.`ctt_subcategories` (
     `cat_id`                INT NOT NULL                    COMMENT 'Id del catálogo relación ctt_categories',
 PRIMARY KEY (`sbc_id`))
 COMMENT = 'Subcategorias.';
-
-
 
 
 DROP TABLE `cttapp_cire`.`ctt_subletting`;
@@ -490,7 +466,6 @@ PRIMARY KEY (`sub_id`))
 COMMENT='Tabla de situación de subarrendos';
 
 
-
 DROP TABLE `cttapp_cire`.`ctt_suppliers`;
 CREATE TABLE `cttapp_cire`.`ctt_suppliers` (
     `sup_id`                INT NOT NULL AUTO_INCREMENT     COMMENT 'Id del proveedor',
@@ -503,7 +478,6 @@ CREATE TABLE `cttapp_cire`.`ctt_suppliers` (
     `sut_id`                INT NULL                        COMMENT 'Id del tipo de proveedor relación ctt_suppliers_type',
 PRIMARY KEY (`sup_id`))
 COMMENT = 'Proveedores de la empresa.';
-
 
 
 DROP TABLE `cttapp_cire`.`ctt_suppliers_type`;
@@ -545,8 +519,6 @@ PRIMARY KEY (`usr_id`))
 COMMENT = 'Tabla de Usuarios registrados';
 
 
-
-
 DROP TABLE `cttapp_cire`.`ctt_users_modules`;
 CREATE TABLE `cttapp_cire`.`ctt_users_modules` (
     `urm_id`                INT NOT NULL AUTO_INCREMENT     COMMENT 'Id de la relacion usuario - modulo',
@@ -554,7 +526,6 @@ CREATE TABLE `cttapp_cire`.`ctt_users_modules` (
     `mod_id`                INT NOT NULL                    COMMENT 'FK Id del modulo relación ctt_modules',
 PRIMARY KEY (`urm_id`))
 COMMENT = 'Tabla pivote m_to_m ctt_usuarios - ctt_modules';
-
 
 
 DROP TABLE `cttapp_cire`.`ctt_version`;
@@ -566,6 +537,3 @@ CREATE TABLE `cttapp_cire`.`ctt_version` (
     `pjt_id`                INT NOT NULL                    COMMENT 'FK Id del projeto relación ctt_projects',
 PRIMARY KEY (`ver_id`))
 COMMENT = 'Version de docuemntos de cotización';
-
-
-
