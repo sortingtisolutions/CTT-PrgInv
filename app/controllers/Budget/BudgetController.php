@@ -325,7 +325,6 @@ public function ProcessProjectProduct($request_params)
     {  
         $params =  $this->session->get('user');
         $pjtcnt = $this->model->SaveProjectContent($request_params);
-
         $result = $this->model->GetProjectContent($request_params);
 
         while($row = $result->fetch_assoc()){
@@ -354,7 +353,6 @@ public function ProcessProjectProduct($request_params)
 
             $ttlqty = $prdexp == '2'? $quanty: 1;
             $quanty = $prdexp == '2'? 1: $quanty;
-            
 
             if ( $bdglvl == 'A' ){
                 echo 'Accesorio';
@@ -383,7 +381,6 @@ public function ProcessProjectProduct($request_params)
                     // echo $serie . ' - ' ;
                 }
             } else if ( $bdglvl == 'P' ){
-
                 for ($i = 1; $i<=$quanty; $i++){
                     $accesory = $this->model->GetAccesories($prodId);
                     while($acc = $accesory->fetch_assoc()){
@@ -436,7 +433,6 @@ public function ProcessProjectProduct($request_params)
                     $serie = $this->model->SettingSeries($params);
                 }
             } else if ( $bdglvl == 'K' ){
-                echo 'Selecciono un paquete: ' . $bdgnme;
                 for ($i = 1; $i<=$quanty; $i++){
                     $products = $this->model->GetProducts($prodId);
                     while($acc = $products->fetch_assoc()){

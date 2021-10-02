@@ -123,4 +123,174 @@ class ProjectDetailsController extends Controller
         echo $res;
     } 
 
+
+    
+// Lista los productos
+    public function listProducts($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProducts($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
+
+
+
+
+// Incrementa la cantidad de un producto ya existente
+    public function increaseQuantity($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->increaseQuantity($request_params);
+        
+        $param = array(
+            'prodId' => $request_params['prd_id'],
+            'dtinic' => $request_params['serReserveStart'],
+            'dtfinl' => $request_params['serReserveEnd'],
+            'pjetId' => $request_params['pjtcn_id'],
+            'servId' => $request_params['srv_id'],
+            'quanty' => $request_params['pjtcn_quantity'],
+            'prdlvl' => $request_params['level']
+        );
+        $succ = $this->addProjectDetail($param);
+
+    } 
+// Agrega producto
+    public function addNewProduct($request_params)
+    {
+        $params =  $this->session->get('user');
+        $servId = $request_params['srvId'];
+        $dayIni = $request_params['serReserveStart'];
+        $dayFnl = $request_params['serReserveEnd'];
+        $quanty = 1; 
+        $pjtcnId = $this->model->addNewProductContent($request_params);
+        $result = $this->model->getProjectContent($pjtcnId, $dayIni, $dayFnl);
+        
+        
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+            $param = array(
+                'prodId' => $row["prd_id"],
+                'dtinic' => $dayIni,
+                'dtfinl' => $dayFnl,
+                'pjetId' => $pjtcnId,
+                'servId' => $row['srv_id'],
+                'quanty' => $quanty,
+                'prdlvl' => $row['pjtcn_prod_level'],
+            );
+            $succ = $this->addProjectDetail($param);
+        }
+
+        if ($i > 0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjtcn_id":"0"}]';	
+        }
+
+        echo $res;
+    } 
+
+
+
+// Agrega el detalle de contenido del proyecto
+    private function addProjectDetail($request_params){
+
+        $prodId =  $request_params['prodId'];
+        $dayIni =  $request_params['dtinic'];
+        $dayFnl =  $request_params['dtfinl'];
+        $pjetId =  $request_params['pjetId'];
+        $prdLvl =  $request_params['prdlvl'];
+        $servId =  $request_params['servId'];
+
+        if ($servId == '1'){
+            if ($prdLvl == 'A'){
+                $param = array(
+                    'prodId' => $prodId, 
+                    'dtinic' => $dayIni, 
+                    'dtfinl' => $dayFnl, 
+                    'pjetId' => $pjetId, 
+                );
+                $serie = $this->model->SettingSeries($param);
+            } elseif($prdLvl == 'P'){
+                $accesory = $this->model->GetAccesories($prodId);
+                while($acc = $accesory->fetch_assoc()){
+
+                    $aprodId = $acc["prd_id"];
+                    $adtinic = $dayIni;
+                    $adtfinl = $dayFnl;
+                    $apjetId = $pjetId;
+
+                    $accparams = array(
+                        'prodId' => $aprodId, 
+                        'dtinic' => $adtinic, 
+                        'dtfinl' => $adtfinl,
+                        'pjetId' => $apjetId,
+                    );
+                    $serie = $this->model->SettingSeries($accparams);
+                }
+                $prdparam = array(
+                    'prodId' => $prodId, 
+                    'dtinic' => $dayIni, 
+                    'dtfinl' => $dayFnl, 
+                    'pjetId' => $pjetId, 
+                );
+                $serie = $this->model->SettingSeries($prdparam);
+            } elseif($prdLvl == 'K'){
+                $products = $this->model->GetProducts($prodId);
+                while($pkt = $products->fetch_assoc()){
+                    $kprodId = $pkt["prd_id"];
+                    $kdtinic = $dayIni;
+                    $kdtfinl = $dayFnl;
+                    $kpjetId = $pjetId;
+
+                    $accesory = $this->model->GetAccesories($kprodId);
+                    while($acc = $accesory->fetch_assoc()){
+
+                        $aprodId = $acc["prd_id"];
+                        $adtinic = $dayIni;
+                        $adtfinl = $dayFnl;
+                        $apjetId = $pjetId;
+    
+                        $accparams = array(
+                            'prodId' => $aprodId, 
+                            'dtinic' => $adtinic, 
+                            'dtfinl' => $adtfinl,
+                            'pjetId' => $apjetId,
+                        );
+                        $serie = $this->model->SettingSeries($accparams);
+                    }
+
+                    $pktparams = array(
+                        'prodId' => $kprodId, 
+                        'dtinic' => $kdtinic, 
+                        'dtfinl' => $kdtfinl,
+                        'pjetId' => $kpjetId,
+                    );
+                    $serie = $this->model->SettingSeries($pktparams);
+                }
+
+            }
+
+        } elseif ($servId == '2'){
+
+        }
+        return true;
+    }
+
+
+
+
+
+
 }

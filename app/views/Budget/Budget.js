@@ -791,9 +791,9 @@ function update_totals() {
 
             qtyst = parseInt(pure_num($(this).children('td.qtybase').attr('data_quantity')));
 
-            if (qtybs > qtyst) {
-                qtybs = qtyst;
-            }
+            // if (qtybs > qtyst) {
+            //     qtybs = qtyst;
+            // }
 
             $(this).children('td.qtybase').text(qtybs);
             stt01 = qtybs * prcbs; // Importe de cantidad x precio
@@ -1069,6 +1069,16 @@ function fill_budget_prods(pd, days) {
 
     $('.quantity').on('blur', function () {
         hide_control_menu('none');
+
+        qtybs = parseInt(pure_num($(this)[0].outerText));
+        qtyst = parseInt(pure_num($(this)[0].attributes[1].value));
+
+        if (qtybs > qtyst) {
+            qtybs = qtyst;
+        }
+        if (qtybs < 1) qtybs = 1;
+        $(this).html(qtybs);
+
         update_totals();
     });
     $('.days').on('blur', function () {
@@ -1700,6 +1710,7 @@ function get_budgets_promote() {
 }
 
 function promote_project() {
+    modal_loading();
     let projectId = $('#IdProject').val();
     var pagina = 'Budget/PromoteProject';
     var par = `[{"pjtId":"${projectId}"}]`;
@@ -1743,4 +1754,15 @@ function show_promote_budget(dt) {
 
 function show_result(dt) {
     console.log(dt);
+    $('.box_loading_deep').css({display: 'none'});
+}
+
+function modal_loading() {
+    $('.box_loading_deep').css({display: 'flex'});
+    $('.box_loading').animate(
+        {
+            top: '170px',
+        },
+        500
+    );
 }

@@ -64,7 +64,7 @@ class ProjectDetailsModel extends Model
 
         $qry = "SELECT pc.*, pj.pjt_id, 
                 date_format(pj.pjt_date_start, '%Y%m%d') AS pjt_date_start, 
-                date_format(pj.pjt_date_end, '%Y%m%d') AS pjt_date_end, 
+                date_format(pj.pjt_date_end, '%Y%m%d') AS pjt_date_end, pd.srv_id,
                 CASE 
                     WHEN pjtcn_prod_level ='K' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pc.prd_id)
@@ -85,7 +85,212 @@ class ProjectDetailsModel extends Model
                     END AS bdg_stock
             FROM ctt_projects_content AS pc
             INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
             WHERE pc.pjt_id = $pjtId ORDER BY pjtcn_prod_name ASC;";
         return $this->db->query($qry);
-    }  
+    } 
+    
+
+
+// Listado de productos
+    public function listProducts($params)
+    {
+
+        $word = $this->db->real_escape_string($params['word']);
+        $dstr = $this->db->real_escape_string($params['dstr']);
+        $dend = $this->db->real_escape_string($params['dend']);
+
+        $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, pd.srv_id,
+                CASE 
+                    WHEN prd_level ='K' THEN 
+                        (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
+                    WHEN prd_level ='P' THEN 
+                        (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
+                        INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
+                        WHERE prd_id =  pd.prd_id
+                        AND (ser_reserve_end < '$dstr' OR ser_reserve_end IS NULL
+                        AND ser_reserve_start > '$dend'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                        )
+                    ELSE 
+                        (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
+                        INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
+                        WHERE prd_id =  pd.prd_id
+                        AND (ser_reserve_end < '$dstr' OR ser_reserve_end IS NULL
+                        AND ser_reserve_start > '$dend'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                        )
+                    END AS stock
+            FROM ctt_products AS pd
+            WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 
+                AND upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%'
+            ORDER BY pd.prd_name ;";
+        return $this->db->query($qry);
+    } 
+
+
+// Incrementa la cantidad de un producto expendable
+    public function increaseQuantity($params)
+    {
+
+        $pjtcn_id       = $this->db->real_escape_string($params['pjtcn_id']);
+        $pjtcn_quantity = $this->db->real_escape_string($params['pjtcn_quantity']);
+
+        $qry = "UPDATE ctt_projects_content SET pjtcn_quantity = pjtcn_quantity + $pjtcn_quantity WHERE pjtcn_id = $pjtcn_id ";
+        $this->db->query($qry);
+
+        $qry1 = "   SELECT * FROM ctt_projects_content AS pj
+                    INNER JOIN ctt_products AS pd ON pd.prd_id = pj.prd_id
+                    WHERE pjtcn_id = $pjtcn_id; ";
+        return $this->db->query($qry1);
+
+
+    }
+
+
+    
+//  Lista los Projectos
+    public function getProjectContent($pjtcn_id, $dayIni, $dayFnl){
+
+        $pjtcn_id       = $this->db->real_escape_string($pjtcn_id);
+        $dayIni         = $this->db->real_escape_string($dayIni);
+        $dayFnl         = $this->db->real_escape_string($dayFnl);
+
+        $qry = "   SELECT pc.*, pj.pjt_id, 
+                        date_format(pj.pjt_date_start, '%Y%m%d') AS pjt_date_start, 
+                        date_format(pj.pjt_date_end, '%Y%m%d') AS pjt_date_end, pd.srv_id,
+                        CASE 
+                            WHEN pjtcn_prod_level ='K' THEN 
+                                (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pc.prd_id)
+                            WHEN pjtcn_prod_level ='P' THEN 
+                                (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
+                                INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
+                                WHERE prd_id =  pc.prd_id
+                                AND (ser_reserve_end < '$dayIni' OR ser_reserve_end IS NULL
+                                AND ser_reserve_start > '$dayFnl'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                                )
+                            ELSE 
+                                (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
+                                INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
+                                WHERE prd_id =  pc.prd_id
+                                AND (ser_reserve_end < '$dayIni' OR ser_reserve_end IS NULL
+                                AND ser_reserve_start > '$dayFnl'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                                )
+                            END AS bdg_stock
+                    FROM ctt_projects_content AS pc
+                    INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
+                    INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
+                    WHERE pc.pjtcn_id = $pjtcn_id; ";
+
+        return $this->db->query($qry);
+    }
+
+
+//  Agrega un nuevo producto
+    public function addNewProductContent($params)
+    {
+
+        $pjtcn_prod_sku         = $this->db->real_escape_string($params['pjtcnProdSku']);
+        $pjtcn_prod_name        = $this->db->real_escape_string($params['pjtcnProdName']);
+        $pjtcn_prod_price       = $this->db->real_escape_string($params['pjtcnProdPrice']);
+        $pjtcn_quantity         = $this->db->real_escape_string($params['pjtcnQuantity']);
+        $pjtcn_days_base        = $this->db->real_escape_string($params['pjtcnDaysBase']);
+        $pjtcn_discount_base    = $this->db->real_escape_string($params['pjtcnDiscountBase']);
+        $pjtcn_days_trip        = $this->db->real_escape_string($params['pjtcnDaysTrip']);
+        $pjtcn_discount_trip    = $this->db->real_escape_string($params['pjtcnDiscountTrip']);
+        $pjtcn_days_test        = $this->db->real_escape_string($params['pjtcnDaysTest']);
+        $pjtcn_discount_test    = $this->db->real_escape_string($params['pjtcnDiscountTest']);
+        $pjtcn_insured          = $this->db->real_escape_string($params['pjtcnInsured']);
+        $pjtcn_prod_level       = $this->db->real_escape_string($params['pjtcnProdLevel']);
+        $prd_id                 = $this->db->real_escape_string($params['prdId']);
+        $pjt_id                 = $this->db->real_escape_string($params['pjtId']);
+        $dtinic                 = $this->db->real_escape_string($params['serReserveStart']);
+        $dtfinl                 = $this->db->real_escape_string($params['serReserveEnd']);
+
+        $qry = "INSERT INTO ctt_projects_content (
+                    pjtcn_prod_sku,     pjtcn_prod_name,        pjtcn_prod_price,       pjtcn_quantity,
+                    pjtcn_days_base,    pjtcn_discount_base,    pjtcn_days_trip,        pjtcn_discount_trip, 
+                    pjtcn_days_test,    pjtcn_discount_test,    pjtcn_insured,          pjtcn_prod_level,
+                    prd_id, pjt_id) 
+                VALUES (
+                    '$pjtcn_prod_sku',  '$pjtcn_prod_name',     '$pjtcn_prod_price',    '$pjtcn_quantity',
+                    '$pjtcn_days_base', '$pjtcn_discount_base', '$pjtcn_days_trip',     '$pjtcn_discount_trip',
+                    '$pjtcn_days_test', '$pjtcn_discount_test', '$pjtcn_insured',       '$pjtcn_prod_level',
+                    '$prd_id','$pjt_id');
+                ";
+
+        $this->db->query($qry);
+        $pjtcnId = $this->db->insert_id;
+
+        return $pjtcnId;
+
+    }
+
+
+//  Asigna las series y el detalle del producto agregado
+    public function SettingSeries($params)
+    {
+        $prodId   = $this->db->real_escape_string($params['prodId']);
+        $dtinic   = $this->db->real_escape_string($params['dtinic']);
+        $dtfinl   = $this->db->real_escape_string($params['dtfinl']);
+        $pjetId   = $this->db->real_escape_string($params['pjetId']);
+
+        $qry = "SELECT ser_id, ser_sku FROM ctt_series WHERE prd_id = $prodId 
+                AND ser_reserve_start is null AND ser_reserve_end is null
+                ORDER BY ser_reserve_count asc LIMIT 1;";
+        $result =  $this->db->query($qry);
+        
+        $series = $result->fetch_object();
+        if ($series != null){
+            $serie  = $series->ser_id; 
+            $sersku  = $series->ser_sku; 
+
+            $qry1 = "UPDATE ctt_series 
+                        SET 
+                            ser_reserve_start = '$dtinic', 
+                            ser_reserve_end   = '$dtfinl', 
+                            ser_reserve_count = ser_reserve_count + 1, 
+                            pjtcn_id = $pjetId WHERE ser_id = $serie;";
+            $this->db->query($qry1);
+
+        }else {
+            $serie  = null; 
+            $sersku  = 'Pendiente';
+        }
+
+        
+        $qry2 = "INSERT INTO ctt_projects_detail (
+                    pjtdt_prod_sku, ser_id, prd_id, pjtcn_id
+                ) VALUES (
+                    '$sersku', '$serie',  '$prodId',  '$pjetId'
+                );        ";
+
+        $this->db->query($qry2);
+        return  $serie;
+    }
+
+
+//  Obtiene los accesorios relacionados
+    public function GetAccesories($params)
+    {
+        $prodId = $this->db->real_escape_string($params);
+
+        $qry = "SELECT pd.* FROM ctt_products AS pd
+                INNER JOIN ctt_accesories AS ac ON ac.prd_id = pd.prd_id 
+                WHERE ac.acr_parent = $prodId;";
+        return $this->db->query($qry);
+
+    }
+
+    
+//  Obtiene los productos del paquete
+    public function GetProducts($params)
+    {
+        $prodId        = $this->db->real_escape_string($params);
+        $qry = "SELECT pd.* 
+                FROM ctt_products_packages AS pk 
+                INNER JOIN ctt_products AS pd ON pd.prd_id = pk.prd_id
+                WHERE  pk.prd_parent = $prodId;";
+        return $this->db->query($qry);
+
+    }
+
 }
