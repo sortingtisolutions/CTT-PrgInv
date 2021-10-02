@@ -28,6 +28,7 @@ function getSelectProject(pjtid) {
     var tipo = 'json';
     var selector = putSelectProject;
     fillField(pagina, par, tipo, selector);
+    //ALGO
 }
 
 /** +++++  coloca los productos en la tabla */
