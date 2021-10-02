@@ -231,7 +231,7 @@ function settingTable() {
     let title = 'Lista de productos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#tblProducts').DataTable({
-        order: [[4, 'desc']],
+        order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
             [100, 200, 300, -1],
@@ -318,7 +318,6 @@ function activeIcons() {
             let qty = $(this).parent().attr('data-content').split('|')[2];
             let pkt = $(this).parent().attr('data-content').split('|')[3];
             let pkn = $(this).parent().attr('data-content').split('|')[1];
-
             if (qty > 0) {
                 getSeries(prd);
             }
@@ -808,6 +807,7 @@ function build_modal_serie(dt) {
 }
 
 function activeIconsSerie() {
+    
     $('.invoiceViewSer')
         .unbind('click')
         .on('click', function () {
@@ -882,6 +882,7 @@ function putDelSerie(dt) {
 }
 
 function putSelectSerie(dt) {
+    console.log('3ro Click Modal');
     $('#txtSerIdSerie').val(dt[0].ser_id);
     $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 7) + '-' + dt[0].ser_sku.slice(7, 11));
     $('#txtSerSerialNumber').val(dt[0].ser_serial_number);

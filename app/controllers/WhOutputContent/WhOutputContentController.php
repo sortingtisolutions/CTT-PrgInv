@@ -61,4 +61,58 @@ public function listProjects()
          echo $res;
      } 
 
+     // Lista las series
+public function listSeries($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->listSeries();
+    $i = 0;
+    while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+    }
+    if ($i>0){
+        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    } else {
+        $res =  '[{"ser_id":"0"}]';	
+    }
+    echo $res;
+}
+
+public function listSeriesFree($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->listSeriesFree();
+    $i = 0;
+    while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+    }
+    if ($i>0){
+        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    } else {
+        $res =  '[{"ser_id":"0"}]';	
+    }
+    echo $res;
+}
+
+// Obtiene datos del producto seleccionado
+public function getSelectSerie($request_params)
+{
+	$params =  $this->session->get('user');
+	$result = $this->model->getSelectSerie($request_params);
+	$i = 0;
+	while($row = $result->fetch_assoc()){
+		$rowdata[$i] = $row;
+		$i++;
+	}
+	if ($i>0){
+		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+	} else {
+		$res =  '[{"ser_id":"0"}]';	
+	}
+	echo $res;
+}
+
+	
 }
