@@ -618,6 +618,32 @@ function show_minimenues(idsel, x, y) {
     psx = x - 50;
     let H = '';
 
+    let sll = '';
+    switch (idsel.slice(0, 7)) {
+        case 'daybase':
+            sll = 3;
+            break;
+        case 'dscbase':
+        case 'desbase':
+            sll = 4;
+            break;
+        case 'daytrip':
+            sll = 6;
+            break;
+        case 'dsctrip':
+        case 'destrip':
+            sll = 7;
+            break;
+        case 'daytest':
+            sll = 9;
+            break;
+        case 'dsctest':
+        case 'destest':
+            sll = 10;
+            break;
+        default:
+    }
+
     if (inic == 'day') {
         H = `
         <div class="box_days">
@@ -630,10 +656,12 @@ function show_minimenues(idsel, x, y) {
 
         $('.minitext').on('mouseout', function () {
             let dys = $('.minitext').val();
+            console.log(idsel);
             dys = days_validator(dys, days, idsel);
             $('.' + idsel).text(dys);
             update_totals();
             $('.box_days').remove();
+            updatesData(sll);
         });
     } else if (inic == 'dsc') {
         fill_discount(psy, psx);
@@ -648,7 +676,9 @@ function show_minimenues(idsel, x, y) {
                     .parent()
                     .children('span')
                     .text(mkn(desc, 'p'));
+
                 update_totals();
+                updatesData(sll);
             });
     } else {
         fill_discount(psy, psx);
@@ -657,13 +687,14 @@ function show_minimenues(idsel, x, y) {
             .unbind('click')
             .on('click', function () {
                 let ds = $(this).attr('data_content');
-                console.log(ds);
+
                 $('.box_desc').remove();
                 let desc = ds * 100;
                 $('.' + idsel)
                     .children('span')
                     .text(mkn(desc, 'p'));
                 update_totals();
+                updatesData(sll);
             });
     }
 }
@@ -999,7 +1030,7 @@ function registered_product(id) {
             });
             ky = 1;
             // alert('incrementa uno la cantidad de productos ');
-            updating_quantity($(this), qty, qtyAnt);
+            updating_quantity($(this), qty, qtyAnt, 'NP');
         }
     });
     return ky;
@@ -1009,6 +1040,7 @@ function registered_product(id) {
 function fill_budget_prods(pd, days, st) {
     caching_events('fill_budget_prods');
     let pds = JSON.parse(pd);
+    let sll = '';
     // console.log(pds);
     let prodName = pds.pjtcn_prod_name.toString().replace(/°/g, '"');
     let H = `
@@ -1070,31 +1102,45 @@ function fill_budget_prods(pd, days, st) {
         .unbind('blur')
         .on('blur', function () {
             hide_control_menu('none');
-            console.log($(this));
+
+            let qtyPrev = $(this)[0].attributes[1].value;
+            let qtyCurr = $(this)[0].outerText;
+            let rw = $(this).parent();
+            let qtytot = qtyCurr < 1 ? 1 : qtyCurr;
+            $(this)[0].innerHTML = qtytot;
+
+            updating_quantity(rw, qtytot, qtyPrev, 'IN');
             update_totals();
             $(this).attr('contenteditable', false);
         });
-    $('.days').on('blur', function () {
-        hide_control_menu('none');
-        let dy = $(this).attr('class');
-        if (dy.indexOf('daybase') >= 0) {
-            let dys = $(this).text();
-            let sel = 'daybase';
-            dys = days_validator(dys, days, sel);
-            $(this).text(dys);
-        } else if (dy.indexOf('daytrip') >= 0) {
-            let dys = $(this).text();
-            let sel = 'daytrip';
-            dys = days_validator(dys, days, sel);
-            $(this).text(dys);
-        } else if (dy.indexOf('daytest') >= 0) {
-            let dys = $(this).text();
-            let sel = 'daytest';
-            dys = days_validator(dys, days, sel);
-            $(this).text(dys);
-        }
-        update_totals();
-    });
+    $('.days')
+        .unbind('blur')
+        .on('blur', function () {
+            hide_control_menu('none');
+            let dy = $(this).attr('class');
+            if (dy.indexOf('daybase') >= 0) {
+                let dys = $(this).text();
+                let sel = 'daybase';
+                dys = days_validator(dys, days, sel);
+                $(this).text(dys);
+                sll = 3;
+            } else if (dy.indexOf('daytrip') >= 0) {
+                let dys = $(this).text();
+                let sel = 'daytrip';
+                dys = days_validator(dys, days, sel);
+                $(this).text(dys);
+                sll = 6;
+            } else if (dy.indexOf('daytest') >= 0) {
+                let dys = $(this).text();
+                let sel = 'daytest';
+                dys = days_validator(dys, days, sel);
+                $(this).text(dys);
+                sll = 9;
+            }
+
+            updatesData(sll);
+            update_totals();
+        });
 
     $('.minimenu')
         .unbind('click')
@@ -1145,6 +1191,7 @@ function fill_budget_prods(pd, days, st) {
 }
 
 function kill_product(id) {
+    killProductBase(id);
     $('.bdg' + id).fadeOut(500, function () {
         update_totals();
         $('.bdg' + id).remove();
@@ -1673,32 +1720,65 @@ function caching_events(ev) {
 /**  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  */
 
 /* ++++ Modificación de la cantidad  ++++ */
-function updating_quantity(rw, qn, qa) {
+function updating_quantity(rw, qn, qa, ac) {
     console.log(rw);
+
+    qn = qn < 1 ? 1 : qn;
+
+    let qtycll = rw[0].cells[1].attributes[1];
 
     let pjtcnid = rw[0].attributes[5].value;
     let pjtserv = rw[0].attributes[6].value;
     let produid = rw[0].attributes[0].value.substring(3, 100);
     let prdlevl = rw[0].attributes[4].value;
-    let pjtcqty = 1;
+    let pjtcqty = qn;
     let dytritt = daytrip / 2;
     let daysini = dytritt + daytest;
     let daysfnl = dytritt + daybase;
-
     let prjDStr = moment(proj[0].pjt_date_start, 'DD/MM/YYYY').subtract('days', daysini).format('YYYYMMDD');
     let prjDEnd = moment(proj[0].pjt_date_end, 'DD/MM/YYYY').add('days', daysfnl).format('YYYYMMDD');
 
+    pjtcqty = 1;
     let par = `[{
-                "pjtcn_id"          : "${pjtcnid}",
-                "prd_id"            : "${produid}",
-                "pjtcn_quantity"    : "${pjtcqty}",
-                "srv_id"            : "${pjtserv}",
-                "serReserveStart"   : "${prjDStr}",
-                "serReserveEnd"     : "${prjDEnd}",
-                "level"             : "${prdlevl}"
-            }]
-            `;
-    console.log(par);
+        "pjtcn_id"          : "${pjtcnid}",
+        "prd_id"            : "${produid}",
+        "pjtcn_quantity"    : "${pjtcqty}",
+        "srv_id"            : "${pjtserv}",
+        "serReserveStart"   : "${prjDStr}",
+        "serReserveEnd"     : "${prjDEnd}",
+        "level"             : "${prdlevl}"
+    }]
+    `;
+
+    if (ac == 'NP') {
+        sequenceIncreaseQty(par);
+        qtycll.value = qn;
+    } else if (ac == 'IN') {
+        if (qn > qa) {
+            let qtyant = rw[0].cells[1].attributes[1].value;
+            let qtynew = rw[0].cells[1].outerText;
+            let qtytot = qtynew - qtyant;
+
+            for (var i = 1; i <= qtytot; i++) {
+                sequenceIncreaseQty(par);
+            }
+            qtycll.value = qn;
+        } else if (qn < qa) {
+            let qtyant = rw[0].cells[1].attributes[1].value;
+            let qtynew = rw[0].cells[1].outerText;
+            let qtytot = qtyant - qtynew;
+            // console.log('disminuye cantidad');
+            for (var i = 1; i <= qtytot; i++) {
+                let rem = parseInt(qtyant) + 1 - i;
+                sequenceDecreaseQty(pjtcnid, rem);
+            }
+            qtycll.value = qn;
+        }
+    }
+}
+
+// secuencia de incremento en la cantidad de productos
+function sequenceIncreaseQty(par) {
     var pagina = 'ProjectDetails/increaseQuantity';
     var tipo = 'html';
     var selector = show_increase_quantity;
@@ -1707,6 +1787,43 @@ function updating_quantity(rw, qn, qa) {
 }
 
 function show_increase_quantity(dt) {
+    console.log(dt);
+}
+
+// secuencia de disminucion en la cantidad de productos
+function sequenceDecreaseQty(pjtcnid, rem) {
+    console.log(pjtcnid, rem);
+    var pagina = 'ProjectDetails/decreaseQuantity';
+    let par = `[{"pjtcnid":"${pjtcnid}","pos":"${rem}"}]`;
+    var tipo = 'html';
+    var selector = show_decrease_quantity;
+    caching_events('updating_quantity-decrease');
+    fillField(pagina, par, tipo, selector);
+}
+
+function show_decrease_quantity(dt) {
+    console.log(dt);
+}
+
+function killProductBase(id) {
+    let rw = $('#bdg' + id);
+    let qty = rw[0].cells[1].outerText;
+    let pjtcnid = rw[0].attributes[5].value;
+    for (var i = 1; i <= qty; i++) {
+        let qt = parseInt(qty) + 1 - i;
+        sequenceDecreaseQty(pjtcnid, qt);
+        console.log(pjtcnid, qt);
+    }
+
+    var pagina = 'ProjectDetails/killProduct';
+    let par = `[{"pjtcnid":"${pjtcnid}"}]`;
+    var tipo = 'html';
+    var selector = show_killProductBase;
+    caching_events('updating_quantity-decrease');
+    fillField(pagina, par, tipo, selector);
+}
+
+function show_killProductBase(dt) {
     console.log(dt);
 }
 
@@ -1772,4 +1889,25 @@ function shownewproducts(dt) {
             fill_budget_prods(jsn, days, '1');
         });
     }
+}
+
+function updatesData(sl) {
+    let rw = $('.frame_content .table_control tbody');
+    let rws = rw[0].rows.length - 1;
+
+    for (var i = 0; i < rws; i++) {
+        let pjtcnId = rw[0].rows[i].attributes[5].value;
+        let pjtdata = rw[0].rows[i].cells[sl].outerText;
+
+        var pagina = 'ProjectDetails/updateData';
+        var par = `[{"pjtcnId":"${pjtcnId}", "data":"${pjtdata}", "field":"${sl}"}]`;
+        var tipo = 'json';
+        var selector = show_updatesData;
+        caching_events('get_customers');
+        fillField(pagina, par, tipo, selector);
+    }
+}
+
+function show_updatesData(dt) {
+    console.log(dt);
 }

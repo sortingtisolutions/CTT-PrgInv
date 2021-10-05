@@ -127,7 +127,7 @@ class ProjectDetailsModel extends Model
     } 
 
 
-// Incrementa la cantidad de un producto expendable
+// Incrementa la cantidad de un producto
     public function increaseQuantity($params)
     {
 
@@ -145,6 +145,42 @@ class ProjectDetailsModel extends Model
 
     }
 
+// Disminuye la cantidad de un producto
+    public function decreaseQuantity($params)
+    {
+
+        $pjtcnId    = $this->db->real_escape_string($params['pjtcnid']);
+        $pos        = $this->db->real_escape_string($params['pos']);
+
+        $qry1 = "UPDATE ctt_projects_content SET pjtcn_quantity = pjtcn_quantity -1 WHERE pjtcn_id = $pjtcnId;";
+        $this->db->query($qry1);
+
+        $qry2 = "WITH elements AS (
+                    SELECT *,
+                        ROW_NUMBER() OVER (partition by prd_id ORDER BY pjtdt_prod_sku asc) AS reng
+                    FROM ctt_projects_detail WHERE pjtcn_id = $pjtcnId ORDER BY pjtdt_prod_sku)
+                SELECT pjtdt_id FROM elements WHERE reng = $pos;";
+        $result =  $this->db->query($qry2);
+        $res2 = $result;
+
+        while($row = $result->fetch_assoc()){
+            $pjtdtId = $row["pjtdt_id"];
+            $qry3 = "UPDATE ctt_series SET ser_reserve_start = null, ser_reserve_end = null, pjtdt_id = 0 WHERE pjtdt_id = $pjtdtId;";
+            $this->db->query($qry3);
+
+            $qry4 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
+            $this->db->query($qry4);
+
+        }
+        return '1';
+
+    }
+
+    public function killProduct($params){
+        $pjtcnId       = $this->db->real_escape_string($params["pjtcnid"]);
+        $qry = "DELETE FROM ctt_projects_content WHERE pjtcn_id = $pjtcnId;";
+        return $this->db->query($qry);
+    }
 
     
 //  Lista los Projectos
@@ -224,6 +260,13 @@ class ProjectDetailsModel extends Model
 
     }
 
+//  Actualiza los días y descuentos
+    public function updateData($field, $pjtcnId, $data)
+    {
+        $qry = "UPDATE ctt_projects_content set $field = '$data' WHERE pjtcn_id = $pjtcnId;";
+        return $this->db->query($qry);
+    }
+
 
 //  Asigna las series y el detalle del producto agregado
     public function SettingSeries($params)
@@ -247,8 +290,8 @@ class ProjectDetailsModel extends Model
                         SET 
                             ser_reserve_start = '$dtinic', 
                             ser_reserve_end   = '$dtfinl', 
-                            ser_reserve_count = ser_reserve_count + 1, 
-                            pjtcn_id = $pjetId WHERE ser_id = $serie;";
+                            ser_reserve_count = ser_reserve_count + 1
+                            WHERE ser_id = $serie;";
             $this->db->query($qry1);
 
         }else {
@@ -264,6 +307,15 @@ class ProjectDetailsModel extends Model
                 );        ";
 
         $this->db->query($qry2);
+        $pjtdtId = $this->db->insert_id;
+
+        if ( $serie != null){
+            $qry3 = "UPDATE ctt_series 
+                    SET 
+                        pjtdt_id = '$pjtdtId'
+                        WHERE ser_id = $serie;";
+            $this->db->query($qry3);
+        }
         return  $serie;
     }
 

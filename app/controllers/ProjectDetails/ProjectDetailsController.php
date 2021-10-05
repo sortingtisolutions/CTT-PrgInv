@@ -164,6 +164,23 @@ class ProjectDetailsController extends Controller
         $succ = $this->addProjectDetail($param);
 
     } 
+// Disminuye la cantidad de un producto ya existente
+    public function decreaseQuantity($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->decreaseQuantity($request_params);
+        $res = $result;
+        echo $res;
+
+    } 
+// Elimina el producto
+    public function killProduct($request_params){
+        $params =  $this->session->get('user');
+        $result = $this->model->killProduct($request_params);
+        $res = $result;
+        echo $res;
+
+    }
 // Agrega producto
     public function addNewProduct($request_params)
     {
@@ -288,9 +305,30 @@ class ProjectDetailsController extends Controller
         return true;
     }
 
+// Actualiza los dias 
+    public function updateData($request_params)
+    {
+        $params =  $this->session->get('user');
 
+        $numfield   = $request_params['field'];
+        $pjtcnId    = $request_params['pjtcnId'];
+        $data       = $request_params['data'];
 
+        $field = '';
+        switch ($numfield){
+            case '3' : $field = 'pjtcn_days_base'; break;
+            case '6' : $field = 'pjtcn_days_trip'; break;
+            case '9' : $field = 'pjtcn_days_test'; break;
+            case '4'  : $field = 'pjtcn_discount_base'; break;
+            case '7'  : $field = 'pjtcn_discount_trip'; break;
+            case '10' : $field = 'pjtcn_discount_test'; break;
+            default:
+        }
 
+        $result = $this->model->updateData($field, $pjtcnId, $data);
+        $res = $result;
+        echo $res;
+    }
 
 
 }
