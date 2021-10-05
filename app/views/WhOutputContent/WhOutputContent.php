@@ -93,19 +93,6 @@
                                 <label for="txtSubcategoryProduct" class="form-label">Subcategoia</label>
                             </div>
                         </div>
-
-
-                        <div class="row list-finder">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <div class="box-items-list" id="boxProducts">Productos
-                                    <i class="fas fa-angle-down"></i>
-                                </div>
-                            </div>
-                            <div class="list-group list-hide">
-                                <div class="list-items" id="listProducts"></div>
-                            </div>
-                            
-                        </div>
                         
                     </div>
                 </div>
@@ -121,7 +108,6 @@
                                     <th style="width:  40px"></th>
                                     <th style="width:  70px">SKU</th>
                                     <th style="width:  auto">Descripcion</th>
-                                    <th style="width:  70px">Num. Serie</th>
 									<th style="width:  70px">Cantidad</th>
                                     <th style="width:  70px">Tipo Producto</th>
                                 </tr>
@@ -159,30 +145,46 @@
     </div>
 </div>
 
-
-<div class="modal fade" id="delProdModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-            <div class="modal-header ">
-            </div>
-            <div class="modal-body" style="padding: 0px !important;">
-
-
-            <div class="row">
-                <input type="hidden" class="form-control" id="txtIdProductPack" aria-describedby="basic-addon3">
-                <div class="col-12 text-center">
-                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea borrarlo?</span>
-                </div>
-            </div>
-
-            </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-danger" id="btnDelProduct">Borrar</button>
-                </div>
-            </div>
+<!-- Start Ventana modal SERIES -->
+<div class="overlay_background overlay_hide"id="SerieModal">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <table class="display compact nowrap"  id="tblSerie">
+                <thead>
+                    <tr>
+                        <th style="width:  30px"></th>
+                        <th style="width: 100px">SKU</th>
+                        <th style="width: 350px">Descripcion Producto</th>
+                        <th style="width:  70px">Num Serie</th>
+                        <th style="width:  50px">Tipo de <br> Producto</th>
+                        <th style="width:  50px">Status</th>
+                        <th style="width:  50px">Disponibles</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
-</div>
+<!-- End Ventana modal SERIES -->
+
+<!-- Start Ventana modal CHANGESERIES -->
+<div class="overlay_background overlay_hide"id="ChangeSerieModal">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <table class="display compact nowrap"  id="tblChangeSerie">
+                <thead>
+                    <tr>
+                        <th style="width:  30px"></th>
+                        <th style="width: 100px">SKU</th>
+                        <th style="width: 350px">Descripcion Producto</th>
+                        <th style="width:  70px">Num Serie</th>
+                        <th style="width:  50px">Status</th>
+                        <th style="width:  50px">Etapa</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+<!-- End Ventana modal SERIES -->
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
