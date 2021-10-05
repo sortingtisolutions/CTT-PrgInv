@@ -11,7 +11,7 @@ function inicial() {
     getDetailProds();
 }
 
-// Solicita los paquetes
+// Solicita los paquetes  OK
 function getProjects() {
     var pagina = 'WhOutputContent/listProjects';
     var par = `[{"pjtpd_id":""}]`;
@@ -20,30 +20,31 @@ function getProjects() {
     fillField(pagina, par, tipo, selector);
 }
 
-// Solicita los productos del proyecto
+// Solicita los productos del proyecto  OK
 function getDetailProds() {
     var pagina = 'WhOutputContent/listDetailProds';
     var par = `[{"pjtpd_id":""}]`;
     var tipo = 'json';
-    var selector = putDetailsProjs;
+    var selector = putDetailsProds;
     fillField(pagina, par, tipo, selector);
 }
 
+//Solicita las series de los productos  OK
 function getSeries(prdId) {
     var pagina = 'WhOutputContent/listSeries';
-    var par = `[{"pjtpd_id":""}]`;
+    var par = `[{"prd":""}]`;
     var tipo = 'json';
     var selector = putSeries;
-
     fillField(pagina, par, tipo, selector);
 }
 
-function getSeriesFree(prdId) {
+// Solicita las series disponibles
+function getSerieDetail() {
+    console.log('PASO 1---putSerieDetails');
     var pagina = 'WhOutputContent/listSeriesFree';
-    var par = `[{"prdId":"${prdId}"}]`;
+    var par = `[{"pjtpd_id":""}]`;
     var tipo = 'json';
-    var selector = putSerieDetail;
-    console.log('Modal 3');
+    var selector = putSerieDetails;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -82,7 +83,7 @@ function setting_table_AsignedProd() {
 }
 
 // Llena la tabla de los detalles del proyecto
-function putDetailsProjs(dt) {  
+function putDetailsProds(dt) {  
     if (dt[0].pjtpd_id != '0') 
     {
         let tabla = $('#tblAsignedProd').DataTable();
@@ -106,6 +107,8 @@ function putDetailsProjs(dt) {
     }
 }
 
+
+//AGREGA LOS DATOS GENERALES DEL PROYECTO
 function putProjects(dt) {    
         $('#txtTipoProject').val(dt[0].pjttp_name);
         $('#txtProjectName').val(dt[0].pjt_name);
@@ -119,6 +122,7 @@ function putProjects(dt) {
 }
 // Llena prepara la table dentro del modal para series
 function putSeries(dt) {
+
     $('#SerieModal').removeClass('overlay_hide');
     $('#tblSerie').DataTable({
         destroy: true,
@@ -156,18 +160,18 @@ function putSeries(dt) {
 //Llena con datos de series la tabla del modal
 function build_modal_serie(dt) {
             let tabla = $('#tblSerie').DataTable();
- /*           $('.overlay_closer .title').html(`${dt[0].pjtcn_prod_sku} - ${dt[0].pjtcn_prod_name}`); */
+            $('.overlay_closer .title').html(`${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`); 
             tabla.rows().remove().draw();
             $.each(dt, function (v, u) {
                 let skufull = u.pjtdt_prod_sku.slice(7, 11) == '' ? u.pjtdt_prod_sku.slice(0, 7) : u.pjtdt_prod_sku.slice(0, 7) + '-' + u.pjtdt_prod_sku.slice(7, 11);
                 tabla.row
                     .add({
-                        sermodif: `<i class='fas fa-edit serie.modif' id="E${u.pjtcn_id}"></i>`,
+                        sermodif: `<i class='fas fa-edit toLink' id="E${u.pjtcn_id}"></i>`,
                         seriesku: skufull,
-                        sername: u.pjtdt_prod_name,
+                        sername: u.prd_name,
                         sernumber: u.ser_id,
-                        sertype: u.pjtdt_prod_level,
-                        serstatus: u.pjtdt_status,
+                        sertype: u.prd_level,
+                        serstatus: u.prd_status,
                         cinvoice: u.pjtcn_id,
                     })
                     .draw();
@@ -175,8 +179,10 @@ function build_modal_serie(dt) {
             });
             activeIconsSerie();
 }
-    
-function putSerieDetail(dt) {
+
+// AGREGA LAS SERIES DISPONIBLES
+function putSerieDetails(dt) {
+    console.log('PASO 2 --- putSerieDetails'); 
         $('#ChangeSerieModal').removeClass('overlay_hide');
         console.log(dt);
         $('#tblChangeSerie').DataTable({
@@ -208,13 +214,15 @@ function putSerieDetail(dt) {
             .on('click', function () {
                 $('.overlay_background').addClass('overlay_hide');
              });
-            
+        console.log('PASO 3 --- putSerieDetails');
         build_modal_seriefree(dt);
 }
 
     function build_modal_seriefree(dt) {
+        console.log('PASO 4 --- build_modal_seriefree');
             let tabla = $('#tblChangeSerie').DataTable();
- /*           $('.overlay_closer .title').html(`${dt[0].pjtcn_prod_sku} - ${dt[0].pjtcn_prod_name}`); */
+            /*$('.overlay_closer .title').html(`${dt[0].ser_sku} - ${dt[0].pjtcn_prod_name}`); */
+            $('.overlay_closer .title').html(`${dt[0].ser_sku}`); 
             tabla.rows().remove().draw();
             $.each(dt, function (v, u) {
             let skufull = u.ser_sku.slice(7, 11) == '' ? u.ser_sku.slice(0, 7) : u.ser_sku.slice(0, 7) + '-' + u.ser_sku.slice(7, 11);
@@ -231,28 +239,27 @@ function putSerieDetail(dt) {
                     .draw();
                 $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.ser_id);
             });
-            activeIconsSerieFree();
+           /*  activeIcons(); */
         }
-    
-/** +++++  Activa los iconos del modal de serie */
-    function activeIconsSerie() {  
-        console.log('2do Click Modal');      
-        $('.serie.modif')
-            .unbind('click')
-            .on('click', function () {
-                let serId = $(this).attr('id').slice(1, 10);
-      
-                $('#ModifySerieModal').removeClass('overlay_hide');
-      
-                $('#ModifySerieModal .btn_close')
-                    .unbind('click')
-                    .on('click', function () {
-                        $('#ModifySerieModal').addClass('overlay_hide');
-                    });
-                    putSerieDetail(serId);
-            });
 
-    }
+/** +++++  Activa los iconos del modal de serie */
+function activeIconsSerie() {  
+          
+        $('.toLink')
+        .unbind('click')
+        .on('click', function () {
+            let prd = $(this).parents('tr').attr('id');
+            let qty = 1;
+            console.log('2do Click Modal');  
+           /* let pkt = $(this).parent().attr('data-content').split('|')[3];
+            let pkn = $(this).parent().attr('data-content').split('|')[1]; */
+            if (qty > 0) {
+                getSerieDetail();
+            }
+        });
+
+}
+
 /** +++++  Activa los iconos del modal de serie free */
 function activeIconsSerieFree() {  
     $('.toLink')
@@ -267,8 +274,7 @@ function activeIconsSerieFree() {
             getSeriesFree(serId);
         }
     });
-
-    console.log('Activo Libres');
+    
     $('.serief.modif')
         .unbind('click')
         .on('click', function () {
@@ -285,16 +291,13 @@ function activeIconsSerieFree() {
         });
 
 }
-/** +++++  Activa los iconos */
+/** +++++  Activa los iconos OK */
 function activeIcons() {
     $('.toLink')
         .unbind('click')
         .on('click', function () {
             let prd = $(this).parents('tr').attr('id');
             let qty = 1;
-            console.log('Modal 2');
-           /* let pkt = $(this).parent().attr('data-content').split('|')[3];
-            let pkn = $(this).parent().attr('data-content').split('|')[1]; */
             if (qty > 0) {
                 getSeries(prd);
             }
@@ -317,6 +320,5 @@ function activeIcons() {
                 });
         });
         
-
 
 }

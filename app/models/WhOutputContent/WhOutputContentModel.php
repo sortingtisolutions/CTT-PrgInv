@@ -37,9 +37,10 @@ class WhOutputContentModel extends Model
    public function listSeries()
    {
 /*       $prodId = $this->db->real_escape_string($params['prdId']); */
-       $qry = "SELECT pjtdt_id, pjtdt_prod_sku, pjtdt_prod_name, pjtdt_prod_level, 
-       pjtdt_status, ser_id, pjtcn_id 
-       FROM ctt_projects_detail WHERE pjtcn_id=2 order by 2,5 desc;";
+       $qry = "SELECT pd.pjtdt_id, pd.pjtdt_prod_sku, pr.prd_name, pr.prd_level,
+       pr.prd_status,pd.ser_id,pd.pjtcn_id
+       FROM ctt_projects_detail pd INNER JOIN ctt_products pr 
+       ON pd.pjtcn_id=2 and pd.prd_id=pr.prd_id order by 2 desc;";
        return $this->db->query($qry);
    }
    
@@ -48,7 +49,8 @@ class WhOutputContentModel extends Model
 /*       $prodId = $this->db->real_escape_string($params['prdId']); */
        $qry = "SELECT ser_id, ser_sku, ser_serial_number, ser_situation, ser_stage 
        FROM ctt_series 
-       WHERE ser_sku like '090A009A007%' and ser_situation='D' and ser_status=1 and pjtdt_id=0;";
+       WHERE prd_id=7711 and ser_situation='D' and ser_status=1 and pjtcn_id=0;";
+    /* WHERE ser_sku like '090A009A007%' and ser_situation='D' and ser_status=1 and pjtdt_id=0;" */
        return $this->db->query($qry);
    }
    
