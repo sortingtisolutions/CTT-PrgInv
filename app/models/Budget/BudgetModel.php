@@ -422,8 +422,8 @@ public function saveBudgetList($params)
                         SET 
                             ser_reserve_start = '$dtinic', 
                             ser_reserve_end   = '$dtfinl', 
-                            ser_reserve_count = ser_reserve_count + 1, 
-                            pjtcn_id = $pjetId WHERE ser_id = $serie;";
+                            ser_reserve_count = ser_reserve_count + 1
+                            WHERE ser_id = $serie;";
             $this->db->query($qry1);
 
         }else {
@@ -439,6 +439,16 @@ public function saveBudgetList($params)
                 );        ";
 
         $this->db->query($qry2);
+        $pjtdtId = $this->db->insert_id;
+
+        if ( $serie != null){
+            $qry3 = "UPDATE ctt_series 
+                    SET 
+                        pjtdt_id = '$pjtdtId'
+                        WHERE ser_id = $serie;";
+            $this->db->query($qry3);
+        }
+
         return  $serie;
     }
 

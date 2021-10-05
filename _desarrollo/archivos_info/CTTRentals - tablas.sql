@@ -382,7 +382,7 @@ CREATE TABLE `cttapp_cire`.`ctt_series` (
     `prd_id`                INT NULL                        COMMENT 'Id del producto relacion ctt_productos',
     `sup_id`                INT NULL                        COMMENT 'Id de la proveedor relacion ctt_suppliers',
     `cin_id`                INT NULL                        COMMENT 'Id del tipo de moneda relacion ctt_coins',
-    `pjtcn_id`              INT NULL                        COMMENT 'Id del detalle de proyecto relacion ctt_projects_content',
+    `pjtdt_id`              INT NULL                        COMMENT 'Id del detalle de proyecto relacion ctt_projects_detail',
 PRIMARY KEY (`ser_id`))
 COMMENT = 'Numero serie de productos correspondientes a un modelo.';
 
