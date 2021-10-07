@@ -14,7 +14,7 @@
         bottom: 1px;
     }
 }
-.titleSection{
+.titleSection {
     font-family: $font_secundary;
     font-size: 1.8em;
 }
@@ -528,18 +528,17 @@ hr {
         height: 200px;
         position: absolute;
         // top: 120%;
-        font-size: 2.0em;
-        color: #FFFFFF;
+        font-size: 2em;
+        color: #ffffff;
         display: flex;
         justify-content: center;
         line-height: 2.8em;
-       
 
         i {
             position: absolute;
             top: 10%;
             left: 42%;
-            font-size: 4.0em;
+            font-size: 4em;
             width: 150px;
             height: 150px;
             padding: 30px;
@@ -558,7 +557,7 @@ hr {
         .row {
             height: 100%;
         }
-        .space_end  {
+        .space_end {
             height: 50px;
         }
 
@@ -567,11 +566,9 @@ hr {
             display: block;
             bottom: 0px;
             z-index: 100;
-            
         }
         .form {
             padding: 30px 0;
-            
 
             .form_group {
                 width: 100%;
@@ -707,7 +704,7 @@ hr {
             h2 {
                 font-size: 1.7em;
                 span {
-                    font-size: 0.8em;;
+                    font-size: 0.8em;
                 }
             }
             .subcatego,
@@ -715,7 +712,7 @@ hr {
                 // float: right;
                 display: inline-block;
                 padding: 2px 10px 10px 10px;
-                font-size: 1.0em;
+                font-size: 1em;
                 font-weight: 600;
             }
 
@@ -729,26 +726,43 @@ hr {
 
                 td {
                     color: #000000;
-                    border-bottom: 1px dotted #EEEEEE;
+                    border-bottom: 1px dotted #eeeeee;
                     padding: 2px 3px;
 
-                    &.pdd_prc  {
+                    &.pdd_prc {
                         text-align: right;
                     }
                     &.blk {
-                        font-weight: 900;
+                        font-weight: 700;
                         color: #000000;
-                        font-size: 1.1em;
+                        // font-size: 1.1em;
+                        padding-top: 20px;
+                    }
+                    &.dep {
+                        padding-left: 30px;
+                    }
+                    &.pnd {
+                        color: rgba($btn-red, 0.8);;
+                        background-color: rgba($btn-red, 0.04);
+                        border-bottom: 1px dashed rgba($btn-red, 0.3);
+                    }
+                    &.pdd_nam  {
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
                     }
                 }
             }
         }
     }
-
 }
 @keyframes loading {
-    from  {transform: rotate(0deg)}
-    to {transform: rotate(360deg)}
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .box_desc {
@@ -764,7 +778,7 @@ hr {
     li {
         text-align: right;
         cursor: pointer;
-        
+
         &:hover {
             font-weight: 900;
         }

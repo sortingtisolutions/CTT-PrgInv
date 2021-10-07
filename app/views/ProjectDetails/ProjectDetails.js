@@ -118,9 +118,9 @@ function get_products(word, dstr, dend) {
 }
 
 /**  Obtiene el listado de relacionados al prducto*/
-function get_products_related(id, tp) {
+function get_products_related(id, tp, pj) {
     var pagina = 'ProjectDetails/listProductsRelated';
-    var par = `[{"prdId":"${id}","type":"${tp}"}]`;
+    var par = `[{"prdId":"${id}","type":"${tp}","pjtcnid":"${pj}"}]`;
     var tipo = 'json';
     var selector = put_products_related;
     caching_events('get_products');
@@ -1150,13 +1150,14 @@ function fill_budget_prods(pd, days, st) {
             let posTop = id.offset().top;
             let prdId = id.attr('id').substring(3, 10);
             let prdLvl = id.attr('data_level');
+            let pjtcn = id.attr('data_project');
             $('.box_minimenu')
                 .css({top: posTop - 35 + 'px', left: posLeft + 320 + 'px'})
                 .fadeIn(400);
 
             var H = `
-            <li data_content="${prdId}" class="mini_option killProd"><i class="fas fa-trash"></i> Eliminar</li>
-            <li data_content="${prdId}" data_level="${prdLvl}" class="mini_option infoProd"><i class="fas fa-info-circle"></i> Información</li>
+            <li data_content="${prdId}" data_project="${pjtcn}" class="mini_option killProd"><i class="fas fa-trash"></i> Eliminar</li>
+            <li data_content="${prdId}" data_project="${pjtcn}" data_level="${prdLvl}" class="mini_option infoProd"><i class="fas fa-info-circle"></i> Información</li>
                 `;
             $('.list_menu ul').html(H);
 
@@ -1172,7 +1173,9 @@ function fill_budget_prods(pd, days, st) {
                     let option = $(this).attr('class').split(' ')[1];
                     let prdId = $(this).attr('data_content');
                     let prdLvl = $(this).attr('data_level');
+                    let pjtcn = $(this).attr('data_project');
                     let blkSts = $('.menu_block').css('display');
+
                     switch (option) {
                         case 'killProd':
                             hide_control_menu('none');
@@ -1182,7 +1185,7 @@ function fill_budget_prods(pd, days, st) {
                             }
                             break;
                         case 'infoProd':
-                            show_info_product(prdId, prdLvl);
+                            show_info_product(prdId, prdLvl, pjtcn);
                             break;
                         default:
                     }
@@ -1198,7 +1201,7 @@ function kill_product(id) {
     });
 }
 
-function show_info_product(id, lvl) {
+function show_info_product(id, lvl, pj) {
     caching_events('add_client');
     $('.box_modal_deep').css({display: 'flex'});
     $('.box_modal').animate(
@@ -1210,15 +1213,13 @@ function show_info_product(id, lvl) {
 
     let H = `
         <div class="row">
-            <div class="form col-sm-12 col-md-12 col-lg-8 col-xl-8 qst">
+            <div class="form col-sm-12 col-md-12 col-lg-9 col-xl-9 qst">
                 <div class="product_container">
                     <h2>Nombre del producto<br><small><small>Producto</small></small></h2>
-                    <span class="subcatego"></span><span class="catego"></span>
                     <table>
                         <tr>
                             <th>SKU</th>
-                            <th id="titcol">NOMBRE DEL ACCESORIO</th>
-                            <th>PRECIO</th>
+                            <th>PRODUCTO</th>
                         </tr>
                         
                     </table>
@@ -1228,11 +1229,11 @@ function show_info_product(id, lvl) {
                     <button class="bn btn-cn">Cerrar</button>
                 </div>
             </div>
-            <div class="form col-sm-12 col-md-12 col-lg-4 col-xl-4 image img01"></div>
+            <div class="form col-sm-12 col-md-12 col-lg-3 col-xl-3 image img01"></div>
         </div>
     `;
     $('.box_modal').html(H);
-    get_products_related(id, lvl);
+    get_products_related(id, lvl, pj);
 
     $('.btn-cn').on('click', function () {
         close_modal();
@@ -1241,35 +1242,25 @@ function show_info_product(id, lvl) {
 /**  Llena el listado de relacionados al prducto */
 function put_products_related(dt) {
     console.log(dt);
-    let name = '',
-        titcol = '';
-    switch (dt[0].prd_level) {
-        case 'K':
-            name = dt[0].prd_name + '<br><span>PAQUETE</span>';
-            titcol = 'NOMBRE DEL PAQUETE Y PRODUCTOS';
-            break;
-        case 'P':
-            name = dt[0].prd_name + '<br><span>PRODUCTO</span>';
-            titcol = 'NOMBRE DEL PRODUCTO Y ACCESORIOS';
-            break;
-        case 'A':
-            name = dt[0].prd_name + '<br><span>ACCESORIO</span>';
-            titcol = 'NOMBRE DEL ACCESORIO';
-            break;
-        default:
-    }
+    let name = dt[0].prd_name;
     $('.product_container h2').html(name);
-    $('#titcol').html(titcol);
-    $('.catego').html('<small>CÁTALOGO:</small> ' + dt[0].cat_name);
-    $('.subcatego').html('<small>SUBCATEGORIA:</small> ' + dt[0].sbc_name);
 
     $.each(dt, function (v, u) {
-        let cls = v == 0 ? 'blk' : '';
+        let cls = u.prd_level == 'P' ? 'blk' : '';
+        let typ = u.prd_level == 'A' ? 'dep' : '';
+        let sku = '';
+        let pnd = '';
+        if (u.pjtdt_prod_sku == 'Pendiente') {
+            pnd = 'pnd';
+            sku = u.pjtdt_prod_sku;
+        } else {
+            pnd = '';
+            sku = u.pjtdt_prod_sku.slice(0, 7) + '-' + u.pjtdt_prod_sku.slice(7, 11);
+        }
         let H = `
         <tr>
-            <td class="pdd_sku ${cls}">${u.prd_sku}</td>
-            <td class="pdd_nam ${cls}">${u.prd_name}</td>
-            <td class="pdd_prc ${cls}">${mkn(u.prd_price, 'n')}</td>
+            <td class="pdd_sku ${cls} ${pnd}">${sku}</td>
+            <td class="pdd_nam ${cls} ${pnd} ${typ}">${u.prd_name}</td>
         </tr>
         `;
         $('.product_container table').append(H);

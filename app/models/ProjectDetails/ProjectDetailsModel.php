@@ -182,6 +182,30 @@ class ProjectDetailsModel extends Model
         return $this->db->query($qry);
     }
 
+
+    
+// Lista los relacionados al producto
+    public function listProductsRelated($params)
+    {
+        $pjtcnId       = $this->db->real_escape_string($params["pjtcnid"]);
+
+        $qry = "SELECT 
+                    pr.prd_id
+                    , pr.prd_sku
+                    , pj.pjtdt_prod_sku
+                    , pr.prd_name
+                    , pr.prd_level
+                    , ct.cat_name
+                    , ROW_NUMBER() OVER (partition by pr.prd_sku ORDER BY sr.ser_sku desc) AS reng
+                FROM ctt_projects_detail AS pj
+                INNER JOIN ctt_products AS pr ON pr.prd_id = pj.prd_id
+                INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id
+                INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
+                LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
+                WHERE pj.pjtcn_id = $pjtcnId order by reng, pr.prd_sku;
+                ";
+        return $this->db->query($qry);
+    }
     
 //  Lista los Projectos
     public function getProjectContent($pjtcn_id, $dayIni, $dayFnl){
