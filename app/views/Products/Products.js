@@ -744,7 +744,7 @@ function putSeries(dt) {
 
     $('#tblSerie').DataTable({
         destroy: true,
-        order: [[2, 'desc']],
+        order: [[1, 'desc']],
         lengthMenu: [
             [100, 150, 200, -1],
             [100, 150, 200, 'Todos'],
