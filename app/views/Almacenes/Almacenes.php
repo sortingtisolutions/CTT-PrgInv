@@ -91,7 +91,8 @@
 													<th style="width: auto">Nombre</th>
 													<th style="width: auto">Responsable Almacen</th>
 													<th style="width: auto" hidden>Encargado Almacen</th>
-													<th style="width: 100px">Tipo</th>
+													<th style="width: 60px">Tipo</th>
+													<th style="width: 200px">Existencias</th>
 											</tr>
 										</thead>
 										<tbody id="tablaAlmacenesRow">
@@ -156,6 +157,30 @@
 		</div>
 	</div>
 </div> -->
+
+<!-- Start Ventana modal EXISTENCIAS -->
+<div class="overlay_background overlay_hide"id="ExisteStrModal">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <table class="display compact nowrap"  id="tblStrSerie">
+                <thead>
+                    <tr>
+                        <th style="width:  30px"></th>
+                        <th style="width: 100px">SKU</th>
+                        <th style="width:  80px">Núm. serie</th>
+                        <th style="width: 120px">Fecha de alta</th>
+						<th style="width:  50px">Costo</th>
+                        <th style="width:  50px">Clave status</th>
+                        <th style="width:  50px">Clave etapa</th>
+                        <th style="width:  60px">Status</th>
+                        <th style="width: 200px">Almacen</th>
+                        <th style="width: 350px">Comentarios</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+<!-- End Ventana modal SERIES -->
 
 <!-- Modal Borrar -->
 <div class="modal fade" id="BorrarAlmacenModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">

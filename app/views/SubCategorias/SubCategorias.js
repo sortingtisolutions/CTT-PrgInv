@@ -94,6 +94,15 @@ function UnSelectRowTable() {
    }, 10);
 }
 
+function getSeries(sbcId) {
+   var pagina = 'SubCategorias/listSeries';
+   var par = `[{"sbcId":"${sbcId}"}]`;
+   var tipo = 'json';
+   var selector = putSeries;
+   fillField(pagina, par, tipo, selector);
+}
+
+
 //BORRAR  * *
 function DeletSubCategoria() {
    var location = 'SubCategorias/DeleteSubCategoria';
@@ -225,12 +234,11 @@ function getSubCategoriasTable(idCategoria) {
       data: {idCategoria: idCategoria},
       url: location,
       _success: function (respuesta) {
-         console.log(respuesta);
          var renglon = '';
          respuesta.forEach(function (row, index) {
             if (row.sbc_id != 0) {
                renglon =
-                  '<tr>' +
+                  '<tr id=" ' + row.sbc_id + '">' +
                   '<td class="text-center edit"> ' +
                   '<button onclick="EditSubCategoria(' +
                   row.sbc_id +
@@ -245,30 +253,31 @@ function getSubCategoriasTable(idCategoria) {
                   row.sbc_id +
                   '</td>' +
 
-
                   '<td>' +
                   row.sbc_code +
                   '</td>' +
-
 
                   '<td>' +
                   row.sbc_name +
                   '</td>' +
 
-
                   '<td>' +
                   row.cat_name +
                   '</td>' +
-
                   
                   '<td>' +
                   padLeadingZeros(row.cat_id,2)   +
                   '</td>' +
 
+                  '<td class="quantity text-left data-content=" ' + row.sbc_id + '"><span class="toLink">' +
+                  row.cantidad  +
+                  '</span></td>' +
+
                   '</tr>';
             }
             $('#tablaSubCategoriasRow').append(renglon);
          });
+         activeIcons();
 
          let title = 'SubCategorias';
          let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
@@ -280,8 +289,8 @@ function getSubCategoriasTable(idCategoria) {
                info: false,
             },
             lengthMenu: [
-               [10, 25, 50, 100, -1],
-               ['10', '25', '50', 'Todo'],
+               [50, 100, 200, -1],
+               ['50', '100', 'Todo'],
             ],
             dom: 'Blfrtip',
             buttons: [
@@ -360,3 +369,87 @@ function padLeadingZeros(num, size) {
    while (s.length < size) s = "0" + s;
    return s;
 }
+
+function activeIcons() {
+   console.log('Se Activo el Boton');
+   $('.toLink')
+       .unbind('click')
+       .on('click', function () {
+           let prd = $(this).parents('tr').attr('id');
+         /*  let qty = $(this).parent('td').attr('data-content');*/
+         /* let prd = 15;*/
+          let qty = 1;
+           if (qty > 0) {
+               console.log('Se TOCO el Boton y valido');
+               getSeries(prd);
+           }
+       });
+}
+
+function putSeries(dt) {
+   $('#ExisteSbcModal').removeClass('overlay_hide');
+   $('#tblSbcSerie').DataTable({
+       destroy: true,
+       order: [[1, 'desc']],
+       lengthMenu: [
+           [100, 150, 200, -1],
+           [100, 150, 200, 'Todos'],
+       ],
+       pagingType: 'simple_numbers',
+       language: {
+           url: 'app/assets/lib/dataTable/spanish.json',
+       },
+       scrollY: 'calc(100vh - 290px)',
+       scrollX: true,
+       fixedHeader: true,
+       columns: [
+           {data: 'sermodif', class: 'edit'},
+           {data: 'produsku', class: 'sku'},
+           {data: 'serlnumb', class: 'product-name'},
+           {data: 'dateregs', class: 'sku'},
+           {data: 'sercost', class: 'quantity'},
+           {data: 'cvstatus', class: 'code-type_s'},
+           {data: 'cvestage', class: 'code-type_s'},
+           {data: 'serstatus', class: 'quantity'},
+           {data: 'serstore', class: 'catalog'},
+           {data: 'comments', class: 'comments'},
+       ],
+   });
+
+   $('#ExisteSbcModal .btn_close')
+       .unbind('click')
+       .on('click', function () {
+           $('.overlay_background').addClass('overlay_hide');
+       });
+
+   build_modal_serie(dt);
+}
+
+/** +++++  Coloca los seriales en la tabla de seriales */
+function build_modal_serie(dt) {
+   console.log('Llenando datos en modal de SUBCATAGORIAS');
+   let tabla = $('#tblSbcSerie').DataTable();
+   $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
+   tabla.rows().remove().draw();
+   $.each(dt, function (v, u) {
+       
+       tabla.row
+           .add({
+               /*sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i><i class="fas fa-times-circle serie kill" id="K${u.ser_id}"></i>`,*/
+               sermodif: `<i></i>`,
+               produsku: `${u.ser_sku.slice(0, 7)}-${u.ser_sku.slice(7, 11)}`,
+               serlnumb: u.ser_serial_number,
+               dateregs: u.ser_date_registry,
+               sercost: u.ser_cost,
+               cvstatus: u.ser_situation,
+               cvestage: u.ser_stage,
+               serstatus: u.ser_status,
+               serstore: u.ser_serial_number,
+               comments: u.ser_comments,
+           })
+           .draw();
+       $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.prd_id);
+   });
+}
+
+

@@ -73,7 +73,8 @@
 													<th style="width: 20px">Codigo</th>
 													<th style="width: 300px">Nombre</th>
 													<th style="width: 300px">Catálogos</th>
-													<th style="width: 300px">Codigo Catálogo</th>
+													<th style="width: 100px">Codigo Catálogo</th>
+													<th style="width: 200px">Existencias</th>
 
 											</tr>
 										</thead>
@@ -88,6 +89,29 @@
 	</div>
 </div>
 
+<!-- Start Ventana modal EXISTENCIAS -->
+<div class="overlay_background overlay_hide"id="ExisteSbcModal">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <table class="display compact nowrap"  id="tblSbcSerie">
+                <thead>
+                    <tr>
+                        <th style="width:  30px"></th>
+                        <th style="width: 100px">SKU</th>
+                        <th style="width:  80px">Núm. serie</th>
+                        <th style="width: 120px">Fecha de alta</th>
+						<th style="width:  50px">Costo</th>
+                        <th style="width:  50px">Clave status</th>
+                        <th style="width:  50px">Clave etapa</th>
+                        <th style="width:  60px">Status</th>
+                        <th style="width: 200px">Almacen</th>
+                        <th style="width: 350px">Comentarios</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+<!-- End Ventana modal SERIES -->
 
 <!-- Modal Borrar -->
 <div class="modal fade" id="BorrarSubCategoriaModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">

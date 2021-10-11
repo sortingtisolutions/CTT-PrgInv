@@ -9,6 +9,7 @@ $(document).ready(function () {
 function inicial() {
    getAlmacenesTable();
    getEncargadoAlmacen();
+   
    //Open modal *
    $('#nuevoAlmacen').on('click', function () {
       LimpiaModal();
@@ -40,6 +41,14 @@ function inicial() {
          }
       }, 10);
    });
+}
+
+function getSeries(strId) {
+   var pagina = 'Almacenes/listSeries';
+   var par = `[{"strId":"${strId}"}]`;
+   var tipo = 'json';
+   var selector = putSeries;
+   fillField(pagina, par, tipo, selector);
 }
 
 //Valida los campos seleccionado *
@@ -204,7 +213,7 @@ function getAlmacenesTable() {
          var renglon = '';
          respuesta.forEach(function (row, index) {
             renglon =
-               '<tr>' +
+               '<tr id=" ' + row.str_id + '">' +
                '<td class="text-center edit"> ' +
                '<button onclick="EditAlmacen(' +
                row.str_id +
@@ -225,12 +234,18 @@ function getAlmacenesTable() {
                '<td hidden>' +
                row.emp_id +
                '</td>' +
+               
                '<td>' +
                row.str_type +
                '</td>' +
+               // se agrego campo de cantidad
+               '<td class="quantity text-left data-content=" ' + row.cantidad + '"><span class="toLink">' +
+               row.cantidad +
+               '</span></td>' +
                '</tr>';
             $('#tablaAlmacenesRow').append(renglon);
          });
+         activeIcons();
 
          let title = 'Almacenes';
          let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
@@ -242,8 +257,8 @@ function getAlmacenesTable() {
                info: false,
             },
             lengthMenu: [
-               [10, 25, 50, 100, -1],
-               ['10', '25', '50', 'Todo'],
+               [25, 50, 100, -1],
+               ['25', '50', 'Todo'],
             ],
             dom: 'Blfrtip',
             buttons: [
@@ -336,4 +351,87 @@ function getEncargadoAlmacen(id) {
       },
       error: function () {},
    }).done(function () {});
+}
+//agregado para mostrar datos en el modal
+function activeIcons() {
+   console.log('Se Activo el Boton');
+   $('.toLink')
+       .unbind('click')
+       .on('click', function () {
+           let prd = $(this).parents('tr').attr('id');
+         /* let qty = $(this).parent('td').attr('data-content');*/
+          /*let prd = 15;*/
+          let qty = 1;
+           console.log('Se TOCO el Boton', qty );
+           if (qty > 0) {
+               console.log('Se TOCO el Boton y valido');
+               getSeries(prd);
+           }
+       });
+} 
+
+function putSeries(dt) {
+   console.log('Llenando datos en modal');
+   $('#ExisteStrModal').removeClass('overlay_hide');
+   $('#tblStrSerie').DataTable({
+       destroy: true,
+       order: [[1, 'desc']],
+       lengthMenu: [
+           [100, 150, 200, -1],
+           [100, 150, 200, 'Todos'],
+       ],
+       pagingType: 'simple_numbers',
+       language: {
+           url: 'app/assets/lib/dataTable/spanish.json',
+       },
+       scrollY: 'calc(100vh - 290px)',
+       scrollX: true,
+       fixedHeader: true,
+       columns: [
+           {data: 'sermodif', class: 'edit'},
+           {data: 'produsku', class: 'sku'},
+           {data: 'serlnumb', class: 'product-name'},
+           {data: 'dateregs', class: 'sku'},
+           {data: 'sercost', class: 'quantity'},
+           {data: 'cvstatus', class: 'code-type_s'},
+           {data: 'cvestage', class: 'code-type_s'},
+           {data: 'serstatus', class: 'quantity'},
+           {data: 'serstore', class: 'catalog'},
+           {data: 'comments', class: 'comments'},
+       ],
+   });
+
+   $('#ExisteStrModal .btn_close')
+       .unbind('click')
+       .on('click', function () {
+           $('.overlay_background').addClass('overlay_hide');
+       });
+
+   build_modal_serie(dt);
+}
+
+/** +++++  Coloca los seriales en la tabla de seriales */
+function build_modal_serie(dt) {
+   let tabla = $('#tblStrSerie').DataTable();
+   $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
+   tabla.rows().remove().draw();
+   $.each(dt, function (v, u) {
+       
+       tabla.row
+           .add({
+            //   sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i><i class="fas fa-times-circle serie kill" id="K${u.ser_id}"></i>`,
+               sermodif: `<i></i>`,
+               produsku: `${u.ser_sku.slice(0, 7)}-${u.ser_sku.slice(7, 11)}`,
+               serlnumb: u.ser_serial_number,
+               dateregs: u.ser_date_registry,
+               sercost: u.ser_cost,
+               cvstatus: u.ser_situation,
+               cvestage: u.ser_stage,
+               serstatus: u.ser_status,
+               serstore: u.ser_serial_number,
+               comments: u.ser_comments,
+           })
+           .draw();
+       $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.prd_id);
+   });
 }

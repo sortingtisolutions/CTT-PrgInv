@@ -30,9 +30,16 @@ class AlmacenesModel extends Model
 // Optiene los Usuaios existentes
 	public function GetAlmacenes()
 	{
-		$qry = "SELECT str_id, str_name, str_type, str.emp_id , emp_fullname  FROM ctt_stores AS str
+	/*	$qry = "SELECT str_id, str_name, str_type, str.emp_id , emp_fullname  FROM ctt_stores AS str
 				LEFT JOIN ctt_employees AS emp ON emp.emp_id = str.emp_id
-				WHERE str.str_status = 1;";
+				WHERE str.str_status = 1;"; */
+		$qry = "SELECT str.str_id, str.str_name, str.str_type, str.emp_id, str.emp_fullname,
+				ifnull(sum(sp.stp_quantity),0) as cantidad 
+				FROM  ctt_stores 					AS str
+				LEFT JOIN ctt_stores_products       AS sp ON sp.str_id = str.str_id
+				WHERE str_status = 1 
+				GROUP BY str.str_id, str.str_name, str.str_type, str.emp_id, str.emp_fullname
+				ORDER BY str.str_id;";
 		$result = $this->db->query($qry);
 		$lista = array();
 		while ($row = $result->fetch_row()){
@@ -40,7 +47,8 @@ class AlmacenesModel extends Model
 						"str_name" =>$row[1],
 						"str_type"=>$row[2],
 						"emp_id"=>$row[3],
-						"emp_fullname"=>$row[4]);
+						"emp_fullname"=>$row[4],
+						"cantidad"=>$row[5]);
 			array_push($lista, $item);
 		}
 		return $lista;
@@ -108,6 +116,18 @@ class AlmacenesModel extends Model
 		}
 		return $lista;
 	}
-
+	
+	public function listSeries($params)
+    {
+        $prodId = $this->db->real_escape_string($params['strId']);
+        $qry = "SELECT  se.ser_id, se.ser_sku, se.ser_serial_number, 
+				date_format(se.ser_date_registry, '%d/%m/%Y') AS ser_date_registry,
+				se.ser_cost, se.ser_situation, se.ser_stage, se.ser_status,se.ser_comments
+				FROM ctt_series as se 
+				LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
+				WHERE sp.str_id IN ($prodId) AND sp.stp_quantity > 0
+				ORDER BY se.ser_sku;";
+        return $this->db->query($qry);
+    }
 
 }

@@ -62,6 +62,21 @@
 		  echo json_encode($result ,JSON_UNESCAPED_UNICODE);	
 		}
 
-
+		public function listSeries($request_params)
+		{
+			$params =  $this->session->get('user');
+			$result = $this->model->listSeries($request_params);
+			$i = 0;
+			while($row = $result->fetch_assoc()){
+				$rowdata[$i] = $row;
+				$i++;
+			}
+			if ($i>0){
+				$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+			} else {
+				$res =  '[{"sbc_id":"0"}]';	
+			}
+			echo $res;
+		}
 	  
 	}

@@ -32,7 +32,6 @@ function inicial() {
     $('#CategoriasTable tbody').on('click', 'tr', function () {
       positionRow = (table.page.info().page * table.page.info().length) + $(this).index();
       console.log(positionRow);
-
       setTimeout(() => {
          RenglonesSelection = table.rows({ selected: true }).count();
          if (RenglonesSelection == 0 || RenglonesSelection == 1) {
@@ -67,15 +66,12 @@ function EditCategoria(id) {
     $.ajax({
             type: "POST",
             dataType: 'JSON',
-            data: { id : id
-             },
+            data: { id : id },
             url: location,
         success: function (respuesta) {
             $('#NomCategoria').val(respuesta.cat_name);
             $('#IdCategoria').val(respuesta.cat_id);
             getAlmacenes(respuesta.str_id);
-
-
 
           $('#CategoriaModal').modal('show');
         },
@@ -100,7 +96,14 @@ function UnSelectRowTable() {
     setTimeout(() => {table.rows().deselect();}, 10);
 }
 
-
+// Obtiene las series para llenar el modal
+function getSeries(catId) {
+   var pagina = 'Categorias/listSeries';
+   var par = `[{"catId":"${catId}"}]`;
+   var tipo = 'json';
+   var selector = putSeries;
+   fillField(pagina, par, tipo, selector);
+}
 
 //BORRAR  * *
 function DeletCategoria() {
@@ -172,7 +175,6 @@ function SaveCategoria() {
                $(rowNode).find('td').eq(4).attr("hidden",true);
                $(rowNode).find('td').eq(5).attr("hidden",true);
 
-
               LimpiaModal();
               getAlmacenes();
 
@@ -193,7 +195,6 @@ function LimpiaModal() {
 }
 
 
-
 //obtiene la informacion de tabla Proveedores *
 function getCategoriasTable() {
    var location = 'Categorias/GetCategorias';                
@@ -208,7 +209,7 @@ function getCategoriasTable() {
          var renglon = '';
          respuesta.forEach(function (row, index) {
             renglon =
-               '<tr>' +
+               '<tr id=" ' + row.cat_id + '">' +
               
                '<td class="text-center edit"> ' +
                    '<button onclick="EditCategoria(' + row.cat_id +')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
@@ -231,15 +232,15 @@ function getCategoriasTable() {
                row.str_id +
                '</td>' +
 
-               
-               '<td hidden>' +
+               '<td class="quantity text-left data-content=" ' + row.cat_id + '"><span class="toLink">' +
                row.cantidad +
-               '</td>' +
-
-               
+               '</span></td>' +
+ 
                '</tr>';
             $('#tablaCategoriasRow').append(renglon);
          });
+        
+         activeIcons();
 
          let title = 'Categorias';
          let filename =
@@ -252,8 +253,8 @@ function getCategoriasTable() {
                info: false,
             },
             lengthMenu: [
-               [10, 25, 50, 100, -1],
-               ['10', '25', '50', 'Todo'],
+               [25, 50, 100, -1],
+               ['25', '50','100', 'Todo'],
             ],
             dom: 'Blfrtip',
             buttons: [
@@ -338,7 +339,7 @@ function getAlmacenes(id) {
       data: {id: id},
       url: location,
       success: function (respuesta) {
-         console.log(respuesta);
+        /* console.log(respuesta);*/
          var renglon = "<option id='0'  value=''>Seleccione...</option> ";
          respuesta.forEach(function (row, index) {
             renglon += '<option id=' + row.str_id + '  value="' + row.str_id + '">' + row.str_name + '</option> ';
@@ -351,4 +352,87 @@ function getAlmacenes(id) {
       error: function () {},
    }).done(function () {});
 }
+
+function activeIcons() {
+   console.log('Se Activo el Boton');
+   $('.toLink')
+       .unbind('click')
+       .on('click', function () {
+           let prd = $(this).parents('tr').attr('id');
+         /*  let qty = $(this).parent('td').attr('data-content');*/
+         /* let prd = 15;*/
+          let qty = 1;
+           if (qty > 0) {
+               console.log('Se TOCO el Boton y valido');
+               getSeries(prd);
+           }
+       });
+}
+
+function putSeries(dt) {
+   $('#ExisteCatModal').removeClass('overlay_hide');
+   $('#tblCatSerie').DataTable({
+       destroy: true,
+       order: [[1, 'desc']],
+       lengthMenu: [
+           [100, 150, 200, -1],
+           [100, 150, 200, 'Todos'],
+       ],
+       pagingType: 'simple_numbers',
+       language: {
+           url: 'app/assets/lib/dataTable/spanish.json',
+       },
+       scrollY: 'calc(100vh - 290px)',
+       scrollX: true,
+       fixedHeader: true,
+       columns: [
+           {data: 'sermodif', class: 'edit'},
+           {data: 'produsku', class: 'sku'},
+           {data: 'serlnumb', class: 'product-name'},
+           {data: 'dateregs', class: 'sku'},
+           {data: 'sercost', class: 'quantity'},
+           {data: 'cvstatus', class: 'code-type_s'},
+           {data: 'cvestage', class: 'code-type_s'},
+           {data: 'serstatus', class: 'quantity'},
+           {data: 'serstore', class: 'catalog'},
+           {data: 'comments', class: 'comments'},
+       ],
+   });
+
+   $('#ExisteCatModal .btn_close')
+       .unbind('click')
+       .on('click', function () {
+           $('.overlay_background').addClass('overlay_hide');
+       });
+
+   build_modal_serie(dt);
+}
+
+/** +++++  Coloca los seriales en la tabla de seriales */
+function build_modal_serie(dt) {
+   console.log('Llenando datos en modal de CATAGORIAS');
+   let tabla = $('#tblCatSerie').DataTable();
+   $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
+   tabla.rows().remove().draw();
+   $.each(dt, function (v, u) {
+       
+       tabla.row
+           .add({
+               /*sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i><i class="fas fa-times-circle serie kill" id="K${u.ser_id}"></i>`,*/
+               sermodif: `<i></i>`,
+               produsku: `${u.ser_sku.slice(0, 7)}-${u.ser_sku.slice(7, 11)}`,
+               serlnumb: u.ser_serial_number,
+               dateregs: u.ser_date_registry,
+               sercost: u.ser_cost,
+               cvstatus: u.ser_situation,
+               cvestage: u.ser_stage,
+               serstatus: u.ser_status,
+               serstore: u.ser_serial_number,
+               comments: u.ser_comments,
+           })
+           .draw();
+       $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.prd_id);
+   });
+}
+
 
