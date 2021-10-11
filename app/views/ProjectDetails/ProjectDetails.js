@@ -1241,7 +1241,6 @@ function show_info_product(id, lvl, pj) {
 }
 /**  Llena el listado de relacionados al prducto */
 function put_products_related(dt) {
-    console.log(dt);
     let name = dt[0].prd_name;
     $('.product_container h2').html(name);
 
@@ -1256,6 +1255,7 @@ function put_products_related(dt) {
         } else {
             pnd = '';
             sku = u.pjtdt_prod_sku.slice(0, 7) + '-' + u.pjtdt_prod_sku.slice(7, 11);
+            sku = u.pjtdt_prod_sku.slice(11, 15) != '' ? sku + '-' + u.pjtdt_prod_sku.slice(11, 15) : sku;
         }
         let H = `
         <tr>
