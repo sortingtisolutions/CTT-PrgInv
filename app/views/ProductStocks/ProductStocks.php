@@ -13,7 +13,6 @@
             
         <div class="row mvst_group">
 
-
             <div class="mvst_panel">
                 <div class="form-group">
                 <h4 id="titulo">Productos en Existencia</h4>
@@ -39,13 +38,8 @@
                         </div>
                     </div>
 
-                    
-
                     <div class="row" style="height: 10px">
 					</div>
-
-
-
 
                     <div class="row" >
 						<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -104,7 +98,7 @@
 
                     <div class="row">
                         <div class="col-md-8 mb-5">
-                            <button type="button" class="btn btn-sm btn-primary" id="btn_products">Cargar</button>
+                            <button type="button" class="btn btn-sm btn-primary" id="btn_products">Cargar Datos</button>
                         </div>
                     </div>
 
@@ -154,14 +148,8 @@
                     </thead>
                     <tbody></tbody>
                 </table> 
-
-
-
+                
             </div>
-
-
-        
-            
         </div>
 
     </div>

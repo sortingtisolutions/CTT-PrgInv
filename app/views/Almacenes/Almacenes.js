@@ -8,8 +8,12 @@ $(document).ready(function () {
 
 function inicial() {
    getAlmacenesTable();
-   getEncargadoAlmacen();
+  // getEncargadoAlmacen();
+
+   var nomalm;
    
+   $('.deep_loading').css({display: 'flex'});
+
    //Open modal *
    $('#nuevoAlmacen').on('click', function () {
       LimpiaModal();
@@ -80,13 +84,15 @@ function EditAlmacen(id) {
          $('#IdAlmacen').val(respuesta.str_id);
          $('#NomAlmacen').val(respuesta.str_name);
          $('#selectTipoAlmacen').val(respuesta.str_type);
-         getEncargadoAlmacen(respuesta.emp_id); 
+         $('#selectRowEncargado').val(respuesta.emp_fullname);
+        /* getEncargadoAlmacen(respuesta.emp_id); */
       },
       error: function (EX) {
          console.log(EX);
       },
    }).done(function () {});
 }
+
 //confirm para borrar **
 function ConfirmDeletAlmacen(id) {
    //UnSelectRowTable();
@@ -134,12 +140,15 @@ function DeletAlmacen() {
 
 //Guardar Almacen **
 function SaveAlmacen() {
+   console.log('22');
    var location = 'Almacenes/SaveAlmacen';
    var IdAlmacen = $('#IdAlmacen').val();
    var NomAlmacen = $('#NomAlmacen').val();
    var tipoAlmacen = $('#selectTipoAlmacen option:selected').attr('id');
-   var EncargadoAlmacen = $('#selectRowEncargado option:selected').attr('id');
-   var Encargado = $('#selectRowEncargado option:selected').text();
+/*   var EncargadoAlmacen = $('#selectRowEncargado option:selected').attr('id');
+   var Encargado = $('#selectRowEncargado option:selected').text();*/
+   var EncargadoAlmacen = $('#selectRowEncargado').val;
+   var Encargado = $('#selectRowEncargado').val;
 
 
    $.ajax({
@@ -194,8 +203,8 @@ function LimpiaModal() {
    $('#titulo').text('Nuevo Almacen');
    $('#NomAlmacen').val('');
    $('#IdAlmacen').val('');
-   $('#selectTipoAlmacen').val('0');
-   getEncargadoAlmacen();
+   $('#selectTipoAlmacen').val('');
+  /* getEncargadoAlmacen();*/
    $('#formProveedor').removeClass('was-validated');
 }
 
@@ -213,7 +222,7 @@ function getAlmacenesTable() {
          var renglon = '';
          respuesta.forEach(function (row, index) {
             renglon =
-               '<tr id=" ' + row.str_id + '">' +
+               '<tr id="' + row.str_id + '">' +
                '<td class="text-center edit"> ' +
                '<button onclick="EditAlmacen(' +
                row.str_id +
@@ -225,7 +234,7 @@ function getAlmacenesTable() {
                "<td class='dtr-control text-center'>" +
                row.str_id +
                '</td>' +
-               '<td>' +
+               '<td data-content="' + row.str_name + '">' +
                row.str_name +
                '</td>' +
                '<td>' +
@@ -239,13 +248,14 @@ function getAlmacenesTable() {
                row.str_type +
                '</td>' +
                // se agrego campo de cantidad
-               '<td class="quantity text-left data-content=" ' + row.cantidad + '"><span class="toLink">' +
+               '<td class="quantity text-left" data-content="' + row.cantidad + '"><span class="toLink">' +
                row.cantidad +
                '</span></td>' +
                '</tr>';
             $('#tablaAlmacenesRow').append(renglon);
          });
          activeIcons();
+         $('.deep_loading').css({display: 'none'});
 
          let title = 'Almacenes';
          let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
@@ -320,6 +330,7 @@ function getAlmacenesTable() {
             },
          });
       },
+      
       get success() {
          return this._success;
       },
@@ -328,10 +339,12 @@ function getAlmacenesTable() {
       },
       error: function () {},
    }).done(function () {});
+   
 }
 
 // Optiene los usuarios disponibles para encargados *
 function getEncargadoAlmacen(id) {
+   console.log('11');
    $('#selectRowEncargado').html("");
    var location = 'Almacenes/GetEncargadosAlmacen';
    $.ajax({
@@ -354,24 +367,23 @@ function getEncargadoAlmacen(id) {
 }
 //agregado para mostrar datos en el modal
 function activeIcons() {
-   console.log('Se Activo el Boton');
    $('.toLink')
        .unbind('click')
        .on('click', function () {
-           let prd = $(this).parents('tr').attr('id');
-         /* let qty = $(this).parent('td').attr('data-content');*/
-          /*let prd = 15;*/
-          let qty = 1;
-           console.log('Se TOCO el Boton', qty );
+         let prd = $(this).parents('tr').attr('id');
+         console.log($(this.parent));
+        /* nomalm = $(this).parent('td').eq(2).val(); */
+        nomalm = prd;
+         let qty = $(this).parent('td').attr('data-content');
            if (qty > 0) {
-               console.log('Se TOCO el Boton y valido');
+               console.log('Se TOCO el Boton y valido ---', nomalm);
+               $('.deep_loading').css({display: 'flex'});
                getSeries(prd);
            }
        });
 } 
 
 function putSeries(dt) {
-   console.log('Llenando datos en modal');
    $('#ExisteStrModal').removeClass('overlay_hide');
    $('#tblStrSerie').DataTable({
        destroy: true,
@@ -413,7 +425,7 @@ function putSeries(dt) {
 /** +++++  Coloca los seriales en la tabla de seriales */
 function build_modal_serie(dt) {
    let tabla = $('#tblStrSerie').DataTable();
-   $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
+   $('.overlay_closer .title').html(`Almacen - ${nomalm}`);
    tabla.rows().remove().draw();
    $.each(dt, function (v, u) {
        
@@ -433,5 +445,6 @@ function build_modal_serie(dt) {
            })
            .draw();
        $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.prd_id);
+       $('.deep_loading').css({display: 'none'});
    });
 }

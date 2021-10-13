@@ -36,8 +36,8 @@ class AlmacenesModel extends Model
 		$qry = "SELECT str.str_id, str.str_name, str.str_type, str.emp_id, str.emp_fullname,
 				ifnull(sum(sp.stp_quantity),0) as cantidad 
 				FROM  ctt_stores 					AS str
-				LEFT JOIN ctt_stores_products       AS sp ON sp.str_id = str.str_id
-				WHERE str_status = 1 
+				LEFT JOIN ctt_stores_products      AS sp ON str.str_id=sp.str_id
+				WHERE str.str_status = 1 
 				GROUP BY str.str_id, str.str_name, str.str_type, str.emp_id, str.emp_fullname
 				ORDER BY str.str_id;";
 		$result = $this->db->query($qry);
@@ -56,13 +56,14 @@ class AlmacenesModel extends Model
 
     public function GetAlmacen($params)
 	{
-		$qry = "SELECT str_id, str_name, str_type, emp_id  FROM ctt_stores WHERE str_id = ".$params['id'].";";
+		$qry = "SELECT str_id, str_name, str_type, emp_id, emp_fullname  FROM ctt_stores WHERE str_id = ".$params['id'].";";
 		$result = $this->db->query($qry);
 		if($row = $result->fetch_row()){
 			$item = array("str_id" =>$row[0],
 			"str_name" =>$row[1],
 			"str_type"=>$row[2],
-			"emp_id"=>$row[3]);
+			"emp_id"=>$row[3],
+			"emp_fullname"=>$row[4]);
 		}
 		return $item;
 	}
@@ -75,7 +76,7 @@ class AlmacenesModel extends Model
                 $qry = " UPDATE ctt_stores
                 SET str_name = '".$params['NomAlmacen']."'
                 ,str_type ='".$params['tipoAlmacen']."'
-				,emp_id ='".$params['EncargadoAlmacen']."'
+				,emp_fullname ='".$params['EncargadoAlmacen']."'
 
                 WHERE str_id = ".$params['IdAlmacen'].";";
 

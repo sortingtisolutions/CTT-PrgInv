@@ -113,7 +113,7 @@ class CategoriasModel extends Model
 	public function listSeries($params)
     {
         $prodId = $this->db->real_escape_string($params['catId']);
-        $qry = "SELECT  se.ser_id, se.ser_sku, se.ser_serial_number, 
+        $qry = "SELECT  se.ser_id, se.ser_sku, p.prd_name, se.ser_serial_number, 
 			date_format(se.ser_date_registry, '%d/%m/%Y') AS ser_date_registry,
 			se.ser_cost, se.ser_situation, se.ser_stage, se.ser_status, se.ser_comments
 			FROM  ctt_products AS p

@@ -36,10 +36,12 @@
 
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<select id="selectRowEncargado"  name="selectRowEncargado"  class="form-select form-select-sm" required>
+									<input id="selectRowEncargado" name="selectRowEncargado" type="text" class="form-control form-control-sm" required>
+									<label for="NomAlmacen">Responsable de almacen</label>
+<!--								<select id="selectRowEncargado"  name="selectRowEncargado"  class="form-select form-select-sm" required>
 
 									</select>
-									<label for="selectTipoAlmacen" class="form-label">Responsable de Almacen</label>
+									<label for="selectTipoAlmacen" class="form-label">Responsable de Almacen</label> -->
 								</div>
 							</div>
 
@@ -88,7 +90,7 @@
 											<tr>
 													<th style="width: 30px"></th>
 													<th style="width: 20px">Id</th>
-													<th style="width: auto">Nombre</th>
+													<th style="width: 200px">Nombre</th>
 													<th style="width: auto">Responsable Almacen</th>
 													<th style="width: auto" hidden>Encargado Almacen</th>
 													<th style="width: 60px">Tipo</th>
@@ -103,7 +105,11 @@
 				</div>
 				<!-- End área de listado -->
 			</div>
+			<div class="deep_loading">
+                <div class="flash_loading"> Cargando datos...</div>
+    		</div>
 	</div>
+	
 </div>
 <!-- Modal Agregar Almacen -->
 <!-- <div class="modal fade" id="AlmacenModal" tabindex="-1" aria-labelledby="AlmacenModalLabel" aria-hidden="true">

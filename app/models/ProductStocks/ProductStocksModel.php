@@ -73,13 +73,15 @@ class ProductStocksModel extends Model
 		}
 
 
-		if($isConcepto == 1){
+		if($isConcepto == 1)
+		{
 			$qry = "SELECT distinct pr.prd_sku, pr.prd_name, prd_price, sb.sbc_name FROM ctt_products AS pr
 			INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
 			INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
 			INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pr.sbc_id
 			WHERE sr.ser_status = 1 AND st.stp_quantity > 0 ".$queryExt;
-		}else{
+		}else
+		{
 			$qry = "SELECT  sr.ser_sku, pr.prd_name, sr.ser_cost, sr.ser_serial_number , sr.ser_date_registry, sp.sup_business_name, sb.sbc_name FROM ctt_products AS pr
 			INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
 			INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id

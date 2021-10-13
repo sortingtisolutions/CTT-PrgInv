@@ -7,12 +7,17 @@ $(document).ready(function () {
 });
 
 function inicial() {
+   $('.deep_loading').css({display: 'flex'});
    getSubCategoriasTable('0');
    getCategorias();
+   ListSubCategorias();
+
+
    //Open modal *
    $('#nuevaSubCategoria').on('click', function () {
       LimpiaModal();
       getCategorias('');
+      ListSubCategorias();
    });
    //Guardar almacen *
    $('#GuardarCategoria').on('click', function () {
@@ -56,8 +61,34 @@ function validaFormulario() {
    return valor;
 }
 
+function getCategorias(sbcId) {
+   var pagina = 'SubCategorias/GetCategorias';
+   var par = `[{"sbcId":"${sbcId}"}]`;
+   var tipo = 'json';
+   var selector = LlenaCategorias;
+   fillField(pagina, par, tipo, selector);
+}
+
+function ListSubCategorias(sbcId) {
+   console.log('GETSUBCATEGORIAS');
+   var pagina = 'SubCategorias/ListSubCategorias';
+   var par = `[{"sbcId":"${sbcId}"}]`;
+   var tipo = 'json';
+   var selector = LlenaSubCategorias;
+   fillField(pagina, par, tipo, selector);
+}
+
+function getSeries(sbcId) {
+   var pagina = 'SubCategorias/listSeries';
+   var par = `[{"sbcId":"${sbcId}"}]`;
+   var tipo = 'json';
+   var selector = putSeries;
+   fillField(pagina, par, tipo, selector);
+}
+
 //Edita el Proveedores *
 function EditSubCategoria(id, idCategoria) {
+   console.log('NO debo entrar');
    UnSelectRowTable();
    LimpiaModal();
    $('#titulo').text('Editar Subcategoria');
@@ -94,13 +125,6 @@ function UnSelectRowTable() {
    }, 10);
 }
 
-function getSeries(sbcId) {
-   var pagina = 'SubCategorias/listSeries';
-   var par = `[{"sbcId":"${sbcId}"}]`;
-   var tipo = 'json';
-   var selector = putSeries;
-   fillField(pagina, par, tipo, selector);
-}
 
 
 //BORRAR  * *
@@ -192,6 +216,7 @@ function SaveSubCategoria() {
 
 //Limpia datos en modal  **
 function LimpiaModal() {
+   console.log('LIMPIA--');
    $('#NomSubCategoria').val('');
    $('#IdSubCategoria').val('');
    $('#selectRowCategorias').html('');
@@ -202,14 +227,18 @@ function LimpiaModal() {
 }
 
 // Optiene los categorias disponibles *
-function getCategorias(id) {
-   var location = 'Categorias/GetCategorias';
+
+
+/*function putCategorias(id) {
+   var location = 'SubCategorias/GetCategorias';
+   console.log('PASO Catalogos');
    $.ajax({
       type: 'POST',
       dataType: 'JSON',
       data: {id: id},
       url: location,
       success: function (respuesta) {
+        
          var renglon = "<option id='0'  value=''>Seleccione...</option> ";
          respuesta.forEach(function (row, index) {
             renglon += '<option id=' + row.cat_id + '  value="' + row.cat_id + '">' + row.cat_name + '</option> ';
@@ -221,7 +250,9 @@ function getCategorias(id) {
       },
       error: function () {},
    }).done(function () {});
-}
+} */
+
+
 
 //obtiene la informacion de tabla Proveedores *
 function getSubCategoriasTable(idCategoria) {
@@ -238,7 +269,7 @@ function getSubCategoriasTable(idCategoria) {
          respuesta.forEach(function (row, index) {
             if (row.sbc_id != 0) {
                renglon =
-                  '<tr id=" ' + row.sbc_id + '">' +
+                  '<tr id="' + row.sbc_id + '">' +
                   '<td class="text-center edit"> ' +
                   '<button onclick="EditSubCategoria(' +
                   row.sbc_id +
@@ -269,7 +300,7 @@ function getSubCategoriasTable(idCategoria) {
                   padLeadingZeros(row.cat_id,2)   +
                   '</td>' +
 
-                  '<td class="quantity text-left data-content=" ' + row.sbc_id + '"><span class="toLink">' +
+                  '<td class="quantity text-left" data-content="' + row.cantidad + '"><span class="toLink">' +
                   row.cantidad  +
                   '</span></td>' +
 
@@ -278,6 +309,7 @@ function getSubCategoriasTable(idCategoria) {
             $('#tablaSubCategoriasRow').append(renglon);
          });
          activeIcons();
+         $('.deep_loading').css({display: 'none'});
 
          let title = 'SubCategorias';
          let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
@@ -371,26 +403,54 @@ function padLeadingZeros(num, size) {
 }
 
 function activeIcons() {
-   console.log('Se Activo el Boton');
    $('.toLink')
        .unbind('click')
        .on('click', function () {
            let prd = $(this).parents('tr').attr('id');
-         /*  let qty = $(this).parent('td').attr('data-content');*/
-         /* let prd = 15;*/
-          let qty = 1;
+           let qty = $(this).parent('td').attr('data-content');
            if (qty > 0) {
-               console.log('Se TOCO el Boton y valido');
+               console.log('Se TOCO el Boton y valido', qty );
+               $('.deep_loading').css({display: 'flex'});
                getSeries(prd);
            }
        });
+}
+
+function LlenaCategorias(dt) {        
+         var renglon = "<option id='0'  value=''>Seleccione...</option> ";
+         /*respuesta.forEach(function (row, index) {*/
+         $.each(dt, function (v, row) {
+            renglon += '<option id=' + row.cat_id + '  value="' + row.cat_id + '">' + row.cat_name + '</option> ';
+         });
+         $('#selectRowCategorias').append(renglon);
+         if (id != undefined) {
+            $("#selectRowCategorias option[value='" + id + "']").attr('selected', 'selected');
+         }
+     /* },
+      error: function () {},
+   }).done(function () {}); */
+}
+
+function LlenaSubCategorias(dt) {        
+   var renglon = "<option id='0'  value=''>Solo consulta ... </option> ";
+   /*respuesta.forEach(function (row, index) {*/
+   $.each(dt, function (v, row) {
+      renglon += '<option id=' + row.sbc_id + '  value="' + row.sbc_id + '">' + row.cat_id + ' - ' + row.sbc_code + ' | ' + row.sbc_name + '</option> ';
+   });
+   $('#selectRowSubCat').append(renglon);
+   if (id != undefined) {
+      $("#selectRowSubCat option[value='" + id + "']").attr('selected', 'selected');
+   }
+/* },
+error: function () {},
+}).done(function () {}); */
 }
 
 function putSeries(dt) {
    $('#ExisteSbcModal').removeClass('overlay_hide');
    $('#tblSbcSerie').DataTable({
        destroy: true,
-       order: [[1, 'desc']],
+       order: [[2, 'asc']],
        lengthMenu: [
            [100, 150, 200, -1],
            [100, 150, 200, 'Todos'],
@@ -405,13 +465,12 @@ function putSeries(dt) {
        columns: [
            {data: 'sermodif', class: 'edit'},
            {data: 'produsku', class: 'sku'},
+           {data: 'prodname', class: 'product-name'},
            {data: 'serlnumb', class: 'product-name'},
            {data: 'dateregs', class: 'sku'},
            {data: 'sercost', class: 'quantity'},
            {data: 'cvstatus', class: 'code-type_s'},
            {data: 'cvestage', class: 'code-type_s'},
-           {data: 'serstatus', class: 'quantity'},
-           {data: 'serstore', class: 'catalog'},
            {data: 'comments', class: 'comments'},
        ],
    });
@@ -427,9 +486,8 @@ function putSeries(dt) {
 
 /** +++++  Coloca los seriales en la tabla de seriales */
 function build_modal_serie(dt) {
-   console.log('Llenando datos en modal de SUBCATAGORIAS');
    let tabla = $('#tblSbcSerie').DataTable();
-   $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
+   $('.overlay_closer .title').html(`Subcategoria - `);
    tabla.rows().remove().draw();
    $.each(dt, function (v, u) {
        
@@ -438,18 +496,40 @@ function build_modal_serie(dt) {
                /*sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i><i class="fas fa-times-circle serie kill" id="K${u.ser_id}"></i>`,*/
                sermodif: `<i></i>`,
                produsku: `${u.ser_sku.slice(0, 7)}-${u.ser_sku.slice(7, 11)}`,
+               prodname: u.prd_name,
                serlnumb: u.ser_serial_number,
                dateregs: u.ser_date_registry,
                sercost: u.ser_cost,
                cvstatus: u.ser_situation,
                cvestage: u.ser_stage,
-               serstatus: u.ser_status,
-               serstore: u.ser_serial_number,
                comments: u.ser_comments,
            })
            .draw();
        $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.prd_id);
+       $('.deep_loading').css({display: 'none'});
    });
 }
 
-
+/*function ListSubCategorias() {
+   
+   var location = 'SubCategorias/ListSubCategorias';
+   console.log('Paso 1');
+   $.ajax({
+      type: 'POST',
+      dataType: 'JSON',
+      data: {id: id},
+      url: location,
+      success: function (respuesta) {
+         console.log(respuesta);
+         var renglon = "<option id='0'  value=''>Seleccione...</option> ";
+         respuesta.forEach(function (row, index) {
+            renglon += '<option id=' + row.sbc_id + '  value="' + row.sbc_id + '">' + row.sbc_code + ' | ' + row.sbc_name + '</option> ';
+         });
+         $('#selectRowSubCat').append(renglon);
+         if (id != undefined) {
+            $("#selectRowSubCat option[value='" + id + "']").attr('selected', 'selected');
+         }
+      },
+      error: function () {},
+   }).done(function () {});
+} */

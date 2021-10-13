@@ -16,12 +16,15 @@ $(document).ready(function () {
     inicial();
 });
 
-function inicial() {
+function inicial() 
+{
+    $('.deep_loading').css({display: 'flex'}); 
     getStores();// optiene los almacenes.
     getCategorias();// Carga las categorias 
     // funcion para la carga de subcategorias
     $('#selectRowCategorias').change(function () {
         var idCategoria = $('#selectRowCategorias option:selected').attr('id');
+        console.log('SELECCIONA -- ', idCategoria)
         getSubCategorias(0, idCategoria);
     });
 
@@ -29,14 +32,13 @@ function inicial() {
     setting_table_pro();// inicializa la tabla de productos
 
     setting_datepicket($('#txtStartDate'));//fecha del dia en curso
-
+    
     $('#btn_products').on('click', function () {
+        console.log('CLick Boton');
         getProducts();
     });
-
+    $('.deep_loading').css({display: 'none'});
 }
-
-
 
 //conceptos
 function setting_table() {
@@ -181,7 +183,7 @@ function getStores() {
 // Optiene las categorias *
 function getCategorias(id) {
     $('#selectRowCategorias').html('');
-    var location = 'Categorias/GetCategorias';
+    var location = 'SubCategorias/GetCategorias';
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -204,7 +206,7 @@ function getCategorias(id) {
 // Optiene las Sub subcategorias *
 function getSubCategorias(id, idCategoria) {
     $('#selectRowSubCategorias').html('');
-    var location = 'SubCategorias/GetSubCategorias';
+    var location = 'SubCategorias/ListSubCategorias';
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -258,7 +260,7 @@ function getProducts() {
         isAccesorio = 1;
     }
 
-    //console.log(idAlmacen+idCategoria+idSubCategoria+isConcepto+isPaquete+isProducto+isAccesorio);
+    console.log(idAlmacen+idCategoria+idSubCategoria+isConcepto+isPaquete+isProducto+isAccesorio);
 
     var pagina = 'ProductStocks/listProducts';
     var par = `[{"idAlmacen":"${idAlmacen}","idCategoria":"${idCategoria}","idSubCategoria":"${idSubCategoria}","isConcepto":"${isConcepto}","isPaquete":"${isPaquete}","isProducto":"${isProducto}","isAccesorio":"${isAccesorio}"}]`;

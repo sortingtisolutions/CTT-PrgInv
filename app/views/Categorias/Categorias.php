@@ -75,6 +75,9 @@
 				</div>
 				<!-- End área de listado -->
 			</div>
+			<div class="deep_loading">
+                <div class="flash_loading"> Cargando datos...</div>
+            </div>
 	</div>
 </div>
 
@@ -87,14 +90,13 @@
                     <tr>
                         <th style="width:  30px"></th>
                         <th style="width: 100px">SKU</th>
+						<th style="width:  2500px">Descripcion</th>
                         <th style="width:  80px">Núm. serie</th>
                         <th style="width: 120px">Fecha de alta</th>
 						<th style="width:  50px">Costo</th>
                         <th style="width:  50px">Clave status</th>
                         <th style="width:  50px">Clave etapa</th>
-                        <th style="width:  60px">Status</th>
-                        <th style="width: 200px">Almacen</th>
-                        <th style="width: 350px">Comentarios</th>
+                        <th style="width: auto">Comentarios</th>
                     </tr>
                 </thead>
             </table>

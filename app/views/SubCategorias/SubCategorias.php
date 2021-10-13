@@ -29,6 +29,14 @@
 								</div>
 							</div>
 
+							<div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<select id="selectRowSubCat"  name="selectRowSubCat"  class="form-select form-select-sm" required>
+
+									</select>
+									<label for="selectRowSubCat" class="form-label">Lista Subcategorias</label>
+								</div>
+							</div>
 
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -43,8 +51,6 @@
 									<label for="CodSubCategoria">Codigo Subcategoria</label>
 								</div>
 							</div>
-
-
 
 							<div class="row">
 								<div class="col-6">
@@ -86,6 +92,9 @@
 				</div>
 				<!-- End área de listado -->
 			</div>
+			<div class="deep_loading">
+                <div class="flash_loading"> Cargando datos...</div>
+            </div>
 	</div>
 </div>
 
@@ -98,14 +107,13 @@
                     <tr>
                         <th style="width:  30px"></th>
                         <th style="width: 100px">SKU</th>
+						<th style="width: 200px">Descripcion</th>
                         <th style="width:  80px">Núm. serie</th>
                         <th style="width: 120px">Fecha de alta</th>
 						<th style="width:  50px">Costo</th>
                         <th style="width:  50px">Clave status</th>
                         <th style="width:  50px">Clave etapa</th>
-                        <th style="width:  60px">Status</th>
-                        <th style="width: 200px">Almacen</th>
-                        <th style="width: 350px">Comentarios</th>
+                        <th style="width: auto">Comentarios</th>
                     </tr>
                 </thead>
             </table>

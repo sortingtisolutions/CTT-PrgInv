@@ -49,7 +49,7 @@
 
                     		 <div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="CodDocumento" name="CodDocumento" type="text" class="form-control form-control-sm" maxlength="10" style="text-transform: uppercase" >
+									<input id="CodDocumento" name="CodDocumento" type="text" class="form-control form-control-sm" style="text-transform: uppercase" >
 									<label for="CodDocumento">Codigo Documento</label>
 								</div>
 							</div>
@@ -78,12 +78,12 @@
 											<tr>
 													<th style="width: 30px"></th>
 													<th style="width: 20px" hidden>Id</th>
-													<th style="width: 300px">Nombre</th>
+													<th style="width: 200px">Nombre</th>
 													<th style="width: 100px" hidden>id Tipo Documento</th>
 
 													<th style="width: 100px">Tipo Documento</th>
 
-													<th style="width: 100px">Codigo</th>
+													<th style="width: 200px">Codigo</th>
 													<th style="width: 100px">Tipo</th>
 											</tr>
 										</thead>
