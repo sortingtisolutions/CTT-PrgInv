@@ -11,14 +11,15 @@ $totalTrip = 0;
 $totalTest = 0;
 $totalInsr = 0;
 
-$dir = 'BudgetFile-'. $usrId .'.json';
+
+$dir = 'ProjectDetailsFile-'. $usrId .'.json';
 // $file = fopen($dir, "r") or die ('problema al abrir archivo');
 
 $file = @file_get_contents($dir);
 $items = json_decode($file, true);
 
 // var_dump($items);
-// echo $items[0]['bdg_prod_name'];
+// echo $items[0]['pjtcn_prod_name'];
 
     $header = '
     <header>
@@ -37,11 +38,11 @@ $items = json_decode($file, true);
 
     $costBase = 0;
     for ($i = 0; $i<count($items); $i++){
-        $amount = $items[$i]['bdg_prod_price'] * $items[$i]['bdg_quantity'];
-        $amountBase = ($amount * $items[$i]['bdg_days_base'])-($amount * $items[$i]['bdg_discount_base']);
-        $amountTrip = ($amount * $items[$i]['bdg_days_trip'])-($amount * $items[$i]['bdg_discount_trip']);
-        $amountTest = ($amount * $items[$i]['bdg_days_test'])-($amount * $items[$i]['bdg_discount_test']);
-        $amountInsr = $amount -($amount * $items[$i]['bdg_insured']);
+        $amount = $items[$i]['pjtcn_prod_price'] * $items[$i]['pjtcn_quantity'];
+        $amountBase = ($amount * $items[$i]['pjtcn_days_base'])-($amount * $items[$i]['pjtcn_discount_base']);
+        $amountTrip = ($amount * $items[$i]['pjtcn_days_trip'])-($amount * $items[$i]['pjtcn_discount_trip']);
+        $amountTest = ($amount * $items[$i]['pjtcn_days_test'])-($amount * $items[$i]['pjtcn_discount_test']);
+        $amountInsr = $amount -($amount * $items[$i]['pjtcn_insured']);
         $totalBase += $amountBase ;
         $totalTrip += $amountTrip ;
         $totalTest += $amountTest ;
@@ -53,7 +54,7 @@ $items = json_decode($file, true);
             <div class="container">
                 <div class="name-report">
                     <p>
-                        <span class="number">Cotización '. $items[0]['ver_code'] .'</span>
+                        <span class="number">Proyecto '. $items[0]['ver_code'] .'</span>
                     <br>
                         <span class="date">'.  $items[0]['ver_date_real'] .'</span>
                     </p>
@@ -166,18 +167,18 @@ $items = json_decode($file, true);
                     <tbody>';
 
                     for ($i = 0; $i<count($items); $i++){
-                        $price = $items[$i]['bdg_prod_price'] ;
-                        $sbtt1 = $price * $items[$i]['bdg_quantity'];
-                        $sbtt2 = $sbtt1 * $items[$i]['bdg_days_base'];
-                        $disco = $sbtt2 * $items[$i]['bdg_discount_base'];
+                        $price = $items[$i]['pjtcn_prod_price'] ;
+                        $sbtt1 = $price * $items[$i]['pjtcn_quantity'];
+                        $sbtt2 = $sbtt1 * $items[$i]['pjtcn_days_base'];
+                        $disco = $sbtt2 * $items[$i]['pjtcn_discount_base'];
                         $amount = $sbtt2 - $disco;
 
     $html .= '
                         <tr>
-                            <td class="dat-figure prod">'. $items[$i]['bdg_prod_name'] .'</td>
+                            <td class="dat-figure prod">'. $items[$i]['pjtcn_prod_name'] .'</td>
                             <td class="dat-figure pric">' . number_format($price , 2,'.',',') . '</td>
-                            <td class="dat-figure qnty">'. $items[$i]['bdg_quantity'] .'</td>
-                            <td class="dat-figure days">'. $items[$i]['bdg_days_base'] .'</td>
+                            <td class="dat-figure qnty">'. $items[$i]['pjtcn_quantity'] .'</td>
+                            <td class="dat-figure days">'. $items[$i]['pjtcn_days_base'] .'</td>
                             <td class="dat-figure disc">' . number_format($disco , 2,'.',',') . '</td>
                             <td class="dat-figure amou">' . number_format($amount , 2,'.',',') . '</td>
                         </tr>
@@ -212,16 +213,16 @@ if ($totalTrip > 0){
                     ';
 
                     for ($i = 0; $i<count($items); $i++){
-                        $price = $items[$i]['bdg_prod_price'] ;
-                        $sbtt1 = $price * $items[$i]['bdg_quantity'];
-                        $sbtt2 = $sbtt1 * $items[$i]['bdg_days_trip'];
-                        $disco = $sbtt2 * $items[$i]['bdg_discount_trip'];
+                        $price = $items[$i]['pjtcn_prod_price'] ;
+                        $sbtt1 = $price * $items[$i]['pjtcn_quantity'];
+                        $sbtt2 = $sbtt1 * $items[$i]['pjtcn_days_trip'];
+                        $disco = $sbtt2 * $items[$i]['pjtcn_discount_trip'];
                         $amount = $sbtt2 - $disco;
 
     $html .= '
                         <tr>
-                            <td class="dat-figure prod">'. $items[$i]['bdg_prod_name'] .'</td>
-                            <td class="dat-figure days">'. $items[$i]['bdg_days_trip'] .'</td>
+                            <td class="dat-figure prod">'. $items[$i]['pjtcn_prod_name'] .'</td>
+                            <td class="dat-figure days">'. $items[$i]['pjtcn_days_trip'] .'</td>
                             <td class="dat-figure disc">' . number_format($disco , 2,'.',',') . '</td>
                             <td class="dat-figure amou">' . number_format($amount , 2,'.',',') . '</td>
                         </tr>
@@ -256,16 +257,16 @@ if ($totalTest > 0){
                     ';
 
                     for ($i = 0; $i<count($items); $i++){
-                        $price = $items[$i]['bdg_prod_price'] ;
-                        $sbtt1 = $price * $items[$i]['bdg_quantity'];
-                        $sbtt2 = $sbtt1 * $items[$i]['bdg_days_test'];
-                        $disco = $sbtt2 * $items[$i]['bdg_discount_test'];
+                        $price = $items[$i]['pjtcn_prod_price'] ;
+                        $sbtt1 = $price * $items[$i]['pjtcn_quantity'];
+                        $sbtt2 = $sbtt1 * $items[$i]['pjtcn_days_test'];
+                        $disco = $sbtt2 * $items[$i]['pjtcn_discount_test'];
                         $amount = $sbtt2 - $disco;
 
     $html .= '
                         <tr>
-                            <td class="dat-figure prod">'. $items[$i]['bdg_prod_name'] .'</td>
-                            <td class="dat-figure days">'. $items[$i]['bdg_days_test'] .'</td>
+                            <td class="dat-figure prod">'. $items[$i]['pjtcn_prod_name'] .'</td>
+                            <td class="dat-figure days">'. $items[$i]['pjtcn_days_test'] .'</td>
                             <td class="dat-figure disc">' . number_format($disco , 2,'.',',') . '</td>
                             <td class="dat-figure amou">' . number_format($amount , 2,'.',',') . '</td>
                         </tr>
@@ -330,7 +331,7 @@ $foot = '
                                     <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
                                     <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
                                     <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $name . '</td>
-                                    <td class="td-foot foot-rept" width="25%" style="text-align: right">Cotización</td>
+                                    <td class="td-foot foot-rept" width="25%" style="text-align: right">Proyecto</td>
                                 </tr>
                             </table>
 

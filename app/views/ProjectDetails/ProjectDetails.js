@@ -1,6 +1,7 @@
 let cust, proj, relc, vers, prod, disc;
 
 $('document').ready(function () {
+    url = getAbsolutePath();
     verifica_usuario();
     inicial();
 });
@@ -712,15 +713,11 @@ function get_days_period() {
 function build_menu_control() {
     let H = `
         <ul class="menu_block">
-            <li class="menu_version" data_content=""></li>
-            <li class="menu_button" id="mkproj"><i class="fas fa-upload"></i> Hacer proyecto</li>
             <li class="menu_button" id="printr"><i class="fas fa-print"></i> Imprimir</li>
-            <li class="menu_button" id="expexl"><i class="fas fa-file-excel"></i> Exportar Excel</li>
-            <li class="menu_button" id="exppdf"><i class="fas fa-file-pdf"></i> Exportar PDF</li>
         </ul>
         `;
     $('.menu_control').html(H);
-
+    $('.menu_block').css({display: 'block'});
     $('.menu_button').on('click', function () {
         let acc = $(this).attr('id');
         switch (acc) {
@@ -729,7 +726,7 @@ function build_menu_control() {
                 make_project();
                 break;
             case 'printr':
-                alert('Imprimir proyecto');
+                // alert('Imprimir proyecto');
                 print_project();
                 break;
             case 'expexl':
@@ -1699,7 +1696,22 @@ function make_project() {
     console.log(projectId, versionId);
 }
 
-function print_project() {}
+function print_project() {
+    let projectId = $('#IdProject').val();
+    console.log(projectId);
+    var pagina = 'ProjectDetails/saveProjectList';
+    var par = `[{"pjtId":"${projectId}"}]`;
+    var tipo = 'html';
+    var selector = printProject;
+    fillField(pagina, par, tipo, selector);
+}
+
+function printProject(dt) {
+    console.log(dt);
+    let usr = dt.split('|')[0];
+    let nme = dt.split('|')[1];
+    window.open(url + 'app/views/ProjectDetails/ProjectDetailsReport.php?u=' + usr + '&n=' + nme, '_blank');
+}
 
 /**  +++++ Cachando eventos   */
 function caching_events(ev) {

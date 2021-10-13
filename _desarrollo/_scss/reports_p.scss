@@ -48,6 +48,11 @@ section {
         .name-report {
             width: 100%;
             text-align: right;
+            padding: 0 3mm;
+            background-color: #eeeeee;
+            border: 1px solid #DDDDDD;
+            border-radius: 2mm;
+            overflow: hidden;
             .number {
                 font-size: 1.8rem;
                 font-weight: 700;
@@ -69,6 +74,7 @@ section {
             // width: 100%;
             margin-bottom: 2mm;
             margin-top: 2mm;
+            page-break-inside: avoid;
 
             .concept {
                 width: 30mm;
@@ -104,18 +110,20 @@ section {
             }
 
             th.prod {
-                width: auto;
+                width: 100mm;
                 text-align: center;
             }
             th.pric,
-            th.disc,
-            th.amou {
-                width: 22mm;
+            th.disc {
+                width: 15mm;
                 text-align: right;
+            }
+            th.amou {
+                width: 20mm;
             }
             th.qnty,
             th.days {
-                width: 15mm;
+                width: 10mm;
                 text-align: right;
             }
 
@@ -145,10 +153,7 @@ section {
                 text-align: right;
                 
             }
-            td.amou {
-                width: 20mm;
-
-            }
+            
         }
 
         .half {

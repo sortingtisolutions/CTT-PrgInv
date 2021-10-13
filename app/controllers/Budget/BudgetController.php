@@ -292,7 +292,7 @@ public function saveBudgetList($request_params)
     $group = explode('|',$params);
 
     $user = $group[0];
-    $name = $group[1];
+    $name = $group[2];
     
 
     $result = $this->model->saveBudgetList($request_params);

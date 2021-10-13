@@ -163,6 +163,40 @@ class ProjectDetailsController extends Controller
 
 
 
+// Genera el archivo del proyecto
+    public function saveProjectList($request_params)
+    {   
+        $params =  $this->session->get('user');
+        $group = explode('|',$params);
+
+        $user = $group[0];
+        $name = $group[2];
+        
+
+        $result = $this->model->saveProjectList($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        $dir = ROOT . FOLDER_PATH . '/app/views/ProjectDetails/ProjectDetailsFile-'. $user .'.json';
+
+        if (file_exists($dir)) unlink($dir);
+
+        $fileJson = fopen( $dir ,"w") or die("problema al escribir el archivo ");
+        fwrite($fileJson, $res);
+        fclose($fileJson);
+
+        echo $user . '|' . $name;
+    } 
+
+
+
 
 // Incrementa la cantidad de un producto ya existente
     public function increaseQuantity($request_params)

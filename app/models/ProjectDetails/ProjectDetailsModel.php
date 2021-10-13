@@ -38,6 +38,24 @@ class ProjectDetailsModel extends Model
         return $this->db->query($qry);
     }    
 
+
+// Promueve proyecto
+    public function saveProjectList($params)
+    {
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $qry = "SELECT *, ucase(date_format(pj.pjt_date_project, '%d-%b-%Y %H:%i')) as ver_date_real,
+                    CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) as period
+                FROM ctt_projects_content AS pc
+                INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
+                INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+                INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
+                INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
+                INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+                INNER JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+                WHERE pc.pjt_id = $pjtId";
+        return $this->db->query($qry);
+    }
+
     
 // Listado de descuentos
     public function listDiscounts($params)
