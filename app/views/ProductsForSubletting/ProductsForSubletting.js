@@ -3,8 +3,9 @@ let cnttot, cntcur;
 let folio;
 
 $(document).ready(function () {
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {

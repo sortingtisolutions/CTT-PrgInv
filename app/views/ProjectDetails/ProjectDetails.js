@@ -2,8 +2,9 @@ let cust, proj, relc, vers, prod, disc;
 
 $('document').ready(function () {
     url = getAbsolutePath();
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {

@@ -6,8 +6,9 @@ let = link = '';
 
 $(document).ready(function () {
     // folio = getFolio();
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {

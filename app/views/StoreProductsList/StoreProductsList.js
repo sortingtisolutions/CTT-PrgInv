@@ -10,8 +10,9 @@ $(document).ready(function () {
     importarScript(url + 'app/assets/lib/kendo.js');
 
     folio = getFolio();
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {
