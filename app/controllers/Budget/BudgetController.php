@@ -289,6 +289,12 @@ public function listProductsRelated($request_params)
 public function saveBudgetList($request_params)
 {   
     $params =  $this->session->get('user');
+    $group = explode('|',$params);
+
+    $user = $group[0];
+    $name = $group[1];
+    
+
     $result = $this->model->saveBudgetList($request_params);
     $i = 0;
     while($row = $result->fetch_assoc()){
@@ -300,8 +306,7 @@ public function saveBudgetList($request_params)
     } else {
         $res =  '[{"prd_id":"0"}]';	
     }
-    $usr = $params[0];
-    $dir = ROOT . FOLDER_PATH . '/app/views/Budget/BudgetFile-'. $usr .'.json';
+    $dir = ROOT . FOLDER_PATH . '/app/views/Budget/BudgetFile-'. $user .'.json';
 
     if (file_exists($dir)) unlink($dir);
 
@@ -309,7 +314,7 @@ public function saveBudgetList($request_params)
     fwrite($fileJson, $res);
     fclose($fileJson);
 
-    echo $usr;
+    echo $user . '|' . $name;
 } 
 
 

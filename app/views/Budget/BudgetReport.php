@@ -5,6 +5,7 @@ ini_set('display_errors', 'On');
 require_once '../../../vendor/autoload.php';
 
 $usrId = $_GET['u'];
+$name = $_GET['n'];
 
 
 $dir = 'BudgetFile-'. $usrId .'.json';
@@ -322,7 +323,7 @@ $foot = '
                                 <tr>
                                     <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
                                     <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
-                                    <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró:</td>
+                                    <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $name . '</td>
                                     <td class="td-foot foot-rept" width="25%" style="text-align: right">Cotización</td>
                                 </tr>
                             </table>

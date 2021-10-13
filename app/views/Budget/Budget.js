@@ -721,7 +721,10 @@ function getListBudget() {
     fillField(pagina, par, tipo, selector);
 }
 function printBudget(dt) {
-    window.open(url + 'app/views/Budget/BudgetReport.php?u=' + dt, '_blank');
+    console.log(dt);
+    let usr = dt.split('|')[0];
+    let nme = dt.split('|')[1];
+    window.open(url + 'app/views/Budget/BudgetReport.php?u=' + usr + '&n=' + nme, '_blank');
 }
 
 /** Limpiadores de campos */
