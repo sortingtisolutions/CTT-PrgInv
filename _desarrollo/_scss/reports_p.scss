@@ -31,7 +31,7 @@ header {
         width: 100%;
 
         .box-logo {
-            text-align: right;
+            text-align: left;
             .img-logo {
                 width: 20mm;
                 margin: 3mm 2.5mm 0 2.5mm;
@@ -123,6 +123,11 @@ section {
                 padding: 0.9mm 0;
                 border-bottom: 1px dotted #cccccc;
             }
+            .tot-figure {
+                padding: 1.9mm 0;
+                border-top: 2px dotted #000000;
+                font-weight: bold;
+            }
             td.prod {
                 font-weight: 700;
             }
@@ -135,6 +140,14 @@ section {
             td.days {
                 width: 15mm;
                 text-align: right;
+            }
+            td.totl {
+                text-align: right;
+                
+            }
+            td.amou {
+                width: 20mm;
+
             }
         }
 
