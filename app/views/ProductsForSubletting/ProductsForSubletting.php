@@ -26,6 +26,9 @@
 						<h6	class="nameProduct objet objHidden">Producto</h6>
 						<input id="txtIdProject" type="text" class="form-control">
 						<input id="txtIdProduct" type="text" class="form-control">
+						<input id="txtSkuProduct" type="text" class="form-control">
+						<input id="txtSkuSerie" type="text" class="form-control">
+						<input id="txtProjectDetail" type="text" class="form-control">
 
 						<div class="row objet objHidden">
 							<div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating">
@@ -58,7 +61,8 @@
 
 						<div class="row objet objHidden">
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtStoreSource" class="form-select form-select-sm required"><option value="0" selected>Selecciona almacen</option></select>
+								<select id="txtStoreSource" class="form-select form-select-sm required"aria-label="Floating label select"  data-mesage="Debes seleccionar un almacen">
+									<option value="0" selected>Selecciona almacen</option></select>
 								<label for="txtStoreSource" class="form-label">Almacen</label>
 							</div>
 						</div>

@@ -150,5 +150,20 @@ class ProductsForSublettingController extends Controller
         }
         $res = $result3;
         echo $res;
-    } 		
+    } 	
+    
+
+// Proceso de series de subarrendos    
+    public function saveSubletting($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->checkSerie($request_params);
+        $skus = $result->fetch_object();
+        $sku  = $skus->skuCount; 
+
+        if ($sku == 0){
+            $newsku = $this->model->addNewSku($request_params);
+            echo $newsku;
+        } 
+    }
 }

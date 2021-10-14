@@ -10,6 +10,16 @@ function inicial() {
     folio = getFolio();
     setting_table();
     get_Proyectos();
+    get_coins();
+    get_suppliers();
+    get_stores();
+
+    $('#txtPrice').on('blur', function () {
+        validator();
+    });
+    $('#btn_subletting').on('click', function () {
+        updating_serie();
+    });
 }
 
 /** ++++  Setea el calendario ++++++ */
@@ -26,8 +36,8 @@ function setting_datepicket(sl, di, df) {
                 firstDay: 1,
             },
             minDate: fc,
-            startDate: di,
-            endDate: df,
+            startDate: moment(di, 'DD/MM/YYYY'),
+            endDate: moment(df, 'DD/MM/YYYY'),
             opens: 'left',
             drops: 'auto',
         },
@@ -35,6 +45,9 @@ function setting_datepicket(sl, di, df) {
             let sdin = start.format('DD/MM/YYYY');
             let sdfn = end.format('DD/MM/YYYY');
             $('#txtPeriod').html(sdin + ' - ' + sdfn);
+            setTimeout(() => {
+                validator();
+            }, 500);
         }
     );
 }
@@ -45,12 +58,16 @@ function setting_table() {
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
     $('#tblProductForSubletting').DataTable({
-        order: [[0, 'desc']],
+        order: [[1, 'desc']],
         dom: 'Blfrtip',
         select: {
             style: 'single',
             info: false,
         },
+        lengthMenu: [
+            [100, 200, 300, -1],
+            [100, 200, 300, 'Todos'],
+        ],
         buttons: [
             {
                 //Botón para Excel
@@ -130,6 +147,31 @@ function get_products(pj) {
     fillField(pagina, par, tipo, selector);
 }
 
+/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
+function get_coins() {
+    var pagina = 'ProductsForSubletting/listCoins';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = put_coins;
+    fillField(pagina, par, tipo, selector);
+}
+/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
+function get_suppliers() {
+    var pagina = 'ProductsForSubletting/listSuppliers';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = put_suppliers;
+    fillField(pagina, par, tipo, selector);
+}
+/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
+function get_stores() {
+    var pagina = 'ProductsForSubletting/listStores';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = put_stores;
+    fillField(pagina, par, tipo, selector);
+}
+
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
     pj = dt;
@@ -148,6 +190,8 @@ function put_Proyectos(dt) {
 
 /**  ++++   Coloca los productos en el listado del input */
 function put_Products(dt) {
+    // console.log(pj);
+    console.log(dt);
     pd = dt;
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblProductForSubletting tbody tr').remove() : '';
@@ -179,25 +223,130 @@ function put_Products(dt) {
             .draw();
         $('#k' + u.pjtdt_id)
             .parents('tr')
-            .attr({id: u.pjtdt_id, data_inx: cn});
+            .attr({
+                id: u.pjtdt_id,
+                data_index: cn,
+                data_pjtcn: u.pjtcn_id,
+                data_produ: u.prd_id,
+                data_store: u.str_id,
+                data_suble: u.sub_id,
+                data_suply: u.sup_id,
+                data_coins: u.cin_id,
+                data_prsku: u.prd_sku,
+            });
 
         cn++;
     });
     $('#tblProductForSubletting tbody tr')
         .unbind('click')
         .on('click', function () {
-            $('.objet').removeClass('objHidden');
-            let rw = $(this);
-            let ix = rw[0].attributes[2].value;
+            let selected = $(this).attr('class').indexOf('selected');
+            console.log(selected);
+            if (selected < 0) {
+                $('.objet').removeClass('objHidden');
+                let rw = $(this);
+                console.log(rw);
+                let ix = rw[0].attributes[2].value;
 
-            console.log(pd[ix]);
+                let prodname = rw[0].cells[1].outerText;
+                let serieSku = rw[0].cells[2].outerText;
+                let subprice = rw[0].cells[3].outerText;
+                let datestar = rw[0].cells[6].outerText;
+                let datesend = rw[0].cells[7].outerText;
+                let comments = rw[0].cells[8].outerText;
+                let projdeta = rw[0].attributes[1].value;
+                let producId = rw[0].attributes[4].value;
+                let storesId = rw[0].attributes[5].value;
+                let suppliId = rw[0].attributes[7].value;
+                let tpcoinId = rw[0].attributes[8].value;
+                let produSku = rw[0].attributes[9].value;
 
-            $('.nameProduct').html(pd[ix].prd_name);
-            $('#txtIdProduct').val(pd[ix].prd_id);
-            let din = define_days('i', pj[px].pjt_date_start, pd[ix].pjtcn_days_base, pd[ix].pjtcn_days_trip, pd[ix].pjtcn_days_test);
-            let dfn = define_days('f', pj[px].pjt_date_start, pd[ix].pjtcn_days_base, pd[ix].pjtcn_days_trip, pd[ix].pjtcn_days_test);
-            setting_datepicket($('#txtPeriod'), din, dfn);
+                $('.nameProduct').html(prodname);
+                $('#txtIdProduct').val(producId);
+                $('#txtPrice').val(subprice);
+                $('#txtCoinType').val(tpcoinId);
+                $('#txtSupplier').val(suppliId);
+                $('#txtStoreSource').val(storesId);
+                $('#txtSkuProduct').val(produSku);
+                $('#txtSkuSerie').val(serieSku);
+                $('#txtProjectDetail').val(projdeta);
+                $('#txtComments').val(comments);
+                setting_datepicket($('#txtPeriod'), datestar, datesend);
+            } else {
+                $('.objet').addClass('objHidden');
+            }
         });
+}
+
+/**  ++++   Coloca las monedas en el listado del input */
+function put_coins(dt) {
+    $.each(dt, function (v, u) {
+        let H = `<option value="${u.cin_id}">${u.cin_code} - ${u.cin_name}</option>`;
+        $('#txtCoinType').append(H);
+    });
+    $('#txtCoinType').on('change', function () {
+        validator();
+    });
+}
+/**  ++++   Coloca los proveedores en el listado del input */
+function put_suppliers(dt) {
+    $.each(dt, function (v, u) {
+        let H = `<option value="${u.sup_id}">${u.sup_business_name}</option>`;
+        $('#txtSupplier').append(H);
+    });
+    $('#txtSupplier').on('change', function () {
+        validator();
+    });
+}
+/**  ++++   Coloca los almacenes en el listado del input */
+function put_stores(dt) {
+    $.each(dt, function (v, u) {
+        let H = `<option value="${u.str_id}">${u.str_name}</option>`;
+        $('#txtStoreSource').append(H);
+    });
+    $('#txtStoreSource').on('change', function () {
+        validator();
+    });
+}
+
+function updating_serie() {
+    console.log('updating serie');
+
+    let producId = $('#txtIdProduct').val();
+    let produSku = $('#txtSkuProduct').val();
+    let seriCost = $('#txtPrice').val();
+    let dtResIni = moment($('#txtPeriod').val().split(' - ')[0], 'DD/MM/YYYY').format('YYYY-MM-DD');
+    let dtResFin = moment($('#txtPeriod').val().split(' - ')[1], 'DD/MM/YYYY').format('YYYY-MM-DD');
+    let comments = $('#txtComments').val();
+    let supplier = $('#txtSupplier option:selected').val();
+    let storesId = $('#txtStoreSource option:selected').val();
+    let tpCoinId = $('#txtCoinType option:selected').val();
+    let pjDetail = $('#txtProjectDetail').val();
+    let projecId = $('#txtIdProject').val();
+
+    let par = `
+    [{
+        "producId"  :   "${producId}",
+        "produSku"  :   "${produSku}",
+        "seriCost"  :   "${seriCost}",
+        "dtResIni"  :   "${dtResIni}",
+        "dtResFin"  :   "${dtResFin}",
+        "comments"  :   "${comments}",
+        "supplier"  :   "${supplier}",
+        "storesId"  :   "${storesId}",
+        "tpCoinId"  :   "${tpCoinId}",
+        "pjDetail"  :   "${pjDetail}",
+        "projecId"  :   "${projecId}"
+    }]`;
+    console.log(par);
+    var pagina = 'ProductsForSubletting/saveSubletting';
+    var tipo = 'html';
+    var selector = put_save_subleting;
+    fillField(pagina, par, tipo, selector);
+}
+
+function put_save_subleting(dt) {
+    console.log(dt);
 }
 
 /*  ++++++++ Valida los campos  +++++++ */
@@ -215,7 +364,6 @@ function validator() {
     let a = moment(period[1], 'DD/MM/YYYY');
     let b = moment(period[0], 'DD/MM/YYYY');
     let dif = a.diff(b, 'days');
-
     if (dif < 1) {
         ky = 1;
         msg += 'La fecha final debe ser por lo menos de un día de diferencia';
@@ -225,6 +373,7 @@ function validator() {
     } else {
         $('#btn_subletting').addClass('disabled');
     }
+    console.log(msg);
 }
 
 /*  ++++++++ Define las fechas de inicio y de fin   +++++++ */
