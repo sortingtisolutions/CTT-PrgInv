@@ -9,15 +9,19 @@ class ProductsForSublettingModel extends Model
       parent::__construct();
     }
 
+// Listado de Proyectos
+public function listProyects($store)
+{
+    $store = $this->db->real_escape_string($store);
+    $qry = "SELECT * FROM ctt_projects WHERE pjt_status = 2 ;";
+    return $this->db->query($qry);
+}    
+
 // Listado de Productos
-    public function listProducts($store)
+    public function listProducts($params)
     {
-        $store = $this->db->real_escape_string($store);
-        $qry = "SELECT 
-                    p.prd_id, p.prd_name, p.prd_sku, ifnull(s.ser_id,0) as ser_id, ifnull(s.ser_serial_number,'') as ser_serial_number, ifnull(s.ser_cost,'') as ser_cost, ifnull(p.cin_id,'0') as cin_id
-                FROM ctt_products AS p
-                LEFT JOIN ctt_series AS s ON s.prd_id = p.prd_id AND s.ser_behaviour = 'R'
-                WHERE p.prd_status = 1 AND prd_visibility = 1 ORDER BY p.prd_name asc ;";
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $qry = "SELECT * FROM ctt_vw_subletting WHERE pjt_id = $pjtId;";
         return $this->db->query($qry);
     }    
 
