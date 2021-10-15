@@ -24,11 +24,12 @@
 						<hr>
 
 						<h6	class="nameProduct objet objHidden">Producto</h6>
-						<input id="txtIdProject" type="text" class="form-control">
-						<input id="txtIdProduct" type="text" class="form-control">
-						<input id="txtSkuProduct" type="text" class="form-control">
-						<input id="txtSkuSerie" type="text" class="form-control">
-						<input id="txtProjectDetail" type="text" class="form-control">
+						<input type="hidden" id="txtIdProject" class="form-control">
+						<input type="hidden" id="txtIdProduct" class="form-control">
+						<input type="hidden" id="txtSkuProduct" class="form-control">
+						<input type="hidden" id="txtSkuSerie" class="form-control">
+						<input type="hidden" id="txtIdSerie" class="form-control">
+						<input type="hidden" id="txtProjectDetail" class="form-control">
 
 						<div class="row objet objHidden">
 							<div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating">
@@ -76,7 +77,7 @@
 
 						<div class="row objet objHidden">
 							<div class="col-md-8 mb-5">
-								<button type="button" class="btn btn-sm btn-primary disabled" id="btn_subletting">Agregar</button>
+								<button type="button" class="btn btn-sm btn-primary disabled" data_accion="add" id="btn_subletting">Aplicar cambios</button>
 							</div>
 						</div>
 

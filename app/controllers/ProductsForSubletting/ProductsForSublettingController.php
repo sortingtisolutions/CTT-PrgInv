@@ -162,8 +162,43 @@ class ProductsForSublettingController extends Controller
         $sku  = $skus->skuCount; 
 
         if ($sku == 0){
-            $newsku = $this->model->addNewSku($request_params);
-            echo $newsku;
-        } 
+            $pjtId = $this->model->addNewSku($request_params);
+            $setData = $this->model->getPjtDetail($pjtId);
+            $i = 0;
+            while($row = $setData->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"pjdt_id_id":"0"}]';	
+            }
+        } else {
+            $res =  '[{"pjdt_id_id":"0"}]';	
+        }
+        echo $res;
+    }
+
+// Proceso de series de subarrendos    
+    public function changeSubletting($request_params)
+    {
+        $params =  $this->session->get('user');
+        $pjtId = $this->model->changeSubletting($request_params);
+
+        $result = $this->model->getPjtDetail($pjtId);
+
+        $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"pjdt_id_id":"0"}]';	
+            }
+            
+        echo $res;
     }
 }

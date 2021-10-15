@@ -161,6 +161,28 @@ class ProjectDetailsController extends Controller
         echo $res;
     } 
 
+    
+
+// Obtiene el conteo de los productos faltantes
+    public function counterPending($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->counterPending($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"count":"0"}]';	
+        }
+        echo $res;
+    } 
+
+
+
 
 
 // Genera el archivo del proyecto

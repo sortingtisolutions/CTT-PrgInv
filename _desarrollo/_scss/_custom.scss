@@ -359,6 +359,14 @@ div.dataTables_wrapper .dataTables_paginate .paginate_button {
 		}
 	}
 }
+.pending {
+	color : #cc0000;
+	border: 1px solid #cc0000;
+	border-radius: 10px;
+	background-color: rgba(#cc0000,0.1);
+	padding: 1px 6px;
+
+}
 .notify {
 	font-size: 1.2rem;
 	text-align: center;

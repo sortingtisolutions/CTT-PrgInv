@@ -145,6 +145,20 @@ class ProjectDetailsModel extends Model
     } 
 
 
+// Obtiene el conteo de los productos faltantes
+    public function counterPending($params){
+        $pjtcnId = $this->db->real_escape_string($params['pjtcnId']);
+        $prdId = $this->db->real_escape_string($params['prdId']);
+        $quantity = $this->db->real_escape_string($params['quantity']);
+
+        $qry = "SELECT '$pjtcnId' AS pjtcn_id, '$prdId' AS prd_id, '$quantity' AS qty, count(*) as pend
+                FROM ctt_projects_detail 
+                WHERE pjtcn_id = $pjtcnId
+                AND pjtdt_prod_sku = 'Pendiente';";
+        return $this->db->query($qry);
+    }
+
+
 // Incrementa la cantidad de un producto
     public function increaseQuantity($params)
     {
@@ -320,7 +334,7 @@ class ProjectDetailsModel extends Model
 
         $qry = "SELECT ser_id, ser_sku FROM ctt_series WHERE prd_id = $prodId 
                 AND ser_reserve_start is null AND ser_reserve_end is null
-                ORDER BY ser_reserve_count asc LIMIT 1;";
+                ORDER BY LEFT(RIGHT(ser_sku, 4),1) asc, ser_reserve_count asc LIMIT 1;";
         $result =  $this->db->query($qry);
         
         $series = $result->fetch_object();
