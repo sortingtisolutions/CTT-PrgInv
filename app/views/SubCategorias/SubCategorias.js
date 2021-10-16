@@ -450,7 +450,7 @@ function putSeries(dt) {
    $('#ExisteSbcModal').removeClass('overlay_hide');
    $('#tblSbcSerie').DataTable({
        destroy: true,
-       order: [[2, 'asc']],
+       order: [[1, 'asc']],
        lengthMenu: [
            [100, 150, 200, -1],
            [100, 150, 200, 'Todos'],

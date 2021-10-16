@@ -21,7 +21,7 @@ function inicial() {
 // Configura la tabla de paquetes
 function setting_table_product() {
     let tabla = $('#tblPackages').DataTable({
-        order: [[1, 'asc']],
+        order: [[0, 'asc']],
         pageLength: 1000,
         select: true,
         dom: 'Brti',
@@ -52,7 +52,7 @@ function setting_table_product() {
 // Configura la tabla de productos
 function setting_table_accesorys() {
     $('#tblProducts').DataTable({
-        order: [[1, 'asc']],
+        order: [[0, 'asc']],
         pageLength: 1000,
         dom: 'Brti',
         buttons: [

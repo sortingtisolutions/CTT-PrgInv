@@ -45,7 +45,7 @@ public function listProducts()
 {
     $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 
             FROM ctt_products 
-            WHERE prd_status = 1;";
+            WHERE prd_status = 1 order by prd_sku;";
     return $this->db->query($qry);
 }
 
@@ -56,7 +56,8 @@ public function listProductsById($sbc_id)
     
     $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 
             FROM ctt_products 
-            WHERE prd_status = 1 and sbc_id = $sbc_id and  prd_level <> 'A' ;";
+            WHERE prd_status = 1 and sbc_id = $sbc_id and 
+            prd_level <> 'A' order by prd_sku;";
     return $this->db->query($qry);
 }
 
@@ -77,7 +78,7 @@ public function getAccesoriesById($params)
     $prdId = $this->db->real_escape_string($params['prdId']);
     $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name FROM ctt_accesories as acc
             INNER JOIN ctt_products AS prd on prd.prd_id = acc.prd_id
-            WHERE acc.acr_parent = $prdId and acc.acr_status = 1;";
+            WHERE acc.acr_parent = $prdId and acc.acr_status = 1 order by prd.prd_sku;";
     return $this->db->query($qry);
 }
 
@@ -85,7 +86,7 @@ public function getAccesoriesById($params)
 public function listAccesorios()
 {
     //$prdId = $this->db->real_escape_string($params);
-    $qry = "SELECT prd_id, prd_name, prd_sku FROM ctt_products WHERE prd_level = 'A' AND prd_sku = '';";
+    $qry = "SELECT prd_id, prd_name, prd_sku FROM ctt_products WHERE prd_level = 'A' AND substr(prd_sku,5,1) = '';";
     return $this->db->query($qry);
 }
 
