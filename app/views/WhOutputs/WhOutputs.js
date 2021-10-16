@@ -5,8 +5,9 @@ let num = 0;
 let cats, subs, sku1, sku2, sku3, sku4;
 
 $(document).ready(function () {
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {
@@ -57,7 +58,7 @@ function putProducts(dt) {
         console.log('1111');
         activeIcons();
     } else {
-         settingTable(); 
+        settingTable();
     }
 }
 
@@ -130,7 +131,7 @@ function settingTable() {
             {data: 'prodcoin', class: 'sku'},
             {data: 'prddocum', class: 'sku'},
             {data: 'subcateg', class: 'sku'},
-            {data: 'categori', class: 'sku'}
+            {data: 'categori', class: 'sku'},
         ],
     });
     console.log('111');
@@ -161,7 +162,6 @@ function activeIcons() {
             }
         });
 
-
     $('.modif')
         .unbind('click')
         .on('click', function () {
@@ -179,9 +179,7 @@ function activeIcons() {
                     $('.overlay_background').addClass('overlay_hide');
                 });
         });
-
 }
-
 
 function putSelectProject(dt) {
     cleanProductsFields();
@@ -196,7 +194,6 @@ function putSelectProject(dt) {
     let prdNameProvider = dt[0].pjt_status;
     let prdComments = dt[0].pjt_id;
 
-
     $('#txtPrdId').val(prdId);
     $('#txtPrdName').val(prdName);
     $('#txtPrdSku').val(prdSku);
@@ -207,20 +204,16 @@ function putSelectProject(dt) {
     $('#txtPrdNameProvider').val(prdNameProvider);
     $('#txtPrdComments').val(prdComments);
 
-
     $('#btn_save')
         .unbind('click')
         .on('click', function () {
             saveEditProduct();
         });
 
-
-function cleanProductsFields() {
-    $('.textbox').val('');
-    $('td.data select').val(0);
-    $('td.data .checkbox').html('<i class="far fa-square" data_val="0"></i>');
-    $('.required').removeClass('fail').parent().children('.fail_note').addClass('hide');
-}
-
-
+    function cleanProductsFields() {
+        $('.textbox').val('');
+        $('td.data select').val(0);
+        $('td.data .checkbox').html('<i class="far fa-square" data_val="0"></i>');
+        $('.required').removeClass('fail').parent().children('.fail_note').addClass('hide');
+    }
 }

@@ -38,6 +38,24 @@ class ProjectDetailsModel extends Model
         return $this->db->query($qry);
     }    
 
+
+// Promueve proyecto
+    public function saveProjectList($params)
+    {
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $qry = "SELECT *, ucase(date_format(pj.pjt_date_project, '%d-%b-%Y %H:%i')) as ver_date_real,
+                    CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) as period
+                FROM ctt_projects_content AS pc
+                INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
+                INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+                INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
+                INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
+                INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+                INNER JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+                WHERE pc.pjt_id = $pjtId";
+        return $this->db->query($qry);
+    }
+
     
 // Listado de descuentos
     public function listDiscounts($params)
@@ -125,6 +143,20 @@ class ProjectDetailsModel extends Model
             ORDER BY pd.prd_name ;";
         return $this->db->query($qry);
     } 
+
+
+// Obtiene el conteo de los productos faltantes
+    public function counterPending($params){
+        $pjtcnId = $this->db->real_escape_string($params['pjtcnId']);
+        $prdId = $this->db->real_escape_string($params['prdId']);
+        $quantity = $this->db->real_escape_string($params['quantity']);
+
+        $qry = "SELECT '$pjtcnId' AS pjtcn_id, '$prdId' AS prd_id, '$quantity' AS qty, count(*) as pend
+                FROM ctt_projects_detail 
+                WHERE pjtcn_id = $pjtcnId
+                AND pjtdt_prod_sku = 'Pendiente';";
+        return $this->db->query($qry);
+    }
 
 
 // Incrementa la cantidad de un producto
@@ -302,7 +334,7 @@ class ProjectDetailsModel extends Model
 
         $qry = "SELECT ser_id, ser_sku FROM ctt_series WHERE prd_id = $prodId 
                 AND ser_reserve_start is null AND ser_reserve_end is null
-                ORDER BY ser_reserve_count asc LIMIT 1;";
+                ORDER BY LEFT(RIGHT(ser_sku, 4),1) asc, ser_reserve_count asc LIMIT 1;";
         $result =  $this->db->query($qry);
         
         $series = $result->fetch_object();

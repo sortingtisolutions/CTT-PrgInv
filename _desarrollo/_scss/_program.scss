@@ -314,6 +314,9 @@ hr {
     .w3 {
         width: 100px;
     }
+    .w4 {
+        width: 50px;
+    }
 
     .headrow {
         background-color: rgba(0, 0, 0, 0.02);
@@ -358,7 +361,22 @@ hr {
         }
     }
     .quantity {
-        text-align: center;
+        text-align: right;
+        padding-right: 13px;
+        position: relative;
+
+        .flagPendig  {
+            width: 7px;
+            height: 7px;
+            display: inline-block;
+            background-color: #ee0000;
+            border-radius: 100%;
+            position: absolute;
+            top: 4px;
+            right: 0;
+            padding: 0;
+            margin-left: 3px;
+        }
     }
     .price {
         text-align: right;

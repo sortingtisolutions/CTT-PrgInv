@@ -7,8 +7,9 @@ var accesorioExist = 0;
 var accesorioSkuNew = '';
 
 $(document).ready(function () {
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {

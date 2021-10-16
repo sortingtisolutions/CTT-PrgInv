@@ -188,7 +188,9 @@ ul {
 		border-radius: 5px;
 	}
 }
-
+.objHidden  {
+	display: none;
+}
 .form-group {
 	.form_primary {
 		display: block;
@@ -196,6 +198,7 @@ ul {
 	.form_secundary {
 		display: none;
 	}
+	
 }
 .mb-2 {
 	margin-bottom: 0.1em !important;
@@ -355,6 +358,14 @@ div.dataTables_wrapper .dataTables_paginate .paginate_button {
 			background-color: none;
 		}
 	}
+}
+.pending {
+	color : #cc0000;
+	border: 1px solid #cc0000;
+	border-radius: 10px;
+	background-color: rgba(#cc0000,0.1);
+	padding: 1px 6px;
+
 }
 .notify {
 	font-size: 1.2rem;
@@ -616,7 +627,7 @@ table {
 
 				.items-just {
 					display: inline-block;
-					float: right;
+					// float: right;
 					.editable {
 						border: 1px solid #dddddd;
 						border-radius: 4px;
@@ -625,7 +636,7 @@ table {
 						display: inline-block;
 					}
 					i {
-						float: right;
+						// float: right;
 						display: inline-block;
 						margin: 0 10px;
 						font-size: 1.4em;
@@ -784,7 +795,7 @@ table {
 	float: left;
 }
 
-// END Estilos de Juan
+
 
 .row {
 	margin: 0;

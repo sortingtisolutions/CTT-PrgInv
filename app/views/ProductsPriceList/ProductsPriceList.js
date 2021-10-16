@@ -4,8 +4,9 @@ let grp = 50;
 let num = 0;
 
 $(document).ready(function () {
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {

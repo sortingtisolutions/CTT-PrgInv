@@ -9,15 +9,26 @@ class ProductsForSublettingModel extends Model
       parent::__construct();
     }
 
+// Listado de Proyectos
+public function listProyects($store)
+{
+    $store = $this->db->real_escape_string($store);
+    $qry = "SELECT * FROM ctt_projects WHERE pjt_status = 2 ;";
+    return $this->db->query($qry);
+}    
+
 // Listado de Productos
-    public function listProducts($store)
+    public function listProducts($params)
     {
-        $store = $this->db->real_escape_string($store);
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
         $qry = "SELECT 
-                    p.prd_id, p.prd_name, p.prd_sku, ifnull(s.ser_id,0) as ser_id, ifnull(s.ser_serial_number,'') as ser_serial_number, ifnull(s.ser_cost,'') as ser_cost, ifnull(p.cin_id,'0') as cin_id
-                FROM ctt_products AS p
-                LEFT JOIN ctt_series AS s ON s.prd_id = p.prd_id AND s.ser_behaviour = 'R'
-                WHERE p.prd_status = 1 AND prd_visibility = 1 ORDER BY p.prd_name asc ;";
+                    prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id,
+                    DATE_FORMAT(sub_date_start,'%d/%m/%Y') AS sub_date_start, DATE_FORMAT(sub_date_end,'%d/%m/%Y') AS sub_date_end, 
+                    sub_comments, pjtcn_days_base, pjtcn_days_trip, pjtcn_days_test,
+                    ifnull(prd_id,0) AS prd_id, ifnull(sup_id,0) AS sup_id, ifnull(str_id,0) AS str_id, 
+                    ifnull(sub_id,0) AS sub_id, ifnull(sut_id,0) AS sut_id, ifnull(pjtdt_id,0) AS pjtdt_id,
+                    ifnull(pjtcn_id,0) AS pjtcn_id, ifnull(cin_id,0) AS cin_id
+                FROM ctt_vw_subletting WHERE pjt_id = $pjtId;";
         return $this->db->query($qry);
     }    
 
@@ -42,7 +53,7 @@ class ProductsForSublettingModel extends Model
 // Listado de Almacenes
     public function listStores()
     {
-        $qry = "SELECT str_id, str_name FROM ctt_stores WHERE str_type = 'ESTATICOS' AND str_status = 1;";
+        $qry = "SELECT str_id, str_name FROM ctt_stores WHERE str_type = 'ESTATICO' AND str_status = 1;";
         return $this->db->query($qry);
     }
 
@@ -151,6 +162,145 @@ class ProductsForSublettingModel extends Model
         $quantity 		= $this->db->real_escape_string($param['qty']);
 
         $qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id) VALUES ($quantity, $idStrSrc, $idPrd);";
+        return $this->db->query($qry);
+    }
+
+// Proceso de subarrendo
+    public function checkSerie($param)
+    {
+        $producId 		= $this->db->real_escape_string($param['producId']);
+
+        $qry = "SELECT count(*) as skuCount FROM ctt_series WHERE prd_id = $producId AND LEFT(RIGHT(ser_sku, 4),1) ='R' AND pjtdt_id = 0;";
+        return $this->db->query($qry);
+    }    
+
+// Agrega nuevos registros de sku en subarrendo
+    public function addNewSku($params)
+    {
+        $pjDetail 		= $this->db->real_escape_string($params['pjDetail']);
+
+        $producId 		= $this->db->real_escape_string($params['producId']);
+        $produSku 		= $this->db->real_escape_string($params['produSku']);
+        $seriCost 		= $this->db->real_escape_string($params['seriCost']);
+        $dtResIni 		= $this->db->real_escape_string($params['dtResIni']);
+        $dtResFin 		= $this->db->real_escape_string($params['dtResFin']);
+        $comments 		= $this->db->real_escape_string($params['comments']);
+        $supplier 		= $this->db->real_escape_string($params['supplier']);
+        $tpCoinId 		= $this->db->real_escape_string($params['tpCoinId']);
+        $projecId 		= $this->db->real_escape_string($params['projecId']);
+        $storesId 		= $this->db->real_escape_string($params['storesId']);
+
+        // Obtiene el ultimo sku registrado para el producto seleccionado
+        $qry = "SELECT ifnull(max(ser_sku),0) as last_sku, ifnull(ser_serial_number,0) as last_serie FROM ctt_series WHERE prd_id = $producId AND LEFT(RIGHT(ser_sku, 4),1) ='R';";
+        $result = $this->db->query($qry);
+
+        $skus = $result->fetch_object();
+        $sku = $skus->last_sku;
+        $serie = $skus->last_serie;
+        $skuNew = intval($sku) +1 ;
+        $skuNew = 'R' . str_pad($skuNew, 3, "0", STR_PAD_LEFT);
+        $serieNew = intval($serie) +1 ;
+        $serieNew = 'R' . str_pad($serieNew, 3, "0", STR_PAD_LEFT);
+
+        $newSku = $produSku . $skuNew;
+
+        // Agrega la nueva serie
+        $qry1 = "INSERT INTO ctt_series (
+                    ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, ser_date_registry, 
+                    ser_reserve_start, ser_reserve_end, ser_reserve_count, ser_behaviour, ser_comments, 
+                    prd_id, sup_id, cin_id, pjtdt_id
+                )
+                SELECT 
+                    '$newSku', '$serieNew', '$seriCost', ser_status, ser_situation, ser_stage, curdate(),
+                    '$dtResIni', '$dtResFin', '1', ser_behaviour, '$comments', 
+                    prd_id, '$supplier','$tpCoinId','$pjDetail'
+                FROM ctt_series AS sr  WHERE prd_id = $producId limit 1;";
+        $this->db->query($qry1);
+        $serieId = $this->db->insert_id;
+
+        // Actualiza el detalle del proyecto con la serie
+        $qry2 = "UPDATE ctt_projects_detail AS pd
+                INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pd.pjtdt_id
+                SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id
+                WHERE pd.pjtdt_id = $pjDetail ;";
+        $this->db->query($qry2);
+
+        // Agrega el nuevo registro en la tabla de subarrendos
+        $qry3 = "INSERT INTO ctt_subletting (
+                    sub_price, sub_quantity, sub_date_start, sub_date_end, sub_comments, 
+                    ser_id, sup_id, prj_id, cin_id)
+                SELECT 
+                    ser_cost, '1', ser_reserve_start, ser_reserve_end, '$comments', ser_id, 
+                    '$supplier', '$projecId', '$tpCoinId' 
+                FROM ctt_series WHERE pjtdt_id = $pjDetail;";
+        $this->db->query($qry3);
+
+        $qry4 = " INSERT INTO ctt_stores_products 
+                    (stp_quantity, str_id, ser_id) 
+                VALUES 
+                    ('1','$storesId', '$serieId');";
+        $this->db->query($qry4);
+
+        return $pjDetail;
+
+    }
+
+    public function changeSubletting($params)
+    {
+        $pjDetail 		= $this->db->real_escape_string($params['pjDetail']);
+
+        $producId 		= $this->db->real_escape_string($params['producId']);
+        $produSku 		= $this->db->real_escape_string($params['produSku']);
+        $seriCost 		= $this->db->real_escape_string($params['seriCost']);
+        $dtResIni 		= $this->db->real_escape_string($params['dtResIni']);
+        $dtResFin 		= $this->db->real_escape_string($params['dtResFin']);
+        $comments 		= $this->db->real_escape_string($params['comments']);
+        $supplier 		= $this->db->real_escape_string($params['supplier']);
+        $tpCoinId 		= $this->db->real_escape_string($params['tpCoinId']);
+        $projecId 		= $this->db->real_escape_string($params['projecId']);
+        $storesId 		= $this->db->real_escape_string($params['storesId']);
+        $seriesId 		= $this->db->real_escape_string($params['seriesId']);
+
+        $qry1 = "UPDATE ctt_series 
+                    SET 
+                        cin_id = '$tpCoinId', 
+                        ser_reserve_start = '$dtResIni', 
+                        ser_reserve_end = '$dtResFin', 
+                        ser_cost = '$seriCost'
+                    WHERE ser_id = '$seriesId';";
+        $this->db->query($qry1);
+
+        $qry2 = "UPDATE ctt_subletting
+                    SET 
+                        sub_price = '$seriCost',
+                        sub_comments = '$comments',
+                        cin_id = '$tpCoinId',
+                        sub_date_start = '$dtResIni',
+                        sub_date_end = '$dtResFin'
+                    WHERE ser_id = '$seriesId' AND prj_id ='$projecId';";
+        $this->db->query($qry2);
+
+        $qry3 = "UPDATE ctt_stores_products
+                    SET 
+                        str_id = '$storesId'
+                    WHERE ser_id = '$seriesId';";
+        $this->db->query($qry3);
+
+        return $pjDetail;
+    }
+
+// Lista el productomodificado
+    public function getPjtDetail($pjtId)
+    {
+        $pjtId = $this->db->real_escape_string($pjtId);
+        $qry = "SELECT 
+                    prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id,
+                    DATE_FORMAT(sub_date_start,'%d/%m/%Y') AS sub_date_start, DATE_FORMAT(sub_date_end,'%d/%m/%Y') AS sub_date_end, 
+                    sub_comments, pjtcn_days_base, pjtcn_days_trip, pjtcn_days_test,
+                    ifnull(prd_id,0) AS prd_id, ifnull(sup_id,0) AS sup_id, ifnull(str_id,0) AS str_id, 
+                    ifnull(sub_id,0) AS sub_id, ifnull(sut_id,0) AS sut_id, ifnull(pjtdt_id,0) AS pjtdt_id,
+                    ifnull(pjtcn_id,0) AS pjtcn_id, ifnull(cin_id,0) AS cin_id
+                FROM ctt_vw_subletting WHERE pjtdt_id = $pjtId;";
         return $this->db->query($qry);
     }
 

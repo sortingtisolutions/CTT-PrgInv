@@ -6,33 +6,32 @@ let link = '';
 let url;
 var isConcepto = 0;
 
-
 $(document).ready(function () {
     url = getAbsolutePath();
     importarScript(url + 'app/assets/lib/kendo.js');
 
     folio = getFolio();
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
-function inicial() 
-{
-    $('.deep_loading').css({display: 'flex'}); 
-    getStores();// optiene los almacenes.
-    getCategorias();// Carga las categorias 
+function inicial() {
+    $('.deep_loading').css({display: 'flex'});
+    getStores(); // optiene los almacenes.
+    getCategorias(); // Carga las categorias
     // funcion para la carga de subcategorias
     $('#selectRowCategorias').change(function () {
         var idCategoria = $('#selectRowCategorias option:selected').attr('id');
-        console.log('SELECCIONA -- ', idCategoria)
+        console.log('SELECCIONA -- ', idCategoria);
         getSubCategorias(0, idCategoria);
     });
 
-    setting_table();// Inicializa data table
-    setting_table_pro();// inicializa la tabla de productos
+    setting_table(); // Inicializa data table
+    setting_table_pro(); // inicializa la tabla de productos
 
-    setting_datepicket($('#txtStartDate'));//fecha del dia en curso
-    
+    setting_datepicket($('#txtStartDate')); //fecha del dia en curso
+
     $('#btn_products').on('click', function () {
         console.log('CLick Boton');
         getProducts();
@@ -82,11 +81,10 @@ function setting_table() {
             {data: 'skuColum', class: 'edit'},
             {data: 'nameColum', class: 'product-name'},
             {data: 'priceColum', class: 'product-name'},
-            {data: 'subCategoriaColum', class: 'product-name'}
+            {data: 'subCategoriaColum', class: 'product-name'},
         ],
     });
 }
-
 
 //conceptos x prod
 function setting_table_pro() {
@@ -133,15 +131,13 @@ function setting_table_pro() {
             {data: 'SerieColum', class: 'serie-product'},
             {data: 'FechaAltaColum', class: 'serie-product'},
             {data: 'ProveedorColum', class: ''},
-            {data: 'SubCategoriaColum', class: ''}
+            {data: 'SubCategoriaColum', class: ''},
         ],
     });
     setTimeout(() => {
-        $("#tblExchangesProductos_wrapper").attr("hidden",true);
+        $('#tblExchangesProductos_wrapper').attr('hidden', true);
     }, 20);
-  
 }
-
 
 /** ++++  Setea el calendario ++++++ */
 function setting_datepicket(selector) {
@@ -179,7 +175,6 @@ function getStores() {
     fillField(pagina, par, tipo, selector);
 }
 
-
 // Optiene las categorias *
 function getCategorias(id) {
     $('#selectRowCategorias').html('');
@@ -189,7 +184,7 @@ function getCategorias(id) {
         dataType: 'JSON',
         url: location,
         success: function (respuesta) {
-            var renglon = "<option id='0'  value='0'>Seleccione...</option> ";         
+            var renglon = "<option id='0'  value='0'>Seleccione...</option> ";
             respuesta.forEach(function (row, index) {
                 renglon += '<option id=' + row.cat_id + '  value="' + row.cat_id + '">' + row.cat_name + '</option> ';
             });
@@ -201,7 +196,6 @@ function getCategorias(id) {
         error: function () {},
     }).done(function () {});
 }
-
 
 // Optiene las Sub subcategorias *
 function getSubCategorias(id, idCategoria) {
@@ -230,9 +224,6 @@ function getSubCategorias(id, idCategoria) {
     }).done(function () {});
 }
 
-
-
-
 // Solicita los productos de un almacen seleccionado
 function getProducts() {
     var idAlmacen = $('#txtStoreSource option:selected').val();
@@ -241,68 +232,64 @@ function getProducts() {
     var isPaquete = 0;
     var isProducto = 0;
     var isAccesorio = 0;
- 
+
     if ($('#RadioConceptos1').prop('checked')) {
         isConcepto = 1;
-    }else{
+    } else {
         isConcepto = 0;
     }
 
     if ($('#checkIsPaquete').prop('checked')) {
         isPaquete = 1;
     }
-    
+
     if ($('#checkIsProducto').prop('checked')) {
         isProducto = 1;
     }
-    
+
     if ($('#checkIsAccesorie').prop('checked')) {
         isAccesorio = 1;
     }
 
-    console.log(idAlmacen+idCategoria+idSubCategoria+isConcepto+isPaquete+isProducto+isAccesorio);
+    console.log(idAlmacen + idCategoria + idSubCategoria + isConcepto + isPaquete + isProducto + isAccesorio);
 
     var pagina = 'ProductStocks/listProducts';
     var par = `[{"idAlmacen":"${idAlmacen}","idCategoria":"${idCategoria}","idSubCategoria":"${idSubCategoria}","isConcepto":"${isConcepto}","isPaquete":"${isPaquete}","isProducto":"${isProducto}","isAccesorio":"${isAccesorio}"}]`;
     var tipo = 'json';
     var selector = putProducts;
-    fillField(pagina, par, tipo, selector); 
-
-
+    fillField(pagina, par, tipo, selector);
 }
 
 function putProducts(dt) {
-
     let tabla = $('#tblExchanges').DataTable();
     tabla.clear().draw();
 
     let tablaProductos = $('#tblExchangesProductos').DataTable();
     tablaProductos.clear().draw();
 
-    if(dt[0].prd_id != 0){
-        if (isConcepto == 0){
-            $("#tblExchangesProductos_wrapper").attr("hidden",false);
-            $("#tblExchanges_wrapper").attr("hidden",true);
+    if (dt[0].prd_id != 0) {
+        if (isConcepto == 0) {
+            $('#tblExchangesProductos_wrapper').attr('hidden', false);
+            $('#tblExchanges_wrapper').attr('hidden', true);
 
             $.each(dt, function (v, u) {
-                fill_table_Productos(u); 
+                fill_table_Productos(u);
             });
 
             //console.log("entro if");
-        }else{
-            $("#tblExchanges_wrapper").attr("hidden",false);
-            $("#tblExchangesProductos_wrapper").attr("hidden",true);
+        } else {
+            $('#tblExchanges_wrapper').attr('hidden', false);
+            $('#tblExchangesProductos_wrapper').attr('hidden', true);
 
             $.each(dt, function (v, u) {
-                fill_table(u); 
+                fill_table(u);
             });
 
             //console.log("entro else");
         }
 
-        btn_apply_appears(); 
+        btn_apply_appears();
     }
-
 }
 
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
@@ -315,7 +302,6 @@ function putStores(dt) {
         });
     }
 }
-
 
 /**  +++ Ocultalos productos del listado que no cumplen con la cadena  */
 function sel_products(res) {
@@ -334,7 +320,6 @@ function sel_products(res) {
         }
     });
 }
-
 
 // Valida los campos
 function validator() {
@@ -360,32 +345,29 @@ function validator() {
 }
 
 // Llena la tabla de movimientos
-function  fill_table(par, tipoDato) {
-
+function fill_table(par, tipoDato) {
     let largo = $('#tblExchanges tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
-   // par = JSON.parse(par);
-   //console.log(par);
-   let tabla = $('#tblExchanges').DataTable();
-   var rowNode = tabla.row
+    // par = JSON.parse(par);
+    //console.log(par);
+    let tabla = $('#tblExchanges').DataTable();
+    var rowNode = tabla.row
         .add({
             skuColum: par.prd_sku,
             nameColum: par.prd_name,
             priceColum: par.prd_price,
-            subCategoriaColum: par.sbc_name
+            subCategoriaColum: par.sbc_name,
         })
-        .draw() 
+        .draw()
         .node();
 }
 
-
 // Llena la tabla de movimientos
-function  fill_table_Productos(par, tipoDato) {
-
-   let largo = $('#tblExchangesProductos tbody tr td').html();
-   largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
-   let tabla = $('#tblExchangesProductos').DataTable();
-   var rowNode = tabla.row
+function fill_table_Productos(par, tipoDato) {
+    let largo = $('#tblExchangesProductos tbody tr td').html();
+    largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
+    let tabla = $('#tblExchangesProductos').DataTable();
+    var rowNode = tabla.row
         .add({
             skuColum: par.ser_sku,
             nameColum: par.prd_name,
@@ -393,19 +375,16 @@ function  fill_table_Productos(par, tipoDato) {
             SerieColum: par.ser_serial_number,
             FechaAltaColum: par.ser_date_registry,
             ProveedorColum: par.sup_business_name,
-            SubCategoriaColum: par.sbc_name
+            SubCategoriaColum: par.sbc_name,
         })
-        .draw() 
+        .draw()
         .node();
 }
 
-
-
 function btn_apply_appears() {
-
     $('.btn-apply').removeClass('hidden-field');
 
-/*     let tabla = $('#tblExchanges').DataTable();
+    /*     let tabla = $('#tblExchanges').DataTable();
     let rengs = tabla.rows().count();
     if (rengs > 0) {
         $('.btn-apply').removeClass('hidden-field');
@@ -432,7 +411,7 @@ function read_exchange_table() {
     let freelnc = $('#txtFreelance').val();
     let chain = '';
 
-    if (isConcepto == 0){
+    if (isConcepto == 0) {
         $('#tblExchangesProductos tbody tr').each(function (v, u) {
             let prodsku = $($(u).find('td')[0]).text();
             let prodnam = $($(u).find('td')[1]).text();
@@ -444,10 +423,10 @@ function read_exchange_table() {
             let pos6 = $($(u).find('td')[6]).text();
 
             prodsku = prodsku.substring(0, 7) + '-' + prodsku.substring(7, prodsku.length);
-    
+
             chain += `${stornam}|${projnum}|${projnam}|${datestr}|${version}|${freelnc}|${prodsku}|${prodnam}|${prodPrice}|${serinum}|${dateRegis}|${pos5}|${pos6}|${isConcepto}@`;
         });
-    }else{
+    } else {
         $('#tblExchanges tbody tr').each(function (v, u) {
             let prodsku = $($(u).find('td')[0]).text();
             let prodnam = $($(u).find('td')[1]).text();
@@ -457,9 +436,9 @@ function read_exchange_table() {
 
             let pos5 = $($(u).find('td')[5]).text();
             let pos6 = $($(u).find('td')[6]).text();
-    
+
             prodsku = prodsku.substring(0, 7) + '-' + prodsku.substring(7, prodsku.length);
-    
+
             chain += `${stornam}|${projnum}|${projnam}|${datestr}|${version}|${freelnc}|${prodsku}|${prodnam}|${prodPrice}|${serinum}|${dateRegis}|${pos5}|${pos6}|${isConcepto}@`;
         });
     }

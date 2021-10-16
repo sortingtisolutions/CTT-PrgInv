@@ -5,8 +5,9 @@ let num = 0;
 let cats, subs, sku1, sku2, sku3, sku4;
 
 $(document).ready(function () {
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {
@@ -815,7 +816,6 @@ function build_modal_serie(dt) {
 }
 
 function activeIconsSerie() {
-    
     $('.invoiceViewSer')
         .unbind('click')
         .on('click', function () {

@@ -1,8 +1,10 @@
 let cust, proj, relc, vers, prod, disc;
 
 $('document').ready(function () {
-    verifica_usuario();
-    inicial();
+    url = getAbsolutePath();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {
@@ -126,6 +128,15 @@ function get_products_related(id, tp, pj) {
     caching_events('get_products');
     fillField(pagina, par, tipo, selector);
 }
+/**  Obtiene el listado de relacionados al prducto*/
+function get_conter_pending(pj, qt, pd) {
+    var pagina = 'ProjectDetails/counterPending';
+    var par = `[{"pjtcnId":"${pj}", "quantity":"${qt}", "prdId":"${pd}"}]`;
+    var tipo = 'json';
+    var selector = put_conter_pending;
+    caching_events('get_products');
+    fillField(pagina, par, tipo, selector);
+}
 
 /**  Llena el listado de prductores */
 function put_customers(dt) {
@@ -243,6 +254,7 @@ function put_version(dt) {
 
 /**  Llena el listado de cotizaciones */
 function put_budgets(dt) {
+    console.log(dt);
     caching_events('put_budgets');
     let days = get_days_period();
     if (dt[0].pjtcn_id > 0) {
@@ -570,7 +582,7 @@ function fill_dinamic_table() {
     caching_events('fill_dinamic_table');
     let H = `
     
-    <table class="table_control" id="tblControl" style="width: 1310px;">
+    <table class="table_control" id="tblControl" style="width: 1280px;">
         <thead>
             <tr class="headrow">
                 <th rowspan="2" class="w1 fix product">PRODUCTO</th>
@@ -579,7 +591,7 @@ function fill_dinamic_table() {
                 <th colspan="3" class="zone_03 headrow" >PRUEBAS</th>
             </tr>
             <tr>
-                <th class="w2 zone_01" >Cantidad</th>
+                <th class="w4 zone_01" >Cantidad</th>
                 <th class="w3 zone_01" >Precio</th>
                 <th class="w2 zone_01 sel" ><i class="fas fa-caret-left" id="daybase"></i>Días</th>
                 <th class="w2 zone_01 sel" ><i class="fas fa-caret-left" id="desbase"></i>Desc.</th>
@@ -712,15 +724,11 @@ function get_days_period() {
 function build_menu_control() {
     let H = `
         <ul class="menu_block">
-            <li class="menu_version" data_content=""></li>
-            <li class="menu_button" id="mkproj"><i class="fas fa-upload"></i> Hacer proyecto</li>
             <li class="menu_button" id="printr"><i class="fas fa-print"></i> Imprimir</li>
-            <li class="menu_button" id="expexl"><i class="fas fa-file-excel"></i> Exportar Excel</li>
-            <li class="menu_button" id="exppdf"><i class="fas fa-file-pdf"></i> Exportar PDF</li>
         </ul>
         `;
     $('.menu_control').html(H);
-
+    $('.menu_block').css({display: 'block'});
     $('.menu_button').on('click', function () {
         let acc = $(this).attr('id');
         switch (acc) {
@@ -729,7 +737,7 @@ function build_menu_control() {
                 make_project();
                 break;
             case 'printr':
-                alert('Imprimir proyecto');
+                // alert('Imprimir proyecto');
                 print_project();
                 break;
             case 'expexl':
@@ -1052,7 +1060,7 @@ function fill_budget_prods(pd, days, st) {
         data_service="${pds.srv_id}" 
     >
         <td class="w1 product"><i class="fas fa-ellipsis-v"></i>${prodName}<i class="fas fa-bars minimenu"></i></td>
-        <td class="w2 zone_01 quantity qtybase editable" qty_base="${pds.pjtcn_quantity}">${pds.pjtcn_quantity}</td>
+        <td class="w4 zone_01 quantity qtybase editable" qty_base="${pds.pjtcn_quantity}">${pds.pjtcn_quantity}</td>
         <td class="w3 zone_01 price prcbase">${mkn(pds.pjtcn_prod_price, 'n')}</td>
         <td class="w2 zone_01 days daybase editable" >${pds.pjtcn_days_base}</td>
         <td class="w2 zone_01 desct desbase sel"><i class="fas fa-caret-left" id="dscbase${pds.prd_id}"></i><span>${mkn(pds.pjtcn_discount_base, 'n')}</span>%</td>
@@ -1066,7 +1074,7 @@ function fill_budget_prods(pd, days, st) {
     </tr>
     `;
     $('.table_control tbody tr:last-child').before(H);
-
+    get_conter_pending(pds.pjtcn_id, pds.pjtcn_quantity, pds.prd_id);
     editable_disable('tbl_dynamic');
 
     $('.editable')
@@ -1243,7 +1251,7 @@ function show_info_product(id, lvl, pj) {
 function put_products_related(dt) {
     let name = dt[0].prd_name;
     $('.product_container h2').html(name);
-
+    console.log(dt);
     $.each(dt, function (v, u) {
         let cls = u.prd_level == 'P' ? 'blk' : '';
         let typ = u.prd_level == 'A' ? 'dep' : '';
@@ -1699,7 +1707,22 @@ function make_project() {
     console.log(projectId, versionId);
 }
 
-function print_project() {}
+function print_project() {
+    let projectId = $('#IdProject').val();
+    console.log(projectId);
+    var pagina = 'ProjectDetails/saveProjectList';
+    var par = `[{"pjtId":"${projectId}"}]`;
+    var tipo = 'html';
+    var selector = printProject;
+    fillField(pagina, par, tipo, selector);
+}
+
+function printProject(dt) {
+    console.log(dt);
+    let usr = dt.split('|')[0];
+    let nme = dt.split('|')[1];
+    window.open(url + 'app/views/ProjectDetails/ProjectDetailsReport.php?u=' + usr + '&n=' + nme, '_blank');
+}
 
 /**  +++++ Cachando eventos   */
 function caching_events(ev) {
@@ -1901,4 +1924,19 @@ function updatesData(sl) {
 
 function show_updatesData(dt) {
     console.log(dt);
+}
+
+function put_conter_pending(dt) {
+    console.log(dt);
+    let prd = dt[0].prd_id;
+    let qty = dt[0].qty;
+    let pnd = dt[0].pend;
+    let cir = qty;
+    if (pnd > 0) {
+        cir = qty + '<span class="flagPendig"></span>';
+    }
+
+    $('#bdg' + dt[0].prd_id)
+        .children('td.qtybase')
+        .html(cir);
 }

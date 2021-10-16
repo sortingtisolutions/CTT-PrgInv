@@ -24,11 +24,29 @@ class ProductsForSublettingController extends Controller
         $this->render(__CLASS__, $params);
     }
 
+    
+// Lista los proyectos activos
+    public function listProyects($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProyects($request_params['store']);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+    } 
 // Lista los productos
      public function listProducts($request_params)
      {
          $params =  $this->session->get('user');
-         $result = $this->model->listProducts($request_params['store']);
+         $result = $this->model->listProducts($request_params);
          $i = 0;
          while($row = $result->fetch_assoc()){
              $rowdata[$i] = $row;
@@ -132,5 +150,55 @@ class ProductsForSublettingController extends Controller
         }
         $res = $result3;
         echo $res;
-    } 		
+    } 	
+    
+
+// Proceso de series de subarrendos    
+    public function saveSubletting($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->checkSerie($request_params);
+        $skus = $result->fetch_object();
+        $sku  = $skus->skuCount; 
+
+        if ($sku == 0){
+            $pjtId = $this->model->addNewSku($request_params);
+            $setData = $this->model->getPjtDetail($pjtId);
+            $i = 0;
+            while($row = $setData->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"pjdt_id_id":"0"}]';	
+            }
+        } else {
+            $res =  '[{"pjdt_id_id":"0"}]';	
+        }
+        echo $res;
+    }
+
+// Proceso de series de subarrendos    
+    public function changeSubletting($request_params)
+    {
+        $params =  $this->session->get('user');
+        $pjtId = $this->model->changeSubletting($request_params);
+
+        $result = $this->model->getPjtDetail($pjtId);
+
+        $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"pjdt_id_id":"0"}]';	
+            }
+            
+        echo $res;
+    }
 }

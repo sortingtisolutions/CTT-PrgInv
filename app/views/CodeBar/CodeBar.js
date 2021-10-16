@@ -4,13 +4,14 @@ let = pr = [];
 let = link = '';
 
 $(document).ready(function () {
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {
-    $("#listProducts").mouseleave(function() {
-       $('.list-group').slideToggle(80);
+    $('#listProducts').mouseleave(function () {
+        $('.list-group').slideToggle(80);
     });
 
     getExchange();
@@ -87,8 +88,6 @@ function setting_table() {
             {data: 'editable', class: 'edit'},
             {data: 'prod_sku', class: 'sku'},
             {data: 'prodname', class: 'product-name'},
-    
-
         ],
     });
 }
@@ -219,7 +218,7 @@ function validator(prId) {
     let ky = 0;
     let msg = '';
 
-   /* if ($('#txtTypeExchange').val() == 0) {
+    /* if ($('#txtTypeExchange').val() == 0) {
         ky = 1;
         msg += 'Debes seleccionar un tipo de movimiento';
         $('#txtTypeExchange').addClass('fail');
@@ -332,7 +331,7 @@ function fill_table(par) {
     $('.edit')
         .unbind('click')
         .on('click', function () {
-            let qty = parseInt($(this).parent().children('td.quantity').text()) ;
+            let qty = parseInt($(this).parent().children('td.quantity').text());
             let pid = $(this).parent().children('td.sku').children('span.hide-support').text().split('|')[4];
             console.log(qty);
             console.log(pid);
@@ -367,9 +366,7 @@ function clean_selectors() {
 function update_array_products(id, cn) {
     let prId = $('#P-' + id);
     let qtystk = prId.children().children('.quantity').text();
-    prId.children()
-        .children('.quantity')
-        .text(1);
+    prId.children().children('.quantity').text(1);
 }
 
 function read_exchange_table() {
@@ -476,59 +473,56 @@ function uuidv4() {
     });
 }
 
-function generateBarcode(selector,SKU){
-
+function generateBarcode(selector, SKU) {
     var medidas = $('#selectTipoMedida option:selected').attr('id');
     var largo = 0;
     var alto = 0;
     var texto = 0;
 
-    switch(medidas) {
+    switch (medidas) {
         case '1':
-            largo = .39;
+            largo = 0.39;
             alto = 40;
             texto = 5;
-          break;
+            break;
         case '2':
-            largo = .62;
+            largo = 0.62;
             alto = 60;
             texto = 6;
-          break;
+            break;
         case '3':
-            largo = .85;
+            largo = 0.85;
             alto = 84;
             texto = 7;
-          break;
+            break;
         case '4':
             largo = 1.05;
             alto = 104;
             texto = 10;
-          break;
+            break;
         case '5':
             largo = 2.1;
             alto = 208;
             texto = 12;
-          break;
+            break;
         default:
-          // code block
-      }
-
+        // code block
+    }
 
     JsBarcode(selector, SKU, {
-        format: "CODE128",
-        lineColor: "#000000",
+        format: 'CODE128',
+        lineColor: '#000000',
         width: largo,
         height: alto,
         displayValue: SKU,
         fontSize: texto,
         textMargin: 2,
-        margin: 10
-      });
-  }
+        margin: 10,
+    });
+}
 
-
-function print_Code(){
-    $("#modalSku").html("");
+function print_Code() {
+    $('#modalSku').html('');
     //$('#modalCodigoBarra').modal('show');
     let tabla = $('#tblExchanges').DataTable();
 
@@ -537,33 +531,36 @@ function print_Code(){
     var contador = 1;
 
     selected.each(function (index) {
-       var arraySku =  index.supports.split("|");
-       idSelected += arraySku[1] + ',';
-       console.log(arraySku[1]);
-       var selector = "barcode"+contador;
-       $("#modalSku").append("<svg  id='"+selector+"'></svg  >");
-       generateBarcode("#"+selector,arraySku[1]);
-       contador++;
-
+        var arraySku = index.supports.split('|');
+        idSelected += arraySku[1] + ',';
+        console.log(arraySku[1]);
+        var selector = 'barcode' + contador;
+        $('#modalSku').append("<svg  id='" + selector + "'></svg  >");
+        generateBarcode('#' + selector, arraySku[1]);
+        contador++;
     });
     idSelected = idSelected.slice(0, -1);
     PrintCodeBar();
 }
 
 function PrintCodeBar() {
-    var data = $("#modalSku").html();
-    var source = '<html><head><title></title>'+'<link rel="stylesheet" href="css/mycss.css" type="text/css" />'+
-    '<script type="text/javascript">'+
-    //'setTimeout(() => {window.print();window.close();}, 1000);'+
-    'setTimeout(() => {window.close();}, 3000);'+
-    '</script>'+'</head><body onload="window.print();" >'+data+'</body></html>';
+    var data = $('#modalSku').html();
+    var source =
+        '<html><head><title></title>' +
+        '<link rel="stylesheet" href="css/mycss.css" type="text/css" />' +
+        '<script type="text/javascript">' +
+        //'setTimeout(() => {window.print();window.close();}, 1000);'+
+        'setTimeout(() => {window.close();}, 3000);' +
+        '</script>' +
+        '</head><body onload="window.print();" >' +
+        data +
+        '</body></html>';
 
-    Pagelink = "about:blank";
-    var pwa = window.open(Pagelink, "_new");
+    Pagelink = 'about:blank';
+    var pwa = window.open(Pagelink, '_new');
     pwa.document.open();
     pwa.document.write(source);
     //pwa.print();
     pwa.document.close();
     //$('#modalCodigoBarra').modal('hide');
 }
-

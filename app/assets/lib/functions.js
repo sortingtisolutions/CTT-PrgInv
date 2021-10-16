@@ -151,6 +151,7 @@ function verifica_usuario() {
         var tipo = 'json';
         var selector = set_menu_on_page;
         fillField(pagina, par, tipo, selector);
+        return true;
     }
 }
 
