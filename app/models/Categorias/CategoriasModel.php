@@ -35,7 +35,7 @@ class CategoriasModel extends Model
 				(select count(*) from ctt_subcategories as sub where sub.cat_id = ct.cat_id and sub.sbc_status = 1) as cantidad
 				FROM ctt_categories AS ct
 				LEFT JOIN ctt_stores AS st ON st.str_id = ct.str_id
-				WHERE ct.cat_status = 1;"; */
+				WHERE ct.cat_status = 1;"; 
 		$qry = "SELECT ct.cat_id, ct.cat_name, ct.str_id, st.str_name,
 				CASE 
 					WHEN p.prd_level = 'P' THEN  ifnull(sum(sp.stp_quantity),0)
@@ -49,7 +49,12 @@ class CategoriasModel extends Model
 				LEFT JOIN ctt_stores				as st ON st.str_id = ct.str_id
 				WHERE prd_status = 1 AND p.prd_level IN ('P') 
 				GROUP BY ct.cat_id, ct.cat_name, ct.str_id, st.str_name 
-				ORDER BY ct.cat_id;";
+				ORDER BY ct.cat_id;";*/
+		$qry = "SELECT ct.cat_id, ct.cat_name, ct.str_id, st.str_name,'0' as cantidad 
+				FROM ctt_categories  AS ct 
+                INNER JOIN ctt_stores		as st ON st.str_id = ct.str_id
+				WHERE ct.cat_status = 1 and st.str_status=1 ORDER BY ct.cat_id;";
+
 		$result = $this->db->query($qry);
 		$lista = array();
 		while ($row = $result->fetch_row()){
@@ -122,6 +127,19 @@ class CategoriasModel extends Model
 			INNER JOIN ctt_series                AS se ON se.prd_id = p.prd_id
 			WHERE ct.cat_id = ($prodId) AND p.prd_level IN ('P') 
 			ORDER BY se.ser_sku;";
+        return $this->db->query($qry);
+    }
+	public function countQuantity($params)
+    {
+        $catId = $this->db->real_escape_string($params['catId']);
+        $qry = "SELECT '$catId' as cat_id, ifnull(sum(sp.stp_quantity),0) as cantidad 
+		FROM  ctt_stores_products AS sp
+		INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
+		INNER JOIN ctt_products				AS P ON p.prd_id = sr.prd_id
+		INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id
+		INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id
+		WHERE sr.ser_status = 1 AND p.prd_level IN ('P')
+		and ct.cat_id= $catId;";
         return $this->db->query($qry);
     }
 

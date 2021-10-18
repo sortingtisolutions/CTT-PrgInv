@@ -35,7 +35,7 @@ class SubCategoriasModel extends Model
 		if($request["idCategoria"] != "0"){
 			$qryExt = "and u.cat_id = ".$request["idCategoria"];
 		}
-		$qry = "SELECT sc.sbc_id, sc.sbc_code, sc.sbc_name,ct.cat_name,sc.cat_id,
+	/*	$qry = "SELECT sc.sbc_id, sc.sbc_code, sc.sbc_name,ct.cat_name,sc.cat_id,
 				CASE 
 					WHEN p.prd_level = 'P' THEN  ifnull(sum(sp.stp_quantity),0)
 					ELSE 0 
@@ -47,7 +47,11 @@ class SubCategoriasModel extends Model
 				LEFT JOIN ctt_stores_products       AS sp ON sp.ser_id = sr.ser_id
 				WHERE prd_status = 1 AND p.prd_level IN ('P','K') 
 				GROUP BY sbc_id, sbc_code, sbc_name , cat_id 
-				ORDER BY sc.cat_id,sc.sbc_id;";
+				ORDER BY sc.cat_id,sc.sbc_id;"; */
+		$qry = "SELECT sc.sbc_id, sc.sbc_code, sc.sbc_name,ct.cat_name,sc.cat_id,'0' as cantidad 
+				FROM  ctt_subcategories        AS sc   
+				INNER JOIN ctt_categories      AS ct ON ct.cat_id = sc.cat_id
+				WHERE sc.sbc_status = 1 and ct.cat_status=1;";
 		return $this->db->query($qry);
 	}
 
@@ -63,7 +67,6 @@ class SubCategoriasModel extends Model
 		}
 		return $item;
 	}
-
 
     public function ActualizaSubCategoria($params)
 	{
@@ -145,6 +148,16 @@ class SubCategoriasModel extends Model
 		return $this->db->query($qry);
 	}
 
-
-
+	public function countQuantity($params)
+    {
+        $sbcatId = $this->db->real_escape_string($params['sbcatId']);
+        $qry = "SELECT '$sbcatId' as sbcat_id, ifnull(sum(sp.stp_quantity),0) as cantidad 
+		FROM  ctt_stores_products AS sp
+		INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
+		INNER JOIN ctt_products				AS P ON p.prd_id = sr.prd_id
+		INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id
+		WHERE sr.ser_status = 1 AND p.prd_level IN ('P','K')
+		and sc.sbc_id= $sbcatId;";
+        return $this->db->query($qry);
+    }
 }
