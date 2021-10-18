@@ -197,7 +197,14 @@ class ProjectDetailsModel extends Model
 
         while($row = $result->fetch_assoc()){
             $pjtdtId = $row["pjtdt_id"];
-            $qry3 = "UPDATE ctt_series SET ser_reserve_start = null, ser_reserve_end = null, pjtdt_id = 0 WHERE pjtdt_id = $pjtdtId;";
+            $qry3 = "UPDATE ctt_series 
+                        SET ser_reserve_start = null, 
+                            ser_reserve_end = null, 
+                            ser_situation = 'D', 
+                            ser_stage = 'D', 
+                            pjtdt_id = 0 
+                    WHERE   pjtdt_id = $pjtdtId;";
+                    
             $this->db->query($qry3);
 
             $qry4 = "DELETE FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
@@ -346,6 +353,8 @@ class ProjectDetailsModel extends Model
                         SET 
                             ser_reserve_start = '$dtinic', 
                             ser_reserve_end   = '$dtfinl', 
+                            ser_situation = 'EA',
+                            ser_stage = 'R',
                             ser_reserve_count = ser_reserve_count + 1
                             WHERE ser_id = $serie;";
             $this->db->query($qry1);

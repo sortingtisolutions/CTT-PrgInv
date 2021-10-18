@@ -135,7 +135,7 @@ public function listProjectsType($params)
         return $this->db->query($qry);
     }    
 
-    
+
 // Listado de descuentos
 public function listDiscounts($params)
 {
@@ -422,6 +422,8 @@ public function saveBudgetList($params)
                         SET 
                             ser_reserve_start = '$dtinic', 
                             ser_reserve_end   = '$dtfinl', 
+                            ser_situation = 'EA',
+                            ser_stage = 'R',
                             ser_reserve_count = ser_reserve_count + 1
                             WHERE ser_id = $serie;";
             $this->db->query($qry1);

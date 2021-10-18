@@ -53,7 +53,7 @@ public function listProyects($store)
 // Listado de Almacenes
     public function listStores()
     {
-        $qry = "SELECT str_id, str_name FROM ctt_stores WHERE str_type = 'ESTATICO' AND str_status = 1;";
+        $qry = "SELECT str_id, str_name FROM ctt_stores WHERE str_type = 'ESTATICOS' AND str_status = 1;";
         return $this->db->query($qry);
     }
 
