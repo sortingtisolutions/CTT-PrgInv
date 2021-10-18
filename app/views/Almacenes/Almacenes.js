@@ -1,5 +1,6 @@
 var table = null;
 var positionRow = 0;
+var strnme;
 
 $(document).ready(function () {
     if (verifica_usuario()) {
@@ -222,9 +223,7 @@ function getAlmacenesTable() {
             var renglon = '';
             respuesta.forEach(function (row, index) {
                 renglon =
-                    '<tr id="' +
-                    row.str_id +
-                    '">' +
+                    '<tr id="' + row.str_id + '">' +
                     '<td class="text-center edit"> ' +
                     '<button onclick="EditAlmacen(' +
                     row.str_id +
@@ -233,17 +232,19 @@ function getAlmacenesTable() {
                     row.str_id +
                     ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
                     '</td>' +
+
                     "<td class='dtr-control text-center'>" +
                     row.str_id +
                     '</td>' +
-                    '<td data-content="' +
-                    row.str_name +
-                    '">' +
+
+                    '<td class="strname">' +
                     row.str_name +
                     '</td>' +
+
                     '<td>' +
                     row.emp_fullname +
                     '</td>' +
+
                     '<td hidden>' +
                     row.emp_id +
                     '</td>' +
@@ -375,12 +376,11 @@ function activeIcons() {
         .unbind('click')
         .on('click', function () {
             let prd = $(this).parents('tr').attr('id');
-            console.log($(this.parent));
-            /* nomalm = $(this).parent('td').eq(2).val(); */
-            nomalm = prd;
             let qty = $(this).parent('td').attr('data-content');
+            strnme = $(this).parents('tr').children('td.strname').html();
+            
             if (qty > 0) {
-                console.log('Se TOCO el Boton y valido ---', nomalm);
+                console.log('Almacen -', strnme);
                 $('.deep_loading').css({display: 'flex'});
                 getSeries(prd);
             }
@@ -429,7 +429,7 @@ function putSeries(dt) {
 /** +++++  Coloca los seriales en la tabla de seriales */
 function build_modal_serie(dt) {
     let tabla = $('#tblStrSerie').DataTable();
-    $('.overlay_closer .title').html(`Almacen - ${nomalm}`);
+    $('.overlay_closer .title').html(`Almacen - ${strnme}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
         tabla.row

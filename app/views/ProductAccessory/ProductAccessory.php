@@ -92,7 +92,7 @@
                             <thead>
                                 <tr>
                                     <th style="width:  70px">SKU</th>
-                                    <th style="width:  auto">Nombre</th>
+                                    <th style="width:  auto">Descripcion</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

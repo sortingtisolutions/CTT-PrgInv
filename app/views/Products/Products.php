@@ -13,11 +13,24 @@
         <div class="contenido">
             <div class="row mvst_group">
                 <div class="mvst_list tblProdMaster">
+                    
                     <div class="row rowTop">
                         <h1>Productos</h1>
+<!--                        <div class="row" >
+						<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" value="0" id="checkIsPaquete" check >
+									<label class="form-check-label" for="flexCheckDefault">
+										FILTRAR SOLO PRODUCTOS
+									</label>
+								</div>
+						</div>
+					    </div> -->
+                        
                         <select id="txtCategoryList" class="topList">
                             <option value="0">SELECCIONA CATÁLOGO</option>
                         </select>
+                        
                     </div>
                     <table class="display compact nowrap"  id="tblProducts" style="min-width: 1880px">
                         <thead>

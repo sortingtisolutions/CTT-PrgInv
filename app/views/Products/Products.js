@@ -277,6 +277,14 @@ function settingTable() {
                     createNewProduct();
                 },
             },
+            {
+                // Boton nuevo producto
+                text: 'Filtrar productos',
+                className: 'btn-apply',
+                action: function (e, dt, node, config) {
+                    /* createNewProduct();*/
+                },
+            },
         ],
         pagingType: 'simple_numbers',
         language: {

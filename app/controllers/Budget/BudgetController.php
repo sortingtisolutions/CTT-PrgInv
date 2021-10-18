@@ -361,7 +361,7 @@ public function ProcessProjectProduct($request_params)
 
             if ( $bdglvl == 'A' ){
                 echo 'Accesorio';
-                for ($i = 1; $i<=$quanty; $i++){
+                for ($i = 1; $i<=$quanty; $i++){   // VALIDA LA CANTIDAD A REALIZA POR CONCEPTO 
 
                     $params = array(
                         'pjetId' => $pjetId, 

@@ -1,5 +1,6 @@
 var table = null;
 var positionRow = 0;
+var catnme;
 
 $(document).ready(function () {
    verifica_usuario();
@@ -223,7 +224,7 @@ function getCategoriasTable() {
                row.cat_id +
                '</td>' +
 
-               '<td>' +
+               '<td class="catname">' +
                row.cat_name +
                '</td>' +
 
@@ -241,9 +242,11 @@ function getCategoriasTable() {
  
                '</tr>';
             $('#tablaCategoriasRow').append(renglon);
+            get_quantity(row.cat_id);
          });
         
          activeIcons();
+
          $('.deep_loading').css({display: 'none'});
 
          let title = 'Categorias';
@@ -363,6 +366,7 @@ function activeIcons() {
        .on('click', function () {
            let prd = $(this).parents('tr').attr('id');
            let qty = $(this).parent('td').attr('data-content');
+           catnme = $(this).parents('tr').children('td.catname').html();
            if (qty > 0) {
                console.log('Se TOCO el Boton y valido', qty );
                $('.deep_loading').css({display: 'flex'});
@@ -375,7 +379,7 @@ function putSeries(dt) {
    $('#ExisteCatModal').removeClass('overlay_hide');
    $('#tblCatSerie').DataTable({
        destroy: true,
-       order: [[2, 'asc']],
+       order: [[1, 'asc']],
        lengthMenu: [
            [100, 150, 200, -1],
            [100, 150, 200, 'Todos'],
@@ -412,7 +416,7 @@ function putSeries(dt) {
 /** +++++  Coloca los seriales en la tabla de seriales */
 function build_modal_serie(dt) {
    let tabla = $('#tblCatSerie').DataTable();
-   $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
+   $('.overlay_closer .title').html(`Catalogo - ${catnme}`);
    tabla.rows().remove().draw();
    $.each(dt, function (v, u) {
        
@@ -435,4 +439,19 @@ function build_modal_serie(dt) {
    });
 }
 
+function get_quantity(catId){
+   var pagina = 'Categorias/countQuantity';
+   var par = `[{"catId":"${catId}"}]`;
+   var tipo = 'json';
+   var selector = putQuantity;
+   fillField(pagina, par, tipo, selector);
+}
 
+function putQuantity(dt){
+   let catid = dt[0].cat_id;
+   let qty = dt[0].cantidad;
+   $('#tablaCategoriasRow #' + catid).children('td.quantity').children('.toLink').html(qty);
+   $('#tablaCategoriasRow #' + catid).children('td.quantity').attr('data-content',qty);
+
+   /*console.log(catid,'|', qty);*/
+}
