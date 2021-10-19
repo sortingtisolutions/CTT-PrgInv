@@ -452,6 +452,4 @@ function putQuantity(dt){
    let qty = dt[0].cantidad;
    $('#tablaCategoriasRow #' + catid).children('td.quantity').children('.toLink').html(qty);
    $('#tablaCategoriasRow #' + catid).children('td.quantity').attr('data-content',qty);
-
-   /*console.log(catid,'|', qty);*/
 }

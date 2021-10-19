@@ -550,8 +550,6 @@ function putQuantity(dt){
    let sbcatid = dt[0].sbcat_id;
    let qty = dt[0].cantidad;
    $('#tablaSubCategoriasRow #' + sbcatid).children('td.quantity').children('.toLink').html(qty);
-   $('#tablaSubCategoriasRow #' + sbcatid).children('td.quantity').attr('data-content',qty);
-   /*console.log(sbcatid,'|', qty);*/
-   
+   $('#tablaSubCategoriasRow #' + sbcatid).children('td.quantity').attr('data-content',qty);   
 }
 

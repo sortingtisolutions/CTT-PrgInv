@@ -135,7 +135,7 @@ class CategoriasModel extends Model
         $qry = "SELECT '$catId' as cat_id, ifnull(sum(sp.stp_quantity),0) as cantidad 
 		FROM  ctt_stores_products AS sp
 		INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
-		INNER JOIN ctt_products				AS P ON p.prd_id = sr.prd_id
+		INNER JOIN ctt_products				AS p ON p.prd_id = sr.prd_id
 		INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id
 		INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id
 		WHERE sr.ser_status = 1 AND p.prd_level IN ('P')

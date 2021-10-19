@@ -39,10 +39,10 @@ $items = json_decode($file, true);
     $costBase = 0;
     for ($i = 0; $i<count($items); $i++){
         $amount = $items[$i]['pjtcn_prod_price'] * $items[$i]['pjtcn_quantity'];
-        $amountBase = ($amount * $items[$i]['pjtcn_days_base'])-($amount * $items[$i]['pjtcn_discount_base']);
-        $amountTrip = ($amount * $items[$i]['pjtcn_days_trip'])-($amount * $items[$i]['pjtcn_discount_trip']);
-        $amountTest = ($amount * $items[$i]['pjtcn_days_test'])-($amount * $items[$i]['pjtcn_discount_test']);
-        $amountInsr = $amount -($amount * $items[$i]['pjtcn_insured']);
+        $amountBase = ($amount * $items[$i]['pjtcn_days_base'])-($amount * ($items[$i]['pjtcn_discount_base']/100));
+        $amountTrip = ($amount * $items[$i]['pjtcn_days_trip'])-($amount * ($items[$i]['pjtcn_discount_trip']/100));
+        $amountTest = ($amount * $items[$i]['pjtcn_days_test'])-($amount * ($items[$i]['pjtcn_discount_test']/100));
+        $amountInsr = ($amount * $items[$i]['pjtcn_insured']);
         $totalBase += $amountBase ;
         $totalTrip += $amountTrip ;
         $totalTest += $amountTest ;
@@ -153,7 +153,7 @@ $items = json_decode($file, true);
 
                 <!-- Start Tabla de costo base  -->
                 <h2>Costo Base</h2>
-                <table autosize="1" class="table-data bline-d">
+                <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                     <thead>
                         <tr>
                             <th class="tit-figure prod">Producto</th>
@@ -170,7 +170,7 @@ $items = json_decode($file, true);
                         $price = $items[$i]['pjtcn_prod_price'] ;
                         $sbtt1 = $price * $items[$i]['pjtcn_quantity'];
                         $sbtt2 = $sbtt1 * $items[$i]['pjtcn_days_base'];
-                        $disco = $sbtt2 * $items[$i]['pjtcn_discount_base'];
+                        $disco = $sbtt2 * ($items[$i]['pjtcn_discount_base']/100);
                         $amount = $sbtt2 - $disco;
 
     $html .= '
@@ -179,7 +179,7 @@ $items = json_decode($file, true);
                             <td class="dat-figure pric">' . number_format($price , 2,'.',',') . '</td>
                             <td class="dat-figure qnty">'. $items[$i]['pjtcn_quantity'] .'</td>
                             <td class="dat-figure days">'. $items[$i]['pjtcn_days_base'] .'</td>
-                            <td class="dat-figure disc">' . number_format($disco , 2,'.',',') . '</td>
+                            <td class="dat-figure disc">' . number_format(($items[$i]['pjtcn_discount_base']/100) , 2,'.',',') . '</td>
                             <td class="dat-figure amou">' . number_format($amount , 2,'.',',') . '</td>
                         </tr>
                         ';
@@ -199,7 +199,7 @@ if ($totalTrip > 0){
 
                 <!-- Start Tabla de costo Viaje  -->
                 <h2>Costo Viaje</h2>
-                <table class="table-data bline-d">
+                <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                     <thead>
                         <tr>
                             <th class="tit-figure prod">Producto</th>
@@ -216,18 +216,19 @@ if ($totalTrip > 0){
                         $price = $items[$i]['pjtcn_prod_price'] ;
                         $sbtt1 = $price * $items[$i]['pjtcn_quantity'];
                         $sbtt2 = $sbtt1 * $items[$i]['pjtcn_days_trip'];
-                        $disco = $sbtt2 * $items[$i]['pjtcn_discount_trip'];
+                        $disco = $sbtt2 * ($items[$i]['pjtcn_discount_trip']/100);
                         $amount = $sbtt2 - $disco;
+                        if ($items[$i]['pjtcn_days_trip']>0){
 
     $html .= '
                         <tr>
                             <td class="dat-figure prod">'. $items[$i]['pjtcn_prod_name'] .'</td>
                             <td class="dat-figure days">'. $items[$i]['pjtcn_days_trip'] .'</td>
-                            <td class="dat-figure disc">' . number_format($disco , 2,'.',',') . '</td>
+                            <td class="dat-figure disc">' . number_format(($items[$i]['pjtcn_discount_trip']/100) , 2,'.',',') . '</td>
                             <td class="dat-figure amou">' . number_format($amount , 2,'.',',') . '</td>
                         </tr>
                         ';
-
+                        }
                     }
     $html .= '
                         <tr>
@@ -243,7 +244,7 @@ if ($totalTest > 0){
 
                 <!-- Start Tabla de costo Pruebas  -->
                 <h2>Costo Pruebas</h2>
-                <table class="table-data bline-d">
+                <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                     <thead>
                         <tr>
                             <th class="tit-figure prod">Producto</th>
@@ -260,17 +261,18 @@ if ($totalTest > 0){
                         $price = $items[$i]['pjtcn_prod_price'] ;
                         $sbtt1 = $price * $items[$i]['pjtcn_quantity'];
                         $sbtt2 = $sbtt1 * $items[$i]['pjtcn_days_test'];
-                        $disco = $sbtt2 * $items[$i]['pjtcn_discount_test'];
+                        $disco = $sbtt2 * ($items[$i]['pjtcn_discount_test']/100);
                         $amount = $sbtt2 - $disco;
-
+                        if ($items[$i]['pjtcn_days_test']>0){
     $html .= '
                         <tr>
                             <td class="dat-figure prod">'. $items[$i]['pjtcn_prod_name'] .'</td>
                             <td class="dat-figure days">'. $items[$i]['pjtcn_days_test'] .'</td>
-                            <td class="dat-figure disc">' . number_format($disco , 2,'.',',') . '</td>
+                            <td class="dat-figure disc">' .number_format(($items[$i]['pjtcn_discount_test']/100) , 2,'.',',') . '</td>
                             <td class="dat-figure amou">' . number_format($amount , 2,'.',',') . '</td>
                         </tr>
                         ';
+                        }
                     }
     $html .=  '
                         <tr>
@@ -375,6 +377,6 @@ $mpdf->SetHTMLFooter($foot);
 $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 $mpdf->Output(
-    "Cotizacon.pdf",
+    "Proyecto-". $items[0]['ver_code'].".pdf",
     "I"
 );

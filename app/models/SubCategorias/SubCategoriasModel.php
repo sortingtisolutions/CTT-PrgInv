@@ -136,7 +136,7 @@ class SubCategoriasModel extends Model
 	public function ListSubCategorias($request)
 	{
 		$qry = "SELECT sbc_id, sbc_code, sbc_name, cat_id FROM ctt_subcategories
-				WHERE sbc_status=1;";
+				WHERE sbc_status=1 ORDER by cat_id, sbc_code; ";
 		/*$result = $this->db->query($qry);
 		if($row = $result->fetch_row()){
 			$item = array("sbc_id" =>$row[0],
@@ -154,7 +154,7 @@ class SubCategoriasModel extends Model
         $qry = "SELECT '$sbcatId' as sbcat_id, ifnull(sum(sp.stp_quantity),0) as cantidad 
 		FROM  ctt_stores_products AS sp
 		INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
-		INNER JOIN ctt_products				AS P ON p.prd_id = sr.prd_id
+		INNER JOIN ctt_products				AS p ON p.prd_id = sr.prd_id
 		INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = p.sbc_id
 		WHERE sr.ser_status = 1 AND p.prd_level IN ('P','K')
 		and sc.sbc_id= $sbcatId;";

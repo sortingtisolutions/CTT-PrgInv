@@ -900,11 +900,11 @@ function save_budget(verId) {
             let bdgQuantity = tr.children('td.qtybase').text().replace(/,/g, '');
             let bdgPriceBase = tr.children('td.prcbase').text().replace(/,/g, '');
             let bdgDaysBase = tr.children('td.daybase').text().replace(/,/g, '');
-            let bdgDesctBase = parseFloat(tr.children('td.desbase').text()) / 100;
+            let bdgDesctBase = parseFloat(tr.children('td.desbase').text());
             let bdgDayTrip = tr.children('td.daytrip').text().replace(/,/g, '');
-            let bdgDesTrip = parseFloat(tr.children('td.destrip').text()) / 100;
+            let bdgDesTrip = parseFloat(tr.children('td.destrip').text());
             let bdgDayTest = tr.children('td.daytest').text().replace(/,/g, '');
-            let bdgDesTest = parseFloat(tr.children('td.destest').text()) / 100;
+            let bdgDesTest = parseFloat(tr.children('td.destest').text());
             let bdgInsured = tr.attr('data_insured');
             let pjtId = $('#IdProject').val();
 
