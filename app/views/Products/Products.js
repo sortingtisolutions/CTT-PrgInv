@@ -1,7 +1,8 @@
 let seccion = '';
-let docs;
+let docs, prds;
 let grp = 50;
-let num = 0;
+let num = 0,
+    lvl = '';
 let cats, subs, sku1, sku2, sku3, sku4;
 
 $(document).ready(function () {
@@ -193,10 +194,17 @@ function putDocuments(dt) {
 
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
+    prds = dt;
+    fillProducts();
+}
+
+/** +++++  coloca los productos en la tabla */
+function fillProducts() {
     $('#tblProducts tbody').html('');
-    if (dt[0].prd_id != '0') {
-        var catId = dt[0].cat_id;
-        $.each(dt, function (v, u) {
+
+    if (prds[0].prd_id != '0') {
+        var catId = prds[0].cat_id;
+        $.each(prds, function (v, u) {
             pack = u.prd_level == 'K' ? 'fas' : 'far';
             let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
             let invoice = u.doc_id == 0 ? '' : docInvo;
@@ -209,7 +217,7 @@ function putProducts(dt) {
                     <td class="product-name editable" data_action="box" data_edit="prd_name"> ${u.prd_name}</td>
                     <td class="price editable" data_action="box" data_edit="prd_price">${u.prd_price}</td>
                     <td class="quantity" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.quantity}|${u.prd_level}"><span class="toLink">${u.quantity}</span></td>
-                    <td class="sku">${u.prd_level}</td>
+                    <td class="level">${u.prd_level}</td>
                     <td class="sku editable list">${u.srv_name}</td>
                     <td class="sku">${u.prd_coin_type}</td>
                     <td class="cellInvoice center editable fileload">${invoice}</td>
@@ -278,11 +286,11 @@ function settingTable() {
                 },
             },
             {
-                // Boton nuevo producto
+                // Boton filtar producto
                 text: 'Filtrar productos',
                 className: 'btn-apply',
                 action: function (e, dt, node, config) {
-                    /* createNewProduct();*/
+                    filterProduct();
                 },
             },
         ],
@@ -299,8 +307,8 @@ function settingTable() {
             {data: 'prodname', class: 'product-name'},
             {data: 'prodpric', class: 'price'},
             {data: 'prodqtty', class: 'quantity'},
-            {data: 'prodtype', class: 'sku'},
-            {data: 'typeserv', class: 'sku'},
+            {data: 'prodtype', class: 'type'},
+            {data: 'typeserv', class: 'lvl'},
             {data: 'prodcoin', class: 'sku'},
             {data: 'prddocum', class: 'cellInvoice center'},
             {data: 'subcateg', class: 'catalog'},
@@ -388,9 +396,18 @@ function activeIcons() {
             });
         });
 }
-
 function putDelProducts(dt) {
     console.log(dt);
+}
+
+/** +++++  muestra unicamente los productos y oculta los accesorios */
+function filterProduct() {
+    console.log($('#tblProducts'));
+    $('#tblProducts tr').each(function (i, v) {
+        console.log($(v).attr('class'));
+        $(v).addClass('hide');
+    });
+    $('#tblProducts').DataTable().draw();
 }
 
 function putDocument(dt) {

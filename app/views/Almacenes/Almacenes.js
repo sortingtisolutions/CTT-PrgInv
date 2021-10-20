@@ -214,16 +214,20 @@ function getAlmacenesTable() {
     var location = 'Almacenes/GetAlmacenes';
     $('#AlmacenesTable').DataTable().destroy();
     $('#tablaAlmacenesRow').html('');
+    console.log(location);
 
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: location,
         _success: function (respuesta) {
+            console.log(respuesta);
             var renglon = '';
             respuesta.forEach(function (row, index) {
                 renglon =
-                    '<tr id="' + row.str_id + '">' +
+                    '<tr id="' +
+                    row.str_id +
+                    '">' +
                     '<td class="text-center edit"> ' +
                     '<button onclick="EditAlmacen(' +
                     row.str_id +
@@ -232,19 +236,15 @@ function getAlmacenesTable() {
                     row.str_id +
                     ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
                     '</td>' +
-
                     "<td class='dtr-control text-center'>" +
                     row.str_id +
                     '</td>' +
-
                     '<td class="strname">' +
                     row.str_name +
                     '</td>' +
-
                     '<td>' +
                     row.emp_fullname +
                     '</td>' +
-
                     '<td hidden>' +
                     row.emp_id +
                     '</td>' +
@@ -343,7 +343,9 @@ function getAlmacenesTable() {
         set success(value) {
             this._success = value;
         },
-        error: function () {},
+        error: function (xhr, textStatus, error) {
+            console.log(error);
+        },
     }).done(function () {});
 }
 
@@ -378,7 +380,7 @@ function activeIcons() {
             let prd = $(this).parents('tr').attr('id');
             let qty = $(this).parent('td').attr('data-content');
             strnme = $(this).parents('tr').children('td.strname').html();
-            
+
             if (qty > 0) {
                 console.log('Almacen -', strnme);
                 $('.deep_loading').css({display: 'flex'});
