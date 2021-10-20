@@ -107,7 +107,7 @@ public function listProjectsType($params)
         $dstr = $this->db->real_escape_string($params['dstr']);
         $dend = $this->db->real_escape_string($params['dend']);
 
-        $qry = "SELECT bg.*, pj.pjt_id, 
+        $qry = "SELECT bg.*, pj.pjt_id, sb.sbc_name,
                     date_format(pj.pjt_date_start, '%Y%m%d') AS pjt_date_start, 
                     date_format(pj.pjt_date_end, '%Y%m%d') AS pjt_date_end, 
                     CASE 
@@ -131,6 +131,8 @@ public function listProjectsType($params)
                 FROM ctt_budget AS bg
                 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
+                LEFT JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
+                LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 WHERE bg.ver_id = $verId ORDER BY bdg_prod_name ASC;";
         return $this->db->query($qry);
     }    
@@ -154,6 +156,7 @@ public function listDiscounts($params)
         $dend = $this->db->real_escape_string($params['dend']);
 
         $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, 
+                        sb.sbc_name,
                 CASE 
                     WHEN prd_level ='K' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
@@ -173,6 +176,7 @@ public function listDiscounts($params)
                         )
                     END AS stock
             FROM ctt_products AS pd
+            INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
             WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 
                 AND upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%'
             ORDER BY pd.prd_name ;";

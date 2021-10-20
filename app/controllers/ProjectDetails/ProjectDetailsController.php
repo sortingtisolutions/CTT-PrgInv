@@ -390,12 +390,12 @@ class ProjectDetailsController extends Controller
 
         $field = '';
         switch ($numfield){
-            case '3' : $field = 'pjtcn_days_base'; break;
-            case '6' : $field = 'pjtcn_days_trip'; break;
-            case '9' : $field = 'pjtcn_days_test'; break;
-            case '4'  : $field = 'pjtcn_discount_base'; break;
-            case '7'  : $field = 'pjtcn_discount_trip'; break;
-            case '10' : $field = 'pjtcn_discount_test'; break;
+            case '4' : $field = 'pjtcn_days_base'; break;
+            case '7' : $field = 'pjtcn_days_trip'; break;
+            case '10' : $field = 'pjtcn_days_test'; break;
+            case '5'  : $field = 'pjtcn_discount_base'; break;
+            case '8'  : $field = 'pjtcn_discount_trip'; break;
+            case '11' : $field = 'pjtcn_discount_test'; break;
             default:
         }
 

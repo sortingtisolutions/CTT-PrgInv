@@ -1,4 +1,6 @@
 let cust, proj, relc, vers, prod, disc, budg;
+let rgcnt = 0,
+    rgevn = 0;
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -245,11 +247,13 @@ function put_version(dt) {
 /**  Llena el listado de cotizaciones */
 function put_budgets(dt) {
     budg = dt;
+    rgcnt = dt.length;
     caching_events('put_budgets');
     let days = get_days_period();
     if (dt[0].bdg_id > 0) {
         $.each(dt, function (v, u) {
             let jsn = JSON.stringify(u);
+            rgevn = 0;
             fill_budget_prods(jsn, days);
         });
     } else {
@@ -278,10 +282,11 @@ function put_products(dt) {
         if (u.prd_name != undefined) {
             let ava = u.stock > 0 ? 'enable' : 'disable';
             let H = `
-                <li class="${ava}" data_indx ="${v}" data_content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}">
+                <li class="${ava}" data_indx ="${v}" data_content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
                     <div class="prodName">${u.prd_name}</div>
                     <div class="prodStock">${u.stock}</div>
                     <div class="prodLevel">${level}</div>
+                    <div class="prodsubct">${u.sbc_name}</div>
                 </li>
             `;
             $('.list_products ul').append(H);
@@ -409,21 +414,14 @@ function button_actions() {
 /** Coloca el boton de agregar nuevo producto en la tabla  */
 function add_boton() {
     caching_events('add_boton');
-    let H = `
-    <tr>
-        <td colspan="12">
-            <button class="btn-add" id="addProduct">+ agregar producto</button>
-        </td>
-    </tr>
-    `;
-    $('#tblControl tbody').append(H);
+    let H = `<br><button class="btn-add" id="addProduct">+ agregar producto</button>`;
+    $('.frame_fix_top #tblControl thead th.product').append(H);
 
-    $('.frame_fix_row #addProduct').on('click', function (e) {
-        var posLeft = $('.frame_fix_row #addProduct').offset().left;
-        var posTop = $('.frame_fix_row #addProduct').offset().top;
-
-        let hg = parseFloat($('.frame_fix_row').css('height'));
-        let pt = $('.frame_fix_row').offset().top;
+    $('.frame_fix_top #addProduct').on('click', function (e) {
+        var posLeft = $('.frame_fix_top #addProduct').offset().left;
+        var posTop = $('.frame_fix_top #addProduct').offset().top;
+        let hg = parseFloat($('.frame_fix_top').css('height'));
+        let pt = $('.frame_fix_top').offset().top;
         let pb = hg + pt;
         let lm = (pb / 4) * 3;
 
@@ -461,6 +459,7 @@ function add_boton() {
                 sel_product(text, idSel);
             });
     });
+    $('#addProduct').addClass('hide');
 }
 
 function modal_products() {
@@ -575,6 +574,7 @@ function fill_dinamic_table() {
         <thead>
             <tr class="headrow">
                 <th rowspan="2" class="w1 fix product">PRODUCTO</th>
+                <th rowspan="2" class="w1 fix subcate hide">SUBCATEGORIA</th>
                 <th colspan="5" class="zone_01 headrow" >COTIZACIÓN BASE</th>
                 <th colspan="3" class="zone_02 headrow" >VIAJE</th>
                 <th colspan="3" class="zone_03 headrow" >PRUEBAS</th>
@@ -773,71 +773,77 @@ function clean_customer_field() {
 
 /** Actualiza los totales */
 function update_totals() {
-    caching_events('update_totals');
-    let costbase = 0,
-        costtrip = 0,
-        costtest = 0;
-    costassu = 0;
-    let total = 0;
-    $('.frame_content #tblControl tbody tr').each(function (v) {
-        let pid = $(this).attr('id');
-        if ($(this).children('td.qtybase').html() != undefined) {
-            qtybs = parseInt(pure_num($(this).children('td.qtybase').text()));
-            prcbs = parseFloat(pure_num($(this).children('td.prcbase').text()));
-            daybs = parseInt(pure_num($(this).children('td.daybase').text()));
-            desbs = parseInt(pure_num($(this).children('td.desbase').text()));
-            daytr = parseInt($(this).children('td.daytrip').text());
-            destr = parseInt($(this).children('td.destrip').text());
-            dayts = parseInt($(this).children('td.daytest').text());
-            dests = parseInt($(this).children('td.destest').text());
-            assur = parseFloat($(this).attr('data_insured'));
+    let ttlrws = $('.frame_content').find('tbody tr').length;
+    if (ttlrws == rgcnt) {
+        caching_events('update_totals');
+        let costbase = 0,
+            costtrip = 0,
+            costtest = 0;
+        costassu = 0;
+        let total = 0;
+        $('.frame_content #tblControl tbody tr').each(function (v) {
+            let pid = $(this).attr('id');
+            if ($(this).children('td.qtybase').html() != undefined) {
+                qtybs = parseInt(pure_num($(this).children('td.qtybase').text()));
+                prcbs = parseFloat(pure_num($(this).children('td.prcbase').text()));
+                daybs = parseInt(pure_num($(this).children('td.daybase').text()));
+                desbs = parseInt(pure_num($(this).children('td.desbase').text()));
+                daytr = parseInt($(this).children('td.daytrip').text());
+                destr = parseInt($(this).children('td.destrip').text());
+                dayts = parseInt($(this).children('td.daytest').text());
+                dests = parseInt($(this).children('td.destest').text());
+                assur = parseFloat($(this).attr('data_insured'));
 
-            qtyst = parseInt(pure_num($(this).children('td.qtybase').attr('data_quantity')));
+                qtyst = parseInt(pure_num($(this).children('td.qtybase').attr('data_quantity')));
 
-            // if (qtybs > qtyst) {
-            //     qtybs = qtyst;
-            // }
+                // if (qtybs > qtyst) {
+                //     qtybs = qtyst;
+                // }
 
-            $(this).children('td.qtybase').text(qtybs);
-            stt01 = qtybs * prcbs; // Importe de cantidad x precio
-            stt02 = stt01 * daybs; // Costo de Importe x días base
-            stt03 = desbs / 100; // Porcentaje de descuento base
-            stt04 = stt02 * stt03; // Costo de Importe x porcentaje descuento base
-            cstbs = stt02 - stt04; // Costo base
-            assre = stt01 * assur;
+                $(this).children('td.qtybase').text(qtybs);
+                stt01 = qtybs * prcbs; // Importe de cantidad x precio
+                stt02 = stt01 * daybs; // Costo de Importe x días base
+                stt03 = desbs / 100; // Porcentaje de descuento base
+                stt04 = stt02 * stt03; // Costo de Importe x porcentaje descuento base
+                cstbs = stt02 - stt04; // Costo base
+                assre = stt01 * assur;
 
-            stt05 = stt01 * daytr; // Costo de Importe x dias viaje
-            stt06 = destr / 100; // Porcentaje de descuento viaje
-            stt07 = stt05 * stt06; // Costo de Importe x porcentaje descuento viaje
-            csttr = stt05 - stt07; // Costo viaje
+                stt05 = stt01 * daytr; // Costo de Importe x dias viaje
+                stt06 = destr / 100; // Porcentaje de descuento viaje
+                stt07 = stt05 * stt06; // Costo de Importe x porcentaje descuento viaje
+                csttr = stt05 - stt07; // Costo viaje
 
-            stt08 = stt01 * dayts; // Costo de Importe x dias prueba
-            stt09 = dests / 100; // Porcentaje de descuento prueba
-            stt10 = stt08 * stt09; // Costo de Importe x porcentaje prueba
-            cstts = stt08 - stt10; // Costo prueba
+                stt08 = stt01 * dayts; // Costo de Importe x dias prueba
+                stt09 = dests / 100; // Porcentaje de descuento prueba
+                stt10 = stt08 * stt09; // Costo de Importe x porcentaje prueba
+                cstts = stt08 - stt10; // Costo prueba
 
-            costbase += cstbs; // Total de Costo Base
-            costtrip += csttr; // Total de Costo Viaje
-            costtest += cstts; // Total de Costo Prueba
-            costassu += assre; // Total de Seguro
+                costbase += cstbs; // Total de Costo Base
+                costtrip += csttr; // Total de Costo Viaje
+                costtest += cstts; // Total de Costo Prueba
+                costassu += assre; // Total de Seguro
 
-            $('#' + pid)
-                .children('td.costbase')
-                .html(mkn(cstbs, 'n'));
-            $('#' + pid)
-                .children('td.costtrip')
-                .html(mkn(csttr, 'n'));
-            $('#' + pid)
-                .children('td.costtest')
-                .html(mkn(cstts, 'n'));
-        }
-    });
-    total = costbase + costtrip + costtest + costassu;
-    $('#costbase').html(mkn(costbase, 'n'));
-    $('#costtrip').html(mkn(costtrip, 'n'));
-    $('#costtest').html(mkn(costtest, 'n'));
-    $('#costassu').html(mkn(costassu, 'n'));
-    $('#total').html(mkn(total, 'n'));
+                $('#' + pid)
+                    .children('td.costbase')
+                    .html(mkn(cstbs, 'n'));
+                $('#' + pid)
+                    .children('td.costtrip')
+                    .html(mkn(csttr, 'n'));
+                $('#' + pid)
+                    .children('td.costtest')
+                    .html(mkn(cstts, 'n'));
+            }
+        });
+        total = costbase + costtrip + costtest + costassu;
+        $('#costbase').html(mkn(costbase, 'n'));
+        $('#costtrip').html(mkn(costtrip, 'n'));
+        $('#costtest').html(mkn(costtest, 'n'));
+        $('#costassu').html(mkn(costassu, 'n'));
+        $('#total').html(mkn(total, 'n'));
+
+        order_subcategories();
+        set_minimenu();
+    }
 }
 
 /**  +++ Oculta los productos del listado que no cumplen con la cadena  */
@@ -946,7 +952,7 @@ function resp_budget(dt) {
 /**  +++++ Guarda el producto en la cotización +++++ */
 function fill_budget(pr, vr, ix) {
     caching_events('fill_budget');
-    // console.log(pr);
+    //console.log(pr);
     // console.log(vr);
     // console.log(ix);
 
@@ -961,6 +967,7 @@ function fill_budget(pr, vr, ix) {
         "prdPrice"  : "${pr.prd_price}",
         "prdId"     : "${pr.prd_id}",
         "prdInsur"  : "${insurance}",
+        "subname"   : "${pr.sbc_name}",
         "verId"     : "${vr}",
         "indx"      : "${ix}"
     }]
@@ -994,12 +1001,15 @@ function load_budget(inx, bdgId) {
         "bdg_insured"       : "${insurance}",
         "bdg_prod_level"    : "${prod[inx].prd_level}",
         "prd_id"            : "${prod[inx].prd_id}",
-        "bdg_stock"         : "${prod[inx].stock}"
+        "bdg_stock"         : "${prod[inx].stock}",
+        "sbc_name"          : "${prod[inx].sbc_name}"
     }
     `;
-    console.log(par);
+    // console.log(par);
     let ky = registered_product('bdg' + prod[inx].prd_id);
     if (ky == 0) {
+        rgevn = 0;
+        rgcnt++;
         fill_budget_prods(par, days);
     }
 }
@@ -1027,9 +1037,11 @@ function registered_product(id) {
 function fill_budget_prods(pd, days) {
     caching_events('fill_budget_prods');
     let pds = JSON.parse(pd);
+    let prdName = pds.bdg_prod_name.replace(/°/g, '"');
     let H = `
-    <tr id="bdg${pds.prd_id}" class="bdg${pds.prd_id}" data_sku="${pds.bdg_prod_sku}" data_insured="${pds.bdg_insured}" data_level="${pds.bdg_prod_level}">
-        <td class="w1 product"><i class="fas fa-ellipsis-v"></i>${pds.bdg_prod_name.replace(/°/g, '"')}<i class="fas fa-bars minimenu"></i></td>
+    <tr id="bdg${pds.prd_id}" class="bdg${pds.prd_id}" data_sku="${pds.bdg_prod_sku}" data_insured="${pds.bdg_insured}" data_level="${pds.bdg_prod_level}" >
+        <td class="w1 product"><i class="fas fa-ellipsis-v"></i>${prdName}<i class="fas fa-bars minimenu"></i></td>
+        <td class="w1 subcate hide">${pds.sbc_name}</td>
         <td class="w2 zone_01 quantity qtybase" data_quantity="${pds.bdg_stock}" contenteditable="true">${pds.bdg_quantity}</td>
         <td class="w3 zone_01 price prcbase">${mkn(pds.bdg_prod_price, 'n')}</td>
         <td class="w2 zone_01 days daybase" contenteditable="true">${pds.bdg_days_base}</td>
@@ -1043,7 +1055,11 @@ function fill_budget_prods(pd, days) {
         <td class="w3 zone_03 cost costtest">0.00</td>
     </tr>
     `;
-    $('.table_control tbody tr:last-child').before(H);
+    // $('.table_control tbody tr:last-child').before(H);
+    $('#tblControl tbody').append(H);
+
+    $('#addProduct').removeClass('hide');
+    total_choice_products();
 
     editable_disable('tbl_dynamic');
 
@@ -1105,7 +1121,9 @@ function fill_budget_prods(pd, days) {
         }
         update_totals();
     });
+}
 
+function set_minimenu() {
     $('.minimenu')
         .unbind('click')
         .on('click', function () {
@@ -1119,9 +1137,9 @@ function fill_budget_prods(pd, days) {
                 .fadeIn(400);
 
             var H = `
-            <li data_content="${prdId}" class="mini_option killProd"><i class="fas fa-trash"></i> Eliminar</li>
-            <li data_content="${prdId}" data_level="${prdLvl}" class="mini_option infoProd"><i class="fas fa-info-circle"></i> Información</li>
-                `;
+        <li data_content="${prdId}" class="mini_option killProd"><i class="fas fa-trash"></i> Eliminar</li>
+        <li data_content="${prdId}" data_level="${prdLvl}" class="mini_option infoProd"><i class="fas fa-info-circle"></i> Información</li>
+            `;
             $('.list_menu ul').html(H);
 
             $('.box_minimenu')
@@ -1152,6 +1170,39 @@ function fill_budget_prods(pd, days) {
                     }
                 });
         });
+}
+
+function total_choice_products() {
+    var ttlrows = $('.frame_content table tbody tr').length;
+    $('#ttlproducts').html(ttlrows);
+}
+
+function order_subcategories() {
+    $('.frame_content table thead th').each(function (colm) {
+        $(this)
+            .unbind('click')
+            .on('click', function () {
+                let regs = $('.frame_content').find('tbody > tr').get();
+                let cl = $(this).text();
+                regs.sort(function (a, b) {
+                    // console.log($(a).children('td').text());
+                    let v1 = $(a).children('td').eq(colm).text().toUpperCase();
+                    let v2 = $(b).children('td').eq(colm).text().toUpperCase();
+                    return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
+                });
+
+                $.each(regs, function (i, e) {
+                    $('.frame_content tbody').append(e);
+                });
+
+                let newrg = $('.frame_content').find('tbody').html();
+                $('.frame_fix_row tbody').html(newrg);
+                $('.frame_fix_col tbody').html(newrg);
+                $('.frame_fix_top tbody').html(newrg);
+            });
+    });
+
+    $('.frame_content table thead .subcate').trigger('click');
 }
 
 function kill_product(id) {
@@ -1367,7 +1418,7 @@ function add_project() {
             <div class="form_group" id="reportrange">
                 <label for="txtPeriodProject">Periodo:</label><br>
                 <input type="text" id="txtPeriodProject"  name="txtPeriodProject" class="textbox">
-                <i class="fas fa-calendar-alt"></i><br>
+                <i class="fas fa-calendar-alt" id="calendar"></i><br>
                 <span class="alert"></span>
             </div>
 
@@ -1441,13 +1492,14 @@ function add_project() {
                 firstDay: 1,
             },
             showCustomRangeLabel: false,
+            singleDatePicker: false,
             startDate: fecha,
             endDate: fecha,
             minDate: fecha,
             opens: 'right',
         },
         function (start, end, label) {
-            $('#txtSerDateRegistry').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+            $('#txtPeriodProject').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
             // $('#txtPeriodProject').parent().children('span').html('');
             // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
         }
@@ -1593,24 +1645,6 @@ function sel_product(res, sele) {
         $(`#Products .list_products ul`).html('');
         $(`.list_products`).css({display: 'none'});
     }
-}
-function x_sel_product(res, sele) {
-    if (res.length < 1) {
-        $(`#${sele} .list_products ul li`).css({display: 'block'});
-    } else {
-        $(`#${sele} .list_products ul li`).css({display: 'none'});
-    }
-
-    $(`#${sele} .list_products ul li`).each(function () {
-        var cm = $(this).attr('data_content').toUpperCase();
-
-        cm = omitirAcentos(cm);
-        var cr = cm.indexOf(res);
-        if (cr > -1) {
-            //            alert($(this).children().html())
-            $(this).css({display: 'block'});
-        }
-    });
 }
 
 /**  ++++ Omite acentos para su facil consulta */

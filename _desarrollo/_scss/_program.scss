@@ -412,8 +412,8 @@ hr {
 
 // Modales
 .box_list_products {
-    width: 650px;
-    height: 170px;
+    width: 750px;
+    height: 250px;
     position: fixed;
     z-index: 100;
     font-size: 0.9em;
@@ -426,21 +426,21 @@ hr {
         position: absolute;
         margin-bottom: 3px;
         background-color: #ffffff;
-        border: 1px dotted #dddddd;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        padding: 3px;
-        top: 0px;
+        border: 1px dotted #999999;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+        padding: 8px;
+        top: 0;
         outline: none;
         z-index: 10;
         &:focus {
             background-color: #f6f6f6;
-            border: 1px dotted #bbbbbb;
+            border: 2px dotted #000000;
         }
     }
 
     .list_products {
         width: 100%;
-        height: 125px;
+        height:250px;
         background-color: #ffffff;
         border: 1px dotted #bbbbbb;
         box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.2);
@@ -448,6 +448,7 @@ hr {
         overflow: auto;
         position: absolute;
         top: 20px;
+        bottom: 0;
         z-index: 8;
 
         li {
@@ -462,16 +463,21 @@ hr {
             // }
 
             .prodName {
-                width: 450px;
+                width: 350px;
                 float: left;
             }
             .prodStock {
-                width: 50px;
+                width: 20px;
                 float: left;
                 text-align: center;
             }
             .prodLevel {
                 width: 80px;
+                float: left;
+                text-align: left;
+            }
+            .prodsubct {
+                width: auto;
                 float: left;
                 text-align: left;
             }

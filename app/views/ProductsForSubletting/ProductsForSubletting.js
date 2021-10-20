@@ -59,7 +59,7 @@ function setting_table() {
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
     $('#tblProductForSubletting').DataTable({
-        order: [[1, 'desc']],
+        order: [[2, 'asc']],
         dom: 'Blfrtip',
         select: {
             style: 'single',
@@ -212,10 +212,15 @@ function put_Products(dt) {
         if (sku == 'Pendiente') {
             sku = `<span class="pending">${sku}</sku>`;
         }
+        let date01 = moment(Date());
+        let date02 = moment(dateend, 'DD/MM/YYYY');
+        let difdays = date02.diff(date01, 'days');
+
+        let alert = difdays > 0 && difdays < 6 ? 'yellow' : difdays <= 0 ? 'red' : 'trans';
 
         tabla.row
             .add({
-                editable: `<i id="k${u.pjtdt_id}" class="fas fa-times-circle kill"></i>`,
+                editable: `<div class="dyalt ${alert}"></div> <i id="k${u.pjtdt_id}" class="fas fa-times-circle kill" style="display:none"></i>`,
                 prodname: u.prd_name,
                 prod_sku: sku,
                 prodpric: u.sub_price,

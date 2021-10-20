@@ -122,29 +122,6 @@ $items = json_decode($file, true);
                 </table>
                 <!-- End Datos de identificación  -->';
 
-            
-// $html .= '
-
-//                 <!-- Start Tabla de totales  -->
-//                 <table class="table-data tline-d bline">
-//                     <thead>
-//                         <tr>
-//                             <th class="tit-totals">Costo base</th>
-//                             <th class="tit-totals">Costo Viaje</th>
-//                             <th class="tit-totals">Costo Pruebas</th>
-//                             <th class="tit-totals">Seguro</th>
-//                         </tr>
-//                     </thead>
-//                     <tbody>
-//                         <tr>
-//                             <td class="dat-totals">' . number_format($totalBase, 2,'.',',') . '</td>
-//                             <td class="dat-totals">' . number_format($totalTrip, 2,'.',',') . '</td>
-//                             <td class="dat-totals">' . number_format($totalTest, 2,'.',',') . '</td>
-//                             <td class="dat-totals">' . number_format($totalInsr, 2,'.',',') . '</td>
-//                         </tr>
-//                     </tbody>
-//                 </table>
-//                 <!-- End Tabla de totales  -->';
 
             
     $html .= '
@@ -334,7 +311,7 @@ $foot = '
                                     <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
                                     <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
                                     <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $name . '</td>
-                                    <td class="td-foot foot-rept" width="25%" style="text-align: right">Cotización</td>
+                                    <td class="td-foot foot-rept" width="25%" style="text-align: right">Versión '. $items[0]['ver_code'].'</td>
                                 </tr>
                             </table>
 

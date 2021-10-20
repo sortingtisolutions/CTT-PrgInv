@@ -80,7 +80,7 @@ class ProjectDetailsModel extends Model
         $dstr = $this->db->real_escape_string($params['dstr']);
         $dend = $this->db->real_escape_string($params['dend']);
 
-        $qry = "SELECT pc.*, pj.pjt_id, 
+        $qry = "SELECT pc.*, pj.pjt_id, sb.sbc_name,
                 date_format(pj.pjt_date_start, '%Y%m%d') AS pjt_date_start, 
                 date_format(pj.pjt_date_end, '%Y%m%d') AS pjt_date_end, pd.srv_id,
                 CASE 
@@ -104,6 +104,7 @@ class ProjectDetailsModel extends Model
             FROM ctt_projects_content AS pc
             INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
             INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
+            LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
             WHERE pc.pjt_id = $pjtId ORDER BY pjtcn_prod_name ASC;";
         return $this->db->query($qry);
     } 
@@ -118,7 +119,7 @@ class ProjectDetailsModel extends Model
         $dstr = $this->db->real_escape_string($params['dstr']);
         $dend = $this->db->real_escape_string($params['dend']);
 
-        $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, pd.srv_id,
+        $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, pd.srv_id, sb.sbc_name,
                 CASE 
                     WHEN prd_level ='K' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
@@ -138,6 +139,7 @@ class ProjectDetailsModel extends Model
                         )
                     END AS stock
             FROM ctt_products AS pd
+            INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
             WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 
                 AND upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%'
             ORDER BY pd.prd_name ;";

@@ -421,6 +421,18 @@ table {
 	}
 	td.edit {
 		text-align: center;
+
+		.dyalt {
+			width: 30px;
+			height: 10px;
+			border-radius: 20px;
+		}
+		.yellow {
+			background-color: #ffc310;
+		}
+		.red {
+			background-color: #DD0000;
+		}
 	}
 	.hide-support {
 		display: none;
