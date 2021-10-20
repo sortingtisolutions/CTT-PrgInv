@@ -145,7 +145,7 @@
     </div>
 </div>
 
-<!-- Start Ventana modal SERIES -->
+<!-- Start Ventana modal de SERIES seleccionadas del producto-->
 <div class="overlay_background overlay_hide"id="SerieModal">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>

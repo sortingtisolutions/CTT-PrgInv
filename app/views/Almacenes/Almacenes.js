@@ -389,6 +389,7 @@ function activeIcons() {
         });
 }
 
+// Agrega los numeros de serie a visualizar
 function putSeries(dt) {
     $('#ExisteStrModal').removeClass('overlay_hide');
     $('#tblStrSerie').DataTable({

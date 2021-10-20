@@ -59,10 +59,10 @@
                                     <td class="concepto">Tipo de locación</td>
                                     <td class="dato" id="TypeLocation"></td>
                                 </tr>
-                                <!-- <tr>
+                                <tr>
                                     <td class="concepto">Fecha del proyecto</td>
                                     <td class="dato" id="DateProject"></td>
-                                </tr> -->
+                                </tr>
                                 <tr>
                                     <td class="concepto">Tipo de proyecto</td>
                                     <td class="dato" id="TypeProject"></td>

@@ -24,7 +24,7 @@ function setting_table() {
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
     $('#tblPriceList').DataTable({
-        order: [[2, 'asc']],
+        order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
             [100, 200, 300, -1],
@@ -280,7 +280,7 @@ function putProducts(dt) {
 
     $('#tblProductlList').DataTable({
         destroy: true,
-        order: [[2, 'desc']],
+        order: [[1, 'desc']],
         lengthMenu: [
             [20, 50, 100, -1],
             [20, 50, 100, 'Todos'],
@@ -354,7 +354,7 @@ function putSeries(dt) {
 
     $('#tblSerialList').DataTable({
         destroy: true,
-        order: [[2, 'desc']],
+        order: [[1, 'desc']],
         lengthMenu: [
             [20, 50, 100, -1],
             [20, 50, 100, 'Todos'],

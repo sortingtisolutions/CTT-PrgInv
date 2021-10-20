@@ -20,7 +20,7 @@ class WhOutputContentModel extends Model
         pj.pjt_location, pj.cuo_id, '1' as analyst, '33' as freelance, pj.pjt_id
         FROM ctt_projects AS pj INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id 
         LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id 
-        WHERE pj.pjt_id='1' ORDER BY pjt_date_start ASC;";
+        WHERE pj.pjt_id='5' ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }    
 
@@ -29,7 +29,7 @@ class WhOutputContentModel extends Model
     {
 /*        $store = $this->db->real_escape_string($store);*/
         $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, pjtcn_prod_level, pjt_id 
-        FROM ctt_projects_content WHERE pjt_id='1' order by 2;";
+        FROM ctt_projects_content WHERE pjt_id='5' order by 2;";
         return $this->db->query($qry);
     }    
 
