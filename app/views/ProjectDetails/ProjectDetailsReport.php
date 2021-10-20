@@ -54,7 +54,7 @@ $items = json_decode($file, true);
             <div class="container">
                 <div class="name-report">
                     <p>
-                        <span class="number">Proyecto '. $items[0]['ver_code'] .'</span>
+                        <span class="number">Proyecto</span>
                     <br>
                         <span class="date">'.  $items[0]['ver_date_real'] .'</span>
                     </p>
@@ -123,31 +123,7 @@ $items = json_decode($file, true);
                 </table>
                 <!-- End Datos de identificación  -->';
 
-            
-// $html .= '
-
-//                 <!-- Start Tabla de totales  -->
-//                 <table class="table-data tline-d bline">
-//                     <thead>
-//                         <tr>
-//                             <th class="tit-totals">Costo base</th>
-//                             <th class="tit-totals">Costo Viaje</th>
-//                             <th class="tit-totals">Costo Pruebas</th>
-//                             <th class="tit-totals">Seguro</th>
-//                         </tr>
-//                     </thead>
-//                     <tbody>
-//                         <tr>
-//                             <td class="dat-totals">' . number_format($totalBase, 2,'.',',') . '</td>
-//                             <td class="dat-totals">' . number_format($totalTrip, 2,'.',',') . '</td>
-//                             <td class="dat-totals">' . number_format($totalTest, 2,'.',',') . '</td>
-//                             <td class="dat-totals">' . number_format($totalInsr, 2,'.',',') . '</td>
-//                         </tr>
-//                     </tbody>
-//                 </table>
-//                 <!-- End Tabla de totales  -->';
-
-            
+                        
     $html .= '
 
 
@@ -333,7 +309,7 @@ $foot = '
                                     <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
                                     <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
                                     <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $name . '</td>
-                                    <td class="td-foot foot-rept" width="25%" style="text-align: right">Proyecto</td>
+                                    <td class="td-foot foot-rept" width="25%" style="text-align: right">Proyecto '. $items[0]['pjt_number'] .'</td>
                                 </tr>
                             </table>
 
@@ -377,6 +353,6 @@ $mpdf->SetHTMLFooter($foot);
 $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 $mpdf->Output(
-    "Proyecto-". $items[0]['ver_code'].".pdf",
+    "Proyecto-". $items[0]['pjt_number'] .".pdf",
     "I"
 );

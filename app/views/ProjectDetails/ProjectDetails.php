@@ -171,11 +171,14 @@
                     <div class="half right total dato" id="total">0</div>
                 </div>
                 
-                <!-- <div class="blocks">
-                    <div class="full text_center">
-                        <button class="bn disable" id="addBudget">Aplicar cambios</button>
-                    </div>
-                </div> -->
+                <div class="blocks total">
+                    <div class="half left concepto">&nbsp;</div>
+                    <div class="half right total dato" >&nbsp;</div>
+                </div>
+                <div class="blocks">
+                    <div class="half left concepto">Num. productos</div>
+                    <div class="half right dato" id="ttlproducts">0</div>
+                </div>
                 <hr>
                 <div class="blocks" id="versions">
 

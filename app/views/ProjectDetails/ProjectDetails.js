@@ -1,4 +1,6 @@
-let cust, proj, relc, vers, prod, disc;
+let cust, proj, relc, vers, prod, disc, budg;
+let rgcnt = 0,
+    rgevn = 0;
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -254,12 +256,14 @@ function put_version(dt) {
 
 /**  Llena el listado de cotizaciones */
 function put_budgets(dt) {
-    console.log(dt);
+    budg = dt;
+    rgcnt = dt.length;
     caching_events('put_budgets');
     let days = get_days_period();
     if (dt[0].pjtcn_id > 0) {
         $.each(dt, function (v, u) {
             let jsn = JSON.stringify(u);
+            rgevn = 0;
             fill_budget_prods(jsn, days, '1');
         });
     } else {
@@ -291,6 +295,7 @@ function put_products(dt) {
                     <div class="prodName">${u.prd_name}</div>
                     <div class="prodStock">${u.stock}</div>
                     <div class="prodLevel">${level}</div>
+                    <div class="prodsubct">${u.sbc_name}</div>
                 </li>
             `;
             $('.list_products ul').append(H);
@@ -420,21 +425,15 @@ function button_actions() {
 /** Coloca el boton de agregar nuevo producto en la tabla  */
 function add_boton() {
     caching_events('add_boton');
-    let H = `
-    <tr>
-        <td colspan="12">
-            <button class="btn-add" id="addProduct">+ agregar producto</button>
-        </td>
-    </tr>
-    `;
-    $('#tblControl tbody').append(H);
+    let H = `<br><button class="btn-add" id="addProduct">+ agregar producto</button>`;
+    $('.frame_fix_top #tblControl thead th.product').append(H);
 
-    $('.frame_fix_row #addProduct').on('click', function (e) {
-        var posLeft = $('.frame_fix_row #addProduct').offset().left;
-        var posTop = $('.frame_fix_row #addProduct').offset().top;
+    $('.frame_fix_top #addProduct').on('click', function (e) {
+        var posLeft = $('.frame_fix_top #addProduct').offset().left;
+        var posTop = $('.frame_fix_top #addProduct').offset().top;
 
-        let hg = parseFloat($('.frame_fix_row').css('height'));
-        let pt = $('.frame_fix_row').offset().top;
+        let hg = parseFloat($('.frame_fix_top').css('height'));
+        let pt = $('.frame_fix_top').offset().top;
         let pb = hg + pt;
         let lm = (pb / 4) * 3;
 
@@ -449,7 +448,7 @@ function add_boton() {
             $('.sel_product').css({top: 0});
         }
 
-        hide_control_menu('none');
+        //hide_control_menu('none');
 
         $('.box_list_products')
             .css({top: posTop + 'px', left: posLeft + 'px'})
@@ -586,6 +585,7 @@ function fill_dinamic_table() {
         <thead>
             <tr class="headrow">
                 <th rowspan="2" class="w1 fix product">PRODUCTO</th>
+                <th rowspan="2" class="w1 fix subcate hide">SUBCATEGORIA</th>
                 <th colspan="5" class="zone_01 headrow" >COSTO BASE</th>
                 <th colspan="3" class="zone_02 headrow" >VIAJE</th>
                 <th colspan="3" class="zone_03 headrow" >PRUEBAS</th>
@@ -633,25 +633,25 @@ function show_minimenues(idsel, x, y) {
     let sll = '';
     switch (idsel.slice(0, 7)) {
         case 'daybase':
-            sll = 3;
+            sll = 4;
             break;
         case 'dscbase':
         case 'desbase':
-            sll = 4;
+            sll = 5;
             break;
         case 'daytrip':
-            sll = 6;
+            sll = 7;
             break;
         case 'dsctrip':
         case 'destrip':
-            sll = 7;
+            sll = 8;
             break;
         case 'daytest':
-            sll = 9;
+            sll = 10;
             break;
         case 'dsctest':
         case 'destest':
-            sll = 10;
+            sll = 11;
             break;
         default:
     }
@@ -797,64 +797,69 @@ function clean_customer_field() {
 
 /** Actualiza los totales */
 function update_totals() {
-    caching_events('update_totals');
-    let costbase = 0,
-        costtrip = 0,
-        costtest = 0;
-    costassu = 0;
-    let total = 0;
-    $('.frame_content #tblControl tbody tr').each(function (v) {
-        let pid = $(this).attr('id');
-        if ($(this).children('td.qtybase').html() != undefined) {
-            qtybs = parseInt(pure_num($(this).children('td.qtybase').text()));
-            prcbs = parseFloat(pure_num($(this).children('td.prcbase').text()));
-            daybs = parseInt(pure_num($(this).children('td.daybase').text()));
-            desbs = parseInt(pure_num($(this).children('td.desbase').text()));
-            daytr = parseInt($(this).children('td.daytrip').text());
-            destr = parseInt($(this).children('td.destrip').text());
-            dayts = parseInt($(this).children('td.daytest').text());
-            dests = parseInt($(this).children('td.destest').text());
-            assur = parseFloat($(this).attr('data_insured'));
+    let ttlrws = $('.frame_content').find('tbody tr').length;
+    if (ttlrws == rgcnt) {
+        caching_events('update_totals');
+        let costbase = 0,
+            costtrip = 0,
+            costtest = 0;
+        costassu = 0;
+        let total = 0;
+        $('.frame_content #tblControl tbody tr').each(function (v) {
+            let pid = $(this).attr('id');
+            if ($(this).children('td.qtybase').html() != undefined) {
+                qtybs = parseInt(pure_num($(this).children('td.qtybase').text()));
+                prcbs = parseFloat(pure_num($(this).children('td.prcbase').text()));
+                daybs = parseInt(pure_num($(this).children('td.daybase').text()));
+                desbs = parseInt(pure_num($(this).children('td.desbase').text()));
+                daytr = parseInt($(this).children('td.daytrip').text());
+                destr = parseInt($(this).children('td.destrip').text());
+                dayts = parseInt($(this).children('td.daytest').text());
+                dests = parseInt($(this).children('td.destest').text());
+                assur = parseFloat($(this).attr('data_insured'));
 
-            stt01 = qtybs * prcbs; // Importe de cantidad x precio
-            stt02 = stt01 * daybs; // Costo de Importe x días base
-            stt03 = desbs / 100; // Porcentaje de descuento base
-            stt04 = stt02 * stt03; // Costo de Importe x porcentaje descuento base
-            cstbs = stt02 - stt04; // Costo base
-            assre = stt01 * assur;
+                stt01 = qtybs * prcbs; // Importe de cantidad x precio
+                stt02 = stt01 * daybs; // Costo de Importe x días base
+                stt03 = desbs / 100; // Porcentaje de descuento base
+                stt04 = stt02 * stt03; // Costo de Importe x porcentaje descuento base
+                cstbs = stt02 - stt04; // Costo base
+                assre = stt01 * assur;
 
-            stt05 = stt01 * daytr; // Costo de Importe x dias viaje
-            stt06 = destr / 100; // Porcentaje de descuento viaje
-            stt07 = stt05 * stt06; // Costo de Importe x porcentaje descuento viaje
-            csttr = stt05 - stt07; // Costo viaje
+                stt05 = stt01 * daytr; // Costo de Importe x dias viaje
+                stt06 = destr / 100; // Porcentaje de descuento viaje
+                stt07 = stt05 * stt06; // Costo de Importe x porcentaje descuento viaje
+                csttr = stt05 - stt07; // Costo viaje
 
-            stt08 = stt01 * dayts; // Costo de Importe x dias prueba
-            stt09 = dests / 100; // Porcentaje de descuento prueba
-            stt10 = stt08 * stt09; // Costo de Importe x porcentaje prueba
-            cstts = stt08 - stt10; // Costo prueba
+                stt08 = stt01 * dayts; // Costo de Importe x dias prueba
+                stt09 = dests / 100; // Porcentaje de descuento prueba
+                stt10 = stt08 * stt09; // Costo de Importe x porcentaje prueba
+                cstts = stt08 - stt10; // Costo prueba
 
-            costbase += cstbs; // Total de Costo Base
-            costtrip += csttr; // Total de Costo Viaje
-            costtest += cstts; // Total de Costo Prueba
-            costassu += assre; // Total de Seguro
+                costbase += cstbs; // Total de Costo Base
+                costtrip += csttr; // Total de Costo Viaje
+                costtest += cstts; // Total de Costo Prueba
+                costassu += assre; // Total de Seguro
 
-            $('#' + pid)
-                .children('td.costbase')
-                .html(mkn(cstbs, 'n'));
-            $('#' + pid)
-                .children('td.costtrip')
-                .html(mkn(csttr, 'n'));
-            $('#' + pid)
-                .children('td.costtest')
-                .html(mkn(cstts, 'n'));
-        }
-    });
-    total = costbase + costtrip + costtest + costassu;
-    $('#costbase').html(mkn(costbase, 'n'));
-    $('#costtrip').html(mkn(costtrip, 'n'));
-    $('#costtest').html(mkn(costtest, 'n'));
-    $('#costassu').html(mkn(costassu, 'n'));
-    $('#total').html(mkn(total, 'n'));
+                $('#' + pid)
+                    .children('td.costbase')
+                    .html(mkn(cstbs, 'n'));
+                $('#' + pid)
+                    .children('td.costtrip')
+                    .html(mkn(csttr, 'n'));
+                $('#' + pid)
+                    .children('td.costtest')
+                    .html(mkn(cstts, 'n'));
+            }
+        });
+        total = costbase + costtrip + costtest + costassu;
+        $('#costbase').html(mkn(costbase, 'n'));
+        $('#costtrip').html(mkn(costtrip, 'n'));
+        $('#costtest').html(mkn(costtest, 'n'));
+        $('#costassu').html(mkn(costassu, 'n'));
+        $('#total').html(mkn(total, 'n'));
+        order_subcategories();
+        set_minimenu();
+    }
 }
 
 /**  +++ Oculta los productos del listado que no cumplen con la cadena  */
@@ -917,11 +922,11 @@ function save_budget(verId) {
             let bdgQuantity = tr.children('td.qtybase').text();
             let bdgPriceBase = tr.children('td.prcbase').text();
             let bdgDaysBase = tr.children('td.daybase').text();
-            let bdgDesctBase = parseFloat(tr.children('td.desbase').text()) / 100;
+            let bdgDesctBase = parseFloat(tr.children('td.desbase').text());
             let bdgDayTrip = tr.children('td.daytrip').text();
-            let bdgDesTrip = parseFloat(tr.children('td.destrip').text()) / 100;
+            let bdgDesTrip = parseFloat(tr.children('td.destrip').text());
             let bdgDayTest = tr.children('td.daytest').text();
-            let bdgDesTest = parseFloat(tr.children('td.destest').text()) / 100;
+            let bdgDesTest = parseFloat(tr.children('td.destest').text());
             let bdgInsured = tr.attr('data_insured');
             let pjtId = $('#IdProject').val();
 
@@ -975,6 +980,7 @@ function fill_budget(pr, ix) {
         "prdPrice"  : "${pr.prd_price}",
         "prdId"     : "${pr.prd_id}",
         "prdInsur"  : "${insurance}",
+        "subname"   : "${pr.sbc_name}",
         "indx"      : "${ix}"
     }]
     `;
@@ -1007,7 +1013,8 @@ function load_budget(inx, bdgId) {
         "pjtcn_insured"       : "${insurance}",
         "pjtcn_prod_level"    : "${prod[inx].prd_level}",
         "prd_id"              : "${prod[inx].prd_id}",
-        "srv_id"              : "${prod[inx].srv_id}"
+        "srv_id"              : "${prod[inx].srv_id}",
+        "sbc_name"            : "${prod[inx].sbc_name}"
     }
     `;
 
@@ -1023,7 +1030,6 @@ function registered_product(id) {
     $('.frame_content table tbody tr').each(function () {
         let idp = $(this).attr('id');
         if (id == idp) {
-            console.log(id);
             let qty = parseInt($(this).children('td.qtybase').text()) + 1; // Nueva cantidad
             let pjtcnId = $(this).attr('data_project'); // Id de la linea del contenido del proyecto
             let prdId = id.substring(3, id.length); // Id del producto
@@ -1060,6 +1066,7 @@ function fill_budget_prods(pd, days, st) {
         data_service="${pds.srv_id}" 
     >
         <td class="w1 product"><i class="fas fa-ellipsis-v"></i>${prodName}<i class="fas fa-bars minimenu"></i></td>
+        <td class="w1 subcate hide">${pds.sbc_name}</td>
         <td class="w4 zone_01 quantity qtybase editable" qty_base="${pds.pjtcn_quantity}">${pds.pjtcn_quantity}</td>
         <td class="w3 zone_01 price prcbase">${mkn(pds.pjtcn_prod_price, 'n')}</td>
         <td class="w2 zone_01 days daybase editable" >${pds.pjtcn_days_base}</td>
@@ -1073,8 +1080,13 @@ function fill_budget_prods(pd, days, st) {
         <td class="w3 zone_03 cost costtest">0.00</td>
     </tr>
     `;
-    $('.table_control tbody tr:last-child').before(H);
+    // $('.table_control tbody tr:last-child').before(H);
+    $('#tblControl tbody').append(H);
     get_conter_pending(pds.pjtcn_id, pds.pjtcn_quantity, pds.prd_id);
+
+    $('#addProduct').removeClass('hide');
+    total_choice_products();
+
     editable_disable('tbl_dynamic');
 
     $('.editable')
@@ -1131,25 +1143,27 @@ function fill_budget_prods(pd, days, st) {
                 let sel = 'daybase';
                 dys = days_validator(dys, days, sel);
                 $(this).text(dys);
-                sll = 3;
+                sll = 4;
             } else if (dy.indexOf('daytrip') >= 0) {
                 let dys = $(this).text();
                 let sel = 'daytrip';
                 dys = days_validator(dys, days, sel);
                 $(this).text(dys);
-                sll = 6;
+                sll = 7;
             } else if (dy.indexOf('daytest') >= 0) {
                 let dys = $(this).text();
                 let sel = 'daytest';
                 dys = days_validator(dys, days, sel);
                 $(this).text(dys);
-                sll = 9;
+                sll = 10;
             }
 
             updatesData(sll);
             update_totals();
         });
+}
 
+function set_minimenu() {
     $('.minimenu')
         .unbind('click')
         .on('click', function () {
@@ -1199,6 +1213,39 @@ function fill_budget_prods(pd, days, st) {
                     }
                 });
         });
+}
+
+function total_choice_products() {
+    var ttlrows = $('.frame_content table tbody tr').length;
+    $('#ttlproducts').html(ttlrows);
+}
+
+function order_subcategories() {
+    $('.frame_content table thead th').each(function (colm) {
+        $(this)
+            .unbind('click')
+            .on('click', function () {
+                let regs = $('.frame_content').find('tbody > tr').get();
+                let cl = $(this).text();
+                regs.sort(function (a, b) {
+                    // console.log($(a).children('td').text());
+                    let v1 = $(a).children('td').eq(colm).text().toUpperCase();
+                    let v2 = $(b).children('td').eq(colm).text().toUpperCase();
+                    return v1 < v2 ? -1 : v1 > v2 ? 1 : 0;
+                });
+
+                $.each(regs, function (i, e) {
+                    $('.frame_content tbody').append(e);
+                });
+
+                let newrg = $('.frame_content').find('tbody').html();
+                $('.frame_fix_row tbody').html(newrg);
+                $('.frame_fix_col tbody').html(newrg);
+                $('.frame_fix_top tbody').html(newrg);
+            });
+    });
+
+    $('.frame_content table thead .subcate').trigger('click');
 }
 
 function kill_product(id) {
@@ -1251,7 +1298,6 @@ function show_info_product(id, lvl, pj) {
 function put_products_related(dt) {
     let name = dt[0].prd_name;
     $('.product_container h2').html(name);
-    console.log(dt);
     $.each(dt, function (v, u) {
         let cls = u.prd_level == 'P' ? 'blk' : '';
         let typ = u.prd_level == 'A' ? 'dep' : '';
@@ -1735,8 +1781,6 @@ function caching_events(ev) {
 
 /* ++++ Modificación de la cantidad  ++++ */
 function updating_quantity(rw, qn, qa, ac) {
-    console.log(rw);
-
     qn = qn < 1 ? 1 : qn;
 
     let qtycll = rw[0].cells[1].attributes[1];
@@ -1806,7 +1850,6 @@ function show_increase_quantity(dt) {
 
 // secuencia de disminucion en la cantidad de productos
 function sequenceDecreaseQty(pjtcnid, rem) {
-    console.log(pjtcnid, rem);
     var pagina = 'ProjectDetails/decreaseQuantity';
     let par = `[{"pjtcnid":"${pjtcnid}","pos":"${rem}"}]`;
     var tipo = 'html';
@@ -1816,7 +1859,7 @@ function sequenceDecreaseQty(pjtcnid, rem) {
 }
 
 function show_decrease_quantity(dt) {
-    console.log(dt);
+    console.log('Decrease: ', dt);
 }
 
 function killProductBase(id) {
@@ -1826,7 +1869,6 @@ function killProductBase(id) {
     for (var i = 1; i <= qty; i++) {
         let qt = parseInt(qty) + 1 - i;
         sequenceDecreaseQty(pjtcnid, qt);
-        console.log(pjtcnid, qt);
     }
 
     var pagina = 'ProjectDetails/killProduct';
@@ -1838,7 +1880,7 @@ function killProductBase(id) {
 }
 
 function show_killProductBase(dt) {
-    console.log(dt);
+    console.log('kill: ', dt);
 }
 
 /* ++++ Agregar producto nuevo  ++++ ++++ */
@@ -1900,6 +1942,8 @@ function shownewproducts(dt) {
     if (dt[0].pjtcn_id > 0) {
         $.each(dt, function (v, u) {
             let jsn = JSON.stringify(u);
+            rgevn = 0;
+            rgcnt++;
             fill_budget_prods(jsn, days, '1');
         });
     }
@@ -1908,10 +1952,9 @@ function shownewproducts(dt) {
 function updatesData(sl) {
     let rw = $('.frame_content .table_control tbody');
     let rws = rw[0].rows.length - 1;
-
     for (var i = 0; i < rws; i++) {
         let pjtcnId = rw[0].rows[i].attributes[5].value;
-        let pjtdata = rw[0].rows[i].cells[sl].outerText;
+        let pjtdata = rw[0].rows[i].cells[sl].outerText.replace(/%/g, '');
 
         var pagina = 'ProjectDetails/updateData';
         var par = `[{"pjtcnId":"${pjtcnId}", "data":"${pjtdata}", "field":"${sl}"}]`;
@@ -1927,7 +1970,6 @@ function show_updatesData(dt) {
 }
 
 function put_conter_pending(dt) {
-    console.log(dt);
     let prd = dt[0].prd_id;
     let qty = dt[0].qty;
     let pnd = dt[0].pend;
