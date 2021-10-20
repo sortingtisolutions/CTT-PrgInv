@@ -360,6 +360,7 @@ function getAlmacenes(id) {
    }).done(function () {});
 }
 
+// ACTIVA LA FUNCIONALIDAD DEL BOTON toLink
 function activeIcons() {
    $('.toLink')
        .unbind('click')

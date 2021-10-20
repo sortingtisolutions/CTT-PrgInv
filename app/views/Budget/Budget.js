@@ -670,6 +670,7 @@ function show_minimenues(idsel, x, y) {
 }
 /**  ++++  Obtiene los días definidos para el proyectos */
 function get_days_period() {
+    console.log('PASO 33');
     let Period = $('#PeriodProject').text();
     let start = moment(Period.split(' - ')[0], 'DD/MM/YYYY');
     let end = moment(Period.split(' - ')[1], 'DD/MM/YYYY');

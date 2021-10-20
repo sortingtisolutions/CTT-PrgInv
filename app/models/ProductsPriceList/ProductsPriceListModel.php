@@ -40,7 +40,7 @@ public function listProducts($params)
                 LEFT JOIN ctt_products_documents AS dc ON dc.prd_id = p.prd_id AND dc.dcp_source = 'P'
                 WHERE prd_status = 1 AND p.prd_visibility = 1 
                 GROUP BY 	p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
-                p.prd_price, p.prd_coin_type, p.prd_english_name ORDER BY p.prd_name ;";
+                p.prd_price, p.prd_coin_type, p.prd_english_name ORDER BY p.prd_sku;";
         return $this->db->query($qry);
     }
 
@@ -105,7 +105,7 @@ public function listProducts($params)
                 WHERE prd_status = 1 AND p.prd_visibility = 1 AND pk.prd_parent = $prdId
                 GROUP BY p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
                         p.prd_price, p.prd_coin_type, p.prd_english_name 
-                ORDER BY p.prd_name;";
+                ORDER BY p.prd_sku;";
         return $this->db->query($qry);
     }
 

@@ -108,6 +108,38 @@ function putDetailsProds(dt) {
     }
 }
 
+function activeIcons() {
+    $('.toLink')
+        .unbind('click')
+        .on('click', function () {
+            let prd = $(this).parents('tr').attr('id');
+            /*let qty = $(this).parent('td').attr('data-content');*/
+           /*catnme = $(this).parents('tr').children('td.catname').html();*/
+           let qty = 1;
+            if (qty > 0) {
+                getSeries(prd);
+            }
+        });
+
+    $('.modif')
+        .unbind('click')
+        .on('click', function () {
+            let sltor = $(this);
+            let prdId = sltor.parents('tr').attr('id');
+            let prdNm = 'Modifica producto';
+
+            $('#ProductModal').removeClass('overlay_hide');
+            $('.overlay_closer .title').html(prdNm);
+            getSelectProduct(prdId);
+            $('#ProductModal .btn_close')
+                .unbind('click')
+                .on('click', function () {
+                    $('.overlay_background').addClass('overlay_hide');
+                });
+        });
+        
+
+}
 
 //AGREGA LOS DATOS GENERALES DEL PROYECTO
 function putProjects(dt) {    
@@ -245,15 +277,13 @@ function putSerieDetails(dt) {
 
 /** +++++  Activa los iconos del modal de serie */
 function activeIconsSerie() {  
-          
         $('.toLink')
         .unbind('click')
         .on('click', function () {
             let prd = $(this).parents('tr').attr('id');
-            let qty = 1;
+            let qty = $(this).parent('td').attr('data-content');
+          /*catnme = $(this).parents('tr').children('td.catname').html();*/
             console.log('2do Click Modal');  
-           /* let pkt = $(this).parent().attr('data-content').split('|')[3];
-            let pkn = $(this).parent().attr('data-content').split('|')[1]; */
             if (qty > 0) {
                 getSerieDetail();
             }
@@ -293,33 +323,4 @@ function activeIconsSerieFree() {
 
 }
 /** +++++  Activa los iconos OK */
-function activeIcons() {
-    $('.toLink')
-        .unbind('click')
-        .on('click', function () {
-            let prd = $(this).parents('tr').attr('id');
-            let qty = 1;
-            if (qty > 0) {
-                getSeries(prd);
-            }
-        });
 
-    $('.modif')
-        .unbind('click')
-        .on('click', function () {
-            let sltor = $(this);
-            let prdId = sltor.parents('tr').attr('id');
-            let prdNm = 'Modifica producto';
-
-            $('#ProductModal').removeClass('overlay_hide');
-            $('.overlay_closer .title').html(prdNm);
-            getSelectProduct(prdId);
-            $('#ProductModal .btn_close')
-                .unbind('click')
-                .on('click', function () {
-                    $('.overlay_background').addClass('overlay_hide');
-                });
-        });
-        
-
-}

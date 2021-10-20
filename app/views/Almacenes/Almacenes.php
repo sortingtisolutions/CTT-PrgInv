@@ -164,7 +164,7 @@
 	</div>
 </div> -->
 
-<!-- Start Ventana modal EXISTENCIAS -->
+<!-- Start Ventana modal que muestra las EXISTENCIAS por serie -->
 <div class="overlay_background overlay_hide"id="ExisteStrModal">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
