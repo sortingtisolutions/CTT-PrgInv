@@ -49,8 +49,8 @@
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<select id="selectTipoAlmacen"  name="selectTipoAlmacen"  class="form-select form-select-sm" required>
 										<option id='' value="0" >Seleccione...</option>
-										<option id='estaticos'  value='estaticos'>Estatico</option> 
-										<option id='moviles'  value='moviles'>Movil</option> 
+										<option id='estaticos'  value='ESTATICOS'>ESTATICOS</option> 
+										<option id='moviles'  value='MOVILES'>MOVILES</option> 
 									</select>
 									<label for="selectTipoAlmacen" class="form-label">Tipo de almacen</label>
 								</div>
