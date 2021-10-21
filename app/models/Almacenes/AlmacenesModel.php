@@ -13,7 +13,7 @@ class AlmacenesModel extends Model
 	{
         $estatus = 0;
 			try {
-                $qry = "INSERT INTO ctt_stores(str_name, str_type,str_status, emp_id) 
+                $qry = "INSERT INTO ctt_stores(str_name, str_type,str_status, emp_fullname) 
                 VALUES ('".$params['NomAlmacen']."','".$params['tipoAlmacen']."',1,'".$params['EncargadoAlmacen']."')";
                 $this->db->query($qry);	
 				$qry = "SELECT MAX(str_id) AS id FROM ctt_stores;";
@@ -33,7 +33,7 @@ class AlmacenesModel extends Model
 	/*	$qry = "SELECT str_id, str_name, str_type, str.emp_id , emp_fullname  FROM ctt_stores AS str
 				LEFT JOIN ctt_employees AS emp ON emp.emp_id = str.emp_id
 				WHERE str.str_status = 1;"; */
-		$qry = "SELECT str.str_id, str.str_name, str.str_type, str.emp_id, str.emp_fullname,
+		$qry = "SELECT str.str_id, str.str_name, UPPER(str.str_type), str.emp_id, str.emp_fullname,
 				ifnull(sum(sp.stp_quantity),0) as cantidad 
 				FROM  ctt_stores 					AS str
 				LEFT JOIN ctt_stores_products      AS sp ON str.str_id=sp.str_id
@@ -79,7 +79,6 @@ class AlmacenesModel extends Model
 				,emp_fullname ='".$params['EncargadoAlmacen']."'
 
                 WHERE str_id = ".$params['IdAlmacen'].";";
-
 				$this->db->query($qry);	
 				$estatus = $params['IdAlmacen'];
 			} catch (Exception $e) {

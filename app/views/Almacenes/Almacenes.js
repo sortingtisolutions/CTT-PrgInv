@@ -72,7 +72,7 @@ function validaFormulario() {
 
 //Edita el Proveedores *
 function EditAlmacen(id) {
-    UnSelectRowTable();
+    /*UnSelectRowTable();*/
     LimpiaModal();
     $('#titulo').text('Editar almacen');
 
@@ -142,16 +142,16 @@ function DeletAlmacen() {
 
 //Guardar Almacen **
 function SaveAlmacen() {
-    console.log('22');
+   
     var location = 'Almacenes/SaveAlmacen';
     var IdAlmacen = $('#IdAlmacen').val();
     var NomAlmacen = $('#NomAlmacen').val();
     var tipoAlmacen = $('#selectTipoAlmacen option:selected').attr('id');
     /*   var EncargadoAlmacen = $('#selectRowEncargado option:selected').attr('id');
    var Encargado = $('#selectRowEncargado option:selected').text();*/
-    var EncargadoAlmacen = $('#selectRowEncargado').val;
-    var Encargado = $('#selectRowEncargado').val;
-
+    var EncargadoAlmacen = $('#selectRowEncargado').val();
+    var Encargado = $('#selectRowEncargado').val(); 
+    var valcantidad = '';
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
@@ -167,7 +167,7 @@ function SaveAlmacen() {
                 table
                     .row(':eq(' + positionRow + ')')
                     .remove()
-                    .draw();
+                    .draw(); 
             }
             if (respuesta != 0) {
                 //getAlmacenesTable();
@@ -184,13 +184,16 @@ function SaveAlmacen() {
                         [3]: Encargado,
                         [4]: EncargadoAlmacen,
                         [5]: tipoAlmacen,
+                        [6]: valcantidad,
                     })
                     .draw()
                     .node();
                 $(rowNode).find('td').eq(0).addClass('edit');
                 $(rowNode).find('td').eq(1).addClass('text-center');
                 $(rowNode).find('td').eq(4).attr('hidden', true);
+              
                 LimpiaModal();
+                getAlmacenesTable();
             }
         },
         error: function (EX) {
@@ -206,6 +209,7 @@ function LimpiaModal() {
     $('#IdAlmacen').val('');
     $('#selectTipoAlmacen').val('');
     /* getEncargadoAlmacen();*/
+    $('#selectRowEncargado').val('');
     $('#formProveedor').removeClass('was-validated');
 }
 
