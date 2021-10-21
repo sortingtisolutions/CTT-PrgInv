@@ -65,7 +65,7 @@ public function listProjects()
 public function listSeries($request_params)
 {
     $params =  $this->session->get('user');
-    $result = $this->model->listSeries();
+    $result = $this->model->listSeries($request_params);
     $i = 0;
     while($row = $result->fetch_assoc()){
         $rowdata[$i] = $row;
