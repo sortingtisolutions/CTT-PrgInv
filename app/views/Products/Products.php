@@ -377,7 +377,7 @@
 
 
 
-
+https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'Products/Products.js' ?>"></script>
 
