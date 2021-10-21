@@ -1,5 +1,5 @@
 let cust, proj, relc, vers, prod, disc, budg;
-let rgcnt = 0,
+let rgcnt = 1,
     rgevn = 0;
 
 $('document').ready(function () {
@@ -247,7 +247,7 @@ function put_version(dt) {
 /**  Llena el listado de cotizaciones */
 function put_budgets(dt) {
     budg = dt;
-    rgcnt = dt.length;
+    rgcnt = 1;
     caching_events('put_budgets');
     let days = get_days_period();
     if (dt[0].bdg_id > 0) {
@@ -265,6 +265,7 @@ function put_budgets(dt) {
 function put_products(dt) {
     caching_events('put_products');
     prod = dt;
+    let H = '';
     $.each(dt, function (v, u) {
         let level = '';
         switch (u.prd_level) {
@@ -280,8 +281,9 @@ function put_products(dt) {
             default:
         }
         if (u.prd_name != undefined) {
-            let ava = u.stock > 0 ? 'enable' : 'disable';
-            let H = `
+            // let ava = u.stock > 0 ? 'enable' : 'disable';
+            let ava = 'enable';
+            H += `
                 <li class="${ava}" data_indx ="${v}" data_content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
                     <div class="prodName">${u.prd_name}</div>
                     <div class="prodStock">${u.stock}</div>
@@ -289,12 +291,13 @@ function put_products(dt) {
                     <div class="prodsubct">${u.sbc_name}</div>
                 </li>
             `;
-            $('.list_products ul').append(H);
         }
     });
+    $('.list_products ul').html(H);
 
-    $('.list_products ul li.enable').on('click', function () {
+    $('.list_products ul li').on('click', function () {
         let inx = $(this).attr('data_indx');
+        console.log(inx);
         fill_budget(prod[inx], vers, inx);
     });
 }
@@ -459,7 +462,7 @@ function add_boton() {
                 sel_product(text, idSel);
             });
     });
-    $('#addProduct').addClass('hide');
+    //$('#addProduct').addClass('hide');
 }
 
 function modal_products() {
@@ -633,6 +636,7 @@ function show_minimenues(idsel, x, y) {
             let dys = $('.minitext').val();
             dys = days_validator(dys, days, idsel);
             $('.' + idsel).text(dys);
+            rgcnt = 1;
             update_totals();
             $('.box_days').remove();
         });
@@ -649,6 +653,7 @@ function show_minimenues(idsel, x, y) {
                     .parent()
                     .children('span')
                     .text(mkn(desc, 'p'));
+                rgcnt = 1;
                 update_totals();
             });
     } else {
@@ -664,13 +669,13 @@ function show_minimenues(idsel, x, y) {
                 $('.' + idsel)
                     .children('span')
                     .text(mkn(desc, 'p'));
+                rgcnt = 1;
                 update_totals();
             });
     }
 }
 /**  ++++  Obtiene los días definidos para el proyectos */
 function get_days_period() {
-    console.log('PASO 33');
     let Period = $('#PeriodProject').text();
     let start = moment(Period.split(' - ')[0], 'DD/MM/YYYY');
     let end = moment(Period.split(' - ')[1], 'DD/MM/YYYY');
@@ -774,7 +779,9 @@ function clean_customer_field() {
 /** Actualiza los totales */
 function update_totals() {
     let ttlrws = $('.frame_content').find('tbody tr').length;
-    if (ttlrws == rgcnt) {
+    console.log(ttlrws, rgcnt);
+    if (rgcnt == 1) {
+        rgcnt = 0;
         caching_events('update_totals');
         let costbase = 0,
             costtrip = 0,
@@ -840,6 +847,8 @@ function update_totals() {
         $('#costtest').html(mkn(costtest, 'n'));
         $('#costassu').html(mkn(costassu, 'n'));
         $('#total').html(mkn(total, 'n'));
+
+        $('#ttlproducts').html(ttlrws);
 
         order_subcategories();
         set_minimenu();
@@ -1009,7 +1018,7 @@ function load_budget(inx, bdgId) {
     let ky = registered_product('bdg' + prod[inx].prd_id);
     if (ky == 0) {
         rgevn = 0;
-        rgcnt++;
+        rgcnt = 1;
         fill_budget_prods(par, days);
     }
 }
@@ -1021,6 +1030,7 @@ function registered_product(id) {
         if (id == idp) {
             let qty = parseInt($(this).children('td.qtybase').text()) + 1;
             $(this).children('td.qtybase').text(qty);
+            rgcnt = 1;
             update_totals();
             $('.sel_product').text('');
             $('.box_list_products').slideUp(200, function () {
@@ -1059,7 +1069,6 @@ function fill_budget_prods(pd, days) {
     $('#tblControl tbody').append(H);
 
     $('#addProduct').removeClass('hide');
-    total_choice_products();
 
     editable_disable('tbl_dynamic');
 
@@ -1086,41 +1095,47 @@ function fill_budget_prods(pd, days) {
 
     update_totals();
 
-    $('.quantity').on('blur', function () {
-        hide_control_menu('none');
+    $('.quantity')
+        .unbind('blur')
+        .on('blur', function () {
+            hide_control_menu('none');
 
-        qtybs = parseInt(pure_num($(this)[0].outerText));
-        qtyst = parseInt(pure_num($(this)[0].attributes[1].value));
+            qtybs = parseInt(pure_num($(this)[0].outerText));
+            qtyst = parseInt(pure_num($(this)[0].attributes[1].value));
 
-        if (qtybs > qtyst) {
-            qtybs = qtyst;
-        }
-        if (qtybs < 1) qtybs = 1;
-        $(this).html(qtybs);
+            if (qtybs > qtyst) {
+                qtybs = qtyst;
+            }
+            if (qtybs < 1) qtybs = 1;
+            $(this).html(qtybs);
 
-        update_totals();
-    });
-    $('.days').on('blur', function () {
-        hide_control_menu('none');
-        let dy = $(this).attr('class');
-        if (dy.indexOf('daybase') >= 0) {
-            let dys = $(this).text();
-            let sel = 'daybase';
-            dys = days_validator(dys, days, sel);
-            $(this).text(dys);
-        } else if (dy.indexOf('daytrip') >= 0) {
-            let dys = $(this).text();
-            let sel = 'daytrip';
-            dys = days_validator(dys, days, sel);
-            $(this).text(dys);
-        } else if (dy.indexOf('daytest') >= 0) {
-            let dys = $(this).text();
-            let sel = 'daytest';
-            dys = days_validator(dys, days, sel);
-            $(this).text(dys);
-        }
-        update_totals();
-    });
+            rgcnt = 1;
+            update_totals();
+        });
+    $('.days')
+        .unbind('blur')
+        .on('blur', function () {
+            hide_control_menu('none');
+            let dy = $(this).attr('class');
+            if (dy.indexOf('daybase') >= 0) {
+                let dys = $(this).text();
+                let sel = 'daybase';
+                dys = days_validator(dys, days, sel);
+                $(this).text(dys);
+            } else if (dy.indexOf('daytrip') >= 0) {
+                let dys = $(this).text();
+                let sel = 'daytrip';
+                dys = days_validator(dys, days, sel);
+                $(this).text(dys);
+            } else if (dy.indexOf('daytest') >= 0) {
+                let dys = $(this).text();
+                let sel = 'daytest';
+                dys = days_validator(dys, days, sel);
+                $(this).text(dys);
+            }
+            rgcnt = 1;
+            update_totals();
+        });
 }
 
 function set_minimenu() {
@@ -1172,11 +1187,6 @@ function set_minimenu() {
         });
 }
 
-function total_choice_products() {
-    var ttlrows = $('.frame_content table tbody tr').length;
-    $('#ttlproducts').html(ttlrows);
-}
-
 function order_subcategories() {
     $('.frame_content table thead th').each(function (colm) {
         $(this)
@@ -1207,8 +1217,9 @@ function order_subcategories() {
 
 function kill_product(id) {
     $('.bdg' + id).fadeOut(500, function () {
-        update_totals();
         $('.bdg' + id).remove();
+        rgcnt = 1;
+        update_totals();
     });
 }
 

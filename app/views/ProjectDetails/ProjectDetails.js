@@ -1,5 +1,5 @@
 let cust, proj, relc, vers, prod, disc, budg;
-let rgcnt = 0,
+let rgcnt = 1,
     rgevn = 0;
 
 $('document').ready(function () {
@@ -257,7 +257,7 @@ function put_version(dt) {
 /**  Llena el listado de cotizaciones */
 function put_budgets(dt) {
     budg = dt;
-    rgcnt = dt.length;
+    rgcnt = 1;
     caching_events('put_budgets');
     let days = get_days_period();
     if (dt[0].pjtcn_id > 0) {
@@ -275,6 +275,7 @@ function put_budgets(dt) {
 function put_products(dt) {
     caching_events('put_products');
     prod = dt;
+    let H = '';
     $.each(dt, function (v, u) {
         let level = '';
         switch (u.prd_level) {
@@ -290,7 +291,7 @@ function put_products(dt) {
             default:
         }
         if (u.prd_name != undefined) {
-            let H = `
+            H += `
                 <li data_indx ="${v}" data_content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.srv_id}">
                     <div class="prodName">${u.prd_name}</div>
                     <div class="prodStock">${u.stock}</div>
@@ -298,9 +299,9 @@ function put_products(dt) {
                     <div class="prodsubct">${u.sbc_name}</div>
                 </li>
             `;
-            $('.list_products ul').append(H);
         }
     });
+    $('.list_products ul').html(H);
 
     $('.list_products ul li')
         .unbind('click')
@@ -671,6 +672,7 @@ function show_minimenues(idsel, x, y) {
             console.log(idsel);
             dys = days_validator(dys, days, idsel);
             $('.' + idsel).text(dys);
+            rgcnt = 1;
             update_totals();
             $('.box_days').remove();
             updatesData(sll);
@@ -688,7 +690,7 @@ function show_minimenues(idsel, x, y) {
                     .parent()
                     .children('span')
                     .text(mkn(desc, 'p'));
-
+                rgcnt = 1;
                 update_totals();
                 updatesData(sll);
             });
@@ -705,6 +707,7 @@ function show_minimenues(idsel, x, y) {
                 $('.' + idsel)
                     .children('span')
                     .text(mkn(desc, 'p'));
+                rgcnt = 1;
                 update_totals();
                 updatesData(sll);
             });
@@ -798,7 +801,8 @@ function clean_customer_field() {
 /** Actualiza los totales */
 function update_totals() {
     let ttlrws = $('.frame_content').find('tbody tr').length;
-    if (ttlrws == rgcnt) {
+    if (rgcnt == 1) {
+        rgcnt = 0;
         caching_events('update_totals');
         let costbase = 0,
             costtrip = 0,
@@ -857,6 +861,9 @@ function update_totals() {
         $('#costtest').html(mkn(costtest, 'n'));
         $('#costassu').html(mkn(costassu, 'n'));
         $('#total').html(mkn(total, 'n'));
+
+        $('#ttlproducts').html(ttlrws);
+
         order_subcategories();
         set_minimenu();
     }
@@ -1036,6 +1043,7 @@ function registered_product(id) {
             let level = $(this).attr('data_level'); // Tipo de producto
             let qtyAnt = parseInt($(this).children('td.qtybase').attr('qty_base')); // Cantidad Anterior
             $(this).children('td.qtybase').text(qty);
+            rgcnt = 1;
             update_totals();
             $('.sel_product').text('');
             $('.box_list_products').slideUp(200, function () {
@@ -1085,7 +1093,6 @@ function fill_budget_prods(pd, days, st) {
     get_conter_pending(pds.pjtcn_id, pds.pjtcn_quantity, pds.prd_id);
 
     $('#addProduct').removeClass('hide');
-    total_choice_products();
 
     editable_disable('tbl_dynamic');
 
@@ -1130,6 +1137,7 @@ function fill_budget_prods(pd, days, st) {
             $(this)[0].innerHTML = qtytot;
 
             updating_quantity(rw, qtytot, qtyPrev, 'IN');
+            rgcnt = 1;
             update_totals();
             $(this).attr('contenteditable', false);
         });
@@ -1157,7 +1165,7 @@ function fill_budget_prods(pd, days, st) {
                 $(this).text(dys);
                 sll = 10;
             }
-
+            rgcnt = 1;
             updatesData(sll);
             update_totals();
         });
@@ -1215,11 +1223,6 @@ function set_minimenu() {
         });
 }
 
-function total_choice_products() {
-    var ttlrows = $('.frame_content table tbody tr').length;
-    $('#ttlproducts').html(ttlrows);
-}
-
 function order_subcategories() {
     $('.frame_content table thead th').each(function (colm) {
         $(this)
@@ -1251,8 +1254,9 @@ function order_subcategories() {
 function kill_product(id) {
     killProductBase(id);
     $('.bdg' + id).fadeOut(500, function () {
-        update_totals();
         $('.bdg' + id).remove();
+        rgcnt = 1;
+        update_totals();
     });
 }
 
