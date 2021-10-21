@@ -32,8 +32,9 @@ function getDetailProds() {
 
 //Solicita las series de los productos  OK
 function getSeries(prdId) {
+    console.log('ID-Producto', prdId);
     var pagina = 'WhOutputContent/listSeries';
-    var par = `[{"prd":""}]`;
+    var par = `[{"prd":"${prdId}"}]`;
     var tipo = 'json';
     var selector = putSeries;
     fillField(pagina, par, tipo, selector);
@@ -51,7 +52,7 @@ function getSerieDetail() {
 
 // Configura la tabla de productos del proyecto
 function setting_table_AsignedProd() {
-    let tabla = $('#tblAsignedProd').DataTable({
+     $('#tblAsignedProd').DataTable({
         order: [[1, 'asc']],
         pageLength: 1000,
         select: true,
@@ -81,41 +82,67 @@ function setting_table_AsignedProd() {
             {data: 'packlevel', class: 'sel sku'},
         ],
     });
+    // $('#tblAsignedProd').DataTable().draw();
 }
 
 // Llena la tabla de los detalles del proyecto
 function putDetailsProds(dt) {  
-    if (dt[0].pjtpd_id != '0') 
-    {
-        let tabla = $('#tblAsignedProd').DataTable();
-        $.each(dt, function (v, u) 
-        {
+    $('#tblAsignedProd tbody').html('');
+    if (dt[0].pjtpd_id != '0') {
+        $.each(dt, function (v, u) {
+            let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
+            var H = `
+                <tr id="${u.prd_id}">
+                    <td class="edit"><i class='fas fa-pen toLink'></i><i class="fas fa-times-circle kill"></i></td>
+                    <td class="sku">${skufull}</td>
+                    <td class="product-name editable" data_action="box" data_edit="prd_name"> ${u.pjtcn_prod_name}</td>
+                    <td class="price editable" data_action="box" data_edit="prd_price">${u.pjtcn_quantity}</td>
+                    <td class="level">${u.prd_level}</td>
+                </tr>`;
+            $('#tblAsignedProd tbody').append(H);
+        }); 
+        
+    }  
+
+
+
+    /*    let tabla = $('#tblAsignedProd').DataTable();
+        $.each(dt, function (v, u)         {
         let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
             tabla.row
                 .add({
                     editable: `<i class="fas fa-edit toLink" id="${u.pjtcn_id}"></i>`,
- /*                   pack_sku: `<span class="hide-support" id="SKU-${u.pjtcn_prod_sku}">${u.pjtcn_id}</span>${u.pjtcn_prod_sku}`, */
+                   // pack_sku: `<span class="hide-support" id="SKU-${u.pjtcn_prod_sku}">${u.pjtcn_id}</span>${u.pjtcn_prod_sku}`, 
                     pack_sku: skufull,
                     packname: u.pjtcn_prod_name,
                     packcount: u.pjtcn_quantity,
                     packlevel: u.pjtcn_prod_level
                 })
                 .draw();
-/*<i class="fas fa-times-circle choice pack kill" id="D-${u.pjtpd_id}"></i>`, */
-            $(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
-        });
-        activeIcons();
-    }
+            //<i class="fas fa-times-circle choice pack kill" id="D-${u.pjtpd_id}"></i>`, 
+            //$(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
+        
+        }); */
+
+        activeIcons(); 
+
 }
 
 function activeIcons() {
     $('.toLink')
         .unbind('click')
         .on('click', function () {
-            let prd = $(this).parents('tr').attr('id');
+            let prd;
+            let selected = $(this).parent().attr('id');
+            console.log('BOTON 1 - Producto', prd); 
+            if (selected < 0) {
+                prd = $(this).parent().attr('id');
+             
+            }
             /*let qty = $(this).parent('td').attr('data-content');*/
            /*catnme = $(this).parents('tr').children('td.catname').html();*/
            let qty = 1;
+           console.log('BOTON 1 -'); 
             if (qty > 0) {
                 getSeries(prd);
             }
@@ -130,7 +157,7 @@ function activeIcons() {
 
             $('#ProductModal').removeClass('overlay_hide');
             $('.overlay_closer .title').html(prdNm);
-            getSelectProduct(prdId);
+            /*getSelectProduct(prdId);*/
             $('#ProductModal .btn_close')
                 .unbind('click')
                 .on('click', function () {

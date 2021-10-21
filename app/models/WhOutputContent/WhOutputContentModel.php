@@ -34,9 +34,9 @@ class WhOutputContentModel extends Model
     }    
 
    // Listado de Productos
-   public function listSeries()
+   public function listSeries($params)
    {
-/*       $prodId = $this->db->real_escape_string($params['prdId']); */
+       $prodId = $this->db->real_escape_string($params['prdId']);
        $qry = "SELECT pd.pjtdt_id, pd.pjtdt_prod_sku, pr.prd_name, pr.prd_level,
        pr.prd_status,pd.ser_id,pd.pjtcn_id
        FROM ctt_projects_detail pd INNER JOIN ctt_products pr 
