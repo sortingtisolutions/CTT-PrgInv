@@ -1121,7 +1121,7 @@ function fill_budget_prods(pd, days, st) {
     $('.quantity')
         .unbind('blur')
         .on('blur', function () {
-            hide_control_menu('none');
+            //hide_control_menu('none');
 
             let qtyPrev = $(this)[0].attributes[1].value;
             let qtyCurr = $(this)[0].outerText;
@@ -1136,7 +1136,7 @@ function fill_budget_prods(pd, days, st) {
     $('.days')
         .unbind('blur')
         .on('blur', function () {
-            hide_control_menu('none');
+            //hide_control_menu('none');
             let dy = $(this).attr('class');
             if (dy.indexOf('daybase') >= 0) {
                 let dys = $(this).text();
@@ -1200,7 +1200,7 @@ function set_minimenu() {
 
                     switch (option) {
                         case 'killProd':
-                            hide_control_menu('none');
+                            //hide_control_menu('none');
                             let rsp = confirm('¿Realmente requieres de eliminar este producto?');
                             if (rsp) {
                                 kill_product(prdId);
@@ -1781,9 +1781,10 @@ function caching_events(ev) {
 
 /* ++++ Modificación de la cantidad  ++++ */
 function updating_quantity(rw, qn, qa, ac) {
+    console.log(rw);
     qn = qn < 1 ? 1 : qn;
 
-    let qtycll = rw[0].cells[1].attributes[1];
+    let qtycll = rw[0].cells[2].attributes[1];
 
     let pjtcnid = rw[0].attributes[5].value;
     let pjtserv = rw[0].attributes[6].value;
@@ -1813,8 +1814,10 @@ function updating_quantity(rw, qn, qa, ac) {
         qtycll.value = qn;
     } else if (ac == 'IN') {
         if (qn > qa) {
-            let qtyant = rw[0].cells[1].attributes[1].value;
-            let qtynew = rw[0].cells[1].outerText;
+            let qtyant = rw[0].cells[2].attributes[1].value;
+            let qtynew = rw[0].cells[2].outerText;
+
+            console.log(qtyant, qtynew);
             let qtytot = qtynew - qtyant;
 
             for (var i = 1; i <= qtytot; i++) {
@@ -1822,8 +1825,9 @@ function updating_quantity(rw, qn, qa, ac) {
             }
             qtycll.value = qn;
         } else if (qn < qa) {
-            let qtyant = rw[0].cells[1].attributes[1].value;
-            let qtynew = rw[0].cells[1].outerText;
+            let qtyant = rw[0].cells[2].attributes[1].value;
+            let qtynew = rw[0].cells[2].outerText;
+            console.log(qtyant, qtynew);
             let qtytot = qtyant - qtynew;
             // console.log('disminuye cantidad');
             for (var i = 1; i <= qtytot; i++) {
