@@ -131,11 +131,11 @@ function get_products_related(id, tp, pj) {
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de relacionados al prducto*/
-function get_conter_pending(pj, qt, pd) {
+function get_counter_pending(pj, qt, pd) {
     var pagina = 'ProjectDetails/counterPending';
     var par = `[{"pjtcnId":"${pj}", "quantity":"${qt}", "prdId":"${pd}"}]`;
     var tipo = 'json';
-    var selector = put_conter_pending;
+    var selector = put_counter_pending;
     caching_events('get_products');
     fillField(pagina, par, tipo, selector);
 }
@@ -1090,7 +1090,7 @@ function fill_budget_prods(pd, days, st) {
     `;
     // $('.table_control tbody tr:last-child').before(H);
     $('#tblControl tbody').append(H);
-    get_conter_pending(pds.pjtcn_id, pds.pjtcn_quantity, pds.prd_id);
+    get_counter_pending(pds.pjtcn_id, pds.pjtcn_quantity, pds.prd_id);
 
     $('#addProduct').removeClass('hide');
 
@@ -1977,16 +1977,16 @@ function show_updatesData(dt) {
     console.log(dt);
 }
 
-function put_conter_pending(dt) {
+function put_counter_pending(dt) {
     let prd = dt[0].prd_id;
     let qty = dt[0].qty;
     let pnd = dt[0].pend;
-    let cir = qty;
+    let cir = '';
     if (pnd > 0) {
-        cir = qty + '<span class="flagPendig"></span>';
+        cir = 'qtypending';
     }
-
+    console.log(cir, dt[0].prd_id);
     $('#bdg' + dt[0].prd_id)
         .children('td.qtybase')
-        .html(cir);
+        .addClass(cir);
 }

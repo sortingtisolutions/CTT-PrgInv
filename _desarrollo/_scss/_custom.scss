@@ -456,6 +456,13 @@ table {
 	td.quantity {
 		text-align: center;
 
+		&.qtypending  {
+			background-image: url("../img/circle-solid.min.svg");
+			background-position: center right;
+			background-size: 12%;
+			background-repeat: no-repeat;
+		}
+
 		span {
 			padding: 2px 6px;
 			background-color: #005599;
