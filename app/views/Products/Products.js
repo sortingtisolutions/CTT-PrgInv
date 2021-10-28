@@ -195,22 +195,28 @@ function putDocuments(dt) {
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
     prds = dt;
-    fillProducts();
+    fillProducts('0');
 }
 
 /** +++++  coloca los productos en la tabla */
-function fillProducts() {
-    $('#tblProducts').html('');
+function fillProducts(ft) {
+    $('#tblProducts tbody').html('');
+
+    console.log(ft);
+
+    if (ft != '1' && u.prd_level != 'A') {
+    }
 
     if (prds[0].prd_id != '0') {
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
-            pack = u.prd_level == 'K' ? 'fas' : 'far';
-            let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
-            let invoice = u.doc_id == 0 ? '' : docInvo;
-            let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11);
+            if (ft != '1' && u.prd_level != 'A') {
+                pack = u.prd_level == 'K' ? 'fas' : 'far';
+                let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
+                let invoice = u.doc_id == 0 ? '' : docInvo;
+                let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11);
 
-            var H = `
+                var H = `
                 <tr id="${u.prd_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>
                     <td class="sku">${skufull}</td>
@@ -226,7 +232,8 @@ function fillProducts() {
                     <td class="catalog editable" data_action="box">${u.prd_english_name}</td>
                     <td class="catalog editable" data_action="box">${u.prd_comments}</td>
                 </tr>`;
-            $('#tblProducts tbody').append(H);
+                $('#tblProducts tbody').append(H);
+            }
         });
         settingTable();
         activeIcons();
@@ -291,9 +298,9 @@ function settingTable() {
             {
                 // Boton filtar producto
                 text: 'Filtrar productos',
-                className: 'btn-apply',
+                className: 'btn-apply btn_filter',
                 action: function (e, dt, node, config) {
-                    // filterProduct();
+                    filterProduct();
                 },
             },
         ],
@@ -318,21 +325,6 @@ function settingTable() {
             {data: 'prodengl', class: 'catalog'},
             {data: 'prdcomme', class: 'catalog'},
         ],
-
-        fixedHeader: true,
-    });
-
-    $('#tblProducts thead tr').clone(true).appendTo('#tblProducts thead');
-
-    $('#tblProducts thead tr:eq(1) th').each(function (i) {
-        var title = $(this).text();
-        $(this).html('<input type="text" placeholder="Buscar..." />');
-
-        $('input', this).on('keyup change', function () {
-            if (tabla.column(i).search() !== this.value) {
-                tabla.column(i).search(this.value).draw();
-            }
-        });
     });
 
     $('.tblProdMaster')
@@ -419,13 +411,15 @@ function putDelProducts(dt) {
 
 /** +++++  muestra unicamente los productos y oculta los accesorios */
 function filterProduct() {
-    console.log($('#tblProducts'));
-    $('#tblProducts tr').each(function (i, v) {
-        if ($(v).children('td.level').text() == 'A') {
-            $(v).hide();
-        }
-    });
-    $('#tblProducts').DataTable().draw();
+    var fltr = $('.btn_filter').attr('class').indexOf('red');
+    $('#tblProducts').DataTable().destroy();
+    if (fltr < 0) {
+        fillProducts('1');
+        $('.btn_filter').addClass('red');
+    } else {
+        fillProducts('0');
+        $('.btn_filter').removeClass('red');
+    }
 }
 
 function putDocument(dt) {

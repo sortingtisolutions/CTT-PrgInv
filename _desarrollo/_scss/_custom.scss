@@ -34,7 +34,6 @@ h4 {
 	font-size: 1.3rem;
 }
 
-
 .bg-dark {
 	background-color: $dark !important;
 }
@@ -306,6 +305,10 @@ div.dataTables_wrapper div.btn-group button.btn-apply {
 	color: #ffffff;
 	border-radius: 8px !important;
 	&:hover {
+		background-color: $dark-x;
+	}
+
+	&.red  {
 		background-color: $dark-x;
 	}
 }
@@ -813,6 +816,8 @@ table {
 	width: 100%;
 	float: left;
 }
+
+
 
 
 
