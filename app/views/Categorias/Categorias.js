@@ -171,6 +171,8 @@ function SaveCategoria() {
             if (respuesta != 0) {
                 //getAlmacenesTable();
                 $('#IdCategoria').val(respuesta);
+                var fixqty = get_quantity(respuesta);
+                console.log(respuesta, fixqty);
                 var rowNode = table.row
                     .add({
                         [0]:
@@ -183,14 +185,14 @@ function SaveCategoria() {
                         [2]: NomCategoria,
                         [3]: NomAlmacen,
                         [4]: idAlmacen,
-                        [5]: 0,
+                        [5]: fixqty,
                     })
                     .draw()
                     .node();
                 $(rowNode).find('td').eq(0).addClass('edit');
                 $(rowNode).find('td').eq(1).addClass('text-center');
                 $(rowNode).find('td').eq(4).attr('hidden', true);
-                $(rowNode).find('td').eq(5).attr('hidden', true);
+                // $(rowNode).find('td').eq(5).attr('hidden', true);
 
                 LimpiaModal();
                 getAlmacenes();
@@ -355,7 +357,6 @@ function getAlmacenes(id) {
         data: {id: id},
         url: location,
         success: function (respuesta) {
-            console.log(respuesta);
             var renglon = "<option id='0'  value=''>Seleccione...</option> ";
             respuesta.forEach(function (row, index) {
                 renglon += '<option id=' + row.str_id + '  value="' + row.str_id + '">' + row.str_name + '</option> ';
@@ -449,6 +450,7 @@ function build_modal_serie(dt) {
 }
 
 function get_quantity(catId) {
+    console.log(catId);
     var pagina = 'Categorias/countQuantity';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
