@@ -49,8 +49,6 @@ function putProducts(dt) {
                     <td class="sku editable list">${u.pjt_date_end}</td>
                     <td class="sku editable list">${u.pjt_date_project}</td>
                     <td class="product-name editable">${u.pjt_location}</td>
-                    <td class="product-name editable">${u.pjt_status}</td>
-                    <td class="product-name editable">${u.pjt_id}</td>
                 </tr>`;
             $('#tblProducts tbody').append(H);
         });
@@ -130,8 +128,6 @@ function settingTable() {
             {data: 'typeserv', class: 'sku'},
             {data: 'prodcoin', class: 'sku'},
             {data: 'prddocum', class: 'sku'},
-            {data: 'subcateg', class: 'sku'},
-            {data: 'categori', class: 'sku'},
         ],
     });
     console.log('111');

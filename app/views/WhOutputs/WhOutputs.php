@@ -27,8 +27,6 @@
                                 <th style="width:  40px">Fecha Final</th>
                                 <th style="width:  70px">Hora <br>ultimo cambio</th>
                                 <th style="width:  40px">Locacion</th>
-                                <th style="width: 100px">Status</th>
-                                <th style="width: 100px">ID</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
