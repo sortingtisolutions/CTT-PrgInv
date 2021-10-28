@@ -183,6 +183,17 @@ class ProjectDetailsController extends Controller
 
 
 
+    
+
+// Obtiene el conteo de los productos faltantes
+public function cancelProject($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->cancelProject($request_params);
+    $res = $result;
+    echo $res;
+} 
+
 
 
 // Genera el archivo del proyecto

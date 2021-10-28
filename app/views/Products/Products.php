@@ -2,7 +2,7 @@
 	defined('BASEPATH') or exit('No se permite acceso directo'); 
 	require ROOT . FOLDER_PATH . "/app/assets/header.php";
 ?>
-
+<link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css">
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
@@ -32,6 +32,7 @@
                         </select>
                         
                     </div>
+                    <div id="dvProducts"></div>
                     <table class="display compact nowrap"  id="tblProducts" style="min-width: 1880px">
                         <thead>
                             <tr>
@@ -377,8 +378,8 @@
 
 
 
-https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'Products/Products.js' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
+<script src="https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js"></script>

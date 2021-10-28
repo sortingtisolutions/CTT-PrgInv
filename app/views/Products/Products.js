@@ -200,7 +200,7 @@ function putProducts(dt) {
 
 /** +++++  coloca los productos en la tabla */
 function fillProducts() {
-    $('#tblProducts tbody').html('');
+    $('#tblProducts').html('');
 
     if (prds[0].prd_id != '0') {
         var catId = prds[0].cat_id;
@@ -235,11 +235,14 @@ function fillProducts() {
     }
 }
 
+function titles_table_products() {}
+
 /** +++++  configura la table de productos */
 function settingTable() {
     let title = 'Lista de productos';
+    // $('#tblProducts').DataTable().destroy();
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-    $('#tblProducts').DataTable({
+    var tabla = $('#tblProducts').DataTable({
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
@@ -299,7 +302,7 @@ function settingTable() {
             url: 'app/assets/lib/dataTable/spanish.json',
         },
         scrollY: 'calc(100vh - 200px)',
-        scrollX: true,
+        // scrollX: true,
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
             {data: 'produsku', class: 'sku'},
@@ -315,6 +318,21 @@ function settingTable() {
             {data: 'prodengl', class: 'catalog'},
             {data: 'prdcomme', class: 'catalog'},
         ],
+
+        fixedHeader: true,
+    });
+
+    $('#tblProducts thead tr').clone(true).appendTo('#tblProducts thead');
+
+    $('#tblProducts thead tr:eq(1) th').each(function (i) {
+        var title = $(this).text();
+        $(this).html('<input type="text" placeholder="Buscar..." />');
+
+        $('input', this).on('keyup change', function () {
+            if (tabla.column(i).search() !== this.value) {
+                tabla.column(i).search(this.value).draw();
+            }
+        });
     });
 
     $('.tblProdMaster')

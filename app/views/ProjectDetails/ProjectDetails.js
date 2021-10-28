@@ -617,100 +617,109 @@ function fill_dinamic_table() {
     $('#tblControl th i')
         .unbind('click')
         .on('click', function (e) {
+            let clss = $(this).attr('class');
+
             let idsel = $(this).attr('id');
             let x = e.pageX;
             let y = e.pageY;
+
             show_minimenues(idsel, x, y);
         });
 }
 /** ++++  Muestra las cuadros de opcion de dias y descuentos */
 function show_minimenues(idsel, x, y) {
-    let inic = idsel.substring(0, 3);
-    let days = get_days_period();
-    psy = y - 20;
-    psx = x - 50;
-    let H = '';
+    if (idsel != undefined) {
+        console.log(idsel, x, y);
+        let inic = idsel.substring(0, 3);
+        let days = get_days_period();
+        psy = y - 20;
+        psx = x - 50;
+        let H = '';
 
-    let sll = '';
-    switch (idsel.slice(0, 7)) {
-        case 'daybase':
-            sll = 4;
-            break;
-        case 'dscbase':
-        case 'desbase':
-            sll = 5;
-            break;
-        case 'daytrip':
-            sll = 7;
-            break;
-        case 'dsctrip':
-        case 'destrip':
-            sll = 8;
-            break;
-        case 'daytest':
-            sll = 10;
-            break;
-        case 'dsctest':
-        case 'destest':
-            sll = 11;
-            break;
-        default:
-    }
+        let sll = '';
+        switch (idsel.slice(0, 7)) {
+            case 'daybase':
+                sll = 4;
+                break;
+            case 'dscbase':
+            case 'desbase':
+                sll = 5;
+                break;
+            case 'daytrip':
+                sll = 7;
+                break;
+            case 'dsctrip':
+            case 'destrip':
+                sll = 8;
+                break;
+            case 'daytest':
+                sll = 10;
+                break;
+            case 'dsctest':
+            case 'destest':
+                sll = 11;
+                break;
+            default:
+        }
 
-    if (inic == 'day') {
-        H = `
+        if (inic == 'day') {
+            H = `
         <div class="box_days">
             <input type="text" id="txtdays" class="minitext">
         </div>
         `;
 
-        $('body').append(H);
-        $('.box_days').css({top: psy + 'px', left: psx + 'px'});
+            $('body').append(H);
+            $('.box_days').css({top: psy + 'px', left: psx + 'px'});
 
-        $('.minitext').on('mouseout', function () {
-            let dys = $('.minitext').val();
-            console.log(idsel);
-            dys = days_validator(dys, days, idsel);
-            $('.' + idsel).text(dys);
-            rgcnt = 1;
-            update_totals();
-            $('.box_days').remove();
-            updatesData(sll);
-        });
-    } else if (inic == 'dsc') {
-        fill_discount(psy, psx);
-
-        $('.box_desc li')
-            .unbind('click')
-            .on('click', function () {
-                let ds = $(this).attr('data_content');
-                $('.box_desc').remove();
-                let desc = ds * 100;
-                $('#' + idsel)
-                    .parent()
-                    .children('span')
-                    .text(mkn(desc, 'p'));
+            $('.minitext').on('mouseout', function () {
+                let dys = $('.minitext').val();
+                console.log(idsel);
+                dys = days_validator(dys, days, idsel);
+                $('.' + idsel).text(dys);
                 rgcnt = 1;
                 update_totals();
+                $('.box_days').remove();
                 updatesData(sll);
             });
+        } else if (inic == 'dsc') {
+            fill_discount(psy, psx);
+
+            $('.box_desc li')
+                .unbind('click')
+                .on('click', function () {
+                    let ds = $(this).attr('data_content');
+                    $('.box_desc').remove();
+                    let desc = ds * 100;
+                    $('#' + idsel)
+                        .parent()
+                        .children('span')
+                        .text(mkn(desc, 'p'));
+                    rgcnt = 1;
+                    update_totals();
+                    updatesData(sll);
+                });
+        } else if (inic == 'mnu') {
+            console.log('mini menu');
+            set_minimenu();
+        } else {
+            fill_discount(psy, psx);
+            $('.box_desc li')
+                .unbind('click')
+                .on('click', function () {
+                    let ds = $(this).attr('data_content');
+                    $('.box_desc').remove();
+                    let desc = ds * 100;
+                    $('.' + idsel)
+                        .children('span')
+                        .text(mkn(desc, 'p'));
+                    rgcnt = 1;
+                    update_totals();
+                    updatesData(sll);
+                });
+        }
     } else {
-        fill_discount(psy, psx);
-
-        $('.box_desc li')
-            .unbind('click')
-            .on('click', function () {
-                let ds = $(this).attr('data_content');
-
-                $('.box_desc').remove();
-                let desc = ds * 100;
-                $('.' + idsel)
-                    .children('span')
-                    .text(mkn(desc, 'p'));
-                rgcnt = 1;
-                update_totals();
-                updatesData(sll);
-            });
+        console.log('click');
     }
 }
 /**  ++++  Obtiene los días definidos para el proyectos */
@@ -728,6 +737,7 @@ function build_menu_control() {
     let H = `
         <ul class="menu_block">
             <li class="menu_button" id="printr"><i class="fas fa-print"></i> Imprimir</li>
+            <li class="menu_button" id="cancel"><i class="fas fa-ban"></i> Cancelar proyecto</li>
         </ul>
         `;
     $('.menu_control').html(H);
@@ -743,8 +753,9 @@ function build_menu_control() {
                 // alert('Imprimir proyecto');
                 print_project();
                 break;
-            case 'expexl':
-                alert('Exportar proyecto a Excel');
+            case 'cancel':
+                // alert('Activa la cancelación del proyecto');
+                cancel_proyect();
                 break;
             case 'exppdf':
                 alert('Exportar proyecto a PDF');
@@ -782,6 +793,7 @@ function clean_projects_field() {
     $('#costtest').html(0);
     $('#costassu').html(0);
     $('#total').html(0);
+    $('#ttlproducts').html(0);
 }
 /** Limpia clientes */
 function clean_customer_field() {
@@ -1073,7 +1085,7 @@ function fill_budget_prods(pd, days, st) {
         data_project="${pds.pjtcn_id}" 
         data_service="${pds.srv_id}" 
     >
-        <td class="w1 product"><i class="fas fa-ellipsis-v"></i>${prodName}<i class="fas fa-bars minimenu"></i></td>
+        <td class="w1 product"><i class="fas fa-ellipsis-v"></i>${prodName}<i class="fas fa-bars minimenu" id="mnu${pds.prd_id}"></i></td>
         <td class="w1 subcate hide">${pds.sbc_name}</td>
         <td class="w4 zone_01 quantity qtybase editable" qty_base="${pds.pjtcn_quantity}">${pds.pjtcn_quantity}</td>
         <td class="w3 zone_01 price prcbase">${mkn(pds.pjtcn_prod_price, 'n')}</td>
@@ -1119,7 +1131,6 @@ function fill_budget_prods(pd, days, st) {
             let idsel = $(this).attr('id');
             let x = e.pageX;
             let y = e.pageY;
-
             show_minimenues(idsel, x, y);
         });
 
@@ -1175,6 +1186,7 @@ function set_minimenu() {
     $('.minimenu')
         .unbind('click')
         .on('click', function () {
+            console.log($(this));
             let id = $(this).parents('tr');
             let posLeft = id.offset().left;
             let posTop = id.offset().top;
@@ -1186,8 +1198,8 @@ function set_minimenu() {
                 .fadeIn(400);
 
             var H = `
-            <li data_content="${prdId}" data_project="${pjtcn}" class="mini_option killProd"><i class="fas fa-trash"></i> Eliminar</li>
-            <li data_content="${prdId}" data_project="${pjtcn}" data_level="${prdLvl}" class="mini_option infoProd"><i class="fas fa-info-circle"></i> Información</li>
+                <li data_content="${prdId}" data_project="${pjtcn}" class="mini_option killProd"><i class="fas fa-trash"></i> Eliminar</li>
+                <li data_content="${prdId}" data_project="${pjtcn}" data_level="${prdLvl}" class="mini_option infoProd"><i class="fas fa-info-circle"></i> Información</li>
                 `;
             $('.list_menu ul').html(H);
 
@@ -1774,6 +1786,23 @@ function printProject(dt) {
     window.open(url + 'app/views/ProjectDetails/ProjectDetailsReport.php?u=' + usr + '&n=' + nme, '_blank');
 }
 
+function cancel_proyect() {
+    var rsp = confirm('Haz solicitado cancelar este proyecto.\n¿Estas seguro de realizar esta tarea?');
+    if (rsp) {
+        let projectId = $('#IdProject').val();
+        var pagina = 'ProjectDetails/cancelProject';
+        var par = `[{"pjtId":"${projectId}"}]`;
+        var tipo = 'html';
+        var selector = show_cancel_proyect;
+        fillField(pagina, par, tipo, selector);
+    }
+}
+
+function show_cancel_proyect(dt) {
+    clean_projects_field();
+    get_projects();
+}
+
 /**  +++++ Cachando eventos   */
 function caching_events(ev) {
     // console.log(ev);
@@ -1985,7 +2014,7 @@ function put_counter_pending(dt) {
     if (pnd > 0) {
         cir = 'qtypending';
     }
-    console.log(cir, dt[0].prd_id);
+    // console.log(cir, dt[0].prd_id);
     $('#bdg' + dt[0].prd_id)
         .children('td.qtybase')
         .addClass(cir);

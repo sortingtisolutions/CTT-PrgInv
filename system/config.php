@@ -13,7 +13,7 @@ define('REQUEST_METHOD', $_SERVER['REQUEST_METHOD']);
 // Valores de rutas
 /////////////////////////////////////
 
-define('FOLDER_PATH', '/cttrentals');               /* DESARROLLO LOCAL */
+define('FOLDER_PATH', '/TesteoCire');               /* DESARROLLO LOCAL */
 //define('FOLDER_PATH', '/TesteoCire');               /* DESARROLLO REMOTO */
 
 
