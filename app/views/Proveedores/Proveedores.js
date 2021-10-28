@@ -15,7 +15,7 @@ function inicial() {
       $('#formProveedor').removeClass('was-validated');
    });
 
-   //Guardar Usuario *
+   //Guardar y salva Usuario *
    $('#GuardarUsuario').on('click', function () {
       if (validaFormulario() == 1) {
          SaveProveedores();
@@ -101,7 +101,7 @@ function UnSelectRowTable() {
       table.rows().deselect();
    }, 10);
 }
-//BORRAR  * *
+//BORRAR DATOS DEL PROVEEDOR * *
 function DeletProveedor() {
    var location = 'Proveedores/DeleteProveedores';
    IdProveedor = $('#IdProveedorBorrar').val();
