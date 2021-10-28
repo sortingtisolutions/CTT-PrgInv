@@ -2,7 +2,8 @@ let seccion = '';
 let docs, prds;
 let grp = 50;
 let num = 0,
-    lvl = '';
+    lvl = '',
+    flt = 0;
 let cats, subs, sku1, sku2, sku3, sku4;
 
 $(document).ready(function () {
@@ -132,6 +133,7 @@ function putCategories(dt) {
             $('.deep_loading').css({display: 'flex'});
             $('.tblProdMaster').css({display: 'none'});
             $('#tblProducts').DataTable().destroy();
+            flt = 0;
             getProducts(catId);
         });
 
@@ -203,14 +205,12 @@ function fillProducts(ft) {
     $('#tblProducts tbody').html('');
 
     console.log(ft);
-
-    if (ft != '1' && u.prd_level != 'A') {
-    }
+    var cod = ft == '1' ? 'A' : '';
 
     if (prds[0].prd_id != '0') {
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
-            if (ft != '1' && u.prd_level != 'A') {
+            if (u.prd_level != cod) {
                 pack = u.prd_level == 'K' ? 'fas' : 'far';
                 let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
                 let invoice = u.doc_id == 0 ? '' : docInvo;
@@ -309,7 +309,7 @@ function settingTable() {
             url: 'app/assets/lib/dataTable/spanish.json',
         },
         scrollY: 'calc(100vh - 200px)',
-        // scrollX: true,
+        scrollX: true,
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
             {data: 'produsku', class: 'sku'},
@@ -411,14 +411,15 @@ function putDelProducts(dt) {
 
 /** +++++  muestra unicamente los productos y oculta los accesorios Ernesto Perez */
 function filterProduct() {
-    var fltr = $('.btn_filter').attr('class').indexOf('red');
     $('#tblProducts').DataTable().destroy();
-    if (fltr < 0) {
-        fillProducts('1');
+    if (flt == 0) {
+        flt = 1;
         $('.btn_filter').addClass('red');
+        fillProducts('1');
     } else {
-        fillProducts('0');
+        flt = 0;
         $('.btn_filter').removeClass('red');
+        fillProducts('0');
     }
 }
 
