@@ -852,17 +852,19 @@ hr {
     }
 
     .menu_button {
-        width: 110px;
+       
         text-align: center;
         border: none;
         background-color: transparent;
         color: #888888;
+        font-weight: 700;
         font-size: 0.9em;
-        padding: 3px 0;
+        padding: 3px 10px;
         cursor: pointer;
         &:hover {
             color: #000000;
-            font-weight: 900;
+            font-weight: 700;
+            text-shadow: -1px -1px 1px #FFFFFF;
         }
         i {
             font-size: 1.2em;

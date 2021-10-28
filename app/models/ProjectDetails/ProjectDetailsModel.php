@@ -412,4 +412,17 @@ class ProjectDetailsModel extends Model
 
     }
 
+
+    //  Obtiene los accesorios relacionados
+    public function cancelProject($params)
+    {
+        $pjtId = $this->db->real_escape_string($params["pjtId"]);
+
+        $qry = "UPDATE ctt_projects SET pjt_status = 3 WHERE  pjt_id = $pjtId;";
+        $this->db->query($qry);
+
+        return $pjtId ;
+
+    }
+
 }

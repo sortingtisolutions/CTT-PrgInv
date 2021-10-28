@@ -616,6 +616,7 @@ function fill_dinamic_table() {
 }
 /** ++++  Muestra las cuadros de opcion de dias y descuentos */
 function show_minimenues(idsel, x, y) {
+    console.log(idsel, x, y);
     let inic = idsel.substring(0, 3);
     let days = get_days_period();
     psy = y - 20;
@@ -656,6 +657,8 @@ function show_minimenues(idsel, x, y) {
                 rgcnt = 1;
                 update_totals();
             });
+    } else if (inic == 'mnu') {
+        set_minimenu();
     } else {
         fill_discount(psy, psx);
 
@@ -1050,7 +1053,7 @@ function fill_budget_prods(pd, days) {
     let prdName = pds.bdg_prod_name.replace(/°/g, '"');
     let H = `
     <tr id="bdg${pds.prd_id}" class="bdg${pds.prd_id}" data_sku="${pds.bdg_prod_sku}" data_insured="${pds.bdg_insured}" data_level="${pds.bdg_prod_level}" >
-        <td class="w1 product"><i class="fas fa-ellipsis-v"></i>${prdName}<i class="fas fa-bars minimenu"></i></td>
+        <td class="w1 product"><i class="fas fa-ellipsis-v"></i>${prdName}<i class="fas fa-bars minimenu" id="mnu${pds.prd_id}"></i></td>
         <td class="w1 subcate hide">${pds.sbc_name}</td>
         <td class="w2 zone_01 quantity qtybase" data_quantity="${pds.bdg_stock}" contenteditable="true">${pds.bdg_quantity}</td>
         <td class="w3 zone_01 price prcbase">${mkn(pds.bdg_prod_price, 'n')}</td>
