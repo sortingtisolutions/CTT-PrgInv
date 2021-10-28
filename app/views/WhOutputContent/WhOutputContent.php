@@ -100,6 +100,7 @@
 
 
             <div class="mvst_table">
+                <div class="mvst_list tblProdMaster">
 			<h1> </h1>
                         <h3>Asignacion de Productos</h3>
                         <table class="display compact nowrap"  id="tblAsignedProd">
@@ -114,6 +115,7 @@
                             </thead>
                             <tbody></tbody>
                         </table>
+                </div>
             </div>           
         </div>
     </div>

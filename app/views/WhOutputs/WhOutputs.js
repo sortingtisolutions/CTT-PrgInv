@@ -41,7 +41,7 @@ function putProducts(dt) {
         $.each(dt, function (v, u) {
             var H = `
                 <tr id="${u.pjt_id}">
-                    <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>
+                    <td class="edit"><i class='fas fa-edit modif'></i></td>
                     <td class="product-name editable">${u.pjttp_name}</td>
                     <td class="product-name editable">${u.pjt_name}</td>
                     <td class="product-name editable">${u.pjt_number}</td>

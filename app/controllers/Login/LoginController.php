@@ -43,7 +43,7 @@ class LoginController extends Controller
 
 
     $user = $result->usr_id . '|' . $result->usr_username . '|' . $result->emp_fullname . '|' . $result->prf_id . '|' . $result->mod_id  . '|' . $result->prf_mod_start;
-
+    
     $this->session->init();
     $this->session->add('user', $user);
 

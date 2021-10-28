@@ -82,7 +82,14 @@ function setting_table_AsignedProd() {
             {data: 'packlevel', class: 'sel sku'},
         ],
     });
-    // $('#tblAsignedProd').DataTable().draw();
+
+    $('.tblProdMaster')
+    .delay(5000)
+    .slideDown('fast', function () {
+        $('.deep_loading').css({display: 'none'});
+        $('#tblAsignedProd').DataTable().draw();
+    });
+    
 }
 
 // Llena la tabla de los detalles del proyecto
@@ -93,7 +100,7 @@ function putDetailsProds(dt) {
             let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
             var H = `
                 <tr id="${u.prd_id}">
-                    <td class="edit"><i class='fas fa-pen toLink'></i><i class="fas fa-times-circle kill"></i></td>
+                    <td class="edit"><i class='fas fa-edit toLink'></i><i class="fas fa-times-circle kill"></i></td>
                     <td class="sku">${skufull}</td>
                     <td class="product-name editable" data_action="box" data_edit="prd_name"> ${u.pjtcn_prod_name}</td>
                     <td class="price editable" data_action="box" data_edit="prd_price">${u.pjtcn_quantity}</td>
@@ -101,10 +108,8 @@ function putDetailsProds(dt) {
                 </tr>`;
             $('#tblAsignedProd tbody').append(H);
         }); 
-        
+       
     }  
-
-
 
     /*    let tabla = $('#tblAsignedProd').DataTable();
         $.each(dt, function (v, u)         {
@@ -123,7 +128,8 @@ function putDetailsProds(dt) {
             //$(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
         
         }); */
-
+       
+        setting_table_AsignedProd();
         activeIcons(); 
 
 }
