@@ -201,7 +201,7 @@ function putProducts(dt) {
     fillProducts('0');
 }
 
-/** +++++  coloca los productos en la tabla */
+/** +++++  coloca los productos en la tabla y filtra */
 function fillProducts(ft) {
     $('#tblProducts tbody').html('');
 
@@ -408,7 +408,7 @@ function putDelProducts(dt) {
     console.log(dt);
 }
 
-/** +++++  muestra unicamente los productos y oculta los accesorios */
+/** +++++  muestra unicamente los productos y oculta los accesorios Ernesto Perez */
 function filterProduct() {
     $('#tblProducts').DataTable().destroy();
     if (flt == 0) {
