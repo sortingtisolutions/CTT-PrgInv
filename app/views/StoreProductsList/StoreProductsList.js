@@ -61,7 +61,7 @@ function setting_table() {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            {data: 'editable', class: 'edit'},
+            {data: 'editable', class: 'edit', orderable: false},
             {data: 'prod_sku', class: 'sku'},
             {data: 'prodname', class: 'product-name'},
             {data: 'prodseri', class: 'serie-product'},

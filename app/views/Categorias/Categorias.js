@@ -1,6 +1,5 @@
-var table = null;
-var positionRow = 0;
-var catnme;
+let cats = null;
+let catnme = '';
 
 $(document).ready(function () {
     verifica_usuario();
@@ -8,385 +7,311 @@ $(document).ready(function () {
 });
 
 function inicial() {
-    getCategoriasTable();
-    getAlmacenes();
-
-    $('.deep_loading').css({display: 'flex'});
-
-    //Open modal *
-    $('#nuevaCategoria').on('click', function () {
-        LimpiaModal();
-    });
-    //Guardar almacen *
-    $('#GuardarCategoria').on('click', function () {
-        if (validaFormulario() == 1) {
-            SaveCategoria();
-        }
-    });
-    //borra almacen +
-    $('#BorrarProveedor').on('click', function () {
-        DeletCategoria();
-    });
-
-    $('#LimpiarFormulario').on('click', function () {
-        LimpiaModal();
-        getAlmacenes();
-    });
-
-    $('#CategoriasTable tbody').on('click', 'tr', function () {
-        positionRow = table.page.info().page * table.page.info().length + $(this).index();
-        console.log(positionRow);
-        setTimeout(() => {
-            RenglonesSelection = table.rows({selected: true}).count();
-            if (RenglonesSelection == 0 || RenglonesSelection == 1) {
-                $('.btn-apply').addClass('hidden-field');
-            } else {
-                $('.btn-apply').removeClass('hidden-field');
-            }
-        }, 10);
-    });
+    settingTable();
+    getCategories();
+    getStores();
+    fillCategories();
 }
 
-//Valida los campos seleccionado *
-function validaFormulario() {
-    var valor = 1;
-    var forms = document.querySelectorAll('.needs-validation');
-    Array.prototype.slice.call(forms).forEach(function (form) {
-        if (!form.checkValidity()) {
-            form.classList.add('was-validated');
-            valor = 0;
-        }
-    });
-    return valor;
-}
+function settingTable() {
+    let title = 'Lista de Catálogos';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    $('#CategoriasTable').DataTable({
+        order: [[2, 'asc']],
+        dom: 'Blfrtip',
+        lengthMenu: [
+            [100, 200, 300, -1],
+            [100, 200, 300, 'Todos'],
+        ],
+        buttons: [
+            {
+                //Botón para Excel
+                extend: 'excel',
+                footer: true,
+                title: title,
+                filename: filename,
 
-//Edita el Proveedores *
-function EditCategoria(id) {
-    UnSelectRowTable();
-    LimpiaModal();
-    $('#titulo').text('Editar Catalago');
-    var location = 'Categorias/GetCategoria';
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        data: {id: id},
-        url: location,
-        success: function (respuesta) {
-            $('#NomCategoria').val(respuesta.cat_name);
-            $('#IdCategoria').val(respuesta.cat_id);
-            getAlmacenes(respuesta.str_id);
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+            },
+            {
+                //Botón para PDF
+                extend: 'pdf',
+                footer: true,
+                title: title,
+                filename: filename,
 
-            $('#CategoriaModal').modal('show');
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+            },
+            {
+                //Botón para imprimir
+                extend: 'print',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+            },
+            {
+                text: 'Borrar seleccionados',
+                // className: 'btn-apply hidden-field',
+                // action: function () {
+                //     var selected = table.rows({selected: true}).data();
+                //     var idSelected = '';
+                //     selected.each(function (index) {
+                //         idSelected += index[1] + ',';
+                //     });
+                //     idSelected = idSelected.slice(0, -1);
+                //     if (idSelected != '') {
+                //         ConfirmDeletCategoria(idSelected);
+                //    }
+                //},
+            },
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
         },
-        error: function (EX) {
-            console.log(EX);
-        },
-    }).done(function () {});
-}
-//confirm para borrar **
-function ConfirmDeletCategoria(id, cantidad) {
-    //UnSelectRowTable();
-
-    console.log(cantidad);
-    if (cantidad != 0) {
-        $('#NoBorrarModal').modal('show');
-    } else {
-        $('#BorrarCategoriaModal').modal('show');
-        $('#IdCategoriaBorrar').val(id);
-    }
+        scrollY: 'calc(100vh - 200px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'editable', class: 'edit', orderable: false},
+            {data: 'category', class: 'sku'},
+            {data: 'catname', class: 'category-name'},
+            {data: 'storename', class: 'store-name'},
+            {data: 'quantity', class: 'quantity'},
+        ],
+    });
 }
 
-function UnSelectRowTable() {
-    setTimeout(() => {
-        table.rows().deselect();
-    }, 10);
-}
-
-// Obtiene las series para llenar el modal
-function getSeries(catId) {
-    var pagina = 'Categorias/listSeries';
-    var par = `[{"catId":"${catId}"}]`;
+function getCategories() {
+    // Solicita los productos de un almacen seleccionado
+    var pagina = 'Categorias/GetCategorias';
+    var par = `[{"cat_id":""}]`;
     var tipo = 'json';
-    var selector = putSeries;
+    var selector = putCategories;
     fillField(pagina, par, tipo, selector);
 }
 
-//BORRAR  * *
-function DeletCategoria() {
-    var location = 'Categorias/DeleteCategoria';
-    IdCategoria = $('#IdCategoriaBorrar').val();
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        data: {
-            IdCategoria: IdCategoria,
-        },
-        url: location,
-        success: function (respuesta) {
-            if ((respuesta = 1)) {
-                var arrayObJ = IdCategoria.split(',');
-                if (arrayObJ.length == 1) {
-                    table
-                        .row(':eq(' + positionRow + ')')
-                        .remove()
-                        .draw();
-                } else {
-                    table.rows({selected: true}).remove().draw();
-                }
-                $('#BorrarCategoriaModal').modal('hide');
+function getStores() {
+    // Solicita los productos de un almacen seleccionado
+    var pagina = 'Almacenes/GetAlmacenes';
+    var par = `[{"cat_id":""}]`;
+    var tipo = 'json';
+    var selector = putStores;
+    fillField(pagina, par, tipo, selector);
+}
+
+function putCategories(dt) {
+    cats = dt;
+    console.log(cats.length);
+}
+function fillCategories() {
+    if (cats != null) {
+        let tabla = $('#CategoriasTable').DataTable();
+        $.each(cats, function (v, u) {
+            fillTableCategories(v);
+        });
+    } else {
+        setTimeout(() => {
+            fillCategories();
+        }, 100);
+    }
+}
+
+function actionButtons() {
+    /**  ---- Acciones de edición ----- */
+    $('td.edit i')
+        .unbind('click')
+        .on('click', function () {
+            let acc = $(this).attr('class').split(' ')[2];
+            let catId = $(this).parents('tr').attr('id');
+
+            switch (acc) {
+                case 'modif':
+                    editCategory(catId);
+                    break;
+                case 'kill':
+                    deleteCategory(catId);
+                    break;
+                default:
             }
-            LimpiaModal();
-        },
-        error: function (EX) {
-            console.log(EX);
-        },
-    }).done(function () {});
-}
+        });
 
-//Guardar Almacen **
-function SaveCategoria() {
-    var location = 'Categorias/SaveCategoria';
-    var IdCategoria = $('#IdCategoria').val();
-    var NomCategoria = $('#NomCategoria').val();
-    var idAlmacen = $('#selectRowAlmacen option:selected').attr('id');
-    var NomAlmacen = $('#selectRowAlmacen option:selected').text();
-
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        data: {IdCategoria: IdCategoria, NomCategoria: NomCategoria, idAlmacen: idAlmacen},
-        url: location,
-        success: function (respuesta) {
-            //console.log("este es el id:"+ respuesta);
-            if (IdCategoria != '') {
-                //console.log("llego a borrar");
-
-                //console.log(positionRow);
-                var table3 = $('#CategoriasTable').DataTable();
-                table3
-                    .row(':eq(' + positionRow + ')')
-                    .remove()
-                    .draw();
-            }
-            if (respuesta != 0) {
-                //getAlmacenesTable();
-                $('#IdCategoria').val(respuesta);
-                var fixqty = get_quantity(respuesta);
-                console.log(respuesta, fixqty);
-                var rowNode = table.row
-                    .add({
-                        [0]:
-                            '<button onclick="EditCategoria(' +
-                            respuesta +
-                            ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button><button onclick="ConfirmDeletProveedor(' +
-                            respuesta +
-                            ',0)" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>',
-                        [1]: respuesta,
-                        [2]: NomCategoria,
-                        [3]: NomAlmacen,
-                        [4]: idAlmacen,
-                        [5]: fixqty,
-                    })
-                    .draw()
-                    .node();
-                $(rowNode).find('td').eq(0).addClass('edit');
-                $(rowNode).find('td').eq(1).addClass('text-center');
-                $(rowNode).find('td').eq(4).attr('hidden', true);
-                // $(rowNode).find('td').eq(5).attr('hidden', true);
-
-                LimpiaModal();
-                getAlmacenes();
-            }
-        },
-        error: function (EX) {
-            console.log(EX);
-        },
-    }).done(function () {});
-}
-
-//Limpia datos en modal  **
-function LimpiaModal() {
-    $('#NomCategoria').val('');
-    $('#IdCategoria').val('');
-    $('#selectTipoAlmacen').val('0');
-    $('#formCategoria').removeClass('was-validated');
-    $('#titulo').text('Nuevo Catalago');
-}
-
-//obtiene la informacion de tabla Proveedores *
-function getCategoriasTable() {
-    var location = 'Categorias/GetCategorias';
-    $('#CategoriasTable').DataTable().destroy();
-    $('#tablaCategoriasRow').html('');
-
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: location,
-        _success: function (respuesta) {
-            var renglon = '';
-            respuesta.forEach(function (row, index) {
-                renglon =
-                    '<tr id="' +
-                    row.cat_id +
-                    '">' +
-                    '<td class="text-center edit"> ' +
-                    '<button onclick="EditCategoria(' +
-                    row.cat_id +
-                    ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
-                    '<button onclick="ConfirmDeletCategoria(' +
-                    row.cat_id +
-                    ',' +
-                    row.cantidad +
-                    ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
-                    '</td>' +
-                    "<td class='dtr-control text-center'>" +
-                    row.cat_id +
-                    '</td>' +
-                    '<td class="catname">' +
-                    row.cat_name +
-                    '</td>' +
-                    '<td>' +
-                    row.str_name +
-                    '</td>' +
-                    '<td hidden>' +
-                    row.str_id +
-                    '</td>' +
-                    '<td class="quantity text-left" data-content="' +
-                    row.cantidad +
-                    '"><span class="toLink">' +
-                    row.cantidad +
-                    '</span></td>' +
-                    '</tr>';
-                $('#tablaCategoriasRow').append(renglon);
-                get_quantity(row.cat_id);
-            });
-
-            activeIcons();
-
-            $('.deep_loading').css({display: 'none'});
-
-            let title = 'Categorias';
-            let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-
-            table = $('#CategoriasTable').DataTable({
-                order: [[1, 'asc']],
-                select: {
-                    style: 'multi',
-                    info: false,
-                },
-                lengthMenu: [
-                    [25, 50, 100, -1],
-                    ['25', '50', '100', 'Todo'],
-                ],
-                dom: 'Blfrtip',
-                buttons: [
-                    {
-                        extend: 'pdf',
-                        footer: true,
-                        title: title,
-                        filename: filename,
-                        //   className: 'btnDatableAdd',
-                        text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
-                    },
-                    {
-                        extend: 'excel',
-                        footer: true,
-                        title: title,
-                        filename: filename,
-                        //   className: 'btnDatableAdd',
-                        text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
-                    },
-
-                    {
-                        //Botón para imprimir
-                        extend: 'print',
-                        footer: true,
-                        title: title,
-                        filename: filename,
-
-                        //Aquí es donde generas el botón personalizado
-                        text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-                    },
-                    {
-                        text: 'Borrar seleccionados',
-                        className: 'btn-apply hidden-field',
-                        action: function () {
-                            var selected = table.rows({selected: true}).data();
-                            var idSelected = '';
-                            selected.each(function (index) {
-                                idSelected += index[1] + ',';
-                            });
-                            idSelected = idSelected.slice(0, -1);
-                            if (idSelected != '') {
-                                ConfirmDeletCategoria(idSelected);
-                            }
-                        },
-                    },
-                ],
-
-                scrollY: 'calc(100vh - 200px)',
-                scrollX: true,
-                // scrollCollapse: true,
-                paging: true,
-                pagingType: 'simple_numbers',
-                fixedHeader: true,
-                language: {
-                    url: './app/assets/lib/dataTable/spanish.json',
-                },
-            });
-        },
-        get success() {
-            return this._success;
-        },
-        set success(value) {
-            this._success = value;
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR, textStatus, errorThrown);
-        },
-    }).done(function () {});
-}
-
-function getAlmacenes(id) {
-    $('#selectRowAlmacen').html('');
-    var location = 'Almacenes/GetAlmacenes';
-    $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        data: {id: id},
-        url: location,
-        success: function (respuesta) {
-            var renglon = "<option id='0'  value=''>Seleccione...</option> ";
-            respuesta.forEach(function (row, index) {
-                renglon += '<option id=' + row.str_id + '  value="' + row.str_id + '">' + row.str_name + '</option> ';
-            });
-            $('#selectRowAlmacen').append(renglon);
-            if (id != undefined) {
-                $("#selectRowAlmacen option[value='" + id + "']").attr('selected', 'selected');
-            }
-        },
-        error: function () {},
-    }).done(function () {});
-}
-
-// ACTIVA LA FUNCIONALIDAD DEL BOTON toLink
-function activeIcons() {
     $('.toLink')
         .unbind('click')
         .on('click', function () {
-            let prd = $(this).parents('tr').attr('id');
-            let qty = $(this).parent('td').attr('data-content');
-            catnme = $(this).parents('tr').children('td.catname').html();
-            if (qty > 0) {
-                console.log('Se TOCO el Boton y valido', qty);
+            let catId = $(this).parents('tr').attr('id');
+            let quant = $(this).html();
+            let ctnme = $(this).parents('tr').children('td.category-name').html();
+            catnme = ctnme;
+            console.log(catId, quant, ctnme);
+            if (quant > 0) {
                 $('.deep_loading').css({display: 'flex'});
-                getSeries(prd);
+                var pagina = 'Categorias/listSeries';
+                var par = `[{"catId":"${catId}"}]`;
+                var tipo = 'json';
+                var selector = putSeries;
+                fillField(pagina, par, tipo, selector);
             }
+        });
+
+    /**  ---- Acciones de Guardar categoria ----- */
+    $('#GuardarCategoria')
+        .unbind('click')
+        .on('click', function () {
+            if (validaFormulario() == 1) {
+                if ($('#IdCategoria').val() == '') {
+                    saveCategory();
+                } else {
+                    updateCategory();
+                }
+            }
+        });
+    /**  ---- Lismpia los campos ----- */
+    $('#LimpiarFormulario')
+        .unbind('click')
+        .on('click', function () {
+            $('#NomCategoria').val('');
+            $('#IdCategoria').val('');
+            // $('#selectTipoAlmacen option[value="3"]').attr('selected', true);
+            $('#selectRowAlmacen').val(0);
         });
 }
 
+function fillTableCategories(ix) {
+    let tabla = $('#CategoriasTable').DataTable();
+    console.log(cats.length);
+    tabla.row
+        .add({
+            editable: `<i class="fas fa-pen modif" id ="md${cats[ix].cat_id}"></i><i class="fas fa-times-circle kill"></i>`,
+            category: cats[ix].cat_id,
+            catname: cats[ix].cat_name,
+            storename: cats[ix].str_name,
+            quantity: `<span class="toLink">${cats[ix].cantidad}</span>`,
+        })
+        .draw();
+    $('#md' + cats[ix].cat_id)
+        .parents('tr')
+        .attr('id', cats[ix].cat_id);
+    get_quantity(cats[ix].cat_id);
+    actionButtons();
+}
+
+function putStores(dt) {
+    console.log(dt);
+    $.each(dt, function (v, u) {
+        let H = `<option value="${u.str_id}">${u.str_name}</option>`;
+        $('#selectRowAlmacen').append(H);
+    });
+}
+
+function saveCategory() {
+    var catName = $('#NomCategoria').val();
+    var strId = $('#selectRowAlmacen option:selected').val();
+    var par = `
+        [{
+            "cat_name" : "${catName}",
+            "str_id"   : "${strId}"
+        }]`;
+
+    cats = '';
+    var pagina = 'Categorias/SaveCategoria';
+    var tipo = 'html';
+    var selector = putSaveCategory;
+    fillField(pagina, par, tipo, selector);
+}
+function putSaveCategory(dt) {
+    getCategories();
+    if (cats.length > 0) {
+        let ix = goThroughCategory(dt);
+        fillTableCategories(ix);
+        $('#LimpiarFormulario').trigger('click');
+    } else {
+        setTimeout(() => {
+            putSaveCategory(dt);
+        }, 100);
+    }
+}
+
+function updateCategory() {
+    var catId = $('#IdCategoria').val();
+    var catName = $('#NomCategoria').val();
+    var strId = $('#selectRowAlmacen option:selected').val();
+    var par = `
+        [{
+            "cat_id" : "${catId}",
+            "cat_name" : "${catName}",
+            "str_id"   : "${strId}"
+        }]`;
+
+    cats = '';
+    var pagina = 'Categorias/UpdateCategoria';
+    var tipo = 'html';
+    var selector = putUpdateCategory;
+    fillField(pagina, par, tipo, selector);
+}
+function putUpdateCategory(dt) {
+    getCategories();
+    if (cats.length > 0) {
+        console.log(dt);
+        let ix = goThroughCategory(dt);
+        console.log(cats[ix].cat_id);
+
+        console.log($(`#${cats[ix].cat_id}`).children('td.category-name').html());
+
+        $(`#${cats[ix].cat_id}`).children('td.category-name').html(cats[ix].cat_name);
+        $(`#${cats[ix].cat_id}`).children('td.store-name').html(cats[ix].str_name);
+        putQuantity(cats[ix].cat_id);
+        $('#LimpiarFormulario').trigger('click');
+    } else {
+        setTimeout(() => {
+            putUpdateCategory(dt);
+        }, 100);
+    }
+}
+
+function editCategory(catId) {
+    let ix = goThroughCategory(catId);
+    $('#NomCategoria').val(cats[ix].cat_name);
+    $('#IdCategoria').val(cats[ix].cat_id);
+    $('#selectRowAlmacen').val(cats[ix].str_id);
+}
+
+function deleteCategory(catId) {
+    let cn = $(`#${catId}`).children('td.quantity').children('.toLink').html();
+
+    console.log(cn);
+    if (cn != 0) {
+        $('#NoBorrarModal').modal('show');
+    } else {
+        $('#BorrarCategoriaModal').modal('show');
+        $('#IdCategoriaBorrar').val(catId);
+
+        $('#BorrarProveedor').on('click', function () {
+            var pagina = 'Categorias/DeleteCategoria';
+            var par = `[{"cat_id":"${catId}"}]`;
+            var tipo = 'html';
+            var selector = putDeleteCategory;
+            fillField(pagina, par, tipo, selector);
+        });
+    }
+}
+function putDeleteCategory(dt) {
+    getCategories();
+    let tabla = $('#CategoriasTable').DataTable();
+    tabla
+        .row($(`#${dt}`))
+        .remove()
+        .draw();
+    $('#BorrarCategoriaModal').modal('hide');
+}
+
 function putSeries(dt) {
+    console.log(dt);
     $('#ExisteCatModal').removeClass('overlay_hide');
     $('#tblCatSerie').DataTable({
         destroy: true,
@@ -408,7 +333,7 @@ function putSeries(dt) {
             {data: 'prodname', class: 'product-name'},
             {data: 'serlnumb', class: 'product-name'},
             {data: 'dateregs', class: 'sku'},
-            {data: 'sercost', class: 'quantity'},
+            {data: 'servcost', class: 'quantity'},
             {data: 'cvstatus', class: 'code-type_s'},
             {data: 'cvestage', class: 'code-type_s'},
             {data: 'comments', class: 'comments'},
@@ -438,7 +363,7 @@ function build_modal_serie(dt) {
                 prodname: u.prd_name,
                 serlnumb: u.ser_serial_number,
                 dateregs: u.ser_date_registry,
-                sercost: u.ser_cost,
+                servcost: u.ser_cost,
                 cvstatus: u.ser_situation,
                 cvestage: u.ser_stage,
                 comments: u.ser_comments,
@@ -450,7 +375,6 @@ function build_modal_serie(dt) {
 }
 
 function get_quantity(catId) {
-    console.log(catId);
     var pagina = 'Categorias/countQuantity';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
@@ -461,11 +385,32 @@ function get_quantity(catId) {
 function putQuantity(dt) {
     let catid = dt[0].cat_id;
     let qty = dt[0].cantidad;
-    $('#tablaCategoriasRow #' + catid)
+    $('#' + catid)
         .children('td.quantity')
         .children('.toLink')
         .html(qty);
-    $('#tablaCategoriasRow #' + catid)
+    $('#' + catid)
         .children('td.quantity')
         .attr('data-content', qty);
+}
+
+function goThroughCategory(catId) {
+    let inx = -1;
+    $.each(cats, function (v, u) {
+        if (catId == u.cat_id) inx = v;
+    });
+    return inx;
+}
+
+//Valida los campos seleccionado *
+function validaFormulario() {
+    var valor = 1;
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            valor = 0;
+        }
+    });
+    return valor;
 }

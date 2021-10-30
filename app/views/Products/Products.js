@@ -81,6 +81,7 @@ function getInvoice() {
 function getProducts(catId) {
     var pagina = 'Products/listProducts';
     var par = `[{"catId":"${catId}","grp":"${grp}","num":"${num}"}]`;
+    console.log(par);
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
@@ -125,7 +126,7 @@ function putCategories(dt) {
             $('#txtCatId').append(H);
         });
 
-        getProducts(0);
+        // getProducts(0);
 
         $('#txtCategoryList').on('change', function () {
             let id = $(this).val();
@@ -241,8 +242,6 @@ function fillProducts(ft) {
         settingTable();
     }
 }
-
-function titles_table_products() {}
 
 /** +++++  configura la table de productos */
 function settingTable() {
