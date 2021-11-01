@@ -74,7 +74,7 @@
 </div>
 
 <!-- Start Ventana modal EXISTENCIAS -->
-<div class="overlay_background overlay_hide"id="ExisteCatModal">
+    <div class="overlay_background overlay_hide"id="ExisteCatModal">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <table class="display compact nowrap"  id="tblCatSerie">
@@ -98,57 +98,49 @@
 
 
 <!-- Modal Borrar -->
-<div class="modal fade" id="BorrarCategoriaModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm">
-                     <div class="modal-content">
-                     <div class="modal-header ">
-                     </div>
-                     <div class="modal-body" style="padding: 0px !important;">
-
-
-                     <div class="row">
-                          <input hidden type="text" class="form-control" id="IdCategoriaBorrar" aria-describedby="basic-addon3">
-                          <div class="col-12 text-center">
-                                <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea borrarlo?</span>
-                          </div>
-                     </div>
-
-                     </div>
-                          <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-danger" id="BorrarProveedor">Borrar</button>
-                          </div>
-                     </div>
+    <div class="modal fade" id="BorrarCategoriaModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header "></div>
+                    <div class="modal-body" style="padding: 0px !important;">
+                        <div class="row">
+                            <input hidden type="text" class="form-control" id="IdCategoriaBorrar" aria-describedby="basic-addon3">
+                                <div class="col-12 text-center">
+                                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea borrarlo?</span>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-danger" id="BorrarProveedor">Borrar</button>
+                    </div>
                 </div>
+            </div>
         </div>
 
 
 <!-- Modal no se puede borrar -->
-<div class="modal fade" id="NoBorrarModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm">
-                     <div class="modal-content">
-                     <div class="modal-header ">
-                     </div>
-                     <div class="modal-body" style="padding: 0px !important;">
+    <div class="modal fade" id="NoBorrarModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header "></div>
+                <div class="modal-body" style="padding: 0px !important;">
+                    <div class="row">
+                        <input hidden type="text" class="form-control" id="IdCategoriaBorrar" aria-describedby="basic-addon3">
+                        <div class="col-12 text-center">
+                            <span class="modal-title text-center" style="font-size: 1rem;" id="BorrarPerfilLabel">No se puede borrar este registro ya que contiene subcatogorias asociadas a el. </span>
+                        </div>
+                    </div>
 
-
-                     <div class="row">
-                          <input hidden type="text" class="form-control" id="IdCategoriaBorrar" aria-describedby="basic-addon3">
-                          <div class="col-12 text-center">
-                                <span class="modal-title text-center" style="font-size: 1rem;" id="BorrarPerfilLabel">No se puede borrar este registro ya que contiene subcatogorias asociadas a el. </span>
-                          </div>
-                     </div>
-
-                     </div>
-                          <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-<!-- 								<button type="button" class="btn btn-danger" id="BorrarProveedor">Borrar</button>
- -->						  </div>
-                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
         </div>
+    </div>
 
-</div>
+
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'Categorias/Categorias.js' ?>"></script>
