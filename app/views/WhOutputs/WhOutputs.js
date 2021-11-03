@@ -41,7 +41,7 @@ function putProducts(dt) {
         $.each(dt, function (v, u) {
             var H = `
                 <tr id="${u.pjt_id}">
-                    <td class="edit"><i class='fas fa-edit modif'></i></td>
+                    <td class="edit"><i class='fas fa-edit detail'></i></td>
                     <td class="product-name editable">${u.pjttp_name}</td>
                     <td class="product-name editable">${u.pjt_name}</td>
                     <td class="product-name editable">${u.pjt_number}</td>
@@ -127,7 +127,7 @@ function settingTable() {
             {data: 'prodtype', class: 'sku'},
             {data: 'typeserv', class: 'sku'},
             {data: 'prodcoin', class: 'sku'},
-            {data: 'prddocum', class: 'sku'},
+           // {data: 'prddocum', class: 'sku'},
         ],
     });
     console.log('111');
@@ -148,8 +148,8 @@ function activeIcons() {
         .on('click', function () {
             let prd = $(this).parents('tr').attr('id');
             let qty = $(this).parent().attr('data-content').split('|')[2];
-            let pkt = $(this).parent().attr('data-content').split('|')[3];
-            let pkn = $(this).parent().attr('data-content').split('|')[1];
+            /*let pkt = $(this).parent().attr('data-content').split('|')[3];
+            let pkn = $(this).parent().attr('data-content').split('|')[1]; */
 
             console.log(pkt, prd, qty);
 
@@ -158,7 +158,7 @@ function activeIcons() {
             }
         });
 
-    $('.modif')
+    $('.detail')
         .unbind('click')
         .on('click', function () {
             let sltor = $(this);
@@ -166,15 +166,17 @@ function activeIcons() {
             let prdNm = 'Modifica proyecto';
 
             console.log(pjtid);
-            $('#ProductModal').removeClass('overlay_hide');
+            window.location.href = "WhOutputContent/inicial/"+pjtid;
+
+    /*        $('#ProductModal').removeClass('overlay_hide');
             $('.overlay_closer .title').html(pjtid);
             getSelectProject(pjtid);
             $('.btn_close')
                 .unbind('click')
                 .on('click', function () {
                     $('.overlay_background').addClass('overlay_hide');
-                });
-        });
+                }); */
+        }); 
 }
 
 function putSelectProject(dt) {

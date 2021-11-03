@@ -103,7 +103,7 @@
                 <div class="mvst_list tblProdMaster">
 			<h1> </h1>
                         <h3>Asignacion de Productos</h3>
-                        <table class="display compact nowrap"  id="tblAsignedProd">
+                        <table class="display compact nowrap"  id="tblAsignedProd" style="min-width: 1000px">
                             <thead>
                                 <tr>
                                     <th style="width:  40px"></th>
