@@ -31,24 +31,42 @@
 
 		public function SaveAlmacen($request_params)
 		{
-		  if($request_params['IdAlmacen'] == ""){
+			$params =  $this->session->get('user');
 			$result = $this->model->SaveAlmacen($request_params);	  
-		  }else{
-			$result = $this->model->ActualizaAlmacen($request_params);	  
-		  }
-		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
+			echo $result;
+		}
+
+		public function UpdateAlmacen($request_params)
+		{
+			$params =  $this->session->get('user');
+            $result = $this->model->UpdateAlmacen($request_params);
+
+			echo $result;
 		}
 
 		public function GetAlmacenes($request_params)
 		{
-	      $result = $this->model->GetAlmacenes($request_params);
-		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
+			$params =  $this->session->get('user');
+            $result = $this->model->GetAlmacenes($request_params);
+            $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"str_id":"0"}]';	
+            }
+            echo $res;
 		}
 
 		public function DeleteAlmacen($request_params)
 		{
-		  $result = $this->model->DeleteAlmacen($request_params);	  
-		  echo json_encode($result ,JSON_UNESCAPED_UNICODE);	
+			$params =  $this->session->get('user');
+            $result = $this->model->DeleteAlmacen($request_params);
+			$strId= $request_params['str_id'];	  
+            echo $strId;
 		}
 
 		public function GetEncargadosAlmacen($request_params)
@@ -75,5 +93,22 @@
 			echo $res;
 		}
 
-	  
+		
+        public function countQuantity($request_params)
+        {
+            $params =  $this->session->get('user');
+            $result = $this->model->countQuantity($request_params);
+			$i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"count":"0"}]';	
+            }
+            echo $res;
+        }
+
 	}
