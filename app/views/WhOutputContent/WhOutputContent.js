@@ -1,9 +1,11 @@
 let products;
 //let prjid = window.location.pathname.split("/").pop();
-let prjid = '6';
+let prjid = '5';
+//var prjid;
 
 $(document).ready(function () {
     if (verifica_usuario()) {
+        //prjid=cookie.get('pjrId');
         inicial();
     }
 });

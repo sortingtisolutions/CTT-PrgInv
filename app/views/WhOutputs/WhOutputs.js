@@ -163,6 +163,8 @@ function activeIcons() {
             let prdNm = 'Modifica proyecto';
 
             console.log(pjtid);
+            Cookies.set('pjrId', pjtid, { expires: 1 });
+
             window.location.href = "WhOutputContent/inicial/"+pjtid;
 
         }); 
