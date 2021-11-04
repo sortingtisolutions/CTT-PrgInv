@@ -446,6 +446,10 @@ table {
 	td.center {
 		text-align: center;
 	}
+
+	td.bold {
+		font-weight: 900;
+	}
 	td.product-name {
 		text-align: left;
 		font-weight: 700;
@@ -456,6 +460,7 @@ table {
 		text-align: left;
 		font-weight: 300;
 	}
+
 	td.quantity {
 		text-align: center;
 

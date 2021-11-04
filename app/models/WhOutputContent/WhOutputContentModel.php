@@ -10,9 +10,10 @@ class WhOutputContentModel extends Model
     }
 
     // Listado de proyectos
-    public function listProjects()
+    public function listProjects($params)
     {
-        /* $store = $this->db->real_escape_string();*/
+        $pjt_id = $this->db->real_escape_string($params['pjt_id']);
+
         $qry = "SELECT pt.pjttp_name, pj.pjt_name, pj.pjt_number,
         DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start, 
         DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end, 
@@ -20,37 +21,37 @@ class WhOutputContentModel extends Model
         pj.pjt_location, pj.cuo_id, '1' as analyst, '33' as freelance, pj.pjt_id
         FROM ctt_projects AS pj INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id 
         LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id 
-        WHERE pj.pjt_id='5' ORDER BY pjt_date_start ASC;";
+        WHERE pj.pjt_id=$pjt_id ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }    
 
 // Listado de Productos de Proyecto asigando
-    public function listDetailProds()
+    public function listDetailProds($params)
     {
-/*        $store = $this->db->real_escape_string($store);*/
+        $pjt_id = $this->db->real_escape_string($params['pjt_id']);
         $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, pjtcn_prod_level, pjt_id 
-        FROM ctt_projects_content WHERE pjt_id='5' order by 2;";
+        FROM ctt_projects_content WHERE pjt_id=$pjt_id order by 2;";
         return $this->db->query($qry);
     }    
 
    // Listado de Productos
    public function listSeries($params)
    {
-       $prodId = $this->db->real_escape_string($params['prdId']);
+       $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
        $qry = "SELECT pd.pjtdt_id, pd.pjtdt_prod_sku, pr.prd_name, pr.prd_level,
        pr.prd_status,pd.ser_id,pd.pjtcn_id
        FROM ctt_projects_detail pd INNER JOIN ctt_products pr 
-       ON pd.pjtcn_id=2 and pd.prd_id=pr.prd_id order by 2 desc;";
+       ON pd.pjtcn_id=$pjtcnid and pd.prd_id=pr.prd_id order by 2 desc;";
        return $this->db->query($qry);
    }
    
-   public function listSeriesFree()
+   public function listSeriesFree($params)
    {
-/*       $prodId = $this->db->real_escape_string($params['prdId']); */
+       $pjtser_id = $this->db->real_escape_string($params['pjtser_id']);
        $qry = "SELECT ser_id, ser_sku, ser_serial_number, ser_situation, ser_stage 
        FROM ctt_series 
-       WHERE prd_id=7711 and ser_situation='D' and ser_status=1 and pjtcn_id=0;";
-    /* WHERE ser_sku like '090A009A007%' and ser_situation='D' and ser_status=1 and pjtdt_id=0;" */
+       WHERE ser_sku like '$pjtser_id%' and ser_situation='D' and ser_status=1 and pjtdt_id=0;";
+      // WHERE ser_id=$pjtser_id and ser_situation='D' and ser_status=1 and ppjtdt_id=0;";
        return $this->db->query($qry);
    }
    

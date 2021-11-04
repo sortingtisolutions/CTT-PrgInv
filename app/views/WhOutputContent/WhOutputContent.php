@@ -108,7 +108,11 @@
                 <div class="tblProdMaster">
 			<h1> </h1>
                         <h3>Asignacion de Productos</h3>
+<<<<<<< HEAD
                         <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%">
+=======
+                        <table class="display compact nowrap"  id="tblAsignedProd" style="min-width: 1000px">
+>>>>>>> 05ae0c769bc1011ae19a2516b701161c6cbf7863
                             <thead>
                                 <tr>
                                     <th style="width:  40px"></th>

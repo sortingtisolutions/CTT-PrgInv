@@ -60,6 +60,7 @@
 				</div>
 				<!-- End área de formularios -->
 
+				
 				<!-- Start área de listado -->
 				<div class="mvst_table">
 					<h1>Subcategorias</h1>
