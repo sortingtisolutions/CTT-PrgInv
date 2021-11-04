@@ -59,6 +59,7 @@ class MainController extends Controller
     return $this->render(__CLASS__, $params);
   }
 
+  
   public function addClient($request_params)
   {
     if(!$this->verify($request_params))

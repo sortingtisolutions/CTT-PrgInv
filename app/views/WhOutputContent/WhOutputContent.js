@@ -1,19 +1,25 @@
 let products;
 
 $(document).ready(function () {
-    if (verifica_usuario()) {
-        inicial();
+    if (verifica_usuario()) { 
+      inicial();
     }
 });
 
 function inicial() {
+    
+   let pjtid = Cookies.get('pjtid');
+   console.log(pjtid);
+        
+   
     setting_table_AsignedProd();
-    getProjects();
-    getDetailProds();
+    getProjects(pjtid);
+    // getDetailProds();
+     
 }
 
 // Solicita los paquetes  OK
-function getProjects() {
+function getProjects(pjtid) {
     var pagina = 'WhOutputContent/listProjects';
     var par = `[{"pjtpd_id":""}]`;
     var tipo = 'json';

@@ -25,7 +25,6 @@ class WhOutputsController extends Controller
 	}
 
 
-
 // Lista los proyectos
 	public function listProjects($request_params)
 	{

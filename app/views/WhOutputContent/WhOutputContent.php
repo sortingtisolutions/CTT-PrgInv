@@ -1,11 +1,16 @@
 <?php 
     defined('BASEPATH') or exit('No se permite acceso directo'); 
     require ROOT . FOLDER_PATH . "/app/assets/header.php";
+
+   
 ?>
 
 <header>
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
+   
 </header>
+
+
 <div class="container-fluid">
     <div class="contenido">
             
@@ -17,7 +22,7 @@
 
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtTipoProject" type="text" class="form-control form-control-sm" >
+                                <input id="txtTipoProject" type="text" class="form-control form-control-sm"  >
                                 <label for="txtTipoProject">Tipo de Proyecto</label>
                             </div>
                            
@@ -100,10 +105,10 @@
 
 
             <div class="mvst_table">
-                <div class="mvst_list tblProdMaster">
+                <div class="tblProdMaster">
 			<h1> </h1>
                         <h3>Asignacion de Productos</h3>
-                        <table class="display compact nowrap"  id="tblAsignedProd">
+                        <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%">
                             <thead>
                                 <tr>
                                     <th style="width:  40px"></th>

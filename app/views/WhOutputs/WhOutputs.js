@@ -52,7 +52,7 @@ function putProducts(dt) {
                 </tr>`;
             $('#tblProducts tbody').append(H);
         });
-        settingTable();
+        //settingTable();
         console.log('1111');
         activeIcons();
     } else {
@@ -161,19 +161,25 @@ function activeIcons() {
     $('.modif')
         .unbind('click')
         .on('click', function () {
+            console.log('modif');
             let sltor = $(this);
             let pjtid = sltor.parents('tr').attr('id');
             let prdNm = 'Modifica proyecto';
 
             console.log(pjtid);
-            $('#ProductModal').removeClass('overlay_hide');
-            $('.overlay_closer .title').html(pjtid);
-            getSelectProject(pjtid);
-            $('.btn_close')
-                .unbind('click')
-                .on('click', function () {
-                    $('.overlay_background').addClass('overlay_hide');
-                });
+            Cookies.set('pjtid', pjtid, {expires:1});
+
+            window.location = 'WhOutputContent';
+
+            // $('#ProductModal').removeClass('overlay_hide');
+            // $('.overlay_closer .title').html(pjtid);
+            // getSelectProject(pjtid);
+
+            // $('.btn_close')
+            //     .unbind('click')
+            //     .on('click', function () {
+            //         $('.overlay_background').addClass('overlay_hide');
+            //     });
         });
 }
 

@@ -2,15 +2,19 @@ let cats = null;
 let catnme = '';
 
 $(document).ready(function () {
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {
-    settingTable();
-    getCategories();
-    getStores();
-    fillCategories();
+    setTimeout(() => {
+        deep_loading('O');
+        settingTable();
+        getCategories();
+        getStores();
+        fillCategories();
+    }, 100);
 }
 
 function settingTable() {
@@ -107,7 +111,6 @@ function getStores() {
 
 function putCategories(dt) {
     cats = dt;
-    console.log(cats.length);
 }
 function fillCategories() {
     if (cats != null) {
@@ -150,7 +153,7 @@ function actionButtons() {
             catnme = ctnme;
             console.log(catId, quant, ctnme);
             if (quant > 0) {
-                $('.deep_loading').css({display: 'flex'});
+                deep_loading('O');
                 var pagina = 'Categorias/listSeries';
                 var par = `[{"catId":"${catId}"}]`;
                 var tipo = 'json';
@@ -184,7 +187,6 @@ function actionButtons() {
 
 function fillTableCategories(ix) {
     let tabla = $('#CategoriasTable').DataTable();
-    console.log(cats.length);
     tabla.row
         .add({
             editable: `<i class="fas fa-pen modif" id ="md${cats[ix].cat_id}"></i><i class="fas fa-times-circle kill"></i>`,
@@ -199,10 +201,10 @@ function fillTableCategories(ix) {
         .attr('id', cats[ix].cat_id);
     get_quantity(cats[ix].cat_id);
     actionButtons();
+    deep_loading('C');
 }
 
 function putStores(dt) {
-    console.log(dt);
     $.each(dt, function (v, u) {
         let H = `<option value="${u.str_id}">${u.str_name}</option>`;
         $('#selectRowAlmacen').append(H);
@@ -261,8 +263,6 @@ function putUpdateCategory(dt) {
         let ix = goThroughCategory(dt);
         console.log(cats[ix].cat_id);
 
-        console.log($(`#${cats[ix].cat_id}`).children('td.category-name').html());
-
         $(`#${cats[ix].cat_id}`).children('td.category-name').html(cats[ix].cat_name);
         $(`#${cats[ix].cat_id}`).children('td.store-name').html(cats[ix].str_name);
         putQuantity(cats[ix].cat_id);
@@ -284,7 +284,6 @@ function editCategory(catId) {
 function deleteCategory(catId) {
     let cn = $(`#${catId}`).children('td.quantity').children('.toLink').html();
 
-    console.log(cn);
     if (cn != 0) {
         $('#NoBorrarModal').modal('show');
     } else {
@@ -370,7 +369,7 @@ function build_modal_serie(dt) {
             })
             .draw();
         $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.prd_id);
-        $('.deep_loading').css({display: 'none'});
+        deep_loading('C');
     });
 }
 

@@ -10,12 +10,14 @@ $(document).ready(function () {
 });
 
 function inicial() {
-    getCategories();
-    $('.deep_loading').css({display: 'flex'});
-    $('.tblProdMaster').css({display: 'none'});
-    // setting_table();
-    getPriceList();
-    //$('#LoadingModal').addClass('overlay_hide');
+    setTimeout(() => {
+        getCategories();
+        deep_loading('O');
+        $('.tblProdMaster').css({display: 'none'});
+        // setting_table();
+        getPriceList();
+        //$('#LoadingModal').addClass('overlay_hide');
+    }, 100);
 }
 
 /** +++++  configura la table de productos */
@@ -88,7 +90,7 @@ function setting_table() {
         .delay(500)
         .slideDown('fast', function () {
             $('#tblPriceList').DataTable().draw();
-            $('.deep_loading').css({display: 'none'});
+            deep_loading('C');
         });
 }
 

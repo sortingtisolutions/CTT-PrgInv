@@ -13,14 +13,14 @@ $(document).ready(function () {
 });
 
 function inicial() {
-    getCategories();
-    getSubcategories();
-    getServices();
-    getCoins();
-    getDocument();
-    getInvoice();
-    $('.deep_loading').css({display: 'flex'});
-    $('.tblProdMaster').css({display: 'none'});
+    setTimeout(() => {
+        getCategories();
+        getSubcategories();
+        getServices();
+        getCoins();
+        getDocument();
+        getInvoice();
+    }, 100);
 }
 
 // Solicita las categorias
@@ -81,7 +81,6 @@ function getInvoice() {
 function getProducts(catId) {
     var pagina = 'Products/listProducts';
     var par = `[{"catId":"${catId}","grp":"${grp}","num":"${num}"}]`;
-    console.log(par);
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
@@ -131,7 +130,7 @@ function putCategories(dt) {
         $('#txtCategoryList').on('change', function () {
             let id = $(this).val();
             let catId = $(`#txtCategoryList option[value="${id}"]`).val();
-            $('.deep_loading').css({display: 'flex'});
+            deep_loading('O');
             $('.tblProdMaster').css({display: 'none'});
             $('#tblProducts').DataTable().destroy();
             flt = 0;
@@ -205,7 +204,6 @@ function putProducts(dt) {
 function fillProducts(ft) {
     $('#tblProducts tbody').html('');
 
-    console.log(ft);
     var cod = ft == '1' ? 'A' : '';
 
     if (prds[0].prd_id != '0') {
@@ -329,7 +327,7 @@ function settingTable() {
     $('.tblProdMaster')
         .delay(500)
         .slideDown('fast', function () {
-            $('.deep_loading').css({display: 'none'});
+            deep_loading('C');
             $('#tblProducts').DataTable().draw();
         });
 }

@@ -176,8 +176,9 @@ function get_stores() {
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
     pj = dt;
+    console.log(dt);
     $.each(dt, function (v, u) {
-        let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
+        let H = `<option style="background_color: #CC0000;" data_indx="${v}" value="${u.pjt_id}">${u.pjs_name} - ${u.pjt_name}</option>`;
         $('#txtProject').append(H);
     });
     $('#txtProject').on('change', function () {
@@ -185,6 +186,7 @@ function put_Proyectos(dt) {
         $('#txtIdProject').val(pj[px].pjt_id);
         // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
 
+        deep_loading('O');
         get_products(pj[px].pjt_id);
     });
 }
@@ -202,12 +204,12 @@ function put_Products(dt) {
         let datestart = u.sub_date_start;
         let dateend = u.sub_date_end;
 
-        if (datestart == null) {
-            datestart = define_days('i', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
-        }
-        if (dateend == null) {
-            dateend = define_days('f', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
-        }
+        // if (datestart == null) {
+        //     datestart = define_days('i', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
+        // }
+        // if (dateend == null) {
+        //     dateend = define_days('f', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
+        // }
         let sku = u.pjtdt_prod_sku;
         if (sku == 'Pendiente') {
             sku = `<span class="pending">${sku}</sku>`;
@@ -293,6 +295,8 @@ function put_Products(dt) {
                 $('.objet').addClass('objHidden');
             }
         });
+
+    deep_loading('C');
 }
 
 /**  ++++   Coloca las monedas en el listado del input */

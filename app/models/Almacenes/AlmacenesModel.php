@@ -90,7 +90,7 @@ class AlmacenesModel extends Model
 		$lista = array();
 		while ($row = $result->fetch_row()){
 			$item = array("emp_id" =>$row[0],
-						  "emp_fullname" =>$row[1]);
+				 "emp_fullname" =>$row[1]);
 			array_push($lista, $item);
 		}
 		return $lista;
@@ -105,7 +105,7 @@ class AlmacenesModel extends Model
 				FROM ctt_series as se 
 				LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
 				WHERE sp.str_id IN ($prodId) AND sp.stp_quantity > 0
-				ORDER BY se.ser_sku LIMIT 10;";
+				ORDER BY se.ser_sku;";
         return $this->db->query($qry);
     }
 

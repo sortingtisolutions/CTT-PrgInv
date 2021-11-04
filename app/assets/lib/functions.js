@@ -1,5 +1,5 @@
 var pos = 0;
-
+let altr = '0';
 function fillField(pagina, par, tipo, selector) {
     $.ajax({
         url: pagina,
@@ -142,6 +142,10 @@ function limpia_campos() {
 }
 
 function verifica_usuario() {
+    altr = '0';
+    url = getAbsolutePath();
+    importarScript(url + 'app/assets/lib/alerts.js');
+
     var galleta = Cookies.get('user');
     if (galleta == undefined) {
         window.location = 'Login';

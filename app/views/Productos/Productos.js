@@ -12,7 +12,9 @@ $(document).ready(function () {
 
 function inicial() {
     // getProductosTable();
-    cargaInicial();
+    setTimeout(() => {
+        cargaInicial();
+    }, 100);
 
     $('#checkIsAccesorie').change(function () {
         if ($('#checkIsAccesorie').prop('checked')) {
@@ -122,6 +124,8 @@ function getCategories() {
 }
 
 function putCategories(dt) {
+    deep_loading('O');
+
     if (dt[0].cat_id != '0') {
         let catId = dt[0].cat_id;
         $.each(dt, function (v, u) {
@@ -557,7 +561,7 @@ function getAlmacenesSku(id) {
 
 function getProductosTable(catId) {
     var location = 'Productos/GetProductos';
-    $('.deep_loading').css({display: 'flex'});
+    // $('.deep_loading').css({display: 'flex'});
     $('.tblProdMaster').css({display: 'none'});
     $('#ProductosTable').DataTable().destroy();
     $('#tablaProductosRow').html('');
@@ -666,7 +670,7 @@ function getProductosTable(catId) {
             .delay(500)
             .slideDown('fast', function () {
                 $('#ProductosTable').DataTable().draw();
-                $('.deep_loading').css({display: 'none'});
+                deep_loading('C');
             });
     });
 }

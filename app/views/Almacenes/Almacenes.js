@@ -2,14 +2,18 @@ let strs = null;
 let strnme = '';
 
 $(document).ready(function () {
-    verifica_usuario();
-    inicial();
+    if (verifica_usuario()) {
+        inicial();
+    }
 });
 
 function inicial() {
-    settingTable();
-    getStores();
-    fillStores();
+    setTimeout(() => {
+        deep_loading('O');
+        settingTable();
+        getStores();
+        fillStores();
+    }, 100);
 }
 
 function settingTable() {
@@ -105,6 +109,7 @@ function fillStores() {
         $.each(strs, function (v, u) {
             fillTableStores(v);
         });
+        deep_loading('C');
     } else {
         setTimeout(() => {
             fillStores();
@@ -140,7 +145,7 @@ function actionButtons() {
             strnme = ctnme;
             console.log(strId, quant, ctnme);
             if (quant > 0) {
-                $('.deep_loading').css({display: 'flex'});
+                deep_loading('O');
                 var pagina = 'Almacenes/listSeries';
                 var par = `[{"strId":"${strId}"}]`;
                 var tipo = 'json';
@@ -356,7 +361,7 @@ function build_modal_serie(dt) {
             })
             .draw();
         $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.prd_id);
-        $('.deep_loading').css({display: 'none'});
+        deep_loading('C');
     });
 }
 

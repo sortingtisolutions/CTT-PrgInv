@@ -191,9 +191,6 @@
                                         </tbody>
                                     </table>
                             </div>
-                            <div class="deep_loading">
-                                <div class="flash_loading"> Cargando datos...</div>
-                            </div>
                     </div>
                 </div>
                 <!-- End área de listado -->

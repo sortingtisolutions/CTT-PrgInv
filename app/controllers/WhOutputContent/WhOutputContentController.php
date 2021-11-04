@@ -20,13 +20,13 @@ class WhOutputContentController extends Controller
 
     public function exec()
     {
-        $params = array('user' => $this->session->get('user'));
-        $this->render(__CLASS__, $params);
+		$params = array('user' => $this->session->get('user'));
+		$this->render(__CLASS__, $params);
     }
 
 
 // Lista los proyectos
-public function listProjects()
+public function listProjects($request_params)
 {
     $params =  $this->session->get('user');
     $result = $this->model->listProjects();
@@ -40,7 +40,10 @@ public function listProjects()
     } else {
         $res =  '[{"pjt_id":"0"}]';	
     }
-    echo $res;
+   echo $request_params;
+
+    $params = array('project' => $request_params);
+    return $this->render(__CLASS__, $params);
 }
 
 // Lista los productos
