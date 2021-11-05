@@ -1,10 +1,17 @@
 let products;
 //let prjid = window.location.pathname.split("/").pop();
-let prjid = '6';
+let prjid = '5';
+//var prjid;
 
 $(document).ready(function () {
+<<<<<<< HEAD
     if (verifica_usuario()) { 
       inicial();
+=======
+    if (verifica_usuario()) {
+        //prjid=cookie.get('pjrId');
+        inicial();
+>>>>>>> 6235ab5ac93e806f863f710b39e11f956ff52c98
     }
 });
 
@@ -229,7 +236,6 @@ function activeIconsSerie() {
     .on('click', function () {
         let serprd = $(this).attr('id');
         let qty = $(this).parent('td').attr('data-content');
-      /*catnme = $(this).parents('tr').children('td.catname').html();*/
         console.log('Click Modal Series', serprd);  
         if (serprd != "") {
             getSerieDetail(serprd);
@@ -276,7 +282,7 @@ function putSerieDetails(dt) {
 }
 
     function build_modal_seriefree(dt) {
-        console.log('PASO 4 --- build_modal_seriefree');
+        //console.log('PASO 4 --- build_modal_seriefree');
             let tabla = $('#tblChangeSerie').DataTable();
             /*$('.overlay_closer .title').html(`${dt[0].ser_sku} - ${dt[0].pjtcn_prod_name}`); */
             $('.overlay_closer .title').html(`${dt[0].ser_sku}`); 
@@ -308,9 +314,7 @@ function activeIconsSerieFree() {
     .on('click', function () {
         let prd = $(this).parents('tr').attr('id');
         let qty = 1;
-        console.log('Modal 3');
-       /* let pkt = $(this).parent().attr('data-content').split('|')[3];
-        let pkn = $(this).parent().attr('data-content').split('|')[1]; */
+        //console.log('Modal 3');
         if (qty > 0) {
             getSeriesFree(serId);
         }

@@ -148,9 +148,6 @@ function activeIcons() {
         .on('click', function () {
             let prd = $(this).parents('tr').attr('id');
             let qty = $(this).parent().attr('data-content').split('|')[2];
-            /*let pkt = $(this).parent().attr('data-content').split('|')[3];
-            let pkn = $(this).parent().attr('data-content').split('|')[1]; */
-
             console.log(pkt, prd, qty);
 
             if (qty > 0) {
@@ -168,6 +165,7 @@ function activeIcons() {
 
             console.log(pjtid);
 <<<<<<< HEAD
+<<<<<<< HEAD
             Cookies.set('pjtid', pjtid, {expires:1});
 
             window.location = 'WhOutputContent';
@@ -183,16 +181,12 @@ function activeIcons() {
             //     });
         });
 =======
+=======
+            Cookies.set('pjrId', pjtid, { expires: 1 });
+
+>>>>>>> 6235ab5ac93e806f863f710b39e11f956ff52c98
             window.location.href = "WhOutputContent/inicial/"+pjtid;
 
-    /*        $('#ProductModal').removeClass('overlay_hide');
-            $('.overlay_closer .title').html(pjtid);
-            getSelectProject(pjtid);
-            $('.btn_close')
-                .unbind('click')
-                .on('click', function () {
-                    $('.overlay_background').addClass('overlay_hide');
-                }); */
         }); 
 >>>>>>> 05ae0c769bc1011ae19a2516b701161c6cbf7863
 }
