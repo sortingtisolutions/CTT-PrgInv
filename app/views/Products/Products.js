@@ -125,7 +125,7 @@ function putCategories(dt) {
             $('#txtCatId').append(H);
         });
 
-        // getProducts(0);
+        getProducts(0);
 
         $('#txtCategoryList').on('change', function () {
             let id = $(this).val();
