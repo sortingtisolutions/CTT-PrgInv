@@ -130,7 +130,6 @@ function settingTable() {
            // {data: 'prddocum', class: 'sku'},
         ],
     });
-    console.log('111');
 
     $('.tblProdMaster')
         .delay(500)
@@ -142,7 +141,6 @@ function settingTable() {
 
 /** +++++  Activa los iconos */
 function activeIcons() {
-    console.log('222');
     $('.toLink')
         .unbind('click')
         .on('click', function () {
@@ -164,31 +162,10 @@ function activeIcons() {
             let prdNm = 'Modifica proyecto';
 
             console.log(pjtid);
-<<<<<<< HEAD
-<<<<<<< HEAD
             Cookies.set('pjtid', pjtid, {expires:1});
 
             window.location = 'WhOutputContent';
-
-            // $('#ProductModal').removeClass('overlay_hide');
-            // $('.overlay_closer .title').html(pjtid);
-            // getSelectProject(pjtid);
-
-            // $('.btn_close')
-            //     .unbind('click')
-            //     .on('click', function () {
-            //         $('.overlay_background').addClass('overlay_hide');
-            //     });
-        });
-=======
-=======
-            Cookies.set('pjrId', pjtid, { expires: 1 });
-
->>>>>>> 6235ab5ac93e806f863f710b39e11f956ff52c98
-            window.location.href = "WhOutputContent/inicial/"+pjtid;
-
         }); 
->>>>>>> 05ae0c769bc1011ae19a2516b701161c6cbf7863
 }
 
 function putSelectProject(dt) {

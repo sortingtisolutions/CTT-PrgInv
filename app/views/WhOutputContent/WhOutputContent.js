@@ -4,14 +4,9 @@ let prjid = '5';
 //var prjid;
 
 $(document).ready(function () {
-<<<<<<< HEAD
-    if (verifica_usuario()) { 
-      inicial();
-=======
     if (verifica_usuario()) {
         //prjid=cookie.get('pjrId');
         inicial();
->>>>>>> 6235ab5ac93e806f863f710b39e11f956ff52c98
     }
 });
 
