@@ -266,6 +266,8 @@ function put_budgets(dt) {
             rgevn = 0;
             fill_budget_prods(jsn, days, '1');
         });
+        rgcnt = 1;
+        update_totals();
     } else {
         console.log('no budgets there are');
     }

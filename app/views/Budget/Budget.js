@@ -256,6 +256,8 @@ function put_budgets(dt) {
             rgevn = 0;
             fill_budget_prods(jsn, days);
         });
+        rgcnt = 1;
+        update_totals();
     } else {
         console.log('no budgets there are');
     }
@@ -638,7 +640,7 @@ function show_minimenues(idsel, x, y) {
             dys = days_validator(dys, days, idsel);
             $('.' + idsel).text(dys);
             rgcnt = 1;
-            update_totals();
+            
             $('.box_days').remove();
         });
     } else if (inic == 'dsc') {
