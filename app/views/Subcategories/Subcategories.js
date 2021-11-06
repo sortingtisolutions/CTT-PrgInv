@@ -81,7 +81,7 @@ function fillSubcategoriesTbl() {
         $('#tblSubcategory tbody').append(H);
         get_quantity(u.sbc_id);
     });
-    activeActions();
+
     setTimeout(() => {
         settingTable();
     }, 200);
@@ -94,8 +94,8 @@ function settingTable() {
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     var tabla = $('#tblSubcategory').DataTable({
         order: [
-            [3, 'asc'],
-            [2, 'asc'],
+            [4, 'asc'],
+            [1, 'asc'],
         ],
         dom: 'Blfrtip',
         lengthMenu: [
@@ -146,9 +146,11 @@ function settingTable() {
             {data: 'subcname', class: 'subName'},
             {data: 'catgname', class: 'catName'},
             {data: 'catgcode', class: 'catCode center'},
-            {data: 'quantity', class: 'quantity'},
+            {data: 'quantity', class: 'center'},
         ],
     });
+
+    activeActions();
 }
 
 /** ---- Llena la lista de subcategorias ---- */
@@ -205,7 +207,7 @@ function activeActions() {
         });
 
     /**  ---- Habilita el bullet de cantidad para consulta de existencias ----- */
-    $('#tblSubcategory tbody tr td span.toLink')
+    $('#tblSubcategory tbody tr td.quantity .toLink')
         .unbind('click')
         .on('click', function () {
             selectSeries($(this));

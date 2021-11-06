@@ -45,7 +45,7 @@
                                     <input id="txtSubcategory" name="txtSubcategory" type="text" class="form-control form-control-sm" required >
                                     <label for="txtSubcategory">Nombre Subcategoria</label>
                                 </div>
-                                <input id="txtIdSubcategory" name="txtIdSubcategory" type="text" class="form-control form-control-sm" >
+                                <input id="txtIdSubcategory" name="txtIdSubcategory" type="hidden" class="form-control form-control-sm" >
                             </div>
 
 
