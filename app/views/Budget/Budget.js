@@ -640,7 +640,7 @@ function show_minimenues(idsel, x, y) {
             dys = days_validator(dys, days, idsel);
             $('.' + idsel).text(dys);
             rgcnt = 1;
-            update_totals();
+            
             $('.box_days').remove();
         });
     } else if (inic == 'dsc') {

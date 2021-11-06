@@ -40,8 +40,6 @@
 <!-- End Contenedor Listado de PRODUCTOS  -->
 
 
-
-
 <!-- Modal Borrar -->
 <!-- <div class="modal fade" id="cancelProjectModal" tabindex="-1" aria-labelledby="cancelProjectModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">

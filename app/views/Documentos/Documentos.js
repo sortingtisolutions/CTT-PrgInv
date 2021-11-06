@@ -80,7 +80,7 @@ function EditDocumento(id) {
     UnSelectRowTable();
     LimpiaModal();
     $('#titulo').text('Editar Documento');
-    var location = "documentos/GetDocumento";
+    var location = "Documentos/GetDocumento";
     $.ajax({
             type: "POST",
             dataType: 'JSON',
@@ -88,7 +88,6 @@ function EditDocumento(id) {
              },
             url: location,
         success: function (respuesta) {
-            //console.log(respuesta);
             $('#NomDocumento').val(respuesta.doc_name);
             $('#IdDocumentNew').val(respuesta.doc_id);
             $('#ExtDocumento').val(respuesta.doc_type);
