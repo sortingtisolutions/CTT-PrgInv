@@ -114,7 +114,7 @@
 
 
 <!-- Modal Borrar -->
-<div class="modal fade" id="MoveFolioModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="MoveFolioModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
             <div class="modal-header ">
@@ -134,7 +134,7 @@
                 </div>
             </div>
     </div>
-</div>
+</div> -->
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'ProductsForSubletting/ProductsForSubletting.js' ?>"></script>

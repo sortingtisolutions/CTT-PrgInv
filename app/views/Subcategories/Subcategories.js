@@ -8,11 +8,22 @@ $(document).ready(function () {
 });
 
 function inicial() {
-    setTimeout(() => {
+    if (altr == 1) {
+        deep_loading('O');
+        settingTable();
         getCategories();
         getSubcategories();
         fillSubcategories();
-    }, 100);
+        confirm_alert();
+    } else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
+
+    setInterval(() => {
+        activeActions();
+    }, 2000);
 }
 
 /** ---- PETICIÓN DE DATOS ----*/
@@ -67,32 +78,33 @@ function fillSubcategories() {
 function fillSubcategoriesTbl() {
     $('#tblSubcategory tbody').html('');
 
+    let tabla = $('#tblSubcategory').DataTable();
+
     $.each(subs, function (v, u) {
-        var H = `
-        <tr id="${u.sbc_id}">
-            <td><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></td>
-            <td class="center bold">${u.sbc_code}</td>
-            <td>${u.sbc_name}</td>
-            <td>${u.cat_name}</td>
-            <td class="center">${u.cat_id}</td>
-            <td class="quantity" data-content="0"><span class="toLink">0</span></td>
-        </tr>
-        `;
-        $('#tblSubcategory tbody').append(H);
+        var rw = tabla.row
+            .add({
+                editable: `<i class="fas fa-pen modif"></i><i class="fas fa-times-circle kill"></i>`,
+                subccode: u.sbc_code,
+                subcname: u.sbc_name,
+                catgname: u.cat_name,
+                catgcode: u.cat_id,
+                quantity: `<span class="toLink">0</span>`,
+            })
+            .draw()
+            .node();
+        $(rw).attr('id', u.sbc_id);
         get_quantity(u.sbc_id);
     });
-
-    setTimeout(() => {
-        settingTable();
-    }, 200);
+    activeActions();
+    deep_loading('C');
 }
 
 /** +++++  configura la table de subcategorias */
 function settingTable() {
     let title = 'Lista de subcategorias';
-    // $('#tblProducts').DataTable().destroy();
+    // $('#tblSubcategory').DataTable().destroy();
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-    var tabla = $('#tblSubcategory').DataTable({
+    $('#tblSubcategory').DataTable({
         order: [
             [4, 'asc'],
             [1, 'asc'],
@@ -140,17 +152,16 @@ function settingTable() {
         },
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,
+        fixedHeader: true,
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
             {data: 'subccode', class: 'subCode center bold'},
             {data: 'subcname', class: 'subName'},
             {data: 'catgname', class: 'catName'},
             {data: 'catgcode', class: 'catCode center'},
-            {data: 'quantity', class: 'center'},
+            {data: 'quantity', class: 'quantity'},
         ],
     });
-
-    activeActions();
 }
 
 /** ---- Llena la lista de subcategorias ---- */
@@ -325,12 +336,20 @@ function deleteSubcategory(sbcId) {
     let cn = $(`#${sbcId}`).children('td.quantity').children('.toLink').html();
 
     if (cn != 0) {
-        $('#delSubcategoryModalNo').modal('show');
+        $('#confirmModal').modal('show');
+        $('#confirmModalLevel').html('No se puede borrar este registro ya que contiene excistencias asociadas a el.');
+        $('#N').html('Cancelar');
+        $('#confirmButton').html('').css({display: 'none'});
+        $('#Id').val(0);
     } else {
-        $('#delSubcategoryModal').modal('show');
-        $('#delIdSubcategory').val(sbcId);
+        $('#confirmModal').modal('show');
 
-        $('#btnDelSucategory').on('click', function () {
+        $('#confirmModalLevel').html('¿Seguro que desea borrar la subcategoria?');
+        $('#N').html('Cancelar');
+        $('#confirmButton').html('Borrar subcategoria').css({display: 'inline'});
+        $('#Id').val(sbcId);
+
+        $('#confirmButton').on('click', function () {
             var pagina = 'SubCategories/DeleteSubcategory';
             var par = `[{"sbcId":"${sbcId}"}]`;
             var tipo = 'html';
@@ -347,7 +366,7 @@ function putDeleteSubcategory(dt) {
         .row($(`#${dt}`))
         .remove()
         .draw();
-    $('#delSubcategoryModal').modal('hide');
+    $('#confirmModal').modal('hide');
 }
 /** ---- End ELIMINA SUBCATEGORIA ---- */
 /** -------------------------------------------------------------------------- */

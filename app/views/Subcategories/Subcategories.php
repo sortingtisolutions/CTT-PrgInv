@@ -120,59 +120,6 @@
     <!-- End Ventana Modal de STOCK -->
 
 
-        
-    <!-- Start Ventana modal ELIMINA SUBCATEGORIA -->
-        <div class="modal fade" id="delSubcategoryModal" tabindex="-1" aria-labelledby="BorrarSubcategoriaLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-sm">
-                    <div class="modal-content">
-                    <div class="modal-header ">
-                    </div>
-                    <div class="modal-body" style="padding: 0px !important;">
-
-                    <div class="row">
-                        <div class="col-12 text-center">
-                            <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarSubcategoriaLabel">¿Seguro que desea borrarlo?</span>
-                        </div>
-                        <input type="hidden" class="form-control" id="delIdSubcategory" aria-describedby="basic-addon3">
-                    </div>
-
-                    </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-danger" id="btnDelSucategory">Borrar</button>
-                        </div>
-                    </div>
-            </div>
-        </div>
-    <!-- End Ventana modal ELIMINA SUBCATEGORIA -->
-
-
-
-    <!-- Start Ventana modal NO BORRA SUBCATEGORIA -->
-        <div class="modal fade" id="delSubcategoryModalNo" tabindex="-1" aria-labelledby="BorrarSubcategoriaLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm">
-                    <div class="modal-content">
-                        <div class="modal-header "></div>
-                        <div class="modal-body" style="padding: 0px !important;">
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <span class="modal-title text-center" style="font-size: 1rem;" id="BorrarSubcategoriaLabel">No se puede borrar este registro ya que contiene existencias asociadas a el. </span>
-                                </div>
-                                <input type="hidden" class="form-control" id="delIdSubcategory" aria-describedby="basic-addon3">
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>	
-
-        </div>
-    <!-- End Ventana modal NO BORRA SUBCATEGORIA -->
-
-
 
 
 

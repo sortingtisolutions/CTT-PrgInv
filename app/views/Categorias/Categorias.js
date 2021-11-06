@@ -8,13 +8,18 @@ $(document).ready(function () {
 });
 
 function inicial() {
-    setTimeout(() => {
+    if (altr == 1) {
         deep_loading('O');
         settingTable();
         getCategories();
         getStores();
         fillCategories();
-    }, 100);
+        confirm_alert();
+    } else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
 }
 
 function settingTable() {
@@ -57,21 +62,6 @@ function settingTable() {
 
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-            },
-            {
-                text: 'Borrar seleccionados',
-                // className: 'btn-apply hidden-field',
-                // action: function () {
-                //     var selected = table.rows({selected: true}).data();
-                //     var idSelected = '';
-                //     selected.each(function (index) {
-                //         idSelected += index[1] + ',';
-                //     });
-                //     idSelected = idSelected.slice(0, -1);
-                //     if (idSelected != '') {
-                //         ConfirmDeletCategoria(idSelected);
-                //    }
-                //},
             },
         ],
         pagingType: 'simple_numbers',
@@ -285,12 +275,20 @@ function deleteCategory(catId) {
     let cn = $(`#${catId}`).children('td.quantity').children('.toLink').html();
 
     if (cn != 0) {
-        $('#NoBorrarModal').modal('show');
+        $('#confirmModal').modal('show');
+        $('#confirmModalLevel').html('No se puede borrar este registro ya que contiene excistencias asociadas a el.');
+        $('#N').html('Cancelar');
+        $('#confirmButton').html('').css({display: 'none'});
+        $('#Id').val(0);
     } else {
-        $('#BorrarCategoriaModal').modal('show');
-        $('#IdCategoriaBorrar').val(catId);
+        $('#confirmModal').modal('show');
 
-        $('#BorrarProveedor').on('click', function () {
+        $('#confirmModalLevel').html('¿Seguro que desea borrar el catálogo?');
+        $('#N').html('Cancelar');
+        $('#confirmButton').html('Borrar catálogo').css({display: 'inline'});
+        $('#Id').val(catId);
+
+        $('#confirmButton').on('click', function () {
             var pagina = 'Categorias/DeleteCategoria';
             var par = `[{"cat_id":"${catId}"}]`;
             var tipo = 'html';
@@ -306,7 +304,7 @@ function putDeleteCategory(dt) {
         .row($(`#${dt}`))
         .remove()
         .draw();
-    $('#BorrarCategoriaModal').modal('hide');
+    $('#confirmModal').modal('hide');
 }
 
 function putSeries(dt) {

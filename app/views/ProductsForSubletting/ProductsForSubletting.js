@@ -199,6 +199,9 @@ function put_Products(dt) {
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblProductForSubletting tbody tr').remove() : '';
     let tabla = $('#tblProductForSubletting').DataTable();
+
+    tabla.rows().remove().draw();
+    $('.objet').addClass('objHidden');
     let cn = 0;
     $.each(pd, function (v, u) {
         let datestart = u.sub_date_start;

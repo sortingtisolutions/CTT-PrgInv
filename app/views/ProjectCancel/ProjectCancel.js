@@ -7,9 +7,17 @@ $('document').ready(function () {
 });
 
 function inicial() {
-    settingTable();
-    getProjects();
-    fillProjects();
+    if (altr == 1) {
+        deep_loading('O');
+        settingTable();
+        getProjects();
+        fillProjects();
+        confirm_alert();
+    } else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
 }
 
 function settingTable() {
@@ -91,6 +99,7 @@ function fillProjects() {
         $.each(pjts, function (v, u) {
             if (pjts[0].pjt_id != 0) fillProjectsTable(v);
         });
+        deep_loading('C');
     } else {
         setTimeout(() => {
             fillProjects();
@@ -138,10 +147,14 @@ function actionButtons() {
 }
 
 function CancelProyect(pjtId) {
-   
-    $('#cancelProjectModal').modal('show');
+    $('#confirmModal').modal('show');
 
-    $('#cancelProjectButton').on('click', function () {
+    $('#confirmModalLevel').html('¿Seguro que desea cancelar el proyecto?');
+    $('#N').html('No cancelar');
+    $('#confirmButton').html('Cancelar proyecto');
+    $('#Id').val(pjtId);
+
+    $('#confirmButton').on('click', function () {
         var pagina = 'ProjectCancel/CancelProject';
         var par = `[{"pjtId":"${pjtId}"}]`;
         var tipo = 'html';
@@ -157,5 +170,5 @@ function putCancelProject(dt) {
         .row($(`#${dt}`))
         .remove()
         .draw();
-    $('#cancelProjectModal').modal('hide');
+    $('#confirmModal').modal('hide');
 }

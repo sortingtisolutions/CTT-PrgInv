@@ -8,12 +8,17 @@ $(document).ready(function () {
 });
 
 function inicial() {
-    setTimeout(() => {
+    if (altr == 1) {
         deep_loading('O');
         settingTable();
         getStores();
         fillStores();
-    }, 100);
+        confirm_alert();
+    } else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
 }
 
 function settingTable() {
@@ -82,7 +87,7 @@ function settingTable() {
         fixedHeader: true,
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
-            {data: 'storesid', class: 'strid'},
+            {data: 'storesid', class: 'strid center bold'},
             {data: 'storname', class: 'store-name'},
             {data: 'storownr', class: 'store-owner'},
             {data: 'stortype', class: 'store-type'},
@@ -280,12 +285,26 @@ function deleteStore(strId) {
     let cn = $(`#${strId}`).children('td.quantity').children('.toLink').html();
 
     if (cn != 0) {
-        $('#NoBorrarModal').modal('show');
+        // $('#NoBorrarModal').modal('show');
+        $('#confirmModal').modal('show');
+        $('#confirmModalLevel').html('No se puede borrar este registro ya que contiene excistencias asociadas a el.');
+        $('#N').html('Cancelar');
+        $('#confirmButton').html('').css({display: 'none'});
+        $('#Id').val(0);
+
+        console.log('no borra');
     } else {
-        $('#BorrarAlmacenModal').modal('show');
+        $('#confirmModal').modal('show');
+
+        $('#confirmModalLevel').html('¿Seguro que desea borrar el almacen?');
+        $('#N').html('Cancelar');
+        $('#confirmButton').html('Borrar almacen').css({display: 'inline'});
+        $('#Id').val(strId);
+
+        //   $('#BorrarAlmacenModal').modal('show');
         $('#IdAlmacenBorrar').val(strId);
 
-        $('#BorrarProveedor').on('click', function () {
+        $('#confirmButton').on('click', function () {
             var pagina = 'Almacenes/DeleteAlmacen';
             var par = `[{"str_id":"${strId}"}]`;
             var tipo = 'html';
@@ -301,7 +320,7 @@ function putDeleteStore(dt) {
         .row($(`#${dt}`))
         .remove()
         .draw();
-    $('#BorrarAlmacenModal').modal('hide');
+    $('#confirmModal').modal('hide');
 }
 
 function putSeries(dt) {

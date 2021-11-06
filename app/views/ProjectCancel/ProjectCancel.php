@@ -35,9 +35,6 @@
                     </table>
                 </div>
             </div>
-            <div class="deep_loading">
-                <div class="flash_loading"> Cargando datos...</div>
-            </div>
         </div>
     </div>
 <!-- End Contenedor Listado de PRODUCTOS  -->
@@ -46,7 +43,7 @@
 
 
 <!-- Modal Borrar -->
-<div class="modal fade" id="cancelProjectModal" tabindex="-1" aria-labelledby="cancelProjectModal" aria-hidden="true">
+<!-- <div class="modal fade" id="cancelProjectModal" tabindex="-1" aria-labelledby="cancelProjectModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-header "></div>
@@ -64,7 +61,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
 
