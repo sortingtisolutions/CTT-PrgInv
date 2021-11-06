@@ -15,7 +15,7 @@ public function listProyects($store)
     $store = $this->db->real_escape_string($store);
     $qry = "SELECT * FROM ctt_projects as pj 
             INNER JOIN ctt_projects_status as ps ON ps.pjs_status = pj.pjt_status
-            WHERE pjt_status in (2,3,4) ;";
+            WHERE pjt_status in (2,3,4);";
     return $this->db->query($qry);
 }    
 
