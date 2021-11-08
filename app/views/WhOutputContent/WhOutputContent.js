@@ -1,21 +1,21 @@
 let products;
 //let prjid = window.location.pathname.split("/").pop();
-let prjid = '5';
+let prjid;
 //var prjid;
 
 $(document).ready(function () {
     if (verifica_usuario()) {
-        //prjid=cookie.get('pjrId');
+        prjid=Cookies.get('pjrId');
         inicial();
     }
 });
 
 function inicial() {
-    
+
    let pjtid = Cookies.get('pjtid');
    console.log(pjtid);
-        
-   
+
+
     setting_table_AsignedProd();
     console.log('Ventana1', prjid);
     getProjects();
@@ -94,11 +94,11 @@ function setting_table_AsignedProd() {
 }
 
 // ### LISTO ### Llena la tabla de los detalles del proyecto
-function putDetailsProds(dt) {  
-    if (dt[0].pjtpd_id != '0') 
+function putDetailsProds(dt) {
+    if (dt[0].pjtpd_id != '0')
     {
         let tabla = $('#tblAsignedProd').DataTable();
-        $.each(dt, function (v, u) 
+        $.each(dt, function (v, u)
         {
         let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
             tabla.row
@@ -125,7 +125,7 @@ function activeIcons() {
         .on('click', function () {
             //let selected = $(this).parent().attr('id');
             let pjtcnid = $(this).attr('id');
-            console.log('Cont-Producto', pjtcnid);  
+            console.log('Cont-Producto', pjtcnid);
             if (pjtcnid > 0) {
                 getSeries(pjtcnid);
             }
@@ -147,12 +147,12 @@ function activeIcons() {
                     $('.overlay_background').addClass('overlay_hide');
                 }); */
         });
-        
+
 
 }
 
 //AGREGA LOS DATOS GENERALES DEL PROYECTO
-function putProjects(dt) {    
+function putProjects(dt) {
         $('#txtTipoProject').val(dt[0].pjttp_name);
         $('#txtProjectName').val(dt[0].pjt_name);
         $('#txtProjectNum').val(dt[0].pjt_number);
@@ -198,12 +198,12 @@ function putSeries(dt) {
             $('.overlay_background').addClass('overlay_hide');
             activeIcons();
         });
-    build_modal_serie(dt);  
+    build_modal_serie(dt);
 }
 // ### LISTO ### Llena con datos de series la tabla del modal
 function build_modal_serie(dt) {
             let tabla = $('#tblSerie').DataTable();
-            $('.overlay_closer .title').html(`${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`); 
+            $('.overlay_closer .title').html(`${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`);
             tabla.rows().remove().draw();
             $.each(dt, function (v, u) {
                 let skufull = u.pjtdt_prod_sku.slice(7, 11) == '' ? u.pjtdt_prod_sku.slice(0, 7) : u.pjtdt_prod_sku.slice(0, 7) + '-' + u.pjtdt_prod_sku.slice(7, 11);
@@ -225,13 +225,13 @@ function build_modal_serie(dt) {
 }
 
 /** ### LISTO ### +++++  Activa los iconos del modal de serie */
-function activeIconsSerie() {  
+function activeIconsSerie() {
     $('.toLink')
     .unbind('click')
     .on('click', function () {
         let serprd = $(this).attr('id');
         let qty = $(this).parent('td').attr('data-content');
-        console.log('Click Modal Series', serprd);  
+        console.log('Click Modal Series', serprd);
         if (serprd != "") {
             getSerieDetail(serprd);
         }
@@ -266,7 +266,7 @@ function putSerieDetails(dt) {
                 {data: 'dserstatus', class: 'sku'},
             ],
         });
-            
+
         $('#ChangeSerieModal .btn_close')
             .unbind('click')
             .on('click', function () {
@@ -280,7 +280,7 @@ function putSerieDetails(dt) {
         //console.log('PASO 4 --- build_modal_seriefree');
             let tabla = $('#tblChangeSerie').DataTable();
             /*$('.overlay_closer .title').html(`${dt[0].ser_sku} - ${dt[0].pjtcn_prod_name}`); */
-            $('.overlay_closer .title').html(`${dt[0].ser_sku}`); 
+            $('.overlay_closer .title').html(`${dt[0].ser_sku}`);
             tabla.rows().remove().draw();
             $.each(dt, function (v, u) {
             let skufull = u.ser_sku.slice(7, 11) == '' ? u.ser_sku.slice(0, 7) : u.ser_sku.slice(0, 7) + '-' + u.ser_sku.slice(7, 11);
@@ -303,7 +303,7 @@ function putSerieDetails(dt) {
 
 
 /** +++++  Activa los iconos del modal de serie free */
-function activeIconsSerieFree() {  
+function activeIconsSerieFree() {
     $('.toLink')
     .unbind('click')
     .on('click', function () {
@@ -314,14 +314,14 @@ function activeIconsSerieFree() {
             getSeriesFree(serId);
         }
     });
-    
+
     $('.serief.modif')
         .unbind('click')
         .on('click', function () {
             let serId = $(this).attr('id').slice(1, 10);
-  
+
             $('#ChangeSerieModal').removeClass('overlay_hide');
-  
+
             $('#ChangeSerieModal .btn_close')
                 .unbind('click')
                 .on('click', function () {

@@ -1,5 +1,5 @@
-<?php 
-	defined('BASEPATH') or exit('No se permite acceso directo'); 
+<?php
+	defined('BASEPATH') or exit('No se permite acceso directo');
 	require ROOT . FOLDER_PATH . "/app/assets/header.php";
 ?>
 
@@ -34,9 +34,9 @@
 
                 </div>
             </div>
-            <div class="deep_loading">
+<!--            <div class="deep_loading">
                 <div class="flash_loading"> Cargando datos...</div>
-            </div>
+            </div>-->
         </div>
     </div>
 <!-- End Contenedor Listado de PRODUCTOS  -->

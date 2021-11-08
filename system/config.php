@@ -44,14 +44,14 @@ define('DEFAULT_CONTROLLER', 'Login');
 /////////////////////////////////////
 
 //////////////////////////////////////
-// Parametros para conexión 
+// Parametros para conexión
 //////////////////////////////////////
 
 
 
-define('HOST', 'localhost');
+define('HOST', '192.168.1.113');
 define('USER', 'root');
-define('PASSWORD', '');
+define('PASSWORD', 'secret');
 define('DB_NAME', 'cttapp_cire');
 
 
