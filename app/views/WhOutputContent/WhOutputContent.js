@@ -5,19 +5,13 @@ let prjid;
 
 $(document).ready(function () {
     if (verifica_usuario()) {
-        prjid=Cookies.get('pjrId');
+        prjid=Cookies.get('pjtid');
         inicial();
     }
 });
 
 function inicial() {
-
-   let pjtid = Cookies.get('pjtid');
-   console.log(pjtid);
-
-
     setting_table_AsignedProd();
-    console.log('Ventana1', prjid);
     getProjects();
     getDetailProds();
 }
