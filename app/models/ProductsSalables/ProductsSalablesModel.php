@@ -61,7 +61,7 @@ class ProductsSalablesModel extends Model
             $salId = $this->db->insert_id;
             $salNumber = str_pad($salId, 7, '0', STR_PAD_LEFT);
 
-            $qry1 = "UPDATE ctt_sales SET sal_number = $salNumber WHERE sal_id = $salId";
+            $qry1 = "UPDATE ctt_sales SET sal_number = '$salNumber' WHERE sal_id = $salId";
             $this->db->query($qry1);
 
             return $salId;
@@ -94,6 +94,22 @@ class ProductsSalablesModel extends Model
 
 
             return $salId;
+        }    
+// Guarda archivo detalle de la venta
+        public function saveSaleList($params)
+        {
+            
+            $salId          = $this->db->real_escape_string($params['salId']);
+
+            $qry = "SELECT sl.*, sd.*, pj.pjt_number, pj.pjt_name, st.str_name
+                    FROM ctt_sales AS sl
+                    INNER JOIN ctt_sales_details AS sd ON sd.sal_id = sl.sal_id
+                    INNER JOIN ctt_stores AS st ON st.str_id = sl.str_id
+                    LEFT JOIN ctt_projects As pj ON pj.pjt_id = sl.pjt_id
+                    WHERE sl.sal_id = $salId;";
+
+            return $this->db->query($qry);
+            
         }    
 
 }

@@ -8,34 +8,41 @@ $('document').ready(function () {
 });
 
 function inicial() {
-    get_stores();
-    get_products();
-    get_projects();
-    fill_dinamic_table();
+    if (altr == 1) {
+        get_stores();
+        get_products();
+        get_projects();
+        fill_dinamic_table();
 
-    $('#lstPayForm')
-        .unbind('change')
-        .on('change', function () {
-            var tp = $(this).val();
-            if (tp == 'TCREDITO') {
-                $('#txtInvoice').addClass('required').parents('div.form_group').removeClass('hide');
-            } else {
-                $('#txtInvoice').removeClass('required').parents('div.form_group').addClass('hide');
-            }
+        $('#lstPayForm')
+            .unbind('change')
+            .on('change', function () {
+                var tp = $(this).val();
+                if (tp == 'TCREDITO') {
+                    $('#txtInvoice').addClass('required').parents('div.form_group').removeClass('hide');
+                } else {
+                    $('#txtInvoice').removeClass('required').parents('div.form_group').addClass('hide');
+                }
+            });
+
+        $('#addPurchase').on('click', function () {
+            saleApply();
         });
 
-    $('#addPurchase').on('click', function () {
-        saleApply();
-    });
+        $('#newQuote').on('click', function () {
+            window.location = 'ProductsSalables';
+        });
 
-    $('#newQuote').on('click', function () {
-        window.location = 'ProductsSalables';
-    });
-
-    $('.required').on('focus', function () {
-        $(this).removeClass('forValid');
-        $(this).parent().children('.novalid').remove();
-    });
+        $('.required').on('focus', function () {
+            $(this).removeClass('forValid');
+            $(this).parent().children('.novalid').remove();
+        });
+        confirm_alert();
+    } else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
 }
 
 /** OBTENCION DE DATOS */
@@ -129,7 +136,9 @@ function put_products(dt) {
             .unbind('click')
             .on('click', function () {
                 let inx = $(this).attr('data_indx');
-                fill_purchase(prod[inx], inx);
+                if (prod[inx].stock > 0) {
+                    fill_purchase(prod[inx], inx);
+                }
             });
     }
 }
@@ -356,12 +365,14 @@ function mkn(cf, tp) {
 }
 
 function saleApply() {
+    deep_loading('O');
     let ky = validator();
     if (ky == 1) {
+        let pix = $('#lstProject').val();
         let payForm = $('#lstPayForm').val();
         let invoice = $('#txtInvoice').val();
         let customer = $('#txtCustomer').val();
-        let pjtId = $('#lstProject').val();
+        let pjtId = proj[pix - 1].pjt_id;
         let strId = $('#lstStore').val();
 
         let par = `
@@ -416,6 +427,20 @@ function saleDetailApply(dt) {
 }
 
 function setSaleDetailApply(dt) {
+    deep_loading('C');
+
+    var pagina = 'ProductsSalables/saveSaleList';
+    var par = `[{"salId":"${dt}"}]`;
+    var tipo = 'html';
+    var selector = printSale;
+    fillField(pagina, par, tipo, selector);
+}
+
+function printSale(dt) {
+    console.log(dt);
+    let usr = dt.split('|')[0];
+    let nme = dt.split('|')[1];
+    window.open(url + 'app/views/ProductsSalables/ProductsSalablesReport.php?u=' + usr + '&n=' + nme, '_blank');
     window.location = 'ProductsSalables';
 }
 
