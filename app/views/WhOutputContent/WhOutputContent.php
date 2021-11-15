@@ -1,19 +1,19 @@
-<?php 
-    defined('BASEPATH') or exit('No se permite acceso directo'); 
+<?php
+    defined('BASEPATH') or exit('No se permite acceso directo');
     require ROOT . FOLDER_PATH . "/app/assets/header.php";
 
-   
+
 ?>
 
 <header>
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
-   
+
 </header>
 
 
 <div class="container-fluid">
     <div class="contenido">
-            
+
         <div class="row mvst_group">
             <div class="mvst_panel">
                 <div class="form-group">
@@ -25,14 +25,14 @@
                                 <input id="txtTipoProject" type="text" class="form-control form-control-sm"  >
                                 <label for="txtTipoProject">Tipo de Proyecto</label>
                             </div>
-                           
+
                         </div>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProjectName" type="text" class="form-control form-control-sm" >
                                 <label for="txtProjectName">Nombre del Proyecto</label>
                             </div>
-                           
+
                         </div>
 
                         <div class="row">
@@ -41,7 +41,7 @@
                                 <label for="txtProjectNum">Numero Proyecto</label>
                             </div>
                         </div>
-						
+
 						<div class="row">
 							<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
 								<input id="txtStartDate" type="text" class="form-control form-control-sm">
@@ -98,7 +98,7 @@
                                 <label for="txtSubcategoryProduct" class="form-label">Subcategoia</label>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -108,11 +108,7 @@
                 <div class="tblProdMaster">
 			<h1> </h1>
                         <h3>Asignacion de Productos</h3>
-<<<<<<< HEAD
                         <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%">
-=======
-                        <table class="display compact nowrap"  id="tblAsignedProd" style="min-width: 1000px">
->>>>>>> 05ae0c769bc1011ae19a2516b701161c6cbf7863
                             <thead>
                                 <tr>
                                     <th style="width:  40px"></th>
@@ -125,7 +121,7 @@
                             <tbody></tbody>
                         </table>
                 </div>
-            </div>           
+            </div>
         </div>
     </div>
 </div>

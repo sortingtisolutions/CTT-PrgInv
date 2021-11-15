@@ -36,14 +36,11 @@ public function listProjects($request_params)
         $i++;
     }
     if ($i>0){
-        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
     } else {
-        $res =  '[{"pjt_id":"0"}]';	
+        $res =  '[{"pjt_id":"0"}]';
     }
-   echo $request_params;
-
-    $params = array('project' => $request_params);
-    return $this->render(__CLASS__, $params);
+   echo $res;
 }
 
 // Lista los productos
@@ -57,12 +54,12 @@ public function listProjects($request_params)
              $i++;
          }
          if ($i>0){
-             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
          } else {
-             $res =  '[{"pjt_id":"0"}]';	
+             $res =  '[{"pjt_id":"0"}]';
          }
          echo $res;
-     } 
+     }
 
      // Lista las series
 public function listSeries($request_params)
@@ -75,9 +72,9 @@ public function listSeries($request_params)
         $i++;
     }
     if ($i>0){
-        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
     } else {
-        $res =  '[{"ser_id":"0"}]';	
+        $res =  '[{"ser_id":"0"}]';
     }
     echo $res;
 }
@@ -92,9 +89,9 @@ public function listSeriesFree($request_params)
         $i++;
     }
     if ($i>0){
-        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
     } else {
-        $res =  '[{"ser_id":"0"}]';	
+        $res =  '[{"ser_id":"0"}]';
     }
     echo $res;
 }
@@ -110,12 +107,12 @@ public function getSelectSerie($request_params)
 		$i++;
 	}
 	if ($i>0){
-		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
 	} else {
-		$res =  '[{"ser_id":"0"}]';	
+		$res =  '[{"ser_id":"0"}]';
 	}
 	echo $res;
 }
 
-	
+
 }
