@@ -282,7 +282,46 @@ hr {
             }
         }
     }
+ 
+    .formSales {
+        width: 100%;
+
+        .form_group {
+            display: inline-block;
+            position: relative;
+
+            label {
+                min-width: 150px;
+                text-align: right;
+                padding: 1px 10px;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+
+            select {
+                min-width: 200px;
+                padding: 1px 5px;
+                border: 1px solid #dddddd;
+                border-radius: 3px;
+                outline: none;
+            }
+            .textbox {
+                min-width: 200px;
+                padding: 4px 5px;
+                border: 1px solid #dddddd;
+                border-radius: 3px;
+                outline: none;
+            }
+
+       
+        }
+
+        .hide {
+            display: none;
+        }
+    }
 }
+
 
 .table_control {
     font-family: $font_primary;
@@ -316,6 +355,9 @@ hr {
     }
     .w4 {
         width: 50px;
+    }
+    .w5 {
+        width: 450px;
     }
 
     .headrow {
@@ -364,8 +406,9 @@ hr {
         text-align: right;
         padding-right: 13px;
         position: relative;
+        white-space: nowrap;
 
-        .flagPendig  {
+        .flagPendig {
             width: 7px;
             height: 7px;
             display: inline-block;
@@ -413,7 +456,7 @@ hr {
 // Modales
 .box_list_products {
     width: 750px;
-    height: 250px;
+    height: 200px;
     position: fixed;
     z-index: 100;
     font-size: 0.9em;
@@ -440,7 +483,7 @@ hr {
 
     .list_products {
         width: 100%;
-        height:250px;
+        height: 250px;
         background-color: #ffffff;
         border: 1px dotted #bbbbbb;
         box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.2);
@@ -766,7 +809,7 @@ hr {
                         padding-left: 30px;
                     }
                     &.pnd {
-                        color: rgba($btn-red, 0.8);;
+                        color: rgba($btn-red, 0.8);
                         background-color: rgba($btn-red, 0.04);
                         border-bottom: 1px dashed rgba($btn-red, 0.3);
                     }
@@ -780,6 +823,21 @@ hr {
         }
     }
 }
+
+
+
+.forValid {
+    border: 1px solid #cc0000 !important;
+    background-color: rgba(#cc0000, 0.1);
+    &~.novalid{
+        color: #cc0000;
+        font-size: 1.2em;
+        position: absolute;
+        top: 5px;
+    }
+}
+
+
 @keyframes loading {
     from {
         transform: rotate(0deg);
@@ -852,7 +910,6 @@ hr {
     }
 
     .menu_button {
-       
         text-align: center;
         border: none;
         background-color: transparent;
@@ -864,7 +921,7 @@ hr {
         &:hover {
             color: #000000;
             font-weight: 700;
-            text-shadow: -1px -1px 1px #FFFFFF;
+            text-shadow: -1px -1px 1px #ffffff;
         }
         i {
             font-size: 1.2em;

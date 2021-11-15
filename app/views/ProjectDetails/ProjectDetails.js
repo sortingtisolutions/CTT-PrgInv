@@ -111,7 +111,7 @@ function get_discounts() {
     fillField(pagina, par, tipo, selector);
 }
 
-/**  Obtiene el listado de proyectos */
+/**  Obtiene el listado de productos */
 function get_products(word, dstr, dend) {
     var pagina = 'ProjectDetails/listProducts';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
