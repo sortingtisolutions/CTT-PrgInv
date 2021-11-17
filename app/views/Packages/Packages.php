@@ -21,7 +21,7 @@
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtPackageName" type="text" class="form-control form-control-sm" >
-                                <label for="txtPackageName">Nombre del packete</label>
+                                <label for="txtPackageName">Nombre del paquete</label>
                             </div>
                            
                         </div>

@@ -217,7 +217,7 @@ function fillProducts(ft) {
 
                 var H = `
                 <tr id="${u.prd_id}">
-                    <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>
+                    <td class="edit"><i class='fas fa-pen modif'></i></td>
                     <td class="sku">${skufull}</td>
                     <td class="product-name editable" data_action="box" data_edit="prd_name"> ${u.prd_name}</td>
                     <td class="price editable" data_action="box" data_edit="prd_price">${u.prd_price}</td>

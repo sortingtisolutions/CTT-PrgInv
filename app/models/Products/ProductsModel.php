@@ -74,7 +74,7 @@ public function listInvoice()
         $qry = "SELECT 
                     p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, 
                     CASE 
-                        WHEN p.prd_level = 'P' THEN  ifnull(sum(sp.stp_quantity),0)
+                        WHEN p.prd_level IN ('P','A') THEN  ifnull(sum(sp.stp_quantity),0)
                         ELSE 0 
                     END AS quantity, 
                     p.prd_price, cn.cin_code AS prd_coin_type,  p.prd_english_name, p.prd_level, IFNULL(dt.doc_id, 0) AS doc_id, dt.doc_name, ct.cat_id,
