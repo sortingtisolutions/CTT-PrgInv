@@ -31,3 +31,22 @@ CREATE TABLE `cttapp_cire`.`ctt_sales_details` (
     `ser_id`                INT NULL                        COMMENT 'Id de la serie relacion ctt_series',
 PRIMARY KEY (`sld_id`))
 COMMENT = 'Detalle de las ventas de productos.';
+
+
+
+
+
+INSERT INTO `cttapp_cire`.`ctt_modules` (`mod_code`, `mod_name`, `mod_description`, `mod_item`) VALUES ('sales', 'Venta de productos', 'Modulo de venta de productos', '#');
+INSERT INTO `cttapp_cire`.`ctt_modules` (`mod_code`, `mod_name`, `mod_description`, `mod_item`) VALUES ('ProdSalables', 'Venta de productos Expendables', 'Modulos de venta deproductos expendables', 'ProductsSalables');
+
+INSERT INTO `cttapp_cire`.`ctt_menu` (`mnu_parent`, `mnu_item`, `mnu_description`, `mnu_order`, `mod_id`) VALUES ('0', 'Venta', 'Seccion de ventas', '3', '32');
+UPDATE `cttapp_cire`.`ctt_menu` SET `mnu_order` = '4' WHERE (`mnu_id` = '23');
+UPDATE `cttapp_cire`.`ctt_menu` SET `mnu_order` = '5' WHERE (`mnu_id` = '5');
+
+INSERT INTO `cttapp_cire`.`ctt_menu` (`mnu_parent`, `mnu_item`, `mnu_description`, `mnu_order`, `mod_id`) VALUES ('33', 'Venta de expendables', 'Modulo de venta de expendables', '1', '33');
+
+INSERT INTO `cttapp_cire`.`ctt_users_modules` (`usr_id`, `mod_id`) VALUES ('1', '32');
+INSERT INTO `cttapp_cire`.`ctt_users_modules` (`usr_id`, `mod_id`) VALUES ('1', '33');
+
+
+
