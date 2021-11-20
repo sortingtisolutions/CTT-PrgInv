@@ -49,4 +49,16 @@ INSERT INTO `cttapp_cire`.`ctt_users_modules` (`usr_id`, `mod_id`) VALUES ('1', 
 INSERT INTO `cttapp_cire`.`ctt_users_modules` (`usr_id`, `mod_id`) VALUES ('1', '33');
 
 
+INSERT INTO `cttapp_cire`.`ctt_modules` (`mod_code`, `mod_name`, `mod_description`, `mod_item`) VALUES ('ProdSalables', 'Venta de productos Expendables', 'Modulos de venta deproductos expendables', 'ProductsSalables');
+
+
+
+
+-- Actualizacion del 18 de noviembre 2021
+ALTER TABLE `cttapp_cire`.`ctt_sales` 
+ADD COLUMN `sal_saller` VARCHAR(100) NULL COMMENT 'Nombre de vendedor' AFTER `sal_customer_name`;
+
+
+ALTER TABLE `cttapp_cire`.`ctt_sales` 
+ADD COLUMN `sal_project` VARCHAR(100) NULL COMMENT 'Nombre del projecto' AFTER `sal_saller`;
 
