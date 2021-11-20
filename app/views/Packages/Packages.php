@@ -84,6 +84,13 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <input id="txtQtyPrds" name="txtQtyPrds" type="text" class="form-control form-control-sm" required>
+                                <label for="txtQtyPrds">Cantidad de Productos</label>
+                            </div>
+                        </div>
 
                         <div class="row list-finder">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -128,6 +135,7 @@
                                     <th style="width:  70px">SKU</th>
                                     <th style="width:  auto">Producto</th>
                                     <th style="width:  70px">Precio</th>
+                                    <th style="width:  70px">Cantidad</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

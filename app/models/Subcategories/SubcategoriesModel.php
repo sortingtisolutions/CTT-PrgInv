@@ -28,7 +28,7 @@ class SubcategoriesModel extends Model
                 FROM  ctt_subcategories        AS sc   
                 INNER JOIN ctt_categories      AS ct ON ct.cat_id = sc.cat_id
                 WHERE sc.sbc_status = '1' AND ct.cat_status = '1' 
-                ORDER BY ct.cat_id, sc.sbc_name";
+                ORDER BY ct.cat_id, sc.sbc_id";
 
         return $this->db->query($qry);
     }

@@ -364,7 +364,7 @@ function putSeries(dt) {
 /** +++++  Coloca los seriales en la tabla de seriales */
 function build_modal_serie(dt) {
     let tabla = $('#tblStrSerie').DataTable();
-    $('.overlay_closer .title').html(`Catalogo - ${strnme}`);
+    $('.overlay_closer .title').html(`Almacen - ${strnme}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
         tabla.row

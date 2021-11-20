@@ -305,8 +305,8 @@ function getDocumentosTable() {
                info: false,
             },
             lengthMenu: [
-               [10, 25, 50, 100, -1],
-               ['10', '25', '50', 'Todo'],
+               [25, 50, 100, -1],
+               ['25', '50', 100, 'Todo'],
             ],
             dom: 'Blfrtip',
             buttons: [
