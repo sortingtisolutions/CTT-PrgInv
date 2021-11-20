@@ -71,7 +71,7 @@ class MoveStoresOutModel extends Model
 		$folio				= $this->db->real_escape_string($param['fol']);
 
 		$qry = "INSERT INTO ctt_stores_exchange
-				(exc_sku_product, exc_product_name, exc_quantity, exc_serie_product, exc_store, exc_comments, exc_proyect, exc_employee_name, ext_code, ext_id, con_id)
+				(exc_sku_product,      exc_product_name,   exc_quantity,   exc_serie_product,    exc_store,    exc_comments,    exc_proyect,    exc_employee_name,    ext_code,   ext_id, con_id)
 				VALUES
 				('$exc_sku_product', '$exc_product_name', $exc_quantity, '$exc_serie_product', '$exc_store', '$exc_comments', '$exc_proyect', '$exc_employee_name', '$ext_code', $ext_id, $folio);
 				";

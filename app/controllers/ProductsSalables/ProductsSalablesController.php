@@ -79,10 +79,22 @@ class ProductsSalablesController extends Controller
             echo $res;
         } 
 // Guarda la venta
+        public function NextExchange($request_params)
+        {
+            $params =  $this->session->get('user');
+            $result = $this->model->NextExchange($request_params);
+            $res = $result;
+            echo $res;
+        } 
+// Guarda la venta
         public function SaveSale($request_params)
         {
             $params =  $this->session->get('user');
-            $result = $this->model->SaveSale($request_params);
+            $group = explode('|',$params);
+    
+            $user = $group[2];
+
+            $result = $this->model->SaveSale($request_params, $user);
             $res = $result;
             echo $res;
         } 
@@ -90,7 +102,7 @@ class ProductsSalablesController extends Controller
         public function SaveSaleDetail($request_params)
         {
             $params =  $this->session->get('user');
-            $result = $this->model->SaveSaleDetail($request_params);
+            $result = $this->model->SaveSaleDetail($request_params, $params);
             $res = $result;
             echo $res;
         } 
@@ -103,7 +115,7 @@ class ProductsSalablesController extends Controller
             $user = $group[0];
             $name = $group[2];
 
-            $result = $this->model->saveSaleList($request_params);
+            $result = $this->model->saveSaleList($request_params, $user);
             $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;

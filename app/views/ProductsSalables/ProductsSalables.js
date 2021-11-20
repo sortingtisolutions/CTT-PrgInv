@@ -1,4 +1,4 @@
-let prod, proj;
+let prod, proj, folio;
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -18,7 +18,7 @@ function inicial() {
             .unbind('change')
             .on('change', function () {
                 var tp = $(this).val();
-                if (tp == 'TCREDITO') {
+                if (tp == 'TARJETA DE CREDITO') {
                     $('#txtInvoice').addClass('required').parents('div.form_group').removeClass('hide');
                 } else {
                     $('#txtInvoice').removeClass('required').parents('div.form_group').addClass('hide');
@@ -366,37 +366,66 @@ function mkn(cf, tp) {
 
 function saleApply() {
     deep_loading('O');
-    let ky = validator();
-    if (ky == 1) {
-        let pix = $('#lstProject').val();
-        let payForm = $('#lstPayForm').val();
-        let invoice = $('#txtInvoice').val();
-        let customer = $('#txtCustomer').val();
-        let pjtId = proj[pix - 1].pjt_id;
-        let strId = $('#lstStore').val();
 
-        let par = `
+    if (folio == undefined) {
+        var pagina = 'ProductsSalables/NextExchange';
+        var par = '[{"par":""}]';
+        var tipo = 'html';
+        var selector = putNextExchangeNumber;
+        fillField(pagina, par, tipo, selector);
+    } else {
+        let ky = validator();
+        if (ky == 1) {
+            let pix = $('#lstProject').val();
+            console.log(pix);
+            let payForm = $('#lstPayForm').val();
+            let invoice = $('#txtInvoice').val();
+            let customer = $('#txtCustomer').val().toUpperCase();
+            let pjtName = pix == '' ? '' : proj[pix - 1].pjt_name.toUpperCase();
+            let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
+            let strId = $('#lstStore').val();
+
+            let par = `
 [{
     "salPayForm"        : "${payForm}",
     "salNumberInvoice"  : "${invoice}",
     "salCustomerName"   : "${customer}",
+    "pjtName"           : "${pjtName}",
     "strId"             : "${strId}",
     "pjtId"             : "${pjtId}"
 }]`;
 
-        // console.log(par);
-
-        let rws = $('.frame_content #tblControl tbody tr').length;
-        if (rws > 0) {
-            var pagina = 'ProductsSalables/SaveSale';
-            var tipo = 'html';
-            var selector = saleDetailApply;
-            fillField(pagina, par, tipo, selector);
+            // console.log(par);
+            clean_required();
+            let rws = $('.frame_content #tblControl tbody tr').length;
+            if (rws > 0) {
+                var pagina = 'ProductsSalables/SaveSale';
+                var tipo = 'html';
+                var selector = saleDetailApply;
+                fillField(pagina, par, tipo, selector);
+            } else {
+                alert('Tabla vacia');
+                deep_loading('C');
+            }
+        } else {
+            deep_loading('C');
         }
     }
 }
 
+function putNextExchangeNumber(dt) {
+    console.log(dt);
+    folio = dt;
+    saleApply();
+}
+
 function saleDetailApply(dt) {
+    let pix = $('#lstProject').val();
+    let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
+    let strId = $('#lstStore').val();
+
+    console.log(pix, pjtId, strId);
+
     $('.frame_content #tblControl tbody tr').each(function (v) {
         let ix = $(this).attr('data_index');
         if (prod[ix].ser_id != undefined) {
@@ -415,8 +444,13 @@ function saleDetailApply(dt) {
     "sldPrice"      : "${productPrice}",
     "sldQuantity"   : "${quantity}",
     "salId"         : "${salId}",
-    "serId"         : "${serId}"
+    "serId"         : "${serId}",
+    "strId"         : "${strId}",
+    "pjtId"         : "${pjtId}",
+    "folio"         : "${folio}"
 }]`;
+
+            console.log(par);
 
             var pagina = 'ProductsSalables/SaveSaleDetail';
             var tipo = 'html';
@@ -427,20 +461,14 @@ function saleDetailApply(dt) {
 }
 
 function setSaleDetailApply(dt) {
+    console.log(dt);
     deep_loading('C');
 
-    var pagina = 'ProductsSalables/saveSaleList';
-    var par = `[{"salId":"${dt}"}]`;
-    var tipo = 'html';
-    var selector = printSale;
-    fillField(pagina, par, tipo, selector);
-}
-
-function printSale(dt) {
-    console.log(dt);
-    let usr = dt.split('|')[0];
-    let nme = dt.split('|')[1];
-    window.open(url + 'app/views/ProductsSalables/ProductsSalablesReport.php?u=' + usr + '&n=' + nme, '_blank');
+    let sal = dt.split('|')[0];
+    let usr = dt.split('|')[1];
+    let nme = dt.split('|')[2];
+    let hst = localStorage.getItem('host');
+    window.open(url + 'app/views/ProductsSalables/ProductsSalablesReport.php?i=' + sal + '&u=' + usr + '&n=' + nme + '&h=' + hst, '_blank');
     window.location = 'ProductsSalables';
 }
 
@@ -459,4 +487,9 @@ function validator() {
     });
 
     return vl;
+}
+
+function clean_required() {
+    $('.required').removeClass('forValid');
+    $('.required').parent().children('.novalid').remove();
 }

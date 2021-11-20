@@ -38,7 +38,7 @@
                                             <select id="lstPayForm" name="lstPayForm" class="required">
                                                 <option value="">Selecciona...</option>
                                                 <option value="EFECTIVO">EFECTIVO</option>
-                                                <option value="TCREDITO">TARJETA DE CREDITO</option>
+                                                <option value="TARJETA DE CREDITO">TARJETA DE CREDITO</option>
                                             </select>
                                         </div>
 

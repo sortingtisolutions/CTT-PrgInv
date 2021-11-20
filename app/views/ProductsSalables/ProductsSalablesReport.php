@@ -4,16 +4,31 @@ ini_set('display_errors', 'On');
 
 require_once '../../../vendor/autoload.php';
 
+
+$SalId = $_GET['i'];
 $usrId = $_GET['u'];
 $name = $_GET['n'];
 
+$conkey = decodificar($_GET['h']) ;
 
-$dir = 'ProductsSalablesFile-'. $usrId .'.json';
+$h = explode("|",$conkey);
 
-$file = @file_get_contents($dir);
-$items = json_decode($file, true);
+$conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
+$qry = "SELECT sl.*, sd.*, pj.pjt_number, pj.pjt_name, st.str_name
+        FROM ctt_sales AS sl
+        INNER JOIN ctt_sales_details AS sd ON sd.sal_id = sl.sal_id
+        INNER JOIN ctt_stores AS st ON st.str_id = sl.str_id
+        LEFT JOIN ctt_projects As pj ON pj.pjt_id = sl.pjt_id
+        WHERE sl.sal_id = $SalId;";
+$res = $conn->query($qry);
+
+while($row = $res->fetch_assoc()){
+    $items[] = $row;
+}
+
+
 $payform = $items[0]['sal_pay_form'];
-if ($items[0]['sal_pay_form'] == 'TCREDITO'){$payform = 'TARJETA DE CRÉDITO';}
+if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO'){$payform = 'TARJETA DE CRÉDITO';}
 
 
 $header = '
@@ -71,7 +86,7 @@ $html .= '
                             <td class="data">'.  $payform .'</td>
                         </tr>';
 
-if ($items[0]['sal_pay_form'] == 'TCREDITO' ){
+if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO' ){
 
     $html .= '
                         <tr>
@@ -125,18 +140,30 @@ $html .= '
 
             }
 
-$iva = $subtotal * .16;
-$total = $subtotal + $iva;
+if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO'){
 
-            $html .= '
-            <tr>
-                <td class="tot-figure totl" colspan="3">Subtotal</td>
-                <td class="tot-figure amou">' . number_format($subtotal, 2,'.',',') . '</td>
-            </tr>
-            <tr>
-                <td class="tot-figure totl" colspan="3">I.V.A.</td>
-                <td class="tot-figure amou">' . number_format($iva, 2,'.',',') . '</td>
-            </tr>
+        
+    $iva = $subtotal * .16;
+    $total = $subtotal + $iva;
+    $html .= '
+
+    <tr>
+        <td class="tot-figure totl" colspan="3">Subtotal</td>
+        <td class="tot-figure amou">' . number_format($subtotal, 2,'.',',') . '</td>
+    </tr>
+
+    <tr>
+        <td class="tot-figure totl" colspan="3">I.V.A.</td>
+        <td class="tot-figure amou">' . number_format($iva, 2,'.',',') . '</td>
+    </tr>';
+
+
+} else {
+    $total = $subtotal;
+}
+
+$html .= '
+
             <tr>
                 <td class="tot-figure totl" colspan="3">Total</td>
                 <td class="tot-figure amou">' . number_format($total, 2,'.',',') . '</td>
@@ -207,3 +234,19 @@ $mpdf->Output(
     "Venta.pdf",
     "I"
 );
+
+
+function decodificar($dato) {
+    $resultado = base64_decode($dato);
+    list($resultado, $letra) = explode('+', $resultado);
+    $arrayLetras = array('M', 'A', 'R', 'C', 'O', 'S');
+    for ($i = 0; $i < count($arrayLetras); $i++) {
+        if ($arrayLetras[$i] == $letra) {
+            for ($j = 1; $j <= $i; $j++) {
+                $resultado = base64_decode($resultado);
+            }
+            break;
+        }
+    }
+    return $resultado;
+}
