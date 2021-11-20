@@ -96,6 +96,7 @@ function setting_table_products() {
             {data: 'prod_sku', class: 'sku'},
             {data: 'prodname', class: 'product-name'},
             {data: 'prodpric', class: 'price'},
+            {data: 'prodcant', class: 'quantity'},
         ],
     });
 }
@@ -512,6 +513,7 @@ function putProductsPack(dt) {
                     prod_sku: `<span class="hide-support" id="SKU-${u.prd_sku}">${u.prd_id}</span>${u.prd_sku}`,
                     prodname: u.prd_name,
                     prodpric: u.prd_price,
+                    prodcant: u.pck_quantity,
                 })
                 .draw();
         });
@@ -525,11 +527,12 @@ function product_apply(prId) {
     let productSKU = prod[1];
     let productName = prod[3];
     let productParent = $('#txtIdPackages').val();
+    let productQuantity = $('#txtQtyPrds').val();
 
     console.log(productParent);
 
     var pagina = 'Packages/SaveProduct';
-    var par = `[{"prdId":"${productId}","prdParent":"${productParent}"}]`;
+    var par = `[{"prdId":"${productId}","prdParent":"${productParent}"},"prdQuantity":"${productQuantity}"}]`;
     var tipo = 'json';
     var selector = putNewProductsPack;
     fillField(pagina, par, tipo, selector);
@@ -543,6 +546,7 @@ function putNewProductsPack(dt) {
             prod_sku: `<span class="hide-support" id="SKU-${dt[0].prd_sku}">${dt[0].prd_id}</span>${dt[0].prd_sku}`,
             prodname: dt[0].prd_name,
             prodpric: dt[0].prd_price,
+            prodcant: dt[0].pck_quantity,
         })
         .draw();
     action_selected_products();

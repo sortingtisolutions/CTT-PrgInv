@@ -53,7 +53,7 @@ public function listProducts()
 public function listProductsPack($params)
 {
     $prdId = $this->db->real_escape_string($params);
-    $qry = "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent  
+    $qry = "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent, pk.pck_quantity  
             FROM ctt_products_packages AS pk
             INNER JOIN ctt_products AS pr ON pr.prd_id = pk.prd_id
             WHERE pk.prd_parent = $prdId AND prd_status =1;";
@@ -92,6 +92,7 @@ public function listProductsPack($params)
     {
         $prd_id            = $this->db->real_escape_string($param['prdId']);
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
+        $prd_quantity        = $this->db->real_escape_string($param['prdQuantity']);
 
         $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id ) 
                 VALUES ( '$prd_parent', '$prd_id');
@@ -100,7 +101,7 @@ public function listProductsPack($params)
         $this->db->query($qry);
         $pckId = $this->db->insert_id;
                 
-        $qrr =  "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent  
+        $qrr =  "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent pk.pck_quantity 
                  FROM ctt_products_packages AS pk
                  INNER JOIN ctt_products AS pr ON pr.prd_id = pk.prd_id
                  WHERE pk.pck_id = $pckId;" ;

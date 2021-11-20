@@ -12,6 +12,7 @@ $(document).ready(function () {
 
 function inicial() {
     getProjects(0);
+    //settingTable();
 }
 
 /** +++++  Obtiene los proyectos de la base */
@@ -29,7 +30,6 @@ function getSelectProject(pjtid) {
     var tipo = 'json';
     var selector = putSelectProject;
     fillField(pagina, par, tipo, selector);
-    //ALGO
 }
 
 /** +++++  coloca los productos en la tabla */
@@ -52,9 +52,10 @@ function putProducts(dt) {
                 </tr>`;
             $('#tblProducts tbody').append(H);
         });
-        //settingTable();
-        console.log('1111');
+        
+        //console.log('1111');
         activeIcons();
+        //settingTable();
     } else {
         settingTable();
     }
@@ -136,7 +137,7 @@ function settingTable() {
         .slideDown('fast', function () {
             $('.deep_loading').css({display: 'none'});
             $('#tblProducts').DataTable().draw();
-        });
+        }); 
 }
 
 /** +++++  Activa los iconos */
