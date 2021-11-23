@@ -65,7 +65,25 @@ function putSubcategories(dt) {
 /** ---- Verifica que el almacen de subcategorias este lleno ---- */
 function fillSubcategories() {
     if (subs != null) {
-        fillSubcategoriesTbl();
+        if (subs[0].str_id != 0) {
+            $('#tblSubcategory').DataTable().destroy();
+            $('#tblSubcategory tbody').html('');
+            $.each(subs, function (v, u) {
+                let H = `
+                <tr id ="${u.sbc_id}">
+                    <td class="edit"><i class="fas fa-pen modif"></i><i class="fas fa-times-circle kill"></i></td>
+                    <td class="subCode center bold">${u.sbc_code}</td>
+                    <td class="subName">${u.sbc_name}</td>
+                    <td class="catName">${u.cat_name}</td>
+                    <td class="catCode center">${u.cat_id}</td>
+                    <td class="quantity"><span class="toLink">0</span></td>
+                </tr>
+            `;
+                $('#tblSubcategory tbody').append(H);
+                get_quantity(u.sbc_id);
+            });
+        }
+        settingTable();
         fillSubcategorieslst();
     } else {
         setTimeout(() => {
@@ -162,6 +180,7 @@ function settingTable() {
             {data: 'quantity', class: 'quantity'},
         ],
     });
+    deep_loading('C');
 }
 
 /** ---- Llena la lista de subcategorias ---- */

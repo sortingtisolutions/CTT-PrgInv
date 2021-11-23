@@ -115,28 +115,30 @@ function fillSales() {
 
 /** ---- Llena la tabla de subcategorias ---- */
 function fillSalesTbl() {
-    $('#tblSales tbody').html('');
+    if (sale[0].sal_id != 0) {
+        $('#tblSales tbody').html('');
 
-    let tabla = $('#tblSales').DataTable();
+        let tabla = $('#tblSales').DataTable();
 
-    $.each(sale, function (v, u) {
-        var rw = tabla.row
-            .add({
-                editable: `<i class="fas fa-eye view"></i>`,
-                numbsale: u.sal_number,
-                datesale: u.sal_date,
-                customer: u.sal_customer_name,
-                projname: u.sal_project,
-                payforms: u.sal_pay_form,
-                sallernm: u.sal_saller,
-            })
-            .draw()
-            .node();
+        $.each(sale, function (v, u) {
+            var rw = tabla.row
+                .add({
+                    editable: `<i class="fas fa-eye view"></i>`,
+                    numbsale: u.sal_number,
+                    datesale: u.sal_date,
+                    customer: u.sal_customer_name,
+                    projname: u.sal_project,
+                    payforms: u.sal_pay_form,
+                    sallernm: u.sal_saller,
+                })
+                .draw()
+                .node();
 
-        $(rw).attr('id', u.sal_id);
-        $(rw).attr('index', v);
-    });
-    activeActions();
+            $(rw).attr('id', u.sal_id);
+            $(rw).attr('index', v);
+        });
+        activeActions();
+    }
     deep_loading('C');
 }
 
