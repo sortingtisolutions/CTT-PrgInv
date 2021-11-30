@@ -84,24 +84,28 @@
                             </div>
                         </div>
 
-                        <div class="row">
+<!--                        <div class="row">
                             
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtQtyPrds" name="txtQtyPrds" type="text" class="form-control form-control-sm" required>
                                 <label for="txtQtyPrds">Cantidad de Productos</label>
                             </div>
-                        </div>
+                        </div>  -->
 
                         <div class="row list-finder">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <div class="box-items-list" id="boxProducts">Productos
+                                <div class="box-items-list" id="boxProducts">Productos Lista
                                     <i class="fas fa-angle-down"></i>
                                 </div>
+ <!--                               <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                    <input id="boxProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un producto" >
+                                    <label for="boxProducts">Productos</label>
+                                    <input type="hidden" id="txtIdProducts" name="txtIdProducts">
+                                    <input type="hidden" id="txtNextSerie" name="txtNextSerie">  -->
                             </div>
                             <div class="list-group list-hide">
                                 <div class="list-items" id="listProducts"></div>
                             </div>
-                            
                         </div>
                         
                     </div>

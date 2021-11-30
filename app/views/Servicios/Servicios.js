@@ -58,7 +58,7 @@ function validaFormulario() {
 //Edita el Proveedores *
 function EditServicios(id) {
    $('#titulo').text('Edita Servicio');
-
+   console.log('CLick para editar');
    UnSelectRowTable();
    LimpiaModal();
    var location = 'Servicios/GetServicio';

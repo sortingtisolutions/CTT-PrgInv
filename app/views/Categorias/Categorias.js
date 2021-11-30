@@ -26,7 +26,7 @@ function settingTable() {
     let title = 'Lista de Catálogos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#CategoriasTable').DataTable({
-        order: [[2, 'asc']],
+        order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
             [100, 200, 300, -1],
@@ -122,7 +122,8 @@ function actionButtons() {
         .on('click', function () {
             let acc = $(this).attr('class').split(' ')[2];
             let catId = $(this).parents('tr').attr('id');
-
+            //console.log($(this).attr('class').split(' '));
+            //console.log(acc);
             switch (acc) {
                 case 'modif':
                     editCategory(catId);
@@ -276,7 +277,7 @@ function deleteCategory(catId) {
 
     if (cn != 0) {
         $('#confirmModal').modal('show');
-        $('#confirmModalLevel').html('No se puede borrar este registro ya que contiene excistencias asociadas a el.');
+        $('#confirmModalLevel').html('No se puede borrar este registro ya que contiene existencias asociadas a el.');
         $('#N').html('Cancelar');
         $('#confirmButton').html('').css({display: 'none'});
         $('#Id').val(0);
