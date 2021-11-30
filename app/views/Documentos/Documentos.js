@@ -234,7 +234,8 @@ function VerDocumento(id) {
             a.target = '_blank';
            // a.download = respuesta.doc_name;
 
-            a.download = respuesta.doc_name + "."+ respuesta.doc_type.trim();
+            //a.download = respuesta.doc_name + "."+ respuesta.doc_type.trim();
+            a.download = respuesta.doc_name;
             a.click();
         },
         error: function (jqXHR, textStatus, errorThrown){
@@ -305,8 +306,8 @@ function getDocumentosTable() {
                info: false,
             },
             lengthMenu: [
-               [25, 50, 100, -1],
-               ['25', '50', 100, 'Todo'],
+               [50, 100, -1],
+               ['50', 100, 'Todo'],
             ],
             dom: 'Blfrtip',
             buttons: [

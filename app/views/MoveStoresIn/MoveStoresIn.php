@@ -54,8 +54,8 @@
                                     <input type="hidden" id="txtIdInvoices" name="txtIdInvoices">
                                     <input type="hidden" id="txtNextSerie" name="txtNextSerie">
                             </div>
-                            <div class="list-group list-hide">
-                                <div class="list-items" id="listInvoice"></div>
+                            <div id="listInvoice" class="list-group list-hide">
+                                <div class="list-items" ></div>
                             </div>
                     </div>
 
@@ -75,8 +75,8 @@
                                     <input type="hidden" id="txtIdProducts" name="txtIdProducts">
                                     <input type="hidden" id="txtNextSerie" name="txtNextSerie">
                             </div>
-                            <div class="list-group list-hide">
-                                <div class="list-items" id="listProducts"></div>
+                            <div id="listProducts" class="list-group list-hide">
+                                <div class="list-items"></div>
                             </div>
                     </div>
 

@@ -15,7 +15,7 @@ function inicial() {
     getExchange();
     getStores();
     getSuppliers();
-    getInvoice();
+    //getInvoice();
     getCoins();
     getCategories();
     setting_table();
@@ -175,6 +175,7 @@ function putTypeExchange(dt) {
             }
         });
     }
+
     $('#txtTypeExchange').on('change', function () {
         let id = $(this).val();
         link = $(`#txtTypeExchange option[value="${id}"]`).attr('data-content').split('|')[2];
@@ -193,6 +194,7 @@ function setting_interface(code) {
     code.substring(4, 5) == '0' ? $('.pos4').addClass('hide-items') : $('.pos4').removeClass('hide-items');
     code.substring(5, 6) == '0' ? $('.pos5').addClass('hide-items') : $('.pos5').removeClass('hide-items');
     code.substring(6, 7) == '0' ? $('.pos6').addClass('hide-items') : $('.pos6').removeClass('hide-items');
+    getInvoice();
 }
 
 // Dibuja los almacenes
@@ -265,34 +267,38 @@ function putCategories(dt) {
 // Almacena los registros de productos en un arreglo
 function putProducts(dt) {
     var ps = $('#txtProducts').offset();
-    $('#listProducts').html('');
-
-    $('.list-group').css({top: ps.top + 40 + 'px'});
-    $('.list-group').slideUp('100', function () {
-        $('#listProducts').html('');
+    $('#listProducts .list-items').html('');
+    console.log(ps);
+    $('#listProducts').css({top: ps.top + 30 + 'px'});
+    $('#listProducts').slideUp('100', function () {
+        $('#listProducts .list-items').html('');
     });
 
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="P-${u.prd_id}" data_serie="${u.serNext}" data_complement="${u.prd_sku}|${u.prd_name}">${u.prd_sku}-${u.prd_name}</div>`;
-        $('#listProducts').append(H);
+        $('#listProducts .list-items').append(H);
     });
 
     $('#txtProducts').on('focus', function () {
-        $('.list-group').slideDown('slow');
+        $('#listProducts').slideDown('slow');
+    });
+
+    $('#listProducts').on('mouseleave', function () {
+        $('#listProducts').slideUp('slow');
     });
 
     $('#txtProducts').keyup(function (e) {
         var res = $(this).val().toUpperCase();
         if (res == '') {
-            $('.list-group').slideUp(100);
+            $('#listProducts').slideUp(100);
         } else {
-            $('.list-group').slideDown(400);
+            $('#listProducts').slideDown(400);
         }
         res = omitirAcentos(res);
         sel_products(res);
     });
 
-    $('.list-group .list-item').on('click', function () {
+    $('#listProducts .list-item').on('click', function () {
         let prdNm = $(this).html();
         let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
         let serie = $(this).attr('data_serie');
@@ -301,49 +307,56 @@ function putProducts(dt) {
         $('#txtNextSerie').val(serie);
         $('#txtPrice').val($(this).attr('data_complement').split('|')[3]);
         $('#txtCoinType').val($(this).attr('data_complement').split('|')[4]);
-        $('.list-group').slideUp(100);
+        $('#listProducts').slideUp(100);
         validator();
     });
 }
 // AGREGA LAS FACTURAS CON TEXTO SELECTIVO
 function putInvoceList(dt) {
     var fc = $('#txtInvoice').offset();
-    $('#listInvoice').html('');
-
-    $('.list-group').css({top: fc.top + 40 + 'px'});
-    $('.list-group').slideUp('100', function () {
-        $('#listInvoice').html('');
+    $('#listInvoice .list-items').html('');
+    console.log(fc);
+    //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
+    $('#listInvoice').css({top: fc.top + 30 + 'px'});
+    $('#listInvoice').slideUp('100', function () {
+    //$('.list-group #listInvoice').slideUp('100', function () {
+        $('#listInvoice .list-items').html('');
     });
 
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="${u.doc_id}" data_serie="${u.doc_id}" data_complement="${u.doc_id}|${u.doc_name}">${u.doc_name}</div>`;
-        $('#listInvoice').append(H);
+        $('#listInvoice .list-items').append(H);
     });
 
     $('#txtInvoice').on('focus', function () {
         console.log('FOCUS');
-        $('.list-group').slideDown('slow');
+        //$('.list-group #listInvoice').slideDown('slow');
+        $('#listInvoice').slideDown('slow');
+    });
+
+    $('#listInvoice').on('mouseleave', function () {
+        $('#listInvoice').slideUp('slow');
     });
 
     $('#txtInvoice').keyup(function (e) {
         var res = $(this).val().toUpperCase();
         if (res == '') {
-            $('.list-group').slideUp(100);
+            $('#listInvoice').slideUp(100);
         } else {
-            $('.list-group').slideDown(400);
+            $('#listInvoice').slideDown(400);
         }
         res = omitirAcentos(res);
         sel_invoice(res);
     });
 
-    $('.list-group .list-item').on('click', function () {
+    $('#listInvoice .list-item').on('click', function () {
         
         let prdNm = $(this).html();
         let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
         //log('selecciona elemento', prdId,'---', prdNm);
         $('#txtInvoice').val(prdNm);
         $('#txtIdInvoices').val(prdId);
-        $('.list-group').slideUp(100);
+        $('#listInvoice').slideUp(100);
         validator();
     });
 }
@@ -352,7 +365,7 @@ function putInvoceList(dt) {
 function relocation_products() {
     var ps = $('#txtProducts').offset();
 
-    $('.list-group').css({top: ps.top + 35 + 'px'});
+    $('#listProducts').css({top: ps.top + 30 + 'px'});
 }
 
 // Valida los campos
@@ -665,12 +678,12 @@ function omitirAcentos(text) {
 /**  +++ Ocultalos productos del listado que no cumplen con la cadena  */
 function sel_products(res) {
     if (res.length < 1) {
-        $('#listProducts div.list-item').css({display: 'block'});
+        $('#listProducts .list-items div.list-item').css({display: 'block'});
     } else {
-        $('#listProducts div.list-item').css({display: 'none'});
+        $('#listProducts .list-items div.list-item').css({display: 'none'});
     }
 
-    $('#listProducts div.list-item').each(function (index) {
+    $('#listProducts .list-items div.list-item').each(function (index) {
         var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
 
         cm = omitirAcentos(cm);
@@ -685,12 +698,12 @@ function sel_products(res) {
 function sel_invoice(res) {
     //console.log('SELECC',res);
     if (res.length < 1) {
-        $('#listInvoice div.list-item').css({display: 'block'});
+        $('#listInvoice .list-items div.list-item').css({display: 'block'});
     } else {
-        $('#listInvoice div.list-item').css({display: 'none'});
+        $('#listInvoice .list-items div.list-item').css({display: 'none'});
     }
 
-    $('#listInvoice div.list-item').each(function (index) {
+    $('#listInvoice .list-items div.list-item').each(function (index) {
         var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
 
         cm = omitirAcentos(cm);

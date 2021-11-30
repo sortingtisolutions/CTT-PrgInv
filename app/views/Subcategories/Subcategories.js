@@ -93,7 +93,7 @@ function settingTable() {
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#tblSubcategory').DataTable({
         order: [
-            [4, 'asc'],
+            [5, 'asc'],
             [1, 'asc'],
         ],
         dom: 'Blfrtip',

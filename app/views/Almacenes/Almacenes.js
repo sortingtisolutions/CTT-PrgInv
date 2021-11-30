@@ -25,7 +25,7 @@ function settingTable() {
     let title = 'Lista de Catálogos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#AlmacenesTable').DataTable({
-        order: [[2, 'asc']],
+        order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
             [100, 200, 300, -1],

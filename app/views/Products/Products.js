@@ -629,7 +629,8 @@ function createNewProduct() {
             let accr = $(this).attr('data_val');
             console.log(itmId, accr);
 
-            if (itmId == 'txtPrdLevel' && accr == 1) {
+            if (itmId == 'txtPrdLevel') {
+                if(accr == 1){
                 $(`#txtCatId`).val(20);
                 $(`#txtSbcId`).val(142);
                 $(`#txtCatId`).attr('disabled', true);
@@ -640,6 +641,7 @@ function createNewProduct() {
                 $(`#txtCatId`).attr('disabled', false);
                 $(`#txtSbcId`).attr('disabled', false);
             }
+        }
         });
 
     $('#txtSbcId')
