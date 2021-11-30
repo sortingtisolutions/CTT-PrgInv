@@ -40,11 +40,23 @@
                     </div>
 
                     <!-- Factura posición 3 -->
-                    <div class="row pos3 hide-items">
+ <!--                   <div class="row pos3 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtInvoice" class="form-select form-select-sm"><option value="0" selected>Selecciona factura</option></select>
                             <label for="txtInvoice">Factura</label>
                         </div>
+                    </div>
+-->
+                    <div class="row list-finder pos3 hide-items">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                    <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" >
+                                    <label for="txtInvoice">Factura</label>
+                                    <input type="hidden" id="txtIdInvoices" name="txtIdInvoices">
+                                    <input type="hidden" id="txtNextSerie" name="txtNextSerie">
+                            </div>
+                            <div class="list-group list-hide">
+                                <div class="list-items" id="listInvoice"></div>
+                            </div>
                     </div>
 
                     <!-- Factura posición 3 -->

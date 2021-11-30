@@ -92,16 +92,15 @@ public function listProductsPack($params)
     {
         $prd_id            = $this->db->real_escape_string($param['prdId']);
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
-        $prd_quantity        = $this->db->real_escape_string($param['prdQuantity']);
+        //$prd_quantity        = $this->db->real_escape_string($param['prdQuantity']);
 
-        $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id ) 
-                VALUES ( '$prd_parent', '$prd_id');
-        ";
+        $qry = "INSERT INTO ctt_products_packages ( prd_parent, prd_id) 
+                VALUES ('$prd_parent', '$prd_id');";
 
         $this->db->query($qry);
         $pckId = $this->db->insert_id;
                 
-        $qrr =  "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent pk.pck_quantity 
+        $qrr =  "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent, pk.pck_quantity 
                  FROM ctt_products_packages AS pk
                  INNER JOIN ctt_products AS pr ON pr.prd_id = pk.prd_id
                  WHERE pk.pck_id = $pckId;" ;
@@ -167,5 +166,21 @@ public function listProductsPack($params)
         
         return $this->db->query($qry);
 
-    }        
+    }      
+    
+// Actualiza la cantidad de productos asociados al paquete
+    public function updateQuantityProds($param)
+    {
+        $prd_id            = $this->db->real_escape_string($param['prdId']);
+        $prd_parent        = $this->db->real_escape_string($param['prdParent']);
+        $prd_qty           = $this->db->real_escape_string($param['prdQty']);
+
+        $qry =  "UPDATE ctt_products_packages SET pck_quantity = $prd_qty 
+                WHERE prd_parent = $prd_parent AND prd_id = $prd_id;" ;
+        
+        $this->db->query($qry);
+
+        return $prd_id;
+    }    
+
 }
