@@ -279,6 +279,14 @@ div.dataTables_wrapper div.dataTables_length select {
 	display: inline-block;
 	width: 50px;
 	font-size: 0.9em;
+
+	.quantity  {
+		border: none;
+		width: 40px;
+		text-align: center;
+		background-color: transparent;
+
+	}
 }
 div.dataTables_wrapper .btn,
 div.dataTables_wrapper div.btn-group button.btn-secundary {

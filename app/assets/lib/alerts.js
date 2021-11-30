@@ -1,4 +1,6 @@
-altr = 1;
+$(document).ready(function () {
+    altr = 1;
+});
 
 function deep_loading(op) {
     if (op == 'C') {

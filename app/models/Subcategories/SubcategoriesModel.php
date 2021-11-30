@@ -1,5 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
+require( ROOT . PATH_ASSETS.  'ssp.class.php' );
+
+
 
 class SubcategoriesModel extends Model
 {
@@ -22,9 +25,41 @@ class SubcategoriesModel extends Model
     }
 
 // Obtiene el listado de las subcategorias activas
+    public function tableSubcategories($params)
+    {
+
+        $table = 'ctt_vw_subcategories';  
+        $primaryKey = 'subcatid';
+        $columns = array(
+            array( 'db' => 'editable', 'dt' => 'editable' ),
+            array( 'db' => 'subcatid', 'dt' => 'subcatid' ),
+            array( 'db' => 'subccode', 'dt' => 'subccode' ),
+            array( 'db' => 'subcname', 'dt' => 'subcname' ),
+            array( 'db' => 'catgname', 'dt' => 'catgname' ),
+            array( 'db' => 'catgcode', 'dt' => 'catgcode' ),
+            array( 'db' => 'quantity', 'dt' => 'quantity' ),
+        );
+        $sql_details = array(
+            'user' => USER,
+            'pass' => PASSWORD,
+            'db'   => DB_NAME,
+            'host' => HOST,
+            'charset' => 'utf8',
+        );
+
+        return json_encode(
+            SSP::simple( $_POST, $sql_details, $table, $primaryKey, $columns )
+        );
+
+    }
+
+    
+// Obtiene el listado de las subcategorias activas
     public function listSubcategories($params)
     {
-        $qry = "SELECT sc.*, ct.*, '0' as cantidad 
+
+        $qry = "SELECT sc.sbc_id, sc.sbc_code, sc.sbc_name, ct.cat_name, 
+                        ct.cat_id, '0' as quantity 
                 FROM  ctt_subcategories        AS sc   
                 INNER JOIN ctt_categories      AS ct ON ct.cat_id = sc.cat_id
                 WHERE sc.sbc_status = '1' AND ct.cat_status = '1' 

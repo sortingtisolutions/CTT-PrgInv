@@ -13,7 +13,6 @@ function inicial() {
         settingTable();
         getCategories();
         getSubcategories();
-        fillSubcategories();
         confirm_alert();
     } else {
         setTimeout(() => {
@@ -60,67 +59,37 @@ function putCategories(dt) {
 /** ---- Almacena las subcategorias ---- */
 function putSubcategories(dt) {
     subs = dt;
+    fillSubcategorieslst();
 }
 
-/** ---- Verifica que el almacen de subcategorias este lleno ---- */
-function fillSubcategories() {
-    if (subs != null) {
-        if (subs[0].str_id != 0) {
-            $('#tblSubcategory').DataTable().destroy();
-            $('#tblSubcategory tbody').html('');
-            $.each(subs, function (v, u) {
-                let H = `
-                <tr id ="${u.sbc_id}">
-                    <td class="edit"><i class="fas fa-pen modif"></i><i class="fas fa-times-circle kill"></i></td>
-                    <td class="subCode center bold">${u.sbc_code}</td>
-                    <td class="subName">${u.sbc_name}</td>
-                    <td class="catName">${u.cat_name}</td>
-                    <td class="catCode center">${u.cat_id}</td>
-                    <td class="quantity"><span class="toLink">0</span></td>
-                </tr>
-            `;
-                $('#tblSubcategory tbody').append(H);
-                get_quantity(u.sbc_id);
-            });
-        }
-        settingTable();
-        fillSubcategorieslst();
-    } else {
-        setTimeout(() => {
-            fillSubcategories();
-        }, 100);
-    }
-}
+// /** ---- Llena la tabla de subcategorias ---- */
+// function fillSubcategoriesTbl() {
+//     $('#tblSubcategory tbody').html('');
 
-/** ---- Llena la tabla de subcategorias ---- */
-function fillSubcategoriesTbl() {
-    $('#tblSubcategory tbody').html('');
+//     let tabla = $('#tblSubcategory').DataTable();
 
-    let tabla = $('#tblSubcategory').DataTable();
-
-    $.each(subs, function (v, u) {
-        var rw = tabla.row
-            .add({
-                editable: `<i class="fas fa-pen modif"></i><i class="fas fa-times-circle kill"></i>`,
-                subccode: u.sbc_code,
-                subcname: u.sbc_name,
-                catgname: u.cat_name,
-                catgcode: u.cat_id,
-                quantity: `<span class="toLink">0</span>`,
-            })
-            .draw()
-            .node();
-        $(rw).attr('id', u.sbc_id);
-        get_quantity(u.sbc_id);
-    });
-    activeActions();
-    deep_loading('C');
-}
+//     $.each(subs, function (v, u) {
+//         var rw = tabla.row
+//             .add({
+//                 editable: `<i class="fas fa-pen modif"></i><i class="fas fa-times-circle kill"></i>`,
+//                 subccode: u.sbc_code,
+//                 subcname: u.sbc_name,
+//                 catgname: u.cat_name,
+//                 catgcode: u.cat_id,
+//                 quantity: `<span class="toLink">0</span>`,
+//             })
+//             .draw()
+//             .node();
+//         $(rw).attr('id', u.sbc_id);
+//         get_quantity(u.sbc_id);
+//     });
+//     activeActions();
+//     deep_loading('C');
+// }
 
 /** +++++  configura la table de subcategorias */
 function settingTable() {
     let title = 'Lista de subcategorias';
-    // $('#tblSubcategory').DataTable().destroy();
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#tblSubcategory').DataTable({
         order: [
@@ -129,8 +98,8 @@ function settingTable() {
         ],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, 300, -1],
-            [100, 200, 300, 'Todos'],
+            [50, 100, 200, 300, -1],
+            [50, 100, 200, 300, 'Todos'],
         ],
         buttons: [
             {
@@ -166,21 +135,29 @@ function settingTable() {
         ],
         pagingType: 'simple_numbers',
         language: {
-            url: 'app/assets/lib/dataTable/spanish.json',
+            url: 'app/assets/lib/dataTable/Spanish.json',
         },
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,
         fixedHeader: true,
+        createdRow: function (nRow, aData, iDataIndex) {
+            $(nRow).attr('id', aData['subcatid']);
+        },
+        processing: true,
+        serverSide: true,
+        ajax: {url: 'Subcategories/tableSubcategories', type: 'POST'},
         columns: [
-            {data: 'editable', class: 'edit', orderable: false},
-            {data: 'subccode', class: 'subCode center bold'},
-            {data: 'subcname', class: 'subName'},
-            {data: 'catgname', class: 'catName'},
-            {data: 'catgcode', class: 'catCode center'},
-            {data: 'quantity', class: 'quantity'},
+            {data: 'editable', name: 'editable', class: 'edit'},
+            {data: 'subcatid', name: 'subcatid', class: 'id hide'},
+            {data: 'subccode', name: 'subccode', class: 'subCode center bold'},
+            {data: 'subcname', name: 'subcname', class: 'subName'},
+            {data: 'catgname', name: 'catgname', class: 'catName'},
+            {data: 'catgcode', name: 'catgcode', class: 'catCode center'},
+            {data: 'quantity', name: 'quantity', class: 'quantity'},
         ],
     });
     deep_loading('C');
+    activeActions();
 }
 
 /** ---- Llena la lista de subcategorias ---- */
@@ -223,7 +200,7 @@ function activeActions() {
         .unbind('click')
         .on('click', function () {
             let acc = $(this).attr('class').split(' ')[2];
-            let sbcId = $(this).parents('tr').attr('id');
+            let sbcId = $(this).closest('tr').attr('id');
 
             switch (acc) {
                 case 'modif':
@@ -258,7 +235,6 @@ function saveSubcategory() {
         "sbcCode"   : "${subcatCd}",
         "catId"     : "${categyId}"
     }]`;
-    console.log(par);
 
     subs = null;
     var pagina = 'Subcategories/SaveSubcategory';
@@ -269,23 +245,10 @@ function saveSubcategory() {
 /** ---- Agrega el nuevo registro a la tabla ---- */
 function putSaveSubcategory(dt) {
     if (subs != null) {
+        $('#btnClean').trigger('click');
         let ix = goThroughSubcategory(dt);
-        console.log(ix, subs[ix]);
         let tabla = $('#tblSubcategory').DataTable();
-        let trow = tabla.row
-            .add({
-                editable: `<i class="fas fa-pen modif"></i><i class="fas fa-times-circle kill"></i>`,
-                subccode: subs[ix].sbc_code,
-                subcname: subs[ix].sbc_name,
-                catgname: subs[ix].cat_name,
-                catgcode: subs[ix].cat_id,
-                quantity: `<span class="toLink">0</span>`,
-            })
-            .draw()
-            .node();
-
-        let id = subs[ix].sbc_id;
-        $(trow).attr('id', id);
+        tabla.draw();
     } else {
         setTimeout(() => {
             getSubcategories();
@@ -327,16 +290,11 @@ function updateSubcategory() {
 }
 /** ---- Actualiza el registro en la tabla de subcategorias ---- */
 function putUpdateSubcategory(dt) {
-    console.log(dt);
     if (subs != null) {
         let ix = goThroughSubcategory(dt);
-
-        $(`#${subs[ix].sbc_id}`).children('td.subName').html(subs[ix].sbc_name);
-        $(`#${subs[ix].sbc_id}`).children('td.subCode').html(subs[ix].sbc_code);
-        $(`#${subs[ix].sbc_id}`).children('td.catName').html(subs[ix].cat_name);
-        $(`#${subs[ix].sbc_id}`).children('td.catCode').html(subs[ix].cat_id);
-        putQuantity(subs[ix].sbc_id);
         $('#btnClean').trigger('click');
+        let tabla = $('#tblSubcategory').DataTable();
+        tabla.draw();
         deep_loading('C');
     } else {
         setTimeout(() => {
@@ -398,7 +356,6 @@ function selectSeries(reg) {
     let quant = reg.html();
     let sbnme = reg.parents('tr').children('td.subName').html();
     subnme = sbnme;
-    console.log(sbcId, quant, sbnme);
     if (quant > 0) {
         var pagina = 'Subcategories/listSeries';
         var par = `[{"sbcId":"${sbcId}"}]`;
@@ -409,7 +366,6 @@ function selectSeries(reg) {
 }
 
 function putSeries(dt) {
-    console.log(dt);
     $('#tblStock tbody').html('');
     $.each(dt, function (v, u) {
         let H = `
@@ -444,8 +400,8 @@ function settindStockTbl() {
         destroy: true,
         order: [[1, 'asc']],
         lengthMenu: [
-            [100, 150, 200, -1],
-            [100, 150, 200, 'Todos'],
+            [50, 100, 150, 200, -1],
+            [50, 100, 150, 200, 'Todos'],
         ],
         pagingType: 'simple_numbers',
         language: {

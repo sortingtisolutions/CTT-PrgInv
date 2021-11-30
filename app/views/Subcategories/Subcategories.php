@@ -75,10 +75,11 @@
         <!-- Start Tabla de contenido -->
             <div class="mvst_table">
                 <h1>Subcategorias</h1>
-                <table class="display compact nowrap dataTable"  id="tblSubcategory" style="width:690px; ">
+                <table class="display compact nowrap"  id="tblSubcategory" style="width:650px; ">
                     <thead>
                         <tr>
-                            <th style="width:  30px"></th>
+                            <th style="width:  40px"></th>
+                            <th style="width:   0px">Id</th>
                             <th style="width:  30px">Código</th>
                             <th style="width: 300px">Nombre</th>
                             <th style="width: 200px">Catálogo</th>
@@ -86,7 +87,6 @@
                             <th style="width:  50px">Existencias</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
                 </table>
             </div>
         <!-- End Tabla de contenido -->

@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
+require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
 class ProductsForSublettingModel extends Model
 {
@@ -32,6 +33,39 @@ public function listProyects($store)
                     ifnull(pjtcn_id,0) AS pjtcn_id, ifnull(cin_id,0) AS cin_id
                 FROM ctt_vw_subletting WHERE pjt_id = $pjtId;";
         return $this->db->query($qry);
+    }    
+
+// Listado de Productos
+    public function tableProducts($params)
+    {
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $table = 'ctt_vw_project_subletting';  
+        $primaryKey = 'num';
+        $whereResult = null;
+        $whereAll = "pjt_id = '" . $pjtId . "'";
+        $columns = array(
+            array( 'db' => '', 'dt' => 'editable' ),
+            array( 'db' => 'pjt_id', 'dt' => 'pjt_id' ),
+            array( 'db' => 'prd_name', 'dt' => 'prd_name' ),
+            array( 'db' => 'pjtdt_prod_sku', 'dt' => 'pjtdt_prod_sku' ),
+            array( 'db' => 'sub_price', 'dt' => 'sub_price' ),
+            array( 'db' => 'sup_business_name', 'dt' => 'sup_business_name' ),
+            array( 'db' => 'str_name', 'dt' => 'str_name' ),
+            array( 'db' => 'sub_date_start', 'dt' => 'sub_date_start' ),
+            array( 'db' => 'sub_date_end', 'dt' => 'sub_date_end' ),
+            array( 'db' => 'sub_comments', 'dt' => 'sub_comments' ),
+        );
+        $sql_details = array(
+            'user' => USER,
+            'pass' => PASSWORD,
+            'db'   => DB_NAME,
+            'host' => HOST,
+            'charset' => 'utf8',
+        );
+
+        return json_encode(
+            SSP::complex( $_POST, $sql_details, $table, $primaryKey, $columns, $whereResult, $whereAll )
+        );
     }    
 
 

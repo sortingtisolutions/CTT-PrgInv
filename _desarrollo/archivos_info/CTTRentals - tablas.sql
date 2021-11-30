@@ -353,6 +353,16 @@ PRIMARY KEY (`pjtdt_id`))
 COMMENT='Detalle del proyecto, cotización promovida';
 
 
+
+DROP TABLE `cttapp_cire`.`ctt_projects_periods`;
+CREATE TABLE `cttapp_cire`.`ctt_projects_periods` (
+    `pjtpd_id`                   INT NOT NULL AUTO_INCREMENT    COMMENT 'Id del detalle de proyecto',
+    `pjtpd_day`                  DATETIME NOT NULL              COMMENT 'Día reservado ',
+    `pjtdt_id`                   INT NOT NULL                   COMMENT 'FK Id del proyecto relación ctt_projects_detail',
+PRIMARY KEY (`pjtpd_id`)) 
+COMMENT='Dias de reservado de la serie del producto';
+
+
 DROP TABLE `cttapp_cire`.`ctt_projects_type`;
 CREATE TABLE `cttapp_cire`.`ctt_projects_type` (
     `pjttp_id`              INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id del tipo de proyecto',
@@ -477,6 +487,7 @@ CREATE TABLE `cttapp_cire`.`ctt_subcategories` (
     `sbc_name`              VARCHAR(100) NULL               COMMENT 'Nombre de la subcategoría',
     `sbc_behaviour`         VARCHAR(2) NULL                 COMMENT 'Comportamiento de la subcategoría',
     `sbc_status`            VARCHAR(1) NULL DEFAULT 1       COMMENT 'Estatus de la subcategoría 1-Activo, 0-Inactivo',
+    `sbc_quantity`          INT NULL DEFAULT 0              COMMENT 'Cantidad de productos contenidos',
     `cat_id`                INT NOT NULL                    COMMENT 'Id del catálogo relación ctt_categories',
 PRIMARY KEY (`sbc_id`))
 COMMENT = 'Subcategorias.';
@@ -603,3 +614,28 @@ LEFT JOIN ctt_suppliers         AS sp ON sp.sup_id = sb.sup_id
 LEFT JOIN ctt_stores_products   AS st ON st.ser_id = pd.ser_id
 LEFT JOIN ctt_stores            AS sr ON sr.str_id = st.str_id
 WHERE (pd.pjtdt_prod_sku = 'Pendiente' OR LEFT(RIGHT(pd.pjtdt_prod_sku, 4),1) ='R');
+
+
+
+DROP VIEW ctt_vw_subcategories;
+CREATE VIEW ctt_vw_subcategories AS
+SELECT sc.sbc_id as subcatid, sc.sbc_code AS subccode, sc.sbc_name AS subcname, ct.cat_name AS catgname, 
+    ct.cat_id AS catgcode, '0' as quantity 
+FROM  ctt_subcategories        AS sc   
+INNER JOIN ctt_categories      AS ct ON ct.cat_id = sc.cat_id
+WHERE sc.sbc_status = '1' AND ct.cat_status = '1' 
+ORDER BY ct.cat_id, sc.sbc_id;
+
+
+
+DROP TRIGGER actualiza_subcategorias;
+CREATE TRIGGER actualiza_subcategorias AFTER UPDATE ON ctt_stores_products
+FOR EACH ROW
+    UPDATE ctt_subcategories as sc SET sbc_quantity = (
+        SELECT  ifnull(sum(sp.stp_quantity),0) 
+        FROM  ctt_stores_products           AS sp
+        INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
+        INNER JOIN ctt_products             AS pr ON pr.prd_id = sr.prd_id
+        INNER JOIN ctt_subcategories        AS st ON st.sbc_id = pr.sbc_id
+        WHERE sr.ser_status = 1 AND pr.prd_level IN ('P','K') and st.sbc_id = sc.sbc_id
+    );

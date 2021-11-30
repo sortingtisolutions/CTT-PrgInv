@@ -7,20 +7,27 @@ $(document).ready(function () {
 });
 
 function inicial() {
-    folio = getFolio();
-    setting_table();
-    get_Proyectos();
-    get_coins();
-    get_suppliers();
-    get_stores();
+    if (altr == 1) {
+        folio = getFolio();
+        setting_table(0);
+        get_Proyectos();
+        get_coins();
+        get_suppliers();
+        get_stores();
+        confirm_alert();
 
-    $('#txtPrice').on('blur', function () {
-        validator();
-    });
-    $('#btn_subletting').on('click', function () {
-        let acc = $(this).attr('data_accion');
-        updating_serie(acc);
-    });
+        $('#txtPrice').on('blur', function () {
+            validator();
+        });
+        $('#btn_subletting').on('click', function () {
+            let acc = $(this).attr('data_accion');
+            updating_serie(acc);
+        });
+    } else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
 }
 
 /** ++++  Setea el calendario ++++++ */
@@ -54,20 +61,21 @@ function setting_datepicket(sl, di, df) {
 }
 
 /** ++++  Setea la tabla ++++++ */
-function setting_table() {
+function setting_table(pjtId) {
+    $('#tblProductForSubletting').DataTable().destroy();
     let title = 'Productos en subarrendo';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
     $('#tblProductForSubletting').DataTable({
-        order: [[2, 'asc']],
+        order: [3, 'asc'],
         dom: 'Blfrtip',
         select: {
             style: 'single',
             info: false,
         },
         lengthMenu: [
-            [100, 200, 300, -1],
-            [100, 200, 300, 'Todos'],
+            [40, 100, 200, 300, -1],
+            [40, 100, 200, 300, 'Todos'],
         ],
         buttons: [
             {
@@ -117,16 +125,23 @@ function setting_table() {
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,
         fixedHeader: true,
+        createdRow: function (nRow, aData, iDataIndex) {
+            $(nRow).attr('id', aData['subcatid']);
+        },
+        processing: true,
+        serverSide: true,
+        ajax: {url: 'ProductsForSubletting/tableProducts', type: 'POST', data: {pjtId: pjtId}},
         columns: [
-            {data: 'editable', class: 'edit'},
-            {data: 'prodname', class: 'product-name'},
-            {data: 'prod_sku', class: 'sku'},
-            {data: 'prodpric', class: 'price'},
-            {data: 'supplier', class: 'supply'},
-            {data: 'storesrc', class: 'stores'},
-            {data: 'datestar', class: 'date'},
-            {data: 'date_end', class: 'date'},
-            {data: 'comments', class: 'comments'},
+            {data: 'editable', name: 'editable', class: 'edit'},
+            {data: 'pjt_id', name: 'pjt_id', class: 'id hide'},
+            {data: 'prd_name', name: 'prodname', class: 'product-name'},
+            {data: 'pjtdt_prod_sku', name: 'produsku', class: 'sku'},
+            {data: 'sub_price', name: 'prodpric', class: 'price'},
+            {data: 'sup_business_name', name: 'supplier', class: 'supply'},
+            {data: 'str_name', name: 'storesrc', class: 'stores'},
+            {data: 'sub_date_start', name: 'datestar', class: 'date'},
+            {data: 'sub_date_end', name: 'date_end', class: 'date'},
+            {data: 'sub_comments', name: 'comments', class: 'comments'},
         ],
     });
 }
@@ -176,18 +191,19 @@ function get_stores() {
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
     pj = dt;
-    console.log(dt);
     $.each(dt, function (v, u) {
         let H = `<option style="background_color: #CC0000;" data_indx="${v}" value="${u.pjt_id}">${u.pjs_name} - ${u.pjt_name}</option>`;
         $('#txtProject').append(H);
     });
     $('#txtProject').on('change', function () {
         px = parseInt($('#txtProject option:selected').attr('data_indx'));
-        $('#txtIdProject').val(pj[px].pjt_id);
-        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
-
-        deep_loading('O');
-        get_products(pj[px].pjt_id);
+        let pjtid = 0;
+        if (px >= 0) {
+            pjtid = pj[px].pjt_id;
+            // deep_loading('O');
+        }
+        $('#txtIdProject').val(pjtid);
+        setting_table(pjtid);
     });
 }
 

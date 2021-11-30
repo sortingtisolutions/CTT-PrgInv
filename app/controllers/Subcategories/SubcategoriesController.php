@@ -2,6 +2,7 @@
     defined('BASEPATH') or exit('No se permite acceso directo');
     require_once ROOT . FOLDER_PATH . '/app/models/Subcategories/SubcategoriesModel.php';
     require_once LIBS_ROUTE . 'Session.php';
+    //require_once ROOT . PATH_ASSETS . 'serverSide.php';
 
     class SubcategoriesController extends Controller
     {
@@ -40,6 +41,13 @@
                 $res =  '[{"cat_id":"0"}]';	
             }
             echo $res;	
+        }
+
+// Obtiene la lista de subcategorias activas
+        public function tableSubcategories($request_params)
+        {
+            $result = $this->model->tableSubcategories($request_params);
+            echo $result;
         }
 
 // Obtiene la lista de subcategorias activas
