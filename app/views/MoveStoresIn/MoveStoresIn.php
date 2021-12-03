@@ -31,28 +31,42 @@
                         </div>
                     </div>
 
-                    <!-- Proveedores posición 2 -->
+                    <!-- Proveedores posición 2 
                     <div class="row pos2 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtSuppliers" class="form-select form-select-sm"><option value="0" selected>Selecciona proveedor</option></select>
                             <label for="txtSuppliers">Proveedores</label>
                         </div>
+                    </div> -->
+
+                    <!-- Proveedores posición 2 -->
+                    <div class="row list-finder pos3 hide-items">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                    <input id="txtSuppliers" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" >
+                                    <label for="txtSuppliers">Proveedores</label>
+                                    <input type="hidden" id="txtSuppliers" name="txtSuppliers">
+                            </div>
+                            <div id="listSupplier" class="list-group list-hide">
+                                <div class="list-items" ></div>
+                            </div>
                     </div>
 
-                    <!-- Factura posición 3 -->
- <!--                   <div class="row pos3 hide-items">
+
+                    <!-- Factura posición 3 
+                    <div class="row pos3 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtInvoice" class="form-select form-select-sm"><option value="0" selected>Selecciona factura</option></select>
                             <label for="txtInvoice">Factura</label>
                         </div>
-                    </div>
--->
+                    </div> -->
+
+                    <!-- Factura posición 3 -->
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" >
                                     <label for="txtInvoice">Factura</label>
                                     <input type="hidden" id="txtIdInvoices" name="txtIdInvoices">
-                                    <input type="hidden" id="txtNextSerie" name="txtNextSerie">
+                    <!--                <input type="hidden" id="txtNextSerie" name="txtNextSerie">  -->
                             </div>
                             <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
@@ -80,6 +94,14 @@
                             </div>
                     </div>
 
+                     <!-- Factura posición 3 -->
+                     <div class="row pos5 hide-items">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                            <select id="txtCoin" class="form-select form-select-sm"><option value="0" selected>Selecciona moneda</option></select>
+                            <label for="txtCoin">Moneda</label>
+                        </div>
+                    </div>
+
                     <!-- Factura posición 5 y 6 -->
                     <div class="row">
                         <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos5 hide-items">
@@ -95,16 +117,6 @@
                             <label for="txtSerie">Serie</label>
                         </div>
                     </div>
-
-
-                     <!-- Factura posición 3 -->
-                     <div class="row pos5 hide-items">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtCoin" class="form-select form-select-sm"><option value="0" selected>Selecciona moneda</option></select>
-                            <label for="txtCoin">Moneda</label>
-                        </div>
-                    </div>
-
 
 
                     <!-- Comentarios posición 4 -->

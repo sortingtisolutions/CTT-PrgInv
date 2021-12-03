@@ -40,7 +40,7 @@ function inicial() {
     });
     //borra almacen +
     $('#BorrarProveedor').on('click', function(){    
-        DeletDocumentos();
+        DeleteDocumentos();
     });  
 
     $('#LimpiarFormulario').on('click', function () {
@@ -64,7 +64,7 @@ function inicial() {
 //Valida los campos seleccionado *
 function validaFormulario() {
     var valor = 1;
-    var forms = document.querySelectorAll('.needs-validation')
+    var forms = document.querySelectorAll('.needs-validation');
         Array.prototype.slice.call(forms)
             .forEach(function (form) {
                 if (!form.checkValidity()) {
@@ -92,11 +92,76 @@ function EditDocumento(id) {
             $('#IdDocumentNew').val(respuesta.doc_id);
             $('#ExtDocumento').val(respuesta.doc_type);
             $('#CodDocumento').val(respuesta.doc_code);
+            $('#fechaadmision').val(respuesta.doc_admission_date);
             GetTypeDocumento(respuesta.dot_id);
         },
         error: function (EX) {console.log(EX);}
     }).done(function () {});
 }
+
+//Guardar Almacen **
+function SaveDocumento() {
+   var location = "Documentos/SaveDocumento";
+   var idDocumentos = $('#IdDocumentNew').val();
+   var NomDocumento = $('#NomDocumento').val();
+   var ExtDocumento = $('#ExtDocumento').val();
+   var CodDocumento = $('#CodDocumento').val().trim().toUpperCase();
+   var Fechaadmision = $('#fechaadmision').val();
+   var tipoDocumento = $('#selectRowTipoDocumento option:selected').attr('id');
+   var tipoDocumentoText = $('#selectRowTipoDocumento option:selected').text();
+  
+  // console.log('BOTON GUARDAR', fechaadmision );
+
+   var data = new FormData();
+   data.append("file",archivo);
+   data.append("NomDocumento", NomDocumento);
+   data.append("Ext", ExtDocumento);
+   data.append("idDocumento", idDocumentos);
+   data.append("CodDocumento", CodDocumento);
+   data.append("tipoDocumento", tipoDocumento);
+   data.append("fechaadmision",Fechaadmision);
+
+   if(ExtDocumento == "jpg" || ExtDocumento == "pdf" || ExtDocumento == "png"){
+       $.ajax({
+           type: "POST",
+           //dataType: 'JSON',
+           enctype: 'multipart/form-data',
+           cache: false,
+           contentType: false,
+           processData: false,
+           data:data,
+           url: location,
+       success: function (respuesta) {
+          console.log(respuesta);
+           if(idDocumentos != ""){
+               table.row(':eq('+positionRow+')').remove().draw();
+            }
+            if ((respuesta != 0)) {
+               var rowNode = table.row.add( {
+                  [0]:  '<button onclick="VerDocumento(' + respuesta +')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-eye modif"></i></button><button onclick="EditDocumento('+respuesta+')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button><button onclick="ConfirmDeletDocumento('+respuesta+')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>',
+                  [1]:   respuesta,
+                  [2]:   NomDocumento,
+                  [3]:   tipoDocumento,
+                  [4]:   tipoDocumentoText,
+                  [5]:   CodDocumento,
+                  [6]:   ExtDocumento,
+                  [7]:   Fechaadmision,
+               }).draw().node();
+               $( rowNode ).find('td').eq(0).addClass('edit');
+               $( rowNode ).find('td').eq(1).addClass('text-center');
+               $(rowNode).find('td').eq(1).attr("hidden",true);
+               $(rowNode).find('td').eq(3).attr("hidden",true);
+
+              LimpiaModal();
+            }
+       },
+       error: function (EX) {console.log(EX);}
+       }).done(function () {}); 
+   }else {
+       $('#filtroDocumentoModal').modal('show');
+   }
+} 
+
 //confirm para borrar **
 function ConfirmDeletDocumento(id) {
     //UnSelectRowTable();
@@ -109,9 +174,8 @@ function UnSelectRowTable() {
 }
 
 
-
 //BORRAR  * *
-function DeletDocumentos() {
+function DeleteDocumentos() {
     var location = "documentos/DeleteDocumentos";
     IdDocumento = $('#IdDocumentoBorrar').val();
     $.ajax({
@@ -140,69 +204,6 @@ function DeletDocumentos() {
 
 
 
-//Guardar Almacen **
-function SaveDocumento() {
-    var location = "Documentos/SaveDocumento";
-    var idDocumentos = $('#IdDocumentNew').val();
-    var NomDocumento = $('#NomDocumento').val();
-    var ExtDocumento = $('#ExtDocumento').val();
-    var CodDocumento = $('#CodDocumento').val().trim().toUpperCase();
-
-    var tipoDocumento = $('#selectRowTipoDocumento option:selected').attr('id');
-    var tipoDocumentoText = $('#selectRowTipoDocumento option:selected').text();
-
-
-
-    var data = new FormData();
-    data.append("file",archivo);
-    data.append("NomDocumento", NomDocumento);
-    data.append("Ext", ExtDocumento);
-    data.append("idDocumento", idDocumentos);
-    data.append("CodDocumento", CodDocumento);
-    data.append("tipoDocumento", tipoDocumento);
-
-
-    if(ExtDocumento == "jpg" || ExtDocumento == "pdf" || ExtDocumento == "png"){
-        $.ajax({
-            type: "POST",
-            //dataType: 'JSON',
-            enctype: 'multipart/form-data',
-            cache: false,
-            contentType: false,
-            processData: false,
-            data:data,
-            url: location,
-        success: function (respuesta) {
-            if(idDocumentos != ""){
-                table.row(':eq('+positionRow+')').remove().draw();
-             }
-             if ((respuesta != 0)) {
-                var rowNode = table.row.add( {
-                   [0]:  '<button onclick="VerDocumento(' + respuesta +')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-eye modif"></i></button><button onclick="EditDocumento('+respuesta+')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button><button onclick="ConfirmDeletDocumento('+respuesta+')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>',
-                   [1]:   respuesta,
-                   [2]:   NomDocumento,
-                   [3]:   tipoDocumento,
-                   [4]:   tipoDocumentoText,
-                   [5]:   CodDocumento,
-                   [6]:   ExtDocumento
-                }).draw().node();
-                $( rowNode ).find('td').eq(0).addClass('edit');
-                $( rowNode ).find('td').eq(1).addClass('text-center');
-                $(rowNode).find('td').eq(1).attr("hidden",true);
-                $(rowNode).find('td').eq(3).attr("hidden",true);
-
-
-               LimpiaModal();
-             }
-        },
-        error: function (EX) {console.log(EX);}
-        }).done(function () {}); 
-    }else {
-        $('#filtroDocumentoModal').modal('show');
-    }
-
-} 
-
 
 //Limpia datos en modal  **
 function LimpiaModal() {
@@ -211,6 +212,7 @@ function LimpiaModal() {
     $('#NomDocumento').val("");
     $('#IdDocumento').val("");
     $('#CodDocumento').val("");
+    $('#fechaadmision').val('');
     $('#formDocumento').removeClass('was-validated');
     $('#titulo').text('Nuevo Documento');
     GetTypeDocumento();
@@ -255,7 +257,7 @@ function getDocumentosTable() {
       dataType: 'JSON',
       url: location,
       _success: function (respuesta) {
-         console.log(respuesta);
+         //console.log(respuesta);
          var renglon = '';
          respuesta.forEach(function (row, index) {
             renglon =
@@ -289,6 +291,10 @@ function getDocumentosTable() {
 
                '<td>' +
                row.doc_type +
+               '</td>' +
+      
+               '<td>' +
+               row.doc_admission_date +
                '</td>' +
       
                '</tr>';

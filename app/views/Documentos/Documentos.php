@@ -16,9 +16,8 @@
 
 							<div class="row" hidden>
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                           <input id="IdDocumento" name="IdDocumento" type="text" class="form-control form-control-sm" >
-                           <input id="IdDocumentNew" name="IdDocumentNew" type="text" class="form-control form-control-sm" >
-
+                           			<input id="IdDocumento" name="IdDocumento" type="text" class="form-control form-control-sm" >
+                           			<input id="IdDocumentNew" name="IdDocumentNew" type="text" class="form-control form-control-sm" >
 									<input id="ExtDocumento" name="ExtDocumento" type="text" class="form-control form-control-sm" >
 								</div>
 							</div>
@@ -47,7 +46,14 @@
 								</div>
 							</div>
 
-                    		 <div class="row">
+							<div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<input id="fechaadmision" name="fechaadmision" type="date"  class="form-control form-control-sm" style="text-transform: uppercase" >
+									<label for="fechaadmision">Fecha de Admision</label>
+								</div>
+							</div>
+
+                    		<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<input id="CodDocumento" name="CodDocumento" type="text" class="form-control form-control-sm" style="text-transform: uppercase" >
 									<label for="CodDocumento">Codigo Documento</label>
@@ -79,12 +85,13 @@
 													<th style="width: 30px"></th>
 													<th style="width: 20px" hidden>Id</th>
 													<th style="width: 200px">Nombre</th>
+
 													<th style="width: 100px" hidden>id Tipo Documento</th>
 
 													<th style="width: 100px">Tipo Documento</th>
-
 													<th style="width: 200px">Codigo</th>
 													<th style="width: 100px">Tipo</th>
+													<th style="width: 100px">Fecha Admision</th>
 											</tr>
 										</thead>
 										<tbody id="tablaDocumentosRow">

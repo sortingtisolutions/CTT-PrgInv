@@ -14,9 +14,11 @@ $(document).ready(function () {
 function inicial() {
     getExchange();
     getStores();
-    getProducts();
+    getCategories();
+    //getProducts();
     setting_table();
     $('#btn_exchange').on('click', function () {
+        console.log('1');
         exchange_apply();
     });
 }
@@ -112,14 +114,32 @@ function getStores() {
     var selector = putStores;
     fillField(pagina, par, tipo, selector);
 }
+
+function getCategories() {
+    //console.log('categos');
+    var pagina = 'MoveStoresOut/listCategories';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = putCategories;
+    fillField(pagina, par, tipo, selector);
+}
 // Solicita los productos de un almacen seleccionado
-function getProducts() {
+/*function getProducts() {
     var pagina = 'MoveStoresOut/listProducts';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
+} */
+
+function getProducts(catId) {
+    var pagina = 'MoveStoresOut/listProducts';
+    var par = `[{"catId":"${catId}"}]`;
+    var tipo = 'json';
+    var selector = putProducts;
+    fillField(pagina, par, tipo, selector);
 }
+
 // Solicita los movimientos acurridos
 function getExchanges() {
     var pagina = 'MoveStoresOut/listExchanges';
@@ -172,11 +192,27 @@ function putStores(dt) {
         drawProducts(id);
     });
 }
+
+function putCategories(dt) {
+    if (dt[0].cat_id != 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
+            $('#txtCategory').append(H);
+        });
+
+        $('#txtCategory').on('change', function () {
+            let catId = $(this).val();
+            console.log(catId);
+            getProducts(catId);
+        });
+    }
+}
+
 // Almacena los registros de productos en un arreglo
 function putProducts(dt) {
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="P-${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}">
-        ${u.ser_sku} - ${u.prd_name}<div class="items-just"><div class="quantity editable" data-content="${u.stp_quantity}" contenteditable=true>${u.stp_quantity}</div><i class="fas fa-arrow-circle-right"></i></div></div>`;
+        ${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}<div class="items-just"><div class="quantity editable" data-content="${u.stp_quantity}" contenteditable=true>${u.stp_quantity}</div><i class="fas fa-arrow-circle-right"></i></div></div>`;
         $('#listProducts').append(H);
     });
 }
@@ -197,6 +233,7 @@ function drawProducts(str) {
 
     $('.list-item .items-just i').on('click', function () {
         let id = $(this).parents('.list-item');
+        console.log('Click 2');
         exchange_apply(id);
     });
 }
@@ -253,6 +290,7 @@ function validator(prId) {
 }
 // Aplica la seleccion para la tabla de movimientos
 function exchange_apply(prId) {
+        console.log('2');
     if (validator(prId) == 0) {
         let typeExchangeCodeSource = $('#txtTypeExchange option:selected').attr('data-content').split('|')[0];
         let typeExchangeCodeTarget = $('#txtTypeExchange option:selected').attr('data-content').split('|')[3];
@@ -335,6 +373,7 @@ function fill_table(par) {
     $('.edit')
         .unbind('click')
         .on('click', function () {
+            console.log('CLICK');
             let qty = parseInt($(this).parent().children('td.quantity').text()) * -1;
             let pid = $(this).parent().children('td.sku').children('span.hide-support').text().split('|')[4];
             update_array_products(pid, qty);

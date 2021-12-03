@@ -14,7 +14,7 @@ $(document).ready(function () {
 function inicial() {
     getExchange();
     getStores();
-    getSuppliers();
+    //getSuppliers();
     //getInvoice();
     getCoins();
     getCategories();
@@ -27,6 +27,10 @@ function inicial() {
         validator();
     });
     $('#txtSerie').on('blur', function () {
+        validator();
+    });
+
+    $('#txtQuantity').on('blur', function () {
         validator();
     });
 }
@@ -90,10 +94,10 @@ function setting_table() {
             {data: 'prod_sku', class: 'sku'},
             {data: 'prodname', class: 'product-name'},
             {data: 'prodcant', class: 'quantity'},
-            {data: 'prodcost', class: 'price'},
+            {data: 'prodcost', class: 'price left'},
             {data: 'prodseri', class: 'serie-product'},
             {data: 'codexcsc', class: 'code-type_s'},
-            {data: 'stnamesc', class: 'store-name_s'},
+            {data: 'stnamesc', class: 'store-name_s'}, 
             {data: 'comments', class: 'comments'},
         ],
     });
@@ -120,7 +124,8 @@ function getSuppliers() {
     var pagina = 'MoveStoresIn/listSuppliers';
     var par = `[{"store":""}]`;
     var tipo = 'json';
-    var selector = putSuppliers;
+    //var selector = putSuppliers;
+    var selector = putSupplierList;
     fillField(pagina, par, tipo, selector);
 }
 // Solicita los documentos factura
@@ -128,7 +133,7 @@ function getInvoice() {
     var pagina = 'MoveStoresIn/listInvoice';
     var par = `[{"store":""}]`;
     var tipo = 'json';
-    var selector = putInvoceList;
+    var selector = putInvoiceList;
     fillField(pagina, par, tipo, selector);
 }
 // Solicita los documentos factura
@@ -157,13 +162,13 @@ function getProducts(catId) {
     fillField(pagina, par, tipo, selector);
 }
 // Solicita los movimientos acurridos
-function getExchanges() {
+/*function getExchanges() {
     var pagina = 'MoveStoresIn/listExchanges';
     var par = `[{"folio":"${folio}"}]`;
     var tipo = 'json';
     var selector = putExchanges;
     fillField(pagina, par, tipo, selector);
-}
+} */
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
 function putTypeExchange(dt) {
@@ -194,6 +199,7 @@ function setting_interface(code) {
     code.substring(4, 5) == '0' ? $('.pos4').addClass('hide-items') : $('.pos4').removeClass('hide-items');
     code.substring(5, 6) == '0' ? $('.pos5').addClass('hide-items') : $('.pos5').removeClass('hide-items');
     code.substring(6, 7) == '0' ? $('.pos6').addClass('hide-items') : $('.pos6').removeClass('hide-items');
+    getSuppliers();
     getInvoice();
 }
 
@@ -210,28 +216,7 @@ function putStores(dt) {
         validator();
     });
 }
-
-function putSuppliers(dt) {
-    if (dt[0].sup_id != 0) {
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.sup_id}">${u.sup_business_name}</option>`;
-            $('#txtSuppliers').append(H);
-        });
-    }
-
-    $('#txtSuppliers').on('change', function () {
-        validator();
-    });
-}
 /*
-function putInvoice(dt) {
-    if (dt[0].doc_id != 0) {
-        $.each(dt, function (v, u) {
-            let H = `<option value="${u.doc_id}">${u.doc_name}</option>`;
-            $('#txtInvoice').append(H);
-        });
-    }
-
     $('#txtInvoice').on('change', function () {
         validator();
     });
@@ -268,7 +253,7 @@ function putCategories(dt) {
 function putProducts(dt) {
     var ps = $('#txtProducts').offset();
     $('#listProducts .list-items').html('');
-    console.log(ps);
+    //console.log(dt);
     $('#listProducts').css({top: ps.top + 30 + 'px'});
     $('#listProducts').slideUp('100', function () {
         $('#listProducts .list-items').html('');
@@ -312,10 +297,10 @@ function putProducts(dt) {
     });
 }
 // AGREGA LAS FACTURAS CON TEXTO SELECTIVO
-function putInvoceList(dt) {
+function putInvoiceList(dt) {
     var fc = $('#txtInvoice').offset();
     $('#listInvoice .list-items').html('');
-    console.log(fc);
+    //console.log(fc);
     //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
     $('#listInvoice').css({top: fc.top + 30 + 'px'});
     $('#listInvoice').slideUp('100', function () {
@@ -329,7 +314,6 @@ function putInvoceList(dt) {
     });
 
     $('#txtInvoice').on('focus', function () {
-        console.log('FOCUS');
         //$('.list-group #listInvoice').slideDown('slow');
         $('#listInvoice').slideDown('slow');
     });
@@ -353,8 +337,53 @@ function putInvoceList(dt) {
         
         let prdNm = $(this).html();
         let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
-        //log('selecciona elemento', prdId,'---', prdNm);
         $('#txtInvoice').val(prdNm);
+        $('#txtIdInvoices').val(prdId);
+        $('#listInvoice').slideUp(100);
+        validator();
+    });
+}
+
+// CARGA LA INFORMACION DE LOS PROVEEDORES DE PRODUCTOS
+function putSupplierList(dt) {
+    var sl = $('#txtSuppliers').offset();
+    $('#listSupplier .list-items').html('');
+    //console.log(sl);
+    $('#listSupplier').css({top: sl.top + 30 + 'px'});
+    $('#listSupplier').slideUp('100', function () {
+        $('#listSupplier .list-items').html('');
+    });
+    
+    $.each(dt, function (v, u) {
+        let H = `<div class="list-item" id="${u.sup_id}" data_serie="${u.sup_id}" data_complement="${u.sup_id}|${u.sup_business_name}">${u.sup_business_name}</div>`;
+        $('#listSupplier .list-items').append(H);
+    });
+
+    $('#txtSuppliers').on('focus', function () {
+       // console.log('FOCUS');
+        $('#listSupplier').slideDown('fast');
+    });
+
+    $('#listSupplier').on('mouseleave', function () {
+        $('#listSupplier').slideUp('fast');
+    });
+
+    $('#txtSuppliers').keyup(function (e) {
+        var res = $(this).val().toUpperCase();
+        if (res == '') {
+            $('#listSupplier').slideUp(100);
+        } else {
+            $('#listSupplier').slideDown(400);
+        }
+        res = omitirAcentos(res);
+        sel_suppliers(res);
+    });
+
+    $('#listSupplier .list-item').on('click', function () {
+        let prdNm = $(this).html();
+        let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
+        //console.log('selecciona elemento', prdId,'---', prdNm);
+        $('#txtSuppliers').val(prdNm);
         $('#txtIdInvoices').val(prdId);
         $('#listInvoice').slideUp(100);
         validator();
@@ -375,17 +404,17 @@ function validator() {
 
     if ($('#txtTypeExchange').val() == 0) {
         ky = 1;
-        msg += 'Debes seleccionar un tipo de movimiento';
+       // msg += 'Debes seleccionar un tipo de movimiento';
     }
 
     if ($('#txtStoreSource').val() == 0 && $('.pos1').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
-        msg += 'Debes seleccionar un almacen destino';
+      //  msg += 'Debes seleccionar un almacen destino';
     }
 
-    if ($('#txtSuppliers').val() == 0 && $('.pos2').attr('class').indexOf('hide-items') < 0) {
+    if ($('#txtSuppliers').val() == 0 ) {  // && $('.pos2').attr('class').indexOf('hide-items') < 0
         ky = 1;
-        msg += 'Debes seleccionar el proveedor';
+       // msg += 'Debes seleccionar el proveedor';
     }
 
     if ($('#txtIdProducts').val() == 0) {
@@ -403,16 +432,29 @@ function validator() {
     //     msg += 'Debes indicar el costo del producto';
     // }
 
-    if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
+     if ($('#txtCoin').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
+       // msg += 'Debes indicar el tipo de moneda';
+    }
+
+     //validacion de cantidad para agregar serie mayor a 1
+    if ($('#txtQuantity').val() > 1  ) { // && $('#txtSerie').val() == 0
+        ky = 0;
+        msg += ' Las series se capturan individualmente en la tabla';
+        $('#txtSerie').attr('disabled', true);
+    } else {
+        $('#txtSerie').attr('disabled', false);
+        ky = 1;
+    }
+
+    //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
+    if ($('#txtSerie').val() == 0 ) {
+        ky = 0;
         msg += 'Debes indicar la serie del producto';
-    }
-
-    if ($('#txtCoin').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
+    } else {
         ky = 1;
-        msg += 'Debes indicar el tipo de moneda';
     }
-
+    
     if (ky == 0) {
         $('#btn_exchange').removeClass('disabled');
     } else {
@@ -440,30 +482,53 @@ function exchange_apply() {
     let strName = $(`#txtStoreSource option[value="${strid}"]`).text();
     let comment = $('#txtComments').val();
 
-    serie++;
-    update_array_products(prdId, serie);
+    //serie++;
+    //console.log('Paso 1 ', serie);
+    
+    //update_array_products(prdId, serie);  // REVISAR EL DETALLE DE ESTA FUNCION
 
-    let par = `
-[{
-    "support"  : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
-    "sersku"   : "${sersku}",
-    "prodser"  : "${serser}",
-    "sercost"  : "${sercost}",
-    "prodnme"  : "${prdName}",
-    "prodqty"  : "${quantity}",
-    "excodsr"  : "${exccode}",
-    "stnmesr"  : "${strName}",
-    "comment"  : "${comment}"
-}]`;
-
-    console.log(par);
-
+    if (quantity>1){
+        for (var i = 0; i < quantity; i++) {
+        sersku = prdSku + refil(serie++, 4);
+        update_array_products(prdId, serie);  // REVISAR EL DETALLE DE ESTA FUNCION
+        let par = `
+        [{
+            "support"  : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
+            "sersku"   : "${sersku}",
+            "prodser"  : "${serser}",
+            "sercost"  : "${sercost}",
+            "prodnme"  : "${prdName}",
+            "prodqty"  : "${'1'}",
+            "excodsr"  : "${exccode}",
+            "stnmesr"  : "${strName}",
+            "comment"  : "${comment}"
+        }]`;
+        //console.log(sersku);
+        fill_table(par);
+        }
+    } else {
+        let par = `
+        [{
+            "support"  : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
+            "sersku"   : "${sersku}",
+            "prodser"  : "${serser}",
+            "sercost"  : "${sercost}",
+            "prodnme"  : "${prdName}",
+            "prodqty"  : "${quantity}",
+            "excodsr"  : "${exccode}",
+            "stnmesr"  : "${strName}",
+            "comment"  : "${comment}"
+        }]`;
+    //console.log(par);
     fill_table(par);
+    }
+    clean_selectors();
 }
+
 
 // Llena la tabla de movimientos
 function fill_table(par) {
-    console.log(par);
+    //console.log('Paso 3 ', par);
     let largo = $('#tblExchanges tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
     par = JSON.parse(par);
@@ -477,7 +542,8 @@ function fill_table(par) {
             prodname: par[0].prodnme,
             prodcant: `<span>${par[0].prodqty}</span>`,
             prodcost: par[0].sercost,
-            prodseri: par[0].prodser,
+            prodseri: '<input class="serprod" type="text" id="PS-'+ par[0].prodser + '" value="'+ par[0].prodser +'">',
+            //prodseri: par[0].prodser,
             codexcsc: par[0].excodsr,
             stnamesc: par[0].stnmesr,
             comments: `<div>${par[0].comment}</div>`,
@@ -497,6 +563,7 @@ function fill_table(par) {
 }
 
 function btn_apply_appears() {
+    //console.log('Paso 4 ');
     let tabla = $('#tblExchanges').DataTable();
     let rengs = tabla.rows().count();
     if (rengs > 0) {
@@ -509,15 +576,23 @@ function btn_apply_appears() {
 // Limpia los campos para uns nueva seleccion
 function clean_selectors() {
     // $('#txtTypeExchange').val(0);
-    $('#txtStoreSource').val(0);
-    $('#txtStoreTarget').val(0);
+    //$('#txtStoreSource').val(0);
+    //$('#txtStoreTarget').val(0);
     $('#txtProducts').html('<option value="0" selected>Selecciona producto</option>');
     $('#txtQuantity').val('');
+    $('#txtSerie').attr('disabled', false);
+    $('#txtSerie').val('');
+    /*if ($('#txtSerie').attr('disabled') == true){
+        //$('#txtSerie').attr('disabled', false);
+        alert('VALIDA');
+    } */
+    $('#txtCost').val('');
     $('#txtQuantityStored').html('&nbsp;');
     $('#txtComments').val('');
 }
 /** Actualiza la cantidad de cada producto dentro del arreglo */
 function update_array_products(id, sr) {
+    //console.log('Paso 2 ', id, sr);
     $('#txtNextSerie').val(sr);
     $(`#P-${id}`).attr('data_serie', sr);
 }
@@ -534,7 +609,8 @@ function read_exchange_table() {
             let seriesku = $(this).attr('data-content').split('|')[3];
             let prodname = $($(u).find('td')[2]).text();
             let quantity = $($(u).find('td')[3]).text();
-            let serienum = $($(u).find('td')[5]).text();
+            //let serienum = $($(u).find('td')[5]).text();
+            let serienum = $('#serprod').val();
             let storname = $($(u).find('td')[7]).text();
             let comments = $($(u).find('td')[8]).text();
             let codeexch = $($(u).find('td')[6]).text();
@@ -547,25 +623,6 @@ function read_exchange_table() {
             let docinvoi = $(this).attr('data-content').split('|')[6];
 
             let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}`;
-
-            /**
-             *  0 - fol    folio          mov exc_guid
-             *  1 - sku    seriesku       mov exc_sku_product      ser ser_sku
-             *  2 - pnm    prodname       mov exc_product_name
-             *  3 - qty    quantity       mov exc_quantity                                   str stp_quantity
-             *  4 - ser    serienum       mov exc_serie_product    ser ser_serial_number
-             *  5 - str    storname       mov exc_store
-             *  6 - com    comments       mov exc_comments
-             *  7 - cod    codeexch       mov ext_code
-             *  8 - idx    typeexch       mov ext_id
-             *  9 - prd    producid                                ser prd_id                                    doc prd_id
-             * 10 - sti    storesid                                                          str str_id
-             * 11 - cos    sericost                                ser ser_cost
-             * 12 - cin    sericoin       mov cin_id               ser cin_id
-             * 13 - sup    suppliid                                ser sup_id
-             * 14 - doc    docinvoi                                                                              doc doc_id
-             */
-
             //console.log(truk);
             build_data_structure(truk);
         });
@@ -598,7 +655,8 @@ function build_data_structure(pr) {
     "sup" :  "${el[13]}",
     "doc" :  "${el[14]}"
 }]`;
-    save_exchange(par);
+    console.log(' Antes de Insertar', par);
+    //save_exchange(par);
 }
 function build_update_store_data(pr) {
     let el = pr.split('|');
@@ -704,6 +762,26 @@ function sel_invoice(res) {
     }
 
     $('#listInvoice .list-items div.list-item').each(function (index) {
+        var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
+
+        cm = omitirAcentos(cm);
+        var cr = cm.indexOf(res);
+        if (cr > -1) {
+            //            alert($(this).children().html())
+            $(this).css({display: 'block'});
+        }
+    });
+}
+
+function sel_suppliers(res) {
+    //console.log('SELECC',res);
+    if (res.length < 1) {
+        $('#listSupplier .list-items div.list-item').css({display: 'block'});
+    } else {
+        $('#listSupplier .list-items div.list-item').css({display: 'none'});
+    }
+
+    $('#listSupplier .list-items div.list-item').each(function (index) {
         var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
 
         cm = omitirAcentos(cm);

@@ -14,11 +14,11 @@ public function SaveDocumento($request_params)
 {
 	$estatus = 0;
 	try {
+		$conn = new mysqli(HOST, USER, PASSWORD);
 		$Code = $request_params['CodDocumento'];
 		$nomebreDocumento = $request_params["NomDocumento"];
-		$conn = new mysqli(HOST, USER, PASSWORD);
 		$tipoDocumento = $request_params["tipoDocumento"];
-
+		$fechaadmision = $request_params["fechaadmision"];
 
 		$fileName = $_FILES['file']['name'];
 		$fileSize = $_FILES['file']['size'];
@@ -30,9 +30,9 @@ public function SaveDocumento($request_params)
 		$newFileName = $fileName;
 
 		$sql = "INSERT INTO ctt_documents(
-					doc_code, doc_name, doc_size, doc_document, doc_content_type, doc_type, dot_id)
+				doc_code, doc_name, doc_size, doc_document, doc_content_type, doc_type, dot_id, doc_admission_date)
 				VALUES (
-					'$Code', '$newFileName', $fileSize, '$file', '$fileType', '$fileExtension', '$tipoDocumento')";
+				'$Code', '$newFileName', $fileSize, '$file', '$fileType', '$fileExtension', '$tipoDocumento','$fechaadmision')";
 
 		$this->db->query($sql);
 		$qry = "SELECT MAX(doc_id) AS id FROM ctt_documents;";
@@ -51,7 +51,8 @@ public function SaveDocumento($request_params)
 // Optiene los Documentos existentes
 	public function GetDocumentos()
 	{
-		$qry = "SELECT doc.doc_id, doc.doc_code, doc.doc_name, doc.doc_type, doc.dot_id, td.dot_name FROM ctt_documents as doc LEFT JOIN ctt_documents_type AS td ON td.dot_id = doc.dot_id";
+		$qry = "SELECT doc.doc_id, doc.doc_code, doc.doc_name, doc.doc_type, doc.dot_id, td.dot_name, doc.doc_admission_date 
+		FROM ctt_documents as doc LEFT JOIN ctt_documents_type AS td ON td.dot_id = doc.dot_id";
 		$result = $this->db->query($qry);
 		$lista = array();
 		while ($row = $result->fetch_row()){
@@ -60,7 +61,8 @@ public function SaveDocumento($request_params)
 						"doc_name" =>$row[2],
 						"doc_type" =>$row[3],
 						"dot_id" =>$row[4],
-						"dot_name" =>$row[5]);
+						"dot_name" =>$row[5],
+						"doc_admission_date" =>$row[6]);
 			array_push($lista, $item);
 		}
 		return $lista;
@@ -86,14 +88,16 @@ public function SaveDocumento($request_params)
 
     public function GetDocumento($params)
 	{
-		$qry = "SELECT doc_id, doc_code, doc_name,doc_type, dot_id FROM ctt_documents WHERE doc_id = ".$params['id'].";";
+		$qry = "SELECT doc_id, doc_code, doc_name,doc_type, dot_id, doc_admission_date 
+		FROM ctt_documents WHERE doc_id = ".$params['id'].";";
 		$result = $this->db->query($qry);
 		if($row = $result->fetch_row()){
 			$item = array("doc_id" =>$row[0],
 			"doc_code" =>$row[1],
 			"doc_name" =>$row[2],
 			"doc_type" =>$row[3],
-			"dot_id" =>$row[4]);
+			"dot_id" =>$row[4],
+			"doc_admission_date"=>$row[5]);
 		}
 		return $item;
 	}
@@ -190,6 +194,5 @@ public function SaveDocumento($request_params)
 		}
 		return $item;
 	}
-
 
 }
