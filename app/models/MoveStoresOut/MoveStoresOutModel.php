@@ -36,29 +36,22 @@ class MoveStoresOutModel extends Model
 // Listado de Productos
 	public function listProducts($param)
 	{
-		$catId = $this->db->real_escape_string($param['catId']);
+		$strId = $this->db->real_escape_string($param['strId']);
 		
-		/*$qry = "SELECT * FROM ctt_products AS pr
+		$qry = "SELECT * FROM ctt_products AS pr
 				INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
 				INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
-				WHERE sr.ser_status = 1 AND st.stp_quantity > 0;"; 
+				WHERE sr.ser_status = 1 AND st.stp_quantity > 0
+				AND st.str_id='$strId' order by st.str_id;"; 
 
-		$qry = "SELECT * FROM ctt_products AS pd 
-		INNER JOIN ctt_series AS sr ON sr.prd_id = pd.prd_id
-		INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
-		INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-		INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
-		WHERE sr.ser_status = 1 AND ct.cat_id = $catId;"; */
-
-		$qry = "SELECT sr.ser_id,sr.ser_sku,sr.ser_serial_number,sr.ser_cost,st.str_id,st.stp_quantity,
+	/*	$qry = "SELECT sr.ser_id,sr.ser_sku,sr.ser_serial_number,sr.ser_cost,st.str_id,st.stp_quantity,
 		pd.prd_name,pd.prd_coin_type 
 		FROM ctt_products AS pd 
 		INNER JOIN ctt_series AS sr ON sr.prd_id = pd.prd_id
 		INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
 		INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
 		INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
-		WHERE sr.ser_status = 1 AND ct.cat_id = $catId;";
-
+		WHERE sr.ser_status = 1 AND ct.cat_id = $catId;"; */
 
 		return $this->db->query($qry);
 	}	

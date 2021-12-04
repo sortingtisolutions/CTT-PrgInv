@@ -14,7 +14,7 @@ $(document).ready(function () {
 function inicial() {
     getExchange();
     getStores();
-    getCategories();
+    //getCategories();
     //getProducts();
     setting_table();
     $('#btn_exchange').on('click', function () {
@@ -124,21 +124,21 @@ function getCategories() {
     fillField(pagina, par, tipo, selector);
 }
 // Solicita los productos de un almacen seleccionado
-/*function getProducts() {
+function getProducts(strId) {
     var pagina = 'MoveStoresOut/listProducts';
-    var par = `[{"store":""}]`;
+    var par = `[{"strId":"${strId}"}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
-} */
+}
 
-function getProducts(catId) {
+/*function getProducts(catId) {
     var pagina = 'MoveStoresOut/listProducts';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
-}
+} */
 
 // Solicita los movimientos acurridos
 function getExchanges() {
@@ -185,15 +185,17 @@ function putStores(dt) {
     }
 
     $('#txtStoreSource').on('change', function () {
+        $('#boxProducts').parents('.list-finder').addClass('hide-items');
         let id = $(this).val();
         $(`#txtStoreTarget option`).css({display: 'block'});
         $(`#txtStoreTarget option[value="${id}"]`).css({display: 'none'});
-
-        drawProducts(id);
+        console.log('ID', id);
+        getProducts(id);
+        //drawProducts(id);
     });
 }
 
-function putCategories(dt) {
+/*function putCategories(dt) {
     if (dt[0].cat_id != 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
@@ -206,20 +208,24 @@ function putCategories(dt) {
             getProducts(catId);
         });
     }
-}
+}*/
 
 // Almacena los registros de productos en un arreglo
 function putProducts(dt) {
+    $('#listProducts').html('');
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="P-${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}">
         ${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}<div class="items-just"><div class="quantity editable" data-content="${u.stp_quantity}" contenteditable=true>${u.stp_quantity}</div><i class="fas fa-arrow-circle-right"></i></div></div>`;
         $('#listProducts').append(H);
     });
+    $('#boxProducts').parents('.list-finder').removeClass('hide-items');
+    drawProducts();
+
 }
 // Dibuja los productos
-function drawProducts(str) {
-    $('.list-item').addClass('hide-items');
-    $(`.list-item[data-store^="${str}"]`).removeClass('hide-items');
+function drawProducts() {
+   // $('.list-item').addClass('hide-items');
+   // $(`.list-item[data-store^="${str}"]`).removeClass('hide-items');
 
     var ps = $('#boxProducts').offset();
     $('.list-group').css({top: ps.top + 30 + 'px', display: 'none'});

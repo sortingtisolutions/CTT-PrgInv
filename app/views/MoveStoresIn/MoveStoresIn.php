@@ -44,7 +44,7 @@
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtSuppliers" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" >
                                     <label for="txtSuppliers">Proveedores</label>
-                                    <input type="hidden" id="txtSuppliers" name="txtSuppliers">
+                                    <input type="hidden" id="txtIdSuppliers" name="txtIdSuppliers">
                             </div>
                             <div id="listSupplier" class="list-group list-hide">
                                 <div class="list-items" ></div>

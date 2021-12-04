@@ -37,14 +37,14 @@
                         </div>
                     </div>
 
-                    <div class="row">
+<!--                    <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtCategory" class="form-select form-select-sm"><option value="0" selected>Catálogo</option></select>
                             <label for="txtCategory">Catálogo</label>
                         </div>
                     </div>
-
-                    <div class="row list-finder">
+-->
+                    <div class="row list-finder hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <div class="box-items-list" id="boxProducts">Productos
                                     <i class="fas fa-angle-down"></i>
@@ -132,6 +132,7 @@
 
             </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button>
                     <button type="button" class="btn btn-secondary" id="btnHideModal">Cerrar</button>
                 </div>
             </div>

@@ -32,20 +32,23 @@ public function SaveDocumento($request_params)
 		$sql = "INSERT INTO ctt_documents(
 				doc_code, doc_name, doc_size, doc_document, doc_content_type, doc_type, dot_id, doc_admission_date)
 				VALUES (
-				'$Code', '$newFileName', $fileSize, '$file', '$fileType', '$fileExtension', '$tipoDocumento','$fechaadmision')";
+				'$Code', '$newFileName', $fileSize, '$file', '$fileType', '$fileExtension', '$tipoDocumento','$fechaadmision');";
 
 		$this->db->query($sql);
-		$qry = "SELECT MAX(doc_id) AS id FROM ctt_documents;";
+		$lastid = $this->db->insert_id;
+		//return $lastid;
+		
+		/*$qry = "SELECT MAX(doc_id) AS id FROM ctt_documents;";
 		$result = $this->db->query($qry);
 		if ($row = $result->fetch_row()) {
 			$lastid = trim($row[0]);
 		}
 
-		$estatus = $lastid;
+		$estatus = $lastid; */
 	} catch (Exception $e) {
-		$estatus = 0;
+		$lastid = $e;
 	}
-	return $estatus;
+	return $lastid;
 }
 
 // Optiene los Documentos existentes
@@ -121,10 +124,10 @@ public function SaveDocumento($request_params)
         $estatus = 0;
 			try {
 		       if(isset($_FILES['file']['name'])){
+					$conn = new mysqli(HOST, USER, PASSWORD);
 					$Code = $request_params['CodDocumento'];
 					$nomebreDocumento = $request_params["NomDocumento"];
-
-					$conn = new mysqli(HOST, USER, PASSWORD);
+					$fechaadmision = $request_params["fechaadmision"];
 			
 					$fileName = $_FILES['file']['name'];
 					$fileSize = $_FILES['file']['size'];
@@ -135,26 +138,28 @@ public function SaveDocumento($request_params)
 			
 					$newFileName = $fileName;
 
-					$qry = "UPDATE ctt_documents
-					SET doc_code = '".$request_params['CodDocumento']."'
+					$qry = "UPDATE ctt_documents SET doc_code = '".$request_params['CodDocumento']."'
 					,doc_name = '".$request_params['NomDocumento']."'
 					,dot_id = '".$request_params['tipoDocumento']."'
 					,doc_size = $fileSize
 					,doc_type = '$fileExtension'
 					,doc_content_type =  '$fileType'
 					,doc_document = '$file'
+					,doc_admission_date = '$fechaadmision
 					WHERE doc_id = ".$request_params['idDocumento'].";";
 					$this->db->query($qry);
 
 					$estatus =  $request_params['idDocumento']; 
 
-				}else{
+				}else {
 
 					$qry = "UPDATE ctt_documents
 					SET doc_code = '".$request_params['CodDocumento']."'
 					,dot_id = '".$request_params['tipoDocumento']."'
 					,doc_name = '".$request_params['NomDocumento']."'
+					,doc_admission_date = '".$request_params['fechaadmision']."'
 					WHERE doc_id = ".$request_params['idDocumento'].";";
+
 					$this->db->query($qry);
 					$estatus =  $request_params['idDocumento']; 
 

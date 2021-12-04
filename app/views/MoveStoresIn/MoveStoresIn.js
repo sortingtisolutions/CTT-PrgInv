@@ -384,8 +384,8 @@ function putSupplierList(dt) {
         let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
         //console.log('selecciona elemento', prdId,'---', prdNm);
         $('#txtSuppliers').val(prdNm);
-        $('#txtIdInvoices').val(prdId);
-        $('#listInvoice').slideUp(100);
+        $('#txtIdSuppliers').val(prdId);
+        $('#listSupplier').slideUp(100);
         validator();
     });
 }
@@ -404,17 +404,17 @@ function validator() {
 
     if ($('#txtTypeExchange').val() == 0) {
         ky = 1;
-       // msg += 'Debes seleccionar un tipo de movimiento';
+        msg += 'Debes seleccionar un tipo de movimiento';
     }
 
     if ($('#txtStoreSource').val() == 0 && $('.pos1').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
-      //  msg += 'Debes seleccionar un almacen destino';
+        msg += 'Debes seleccionar un almacen destino';
     }
 
     if ($('#txtSuppliers').val() == 0 ) {  // && $('.pos2').attr('class').indexOf('hide-items') < 0
         ky = 1;
-       // msg += 'Debes seleccionar el proveedor';
+        msg += 'Debes seleccionar el proveedor';
     }
 
     if ($('#txtIdProducts').val() == 0) {
@@ -432,29 +432,32 @@ function validator() {
     //     msg += 'Debes indicar el costo del producto';
     // }
 
-     if ($('#txtCoin').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
-        ky = 1;
-       // msg += 'Debes indicar el tipo de moneda';
-    }
-
      //validacion de cantidad para agregar serie mayor a 1
-    if ($('#txtQuantity').val() > 1  ) { // && $('#txtSerie').val() == 0
-        ky = 0;
-        msg += ' Las series se capturan individualmente en la tabla';
-        $('#txtSerie').attr('disabled', true);
-    } else {
+    if ($('#txtQuantity').val() > 1 ) { // && $('#txtSerie').val() == 0
+        $('#txtSerie').attr('disabled', true).val('');
+        
+    } else if ($('#txtQuantity').val() == 1) {
         $('#txtSerie').attr('disabled', false);
+
+    } else {
         ky = 1;
+        msg += ' Las series se capturan individualmente en la tabla';
     }
 
     //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
-    if ($('#txtSerie').val() == 0 ) {
-        ky = 0;
-        msg += 'Debes indicar la serie del producto';
-    } else {
+    console.log($('#txtSerie').val(), $('#txtSerie').attr('disabled'));
+
+    if ($('#txtSerie').val() == '' && $('#txtSerie').attr('disabled') == undefined ) {
         ky = 1;
+        msg += 'Debes indicar la serie del producto';
+    } 
+
+    if ($('#txtCoin').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
+        ky = 1;
+        msg += 'Debes indicar el tipo de moneda';
     }
-    
+    console.log(ky,msg);
+
     if (ky == 0) {
         $('#btn_exchange').removeClass('disabled');
     } else {
@@ -474,7 +477,7 @@ function exchange_apply() {
     let sercost = $('#txtCost').val();
     let sercoin = $('#txtCoin').val();
     let quantity = $('#txtQuantity').val();
-    let supplier = $('#txtSuppliers').val();
+    let supplier = $('#txtIdSuppliers').val();
     let docinvoice = $('#txtInvoice').val();
     let excId = $('#txtTypeExchange').val();
     let exccode = $(`#txtTypeExchange option[value="${excId}"]`).attr('data-content').split('|')[0];
@@ -609,8 +612,8 @@ function read_exchange_table() {
             let seriesku = $(this).attr('data-content').split('|')[3];
             let prodname = $($(u).find('td')[2]).text();
             let quantity = $($(u).find('td')[3]).text();
-            //let serienum = $($(u).find('td')[5]).text();
-            let serienum = $('#serprod').val();
+            let serienum = $($(u).find('td')[5]).children('.serprod').val();
+            //let serienum = $('.serprod').val();
             let storname = $($(u).find('td')[7]).text();
             let comments = $($(u).find('td')[8]).text();
             let codeexch = $($(u).find('td')[6]).text();
@@ -656,7 +659,7 @@ function build_data_structure(pr) {
     "doc" :  "${el[14]}"
 }]`;
     console.log(' Antes de Insertar', par);
-    //save_exchange(par);
+    save_exchange(par);
 }
 function build_update_store_data(pr) {
     let el = pr.split('|');

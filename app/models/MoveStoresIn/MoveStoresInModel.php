@@ -9,7 +9,6 @@ class MoveStoresInModel extends Model
       parent::__construct();
     }
 
-
 // Listado de Tipos de movimiento
     public function listExchange()
     {
@@ -22,7 +21,6 @@ class MoveStoresInModel extends Model
         return $this->db->query($qry);
     }
 
-
 // Listado de Almacecnes
     public function listStores()
     {
@@ -30,39 +28,33 @@ class MoveStoresInModel extends Model
         return $this->db->query($qry);
     }
 
-
 // Listado de proveedores
     public function listSuppliers()
     {
         $qry = "  SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
         return $this->db->query($qry);
     }
-
-    
+   
 // Listado de Facturas
     public function listInvoice()
     {
         $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id = 1;";
         return $this->db->query($qry);
     }
-
-        
+       
 // Listado de Monedas
     public function listCoins()
     {
         $qry = "SELECT cin_id, cin_code, cin_name FROM ctt_coins WHERE cin_status = 1;";
         return $this->db->query($qry);
     }
-
-
-        
+      
 // Listado de categorias
     public function listCategories()
     {
         $qry = "SELECT * FROM ctt_categories WHERE cat_status  = 1;";
         return $this->db->query($qry);
     }
-
 
 // Listado de Productos
     public function listProducts($param)
@@ -142,7 +134,5 @@ public function NextExchange()
         return $con_id ;
 
     }
-
-
 
 }
