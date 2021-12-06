@@ -42,12 +42,19 @@ WHERE (pd.pjtdt_prod_sku = 'Pendiente' OR LEFT(RIGHT(pd.pjtdt_prod_sku, 4),1) ='
 
 DROP VIEW ctt_vw_subcategories;
 CREATE VIEW ctt_vw_subcategories AS
-SELECT sc.sbc_id as subcatid, sc.sbc_code AS subccode, sc.sbc_name AS subcname, ct.cat_name AS catgname, 
-    ct.cat_id AS catgcode, '0' as quantity 
-FROM  ctt_subcategories        AS sc   
-INNER JOIN ctt_categories      AS ct ON ct.cat_id = sc.cat_id
-WHERE sc.sbc_status = '1' AND ct.cat_status = '1' 
-ORDER BY ct.cat_id, sc.sbc_id;
+    SELECT 
+        CONCAT('<i class="fas fa-pen modif" data="', sc.sbc_id,'"></i><i class="fas fa-times-circle kill" data="', sc.sbc_id , '"></i>') AS editable,
+        sc.sbc_id   AS subcatid,
+        sc.sbc_code AS subccode,
+        sc.sbc_name AS subcname,
+        ct.cat_name AS catgname,
+        ct.cat_id   AS catgcode,
+        CONCAT_WS('<span class="toLink">', IFNULL(SUM(sc.sbc_quantity), 0), '</span>') AS quantity
+    FROM ctt_subcategories AS sc
+    INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
+    WHERE sc.sbc_status = '1'
+    AND ct.cat_status = '1'
+    GROUP BY sc.sbc_id;
 
 
 
@@ -59,6 +66,8 @@ FOR EACH ROW
         FROM  ctt_stores_products           AS sp
         INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
         INNER JOIN ctt_products             AS pr ON pr.prd_id = sr.prd_id
-        INNER JOIN ctt_subcategories        AS st ON st.sbc_id = pr.sbc_id
-        WHERE sr.ser_status = 1 AND pr.prd_level IN ('P','K') and st.sbc_id = sc.sbc_id
+        WHERE sr.ser_status = 1 AND pr.prd_level IN ('P','K') and pr.sbc_id = sc.sbc_id
     );
+
+-- Actualizacion del 6 de diciembre 2021
+ALTER TABLE `ctt_documents` ADD `doc_admission_date` DATE NULL DEFAULT NULL COMMENT 'Fecha de admision del documento' AFTER `dot_id`;

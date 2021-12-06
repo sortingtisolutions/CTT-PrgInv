@@ -1,5 +1,5 @@
 var seccion = '';
-
+var campo = '';
 $(document).ready(function () {
     console.log('start');
     let host = $('#host').text();

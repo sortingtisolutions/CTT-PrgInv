@@ -10,7 +10,7 @@
 </header>
 <div class="container">
 	<div class="contenido"></div>
-	<div id="host" style="display:none"><?= $host; ?></div>
+	<div id="host" style="display:block"><?= $host; ?></div>
 </div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
