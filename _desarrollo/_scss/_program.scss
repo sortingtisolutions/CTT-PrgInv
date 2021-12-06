@@ -158,6 +158,9 @@ hr {
     width: 100%;
     font-family: $font_primary;
     border-collapse: collapse;
+    tr.overpast:hover {
+        background-color: rgba($setColor,0.1);
+    }
     td {
         padding: 0px 5px;
         //  border:1px solid #CCCCCC;

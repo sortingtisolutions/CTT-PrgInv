@@ -194,6 +194,13 @@ public function cancelProject($request_params)
     echo $res;
 } 
 
+// Actualiza las fechas del proyecto
+public function UpdatePeriodProject($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->UpdatePeriodProject($request_params);
+    echo $result;
+}
 
 
 // Genera el archivo del proyecto

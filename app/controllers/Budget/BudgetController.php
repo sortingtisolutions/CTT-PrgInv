@@ -257,6 +257,14 @@ public function listProductsRelated($request_params)
         echo $result;
     } 
 
+// Actualiza las fechas del proyecto
+    public function UpdatePeriodProject($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->UpdatePeriodProject($request_params);
+        echo $result;
+    }
+
 
         
 // Guarda nueva version

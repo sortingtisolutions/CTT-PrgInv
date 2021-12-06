@@ -51,7 +51,7 @@
                                     <td class="concepto">Locación</td>
                                     <td class="dato" id="LocationProject"></td>
                                 </tr>
-                                <tr>
+                                <tr class="overpast">
                                     <td class="concepto">Periodo</td>
                                     <td class="dato" id="PeriodProject"></td>
                                 </tr>

@@ -161,6 +161,23 @@ class ProjectDetailsModel extends Model
     }
 
 
+    
+// Actualiza las fechas del proyecto
+    public function UpdatePeriodProject($params)
+    {
+        $pjtId                  = $this->db->real_escape_string($params['pjtId']);
+        $pjtDateStart           = $this->db->real_escape_string($params['pjtDateStart']);
+        $pjtDateEnd             = $this->db->real_escape_string($params['pjtDateEnd']);
+        $qry = "UPDATE ctt_projects SET pjt_date_start = '$pjtDateStart', pjt_date_end = '$pjtDateEnd' WHERE pjt_id = $pjtId;";
+        $this->db->query($qry);
+
+        return $pjtId;
+
+    }
+
+
+
+
 // Incrementa la cantidad de un producto
     public function increaseQuantity($params)
     {

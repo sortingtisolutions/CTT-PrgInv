@@ -410,7 +410,7 @@ function button_actions() {
         .unbind('click')
         .on('click', function () {
             let nRows = $('.frame_content table tbody tr').length;
-            if (nRows > 1) {
+            if (nRows > 0) {
                 save_version();
             }
         });
@@ -551,7 +551,7 @@ function selector_projects() {
                 $('#TypeLocation').html(pj.loc_type_location);
                 $('#DateProject').html(pj.pjt_date_project);
                 $('#TypeProject').html(pj.pjttp_name);
-                $('#PeriodProject').html(pj.pjt_date_start + ' - ' + pj.pjt_date_end);
+                $('#PeriodProject').html('<span>' + pj.pjt_date_start + ' - ' + pj.pjt_date_end + '</span><i class="fas fa-calendar-alt id="periodcalendar""></i>');
                 $('#numProject .search').html(pj.pjt_number);
                 $('#IdProject').val(pj.pjt_id);
                 $('#IdCuo').val(pj.cuo_id);
@@ -567,9 +567,70 @@ function selector_projects() {
                     .on('click', function () {
                         clean_projects_field();
                     });
+                let fecha = moment(Date()).format('DD/MM/YYYY');
+                $('#PeriodProject').daterangepicker(
+                    {
+                        showDropdowns: true,
+                        autoApply: true,
+                        locale: {
+                            format: 'DD/MM/YYYY',
+                            separator: ' - ',
+                            applyLabel: 'Apply',
+                            cancelLabel: 'Cancel',
+                            fromLabel: 'From',
+                            toLabel: 'To',
+                            customRangeLabel: 'Custom',
+                            weekLabel: 'W',
+                            daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                            firstDay: 1,
+                        },
+                        showCustomRangeLabel: false,
+                        singleDatePicker: false,
+                        startDate: fecha,
+                        endDate: fecha,
+                        minDate: fecha,
+                        opens: 'left',
+                    },
+                    function (start, end, label) {
+                        $('#PeriodProject span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+                        let projDateStart = start.format('YYYYMMDD');
+                        let projDateEnd = end.format('YYYYMMDD');
+
+                        let par = `
+                        [{
+                            "pjtDateStart"  : "${projDateStart}",
+                            "pjtDateEnd"    : "${projDateEnd}",
+                            "pjtId"         : "${pj.pjt_id}"
+                        }]
+                        `;
+                        var pagina = 'Budget/UpdatePeriodProject';
+                        var tipo = 'html';
+                        var selector = SetUpdatePeriodProject;
+                        fillField(pagina, par, tipo, selector);
+                    }
+                );
             }
         });
 }
+
+function SetUpdatePeriodProject(dt) {
+    console.log(dt);
+
+    let topDays = get_days_period();
+    console.log(topDays);
+
+    $('.frame_content #tblControl tbody tr').each(function (v) {
+        let tr = $(this);
+        let bdgDaysBase = tr.children('td.daybase').text().replace(/,/g, '');
+        if (bdgDaysBase > topDays) {
+            tr.children('td.daybase').text(topDays);
+        }
+    });
+    rgcnt = 1;
+    update_totals();
+}
+
 /**  +++++   Arma el escenario de la cotizacion  */
 function fill_dinamic_table() {
     caching_events('fill_dinamic_table');
@@ -640,7 +701,7 @@ function show_minimenues(idsel, x, y) {
             dys = days_validator(dys, days, idsel);
             $('.' + idsel).text(dys);
             rgcnt = 1;
-            
+
             $('.box_days').remove();
         });
     } else if (inic == 'dsc') {
@@ -681,7 +742,8 @@ function show_minimenues(idsel, x, y) {
 }
 /**  ++++  Obtiene los días definidos para el proyectos */
 function get_days_period() {
-    let Period = $('#PeriodProject').text();
+    let Period = $('#PeriodProject span').text();
+    console.log(Period);
     let start = moment(Period.split(' - ')[0], 'DD/MM/YYYY');
     let end = moment(Period.split(' - ')[1], 'DD/MM/YYYY');
     let days = end.diff(start, 'days') + 1;
@@ -784,7 +846,6 @@ function clean_customer_field() {
 /** Actualiza los totales */
 function update_totals() {
     let ttlrws = $('.frame_content').find('tbody tr').length;
-    console.log(ttlrws, rgcnt);
     if (rgcnt == 1) {
         rgcnt = 0;
         caching_events('update_totals');
@@ -1084,7 +1145,7 @@ function fill_budget_prods(pd, days) {
     });
 
     let nRows = $('.frame_content table tbody tr').length;
-    if (nRows > 1) {
+    if (nRows > 0) {
         $('#addBudget').removeClass('disable').addClass('enable');
     }
 
@@ -1122,6 +1183,7 @@ function fill_budget_prods(pd, days) {
         .on('blur', function () {
             hide_control_menu('none');
             let dy = $(this).attr('class');
+            let days = get_days_period();
             if (dy.indexOf('daybase') >= 0) {
                 let dys = $(this).text();
                 let sel = 'daybase';
@@ -1695,6 +1757,7 @@ function fill_discount(psy, psx) {
 
 /**  Valida los parametros de días */
 function days_validator(dys, days, idsel) {
+    console.log(dys, days, idsel);
     if (dys != '') {
         if (idsel == 'daybase') {
             if (dys > days) {
