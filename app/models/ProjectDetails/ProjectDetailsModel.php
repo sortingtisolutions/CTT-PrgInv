@@ -265,6 +265,19 @@ class ProjectDetailsModel extends Model
         return $this->db->query($qry);
     }
     
+// Lista los relacionados al producto para periodos
+    public function listProductsAsigned($params)
+    {
+        $pjtcnId        = $this->db->real_escape_string($params["pjtcnid"]);
+        $prdId          = $this->db->real_escape_string($params["prdId"]);
+
+        $qry = "SELECT * FROM ctt_projects_periods AS pp
+                INNER JOIN ctt_projects_detail AS pd ON pd.pjtdt_id = pp.pjtdt_id
+                WHERE pd.pjtcn_id = '$pjtcnId' AND pd.prd_id = '$prdId';
+                ";
+        return $this->db->query($qry);
+    }
+    
 //  Lista los Projectos
     public function getProjectContent($pjtcn_id, $dayIni, $dayFnl){
 

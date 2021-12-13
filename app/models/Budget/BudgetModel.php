@@ -468,23 +468,21 @@ public function saveBudgetList($params)
             $this->db->query($qry3);
         }
 
-        $dateStart = new DateTime($dtinic);
-        $dateEnd   = new DateTime($dtfinl);
-        $diff = $dateStart->diff($dateEnd);
-        $daysCount = $diff->days;
+        // $dateStart = new DateTime($dtinic);
+        // $dateEnd   = new DateTime($dtfinl);
+        // $diff = $dateStart->diff($dateEnd);
+        // $daysCount = $diff->days;
 
-        $qry4 = "INSERT INTO ctt_projects_periods (pjtpd_day, pjtdt_id) VALUES ";
+        $qry4 = "INSERT INTO ctt_projects_periods (pjtpd_day_start, pjtpd_day_end, pjtdt_id) VALUES 
+            ('$dtinic', '$dtfinl', '$pjtdtId')";
 
-        for ($i = 0; $i <= $daysCount; $i++){
-            $dateSet = date("Y-m-d", strtotime($dtinic. "+" . $i . " day"));
-            $qry4 .= "('$dateSet', $pjtdtId),";
-        }
+        // for ($i = 0; $i <= $daysCount; $i++){
+        //     $dateSet = date("Y-m-d", strtotime($dtinic. "+" . $i . " day"));
+        //     $qry4 .= "('$dateSet', $pjtdtId),";
+        // }
+        //$qry4 = substr($qry4, 0,-1);
 
-        $qry4 = substr($qry4, 0,-1);
         $this->db->query($qry4);
-
-
-
 
         return  $serie;
     }

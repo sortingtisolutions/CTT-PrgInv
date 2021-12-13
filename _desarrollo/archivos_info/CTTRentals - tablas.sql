@@ -626,7 +626,7 @@ CREATE VIEW ctt_vw_subcategories AS
         sc.sbc_name AS subcname,
         ct.cat_name AS catgname,
         ct.cat_id   AS catgcode,
-        CONCAT_WS('<span class="toLink">', IFNULL(SUM(sc.sbc_quantity), 0), '</span>') AS quantity
+        CONCAT_WS('','<span class="toLink">', IFNULL(SUM(sc.sbc_quantity), 0), '</span>') AS quantity
     FROM ctt_subcategories AS sc
     INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
     WHERE sc.sbc_status = '1'
