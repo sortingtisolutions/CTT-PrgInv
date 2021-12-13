@@ -327,7 +327,7 @@ function deleteSubcategory(sbcId) {
         $('#Id').val(sbcId);
 
         $('#confirmButton').on('click', function () {
-            var pagina = 'SubCategories/DeleteSubcategory';
+            var pagina = 'Subcategories/DeleteSubcategory';
             var par = `[{"sbcId":"${sbcId}"}]`;
             var tipo = 'html';
             var selector = putDeleteSubcategory;

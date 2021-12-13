@@ -122,12 +122,10 @@ class SubcategoriesModel extends Model
 // Actualiza el status de la subcategorias a eliminar
     public function DeleteSubcategory($params)
     {
-        $sbcId      = $this->db->real_escape_string($params['sbcId']);
+        $sbcid      = $this->db->real_escape_string($params['sbcId']);
 
-        $qry = "UPDATE ctt_subcategories
-                SET 
-                      sbc_status  = '0'
-                WHERE sbc_id    = '$sbcId';";
+        $qry = "UPDATE ctt_subcategories SET sbc_status  = '0'
+                WHERE sbc_id    = '$sbcid';";
 
         $this->db->query($qry);	
         return $sbcId;
