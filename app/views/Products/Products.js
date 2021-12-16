@@ -214,10 +214,10 @@ function fillProducts(ft) {
                 let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
                 let invoice = u.doc_id == 0 ? '' : docInvo;
                 let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11);
-
+/// agregar boton de elimniar
                 var H = `
                 <tr id="${u.prd_id}">
-                    <td class="edit"><i class='fas fa-pen modif'></i></td>
+                    <td class="edit"><i class='fas fa-pen modif'></i></td>    
                     <td class="sku">${skufull}</td>
                     <td class="product-name editable" data_action="box" data_edit="prd_name"> ${u.prd_name}</td>
                     <td class="price editable" data_action="box" data_edit="prd_price">${u.prd_price}</td>

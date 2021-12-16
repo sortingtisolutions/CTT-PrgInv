@@ -353,6 +353,19 @@ public function saveBudgetList($params)
 
     }
 
+// Actualiza las fechas del proyecto
+    public function UpdatePeriodProject($params)
+    {
+        $pjtId                  = $this->db->real_escape_string($params['pjtId']);
+        $pjtDateStart           = $this->db->real_escape_string($params['pjtDateStart']);
+        $pjtDateEnd             = $this->db->real_escape_string($params['pjtDateEnd']);
+        $qry = "UPDATE ctt_projects SET pjt_date_start = '$pjtDateStart', pjt_date_end = '$pjtDateEnd' WHERE pjt_id = $pjtId;";
+        $this->db->query($qry);
+
+        return $pjtId;
+
+    }
+
 
 
 
@@ -424,8 +437,8 @@ public function saveBudgetList($params)
 
             $qry1 = "UPDATE ctt_series 
                         SET 
-                            ser_reserve_start = '$dtinic', 
-                            ser_reserve_end   = '$dtfinl', 
+                            -- ser_reserve_start = '$dtinic', 
+                            -- ser_reserve_end   = '$dtfinl', 
                             ser_situation = 'EA',
                             ser_stage = 'R',
                             ser_reserve_count = ser_reserve_count + 1
@@ -454,6 +467,22 @@ public function saveBudgetList($params)
                         WHERE ser_id = $serie;";
             $this->db->query($qry3);
         }
+
+        // $dateStart = new DateTime($dtinic);
+        // $dateEnd   = new DateTime($dtfinl);
+        // $diff = $dateStart->diff($dateEnd);
+        // $daysCount = $diff->days;
+
+        $qry4 = "INSERT INTO ctt_projects_periods (pjtpd_day_start, pjtpd_day_end, pjtdt_id) VALUES 
+            ('$dtinic', '$dtfinl', '$pjtdtId')";
+
+        // for ($i = 0; $i <= $daysCount; $i++){
+        //     $dateSet = date("Y-m-d", strtotime($dtinic. "+" . $i . " day"));
+        //     $qry4 .= "('$dateSet', $pjtdtId),";
+        // }
+        //$qry4 = substr($qry4, 0,-1);
+
+        $this->db->query($qry4);
 
         return  $serie;
     }

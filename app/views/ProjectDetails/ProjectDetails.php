@@ -227,3 +227,4 @@
 <script src="<?=  PATH_VIEWS . 'ProjectDetails/ProjectDetails.js' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
+

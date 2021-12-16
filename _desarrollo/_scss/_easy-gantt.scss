@@ -1,0 +1,121 @@
+table.tb-gantt {
+	position: relative;
+	background-color: #FFFFFF;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 11px;
+	font-family: $font_primary;
+	border-collapse: collapse;
+	display: block;
+	overflow: auto;
+	max-height: 450px;
+	thead {
+		th {
+			min-width: 20px;
+			height: 30px;
+			text-align: center;
+            border:none;
+            border-bottom: 1px solid #FFFFFF !important;
+			&:nth-child(1) {
+				min-width: 200px;
+                border:none;
+			}
+		}
+		.month-name-par {
+			background-color: rgba($setColor, 0.2);
+			color: #000000;
+		}
+		.month-name-odd {
+			background-color: rgba($setColor, 0.4);
+			color: #000000;
+		}
+		.days {
+			background-color: rgba($setColor, 0.6);
+			color: $light;
+			margin: auto;
+			padding: 0px;
+			text-align: center;
+            
+			>p {
+				margin: auto;
+				height: 100%;
+				width: 100%;
+				padding: 5px 0px 0px 0px;
+				//border-right: 1px solid rgba($light,0.5);
+			}
+		}
+	}
+	tbody {
+        td {
+            border: none;
+        }
+		.td-bg1 {
+			background: #FFFFFF;
+		}
+		.td-tasks {
+			text-align: center;
+			color: black;
+			margin: 0px;
+			padding: 10px 0px;
+			>.div-task {
+				min-height: 13px;
+				margin: 0px;
+				padding: 0px;
+			}
+			>.border-radius-full {
+				border-radius: .25rem;
+			}
+			>.border-radius-left {
+				border-radius: .25rem 0 0 .25rem;
+			}
+			>.border-radius-right {
+				border-radius: 0 .25rem .25rem 0;
+			}
+		}
+		tr {
+			th {
+                border: 1px solid #EEEEEE !important;
+				&:nth-child(1) {
+					height: 20px;
+					min-width: 100px;
+					background-color: #FFFFFF;
+                    
+					margin: 0px;
+					padding-top: 3px;
+					padding-left: 0px;
+					color: $font_color_principal;
+					>p {
+						height: 100%;
+						width: 100%;
+						margin: 0px;
+						padding: 5px 0px;
+						text-align: left;
+						border-bottom: 1px solid rgba($light,0.5);
+					}
+				}
+			}
+			&:last-child {
+				>th {
+                    
+					&:first-child {
+						>p {
+							border: none;
+
+						}
+					}
+				}
+			}
+		}
+	}
+}
+div.tooltip-gantt {
+	width: auto;
+	height: auto;
+	color: white;
+	background: darkslategrey;
+	position: absolute;
+	z-index: 10001;
+	padding: 10px 10px 10px 10px;
+	line-height: 200%;
+	border-radius: .25rem;
+}

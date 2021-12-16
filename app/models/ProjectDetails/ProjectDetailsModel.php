@@ -161,6 +161,23 @@ class ProjectDetailsModel extends Model
     }
 
 
+    
+// Actualiza las fechas del proyecto
+    public function UpdatePeriodProject($params)
+    {
+        $pjtId                  = $this->db->real_escape_string($params['pjtId']);
+        $pjtDateStart           = $this->db->real_escape_string($params['pjtDateStart']);
+        $pjtDateEnd             = $this->db->real_escape_string($params['pjtDateEnd']);
+        $qry = "UPDATE ctt_projects SET pjt_date_start = '$pjtDateStart', pjt_date_end = '$pjtDateEnd' WHERE pjt_id = $pjtId;";
+        $this->db->query($qry);
+
+        return $pjtId;
+
+    }
+
+
+
+
 // Incrementa la cantidad de un producto
     public function increaseQuantity($params)
     {
@@ -244,6 +261,19 @@ class ProjectDetailsModel extends Model
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
                 WHERE pj.pjtcn_id = $pjtcnId order by reng, pr.prd_sku;
+                ";
+        return $this->db->query($qry);
+    }
+    
+// Lista los relacionados al producto para periodos
+    public function listProductsAsigned($params)
+    {
+        $pjtcnId        = $this->db->real_escape_string($params["pjtcnid"]);
+        $prdId          = $this->db->real_escape_string($params["prdId"]);
+
+        $qry = "SELECT * FROM ctt_projects_periods AS pp
+                INNER JOIN ctt_projects_detail AS pd ON pd.pjtdt_id = pp.pjtdt_id
+                WHERE pd.pjtcn_id = '$pjtcnId' AND pd.prd_id = '$prdId';
                 ";
         return $this->db->query($qry);
     }

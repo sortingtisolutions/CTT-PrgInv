@@ -181,7 +181,11 @@ class PackagesController extends Controller
         echo $res;
     }
 
+<<<<<<< HEAD
     // Obtiene detalle del paquete
+=======
+// Obtiene detalle del paquete
+>>>>>>> b897ba4ec98cce4cbefa779b219ef581364e1083
     public function deletePackages($request_params)
     {
         $params =  $this->session->get('user');
@@ -189,7 +193,10 @@ class PackagesController extends Controller
         $res = $result;
         echo $res;
     }
+<<<<<<< HEAD
     
+=======
+>>>>>>> b897ba4ec98cce4cbefa779b219ef581364e1083
 
 // Obtiene detalle del paquete
     public function deleteProduct($request_params)

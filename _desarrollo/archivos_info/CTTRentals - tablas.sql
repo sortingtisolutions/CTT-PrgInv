@@ -8,7 +8,7 @@ CREATE TABLE `cttapp_cire`.`ctt_accesories` (
     `acr_status`            VARCHAR(1) NOT NULL             COMMENT 'Estatus del accesorio D-Disponible, N-No disponible',
     `prd_id`                INT NOT NULL                    COMMENT 'Id del producto relaciòn ctt_products',
 PRIMARY KEY (`acr_id`))
-COMMENT = 'Productos o accesorios dependientes de otros productos';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Productos o accesorios dependientes de otros productos';
 
 
 DROP TABLE `cttapp_cire`.`ctt_actions`;
@@ -18,7 +18,7 @@ CREATE TABLE `cttapp_cire`.`ctt_actions` (
     `acc_type`               VARCHAR(50) NOT NULL           COMMENT 'Tipo de accion',
     `mod_id`                 INT NULL                       COMMENT 'Id del modulo relacion ctt_module',
 PRIMARY KEY (`acc_id`))
-COMMENT = 'Tabla de tipos de acciones realizadas por un usuario dentro del sistema';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tabla de tipos de acciones realizadas por un usuario dentro del sistema';
 
 
 DROP TABLE `cttapp_cire`.`ctt_activity_log`;
@@ -30,7 +30,7 @@ CREATE TABLE `cttapp_cire`.`ctt_activity_log` (
     `emp_fullname`           VARCHAR(100) NOT NULL          COMMENT 'Nombre del empleado',
     `acc_id`                 INT NULL                       COMMENT 'Id de la accion relacion ctt_actions',
 PRIMARY KEY (`log_id`))
-COMMENT = 'Bitácora de actividades realizadas en el sistema';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Bitácora de actividades realizadas en el sistema';
 
 
 DROP TABLE `cttapp_cire`.`ctt_areas`;
@@ -39,7 +39,7 @@ CREATE TABLE `cttapp_cire`.`ctt_areas` (
     `are_name`                 VARCHAR(50)                    COMMENT 'nombre del área',
     `are_status`               INT DEFAULT 1                  COMMENT 'Estatus del área 1-activo 0-inactivo',
 PRIMARY KEY (`are_id`)) 
-COMMENT='Áreas organizacionales de la empresa';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Áreas organizacionales de la empresa';
 
 
 
@@ -63,7 +63,7 @@ CREATE TABLE `cttapp_cire`.`ctt_budget` (
     `prd_id`                   INT NOT NULL                   COMMENT 'FK Id del producto relación ctt_products',
 
 PRIMARY KEY (`bdg_id`)) 
-COMMENT='Cotizaciones generadas';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Cotizaciones generadas';
 
 
 
@@ -74,7 +74,7 @@ CREATE TABLE `cttapp_cire`.`ctt_categories` (
     `cat_status`            VARCHAR(1) NULL DEFAULT 1       COMMENT 'Estatus del catálogo 1-Activo, 0-Inactivo',
     `str_id`                INT NULL                        COMMENT 'Id del almacen relacion ctt_stores',
 PRIMARY KEY (`cat_id`))
-COMMENT = 'Corresponde a los catalogos de la organización.';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Corresponde a los catalogos de la organización.';
 
 
 DROP TABLE `cttapp_cire`.`ctt_coins`;
@@ -85,7 +85,7 @@ CREATE TABLE `cttapp_cire`.`ctt_coins` (
     `cin_name`              VARCHAR(100)                    COMMENT 'Nombre de la moneda',
     `cin_status`            INT DEFAULT 1                   COMMENT 'Estatus de la moneda 1-activo 0-inactivo',
 PRIMARY KEY (`cin_id`)) 
-COMMENT='Tabla catalogo de monedas';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Tabla catalogo de monedas';
 
 
 DROP TABLE `cttapp_cire`.`ctt_customers`;
@@ -102,7 +102,7 @@ CREATE TABLE `cttapp_cire`.`ctt_customers` (
     `cut_id`                INT NOT NULL                    COMMENT 'Tipo de cliente relacion con ctt_customer_type',
     `cus_status`            INT DEFAULT 1                   COMMENT 'Estatus de la moneda 1-activo 0-inactivo',
 PRIMARY KEY (`cos_id`)) 
-COMMENT='Clientes y prospectos de cliente';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Clientes y prospectos de cliente';
 
 
 
@@ -111,7 +111,7 @@ CREATE TABLE `cttapp_cire`.`ctt_customers_type` (
     `cut_id`                INT NOT NULL AUTO_INCREMENT     COMMENT 'Id del tipo de cliente',
     `cut_name`              VARCHAR(50)                     COMMENT 'Nombre del tipo de cliente',
 PRIMARY KEY (`cut_id`)) 
-COMMENT='Catálogo de tipos de cliente ';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Catálogo de tipos de cliente ';
 
 
 
@@ -121,7 +121,7 @@ CREATE TABLE `cttapp_cire`.`ctt_customers_owner` (
     `cus_id`                INT                             COMMENT 'Id del cliente',
     `cus_parent`            INT                             COMMENT 'Id del cliente relación',
 PRIMARY KEY (`cuo_id`)) 
-COMMENT='Relacion de clientes pertenecientes a otros clientes';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Relacion de clientes pertenecientes a otros clientes';
 
 
 DROP TABLE `cttapp_cire`.`ctt_counter_exchange`;
@@ -130,7 +130,7 @@ CREATE TABLE `cttapp_cire`.`ctt_counter_exchange` (
     `con_date`              DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de registro del movimiento',
     `con_status`            INT DEFAULT 1                   COMMENT 'Estatus del folio 1-activo 0-inactivo',
 PRIMARY KEY (`con_id`)) 
-COMMENT='Tabla generador de folios';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Tabla generador de folios';
 
 
 
@@ -143,7 +143,7 @@ CREATE TABLE `cttapp_cire`.`ctt_discounts` (
     `dis_level`             INT                             COMMENT 'Nivel ',
     `dis_status`            INT DEFAULT 1                   COMMENT 'Estatus del folio 1-activo 0-inactivo',
 PRIMARY KEY (`dis_id`)) 
-COMMENT='Tabla de descuentos';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Tabla de descuentos';
 
 DROP TABLE `cttapp_cire`.`ctt_documents`;
 CREATE TABLE `cttapp_cire`.`ctt_documents` (
@@ -156,7 +156,7 @@ CREATE TABLE `cttapp_cire`.`ctt_documents` (
     `doc_document`          BLOB NULL                       COMMENT 'Contenido del documento',
     `dot_id`                INT NULL                        COMMENT 'Id del tipo de documento relacion ctt_documents_type',
 PRIMARY KEY (`doc_id`))
-COMMENT = 'Documentos de productos';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Documentos de productos';
 
 
 DROP TABLE `cttapp_cire`.`ctt_documents_type`;
@@ -166,7 +166,7 @@ CREATE TABLE `cttapp_cire`.`ctt_documents_type` (
     `dot_name`              VARCHAR(100) NULL               COMMENT 'Nombre del tipo documento',
     `dot_status`            VARCHAR(1) NULL DEFAULT 1       COMMENT 'Estatus del tipo de documento  1-Activo, 0-Inactivo',
 PRIMARY KEY (`dot_id`))
-COMMENT = 'Tipos de documentos de productos';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tipos de documentos de productos';
 
 
 
@@ -181,7 +181,7 @@ CREATE TABLE `cttapp_cire`.`ctt_employees` (
     `pos_id`                INT NULL                        COMMENT 'Id del puesto relación ctt_post',
     `are_id`                INT NULL                        COMMENT 'Id del area relacion con ctt_areas',
 PRIMARY KEY (`emp_id`))
-COMMENT = 'Tabla de los empleados de la empresa';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tabla de los empleados de la empresa';
 
 
 DROP TABLE `cttapp_cire`.`ctt_location`;
@@ -189,7 +189,7 @@ CREATE TABLE `cttapp_cire`.`ctt_location` (
     `loc_id`                INT NOT NULL AUTO_INCREMENT     COMMENT 'Id de la locación',
     `loc_type_location`     VARCHAR(100) NULL               COMMENT 'Tipo de locación',
 PRIMARY KEY (`loc_id`))
-COMMENT = 'Locación en donde se llevara la filmación';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Locación en donde se llevara la filmación';
 
 
 
@@ -202,7 +202,7 @@ CREATE TABLE `cttapp_cire`.`ctt_menu` (
     `mnu_order`             INT NULL                        COMMENT 'Ordenamiento de los elementos del menu para su presentación',
     `mod_id`                INT NULL                        COMMENT 'Id del modulo relación ctt_module',
 PRIMARY KEY (`mnu_id`))
-COMMENT = 'Tabla de los elementos que componen el menu susperior';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tabla de los elementos que componen el menu susperior';
 
 
 
@@ -214,7 +214,7 @@ CREATE TABLE `cttapp_cire`.`ctt_modules` (
     `mod_description`       VARCHAR(300) NULL               COMMENT 'Descripción del módulo',
     `mod_item`              VARCHAR(50) NULL                COMMENT 'metodo que corresponde la sección',
 PRIMARY KEY (`mod_id`))
-COMMENT = 'Tabla de Módulos que componen el sistema';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tabla de Módulos que componen el sistema';
 
 
 
@@ -225,7 +225,7 @@ CREATE TABLE `cttapp_cire`.`ctt_position` (
     `pos_description`       VARCHAR(300) NOT NULL           COMMENT 'Descripción del puesto',
     `pos_status`            VARCHAR(1) NULL                 COMMENT 'Estatus del puesto 1-Activo, 0-Inactivo',
 PRIMARY KEY (`pos_id`))
-COMMENT = 'Puestos de empleados en la empresa';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Puestos de empleados en la empresa';
 
 
 
@@ -252,7 +252,7 @@ CREATE TABLE `cttapp_cire`.`ctt_products` (
     `srv_id`                INT NULL                        COMMENT 'Id del tipo de servicio relacion ctt_services',
     `cin_id`                INT NULL                        COMMENT 'Id del tipo de moneda relacion ctt_coins',
 PRIMARY KEY (`prd_id`))
-COMMENT = 'Productos de la empresa.';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Productos de la empresa.';
 
 
 
@@ -263,7 +263,7 @@ CREATE TABLE `cttapp_cire`.`ctt_products_documents` (
     `prd_id`                INT NULL                        COMMENT 'Id del producto o serie',
     `doc_id`                INT NULL                        COMMENT 'Id del documento relación ctt_documents',
 PRIMARY KEY (`dcp_id`))
-COMMENT = 'Relación de documentos con productos';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Relación de documentos con productos';
 
 
 
@@ -273,7 +273,7 @@ CREATE TABLE `cttapp_cire`.`ctt_products_packages` (
     `prd_parent`            INT NULL                        COMMENT 'Id del producto padre',
     `prd_id`                INT NULL                        COMMENT 'Id del producto hijo relaciòn ctt_products',
 PRIMARY KEY (`pck_id`))
-COMMENT = 'Tabla pivote que relaiona los productos a un paquete';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tabla pivote que relaiona los productos a un paquete';
 
 
 
@@ -287,7 +287,7 @@ CREATE TABLE `cttapp_cire`.`ctt_profiles` (
     `prf_mod_start`         VARCHAR(50) NULL                COMMENT 'Id del modulo de inicio',
     `prf_status`            VARCHAR(1) NULL DEFAULT 1       COMMENT 'Estatus del perfil 1-Activo, 0-Inactivo',
 PRIMARY KEY (`prf_id`))
-COMMENT = 'Tabla de Perfiles';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tabla de Perfiles';
 
 
 
@@ -297,7 +297,7 @@ CREATE TABLE `cttapp_cire`.`ctt_profiles_modules` (
     `prf_id`                INT NOT NULL                    COMMENT 'FK Id del perfil relacion ctt_profile',
     `mod_id`                INT NOT NULL                    COMMENT 'FK Id del modulo relación ctt_modulo',
 PRIMARY KEY (`pfm_id`))
-COMMENT = 'Tabla pivote m_to_m ctt_profile - ctt_modulo';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tabla pivote m_to_m ctt_profile - ctt_modulo';
 
 
 
@@ -315,7 +315,7 @@ CREATE TABLE `cttapp_cire`.`ctt_projects` (
     `loc_id`              INT NOT NULL                    COMMENT 'FK Id de la locación relación ctt_location',
     `pjttp_id`            INT NOT NULL                    COMMENT 'Fk Id del Tipo de projecto relacion ctt_projects_type',
 PRIMARY KEY (`pjt_id`))
-COMMENT='proyectos registrados';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='proyectos registrados';
 
 
 
@@ -339,7 +339,7 @@ CREATE TABLE `cttapp_cire`.`ctt_projects_content` (
     `prd_id`                    INT NOT NULL                   COMMENT 'FK Id del producto relación ctt_products',
     `pjt_id`                    INT NOT NULL                   COMMENT 'FK Id del proyecto relación ctt_proyect',
 PRIMARY KEY (`pjtcn_id`)) 
-COMMENT='Contenido del proyecto cotización promovida';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Contenido del proyecto cotización promovida';
 
 
 DROP TABLE `cttapp_cire`.`ctt_projects_detail`;
@@ -350,17 +350,17 @@ CREATE TABLE `cttapp_cire`.`ctt_projects_detail` (
     `prd_id`                     INT NOT NULL                   COMMENT 'Id del producto relación con ctt_products',
     `pjtcm_id`                   INT NOT NULL                   COMMENT 'FK Id del proyecto relación ctt_projects_content',
 PRIMARY KEY (`pjtdt_id`)) 
-COMMENT='Detalle del proyecto, cotización promovida';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Detalle del proyecto, cotización promovida';
 
 
 
 DROP TABLE `cttapp_cire`.`ctt_projects_periods`;
 CREATE TABLE `cttapp_cire`.`ctt_projects_periods` (
     `pjtpd_id`                   INT NOT NULL AUTO_INCREMENT    COMMENT 'Id del detalle de proyecto',
-    `pjtpd_day`                  DATETIME NOT NULL              COMMENT 'Día reservado ',
+    `pjtpd_day`                  DATE NOT NULL                  COMMENT 'Día reservado ',
     `pjtdt_id`                   INT NOT NULL                   COMMENT 'FK Id del proyecto relación ctt_projects_detail',
 PRIMARY KEY (`pjtpd_id`)) 
-COMMENT='Dias de reservado de la serie del producto';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Dias de reservado de la serie del producto';
 
 
 DROP TABLE `cttapp_cire`.`ctt_projects_type`;
@@ -370,7 +370,7 @@ CREATE TABLE `cttapp_cire`.`ctt_projects_type` (
     `pjttp_min_download`    INT(11) NOT NULL                COMMENT 'Horas minimas requeridos para carga/descarga',
     `pjttp_max_download`    INT(11) NOT NULL                COMMENT 'Horas maximas requeridos para carga/descarga',
 PRIMARY KEY (`pjttp_id`))
-COMMENT='Tipos de proyectos o eventos que se ofrecen y siministran';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Tipos de proyectos o eventos que se ofrecen y siministran';
 
 
 DROP TABLE `cttapp_cire`.`ctt_series`;
@@ -394,7 +394,7 @@ CREATE TABLE `cttapp_cire`.`ctt_series` (
     `cin_id`                INT NULL                        COMMENT 'Id del tipo de moneda relacion ctt_coins',
     `pjtdt_id`              INT NULL                        COMMENT 'Id del detalle de proyecto relacion ctt_projects_detail',
 PRIMARY KEY (`ser_id`))
-COMMENT = 'Numero serie de productos correspondientes a un modelo.';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Numero serie de productos correspondientes a un modelo.';
 
 
 
@@ -410,7 +410,7 @@ CREATE TABLE `cttapp_cire`.`ctt_sales` (
     `str_id`                INT NULL                        COMMENT 'Id del almacen relacion ctt_stores',
     `pjt_id`                INT NULL                        COMMENT 'Id del proyeto relacion ctt_projects',
 PRIMARY KEY (`sal_id`))
-COMMENT = 'Ventas de productos.';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Ventas de productos.';
 
 
 
@@ -425,7 +425,7 @@ CREATE TABLE `cttapp_cire`.`ctt_sales_details` (
     `sal_id`                INT NOT NULL                    COMMENT 'Id de la venta relacion ctt_sales',
     `ser_id`                INT NULL                        COMMENT 'Id de la serie relacion ctt_series',
 PRIMARY KEY (`sld_id`))
-COMMENT = 'Detalle de las ventas de productos.';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Detalle de las ventas de productos.';
 
 
 DROP TABLE `cttapp_cire`.`ctt_services`;
@@ -435,7 +435,7 @@ CREATE TABLE `cttapp_cire`.`ctt_services` (
     `srv_description`       VARCHAR(300) NULL               COMMENT 'Descripcion del servicio',
     `srv_status`            VARCHAR(1) NULL                 COMMENT 'Estatus del servicio 1-Activo, 0-Inactivo',
 PRIMARY KEY (`srv_id`))
-COMMENT = 'Tipificación de los servicios.';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tipificación de los servicios.';
 
 
 
@@ -447,7 +447,7 @@ CREATE TABLE `cttapp_cire`.`ctt_stores` (
     `str_type`              VARCHAR(100) NULL               COMMENT 'Tipo de almacén',
     `emp_id`                INT NULL                        COMMENT 'Id del empleado relacion ctt_employees',
 PRIMARY KEY (`str_id`))
-COMMENT = 'Listado de almacenes.';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Listado de almacenes.';
 
 
 DROP TABLE `cttapp_cire`.`ctt_stores_exchange`;
@@ -467,7 +467,7 @@ CREATE TABLE `cttapp_cire`.`ctt_stores_exchange` (
     `ext_id`                INT NULL                        COMMENT 'Id del tipo de movimiento relación ctt_type_exchange',
     `cin_id`                INT NULL                        COMMENT 'Id del tipo de moneda relación ctt_coins',
 PRIMARY KEY (`exc_id`))
-COMMENT = 'Movimientos de productos entre almacenes';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Movimientos de productos entre almacenes';
 
 
 DROP TABLE `cttapp_cire`.`ctt_stores_products`;
@@ -477,7 +477,7 @@ CREATE TABLE `cttapp_cire`.`ctt_stores_products` (
     `str_id`              INT NOT NULL                    COMMENT 'Id del almacen relacion ctt_store',
     `ser_id`              INT NOT NULL                    COMMENT 'Id del numero de serie relacion ctt_series',
 PRIMARY KEY (`stp_id`))
-COMMENT='Tabla de cantidad de productos en almacen';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Tabla de cantidad de productos en almacen';
 
 
 DROP TABLE `cttapp_cire`.`ctt_subcategories`;
@@ -490,7 +490,7 @@ CREATE TABLE `cttapp_cire`.`ctt_subcategories` (
     `sbc_quantity`          INT NULL DEFAULT 0              COMMENT 'Cantidad de productos contenidos',
     `cat_id`                INT NOT NULL                    COMMENT 'Id del catálogo relación ctt_categories',
 PRIMARY KEY (`sbc_id`))
-COMMENT = 'Subcategorias.';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Subcategorias.';
 
 
 DROP TABLE `cttapp_cire`.`ctt_subletting`;
@@ -506,7 +506,7 @@ CREATE TABLE `cttapp_cire`.`ctt_subletting` (
     `prj_id`                INT NULL                        COMMENT 'Id del proyecto ',
     `cin_id`                INT NULL                        COMMENT 'Id del tipo de moneda relación ctt_coins',
 PRIMARY KEY (`sub_id`))
-COMMENT='Tabla de situación de subarrendos';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Tabla de situación de subarrendos';
 
 
 DROP TABLE `cttapp_cire`.`ctt_suppliers`;
@@ -520,7 +520,7 @@ CREATE TABLE `cttapp_cire`.`ctt_suppliers` (
     `sup_status`            VARCHAR(1) NULL                 COMMENT 'Estatus del proveedor 1-Activo, 0-Inactivo',
     `sut_id`                INT NULL                        COMMENT 'Id del tipo de proveedor relación ctt_suppliers_type',
 PRIMARY KEY (`sup_id`))
-COMMENT = 'Proveedores de la empresa.';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Proveedores de la empresa.';
 
 
 DROP TABLE `cttapp_cire`.`ctt_suppliers_type`;
@@ -530,7 +530,7 @@ CREATE TABLE `cttapp_cire`.`ctt_suppliers_type` (
     `sut_name`              VARCHAR(100) NULL               COMMENT 'Nombre del tipo de proveddor',
     `sut_status`            VARCHAR(1) NULL                 COMMENT 'Estatus del tipo de proveedor 1-Activo, 0-Inactivo',
 PRIMARY KEY (`sut_id`))
-COMMENT = 'Tipos de proveedores de la empresa.';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tipos de proveedores de la empresa.';
 
 
 DROP TABLE `cttapp_cire`.`ctt_type_exchange`;
@@ -543,7 +543,7 @@ CREATE TABLE `cttapp_cire`.`ctt_type_exchange` (
     `ext_affect_product`    VARCHAR(5) NOT NULL             COMMENT 'Clave de afectaciòn a la situaciòn del producto',
     `ext_elements`          VARCHAR(10) NOT NULL            COMMENT 'Elementos que se muestan en la interfase',
 PRIMARY KEY (`ext_id`))
-COMMENT = 'Tipos de movimientos entre almacenes';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tipos de movimientos entre almacenes';
 
 
 
@@ -559,7 +559,7 @@ CREATE TABLE `cttapp_cire`.`ctt_users` (
     `prf_id`                INT NULL                        COMMENT 'Id del perfil relacion ctt_profiles',
     `emp_id`                INT NULL                        COMMENT 'Id del empleado relacion ctt_employees',
 PRIMARY KEY (`usr_id`))
-COMMENT = 'Tabla de Usuarios registrados';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tabla de Usuarios registrados';
 
 
 DROP TABLE `cttapp_cire`.`ctt_users_modules`;
@@ -568,7 +568,7 @@ CREATE TABLE `cttapp_cire`.`ctt_users_modules` (
     `usr_id`                INT NOT NULL                    COMMENT 'FK Id del usuario relacion ctt_users',
     `mod_id`                INT NOT NULL                    COMMENT 'FK Id del modulo relación ctt_modules',
 PRIMARY KEY (`urm_id`))
-COMMENT = 'Tabla pivote m_to_m ctt_usuarios - ctt_modules';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Tabla pivote m_to_m ctt_usuarios - ctt_modules';
 
 
 DROP TABLE `cttapp_cire`.`ctt_version`;
@@ -579,7 +579,7 @@ CREATE TABLE `cttapp_cire`.`ctt_version` (
     `ver_status`            VARCHAR(1) NULL DEFAULT 'C'     COMMENT 'Tipo de version C= Cotización P=Proyecto',
     `pjt_id`                INT NOT NULL                    COMMENT 'FK Id del projeto relación ctt_projects',
 PRIMARY KEY (`ver_id`))
-COMMENT = 'Version de docuemntos de cotización';
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Version de docuemntos de cotización';
 
 
 
@@ -619,12 +619,33 @@ WHERE (pd.pjtdt_prod_sku = 'Pendiente' OR LEFT(RIGHT(pd.pjtdt_prod_sku, 4),1) ='
 
 DROP VIEW ctt_vw_subcategories;
 CREATE VIEW ctt_vw_subcategories AS
-SELECT sc.sbc_id as subcatid, sc.sbc_code AS subccode, sc.sbc_name AS subcname, ct.cat_name AS catgname, 
-    ct.cat_id AS catgcode, '0' as quantity 
-FROM  ctt_subcategories        AS sc   
-INNER JOIN ctt_categories      AS ct ON ct.cat_id = sc.cat_id
-WHERE sc.sbc_status = '1' AND ct.cat_status = '1' 
-ORDER BY ct.cat_id, sc.sbc_id;
+    SELECT 
+        CONCAT('<i class="fas fa-pen modif" data="', sc.sbc_id,'"></i><i class="fas fa-times-circle kill" data="', sc.sbc_id , '"></i>') AS editable,
+        sc.sbc_id   AS subcatid,
+        sc.sbc_code AS subccode,
+        sc.sbc_name AS subcname,
+        ct.cat_name AS catgname,
+        ct.cat_id   AS catgcode,
+        CONCAT_WS('','<span class="toLink">', IFNULL(SUM(sc.sbc_quantity), 0), '</span>') AS quantity
+    FROM ctt_subcategories AS sc
+    INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
+    WHERE sc.sbc_status = '1'
+    AND ct.cat_status = '1'
+    GROUP BY sc.sbc_id;
+
+
+
+DROP VIEW ctt_vw_project_subletting;
+
+CREATE VIEW ctt_vw_project_subletting AS
+SELECT 
+	num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id,
+	DATE_FORMAT(sub_date_start,'%d/%m/%Y') AS sub_date_start, DATE_FORMAT(sub_date_end,'%d/%m/%Y') AS sub_date_end, 
+	sub_comments, pjtcn_days_base, pjtcn_days_trip, pjtcn_days_test,
+	ifnull(prd_id,0) AS prd_id, ifnull(sup_id,0) AS sup_id, ifnull(str_id,0) AS str_id, 
+	ifnull(sub_id,0) AS sub_id, ifnull(sut_id,0) AS sut_id, ifnull(pjtdt_id,0) AS pjtdt_id,
+	ifnull(pjtcn_id,0) AS pjtcn_id, ifnull(cin_id,0) AS cin_id
+FROM ctt_vw_subletting;
 
 
 
@@ -636,6 +657,5 @@ FOR EACH ROW
         FROM  ctt_stores_products           AS sp
         INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
         INNER JOIN ctt_products             AS pr ON pr.prd_id = sr.prd_id
-        INNER JOIN ctt_subcategories        AS st ON st.sbc_id = pr.sbc_id
-        WHERE sr.ser_status = 1 AND pr.prd_level IN ('P','K') and st.sbc_id = sc.sbc_id
+        WHERE sr.ser_status = 1 AND pr.prd_level IN ('P','K') and pr.sbc_id = sc.sbc_id
     );

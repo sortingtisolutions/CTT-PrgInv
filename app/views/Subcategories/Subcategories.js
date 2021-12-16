@@ -384,7 +384,7 @@ function putSeries(dt) {
     });
 
     settindStockTbl();
-    $('.overlay_closer .title').html(`Catalogo - ${subnme}`);
+    $('.overlay_closer .title').html(`Subcategorias - ${subnme}`);
     $('#ModifySerieModal').removeClass('overlay_hide');
 
     $('#ModifySerieModal .btn_close')
