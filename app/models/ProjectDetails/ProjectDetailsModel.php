@@ -271,9 +271,19 @@ class ProjectDetailsModel extends Model
         $pjtcnId        = $this->db->real_escape_string($params["pjtcnid"]);
         $prdId          = $this->db->real_escape_string($params["prdId"]);
 
-        $qry = "SELECT * FROM ctt_projects_periods AS pp
+        $qry = "SELECT 
+                    pp.pjtpd_id
+                , DATE_FORMAT(pp.pjtpd_day_start, '%Y%m%d') AS pjtpd_day_start
+                , DATE_FORMAT(pp.pjtpd_day_end, '%Y%m%d') AS pjtpd_day_end
+                , pd.pjtdt_id
+                , pd.pjtdt_prod_sku
+                , pd.ser_id
+                , pd.prd_id
+                , pd.pjtcn_id
+                FROM ctt_projects_periods AS pp
                 INNER JOIN ctt_projects_detail AS pd ON pd.pjtdt_id = pp.pjtdt_id
-                WHERE pd.pjtcn_id = '$pjtcnId' AND pd.prd_id = '$prdId';
+                WHERE pd.pjtcn_id = '$pjtcnId' AND pd.prd_id = '$prdId'
+                ORDER BY pd.pjtdt_id, pp.pjtpd_day_start;
                 ";
         return $this->db->query($qry);
     }
@@ -383,8 +393,6 @@ class ProjectDetailsModel extends Model
 
             $qry1 = "UPDATE ctt_series 
                         SET 
-                            ser_reserve_start = '$dtinic', 
-                            ser_reserve_end   = '$dtfinl', 
                             ser_situation = 'EA',
                             ser_stage = 'R',
                             ser_reserve_count = ser_reserve_count + 1
@@ -412,6 +420,12 @@ class ProjectDetailsModel extends Model
                         pjtdt_id = '$pjtdtId'
                         WHERE ser_id = $serie;";
             $this->db->query($qry3);
+
+            $qry4 = "INSERT INTO ctt_projects_periods (pjtpd_day_start, pjtpd_day_end, pjtdt_id) 
+                     VALUES 
+                    ('$dtinic', '$dtfinl', '$pjtdtId')";
+
+            $this->db->query($qry4);
         }
         return  $serie;
     }
