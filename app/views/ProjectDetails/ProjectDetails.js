@@ -1,6 +1,7 @@
 let cust, proj, relc, vers, prod, disc, budg;
 let rgcnt = 1,
     rgevn = 0;
+let dss;
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -1429,32 +1430,12 @@ function periods_product(prdId, prdLvl, pjtcn) {
                 <div class="product_container">
                     <div class="serie_group">
                         <div class="serie_top">    
-                            <div class="serie_name">Nombre de la serie</div>
+                            <div class="serie_name">Productos</div>
                             <div class="serie_period">Seleccion de periodos</div>
                         </div>
                         <div class="serie_bottom">    
                             <div class="serie_calendar" id="serie_calendar">
-                                <table>
-                                    <tr>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                        <td class="serie_day">1</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="serie_cell">1</td>
-                                    </tr>
-                                </table>
+                                
                             </div>
                         </div>
                     </div>
@@ -2158,104 +2139,114 @@ function put_counter_pending(dt) {
 }
 
 function put_products_asigned(dt) {
+    dss = dt;
     console.log(dt);
-    //let calendar = build_range_calendar();
-    $.each(dt, function (v, u) {
-        var H = `
-        <div class="serie_group">
-            <div class="serie_top">    
-                <div class="serie_name">${u.pjtdt_prod_sku}</div>
-                <div class="serie_period">Seleccion de periodos</div>
-            </div>
-            <div class="serie_bottom">    
-                <div class="serie_calendar"></div>
-            </div>
-        </div>
-        
-        `;
-        // $('.product_container').append(H);
-    });
 
     let fini = moment($('#PeriodProject').text().split(' - ')[0], 'DD/MM/YYYY');
     let ffin = moment($('#PeriodProject').text().split(' - ')[1], 'DD/MM/YYYY');
 
-    var myTask = [
-        {
-            id: 10,
-            name: 'Tarea 1',
-            title: 'Tarea 1 Titulo',
-            date_start: '20211201',
-            date_end: '20211231',
+    $.each(dt, function (v, u) {});
+
+    var series = [];
+    $.each(dt, function (v, u) {
+        series.push({
+            id: u.pjtpd_id,
+            name: u.pjtdt_prod_sku,
+            title: u.pjtdt_prod_sku,
+            date_start: u.pjtpd_day_start,
+            date_end: u.pjtpd_day_end,
+            parent: u.pjtdt_id,
             color: '#ADFF2F',
-            dep: '11',
-        },
-        {
-            id: 11,
-            name: 'Tarea 1 A',
-            title: 'Tarea 1 Titulo',
-            date_start: '20220110',
-            date_end: '20220115',
-            color: '#ADFF2F',
-        },
-        {
-            id: 12,
-            name: 'Tarea 2',
-            title: 'Tarea 2 Titulo',
-            date_start: '20220103',
-            date_end: '20220210',
-            color: '#AD002F',
-        },
-    ];
+            dep: secuence(dt, u.pjtdt_id, u.pjtpd_id),
+        });
+    });
+    //series = series.substring(0, series.length - 1);
+
+    console.log(series);
 
     $('#serie_calendar').gantt({
-        data: myTask,
-        dtStart: fini,
-        dtEnd: ffin,
+        data: series,
+        dtStart: fini.format('YYYYMMDD'),
+        dtEnd: ffin.format('YYYYMMDD'),
     });
+
+    $('i.addPeriod')
+        .unbind('click')
+        .on('click', function () {
+            addPeriod($(this));
+        });
+
+    $('i.editPeriod')
+        .unbind('click')
+        .on('click', function () {
+            editPeriod($(this));
+        });
 }
 
-function build_range_calendar() {
-    let H = '';
-    moment.locale('es');
-    let fini = moment($('#PeriodProject').text().split(' - ')[0], 'DD/MM/YYYY');
-    let ffin = moment($('#PeriodProject').text().split(' - ')[1], 'DD/MM/YYYY');
-    let diff = ffin.diff(fini, 'days');
-    let fstr = moment($('#PeriodProject').text().split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
-
-    let month = '';
-    console.log(month);
-
-    var meses = [];
-
-    H += '<table><tr>';
-
-    for (var i = 0; i <= diff; i++) {
-        let dti = nextday(fstr, i).format('MMMM').toUpperCase();
-
-        if (month != dti) {
-            month = dti;
-            // meses.push(month);
-            var colsp = counter_days(month, diff, fstr);
-            H += `<td colspan="${colsp}">${month}</td>`;
+function secuence(dt, id, pi) {
+    var dep = '';
+    $.each(dt, function (v, u) {
+        if (id === u.pjtdt_id && pi < u.pjtpd_id) {
+            dep = `${u.pjtpd_id},`;
         }
+    });
+    if (dep != '') {
+        dep = dep.substring(0, dep.length - 1);
     }
-    H += '</tr></table>';
+    return dep;
+}
 
-    console.log(meses);
+function addPeriod(id) {
+    console.log(id.attr('id'));
+    console.log(dss);
+}
 
-    return H;
+function editPeriod(id) {
+    console.log(id);
 }
-function nextday(fstr, i) {
-    let dti = moment(fstr, 'YYYYMMDD').add(i, 'days');
-    return dti;
-}
-function counter_days(month, dif, fstr) {
-    var colsp = 1;
-    for (var i = 1; i <= dif; i++) {
-        let dti = nextday(fstr, i).format('MMMM').toUpperCase();
-        if (month == dti) {
-            colsp++;
-        }
-    }
-    return colsp;
-}
+
+// function build_range_calendar() {
+//     let H = '';
+//     moment.locale('es');
+//     let fini = moment($('#PeriodProject').text().split(' - ')[0], 'DD/MM/YYYY');
+//     let ffin = moment($('#PeriodProject').text().split(' - ')[1], 'DD/MM/YYYY');
+//     let diff = ffin.diff(fini, 'days');
+//     let fstr = moment($('#PeriodProject').text().split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
+
+//     let month = '';
+//     console.log(month);
+
+//     var meses = [];
+
+//     H += '<table><tr>';
+
+//     for (var i = 0; i <= diff; i++) {
+//         let dti = nextday(fstr, i).format('MMMM').toUpperCase();
+
+//         if (month != dti) {
+//             month = dti;
+//             // meses.push(month);
+//             var colsp = counter_days(month, diff, fstr);
+//             H += `<td colspan="${colsp}">${month}</td>`;
+//         }
+//     }
+//     H += '</tr></table>';
+
+//     console.log(meses);
+
+//     return H;
+// }
+// function nextday(fstr, i) {
+//     let dti = moment(fstr, 'YYYYMMDD').add(i, 'days');
+//     return dti;
+// }
+// function counter_days(month, dif, fstr) {
+//     var colsp = 1;
+//     for (var i = 1; i <= dif; i++) {
+//         let dti = nextday(fstr, i).format('MMMM').toUpperCase();
+//         if (month == dti) {
+//             colsp++;
+//         }
+//     }
+//     return colsp;
+// }
