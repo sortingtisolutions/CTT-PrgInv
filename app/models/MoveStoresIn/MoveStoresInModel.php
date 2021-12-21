@@ -38,7 +38,7 @@ class MoveStoresInModel extends Model
 // Listado de Facturas
     public function listInvoice()
     {
-        $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id = 1;";
+        $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id IN (1,4);";
         return $this->db->query($qry);
     }
        
