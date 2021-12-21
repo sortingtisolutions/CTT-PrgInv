@@ -425,6 +425,9 @@ public function saveBudgetList($params)
         $dtfinl   = $this->db->real_escape_string($params['dtfinl']);
         $pjetId   = $this->db->real_escape_string($params['pjetId']);
 
+
+       
+
         $qry = "SELECT ser_id, ser_sku FROM ctt_series WHERE prd_id = $prodId 
                 AND ser_reserve_start is null AND ser_reserve_end is null
                 ORDER BY ser_reserve_count asc LIMIT 1;";
@@ -485,6 +488,7 @@ public function saveBudgetList($params)
         $this->db->query($qry4);
 
         return  $serie;
+        
     }
 
     public function GetAccesories($params)

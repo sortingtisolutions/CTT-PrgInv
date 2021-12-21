@@ -171,6 +171,26 @@ class ProjectDetailsModel extends Model
         $qry = "UPDATE ctt_projects SET pjt_date_start = '$pjtDateStart', pjt_date_end = '$pjtDateEnd' WHERE pjt_id = $pjtId;";
         $this->db->query($qry);
 
+
+        $qry1 = "UPDATE ctt_projects_periods 
+                    SET pjtpd_day_start = '$pjtDateStart' 
+                    WHERE pjtpd_day_start < '$pjtDateStart' 
+                    AND pjtdt_id in (
+                        SELECT pjtdt_id FROM ctt_projects_content AS pc
+                        INNER JOIN ctt_projects_detail AS pd ON pd.pjtcn_id = pc.pjtcn_id
+                        WHERE pjt_id = '$pjtId'
+                    );";
+        $this->db->query($qry1);
+
+        $qry2 = " UPDATE ctt_projects_periods 
+                    SET pjtpd_day_end = '$pjtDateEnd' 
+                    WHERE pjtpd_day_end > '$pjtDateEnd' 
+                    AND pjtdt_id in (
+                        SELECT pjtdt_id FROM ctt_projects_content AS pc
+                        INNER JOIN ctt_projects_detail AS pd ON pd.pjtcn_id = pc.pjtcn_id
+                        WHERE pjt_id = '$pjtId'
+                    );";
+
         return $pjtId;
 
     }

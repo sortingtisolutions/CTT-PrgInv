@@ -340,6 +340,7 @@ public function ProcessProjectProduct($request_params)
         $pjtcnt = $this->model->SaveProjectContent($request_params);
         $result = $this->model->GetProjectContent($request_params);
 
+      
         while($row = $result->fetch_assoc()){
             $dtstar = $row["pjt_date_start"];
             $dybase = $row["pjtcn_days_base"];
@@ -351,7 +352,7 @@ public function ProcessProjectProduct($request_params)
             $dyinic = $dytrip + $dytest;
             $dyfinl = $dytrip + $dybase;
             $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));
-            $dtfinl = date('Y-m-d',strtotime($dtstar . '+'. $dyfinl .' days'));
+            $dtfinl = date('Y-m-d',strtotime($dtstar . '+'. ($dyfinl-1) .' days')); 
 
             $bdgsku = $row["pjtcn_prod_sku"];
             $bdgnme = $row["pjtcn_prod_name"];
@@ -507,6 +508,7 @@ public function ProcessProjectProduct($request_params)
             }
         }
 
-        echo '1';
+        echo $dtinic . '|' . $dtfinl;
+        
     } 
 }
