@@ -26,12 +26,21 @@ class CodeBarModel extends Model
 		return $this->db->query($qry);
     }
 // Listado de Productos
-	public function listProducts($store)
+	public function listProducts($strId)
 	{
-		$store = $this->db->real_escape_string($store);
+		//$strId = $this->db->real_escape_string($param['strId']);
+		$strId = $this->db->real_escape_string($strId);
 		$qry = "SELECT * FROM ctt_products AS pr
+				INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
+				INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
+				WHERE sr.ser_status = 1 AND st.stp_quantity > 0
+				AND st.str_id='$strId' order by st.str_id;"; 
+
+		//$store = $this->db->real_escape_string($store);
+		/* $qry = "SELECT * FROM ctt_products AS pr
 		LEFT JOIN  ctt_series AS sr ON sr.prd_id = pr.prd_id
-		WHERE sr.ser_status = 1 and sr.ser_sku is not null ;";
+		WHERE sr.ser_status = 1 and sr.ser_sku is not null ;"; */
+
 		return $this->db->query($qry);
 	}	
 // Listado de Movimientos

@@ -68,7 +68,7 @@ class CodeBarController extends Controller
 	public function listProducts($request_params)
 	{
 		$params =  $this->session->get('user');
-		$result = $this->model->listProducts($request_params['store']);
+		$result = $this->model->listProducts($request_params['strId']);
 		$i = 0;
 		while($row = $result->fetch_assoc()){
 			$rowdata[$i] = $row;
@@ -77,7 +77,7 @@ class CodeBarController extends Controller
 		if ($i>0){
 			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
 		} else {
-			$res =  '[{"prd_id":"0"}]';	
+			$res =  '[{"strId":"0"}]';	
 		}
 		echo $res;
 	} 

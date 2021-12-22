@@ -16,11 +16,11 @@
 
             <div class="mvst_panel">
                 <div class="form-group">
-                <h4 id="titulo">Productos para Impresión</h4>
+                <h4 id="titulo">Salida de Productos</h4>
 
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtStoreSource" class="form-select form-select-sm required"><option value="0" data-content="||" selected>Selecciona Almacén</option></select>
+                            <select id="txtStoreSource" class="form-select form-select-sm required"><option value="0" data-content="||" selected>Selecciona un Almacén</option></select>
                             <label for="txtStoreSource" class="form-label">Almacén</label>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
 
             <div class="mvst_table" style="text-align:left">
 
-                <h1>Productos de almacén</h1>
+                <h1>Datos para Impresión</h1>
 
                 <div class="row">
 
