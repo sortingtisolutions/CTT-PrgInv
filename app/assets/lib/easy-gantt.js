@@ -86,11 +86,74 @@ $.fn.gantt = function (options) {
         let d2 = moment(task.date_end, 'YYYY-MM-DD');
 
         let dystr = d1.diff(moment(firstDay, 'DD/MM/YYYY'), 'days') * 20;
+        let taskdays = d2.diff(d1, 'days') + 1;
         let dyend = (d2.diff(d1, 'days') + 1) * 20;
 
-        H = `<div class="rango periodo_02" style="left:${dystr}px; width: ${dyend}px;"></div>`;
+        let dstart = moment(task.date_start, 'YYYYMMDD').format('DD-MMM-YYYY').toUpperCase();
+        let dend = moment(task.date_end, 'YYYYMMDD').format('DD-MMM-YYYY').toUpperCase();
+
+        H = `<div class="rango periodo_02" style="left:${dystr}px; width: ${dyend}px;" 
+                task_name="${task.name}"
+                start="${dstart}"
+                end="${dend}"
+                task_days="${taskdays}"
+                >
+        <i class="far fa-calendar-plus editPeriod" id="${task.id}" title="editar periodo"></i>
+        </div>`;
         $(`#TSK${task.parent}`).append(H);
     });
+
+    $('.periodo_02').on('mousemove', function (e) {
+        // Arrasta o tooltip de acordo com o mouse
+        $('.tooltip-gantt').css('top', e.pageY + 10);
+        $('.tooltip-gantt').css('left', e.pageX + 20);
+        $('.tooltip-gantt').show();
+
+        let tooltipGantt = `<div class="tooltip-gantt">
+        <b>${$(this).attr('task_name')}</b><br>
+        <span>${$(this).attr('start')} a ${$(this).attr('end')}</span><br>
+        <span>${$(this).attr('task_days')} días</span>
+        <hr>
+        <span></span>
+        </div>`;
+        $('body').append(tooltipGantt);
+        $('.tooltip-gantt').css('z-index', 10000);
+    });
+
+    $('.periodo_02').on('mouseout', function (e) {
+        // Arrasta o tooltip de acordo com o mouse
+        $('.tooltip-gantt').hide();
+    });
+
+    console.log(dss);
+
+    $('.periodo_02 i').daterangepicker(
+        {
+            showDropdowns: true,
+            autoApply: true,
+            locale: {
+                format: 'DD/MM/YYYY',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                firstDay: 1,
+            },
+            showCustomRangeLabel: false,
+            singleDatePicker: false,
+            minDate: dtStart,
+            maxDate: dtEnd,
+            opens: 'left',
+        },
+        function (start, end, label) {
+            console.log(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'), label);
+        }
+    );
 
     $(function () {
         $('#' + unic).scroll(function (ev) {

@@ -2176,11 +2176,11 @@ function put_products_asigned(dt) {
             addPeriod($(this));
         });
 
-    $('i.editPeriod')
-        .unbind('click')
-        .on('click', function () {
-            editPeriod($(this));
-        });
+    // $('i.editPeriod')
+    //     .unbind('click')
+    //     .on('click', function () {
+    //         editPeriod($(this));
+    //     });
 }
 
 function secuence(dt, id, pi) {
@@ -2203,6 +2203,8 @@ function addPeriod(id) {
 
 function editPeriod(id) {
     console.log(id);
+    console.log(dss);
+    $('#' + id).daterangepicker();
 }
 
 // function build_range_calendar() {

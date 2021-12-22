@@ -1827,6 +1827,7 @@ function get_budgets_promote() {
 
 function promote_project() {
     modal_loading();
+
     let projectId = $('#IdProject').val();
     var pagina = 'Budget/PromoteProject';
     var par = `[{"pjtId":"${projectId}"}]`;

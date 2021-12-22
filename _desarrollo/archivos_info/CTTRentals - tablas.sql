@@ -357,7 +357,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Detalle del proyecto, cotización p
 DROP TABLE `cttapp_cire`.`ctt_projects_periods`;
 CREATE TABLE `cttapp_cire`.`ctt_projects_periods` (
     `pjtpd_id`                   INT NOT NULL AUTO_INCREMENT    COMMENT 'Id del detalle de proyecto',
-    `pjtpd_day`                  DATE NOT NULL                  COMMENT 'Día reservado ',
+    `pjtpd_day_start`            DATE NOT NULL                  COMMENT 'Día inicial reservado ',
+    `pjtpd_day_end`              DATE NOT NULL                  COMMENT 'Día final reservado ',
     `pjtdt_id`                   INT NOT NULL                   COMMENT 'FK Id del proyecto relación ctt_projects_detail',
 PRIMARY KEY (`pjtpd_id`)) 
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Dias de reservado de la serie del producto';
