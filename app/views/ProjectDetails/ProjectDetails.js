@@ -2207,6 +2207,15 @@ function editPeriod(id) {
     $('#' + id).daterangepicker();
 }
 
+function update_range_data(id, d1, d2) {
+    var pagina = 'ProjectDetails/updatePeriods';
+    var par = `[{"pjt":""}]`;
+    var tipo = 'json';
+    var selector = put_projects_type;
+    caching_events('put_projects_type');
+    fillField(pagina, par, tipo, selector);
+}
+
 // function build_range_calendar() {
 //     let H = '';
 //     moment.locale('es');

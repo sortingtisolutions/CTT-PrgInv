@@ -125,11 +125,20 @@ $.fn.gantt = function (options) {
         $('.tooltip-gantt').hide();
     });
 
-    console.log(dss);
+    var idElm = '';
+    var dys = '';
+    var dye = '';
 
-    $('.periodo_02 i').daterangepicker(
+    $('.periodo_02 i.editPeriod').on('mouseover', function () {
+        idElm = $(this).attr('id');
+        dys = moment($(this).parent().attr('start'), 'DD-MMM-YYYY').format('DD/MM/YYYY');
+        dye = moment($(this).parent().attr('end'), 'DD-MMM-YYYY').format('DD/MM/YYYY');
+        console.log($(this).parent());
+    });
+
+    $('.periodo_02 i.editPeriod').daterangepicker(
         {
-            showDropdowns: true,
+            showDropdowns: false,
             autoApply: true,
             locale: {
                 format: 'DD/MM/YYYY',
@@ -146,12 +155,15 @@ $.fn.gantt = function (options) {
             },
             showCustomRangeLabel: false,
             singleDatePicker: false,
-            minDate: dtStart,
-            maxDate: dtEnd,
+            dateStart: dys,
+            minDate: moment(options.dtStart, 'YYYY-MM-DD').format('DD/MM/YYYY'),
+            maxDate: moment(options.dtEnd, 'YYYY-MM-DD').format('DD/MM/YYYY'),
             opens: 'left',
         },
         function (start, end, label) {
-            console.log(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'), label);
+            console.log(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'), idElm, dys, dye);
+
+            //update_range_sector(idElm, start, end, firstDay);
         }
     );
 
@@ -170,3 +182,20 @@ $.fn.gantt = function (options) {
         });
     });
 };
+
+function update_range_sector(id, d1, d2, firstDay) {
+    console.log(id, d1, d2, firstDay);
+
+    let dystr = d1.diff(moment(firstDay, 'DD/MM/YYYY'), 'days') * 20;
+    let taskdays = d2.diff(d1, 'days') + 1;
+    let dyend = (d2.diff(d1, 'days') + 1) * 20;
+    let elemt = $('#' + id).parent('div.periodo_02');
+
+    elemt.css({left: dystr + 'px'});
+    elemt.css({width: dyend + 'px'});
+    elemt.attr('start', d1.format('DD-MMM-YYYY').toUpperCase());
+    elemt.attr('end', d2.format('DD-MMM-YYYY').toUpperCase());
+    elemt.attr('task_days', taskdays);
+
+    update_range_data(id, d1, d2);
+}
