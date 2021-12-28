@@ -91,7 +91,7 @@ function setting_datepicket(selector) {
 
 // Solicita los tipos de movimiento
 function getExchange() {
-    var pagina = 'StoreProductsList/listExchange';
+    var pagina = 'StoreProductsListIn/listExchange';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putTypeExchange;
@@ -99,7 +99,7 @@ function getExchange() {
 }
 // Solicita el listado de almacenes
 function getStores() {
-    var pagina = 'StoreProductsList/listStores';
+    var pagina = 'StoreProductsListIn/listStores';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putStores;
@@ -107,7 +107,7 @@ function getStores() {
 }
 // Solicita los productos de un almacen seleccionado
 function getProducts(strId) {
-    var pagina = 'StoreProductsList/listProducts';
+    var pagina = 'StoreProductsListIn/listProducts';
     var par = `[{"store":"${strId}"}]`;
     var tipo = 'json';
     var selector = putProducts;
