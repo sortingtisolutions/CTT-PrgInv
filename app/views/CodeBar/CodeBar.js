@@ -16,7 +16,7 @@ function inicial() {
 
     getExchange();
     getStores();
-    getProducts();
+    //getProducts();
     setting_table();
     $('#btn_exchange').on('click', function () {
         exchange_apply();
@@ -109,9 +109,10 @@ function getStores() {
     fillField(pagina, par, tipo, selector);
 }
 // Solicita los productos de un almacen seleccionado
-function getProducts() {
-    var pagina = 'MoveStoresOut/listProducts';
-    var par = `[{"store":""}]`;
+function getProducts(strId) {
+    var pagina = 'CodeBar/listProducts';
+    var par = `[{"strId":"${strId}"}]`;
+    console.log('par', par);
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
@@ -158,29 +159,32 @@ function putStores(dt) {
             $('#txtStoreSource').append(H);
             $('#txtStoreTarget').append(H);
         });
+       
     }
 
     $('#txtStoreSource').on('change', function () {
         let id = $(this).val();
         $(`#txtStoreTarget option`).css({display: 'block'});
         $(`#txtStoreTarget option[value="${id}"]`).css({display: 'none'});
-
-        drawProducts(id);
+        getProducts(id);
+        
     });
 }
 // Almacena los registros de productos en un arreglo
 function putProducts(dt) {
+    //console.log(dt);
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="P-${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}">
          ${u.ser_sku} - ${u.prd_name}<div class="items-just"><div class="quantity editable" data-content="1" contenteditable=true hidden>1</div><i class="fas fa-arrow-circle-right"></i></div></div>`;
         $('#listProducts').append(H);
     });
+    drawProducts();
 }
 // Dibuja los productos
-function drawProducts(str) {
-    $('.list-item').addClass('hide-items');
-    $(`.list-item[data-store^="${str}"]`).removeClass('hide-items');
-
+function drawProducts() {
+   /*  $('.list-item').addClass('hide-items');
+    $(`.list-item[data-store^="${str}"]`).removeClass('hide-items'); */
+    console.log('paso 2');
     var ps = $('#boxProducts').offset();
     $('.list-group').css({top: ps.top + 30 + 'px', display: 'none'});
     $('.box-items-list i').removeClass('rotate');
