@@ -391,6 +391,12 @@ class ProjectDetailsModel extends Model
         $qry = "UPDATE ctt_projects_content set $field = '$data' WHERE pjtcn_id = $pjtcnId;";
         return $this->db->query($qry);
     }
+//  Actualiza los días y descuentos
+    public function updatePeriods($field, $pjtcnId, $data)
+    {
+        $qry = "UPDATE ctt_projects_content set $field = '$data' WHERE pjtcn_id = $pjtcnId;";
+        return $this->db->query($qry);
+    }
 
 
 //  Asigna las series y el detalle del producto agregado

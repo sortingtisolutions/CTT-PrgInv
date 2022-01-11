@@ -1,6 +1,8 @@
 $.fn.gantt = function (options) {
     moment.locale('es');
 
+    let lastindex = [];
+
     let dtStart = moment(options.dtStart, 'YYYY-MM-DD'); // Define início del calendario
     let dtEnd = moment(options.dtEnd, 'YYYY-MM-DD'); // Define el fin del calendario
     let countMonth = dtEnd.diff(dtStart, 'month'); // Verifica cantidad de meses entre fechas
@@ -8,6 +10,7 @@ $.fn.gantt = function (options) {
     let firstDay = '01/' + dtStart.format('MM/YYYY'); // Define el primer dia de fecha início
     let lastDay = dtEnd.endOf('month').format('DD') + '/' + dtEnd.format('MM/YYYY'); // Define el último dia de la fecha final
     let countDays = 1 + moment(lastDay, 'DD/MM/YYYY').diff(moment(firstDay, 'DD/MM/YYYY'), 'days'); // Verifica la cantidad de dias entre las fechas
+    let periodDays = dtEnd.diff(dtStart, 'days'); // total de dias del perido
     let tasks = options.data;
     let divGantt = $(this);
     let unic = divGantt.attr('id') + '_' + moment().format('s'); // Crea la instancia única para minupular la tabla
@@ -19,7 +22,7 @@ $.fn.gantt = function (options) {
     $(this).css({'margin-left': 'auto', 'margin-right': 'auto', width: '100%'});
 
     let table = `<div id="conflicts_${unic}"></div><div></div>
-                <table class="tb-gantt" id="${unic}">
+                <table class="tb-gantt" id="${unic}" border="0">
                     <thead id="thead_${unic}">
                     </thead>
                     <tbody id="tbody_${unic}">
@@ -28,7 +31,6 @@ $.fn.gantt = function (options) {
                 `;
     $(this).html(table);
 
-    // Coloca la cabecera de los meses
     var headerMonthTable = '<th></th>';
     for (let i = 0; i <= countMonth; i++) {
         let month = moment(dtStart, 'DD/MM/YYYY').add(i, 'month').format('MMMM YYYY').toUpperCase();
@@ -47,72 +49,87 @@ $.fn.gantt = function (options) {
     }
     $(idThead).append('<tr>' + headerDaysTable + '</tr>');
 
-    // Mapeia todos os IDs de dependências
-    let deps = $.map(tasks, function (val, i) {
-        if (val.dep) {
-            return val.dep.split(',');
-        }
-    });
-
+    // Coloca la cabecera de los días
+    let taskOrigin = '';
     $.each(tasks, function (index, task) {
-        if (deps.indexOf(task.id.toString()) < 0 && task.date_start && task.date_end) {
-            let d1 = moment(task.date_start, 'YYYY-MM-DD');
-            let d2 = moment(task.date_end, 'YYYY-MM-DD');
-            let taskName = task.name ? task.name : '';
-            let titleName = task.title ? task.title : taskName;
-            let taskColor = task.color ? task.color : '#ADFF2F';
-            let daysCount = d2.diff(d1, 'days') + 1;
-            let labelT = options.labelTask ? taskName : '';
-            let classTd = index % 2 == 0 ? 'td-bg1' : 'td-bg2';
-            console.log(daysCount);
-            var tasksTable = '<tr>';
-            tasksTable += `<th colspan="1"><p><i class="far fa-calendar-plus addPeriod" id="${task.parent}" title="agregar nuevo periodo"></i>&nbsp;${titleName}</p></th>`;
-            tasksTable += `<td class="celda" colspan="${countDays}" id="TSK${task.parent}"></td>`;
-            $(idTbody).append(tasksTable);
+        let taskName = task.name ? task.name : '';
+        if (taskName != taskOrigin) {
+            var bodyDaysTable = `<th>${taskName}</th>`;
+            for (let i = 0; i <= countDays - 1; i++) {
+                let dayNumber = moment(firstDay, 'DD/MM/YYYY').add(i, 'days').format('YYYYMMDD');
+                bodyDaysTable += `<td class="days ${dayNumber} block" day_serie="${taskName}-${dayNumber}" ></td>`;
+            }
+            $(idTbody).append('<tr>' + bodyDaysTable + '</tr>');
+            taskOrigin = taskName;
         }
     });
 
-    let daysstart = dtStart.diff(moment(firstDay, 'DD/MM/YYYY'), 'days');
-    let daysend = moment(options.dtEnd, 'YYYYMMDD').diff(moment(options.dtStart, 'YYYYMMDD'), 'days') + 1;
-    let str = parseInt(daysstart) * 20;
-    let lng = parseInt(daysend) * 20;
+    //Define el rango del proyecto
+    $.each(tasks, function (index, task) {
+        let taskName = task.name ? task.name : '';
 
-    console.log(options.dtStart, options.dtEnd, daysstart, daysend, lng);
-    H = `<div class="rango periodo_01" style="left:${str}px; width: ${lng}px;"></div>`;
-    $(`.celda`).append(H);
+        var datePeriodProject = '';
+        for (var i = 0; i < periodDays; i++) {
+            datePeriodProject = moment(options.dtStart, 'YYYY-MM-DD').add(i, 'days').format('YYYYMMDD');
+            if (taskName != '') {
+                $(`#tbody_${unic} td[day_serie="${taskName}-${datePeriodProject}"]`).removeClass('block').addClass('free');
+                $(`#tbody_${unic} td[day_serie="${taskName}-${datePeriodProject}"].free`).attr('day_task', taskName);
+                $(`#tbody_${unic} td[day_serie="${taskName}-${datePeriodProject}"].free`).attr('day_start', moment(task.date_start, 'YYYY-MM-DD').format('YYYYMMDD'));
+                $(`#tbody_${unic} td[day_serie="${taskName}-${datePeriodProject}"].free`).attr('day_end', moment(task.date_end, 'YYYY-MM-DD').format('YYYYMMDD'));
+            }
+        }
+    });
 
+    //Define el rango de la seleccion inicial
     $.each(tasks, function (index, task) {
         let d1 = moment(task.date_start, 'YYYY-MM-DD');
         let d2 = moment(task.date_end, 'YYYY-MM-DD');
+        let dycnt = d2.diff(d1, 'days');
+        console.log(d1.format('YYYYMMDD'), d2.format('YYYYMMDD'), task.id.toString());
+        var datePeriodProject = '';
+        let taskName = task.name ? task.name : '';
 
-        let dystr = d1.diff(moment(firstDay, 'DD/MM/YYYY'), 'days') * 20;
-        let taskdays = d2.diff(d1, 'days') + 1;
-        let dyend = (d2.diff(d1, 'days') + 1) * 20;
+        lastindex.push(task.id);
 
-        let dstart = moment(task.date_start, 'YYYYMMDD').format('DD-MMM-YYYY').toUpperCase();
-        let dend = moment(task.date_end, 'YYYYMMDD').format('DD-MMM-YYYY').toUpperCase();
-
-        H = `<div class="rango periodo_02" style="left:${dystr}px; width: ${dyend}px;" 
-                task_name="${task.name}"
-                start="${dstart}"
-                end="${dend}"
-                task_days="${taskdays}"
-                >
-        <i class="far fa-calendar-plus editPeriod" id="${task.id}" title="editar periodo"></i>
-        </div>`;
-        $(`#TSK${task.parent}`).append(H);
+        for (var i = 0; i <= dycnt; i++) {
+            datePeriodProject = moment(task.date_start, 'YYYY-MM-DD').add(i, 'days').format('YYYYMMDD');
+            // console.log(taskName, datePeriodProject);
+            var A = '';
+            switch (i) {
+                case 0:
+                    A = 'I';
+                    break;
+                case dycnt:
+                    A = 'F';
+                    break;
+                default:
+                    A = 'A';
+                    break;
+            }
+            var H = `
+            <div class="reference ${A}"></div>
+            `;
+            $(`#tbody_${unic} td[day_serie="${taskName}-${datePeriodProject}"].free`).html(H);
+        }
     });
 
-    $('.periodo_02').on('mousemove', function (e) {
-        // Arrasta o tooltip de acordo com o mouse
+    $('td.free .reference').on('mousemove', function (e) {
         $('.tooltip-gantt').css('top', e.pageY + 10);
         $('.tooltip-gantt').css('left', e.pageX + 20);
         $('.tooltip-gantt').show();
 
+        let ds = moment($(this).parent().attr('day_start'), 'YYYYMMDD');
+        let de = moment($(this).parent().attr('day_end'), 'YYYYMMDD');
+
+        let dst = moment($(this).parent().attr('day_start'), 'YYYYMMDD').format('DD MMM YYYY').toUpperCase();
+        let den = moment($(this).parent().attr('day_end'), 'YYYYMMDD').format('DD MMM YYYY').toUpperCase();
+
+        let taskdays = de.diff(ds, 'days') + 1;
+
         let tooltipGantt = `<div class="tooltip-gantt">
-        <b>${$(this).attr('task_name')}</b><br>
-        <span>${$(this).attr('start')} a ${$(this).attr('end')}</span><br>
-        <span>${$(this).attr('task_days')} días</span>
+        <b>${$(this).parent().attr('day_task')}</b><br>
+        <span>${dst} a ${den}</span><br>
+        <span>${taskdays} días</span>
         <hr>
         <span></span>
         </div>`;
@@ -120,52 +137,68 @@ $.fn.gantt = function (options) {
         $('.tooltip-gantt').css('z-index', 10000);
     });
 
-    $('.periodo_02').on('mouseout', function (e) {
+    $('td.free .reference').on('mouseout', function (e) {
         // Arrasta o tooltip de acordo com o mouse
         $('.tooltip-gantt').hide();
     });
 
-    var idElm = '';
-    var dys = '';
-    var dye = '';
-
-    $('.periodo_02 i.editPeriod').on('mouseover', function () {
-        idElm = $(this).attr('id');
-        dys = moment($(this).parent().attr('start'), 'DD-MMM-YYYY').format('DD/MM/YYYY');
-        dye = moment($(this).parent().attr('end'), 'DD-MMM-YYYY').format('DD/MM/YYYY');
-        console.log($(this).parent());
+    $('td.free').on('mouseover', function () {
+        var column = $(this).attr('class').split(' ')[1];
+        $(`.${column}`).addClass('over');
+    });
+    $('td.free').on('mouseleave', function () {
+        var column = $(this).attr('class').split(' ')[1];
+        $(`.${column}`).removeClass('over');
     });
 
-    $('.periodo_02 i.editPeriod').daterangepicker(
-        {
-            showDropdowns: false,
-            autoApply: true,
-            locale: {
-                format: 'DD/MM/YYYY',
-                separator: ' - ',
-                applyLabel: 'Apply',
-                cancelLabel: 'Cancel',
-                fromLabel: 'From',
-                toLabel: 'To',
-                customRangeLabel: 'Custom',
-                weekLabel: 'W',
-                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                firstDay: 1,
-            },
-            showCustomRangeLabel: false,
-            singleDatePicker: false,
-            dateStart: dys,
-            minDate: moment(options.dtStart, 'YYYY-MM-DD').format('DD/MM/YYYY'),
-            maxDate: moment(options.dtEnd, 'YYYY-MM-DD').format('DD/MM/YYYY'),
-            opens: 'left',
-        },
-        function (start, end, label) {
-            console.log(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'), idElm, dys, dye);
+    lastindex.sort();
+    let lastItem = lastindex[lastindex.length - 1];
 
-            //update_range_sector(idElm, start, end, firstDay);
-        }
-    );
+    $('td.free')
+        .unbind('click')
+        .on('click', function () {
+            var rf = $(this);
+            // console.log(rf.children().attr('class'));
+            if (rf.children().attr('class') == undefined) {
+                var dayPrev = $(this).prev().children('div').attr('class');
+                var dayNext = $(this).next().children('div').attr('class');
+                var taskname = rf.attr('data_name');
+
+                console.log(dayPrev, dayNext, taskname);
+                if (dayPrev == undefined && dayNext == undefined) {
+                    var dhed = 'I';
+                    var dprt = parseInt(lastItem) + 1;
+                    var dnam = rf.attr('day_task');
+                    var dstr = rf.attr('day_start');
+                    var dend = rf.attr('day_end');
+                    var ddys = 1;
+                    redraw_period(this, dhed, dprt, dnam, dstr, dend, ddys);
+                    lastItem = dprt;
+                }
+
+                if ((dayPrev.split(' ')[1] == 'I' || dayPrev.split(' ')[1] == 'A') && dayNext == undefined) {
+                    var dhed = 'A';
+                    var dprt = parseInt(lastItem);
+                    var dnam = rf.attr('day_task');
+                    var dstr = rf.attr('day_start');
+                    var dend = rf.attr('day_end');
+                    var ddys = 1;
+                    redraw_period(this, dhed, dprt, dnam, dstr, dend, ddys);
+                }
+
+                if ((dayPrev.split(' ')[1] == 'I' || dayPrev.split(' ')[1] == 'A') && dayNext.split(' ')[1] == 'F') {
+                    var dhed = 'A';
+                    var dprt = parseInt(lastItem);
+                    var dnam = rf.attr('day_task');
+                    var dstr = rf.attr('day_start');
+                    var dend = rf.attr('day_end');
+                    var ddys = 1;
+                    redraw_period(this, dhed, dprt, dnam, dstr, dend, ddys);
+                }
+            }
+            // var ps = $(this).children('.reference').attr('class').split(' ')[1];
+            // var pr = $(this).children('.reference').attr('data_part');
+        });
 
     $(function () {
         $('#' + unic).scroll(function (ev) {
@@ -183,19 +216,15 @@ $.fn.gantt = function (options) {
     });
 };
 
-function update_range_sector(id, d1, d2, firstDay) {
-    console.log(id, d1, d2, firstDay);
-
-    let dystr = d1.diff(moment(firstDay, 'DD/MM/YYYY'), 'days') * 20;
-    let taskdays = d2.diff(d1, 'days') + 1;
-    let dyend = (d2.diff(d1, 'days') + 1) * 20;
-    let elemt = $('#' + id).parent('div.periodo_02');
-
-    elemt.css({left: dystr + 'px'});
-    elemt.css({width: dyend + 'px'});
-    elemt.attr('start', d1.format('DD-MMM-YYYY').toUpperCase());
-    elemt.attr('end', d2.format('DD-MMM-YYYY').toUpperCase());
-    elemt.attr('task_days', taskdays);
-
-    update_range_data(id, d1, d2);
+function redraw_period(sel, dhed, dprt, dnam, dstr, dend, ddys) {
+    var H = `
+    <div class="reference ${dhed}" 
+        data_part   = "${dprt}"
+        data_name   = "${dnam}"
+        data_start  = "${dstr}"
+        data_end    = "${dend}"
+        data_days   = "${ddys}">
+    </div>
+    `;
+    $(sel).html(H);
 }

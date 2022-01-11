@@ -2204,7 +2204,48 @@ function addPeriod(id) {
 function editPeriod(id) {
     console.log(id);
     console.log(dss);
-    $('#' + id).daterangepicker();
+    $('#' + id).daterangepicker(
+        {
+            showDropdowns: true,
+            autoApply: true,
+            locale: {
+                format: 'DD/MM/YYYY',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                firstDay: 1,
+            },
+            showCustomRangeLabel: false,
+            singleDatePicker: false,
+            startDate: fecha,
+            endDate: fecha,
+            minDate: fecha,
+            opens: 'left',
+        },
+        function (start, end, label) {
+            $('#PeriodProject span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+            let projDateStart = start.format('YYYYMMDD');
+            let projDateEnd = end.format('YYYYMMDD');
+
+            let par = `
+                [{
+                    "pjtDateStart"  : "${projDateStart}",
+                    "pjtDateEnd"    : "${projDateEnd}",
+                    "pjtId"         : "${pj.pjt_id}"
+                }]
+                `;
+            var pagina = 'Budget/UpdatePeriodProject';
+            var tipo = 'html';
+            var selector = SetUpdatePeriodProject;
+            fillField(pagina, par, tipo, selector);
+        }
+    );
 }
 
 function update_range_data(id, d1, d2) {

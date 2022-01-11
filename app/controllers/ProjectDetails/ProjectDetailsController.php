@@ -221,6 +221,15 @@ public function UpdatePeriodProject($request_params)
 }
 
 
+// Actualiza las fechas del proyecto
+public function updatePeriods($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->updatePeriods($request_params);
+    echo $result;
+}
+
+
 // Genera el archivo del proyecto
     public function saveProjectList($request_params)
     {   

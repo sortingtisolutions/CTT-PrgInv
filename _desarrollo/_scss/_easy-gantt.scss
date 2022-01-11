@@ -70,15 +70,52 @@ table.tb-gantt {
 			text-align: right;
 		}
 		.celda {
-			border : 1px solid #DDDDDD;
+			border : 0px solid #DDDDDD;
 			position: relative;
 		}
         td {
-            border: none;
+			// border-right: 1px solid #EEEEEE;
+			padding: 0 !important;
+			
+			&.block  {
+				background-color: #F0F0F0;
+				cursor: no-drop;
+			}
+			&.free  {
+				cursor: default;
+				background-color: #FFFFEE;
+				padding: 0;
+
+				.reference {
+					width: 20px;
+					height: 38px;
+					
+					background-image: url('../img/linea-tiempo.png');
+					background-size: 60px 40px;
+					background-repeat: no-repeat;
+					background-size: cover;
+					
+					background-position-y: 0px;
+				}
+
+				.I {
+					background-position-x: -0px;
+				}
+				.A {
+					background-position-x: -20px;
+				}
+				.F {
+					background-position-x: -40px;
+				}
+			}
+			&.over  {
+				background-color: rgba($setColor, 0.15);
+			}
+
         }
-		.td-bg1 {
-			background: #FFFFFF;
-		}
+		// .td-bg1 {
+		// 	background: #FFFFFF;
+		// }
 		.td-tasks {
 			text-align: center;
 			color: black;
