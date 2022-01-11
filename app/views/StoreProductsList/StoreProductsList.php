@@ -40,7 +40,7 @@
                     <div class="row list-finder">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un producto" >
-                                <label for="txtProducts">Productos</label>
+                                <label for="txtProducts">Productos del almacen...</label>
                             </div>
                             <input type="hidden" id="txtIdProducts" name="txtIdProducts">
                         <div class="list-group list-hide">

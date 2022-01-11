@@ -48,7 +48,7 @@ function setting_table() {
                 text: 'Nuevo reporte',
                 className: 'btn-apply hidden-field',
                 action: function (e, dt, node, config) {
-                    window.location = 'StoreProductsList';
+                    window.location = 'StoreProductsListIn';
                 },
             },
         ],
@@ -90,13 +90,13 @@ function setting_datepicket(selector) {
 }
 
 // Solicita los tipos de movimiento
-function getExchange() {
+/* function getExchange() {
     var pagina = 'StoreProductsList/listExchange';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putTypeExchange;
     fillField(pagina, par, tipo, selector);
-}
+} */
 // Solicita el listado de almacenes
 function getStores() {
     var pagina = 'StoreProductsList/listStores';
@@ -337,12 +337,13 @@ function read_exchange_table() {
         chain += `${stornam}|${projnum}|${projnam}|${datestr}|${version}|${freelnc}|${prodsku}|${prodnam}|${serinum}|${comment}@`;
     });
     chain = chain.substring(0, chain.length - 1);
+
     build_data_structure(chain);
 }
 
 function build_data_structure(pr) {
     let pa = `[{"par":"${pr}"}]`;
-    var pagina = 'StoreProductsList/saveList';
+    var pagina = 'StoreProductsListIn/saveList';
     var par = pa;
     var tipo = 'html';
     var selector = putSaveList;

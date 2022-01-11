@@ -345,10 +345,10 @@ function putSeries(dt) {
             {data: 'produsku', class: 'sku'},
             {data: 'serlnumb', class: 'product-name'},
             {data: 'dateregs', class: 'sku'},
-            {data: 'servcost', class: 'quantity'},
+           /*  {data: 'servcost', class: 'quantity'},
             {data: 'cvsituat', class: 'code-type_s'},
             {data: 'cvestage', class: 'code-type_s'},
-            {data: 'comments', class: 'comments'},
+            {data: 'comments', class: 'comments'}, */
         ],
     });
 
@@ -370,16 +370,16 @@ function build_modal_serie(dt) {
         tabla.row
             .add({
                 sermodif: `<i></i>`,
-                produsku: `${u.ser_sku.slice(0, 7)}-${u.ser_sku.slice(7, 11)}`,
-                serlnumb: u.ser_serial_number,
-                dateregs: u.ser_date_registry,
-                servcost: u.ser_cost,
-                cvsituat: u.ser_situation,
-                cvestage: u.ser_stage,
-                comments: u.ser_comments,
+                produsku: `${u.prd_sku.slice(0, 7)}-${u.prd_sku.slice(7, 11)}`,
+                serlnumb: u.prd_name,
+                dateregs: u.cantidad,
+               /*  servcost: u.cantidad,
+                cvsituat: u.prd_level,
+                cvestage: u.prd_level,
+                comments: u.prd_level, */
             })
             .draw();
-        $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.prd_id);
+        $(`#E${u.prd_sku}`).parents('tr').attr('data-product', u.prd_sku);
         deep_loading('C');
     });
 }

@@ -106,7 +106,7 @@
                     <div class="row">
                         <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos5 hide-items">
                         <input id="txtCost" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
-                            <label for="txtCost">Costo</label>
+                            <label for="txtCost">Costo Total</label>
                         </div>
                         <div class="col-md-4 col-lg-4 col-xl-4 mb-2 pos4 form-floating hide-items">
                             <input id="txtQuantity" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos" value=1>
@@ -117,12 +117,27 @@
                             <label for="txtSerie">Serie</label>
                         </div>
                     </div>
-
-
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 hide-items">
+                            <input id="txtMarca" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" >
+                            <label for="txtMarca">Marca</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos5 hide-items">
+                        <input id="txtCostImp" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
+                            <label for="txtCostImp">Costo Importación</label>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating hide-items">
+                            <input id="txtPedimento" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos">
+                            <label for="txtPedimento">No. Pedimento</label>
+                        </div>
+                    </div>
+                   
                     <!-- Comentarios posición 4 -->
                     <div class="row  pos4 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <textarea class="form-control form-control-sm" id="txtComments" style="height: 120px" rows="3"></textarea>
+                            <textarea class="form-control form-control-sm" id="txtComments" style="height: 60px" rows="3"></textarea>
                             <label for="txtComments">Comentarios</label>
                         </div>
                     </div>
@@ -145,11 +160,16 @@
                             <th style="width:  80px">SKU</th>
                             <th style="width: 350px">Producto</th>
                             <th style="width:  60px">Cantidad</th>
-                            <th style="width:  60px">Costo</th>
-                            <th style="width: 100px">No. Serie</th>
+                            <th style="width:  60px">Costo Total</th>
+                            <th style="width: 90px">No. Serie</th>
+                            <th style="width: 90px">No. Pedimento</th>
+                            <th style="width: 80px">C. Importacion</th>
                             <th style="width:  50px">Cve. movimiento</th>
-                            <th style="width: 150px">Almacen</th>
-                            <th style="width: 350px">Nota</th>
+                            <th style="width: 140px">Almacen</th>
+                            <th style="width: 180px">Proveedor</th>
+                            <th style="width: 180px">Factura</th>
+                            <th style="width: 100px">Marca</th>
+                            <th style="width: 200px">Nota</th>
                         </tr>
                     </thead>
                     <tbody>	

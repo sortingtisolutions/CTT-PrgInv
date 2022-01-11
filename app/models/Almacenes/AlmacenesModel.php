@@ -99,13 +99,20 @@ class AlmacenesModel extends Model
 	public function listSeries($params)
     {
         $prodId = $this->db->real_escape_string($params['strId']);
-        $qry = "SELECT  se.ser_id, se.ser_sku, se.ser_serial_number, 
+        /* $qry = "SELECT  se.ser_id, se.ser_sku, se.ser_serial_number, 
 						date_format(se.ser_date_registry, '%d/%m/%Y') AS ser_date_registry,
 						se.ser_cost, se.ser_situation, se.ser_stage, se.ser_status,se.ser_comments
 				FROM ctt_series as se 
 				LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
 				WHERE sp.str_id IN ($prodId) AND sp.stp_quantity > 0
-				ORDER BY se.ser_sku;";
+				ORDER BY se.ser_sku;"; */
+			$qry = "SELECT prd.prd_sku, prd.prd_name, sum(sp.stp_quantity) as cantidad, prd.prd_level
+			FROM ctt_products as prd
+			INNER JOIN ctt_series as se ON prd.prd_id=se.prd_id
+			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
+			where sp.str_id IN ($prodId) and se.ser_status=1
+			group by prd.prd_sku, prd.prd_name, prd.prd_level
+			ORDER BY se.ser_sku;";
         return $this->db->query($qry);
     }
 

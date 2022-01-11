@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
 
-class StoreProductsListModel extends Model
+class StoreProductsListInModel extends Model
 {
 
     public function __construct()
@@ -10,7 +10,7 @@ class StoreProductsListModel extends Model
     }
 
 // Listado de Tipos de mivimiento
-	public function listExchange()
+/* 	public function listExchange()
 	{
 		$qry = "SELECT ex1.ext_id, ex1.ext_code, ex1.ext_type, ex1.ext_description, ex1.ext_link,
 						ex2.ext_id as ext_id_a, ex2.ext_code as ext_code_a, ex2.ext_type as ext_type_a, ex2.ext_description as ext_description_a
@@ -18,7 +18,7 @@ class StoreProductsListModel extends Model
 				LEFT JOIN ctt_type_exchange AS ex2 ON ex2.ext_link = ex1.ext_id 
 				WHERE ex1.ext_type = 'S';";
 		return $this->db->query($qry);
-	}
+	} */
 
 // Listado de Almacecnes
     public function listStores()
