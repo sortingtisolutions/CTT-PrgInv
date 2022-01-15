@@ -356,9 +356,20 @@ public function updatePeriods($request_params)
                     'dtinic' => $dayIni, 
                     'dtfinl' => $dayFnl, 
                     'pjetId' => $pjetId, 
+                    'detlId' => 0,
                 );
                 $serie = $this->model->SettingSeries($param);
             } elseif($prdLvl == 'P'){
+                
+                $prdparam = array(
+                    'prodId' => $prodId, 
+                    'dtinic' => $dayIni, 
+                    'dtfinl' => $dayFnl, 
+                    'pjetId' => $pjetId, 
+                    'detlId' => 0,
+                );
+                $detlId = $this->model->SettingSeries($prdparam);
+                
                 $accesory = $this->model->GetAccesories($prodId);
                 while($acc = $accesory->fetch_assoc()){
 
@@ -372,16 +383,11 @@ public function updatePeriods($request_params)
                         'dtinic' => $adtinic, 
                         'dtfinl' => $adtfinl,
                         'pjetId' => $apjetId,
+                        'detlId' => $detlId,
                     );
                     $serie = $this->model->SettingSeries($accparams);
                 }
-                $prdparam = array(
-                    'prodId' => $prodId, 
-                    'dtinic' => $dayIni, 
-                    'dtfinl' => $dayFnl, 
-                    'pjetId' => $pjetId, 
-                );
-                $serie = $this->model->SettingSeries($prdparam);
+               
             } elseif($prdLvl == 'K'){
                 $products = $this->model->GetProducts($prodId);
                 while($pkt = $products->fetch_assoc()){
@@ -389,6 +395,15 @@ public function updatePeriods($request_params)
                     $kdtinic = $dayIni;
                     $kdtfinl = $dayFnl;
                     $kpjetId = $pjetId;
+
+                    $pktparams = array(
+                        'prodId' => $kprodId, 
+                        'dtinic' => $kdtinic, 
+                        'dtfinl' => $kdtfinl,
+                        'pjetId' => $kpjetId,
+                        'detlId' => 0,
+                    );
+                    $detlId = $this->model->SettingSeries($pktparams);
 
                     $accesory = $this->model->GetAccesories($kprodId);
                     while($acc = $accesory->fetch_assoc()){
@@ -403,17 +418,12 @@ public function updatePeriods($request_params)
                             'dtinic' => $adtinic, 
                             'dtfinl' => $adtfinl,
                             'pjetId' => $apjetId,
+                            'detlId' => $detlId,
                         );
                         $serie = $this->model->SettingSeries($accparams);
                     }
 
-                    $pktparams = array(
-                        'prodId' => $kprodId, 
-                        'dtinic' => $kdtinic, 
-                        'dtfinl' => $kdtfinl,
-                        'pjetId' => $kpjetId,
-                    );
-                    $serie = $this->model->SettingSeries($pktparams);
+
                 }
 
             }

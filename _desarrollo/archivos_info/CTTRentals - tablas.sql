@@ -385,15 +385,13 @@ CREATE TABLE `cttapp_cire`.`ctt_series` (
     `ser_stage`             VARCHAR(5) NULL                 COMMENT 'Etapa dentro del proceso',
     `ser_date_registry`     DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de registro del producto',
     `ser_date_down`         DATETIME NULL                   COMMENT 'Fecha de baja del producto',
-    `ser_reserve_start`     DATETIME NULL                   COMMENT 'Fecha de reservado comienzo',
     `ser_reserve_end`       DATETIME NULL                   COMMENT 'Fecha de reservado termino',
-    `ser_reserve_count`     INT NULL                        COMMENT 'Contador de rentas',
     `ser_behaviour`         VARCHAR(1) NOT NULL             COMMENT 'Comportamiento del producto C-Compra, R-Renta',
     `ser_comments`          VARCHAR(500) NOT NULL           COMMENT 'Comentarios sobre la serie',
     `prd_id`                INT NULL                        COMMENT 'Id del producto relacion ctt_productos',
     `sup_id`                INT NULL                        COMMENT 'Id de la proveedor relacion ctt_suppliers',
     `cin_id`                INT NULL                        COMMENT 'Id del tipo de moneda relacion ctt_coins',
-    `pjtdt_id`              INT NULL                        COMMENT 'Id del detalle de proyecto relacion ctt_projects_detail',
+    `pjtdt_id`              INT NULL DEFAULT 0              COMMENT 'Id del detalle de proyecto relacion ctt_projects_detail',
 PRIMARY KEY (`ser_id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Numero serie de productos correspondientes a un modelo.';
 

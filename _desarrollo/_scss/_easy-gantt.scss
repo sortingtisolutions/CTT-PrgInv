@@ -1,6 +1,6 @@
 table.tb-gantt {
 	position: relative;
-	background-color: #FFFFFF;
+	background-color: #ffffff;
 	margin-left: auto;
 	margin-right: auto;
 	font-size: 11px;
@@ -14,22 +14,22 @@ table.tb-gantt {
 			min-width: 20px;
 			height: 30px;
 			text-align: center;
-            border:none;
-            border-bottom: 1px solid #FFFFFF !important;
+			border: none;
+			border-bottom: 1px solid #ffffff !important;
 			&:nth-child(1) {
 				min-width: 120px;
-                border:none;
+				border: none;
 			}
 		}
 		.month-name-par {
 			background-color: rgba($setColor, 0.2);
 			color: #000000;
-			text-shadow: -1px -1px 1px #FFFFFF;
+			text-shadow: -1px -1px 1px #ffffff;
 		}
 		.month-name-odd {
 			background-color: rgba($setColor, 0.4);
 			color: #000000;
-			text-shadow: -1px -1px 1px #FFFFFF;
+			text-shadow: -1px -1px 1px #ffffff;
 		}
 		.days {
 			background-color: rgba($setColor, 0.6);
@@ -37,8 +37,8 @@ table.tb-gantt {
 			margin: auto;
 			padding: 0px;
 			text-align: center;
-            
-			>p {
+
+			> p {
 				margin: auto;
 				height: 100%;
 				width: 100%;
@@ -49,70 +49,80 @@ table.tb-gantt {
 		}
 	}
 	tbody {
+		border-bottom: 2px solid #CCCCCC;
 
-		.rango  {
+		.rango {
 			position: absolute;
 			border-radius: 3px;
 			width: 100px;
 		}
 		.periodo_01 {
 			top: 26px;
-			background-color: rgba(#146afa,0.3);
+			background-color: rgba(#146afa, 0.3);
 			height: 3px;
 			z-index: 900;
 		}
 		.periodo_02 {
 			top: 18px;
-			background-color: rgba(#1ffa14,0.4);
-			border:1px solid #1ffa14;
+			background-color: rgba(#1ffa14, 0.4);
+			border: 1px solid #1ffa14;
 			height: 16px;
 			z-index: 1000;
 			text-align: right;
 		}
 		.celda {
-			border : 0px solid #DDDDDD;
+			border: 0px solid #dddddd;
 			position: relative;
 		}
-        td {
+		td {
 			// border-right: 1px solid #EEEEEE;
+			border-bottom: 1px dotted rgba(#1ffa14, 0.9) !important;
 			padding: 0 !important;
-			
-			&.block  {
-				background-color: #F0F0F0;
+
+			&.block {
+				background-color: rgba(#1ffa14, 0.6);
 				cursor: no-drop;
 			}
-			&.free  {
+			&.free {
 				cursor: default;
-				background-color: #FFFFEE;
+				background-color: rgba(#AAEE99, 0.3);
 				padding: 0;
-
-				.reference {
+			}
+			&.reference {
+				div {
 					width: 20px;
 					height: 38px;
-					
-					background-image: url('../img/linea-tiempo.png');
-					background-size: 60px 40px;
+					border-right: 1px dotted rgba(#1ffa14, 0.6);
+
+					background-image: url("../img/linea-tiempo.png");
+					background-size: 100px 40px;
 					background-repeat: no-repeat;
 					background-size: cover;
-					
+
 					background-position-y: 0px;
 				}
 
-				.I {
+				.E {
 					background-position-x: -0px;
 				}
-				.A {
+				.I {
 					background-position-x: -20px;
 				}
-				.F {
+				.M {
 					background-position-x: -40px;
 				}
-			}
-			&.over  {
-				background-color: rgba($setColor, 0.15);
+				.F {
+					background-position-x: -58px;
+				}
+				.A {
+					background-position-x: -78px;
+				}
 			}
 
-        }
+			&.over {
+				background-color: rgba(#1ffa14, 0.3);
+			}
+		}
 		// .td-bg1 {
 		// 	background: #FFFFFF;
 		// }
@@ -121,53 +131,52 @@ table.tb-gantt {
 			color: black;
 			margin: 0px;
 			padding: 10px 0px;
-			>.div-task {
+			> .div-task {
 				min-height: 13px;
 				margin: 0px;
 				padding: 0px 8px;
 				text-align: right;
 			}
-			>.border-radius-full {
-				border-radius: .25rem;
+			> .border-radius-full {
+				border-radius: 0.25rem;
 			}
-			>.border-radius-left {
-				border-radius: .25rem 0 0 .25rem;
+			> .border-radius-left {
+				border-radius: 0.25rem 0 0 0.25rem;
 			}
-			>.border-radius-right {
-				border-radius: 0 .25rem .25rem 0;
+			> .border-radius-right {
+				border-radius: 0 0.25rem 0.25rem 0;
 			}
 		}
 		tr {
+		
 			th {
-                border: 1px solid #EEEEEE !important;
+				border: 1px solid #eeeeee !important;
 				z-index: 1000;
-				background-color: #FFFFFF;
+				background-color: #ffffff;
 				&:nth-child(1) {
 					height: 40px;
 					min-width: 100px;
-					background-color: #FFFFFF;
-                    
+					background-color: #ffffff;
+
 					margin: 0px;
 					padding-top: 0px;
 					padding-left: 0px;
 					color: $font_color_principal;
-					>p {
+					> p {
 						height: 100%;
 						width: 100%;
 						margin: 0px;
 						padding: 0px 0px;
 						text-align: left;
-						border-bottom: 1px solid rgba($light,0.5);
+						border-bottom: 1px solid rgba($light, 0.5);
 					}
 				}
 			}
 			&:last-child {
-				>th {
-                    
+				> th {
 					&:first-child {
-						>p {
-							border: none;
-
+						> p {
+							// border: none;
 						}
 					}
 				}
@@ -184,10 +193,10 @@ div.tooltip-gantt {
 	z-index: 10001;
 	padding: 10px 10px 10px 10px;
 	line-height: 200%;
-	border-radius: .25rem;
+	border-radius: 0.25rem;
 }
 
-.addPeriod  {
+.addPeriod {
 	cursor: pointer;
 	font-size: 1.1em;
 	padding: 3px;
@@ -195,26 +204,26 @@ div.tooltip-gantt {
 	margin-right: 6px;
 
 	&:hover {
-		background-color: rgba($setColor, 1.0);
-		color: #FFFFFF;
+		background-color: rgba($setColor, 1);
+		color: #ffffff;
 	}
 }
 
-.editPeriod  {
+.editPeriod {
 	cursor: pointer;
 	font-size: 1.3em;
 	padding: 3px;
 	border-radius: 4px;
 	border: 1px solid transparent;
-	text-shadow: 2px 2px 2px #FFFFFF;
+	text-shadow: 2px 2px 2px #ffffff;
 	position: absolute;
 	top: -8px;
 	right: -3px;
 
 	&:hover {
-		background-color: rgba(#FFFFFF, 1.0);
+		background-color: rgba(#ffffff, 1);
 		color: $setColor;
 		border: 1px solid $setColor;
-		box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+		box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
 	}
 }

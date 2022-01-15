@@ -117,15 +117,13 @@ public function listProjectsType($params)
                             (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                             INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
                             WHERE prd_id =  bg.prd_id
-                            AND (ser_reserve_end < '$dstr' OR ser_reserve_end IS NULL
-                            AND ser_reserve_start > '$dend'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                            AND  pjtdt_id = 0 AND sr.ser_status = 1
                             )
                         ELSE 
                             (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                             INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
                             WHERE prd_id =  bg.prd_id
-                            AND (ser_reserve_end < '$dstr' OR ser_reserve_end IS NULL
-                            AND ser_reserve_start > '$dend'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                            AND  pjtdt_id = 0 AND sr.ser_status = 1
                             )
                         END AS bdg_stock
                 FROM ctt_budget AS bg
@@ -164,15 +162,13 @@ public function listDiscounts($params)
                         (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                         INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
                         WHERE prd_id =  pd.prd_id
-                        AND (ser_reserve_end < '$dstr' OR ser_reserve_end IS NULL
-                        AND ser_reserve_start > '$dend'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                        AND  pjtdt_id = 0 AND sr.ser_status = 1
                         )
                     ELSE 
                         (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                         INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
                         WHERE prd_id =  pd.prd_id
-                        AND (ser_reserve_end < '$dstr' OR ser_reserve_end IS NULL
-                        AND ser_reserve_start > '$dend'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                        AND  pjtdt_id = 0 AND sr.ser_status = 1
                         )
                     END AS stock
             FROM ctt_products AS pd
@@ -424,12 +420,11 @@ public function saveBudgetList($params)
         $dtinic   = $this->db->real_escape_string($params['dtinic']);
         $dtfinl   = $this->db->real_escape_string($params['dtfinl']);
         $pjetId   = $this->db->real_escape_string($params['pjetId']);
+        $detlId   = $this->db->real_escape_string($params['detlId']);
 
-
-       
 
         $qry = "SELECT ser_id, ser_sku FROM ctt_series WHERE prd_id = $prodId 
-                AND ser_reserve_start is null AND ser_reserve_end is null
+                AND pjtdt_id = 0
                 ORDER BY ser_reserve_count asc LIMIT 1;";
         $result =  $this->db->query($qry);
         
@@ -440,8 +435,6 @@ public function saveBudgetList($params)
 
             $qry1 = "UPDATE ctt_series 
                         SET 
-                            -- ser_reserve_start = '$dtinic', 
-                            -- ser_reserve_end   = '$dtfinl', 
                             ser_situation = 'EA',
                             ser_stage = 'R',
                             ser_reserve_count = ser_reserve_count + 1
@@ -455,9 +448,9 @@ public function saveBudgetList($params)
 
         
         $qry2 = "INSERT INTO ctt_projects_detail (
-                    pjtdt_prod_sku, ser_id, prd_id, pjtcn_id
+                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtcn_id
                 ) VALUES (
-                    '$sersku', '$serie',  '$prodId',  '$pjetId'
+                    '$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
                 );        ";
 
         $this->db->query($qry2);
@@ -465,8 +458,8 @@ public function saveBudgetList($params)
 
         if ( $serie != null){
             $qry3 = "UPDATE ctt_series 
-                    SET 
-                        pjtdt_id = '$pjtdtId'
+                        SET 
+                            pjtdt_id = '$pjtdtId'
                         WHERE ser_id = $serie;";
             $this->db->query($qry3);
         }
@@ -476,8 +469,8 @@ public function saveBudgetList($params)
         // $diff = $dateStart->diff($dateEnd);
         // $daysCount = $diff->days;
 
-        $qry4 = "INSERT INTO ctt_projects_periods (pjtpd_day_start, pjtpd_day_end, pjtdt_id) VALUES 
-            ('$dtinic', '$dtfinl', '$pjtdtId')";
+        $qry4 = "INSERT INTO ctt_projects_periods (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) VALUES 
+            ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId')";
 
         // for ($i = 0; $i <= $daysCount; $i++){
         //     $dateSet = date("Y-m-d", strtotime($dtinic. "+" . $i . " day"));
@@ -487,7 +480,7 @@ public function saveBudgetList($params)
 
         $this->db->query($qry4);
 
-        return  $serie;
+        return  $pjtdtId;
         
     }
 

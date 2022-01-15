@@ -390,12 +390,36 @@ public function ProcessProjectProduct($request_params)
                         'dstest' => $dstest,
                         'bdgIns' => $bdgIns,
                         'versId' => $versId,
+                        'detlId' => 0,
                     );
                     $serie = $this->model->SettingSeries($params);
                     // echo $serie . ' - ' ;
                 }
             } else if ( $bdglvl == 'P' ){
                 for ($i = 1; $i<=$quanty; $i++){
+                    
+                    $params = array(
+                        'pjetId' => $pjetId, 
+                        'prodId' => $prodId, 
+                        'dtinic' => $dtinic, 
+                        'dtfinl' => $dtfinl,
+                        'bdgsku' => $bdgsku,
+                        'bdgnme' => $bdgnme,
+                        'bdgprc' => $bdgprc,
+                        'bdglvl' => $bdglvl,
+                        'bdgqty' => $ttlqty,
+                        'dybase' => $dybase,
+                        'dsbase' => $dsbase,
+                        'dytrip' => $dytrip,
+                        'dstrip' => $dstrip,
+                        'dytest' => $dytest,
+                        'dstest' => $dstest,
+                        'bdgIns' => $bdgIns,
+                        'versId' => $versId,
+                        'detlId' => 0,
+                    );
+                    $detlId = $this->model->SettingSeries($params);
+
                     $accesory = $this->model->GetAccesories($prodId);
                     while($acc = $accesory->fetch_assoc()){
 
@@ -421,30 +445,11 @@ public function ProcessProjectProduct($request_params)
                             'dstest' => $dstest,
                             'bdgIns' => $bdgIns,
                             'versId' => $versId,
+                            'detlId' => $detlId,
                         );
                         $serie = $this->model->SettingSeries($accparams);
                     }
 
-                    $params = array(
-                        'pjetId' => $pjetId, 
-                        'prodId' => $prodId, 
-                        'dtinic' => $dtinic, 
-                        'dtfinl' => $dtfinl,
-                        'bdgsku' => $bdgsku,
-                        'bdgnme' => $bdgnme,
-                        'bdgprc' => $bdgprc,
-                        'bdglvl' => $bdglvl,
-                        'bdgqty' => $ttlqty,
-                        'dybase' => $dybase,
-                        'dsbase' => $dsbase,
-                        'dytrip' => $dytrip,
-                        'dstrip' => $dstrip,
-                        'dytest' => $dytest,
-                        'dstest' => $dstest,
-                        'bdgIns' => $bdgIns,
-                        'versId' => $versId,
-                    );
-                    $serie = $this->model->SettingSeries($params);
                 }
             } else if ( $bdglvl == 'K' ){
                 for ($i = 1; $i<=$quanty; $i++){
@@ -454,6 +459,28 @@ public function ProcessProjectProduct($request_params)
                         $pkpdId =  $acc["prd_id"];
                         $pkpdNm =  $acc["prd_name"];
                         $pkpdPc =  $acc["prd_price"];
+
+                        $prodparams = array(
+                            'pjetId' => $pjetId, 
+                            'prodId' => $pkpdId, 
+                            'dtinic' => $dtinic, 
+                            'dtfinl' => $dtfinl,
+                            'bdgsku' => $bdgsku,
+                            'bdgnme' => $pkpdNm,
+                            'bdgprc' => $pkpdPc,
+                            'bdglvl' => 'P',
+                            'bdgqty' => $ttlqty,
+                            'dybase' => $dybase,
+                            'dsbase' => $dsbase,
+                            'dytrip' => $dytrip,
+                            'dstrip' => $dstrip,
+                            'dytest' => $dytest,
+                            'dstest' => $dstest,
+                            'bdgIns' => $bdgIns,
+                            'versId' => $versId,
+                            'detlId' => 0,
+                        );
+                        $detlId = $this->model->SettingSeries($prodparams);
 
                         $accesory = $this->model->GetAccesories($pkpdId);
                         while($acc = $accesory->fetch_assoc()){
@@ -480,29 +507,10 @@ public function ProcessProjectProduct($request_params)
                                 'dstest' => $dstest,
                                 'bdgIns' => $bdgIns,
                                 'versId' => $versId,
+                                'detlId' => $detlId,
                             );
                             $serie = $this->model->SettingSeries($accparams);
                         }
-                        $prodparams = array(
-                            'pjetId' => $pjetId, 
-                            'prodId' => $pkpdId, 
-                            'dtinic' => $dtinic, 
-                            'dtfinl' => $dtfinl,
-                            'bdgsku' => $bdgsku,
-                            'bdgnme' => $pkpdNm,
-                            'bdgprc' => $pkpdPc,
-                            'bdglvl' => 'P',
-                            'bdgqty' => $ttlqty,
-                            'dybase' => $dybase,
-                            'dsbase' => $dsbase,
-                            'dytrip' => $dytrip,
-                            'dstrip' => $dstrip,
-                            'dytest' => $dytest,
-                            'dstest' => $dstest,
-                            'bdgIns' => $bdgIns,
-                            'versId' => $versId,
-                        );
-                        $serie = $this->model->SettingSeries($prodparams);
                     }
                 }
             }

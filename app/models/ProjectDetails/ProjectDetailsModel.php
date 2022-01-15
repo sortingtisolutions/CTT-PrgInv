@@ -56,7 +56,6 @@ class ProjectDetailsModel extends Model
         return $this->db->query($qry);
     }
 
-    
 // Listado de descuentos
     public function listDiscounts($params)
     {
@@ -90,15 +89,13 @@ class ProjectDetailsModel extends Model
                         (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                         INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
                         WHERE prd_id =  pc.prd_id
-                        AND (ser_reserve_end < '$dstr' OR ser_reserve_end IS NULL
-                        AND ser_reserve_start > '$dend'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                        AND  pjtdt_id = 0 AND sr.ser_status = 1
                         )
                     ELSE 
                         (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                         INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
                         WHERE prd_id =  pc.prd_id
-                        AND (ser_reserve_end < '$dstr' OR ser_reserve_end IS NULL
-                        AND ser_reserve_start > '$dend'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                        AND  pjtdt_id = 0 AND sr.ser_status = 1
                         )
                     END AS bdg_stock
             FROM ctt_projects_content AS pc
@@ -127,15 +124,13 @@ class ProjectDetailsModel extends Model
                         (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                         INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
                         WHERE prd_id =  pd.prd_id
-                        AND (ser_reserve_end < '$dstr' OR ser_reserve_end IS NULL
-                        AND ser_reserve_start > '$dend'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                        AND  pjtdt_id = 0 AND sr.ser_status = 1
                         )
                     ELSE 
                         (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                         INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
                         WHERE prd_id =  pd.prd_id
-                        AND (ser_reserve_end < '$dstr' OR ser_reserve_end IS NULL
-                        AND ser_reserve_start > '$dend'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                        AND  pjtdt_id = 0 AND sr.ser_status = 1
                         )
                     END AS stock
             FROM ctt_products AS pd
@@ -191,8 +186,10 @@ class ProjectDetailsModel extends Model
                         WHERE pjt_id = '$pjtId'
                     );";
 
-        return $pjtId;
+        $this->db->query($qry2);
 
+        return $pjtId;
+        
     }
 
 
@@ -256,8 +253,27 @@ class ProjectDetailsModel extends Model
 
     public function killProduct($params){
         $pjtcnId       = $this->db->real_escape_string($params["pjtcnid"]);
-        $qry = "DELETE FROM ctt_projects_content WHERE pjtcn_id = $pjtcnId;";
-        return $this->db->query($qry);
+
+        $qr1 = "DELETE FROM ctt_projects_periods 
+                WHERE pjtdt_id IN (
+                    SELECT pjtdt_id FROM ctt_projects_detail 
+                    WHERE pjtcn_id = $pjtcnId
+                );";
+        $this->db->query($qr1);
+
+        $qr2 = "UPDATE ctt_series SET pjtdt_id=0, ser_reserve_count = ser_reserve_count-1 
+                WHERE pjtdt_id in (
+                    SELECT pjtdt_id FROM ctt_projects_detail 
+                    WHERE pjtcn_id = $pjtcnId
+                );";
+        $this->db->query($qr2);
+
+        $qr3 = "DELETE FROM ctt_projects_detail WHERE pjtcn_id = $pjtcnId;";
+        $this->db->query($qr3);
+
+
+        $qr4 = "DELETE FROM ctt_projects_content WHERE pjtcn_id = $pjtcnId;";
+        return $this->db->query($qr4);
     }
 
 
@@ -300,10 +316,11 @@ class ProjectDetailsModel extends Model
                 , pd.ser_id
                 , pd.prd_id
                 , pd.pjtcn_id
+                , pp.pjtpd_sequence
                 FROM ctt_projects_periods AS pp
                 INNER JOIN ctt_projects_detail AS pd ON pd.pjtdt_id = pp.pjtdt_id
                 WHERE pd.pjtcn_id = '$pjtcnId' AND pd.prd_id = '$prdId'
-                ORDER BY pd.pjtdt_id, pp.pjtpd_day_start;
+                ORDER BY pd.pjtdt_prod_sku, pp.pjtpd_day_start, pp.pjtpd_sequence;
                 ";
         return $this->db->query($qry);
     }
@@ -406,9 +423,10 @@ class ProjectDetailsModel extends Model
         $dtinic   = $this->db->real_escape_string($params['dtinic']);
         $dtfinl   = $this->db->real_escape_string($params['dtfinl']);
         $pjetId   = $this->db->real_escape_string($params['pjetId']);
+        $detlId   = $this->db->real_escape_string($params['detlId']);
 
         $qry = "SELECT ser_id, ser_sku FROM ctt_series WHERE prd_id = $prodId 
-                AND ser_reserve_start is null AND ser_reserve_end is null
+                AND pjtdt_id = 0
                 ORDER BY LEFT(RIGHT(ser_sku, 4),1) asc, ser_reserve_count asc LIMIT 1;";
         $result =  $this->db->query($qry);
         
@@ -432,28 +450,29 @@ class ProjectDetailsModel extends Model
 
         
         $qry2 = "INSERT INTO ctt_projects_detail (
-                    pjtdt_prod_sku, ser_id, prd_id, pjtcn_id
+                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtcn_id
                 ) VALUES (
-                    '$sersku', '$serie',  '$prodId',  '$pjetId'
-                );        ";
+                    '$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
+                );";
 
         $this->db->query($qry2);
         $pjtdtId = $this->db->insert_id;
+        
+        $qry3 = "INSERT INTO ctt_projects_periods (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs) 
+                    VALUES 
+                ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId')";
+
+        $this->db->query($qry3);
+        
 
         if ( $serie != null){
-            $qry3 = "UPDATE ctt_series 
+            $qry4 = "UPDATE ctt_series 
                     SET 
                         pjtdt_id = '$pjtdtId'
                         WHERE ser_id = $serie;";
-            $this->db->query($qry3);
-
-            $qry4 = "INSERT INTO ctt_projects_periods (pjtpd_day_start, pjtpd_day_end, pjtdt_id) 
-                     VALUES 
-                    ('$dtinic', '$dtfinl', '$pjtdtId')";
-
             $this->db->query($qry4);
         }
-        return  $serie;
+        return  $pjtdtId;
     }
 
 
