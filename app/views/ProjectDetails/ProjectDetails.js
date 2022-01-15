@@ -2304,6 +2304,7 @@ function apply_period_changes() {
         var selector = put_period_changes;
         fillField(pagina, par, tipo, selector);
     });
+    $('.btn-cn').trigger('click');
 }
 
 function put_period_changes(dt) {
