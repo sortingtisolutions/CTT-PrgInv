@@ -156,13 +156,15 @@ public function listInvoice()
     {
         $serId = $this->db->real_escape_string($params['serId']);
         $qry = "SELECT sr.ser_id, sr.ser_sku, sr.ser_serial_number, 
-                    date_format(sr.ser_date_registry, '%d/%m/%Y') AS ser_date_registry, 
-                    sr.ser_comments, ifnull(dc.doc_id,0) As doc_id, dc.doc_name, dt.dot_id, dt.dot_name, 
-                    ds.dcp_source, ifnull(ds.dcp_id,0) AS dcp_id 
+                date_format(sr.ser_date_registry, '%d/%m/%Y') AS ser_date_registry,
+                sp.sup_business_name, sr.ser_cost, sr.ser_comments, 
+                ifnull(dc.doc_id,0) As doc_id, dc.doc_name, dt.dot_id, dt.dot_name, 
+                ds.dcp_source, ifnull(ds.dcp_id,0) AS dcp_id 
                 FROM ctt_series AS sr
                 LEFT JOIN ctt_products_documents AS ds ON ds.prd_id = sr.ser_id
                 LEFT JOIN ctt_documents AS dc ON dc.doc_id = ds.doc_id
                 LEFT JOIN ctt_documents_type AS dt ON dt.dot_id = dc.dot_id AND dt.dot_id = 1
+                LEFT JOIN ctt_suppliers AS sp on sp.sup_id = sr.sup_id
                 WHERE sr.ser_id = $serId ORDER BY dcp_id DESC LIMIT 1;";
         return $this->db->query($qry);
     }

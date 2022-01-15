@@ -294,8 +294,8 @@
                     <tr>
                         <td class="concept"><span class="reqsign"></span> Proveedor:</td>
                         <td class="data">
-                            <input type="hidden" id="txtSerIdSerie" name="txtSerIdSerie" >
-                            <input type="text" id="txtSerSkuSerie" name="txtSerSkuSerie" class="textbox" style="width:200px" disabled>
+                            <!-- <input id="txtSerIdSerie" name="txtSerIdSerie" type="hidden" > -->
+                            <input type="text" id="txtSerSup" name="txtSerSup" class="textbox" style="width:200px">
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
                             <span class="intructions">Proveedor del producto</span>
                         </td>
@@ -303,8 +303,8 @@
                     <tr>
                         <td class="concept"><span class="reqsign"></span> Costo:</td>
                         <td class="data">
-                            <input type="hidden" id="txtSerIdSerie" name="txtSerIdSerie" >
-                            <input type="text" id="txtSerSkuSerie" name="txtSerSkuSerie" class="textbox" style="width:200px" disabled>
+                            <!-- <input id="txtSerIdSerie" name="txtSerIdSerie" > -->
+                            <input type="text" id="txtSerCost" name="txtSerCost" class="textbox" style="width:200px">
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
                             <span class="intructions">Costo total del producto</span>
                         </td>
@@ -324,8 +324,8 @@
                         <td class="concept"><span class="reqsign">&nbsp;</span> Factura:</td>
                         <td class="data">
                             <input id="txtDocIdSerie" name="txtDocIdSerie" class="textbox" style="width:300px">
-                            <label for="txtDocIdSerie">Selecciona la factura</label>
-                            </input>
+                            <!-- <label for="txtDocIdSerie">Selecciona la FACTURA</label>  -->
+                            
                             <input type="hidden" id="txtDcpIdSerie" name="txtDcpIdSerie">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Selecciona la factura correspondiente al producto</span>
