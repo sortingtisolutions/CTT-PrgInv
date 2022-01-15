@@ -615,8 +615,8 @@ function selector_projects() {
                     },
                     function (start, end, label) {
                         $('#PeriodProject span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
-                        let projDateStart = start.format('YYYYMMDD');
-                        let projDateEnd = end.format('YYYYMMDD');
+                        let projDateStart = start.format('YYYY-MM-DD');
+                        let projDateEnd = end.format('YYYY-MM-DD');
 
                         let par = `
                             [{
@@ -625,7 +625,8 @@ function selector_projects() {
                                 "pjtId"         : "${pj.pjt_id}"
                             }]
                             `;
-                        var pagina = 'Budget/UpdatePeriodProject';
+                        console.log(par);
+                        var pagina = 'ProjectDetails/UpdatePeriodProject';
                         var tipo = 'html';
                         var selector = SetUpdatePeriodProject;
                         fillField(pagina, par, tipo, selector);
@@ -1431,7 +1432,7 @@ function periods_product(prdId, prdLvl, pjtcn) {
                     <div class="serie_group">
                         <div class="serie_top">    
                             <div class="serie_name">Productos</div>
-                            <div class="serie_period">Seleccion de periodos</div>
+                            <div class="serie_period">[Clic] + [Ctrl] para editar la línea de tiempo</div>
                         </div>
                         <div class="serie_bottom">    
                             <div class="serie_calendar" id="serie_calendar">
@@ -1442,6 +1443,7 @@ function periods_product(prdId, prdLvl, pjtcn) {
                 </div>
                 <div class="fix_buttons">
                     <button class="bn btn-cn">Cerrar</button>
+                    <button class="bn btn-ok">Aplicar Cambios</button>
                 </div>
             </div>
             <div class="form col-sm-12 col-md-12 col-lg-3 col-xl-3 image img01"></div>
@@ -1452,6 +1454,10 @@ function periods_product(prdId, prdLvl, pjtcn) {
 
     $('.btn-cn').on('click', function () {
         close_modal();
+    });
+
+    $('.btn-ok').on('click', function () {
+        applyPeriodChanges();
     });
 }
 
@@ -2156,8 +2162,9 @@ function put_products_asigned(dt) {
             date_start: u.pjtpd_day_start,
             date_end: u.pjtpd_day_end,
             parent: u.pjtdt_id,
+            seqnc: u.pjtpd_sequence,
             color: '#ADFF2F',
-            dep: secuence(dt, u.pjtdt_id, u.pjtpd_id),
+            dep: sequence(dt, u.pjtdt_id, u.pjtpd_id),
         });
     });
     //series = series.substring(0, series.length - 1);
@@ -2183,7 +2190,7 @@ function put_products_asigned(dt) {
     //     });
 }
 
-function secuence(dt, id, pi) {
+function sequence(dt, id, pi) {
     var dep = '';
     $.each(dt, function (v, u) {
         if (id === u.pjtdt_id && pi < u.pjtpd_id) {
@@ -2240,7 +2247,7 @@ function editPeriod(id) {
                     "pjtId"         : "${pj.pjt_id}"
                 }]
                 `;
-            var pagina = 'Budget/UpdatePeriodProject';
+            var pagina = 'ProjectDetails/UpdatePeriodProject';
             var tipo = 'html';
             var selector = SetUpdatePeriodProject;
             fillField(pagina, par, tipo, selector);
@@ -2302,3 +2309,11 @@ function update_range_data(id, d1, d2) {
 //     }
 //     return colsp;
 // }
+
+/**  ++++ Aplica los cambios realizados a los periodos ++++ */
+function applyPeriodChanges() {
+    $('#serie_calendar .tb-gantt tbody tr').each(function () {
+        var stl = redraw_period(this, '1');
+        console.log(stl);
+    });
+}

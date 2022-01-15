@@ -10,7 +10,7 @@ $.fn.gantt = function (options) {
     let firstDay = '01/' + dtStart.format('MM/YYYY'); // Define el primer dia de fecha início
     let lastDay = dtEnd.endOf('month').format('DD') + '/' + dtEnd.format('MM/YYYY'); // Define el último dia de la fecha final
     let countDays = 1 + moment(lastDay, 'DD/MM/YYYY').diff(moment(firstDay, 'DD/MM/YYYY'), 'days'); // Verifica la cantidad de dias entre las fechas
-    let periodDays = dtEnd.diff(dtStart, 'days'); // total de dias del perido
+    let periodDays = moment(options.dtEnd, 'YYYY-MM-DD').diff(moment(options.dtStart, 'YYYY-MM-DD'), 'days') + 1; // total de dias del perido
     let tasks = options.data;
     let divGantt = $(this);
     let unic = divGantt.attr('id') + '_' + moment().format('s'); // Crea la instancia única para minupular la tabla
@@ -59,87 +59,116 @@ $.fn.gantt = function (options) {
                 let dayNumber = moment(firstDay, 'DD/MM/YYYY').add(i, 'days').format('YYYYMMDD');
                 bodyDaysTable += `<td class="days ${dayNumber} block" day_serie="${taskName}-${dayNumber}" ></td>`;
             }
-            $(idTbody).append('<tr>' + bodyDaysTable + '</tr>');
+            var dataRow = '<tr data_row="' + task.id + '">' + bodyDaysTable + '</tr>';
+            $(idTbody).append(dataRow);
             taskOrigin = taskName;
         }
     });
 
-    //Define el rango del proyecto
     $.each(tasks, function (index, task) {
         let taskName = task.name ? task.name : '';
+        let tsksqnc = task.seqnc;
+        let tskdays = moment(task.date_end, 'YYYY-MM-DD').diff(moment(task.date_start, 'YYYY-MM-DD'), 'days');
 
-        var datePeriodProject = '';
+        for (var i = 0; i <= tskdays; i++) {
+            var daycurr = moment(task.date_start, 'YYYY-MM-DD').add(i, 'days').format('YYYYMMDD');
+            //    console.log(taskName, daycurr, tsksqnc);
+
+            $(`#tbody_${unic} td[day_serie="${taskName}-${daycurr}"]`).attr('day_serie', taskName + '-' + daycurr + '-' + tsksqnc);
+        }
+        // console.log('----');
+    });
+
+    //Define el rango del proyecto
+
+    $.each(tasks, function (index, task) {
+        let taskName = task.name ? task.name : '';
+        let tsksqc = task.seqnc;
+        let tskdtst = moment(task.date_start, 'YYYY-MM-DD').format('YYYYMMDD');
+        let tskdten = moment(task.date_end, 'YYYY-MM-DD').format('YYYYMMDD');
+
+        var dtcurr = '';
         for (var i = 0; i < periodDays; i++) {
-            datePeriodProject = moment(options.dtStart, 'YYYY-MM-DD').add(i, 'days').format('YYYYMMDD');
-            if (taskName != '') {
-                $(`#tbody_${unic} td[day_serie="${taskName}-${datePeriodProject}"]`).removeClass('block').addClass('free');
-                $(`#tbody_${unic} td[day_serie="${taskName}-${datePeriodProject}"].free`).attr('day_task', taskName);
-                $(`#tbody_${unic} td[day_serie="${taskName}-${datePeriodProject}"].free`).attr('day_start', moment(task.date_start, 'YYYY-MM-DD').format('YYYYMMDD'));
-                $(`#tbody_${unic} td[day_serie="${taskName}-${datePeriodProject}"].free`).attr('day_end', moment(task.date_end, 'YYYY-MM-DD').format('YYYYMMDD'));
+            dtcurr = moment(options.dtStart, 'YYYY-MM-DD').add(i, 'days').format('YYYYMMDD');
+            $(`#tbody_${unic} td.${dtcurr}`).removeClass('block').addClass('free reference');
+            //            $(`#tbody_${unic} td[day_serie="${taskName}-${dtcurr}-${task.seqnc}"]`).removeClass('block').addClass('free reference');
+
+            if (dtcurr >= tskdtst && dtcurr <= tskdten) {
+                //console.log(taskName, dtcurr, tskdtst, tskdten, tsksqc);
+                $(`#tbody_${unic} td[day_serie="${taskName}-${dtcurr}-${tsksqc}"].free`).attr('sku', taskName);
+                $(`#tbody_${unic} td[day_serie="${taskName}-${dtcurr}-${tsksqc}"].free`).attr('pjtpd_day_start', tskdtst);
+                $(`#tbody_${unic} td[day_serie="${taskName}-${dtcurr}-${tsksqc}"].free`).attr('pjtpd_day_end', tskdten);
+                $(`#tbody_${unic} td[day_serie="${taskName}-${dtcurr}-${tsksqc}"].free`).attr('pjtpd_sequence', tsksqc);
             }
         }
+        // console.log('-----');
     });
+
+    var H = '<div class="E"></div>';
+    $(`#tbody_${unic} td.free`).html(H);
 
     //Define el rango de la seleccion inicial
     $.each(tasks, function (index, task) {
         let d1 = moment(task.date_start, 'YYYY-MM-DD');
         let d2 = moment(task.date_end, 'YYYY-MM-DD');
         let dycnt = d2.diff(d1, 'days');
-        console.log(d1.format('YYYYMMDD'), d2.format('YYYYMMDD'), task.id.toString());
-        var datePeriodProject = '';
+        //console.log(d1.format('YYYYMMDD'), d2.format('YYYYMMDD'), task.id.toString());
+        var dtcurr = '';
         let taskName = task.name ? task.name : '';
 
         lastindex.push(task.id);
 
         for (var i = 0; i <= dycnt; i++) {
-            datePeriodProject = moment(task.date_start, 'YYYY-MM-DD').add(i, 'days').format('YYYYMMDD');
-            // console.log(taskName, datePeriodProject);
+            dtcurr = moment(task.date_start, 'YYYY-MM-DD').add(i, 'days').format('YYYYMMDD');
             var A = '';
             switch (i) {
                 case 0:
-                    A = 'I';
+                    A = 'I'; /** Inicial */
                     break;
                 case dycnt:
-                    A = 'F';
+                    A = 'F'; /** Final */
                     break;
                 default:
-                    A = 'A';
+                    A = 'M'; /** Medio */
                     break;
             }
-            var H = `
-            <div class="reference ${A}"></div>
-            `;
-            $(`#tbody_${unic} td[day_serie="${taskName}-${datePeriodProject}"].free`).html(H);
+
+            $(`#tbody_${unic} td[day_serie="${taskName}-${dtcurr}-${task.seqnc}"].free`).children('div').removeAttr('class').addClass(A).attr('data_id', task.id);
         }
     });
 
-    $('td.free .reference').on('mousemove', function (e) {
+    $('td.free.reference').on('mousemove', function (e) {
         $('.tooltip-gantt').css('top', e.pageY + 10);
         $('.tooltip-gantt').css('left', e.pageX + 20);
         $('.tooltip-gantt').show();
 
-        let ds = moment($(this).parent().attr('day_start'), 'YYYYMMDD');
-        let de = moment($(this).parent().attr('day_end'), 'YYYYMMDD');
+        let sqnc = $(this).attr('pjtpd_sequence');
 
-        let dst = moment($(this).parent().attr('day_start'), 'YYYYMMDD').format('DD MMM YYYY').toUpperCase();
-        let den = moment($(this).parent().attr('day_end'), 'YYYYMMDD').format('DD MMM YYYY').toUpperCase();
+        let ds = moment($(this).attr('pjtpd_day_start'), 'YYYYMMDD');
+        let de = moment($(this).attr('pjtpd_day_end'), 'YYYYMMDD');
+
+        let dst = moment($(this).attr('pjtpd_day_start'), 'YYYYMMDD').format('DD MMMM YYYY').toUpperCase();
+        let den = moment($(this).attr('pjtpd_day_end'), 'YYYYMMDD').format('DD MMMM YYYY').toUpperCase();
 
         let taskdays = de.diff(ds, 'days') + 1;
+        let busy = $(this).children('div').attr('class');
 
-        let tooltipGantt = `<div class="tooltip-gantt">
-        <b>${$(this).parent().attr('day_task')}</b><br>
-        <span>${dst} a ${den}</span><br>
-        <span>${taskdays} días</span>
-        <hr>
-        <span></span>
-        </div>`;
-        $('body').append(tooltipGantt);
-        $('.tooltip-gantt').css('z-index', 10000);
+        if (busy != 'E') {
+            let tooltipGantt = `<div class="tooltip-gantt">
+                <b>${$(this).attr('sku')}</b><br>
+                <span>${dst} a ${den}</span><br>
+                <span>${taskdays} días</span>
+                <hr>
+                <span>${sqnc}</span>
+                </div>`;
+            $('body').append(tooltipGantt);
+            $('.tooltip-gantt').css('z-index', 10000);
+        }
     });
 
-    $('td.free .reference').on('mouseout', function (e) {
+    $('td.free.reference').on('mouseleave', function (e) {
         // Arrasta o tooltip de acordo com o mouse
-        $('.tooltip-gantt').hide();
+        $('.tooltip-gantt').remove();
     });
 
     $('td.free').on('mouseover', function () {
@@ -153,49 +182,124 @@ $.fn.gantt = function (options) {
 
     lastindex.sort();
     let lastItem = lastindex[lastindex.length - 1];
-
     $('td.free')
         .unbind('click')
-        .on('click', function () {
-            var rf = $(this);
-            // console.log(rf.children().attr('class'));
-            if (rf.children().attr('class') == undefined) {
-                var dayPrev = $(this).prev().children('div').attr('class');
-                var dayNext = $(this).next().children('div').attr('class');
+        .on('click', function (e) {
+            if (e.ctrlKey) {
+                var rf = $(this);
+                //console.log(rf.children().attr('class'));
+                var dayPrev = $(this).prev().children('div');
+                var dayNext = $(this).next().children('div');
+                var clsPrev = dayPrev.attr('class') == undefined ? 'E' : dayPrev.attr('class');
+                var clsNext = dayNext.attr('class') == undefined ? 'E' : dayNext.attr('class');
                 var taskname = rf.attr('data_name');
 
-                console.log(dayPrev, dayNext, taskname);
-                if (dayPrev == undefined && dayNext == undefined) {
-                    var dhed = 'I';
-                    var dprt = parseInt(lastItem) + 1;
-                    var dnam = rf.attr('day_task');
-                    var dstr = rf.attr('day_start');
-                    var dend = rf.attr('day_end');
-                    var ddys = 1;
-                    redraw_period(this, dhed, dprt, dnam, dstr, dend, ddys);
-                    lastItem = dprt;
+                // console.log(taskname);
+                if (rf.children().attr('class') == 'E') {
+                    if (clsPrev == 'E' && clsNext == 'E') {
+                        $(this).children('div').removeAttr('class').addClass('A');
+                        //console.log('Medida 1');
+                    }
+                    if (clsPrev == 'A' && clsNext == 'I') {
+                        $(this).children('div').removeAttr('class').addClass('M');
+                        $(this).prev().children('div').removeAttr('class').addClass('I');
+                        $(this).next().children('div').removeAttr('class').addClass('M');
+                        //console.log('Medida 2');
+                    }
+                    if ((clsPrev == 'A' || clsPrev == 'I' || clsPrev == 'M') && clsNext == 'E') {
+                        $(this).children('div').removeAttr('class').addClass('F');
+                        $(this).prev().children('div').removeAttr('class').addClass('I');
+                        //console.log('Medida 3');
+                    }
+                    if (clsPrev == 'F' && clsNext == 'E') {
+                        $(this).children('div').removeAttr('class').addClass('F');
+                        $(this).prev().children('div').removeAttr('class').addClass('M');
+                        //console.log('Medida 4');
+                    }
+                    if (clsPrev == 'E' && clsNext == 'I') {
+                        $(this).children('div').removeAttr('class').addClass('I');
+                        $(this).next().children('div').removeAttr('class').addClass('M');
+                        //console.log('Medida 5');
+                    }
+                    if (clsPrev == 'E' && clsNext == 'A') {
+                        $(this).children('div').removeAttr('class').addClass('I');
+                        $(this).next().children('div').removeAttr('class').addClass('F');
+                        //console.log('Medida 6');
+                    }
+                    if (clsPrev == 'F' && clsNext == 'I') {
+                        $(this).children('div').removeAttr('class').addClass('M');
+                        $(this).prev().children('div').removeAttr('class').addClass('M');
+                        $(this).next().children('div').removeAttr('class').addClass('M');
+                        //console.log('Medida 7');
+                    }
+                    if (clsPrev == 'A' && clsNext == 'A') {
+                        $(this).children('div').removeAttr('class').addClass('M');
+                        $(this).prev().children('div').removeAttr('class').addClass('I');
+                        $(this).next().children('div').removeAttr('class').addClass('F');
+                        //console.log('Medida 7A');
+                    }
+                    if (clsPrev == 'F' && clsNext == 'A') {
+                        $(this).children('div').removeAttr('class').addClass('M');
+                        $(this).prev().children('div').removeAttr('class').addClass('M');
+                        $(this).next().children('div').removeAttr('class').addClass('F');
+                        //console.log('Medida 7B');
+                    }
+                    var sku = $(this).attr('day_serie').split('-')[0];
+                    $(this).attr('sku', sku);
+                } else {
+                    if ($(this).children('div').attr('class') == 'M' && clsPrev == 'M' && clsNext == 'M') {
+                        $(this).children('div').removeAttr('class').addClass('E');
+                        $(this).prev().children('div').removeAttr('class').addClass('F');
+                        $(this).next().children('div').removeAttr('class').addClass('I');
+                        //console.log('Medida 8');
+                    }
+                    if ($(this).children('div').attr('class') == 'M' && clsPrev == 'I' && clsNext == 'M') {
+                        $(this).children('div').removeAttr('class').addClass('E');
+                        $(this).prev().children('div').removeAttr('class').addClass('A');
+                        $(this).next().children('div').removeAttr('class').addClass('I');
+                        //console.log('Medida 9');
+                    }
+                    if ($(this).children('div').attr('class') == 'I' && clsPrev == 'E' && clsNext == 'F') {
+                        $(this).children('div').removeAttr('class').addClass('E');
+                        $(this).prev().children('div').removeAttr('class').addClass('E');
+                        $(this).next().children('div').removeAttr('class').addClass('A');
+                        //console.log('Medida 10');
+                    }
+                    if ($(this).children('div').attr('class') == 'F' && clsPrev == 'I' && clsNext == 'E') {
+                        $(this).children('div').removeAttr('class').addClass('E');
+                        $(this).prev().children('div').removeAttr('class').addClass('A');
+                        $(this).next().children('div').removeAttr('class').addClass('E');
+                        //console.log('Medida 11');
+                    }
+                    if ($(this).children('div').attr('class') == 'A' && clsPrev == 'E' && clsNext == 'E') {
+                        $(this).children('div').removeAttr('class').addClass('E');
+                        $(this).prev().children('div').removeAttr('class').addClass('E');
+                        $(this).next().children('div').removeAttr('class').addClass('E');
+                        //console.log('Medida 12');
+                    }
+                    if ($(this).children('div').attr('class') == 'I' && clsPrev == 'E' && clsNext == 'M') {
+                        $(this).children('div').removeAttr('class').addClass('E');
+                        $(this).prev().children('div').removeAttr('class').addClass('E');
+                        $(this).next().children('div').removeAttr('class').addClass('I');
+                        //console.log('Medida 13');
+                    }
+                    if ($(this).children('div').attr('class') == 'F' && clsPrev == 'M' && clsNext == 'E') {
+                        $(this).children('div').removeAttr('class').addClass('E');
+                        $(this).prev().children('div').removeAttr('class').addClass('F');
+                        $(this).next().children('div').removeAttr('class').addClass('E');
+                        //console.log('Medida 14');
+                    }
+                    if ($(this).children('div').attr('class') == 'M' && clsPrev == 'M' && clsNext == 'F') {
+                        $(this).children('div').removeAttr('class').addClass('E');
+                        $(this).prev().children('div').removeAttr('class').addClass('F');
+                        $(this).next().children('div').removeAttr('class').addClass('A');
+                        //console.log('Medida 15');
+                    }
                 }
 
-                if ((dayPrev.split(' ')[1] == 'I' || dayPrev.split(' ')[1] == 'A') && dayNext == undefined) {
-                    var dhed = 'A';
-                    var dprt = parseInt(lastItem);
-                    var dnam = rf.attr('day_task');
-                    var dstr = rf.attr('day_start');
-                    var dend = rf.attr('day_end');
-                    var ddys = 1;
-                    redraw_period(this, dhed, dprt, dnam, dstr, dend, ddys);
-                }
-
-                if ((dayPrev.split(' ')[1] == 'I' || dayPrev.split(' ')[1] == 'A') && dayNext.split(' ')[1] == 'F') {
-                    var dhed = 'A';
-                    var dprt = parseInt(lastItem);
-                    var dnam = rf.attr('day_task');
-                    var dstr = rf.attr('day_start');
-                    var dend = rf.attr('day_end');
-                    var ddys = 1;
-                    redraw_period(this, dhed, dprt, dnam, dstr, dend, ddys);
-                }
+                redraw_period($(this).parent('tr'), '0');
             }
+
             // var ps = $(this).children('.reference').attr('class').split(' ')[1];
             // var pr = $(this).children('.reference').attr('data_part');
         });
@@ -216,15 +320,83 @@ $.fn.gantt = function (options) {
     });
 };
 
-function redraw_period(sel, dhed, dprt, dnam, dstr, dend, ddys) {
-    var H = `
-    <div class="reference ${dhed}" 
-        data_part   = "${dprt}"
-        data_name   = "${dnam}"
-        data_start  = "${dstr}"
-        data_end    = "${dend}"
-        data_days   = "${ddys}">
-    </div>
-    `;
-    $(sel).html(H);
+function redraw_period(th, ky) {
+    var dini;
+    var dfin;
+    var stl = '';
+    var seq = 1;
+    var sqq = 0;
+    var dys = 0;
+    var ddy = 0;
+
+    $(th)
+        .children('td')
+        .each(function () {
+            var div = $(this).children('div');
+            var key = div.attr('class');
+            if (key != 'E') {
+                if (key === 'I') {
+                    stl += div.parents('tr').attr('data_row') + ',';
+                    stl += seq + ',';
+                    stl += div.parents('td').attr('day_serie').split('-')[0] + ',';
+                    stl += div.parents('td').attr('class').split(' ')[1] + ',';
+                    ddy = 1;
+                }
+                if (key === 'M') {
+                    dys++;
+                }
+                if (key === 'F') {
+                    seq++;
+                    ddy = dys + 2;
+                    dys = 0;
+                    stl += div.parents('td').attr('class').split(' ')[1] + ',' + ddy + '|';
+                }
+                if (key === 'A') {
+                    stl += div.parents('tr').attr('data_row') + ',';
+                    stl += seq + ',';
+                    stl += div.parents('td').attr('day_serie').split('-')[0] + ',';
+                    stl += div.parents('td').attr('class').split(' ')[1] + ',';
+                    stl += div.parents('td').attr('class').split(' ')[1] + ',1|';
+                    ddy = 0;
+                }
+            }
+        });
+    stl = stl.slice(0, stl.length - 1);
+    $('.tooltip-gantt').remove();
+
+    if (ky == 0) {
+        updateTooltipInfo(stl);
+    } else {
+        return stl;
+    }
+
+    //$('td[sku="010D0120003"].20220204').css({'background-color': '#CC0000'});
+
+    // $(`td[day_serie="010D0120003-20220204-1`).attr('pjtpd_day_start', '20220204');
+    // $(`td[day_serie="010D0120003-20220204-1`).attr('pjtpd_day-end', '20220318');
+
+    //    1|1|010D0120003|20220204|20220318|43
+}
+
+function updateTooltipInfo(stl) {
+    let gpopar = stl.split('|');
+    $.each(gpopar, function (v, u) {
+        var itm = u.split(',');
+        var sqc = itm[1];
+        var sku = itm[2];
+        var dst = itm[3];
+        var den = itm[4];
+
+        console.log(dst, den, sqc);
+
+        var dys = moment(den, 'YYYYMMDD').diff(moment(dst, 'YYYYMMDD'), 'days');
+        console.log(dys);
+        for (var i = 0; i <= dys; i++) {
+            var dcr = moment(dst, 'YYYYMMDD').add(i, 'days').format('YYYYMMDD');
+            $(`td[sku="${sku}"].${dcr}`).attr('pjtpd_day_start', dst);
+            $(`td[sku="${sku}"].${dcr}`).attr('pjtpd_day_end', den);
+            $(`td[sku="${sku}"].${dcr}`).attr('pjtpd_sequence', sqc);
+            $(`td[sku="${sku}"].${dcr}`).attr('day_serie', `${sku}-${dcr}-${sqc}`);
+        }
+    });
 }
