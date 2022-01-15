@@ -921,10 +921,14 @@ function putDelSerie(dt) {
 
 function putSelectSerie(dt) {
     console.log('3ro Click Modal');
+    console.log(dt);
+    getInvoice();
     $('#txtSerIdSerie').val(dt[0].ser_id);
     $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 7) + '-' + dt[0].ser_sku.slice(7, 11));
     $('#txtSerSerialNumber').val(dt[0].ser_serial_number);
     $('#txtSerDateRegistry').val(dt[0].ser_date_registry);
+    $('#txtSerSup').val(dt[0].sup_business_name);
+    $('#txtSerCost').val(dt[0].ser_cost);
     $('#txtDocIdSerie').val(dt[0].doc_id);
     $('#txtDcpIdSerie').val(dt[0].dcp_id);
     $('#txtSerComments').val(dt[0].ser_comments);
@@ -1013,11 +1017,12 @@ function putInvoice(dt) {
 }
 
 function putInvoiceList(dt) {
+    //console.log(dt);
     var fc = $('#txtDocIdSerie').offset();
     $('#listInvoice .list-items').html('');
     //console.log(fc);
     //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
-    $('#listInvoice').css({top: fc.top + 30 + 'px'});
+    $('#listInvoice').css({top: fc.top + 90 + 'px'});
     $('#listInvoice').slideUp('100', function () {
     //$('.list-group #listInvoice').slideUp('100', function () {
         $('#listInvoice .list-items').html('');
@@ -1055,7 +1060,7 @@ function putInvoiceList(dt) {
         $('#txtDocIdSerie').val(prdNm);
         $('#txtIdInvoices').val(prdId);
         $('#listInvoice').slideUp(100);
-        validator();
+        //validator();
     });
 }
 function omitirAcentos(text) {
@@ -1065,4 +1070,24 @@ function omitirAcentos(text) {
         text = text.replace(acentos.charAt(i), original.charAt(i));
     }
     return text;
+}
+
+function sel_invoice(res) {
+    //console.log('SELECC',res);
+    if (res.length < 1) {
+        $('#listInvoice .list-items div.list-item').css({display: 'block'});
+    } else {
+        $('#listInvoice .list-items div.list-item').css({display: 'none'});
+    }
+
+    $('#listInvoice .list-items div.list-item').each(function (index) {
+        var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
+
+        cm = omitirAcentos(cm);
+        var cr = cm.indexOf(res);
+        if (cr > -1) {
+            //            alert($(this).children().html())
+            $(this).css({display: 'block'});
+        }
+    });
 }

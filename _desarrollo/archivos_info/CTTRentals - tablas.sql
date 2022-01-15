@@ -606,7 +606,7 @@ SELECT
     sp.sup_credit,          sp.sup_credit_days,     sp.sup_email,           sp.sup_id,
     sp.sup_money_advance,   sp.sup_phone,           sp.sup_phone_extension, sp.sup_rfc,
     sp.sup_status,          sp.sup_trade_name,      sp.sut_id,              pc.ver_id, 
-	ROW_NUMBER() OVER (partition by pr.prd_sku ORDER BY pr.prd_name asc) AS reng
+	ROW_NUMBER() OVER (partition by pr.prd_sku ORDER BY pr.prd_name asc) AS num
 FROM ctt_projects_content       AS pc
 INNER JOIN ctt_projects_detail  AS pd ON pd.pjtcn_id = pc.pjtcn_id 
 INNER JOIN ctt_products         AS pr ON pr.prd_id = pd.prd_id 
@@ -640,7 +640,7 @@ DROP VIEW ctt_vw_project_subletting;
 
 CREATE VIEW ctt_vw_project_subletting AS
 SELECT 
-	num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id,
+	reng, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id,
 	DATE_FORMAT(sub_date_start,'%d/%m/%Y') AS sub_date_start, DATE_FORMAT(sub_date_end,'%d/%m/%Y') AS sub_date_end, 
 	sub_comments, pjtcn_days_base, pjtcn_days_trip, pjtcn_days_test,
 	ifnull(prd_id,0) AS prd_id, ifnull(sup_id,0) AS sup_id, ifnull(str_id,0) AS str_id, 
