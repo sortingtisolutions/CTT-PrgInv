@@ -342,15 +342,15 @@ class ProjectDetailsModel extends Model
                                 (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                                 INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
                                 WHERE prd_id =  pc.prd_id
-                                AND (ser_reserve_end < '$dayIni' OR ser_reserve_end IS NULL
-                                AND ser_reserve_start > '$dayFnl'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                                AND sr.pjtdt_id = 0
+                                AND sr.ser_status = 1
                                 )
                             ELSE 
                                 (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                                 INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
                                 WHERE prd_id =  pc.prd_id
-                                AND (ser_reserve_end < '$dayIni' OR ser_reserve_end IS NULL
-                                AND ser_reserve_start > '$dayFnl'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                                AND sr.pjtdt_id = 0
+                                AND sr.ser_status = 1
                                 )
                             END AS bdg_stock
                     FROM ctt_projects_content AS pc
@@ -502,7 +502,7 @@ class ProjectDetailsModel extends Model
     }
 
 
-    //  Obtiene los accesorios relacionados
+//  Obtiene los accesorios relacionados
     public function cancelProject($params)
     {
         $pjtId = $this->db->real_escape_string($params["pjtId"]);
@@ -511,6 +511,56 @@ class ProjectDetailsModel extends Model
         $this->db->query($qry);
 
         return $pjtId ;
+
+    }
+
+//  Actualiza los rangos de periodos por serie
+    public function settingRangePeriods($params)
+    {
+        $pjtdtId        = $this->db->real_escape_string($params['pjtdtId']);
+        $sequenc        = $this->db->real_escape_string($params['sequenc']);
+        $datestr        = $this->db->real_escape_string($params['datestr']);
+        $dateend        = $this->db->real_escape_string($params['dateend']);
+
+        $qry = "SELECT count(*) AS getway FROM ctt_projects_periods WHERE pjtdt_id = $pjtdtId AND pjtpd_sequence = $sequenc; ";
+        $result =  $this->db->query($qry);
+        $res = $result->fetch_object(); 
+
+        $setKey  = $res->getway; 
+
+        if ($setKey == '0'){
+            $qrr = "INSERT INTO ctt_projects_periods 
+                        (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs, pjtpd_sequence)
+                    SELECT 
+                        '$datestr' as pjtpd_day_start
+                        , '$dateend' as pjtpd_day_end 
+                        , pjtdt_id
+                        , pjtdt_belongs
+                        , '$sequenc' as pjtpd_sequence
+                    FROM ctt_projects_periods WHERE (pjtdt_id = $pjtdtId OR pjtdt_belongs = $pjtdtId) AND pjtpd_sequence = 1  ;";
+            $this->db->query($qrr);
+        } else {
+            $qrr = "UPDATE ctt_projects_periods 
+                    SET 
+                        pjtpd_day_start = '$datestr',
+                        pjtpd_day_end = '$dateend' 
+                    WHERE (pjtdt_id = $pjtdtId OR pjtdt_belongs = $pjtdtId) AND pjtpd_sequence = $sequenc;";
+            $this->db->query($qrr);
+        }
+
+        return $setKey;
+
+    }
+
+//  Actualiza los rangos de periodos por serie
+    public function deleteRangePeriods($params)
+    {
+        $pjtdtId        = $this->db->real_escape_string($params['pjtdtId']);
+        $sequenc        = $this->db->real_escape_string($params['sequenc']);
+
+        $qry = "DELETE FROM ctt_projects_periods WHERE (pjtdt_id = $pjtdtId OR pjtdt_belongs = $pjtdtId) AND pjtpd_sequence > $sequenc;";
+        return $this->db->query($qry);
+
 
     }
 

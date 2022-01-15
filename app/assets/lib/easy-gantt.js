@@ -57,7 +57,7 @@ $.fn.gantt = function (options) {
             var bodyDaysTable = `<th>${taskName}</th>`;
             for (let i = 0; i <= countDays - 1; i++) {
                 let dayNumber = moment(firstDay, 'DD/MM/YYYY').add(i, 'days').format('YYYYMMDD');
-                bodyDaysTable += `<td class="days ${dayNumber} block" day_serie="${taskName}-${dayNumber}" ></td>`;
+                bodyDaysTable += `<td class="days ${dayNumber} block" day_serie="${taskName}-${dayNumber}" pjtpd_id_detail="${task.parent}"></td>`;
             }
             var dataRow = '<tr data_row="' + task.id + '">' + bodyDaysTable + '</tr>';
             $(idTbody).append(dataRow);
@@ -159,7 +159,7 @@ $.fn.gantt = function (options) {
                 <span>${dst} a ${den}</span><br>
                 <span>${taskdays} días</span>
                 <hr>
-                <span>${sqnc}</span>
+                <span>${$(this).attr('pjtpd_id_detail')} - ${sqnc}</span>
                 </div>`;
             $('body').append(tooltipGantt);
             $('.tooltip-gantt').css('z-index', 10000);
@@ -183,8 +183,8 @@ $.fn.gantt = function (options) {
     lastindex.sort();
     let lastItem = lastindex[lastindex.length - 1];
     $('td.free')
-        .unbind('click')
-        .on('click', function (e) {
+        .unbind('mousedown')
+        .on('mousedown', function (e) {
             if (e.ctrlKey) {
                 var rf = $(this);
                 //console.log(rf.children().attr('class'));
@@ -338,6 +338,7 @@ function redraw_period(th, ky) {
                 if (key === 'I') {
                     stl += div.parents('tr').attr('data_row') + ',';
                     stl += seq + ',';
+                    stl += div.parents('td').attr('pjtpd_id_detail') + ',';
                     stl += div.parents('td').attr('day_serie').split('-')[0] + ',';
                     stl += div.parents('td').attr('class').split(' ')[1] + ',';
                     ddy = 1;
@@ -354,6 +355,7 @@ function redraw_period(th, ky) {
                 if (key === 'A') {
                     stl += div.parents('tr').attr('data_row') + ',';
                     stl += seq + ',';
+                    stl += div.parents('td').attr('pjtpd_id_detail') + ',';
                     stl += div.parents('td').attr('day_serie').split('-')[0] + ',';
                     stl += div.parents('td').attr('class').split(' ')[1] + ',';
                     stl += div.parents('td').attr('class').split(' ')[1] + ',1|';
@@ -363,19 +365,23 @@ function redraw_period(th, ky) {
         });
     stl = stl.slice(0, stl.length - 1);
     $('.tooltip-gantt').remove();
+    /*
+        stl position 
+
+        0 - pjtpd_id
+        1 - pjtpd_sequence
+        2 - pjtdt_id
+        3 - pjtdt_sku
+        4 - pjtpd_day_start
+        5 - pjtpd_day_end
+        6 - total range days
+*/
 
     if (ky == 0) {
         updateTooltipInfo(stl);
     } else {
         return stl;
     }
-
-    //$('td[sku="010D0120003"].20220204').css({'background-color': '#CC0000'});
-
-    // $(`td[day_serie="010D0120003-20220204-1`).attr('pjtpd_day_start', '20220204');
-    // $(`td[day_serie="010D0120003-20220204-1`).attr('pjtpd_day-end', '20220318');
-
-    //    1|1|010D0120003|20220204|20220318|43
 }
 
 function updateTooltipInfo(stl) {
@@ -383,14 +389,11 @@ function updateTooltipInfo(stl) {
     $.each(gpopar, function (v, u) {
         var itm = u.split(',');
         var sqc = itm[1];
-        var sku = itm[2];
-        var dst = itm[3];
-        var den = itm[4];
-
-        console.log(dst, den, sqc);
+        var sku = itm[3];
+        var dst = itm[4];
+        var den = itm[5];
 
         var dys = moment(den, 'YYYYMMDD').diff(moment(dst, 'YYYYMMDD'), 'days');
-        console.log(dys);
         for (var i = 0; i <= dys; i++) {
             var dcr = moment(dst, 'YYYYMMDD').add(i, 'days').format('YYYYMMDD');
             $(`td[sku="${sku}"].${dcr}`).attr('pjtpd_day_start', dst);
