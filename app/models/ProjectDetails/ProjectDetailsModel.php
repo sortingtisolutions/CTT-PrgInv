@@ -154,9 +154,7 @@ class ProjectDetailsModel extends Model
                 AND pjtdt_prod_sku = 'Pendiente';";
         return $this->db->query($qry);
     }
-
-
-    
+ 
 // Actualiza las fechas del proyecto
     public function UpdatePeriodProject($params)
     {
@@ -341,16 +339,14 @@ class ProjectDetailsModel extends Model
                             WHEN pjtcn_prod_level ='P' THEN 
                                 (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                                 INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                                WHERE prd_id =  pc.prd_id
-                                AND (ser_reserve_end < '$dayIni' OR ser_reserve_end IS NULL
-                                AND ser_reserve_start > '$dayFnl'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                                WHERE prd_id =  pc.prd_id AND sr.pjtdt_id=0
+                                AND sr.ser_status = 1
                                 )
                             ELSE 
                                 (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                                 INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                                WHERE prd_id =  pc.prd_id
-                                AND (ser_reserve_end < '$dayIni' OR ser_reserve_end IS NULL
-                                AND ser_reserve_start > '$dayFnl'  OR ser_reserve_start IS NULL) AND sr.ser_status = 1
+                                WHERE prd_id =  pc.prd_id 
+                                AND sr.ser_status = 1 AND sr.pjtdt_id=0
                                 )
                             END AS bdg_stock
                     FROM ctt_projects_content AS pc

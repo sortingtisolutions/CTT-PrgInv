@@ -325,14 +325,13 @@
                         <td class="data">
                             <input id="txtDocIdSerie" name="txtDocIdSerie" class="textbox" style="width:300px">
                             <!-- <label for="txtDocIdSerie">Selecciona la FACTURA</label>  -->
-                            
                             <input type="hidden" id="txtDcpIdSerie" name="txtDcpIdSerie">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Selecciona la factura correspondiente al producto</span>
-                        </td>
+                            <!-- <span class="fail_note hide"></span>
+                            <span class="intructions">Selecciona la factura correspondiente al producto</span> -->
                         <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
                         </div>
+                        </td>
                     </tr>
 
                     <tr>
