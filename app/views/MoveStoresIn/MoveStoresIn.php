@@ -142,11 +142,11 @@
                         </div>
                     </div>
                     <!-- Boton posición 4 -->
-                    <div class="row pos4 hide-items">
-                        <div class="col-md-12 mb-5">
-                            <button type="button" class="btn btn-sm btn-primary disabled" id="btn_exchange">Agregar</button>
+                        <div class="row pos4 hide-items">
+                            <div class="col-md-12 mb-5">
+                                <button id="btn_exchange" type="button" class="btn btn-sm btn-primary" >Agregar</button>
+                            </div>
                         </div>
-                    </div>
                 </div>
             </div>
 

@@ -19,7 +19,8 @@ function inicial() {
     setting_table();
     $('#btn_exchange').on('click', function () {
         console.log('1');
-        exchange_apply();
+        let id = $('#boxIdProducts').val();
+        exchange_apply(id);
     });
 }
 
@@ -189,7 +190,7 @@ function putStores(dt) {
         let id = $(this).val();
         $(`#txtStoreTarget option`).css({display: 'block'});
         $(`#txtStoreTarget option[value="${id}"]`).css({display: 'none'});
-        console.log('ID', id);
+       //console.log('ID Almacen', id);
         getProducts(id);
         //drawProducts(id);
     });
@@ -210,8 +211,58 @@ function putStores(dt) {
     }
 }*/
 
-// Almacena los registros de productos en un arreglo
 function putProducts(dt) {
+    
+    $('#boxProducts').parents('.list-finder').removeClass('hide-items');
+    var sl = $('#boxProducts').offset();
+    $('#listProducts .list-items').html('');
+    
+    $('#listProducts').css({top: sl.top + 30 + 'px'});
+    //console.log(sl);
+    $('#listProducts').slideUp('100', function () {
+        $('#listProducts .list-items').html('');
+    });
+    
+    $.each(dt, function (v, u) {
+        /* let H = `<div class="list-item" id="P-${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}">
+        ${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}<div class="items-just"><div class="quantity editable" data-content="${u.stp_quantity}" contenteditable=true>${u.stp_quantity}</div><i class="fas fa-arrow-circle-right"></i></div></div>`; */
+        let H = `<div class="list-item" id="P-${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}">${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}</div>`;
+        $('#listProducts .list-items').append(H);
+    });
+
+    $('#boxProducts').on('focus', function () {
+        $('#listProducts').slideDown('fast');
+    });
+
+    $('#listProducts').on('mouseleave', function () {
+        $('#listProducts').slideUp('fast');
+    });
+
+    $('#boxProducts').keyup(function (e) {
+        var res = $(this).val().toUpperCase();
+        if (res == '') {
+            $('#listProducts').slideUp(100);
+        } else {
+            $('#listProducts').slideDown(400);
+        }
+        res = omitirAcentos(res);
+        sel_products(res);
+    });
+
+    $('#listProducts .list-item').on('click', function () {
+        let prdNm = $(this).html();
+        let prdId = $(this).attr('id') + '|' + $(this).attr('data-content');
+        //console.log('Mostrar prdID--', prdId);
+        //console.log('Mostrar prdNm --', prdNm);
+        $('#boxProducts').val(prdNm);
+        $('#boxIdProducts').val(prdId);
+        $('#listProducts').slideUp(100);
+        //validator();
+    });
+}
+
+// Almacena los registros de productos en un arreglo
+/* function r_putProducts(dt) {
     $('#listProducts').html('');
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="P-${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}">
@@ -242,7 +293,8 @@ function drawProducts() {
         console.log('Click 2');
         exchange_apply(id);
     });
-}
+} */
+
 function xdrawProducts(str) {
     $('#txtProducts').html('<option value="0" selected>Selecciona producto</option>');
     if (pr[0][1].prd_id != 0) {
@@ -277,7 +329,7 @@ function validator(prId) {
         $('#txtStoreTarget').addClass('fail');
     }
 
-    let qtystk = prId.children().children('.quantity').attr('data-content');
+    /* let qtystk = prId.children().children('.quantity').attr('data-content');
     let qtysel = prId.children().children('.quantity').text();
     if (qtystk < qtysel) {
         prId.children().children('.quantity').text(qtystk);
@@ -286,7 +338,7 @@ function validator(prId) {
         ky = 1;
         msg += 'No tiene stock suficiente';
     }
-
+ */
     $('.fail')
         .unbind('focus')
         .on('focus', function () {
@@ -296,7 +348,8 @@ function validator(prId) {
 }
 // Aplica la seleccion para la tabla de movimientos
 function exchange_apply(prId) {
-        console.log('2');
+        //console.log('2');
+        //console.log(prId);
     if (validator(prId) == 0) {
         let typeExchangeCodeSource = $('#txtTypeExchange option:selected').attr('data-content').split('|')[0];
         let typeExchangeCodeTarget = $('#txtTypeExchange option:selected').attr('data-content').split('|')[3];
@@ -312,18 +365,19 @@ function exchange_apply(prId) {
             typeExchangeCodeTarget = '';
             storeNameTarget = '';
         }
-
-        let prod = prId.attr('data-content').split('|');
+        //let prod = prId.attr('data-content').split('|');
+        let prod = prId.split('|');
         let productId = prod[0];
-        let productSKU = prod[1];
-        let productName = prod[3];
-        let productQuantity = prId.children().children('.quantity').text();
-        let productSerie = prod[2];
+        let productSKU = prod[2];
+        let productName = prod[4];
+        //let productQuantity = prId.children().children('.quantity').text();
+        let productQuantity = '1';
+        let productSerie = prod[3];
 
         let commnets = $('#txtComments').val();
         let project = '';
-
-        update_array_products(productId, productQuantity);
+        //console.log('DATOS- ', productId, productSKU, productName,productSerie,commnets);
+        //update_array_products(productId, productQuantity);
         let par = `
 [{
     "support"    :  "${folio}|${productSKU}|${typeExchangeIdSource}|${typeExchangeIdTarget}|${productId}|${storeIdSource}|${storeIdTarget}",
@@ -374,7 +428,7 @@ function fill_table(par) {
         .draw();
     btn_apply_appears();
 
-    // clean_selectors();
+    clean_selectors();
 
     $('.edit')
         .unbind('click')
@@ -382,7 +436,7 @@ function fill_table(par) {
             console.log('CLICK');
             let qty = parseInt($(this).parent().children('td.quantity').text()) * -1;
             let pid = $(this).parent().children('td.sku').children('span.hide-support').text().split('|')[4];
-            update_array_products(pid, qty);
+           // update_array_products(pid, qty);
             tabla.row($(this).parent('tr')).remove().draw();
             btn_apply_appears();
         });
@@ -407,6 +461,8 @@ function clean_selectors() {
     $('#txtQuantity').val('');
     $('#txtQuantityStored').html('&nbsp;');
     $('#txtComments').val('');
+    $('#boxProducts').val('');
+    $('#boxIdProducts').val('');
 }
 /** Actualiza la cantidad de cada producto dentro del arreglo */
 function update_array_products(id, cn) {
@@ -548,5 +604,33 @@ function uuidv4() {
         var r = (Math.random() * 16) | 0,
             v = c == 'x' ? r : (r & 0x3) | 0x8;
         return v.toString(16);
+    });
+}
+function omitirAcentos(text) {
+    var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
+    var original = 'AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc';
+    for (var i = 0; i < acentos.length; i++) {
+        text = text.replace(acentos.charAt(i), original.charAt(i));
+    }
+    return text;
+}
+
+/**  +++ Ocultalos productos del listado que no cumplen con la cadena  */
+function sel_products(res) {
+    if (res.length < 1) {
+        $('#listProducts .list-items div.list-item').css({display: 'block'});
+    } else {
+        $('#listProducts .list-items div.list-item').css({display: 'none'});
+    }
+
+    $('#listProducts .list-items div.list-item').each(function (index) {
+        var cm = $(this).attr('data-content').toUpperCase().replace(/|/g, '');
+
+        cm = omitirAcentos(cm);
+        var cr = cm.indexOf(res);
+        if (cr > -1) {
+            //            alert($(this).children().html())
+            $(this).css({display: 'block'});
+        }
     });
 }

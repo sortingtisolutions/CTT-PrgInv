@@ -460,4 +460,24 @@ public function updatePeriods($request_params)
     }
 
 
+// Actualiza los rangos de periodos por serie
+    public function settingRangePeriods($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->settingRangePeriods($request_params);
+        $res = $result;
+        echo $res;
+
+    } 
+
+// Actualiza los rangos de periodos por serie
+    public function deleteRangePeriods($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->deleteRangePeriods($request_params);
+        $res = $result;
+        echo $res;
+
+    } 
+
 }

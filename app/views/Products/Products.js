@@ -929,7 +929,8 @@ function putSelectSerie(dt) {
     $('#txtSerDateRegistry').val(dt[0].ser_date_registry);
     $('#txtSerSup').val(dt[0].sup_business_name);
     $('#txtSerCost').val(dt[0].ser_cost);
-    $('#txtDocIdSerie').val(dt[0].doc_id);
+    $('#txtDocIdSerie').val(dt[0].doc_name);
+    $('#txtDocId').val(dt[0].doc_id);
     $('#txtDcpIdSerie').val(dt[0].dcp_id);
     $('#txtSerComments').val(dt[0].ser_comments);
 
@@ -943,7 +944,7 @@ function putSelectSerie(dt) {
                 "serId"  :  "${$('#txtSerIdSerie').val()}",
                 "serSr"  :  "${$('#txtSerSerialNumber').val()}",
                 "serDt"  :  "${dateReg}",
-                "serDc"  :  "${$('#txtDocIdSerie').val()}",
+                "serDc"  :  "${$('#txtDocId').val()}",
                 "serDi"  :  "${$('#txtDcpIdSerie').val()}",
                 "serCm"  :  "${$('#txtSerComments').val()}"
             }]
@@ -1022,7 +1023,7 @@ function putInvoiceList(dt) {
     $('#listInvoice .list-items').html('');
     //console.log(fc);
     //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
-    $('#listInvoice').css({top: fc.top + 90 + 'px'});
+    //$('#listInvoice').css({top: fc.top + 90 + 'px'});
     $('#listInvoice').slideUp('100', function () {
     //$('.list-group #listInvoice').slideUp('100', function () {
         $('#listInvoice .list-items').html('');

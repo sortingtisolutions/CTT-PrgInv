@@ -1457,7 +1457,7 @@ function periods_product(prdId, prdLvl, pjtcn) {
     });
 
     $('.btn-ok').on('click', function () {
-        applyPeriodChanges();
+        apply_period_changes();
     });
 }
 
@@ -2065,8 +2065,9 @@ function add_new_product(pd) {
 
     let dytritt = daytrip / 2;
     let daysini = dytritt + daytest;
-    let daysfnl = (dytritt + daybase)-1;
-    
+   // let daysfnl = (dytritt + daybase)-1;
+
+    let daysfnl = dytritt + daybase - 1;
     let prjDStr = moment(proj[0].pjt_date_start, 'DD/MM/YYYY').subtract('days', daysini).format('YYYYMMDD');
     let prjDEnd = moment(proj[0].pjt_date_start, 'DD/MM/YYYY').add('days', daysfnl).format('YYYYMMDD');
 
@@ -2147,7 +2148,6 @@ function put_counter_pending(dt) {
 
 function put_products_asigned(dt) {
     dss = dt;
-    console.log(dt);
 
     let fini = moment($('#PeriodProject').text().split(' - ')[0], 'DD/MM/YYYY');
     let ffin = moment($('#PeriodProject').text().split(' - ')[1], 'DD/MM/YYYY');
@@ -2169,8 +2169,6 @@ function put_products_asigned(dt) {
         });
     });
     //series = series.substring(0, series.length - 1);
-
-    console.log(series);
 
     $('#serie_calendar').gantt({
         data: series,
@@ -2265,56 +2263,52 @@ function update_range_data(id, d1, d2) {
     fillField(pagina, par, tipo, selector);
 }
 
-// function build_range_calendar() {
-//     let H = '';
-//     moment.locale('es');
-//     let fini = moment($('#PeriodProject').text().split(' - ')[0], 'DD/MM/YYYY');
-//     let ffin = moment($('#PeriodProject').text().split(' - ')[1], 'DD/MM/YYYY');
-//     let diff = ffin.diff(fini, 'days');
-//     let fstr = moment($('#PeriodProject').text().split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
-
-//     let month = '';
-//     console.log(month);
-
-//     var meses = [];
-
-//     H += '<table><tr>';
-
-//     for (var i = 0; i <= diff; i++) {
-//         let dti = nextday(fstr, i).format('MMMM').toUpperCase();
-
-//         if (month != dti) {
-//             month = dti;
-//             // meses.push(month);
-//             var colsp = counter_days(month, diff, fstr);
-//             H += `<td colspan="${colsp}">${month}</td>`;
-//         }
-//     }
-//     H += '</tr></table>';
-
-//     console.log(meses);
-
-//     return H;
-// }
-// function nextday(fstr, i) {
-//     let dti = moment(fstr, 'YYYYMMDD').add(i, 'days');
-//     return dti;
-// }
-// function counter_days(month, dif, fstr) {
-//     var colsp = 1;
-//     for (var i = 1; i <= dif; i++) {
-//         let dti = nextday(fstr, i).format('MMMM').toUpperCase();
-//         if (month == dti) {
-//             colsp++;
-//         }
-//     }
-//     return colsp;
-// }
-
 /**  ++++ Aplica los cambios realizados a los periodos ++++ */
-function applyPeriodChanges() {
-    $('#serie_calendar .tb-gantt tbody tr').each(function () {
-        var stl = redraw_period(this, '1');
-        console.log(stl);
+function apply_period_changes() {
+    let th = $('#serie_calendar');
+
+    $('#serie_calendar tbody tr').each(function () {
+        let stl = redraw_period(this, '1');
+        let gpopar = stl.split('|');
+        console.log(gpopar);
+        var itms = [];
+        var idt = '';
+        $.each(gpopar, function (v, u) {
+            var itm = u.split(',');
+            var sqc = itm[1];
+            var idt = itm[2];
+            var dst = moment(itm[4], 'YYYYMMDD').format('YYYY-MM-DD');
+            var den = moment(itm[5], 'YYYYMMDD').format('YYYY-MM-DD');
+            itms.push(itm[1]);
+            iddt = idt;
+
+            let par = `[
+            {
+                "pjtdtId" : "${idt}",
+                "sequenc" : "${sqc}",
+                "datestr" : "${dst}",
+                "dateend" : "${den}"
+            }
+        ]`;
+
+            var pagina = 'ProjectDetails/settingRangePeriods';
+            var tipo = 'html';
+            var selector = put_period_changes;
+            fillField(pagina, par, tipo, selector);
+
+            console.log(par);
+        });
+        console.log(itms.length, iddt);
+
+        var pagina = 'ProjectDetails/deleteRangePeriods';
+        var par = `[{"pjtdtId" : "${iddt}","sequenc" : "${itms.length}"}]`;
+        var tipo = 'html';
+        var selector = put_period_changes;
+        fillField(pagina, par, tipo, selector);
     });
+    $('.btn-cn').trigger('click');
+}
+
+function put_period_changes(dt) {
+    console.log(dt);
 }

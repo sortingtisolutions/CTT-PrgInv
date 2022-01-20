@@ -51,7 +51,7 @@ class ProductsModel extends Model
 // Listado de facturas
 public function listInvoice()
 {
-    $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id = 1;";
+    $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id IN (1,4,5);";
     return $this->db->query($qry);
 }
 
@@ -259,11 +259,11 @@ public function saveEdtSeries($params)
             WHERE   ser_id              = '$serId';";
     $this->db->query($qry);
 
-        if ($serDi == '0'&& $serDc > '0' ){
+        if ($serDi == '0' && $serDc > '0' ){
             $qry1 = "INSERT INTO ctt_products_documents 
                         (dcp_source, prd_id, doc_id) 
                     VALUES
-                        ('P', '$serId', '$serDc')
+                        ('S', '$serId', '$serDc')
                     ";
                     $this->db->query($qry1);
                     $serDc = $this->db->insert_id;
