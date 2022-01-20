@@ -187,7 +187,7 @@ ul {
 		border-radius: 5px;
 	}
 }
-.objHidden  {
+.objHidden {
 	display: none;
 }
 .form-group {
@@ -197,7 +197,6 @@ ul {
 	.form_secundary {
 		display: none;
 	}
-	
 }
 .mb-2 {
 	margin-bottom: 0.1em !important;
@@ -280,12 +279,11 @@ div.dataTables_wrapper div.dataTables_length select {
 	width: 50px;
 	font-size: 0.9em;
 
-	.quantity  {
+	.quantity {
 		border: none;
 		width: 40px;
 		text-align: center;
 		background-color: transparent;
-
 	}
 }
 div.dataTables_wrapper .btn,
@@ -316,7 +314,7 @@ div.dataTables_wrapper div.btn-group button.btn-apply {
 		background-color: $dark-x;
 	}
 
-	&.red  {
+	&.red {
 		background-color: $dark-x;
 	}
 }
@@ -371,12 +369,11 @@ div.dataTables_wrapper .dataTables_paginate .paginate_button {
 	}
 }
 .pending {
-	color : #cc0000;
+	color: #cc0000;
 	border: 1px solid #cc0000;
 	border-radius: 10px;
-	background-color: rgba(#cc0000,0.1);
+	background-color: rgba(#cc0000, 0.1);
 	padding: 1px 6px;
-
 }
 .notify {
 	font-size: 1.2rem;
@@ -429,6 +426,26 @@ table {
 				}
 			}
 		}
+
+		.fieldIn {
+			border: 1px solid #eeeeee;
+			border-radius: 3px;
+			background-color: transparent;
+			width: 90%;
+			text-align: center;
+			outline: none;
+			padding: 2px;
+
+			&:hover {
+				border-color: #999999;
+				background-color: rgba($setColor, 0.2);
+			}
+
+			&:focus {
+				background-color: rgba($setColor, 0.1);
+				border: 1px solid $setColor;
+			}
+		}
 	}
 	td.edit {
 		text-align: center;
@@ -442,7 +459,7 @@ table {
 			background-color: #ffc310;
 		}
 		.red {
-			background-color: #DD0000;
+			background-color: #dd0000;
 		}
 	}
 	.hide-support {
@@ -472,7 +489,7 @@ table {
 	td.quantity {
 		text-align: center;
 
-		&.qtypending  {
+		&.qtypending {
 			background-image: url("../img/circle-solid.min.svg");
 			background-position: center right;
 			background-size: 12%;
@@ -560,10 +577,9 @@ table {
 			border: 1px solid $texboxColorBorder;
 			border-radius: 4px;
 			padding: 2px 10px;
-			
 
 			&:focus {
-				background-color: #ffffEE;
+				background-color: #ffffee;
 				border-color: #cccccc;
 			}
 			&.fail {
@@ -593,6 +609,29 @@ table {
 			color: #999999;
 			margin-bottom: 10px;
 			margin-top: 2px;
+		}
+
+		.list-group {
+			position: absolute;
+			top: 23px;
+			left: 0px;
+			right: 10px;
+			background-color: #ffffff;
+			border: 1px solid #ddd;
+			box-shadow: 5px 10px 10px rgba(#777777, 0.5);
+			border-radius: 3px;
+			max-height: 120px;
+			padding: 5px;
+			z-index: 1000;
+
+			.list-item {
+				padding: 3px 10px;
+				border-bottom: 1px solid #dddddd;
+
+				&:hover {
+					background-color: rgba($setColor, 0.2);
+				}
+			}
 		}
 	}
 }
@@ -829,10 +868,6 @@ table {
 	width: 100%;
 	float: left;
 }
-
-
-
-
 
 .row {
 	margin: 0;

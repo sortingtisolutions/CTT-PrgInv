@@ -7,7 +7,6 @@
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 
-<style>#listInvoice{position:absolute;top: 23px; left: 0px; right:10px; background-color:#ffffff; border:1px solid #ddd; border-radius: 3px; max-height:120px; padding:5px; z-index:1000;}</style>
 
 <!-- Start Contenedor Listado de PRODUCTOS  -->
     <div class="container-fluid">

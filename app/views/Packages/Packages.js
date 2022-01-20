@@ -171,7 +171,7 @@ function putProducts(dt) {
         let H = `<div class="list-item" id="P-${u.prd_id}" data-subcateg="${u.sbc_id}" data-content="${u.prd_id}|${u.prd_sku}|${u.prd_name}|${u.prd_price}|${u.sbc_id}">
                     ${u.prd_sku} - ${u.prd_name}<div class="items-just"><i class="fas fa-arrow-circle-right"></i></div>
                 </div>`;
-       /* let H = `<div class="list-item" id="P-${u.prd_id}" data-subcateg="${u.sbc_id}" data-content="${u.prd_id}|${u.prd_sku}|${u.prd_name}|${u.prd_price}|${u.sbc_id}">
+        /* let H = `<div class="list-item" id="P-${u.prd_id}" data-subcateg="${u.sbc_id}" data-content="${u.prd_id}|${u.prd_sku}|${u.prd_name}|${u.prd_price}|${u.sbc_id}">
                 ${u.prd_sku} - ${u.prd_name}<div class="items-just"></div>
             </div>`; */
         $('#listProducts').append(H);
@@ -479,18 +479,19 @@ function action_selected_products() {
                     break;
                 default:
             }
-           /* let edt = $(this).attr('class').indexOf('kill');
+            /* let edt = $(this).attr('class').indexOf('kill');
             // console.log(edt);
             let prdId = $(this).attr('id');
             confirm_delet_product(prdId); */
         });
 
-        $('.quantity').unbind('blur').on('blur',function(){
+    $('.quantity')
+        .unbind('blur')
+        .on('blur', function () {
             let qty = $(this).val();
-            let prdId = $(this).attr('id').substring(3,20);
-            editProdAsoc(prdId,qty);
-        })
-
+            let prdId = $(this).attr('id').substring(3, 20);
+            editProdAsoc(prdId, qty);
+        });
 }
 
 function put_detailPack(dt) {
@@ -535,7 +536,7 @@ function putProductsPack(dt) {
                     prod_sku: `<span class="hide-support" id="SKU-${u.prd_sku}">${u.prd_id}</span>${u.prd_sku}`,
                     prodname: u.prd_name,
                     prodpric: u.prd_price,
-                    prodcant: '<input class="quantity" type="text" id="QY-'+ u.prd_id+'-'+ u.prd_parent +'" value="'+ u.pck_quantity+'">',
+                    prodcant: '<input class="quantity fieldIn" type="text" id="QY-' + u.prd_id + '-' + u.prd_parent + '" value="' + u.pck_quantity + '">',
                 })
                 .draw();
         });
@@ -571,7 +572,7 @@ function putNewProductsPack(dt) {
             prod_sku: `<span class="hide-support" id="SKU-${dt[0].prd_sku}">${dt[0].prd_id}</span>${dt[0].prd_sku}`,
             prodname: dt[0].prd_name,
             prodpric: dt[0].prd_price,
-            prodcant: '<input class="quantity" type="text" id="QY-'+ dt[0].prd_id + '-' + dt[0].prd_parent +'" value="'+dt[0].pck_quantity+'">',
+            prodcant: '<input class="quantity fieldIn" type="text" id="QY-' + dt[0].prd_id + '-' + dt[0].prd_parent + '" value="' + dt[0].pck_quantity + '">',
         })
         .draw();
     action_selected_products();
@@ -647,20 +648,19 @@ function validator_part01() {
     }
 }
 
-function editProdAsoc(Id,prdQty) {
-  //  $('#txtCategoryProduct').attr('disabled', true);
-   // $('#txtSubcategoryProduct').attr('disabled', true);
-  //  $('#delProdModal').modal('show');
+function editProdAsoc(Id, prdQty) {
+    //  $('#txtCategoryProduct').attr('disabled', true);
+    // $('#txtSubcategoryProduct').attr('disabled', true);
+    //  $('#delProdModal').modal('show');
     let prdId = Id.split('-')[0];
     let prdParent = Id.split('-')[1];
-    console.log('Vals', prdId, prdParent,prdQty );
+    console.log('Vals', prdId, prdParent, prdQty);
 
     var pagina = 'Packages/updateQuantityProds';
     var par = `[{"prdId":"${prdId}","prdParent":"${prdParent}","prdQty":"${prdQty}"}]`;
     var tipo = 'json';
     var selector = putUpdatePackages;
-    fillField(pagina, par, tipo, selector); 
-
+    fillField(pagina, par, tipo, selector);
 }
 
 function putUpdatePackages(dt) {

@@ -189,6 +189,8 @@ class PackagesController extends Controller
         $res = $result;
         echo $res;
     }
+    
+
 // Obtiene detalle del paquete
     public function deleteProduct($request_params)
     {

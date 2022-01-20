@@ -102,7 +102,7 @@ function setting_table() {
             {data: 'stnamesc', class: 'store-name_s'},
             {data: 'provname', class: 'store-name_s'},
             {data: 'factname', class: 'store-name_s'},
-            {data: 'prodmarc', class: 'store-name_s'}, 
+            {data: 'prodmarc', class: 'store-name_s'},
             {data: 'comments', class: 'comments'},
         ],
     });
@@ -309,7 +309,7 @@ function putInvoiceList(dt) {
     //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
     $('#listInvoice').css({top: fc.top + 30 + 'px'});
     $('#listInvoice').slideUp('100', function () {
-    //$('.list-group #listInvoice').slideUp('100', function () {
+        //$('.list-group #listInvoice').slideUp('100', function () {
         $('#listInvoice .list-items').html('');
     });
 
@@ -339,7 +339,6 @@ function putInvoiceList(dt) {
     });
 
     $('#listInvoice .list-item').on('click', function () {
-        
         let prdNm = $(this).html();
         let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
         $('#txtInvoice').val(prdNm);
@@ -358,7 +357,7 @@ function putSupplierList(dt) {
     $('#listSupplier').slideUp('100', function () {
         $('#listSupplier .list-items').html('');
     });
-    
+
     $.each(dt, function (v, u) {
         let H = `<div class="list-item" id="${u.sup_id}" data_serie="${u.sup_id}" data_complement="${u.sup_id}|${u.sup_business_name}">${u.sup_business_name}</div>`;
         $('#listSupplier .list-items').append(H);
@@ -416,7 +415,8 @@ function validator() {
         msg += 'Debes seleccionar un almacen destino';
     }
 
-    if ($('#txtSuppliers').val() == 0 ) {  // && $('.pos2').attr('class').indexOf('hide-items') < 0
+    if ($('#txtSuppliers').val() == 0) {
+        // && $('.pos2').attr('class').indexOf('hide-items') < 0
         ky = 1;
         msg += 'Debes seleccionar el proveedor';
     }
@@ -436,8 +436,9 @@ function validator() {
     //     msg += 'Debes indicar el costo del producto';
     // }
 
-     //validacion de cantidad para agregar serie mayor a 1
-    if ($('#txtQuantity').val() > 1 ) { // && $('#txtSerie').val() == 0
+    //validacion de cantidad para agregar serie mayor a 1
+    if ($('#txtQuantity').val() > 1) {
+        // && $('#txtSerie').val() == 0
         $('#txtSerie').attr('disabled', true).val('');
         //$('#txtCostImp').attr('disabled', true).val('');
         
@@ -453,16 +454,16 @@ function validator() {
     //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
     //console.log($('#txtSerie').val(), $('#txtSerie').attr('disabled'));
 
-    if ($('#txtSerie').val() == '' && $('#txtSerie').attr('disabled') == undefined ) {
+    if ($('#txtSerie').val() == '' && $('#txtSerie').attr('disabled') == undefined) {
         ky = 1;
         msg += 'Debes indicar la serie del producto';
-    } 
+    }
 
     if ($('#txtCoin').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
         msg += 'Debes indicar el tipo de moneda';
     }
-    console.log(ky,msg);
+    console.log(ky, msg);
 
     if (ky == 0) {
         $('#btn_exchange').removeClass('disabled');
@@ -480,6 +481,8 @@ function exchange_apply() {
     let serie = parseInt($('#txtNextSerie').val());
     let sersku = prdSku + refil(serie, 4);
     let serser = $('#txtSerie').val();
+    let prodpeti = $('#txtPedimento').val();
+    let prodimpo = $('#txtCostImp').val();
     let sercost = $('#txtCost').val();
     let sercoin = $('#txtCoin').val();
     let quantity = $('#txtQuantity').val();
@@ -489,6 +492,7 @@ function exchange_apply() {
     let exccode = $(`#txtTypeExchange option[value="${excId}"]`).attr('data-content').split('|')[0];
     let strid = $('#txtStoreSource').val();
     let strName = $(`#txtStoreSource option[value="${strid}"]`).text();
+    let prodmarc = $('#txtMarca').val();
     let comment = $('#txtComments').val();
     let serbran = $('#txtMarca').val();
     let sercostimp = $('#txtCostImp').val();
@@ -498,15 +502,17 @@ function exchange_apply() {
     //console.log('Paso 1 ', serie);
     //update_array_products(prdId, serie);  // REVISAR EL DETALLE DE ESTA FUNCION
 
-    if (quantity>1){
+    if (quantity > 1) {
         for (var i = 0; i < quantity; i++) {
-        sersku = prdSku + refil(serie++, 4);
-        update_array_products(prdId, serie);  // REVISAR EL DETALLE DE ESTA FUNCION
-        let par = `
+            sersku = prdSku + refil(serie++, 4);
+            update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
+            let par = `
         [{
             "support"  : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
             "sersku"   : "${sersku}",
             "prodser"  : "${serser}",
+            "prodpeti" : "${prodpeti}",
+            "prodimpo" : "${prodimpo}",
             "sercost"  : "${sercost}",
             "prodnme"  : "${prdName}",
             "prodqty"  : "${'1'}",
@@ -520,8 +526,8 @@ function exchange_apply() {
             "serpetimp"  : "${serpetimp}"
 
         }]`;
-        //console.log(sersku);
-        fill_table(par);
+            //console.log(sersku);
+            fill_table(par);
         }
     } else {
         let par = `
@@ -541,12 +547,11 @@ function exchange_apply() {
             "sercostimp"  : "${sercostimp}",
             "serpetimp"  : "${serpetimp}"
         }]`;
-    //console.log(par);
-    fill_table(par);
+        //console.log(par);
+        fill_table(par);
     }
     clean_selectors();
 }
-
 
 // Llena la tabla de movimientos
 function fill_table(par) {
@@ -564,12 +569,12 @@ function fill_table(par) {
             prodname: par[0].prodnme,
             prodcant: `<span>${par[0].prodqty}</span>`,
             prodcost: par[0].sercost,
-            prodseri: '<input class="serprod" type="text" id="PS-'+ par[0].prodser + '" value="'+ par[0].prodser +'">',
-            //prodseri: par[0].prodser,
+            //prodseri: par[0].prodser, 
+            prodseri: '<input class="serprod fieldIn" type="text" id="PS-' + par[0].prodser + '" value="' + par[0].prodser + '">',
             prodpeti: par[0].serpetimp,
             prodimpo: par[0].sercostimp,
             codexcsc: par[0].excodsr,
-            stnamesc: par[0].stnmesr, 
+            stnamesc: par[0].stnmesr,
             provname: par[0].provname,
             factname: par[0].factname,
             prodmarc: par[0].serbran,
