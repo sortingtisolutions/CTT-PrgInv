@@ -7,6 +7,7 @@
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 
+<style>#listInvoice{position:absolute;top: 23px; left: 0px; right:10px; background-color:#ffffff; border:1px solid #ddd; border-radius: 3px; max-height:120px; padding:5px; z-index:1000;}</style>
 
 <!-- Start Contenedor Listado de PRODUCTOS  -->
     <div class="container-fluid">
@@ -322,17 +323,14 @@
                     </tr> -->
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Factura:</td>
-                        <td class="data">
+                        <td class="data" style="position:relative;">
                             <input id="txtDocIdSerie" name="txtDocIdSerie" class="textbox" style="width:300px">
-                            <!-- <label for="txtDocIdSerie">Selecciona la FACTURA</label>  -->
-                            
+                            <input type="hidden" id="txtDocId" name="txtDocId">
                             <input type="hidden" id="txtDcpIdSerie" name="txtDcpIdSerie">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Selecciona la factura correspondiente al producto</span>
-                        </td>
                         <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
                         </div>
+                        </td>
                     </tr>
 
                     <tr>
@@ -348,8 +346,6 @@
         </div>
     </div>
 <!-- End Ventana modal AGREGA O MODIFICA PRODUCTO -->
-
-
 
 
 <!-- Start Ventana modal ELIMINA PRODUCTO -->

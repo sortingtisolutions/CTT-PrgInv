@@ -45,13 +45,18 @@
                     </div>
 -->
                     <div class="row list-finder hide-items">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <div class="box-items-list" id="boxProducts">Productos
+                        <!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <div id="boxProducts" type="text" class="box-items-list" >Productos
                                     <i class="fas fa-angle-down"></i>
                                 </div> 
-                        </div>
-                        <div class="list-group list-hide">
-                            <div class="list-items" id="listProducts"></div>
+                        </div> -->
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <input id="boxProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" >
+                                <label for="boxProducts">Productos</label>
+                                <input type="hidden" id="boxIdProducts" name="boxIdProducts">
+                            </div>
+                        <div id="listProducts" class="list-group list-hide">
+                            <div class="list-items" ></div>
                         </div>
                     </div>
 
@@ -76,14 +81,13 @@
                             <label for="txtComments">Comentarios</label>
                         </div>
                     </div>
-                    <!-- <div class="row">
+                    <div class="row">
                         <div class="col-md-12 mb-5">
-                            <button type="button" class="btn btn-sm btn-primary disabled" id="btn_exchange">Agregar</button>
+                            <button id="btn_exchange" type="button" class="btn btn-sm btn-primary" >Agregar</button>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
-
 
             <div class="mvst_table">
                 <h1>Salidas de almacenes</h1>

@@ -154,9 +154,7 @@ class ProjectDetailsModel extends Model
                 AND pjtdt_prod_sku = 'Pendiente';";
         return $this->db->query($qry);
     }
-
-
-    
+ 
 // Actualiza las fechas del proyecto
     public function UpdatePeriodProject($params)
     {

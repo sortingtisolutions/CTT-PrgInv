@@ -120,7 +120,7 @@ class MoveStoresInController extends Controller
     public function listInvoice($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listInvoice();
+        $result = $this->model->listInvoice($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;

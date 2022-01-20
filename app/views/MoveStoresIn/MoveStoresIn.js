@@ -134,9 +134,9 @@ function getSuppliers() {
     fillField(pagina, par, tipo, selector);
 }
 // Solicita los documentos factura
-function getInvoice() {
+function getInvoice(id) {
     var pagina = 'MoveStoresIn/listInvoice';
-    var par = `[{"store":""}]`;
+    var par = `[{"extId":"${id}"}]`;
     var tipo = 'json';
     var selector = putInvoiceList;
     fillField(pagina, par, tipo, selector);
@@ -190,13 +190,13 @@ function putTypeExchange(dt) {
         let id = $(this).val();
         link = $(`#txtTypeExchange option[value="${id}"]`).attr('data-content').split('|')[2];
         code = $(`#txtTypeExchange option[value="${id}"]`).attr('data-content').split('|')[5];
-        setting_interface(code);
+        setting_interface(code,id);
         relocation_products();
         validator();
     });
 }
 /**  ++++++  configura la interfasede inputs requeridos */
-function setting_interface(code) {
+function setting_interface(code,id) {
     //console.log('CODE ', code);
     code.substring(1, 2) == '0' ? $('.pos1').addClass('hide-items') : $('.pos1').removeClass('hide-items');
     code.substring(2, 3) == '0' ? $('.pos2').addClass('hide-items') : $('.pos2').removeClass('hide-items');
@@ -205,7 +205,7 @@ function setting_interface(code) {
     code.substring(5, 6) == '0' ? $('.pos5').addClass('hide-items') : $('.pos5').removeClass('hide-items');
     code.substring(6, 7) == '0' ? $('.pos6').addClass('hide-items') : $('.pos6').removeClass('hide-items');
     getSuppliers();
-    getInvoice();
+    getInvoice(id);
 }
 
 // Dibuja los almacenes

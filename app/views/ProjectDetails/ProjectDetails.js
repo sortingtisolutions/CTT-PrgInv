@@ -2065,8 +2065,9 @@ function add_new_product(pd) {
 
     let dytritt = daytrip / 2;
     let daysini = dytritt + daytest;
-    let daysfnl = dytritt + daybase - 1;
+   // let daysfnl = (dytritt + daybase)-1;
 
+    let daysfnl = dytritt + daybase - 1;
     let prjDStr = moment(proj[0].pjt_date_start, 'DD/MM/YYYY').subtract('days', daysini).format('YYYYMMDD');
     let prjDEnd = moment(proj[0].pjt_date_start, 'DD/MM/YYYY').add('days', daysfnl).format('YYYYMMDD');
 
@@ -2090,6 +2091,7 @@ function add_new_product(pd) {
         "serReserveEnd"         : "${prjDEnd}"
     }]
     `;
+    //console.log(par);
     var pagina = 'ProjectDetails/addNewProduct';
     var tipo = 'json';
     var selector = shownewproducts;
