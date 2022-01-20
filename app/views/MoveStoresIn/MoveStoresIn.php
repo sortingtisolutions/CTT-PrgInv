@@ -123,7 +123,7 @@
                             <label for="txtMarca">Marca</label>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row pos3 hide-items">
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos5 hide-items">
                         <input id="txtCostImp" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
                             <label for="txtCostImp">Costo Importación</label>

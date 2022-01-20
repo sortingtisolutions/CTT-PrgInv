@@ -365,7 +365,6 @@ function putSupplierList(dt) {
     });
 
     $('#txtSuppliers').on('focus', function () {
-       // console.log('FOCUS');
         $('#listSupplier').slideDown('fast');
     });
 
@@ -440,11 +439,11 @@ function validator() {
      //validacion de cantidad para agregar serie mayor a 1
     if ($('#txtQuantity').val() > 1 ) { // && $('#txtSerie').val() == 0
         $('#txtSerie').attr('disabled', true).val('');
-        $('#txtCostImp').attr('disabled', true).val('');
+        //$('#txtCostImp').attr('disabled', true).val('');
         
     } else if ($('#txtQuantity').val() == 1) {
         $('#txtSerie').attr('disabled', false);
-        $('#txtCostImp').attr('disabled', false);
+        //$('#txtCostImp').attr('disabled', false);
 
     } else {
         ky = 1;
@@ -491,10 +490,12 @@ function exchange_apply() {
     let strid = $('#txtStoreSource').val();
     let strName = $(`#txtStoreSource option[value="${strid}"]`).text();
     let comment = $('#txtComments').val();
+    let serbran = $('#txtMarca').val();
+    let sercostimp = $('#txtCostImp').val();
+    let serpetimp = $('#txtPedimento').val();
 
     //serie++;
     //console.log('Paso 1 ', serie);
-    
     //update_array_products(prdId, serie);  // REVISAR EL DETALLE DE ESTA FUNCION
 
     if (quantity>1){
@@ -513,7 +514,11 @@ function exchange_apply() {
             "stnmesr"  : "${strName}",
             "provname" : "${supplier}",
             "factname" : "${docinvoice}",
-            "comment"  : "${comment}"
+            "comment"  : "${comment}",
+            "serbran"  : "${serbran}",
+            "sercostimp"  : "${sercostimp}",
+            "serpetimp"  : "${serpetimp}"
+
         }]`;
         //console.log(sersku);
         fill_table(par);
@@ -531,7 +536,10 @@ function exchange_apply() {
             "stnmesr"  : "${strName}",
             "provname" : "${supplier}",
             "factname" : "${docinvoice}",
-            "comment"  : "${comment}"
+            "comment"  : "${comment}",
+            "serbran"  : "${serbran}",
+            "sercostimp"  : "${sercostimp}",
+            "serpetimp"  : "${serpetimp}"
         }]`;
     //console.log(par);
     fill_table(par);
@@ -558,11 +566,14 @@ function fill_table(par) {
             prodcost: par[0].sercost,
             prodseri: '<input class="serprod" type="text" id="PS-'+ par[0].prodser + '" value="'+ par[0].prodser +'">',
             //prodseri: par[0].prodser,
+            prodpeti: par[0].serpetimp,
+            prodimpo: par[0].sercostimp,
             codexcsc: par[0].excodsr,
             stnamesc: par[0].stnmesr, 
             provname: par[0].provname,
             factname: par[0].factname,
-            comments: `<div>${par[0].comment}</div>`,
+            prodmarc: par[0].serbran,
+            comments: `<div>${par[0].comment}</div>`
         })
         .draw();
 
@@ -605,6 +616,9 @@ function clean_selectors() {
     $('#txtCost').val('');
     $('#txtQuantityStored').html('&nbsp;');
     $('#txtComments').val('');
+    $('#txtMarca').val('');
+    $('#txtCostImp').val('');
+    $('#txtPedimento').val('');
 }
 /** Actualiza la cantidad de cada producto dentro del arreglo */
 function update_array_products(id, sr) {
