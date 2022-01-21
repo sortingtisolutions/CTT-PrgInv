@@ -109,6 +109,10 @@ public function NextExchange()
         $ser_cost           = $this->db->real_escape_string($param['cos']);
         $sup_id             = $this->db->real_escape_string($param['sup']);
         $doc_id             = $this->db->real_escape_string($param['doc']);
+        $pet_id             = $this->db->real_escape_string($param['pet']);
+        $cpe_id             = $this->db->real_escape_string($param['cpe']);
+        $bra_id             = $this->db->real_escape_string($param['bra']);
+
         $exc_employee_name	= $this->db->real_escape_string($employee_data[2]);
         $ser_status         = '1';
         $ser_situation      = 'D';
@@ -119,9 +123,9 @@ public function NextExchange()
         
 		$qry1 = "INSERT INTO ctt_series (
                     ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
-                    ser_behaviour, prd_id, sup_id, cin_id
-                ) VALUES (
-                    '$exc_sku_product', '$exc_serie_product', '$ser_cost', '$ser_status', '$ser_situation', '$ser_stage', '$ser_behaviour', '$prd_id', '$sup_id', '$cin_id');";
+                    ser_behaviour, prd_id, sup_id, cin_id,ser_brand,ser_cost_import,ser_import_petition
+                ) VALUES ('$exc_sku_product', '$exc_serie_product', '$ser_cost', '$ser_status', '$ser_situation', 
+                '$ser_stage', '$ser_behaviour', '$prd_id', '$sup_id', '$cin_id', '$bra_id', '$cpe_id', '$pet_id' );";
 
         $this->db->query($qry1);
         $serId = $this->db->insert_id;
