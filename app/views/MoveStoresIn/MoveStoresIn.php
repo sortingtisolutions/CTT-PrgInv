@@ -65,12 +65,13 @@
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" >
                                     <label for="txtInvoice">Factura</label>
-                                    <input type="hidden" id="txtIdInvoices" name="txtIdInvoices">
-                    <!--                <input type="hidden" id="txtNextSerie" name="txtNextSerie">  -->
+                                    <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
+                    
                             </div>
                             <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
                             </div>
+                            <!-- <input type="text" id="txtIdInvoices" name="txtIdInvoices"> -->
                     </div>
 
                     <!-- Factura posición 3 -->
@@ -123,7 +124,7 @@
                             <label for="txtMarca">Marca</label>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row pos3 hide-items">
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos5 hide-items">
                         <input id="txtCostImp" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
                             <label for="txtCostImp">Costo Importación</label>

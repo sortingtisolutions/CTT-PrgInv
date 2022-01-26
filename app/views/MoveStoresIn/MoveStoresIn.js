@@ -1,5 +1,4 @@
 var seccion = '';
-///const folio = uuidv4();
 let folio;
 let = pr = [];
 let = link = '';
@@ -305,7 +304,7 @@ function putProducts(dt) {
 function putInvoiceList(dt) {
     var fc = $('#txtInvoice').offset();
     $('#listInvoice .list-items').html('');
-    //console.log(fc);
+    //console.log(dt);
     //$('.list-group #listInvoice').css({top: fc.top + 40 + 'px'});
     $('#listInvoice').css({top: fc.top + 30 + 'px'});
     $('#listInvoice').slideUp('100', function () {
@@ -314,7 +313,7 @@ function putInvoiceList(dt) {
     });
 
     $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.doc_id}" data_serie="${u.doc_id}" data_complement="${u.doc_id}|${u.doc_name}">${u.doc_name}</div>`;
+        let H = `<div class="list-item" id="${u.doc_id}" data_complement="${u.doc_id}|${u.doc_name}">${u.doc_name}</div>`;
         $('#listInvoice .list-items').append(H);
     });
 
@@ -340,9 +339,10 @@ function putInvoiceList(dt) {
 
     $('#listInvoice .list-item').on('click', function () {
         let prdNm = $(this).html();
-        let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
+        let prdId = $(this).attr('id');
+        //console.log(prdId);
         $('#txtInvoice').val(prdNm);
-        $('#txtIdInvoices').val(prdId);
+        $('#txtIdInvoice').val(prdId);
         $('#listInvoice').slideUp(100);
         validator();
     });
@@ -359,12 +359,12 @@ function putSupplierList(dt) {
     });
 
     $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.sup_id}" data_serie="${u.sup_id}" data_complement="${u.sup_id}|${u.sup_business_name}">${u.sup_business_name}</div>`;
+        let H = `<div class="list-item" id="${u.sup_id}" data_complement="${u.sup_id}|${u.sup_business_name}">${u.sup_business_name}</div>`;
         $('#listSupplier .list-items').append(H);
     });
 
     $('#txtSuppliers').on('focus', function () {
-        // console.log('FOCUS');
+        
         $('#listSupplier').slideDown('fast');
     });
 
@@ -385,7 +385,7 @@ function putSupplierList(dt) {
 
     $('#listSupplier .list-item').on('click', function () {
         let prdNm = $(this).html();
-        let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
+        let prdId = $(this).attr('id');
         //console.log('selecciona elemento', prdId,'---', prdNm);
         $('#txtSuppliers').val(prdNm);
         $('#txtIdSuppliers').val(prdId);
@@ -427,7 +427,7 @@ function validator() {
         msg += 'Debes seleccionar un producto';
     }
 
-    if ($('#txtIdInvoices').val() == 0) {
+    if ($('#txtIdInvoice').val() == 0) {
         ky = 1;
         msg += 'Debes seleccionar un producto';
     }
@@ -441,10 +441,12 @@ function validator() {
     if ($('#txtQuantity').val() > 1) {
         // && $('#txtSerie').val() == 0
         $('#txtSerie').attr('disabled', true).val('');
-        $('#txtCostImp').attr('disabled', true).val('');
+        //$('#txtCostImp').attr('disabled', true).val('');
+        
     } else if ($('#txtQuantity').val() == 1) {
         $('#txtSerie').attr('disabled', false);
-        $('#txtCostImp').attr('disabled', false);
+        //$('#txtCostImp').attr('disabled', false);
+
     } else {
         ky = 1;
         msg += ' Las series se capturan individualmente en la tabla';
@@ -462,7 +464,7 @@ function validator() {
         ky = 1;
         msg += 'Debes indicar el tipo de moneda';
     }
-    console.log(ky, msg);
+    //console.log(ky, msg);
 
     if (ky == 0) {
         $('#btn_exchange').removeClass('disabled');
@@ -485,18 +487,22 @@ function exchange_apply() {
     let sercost = $('#txtCost').val();
     let sercoin = $('#txtCoin').val();
     let quantity = $('#txtQuantity').val();
-    let supplier = $('#txtIdSuppliers').val().split('|')[2];
-    let docinvoice = $('#txtInvoice').val();
+    let supplier = $('#txtIdSuppliers').val();
+    let suppliernm = $('#txtSuppliers').val();
+    let docinvoice = $('#txtIdInvoice').val();
+    let docinvoicenm = $('#txtInvoice').val();
     let excId = $('#txtTypeExchange').val();
     let exccode = $(`#txtTypeExchange option[value="${excId}"]`).attr('data-content').split('|')[0];
     let strid = $('#txtStoreSource').val();
     let strName = $(`#txtStoreSource option[value="${strid}"]`).text();
-    let prodmarc = $('#txtMarca').val();
+    //let prodmarc = $('#txtMarca').val();
     let comment = $('#txtComments').val();
+    let serbran = $('#txtMarca').val();
+    let sercostimp = $('#txtCostImp').val();
+    let serpetimp = $('#txtPedimento').val();
 
-    //serie++;
+    serie++;
     //console.log('Paso 1 ', serie);
-
     //update_array_products(prdId, serie);  // REVISAR EL DETALLE DE ESTA FUNCION
 
     if (quantity > 1) {
@@ -515,12 +521,15 @@ function exchange_apply() {
             "prodqty"  : "${'1'}",
             "excodsr"  : "${exccode}",
             "stnmesr"  : "${strName}",
-            "provname" : "${supplier}",
-            "factname" : "${docinvoice}",
-            "prodmarc" : "${prodmarc}",
-            "comment"  : "${comment}"
+            "provname" : "${suppliernm}",
+            "factname" : "${docinvoicenm}",
+            "comment"  : "${comment}",
+            "serbran"  : "${serbran}",
+            "sercostimp"  : "${sercostimp}",
+            "serpetimp"  : "${serpetimp}"
+
         }]`;
-            //console.log(sersku);
+            //console.log(par);
             fill_table(par);
         }
     } else {
@@ -534,9 +543,12 @@ function exchange_apply() {
             "prodqty"  : "${quantity}",
             "excodsr"  : "${exccode}",
             "stnmesr"  : "${strName}",
-            "provname" : "${supplier}",
-            "factname" : "${docinvoice}",
-            "comment"  : "${comment}"
+            "provname" : "${suppliernm}",
+            "factname" : "${docinvoicenm}",
+            "comment"  : "${comment}",
+            "serbran"  : "${serbran}",
+            "sercostimp"  : "${sercostimp}",
+            "serpetimp"  : "${serpetimp}"
         }]`;
         //console.log(par);
         fill_table(par);
@@ -560,15 +572,17 @@ function fill_table(par) {
             prodname: par[0].prodnme,
             prodcant: `<span>${par[0].prodqty}</span>`,
             prodcost: par[0].sercost,
+            //prodseri: par[0].prodser, 
             prodseri: '<input class="serprod fieldIn" type="text" id="PS-' + par[0].prodser + '" value="' + par[0].prodser + '">',
-            prodpeti: par[0].prodpeti,
-            prodimpo: par[0].prodimpo,
+            prodpeti: par[0].serpetimp,
+            prodimpo: '<input class="serprod fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">',
+            //prodimpo: par[0].sercostimp,
             codexcsc: par[0].excodsr,
             stnamesc: par[0].stnmesr,
             provname: par[0].provname,
             factname: par[0].factname,
-            prodmarc: par[0].prodmarc,
-            comments: `<div>${par[0].comment}</div>`,
+            prodmarc: par[0].serbran,
+            comments: `<div>${par[0].comment}</div>`
         })
         .draw();
 
@@ -611,6 +625,9 @@ function clean_selectors() {
     $('#txtCost').val('');
     $('#txtQuantityStored').html('&nbsp;');
     $('#txtComments').val('');
+    $('#txtMarca').val('');
+    $('#txtCostImp').val('');
+    $('#txtPedimento').val('');
 }
 /** Actualiza la cantidad de cada producto dentro del arreglo */
 function update_array_products(id, sr) {
@@ -631,12 +648,16 @@ function read_exchange_table() {
             let seriesku = $(this).attr('data-content').split('|')[3];
             let prodname = $($(u).find('td')[2]).text();
             let quantity = $($(u).find('td')[3]).text();
+            let sericost = $($(u).find('td')[4]).text();
             let serienum = $($(u).find('td')[5]).children('.serprod').val();
             //let serienum = $('.serprod').val();
-            let storname = $($(u).find('td')[7]).text();
-            let comments = $($(u).find('td')[8]).text();
-            let codeexch = $($(u).find('td')[6]).text();
-            let sericost = $($(u).find('td')[4]).text();
+            let petition = $($(u).find('td')[6]).text();
+            let costpeti = $($(u).find('td')[7]).children('.serprod').val();
+            let codeexch = $($(u).find('td')[8]).text();
+            let storname = $($(u).find('td')[9]).text();
+            let serbrand = $($(u).find('td')[12]).text();
+            let comments = $($(u).find('td')[13]).text();
+           
             let typeexch = $(this).attr('data-content').split('|')[1];
             let producid = $(this).attr('data-content').split('|')[0];
             let storesid = $(this).attr('data-content').split('|')[2];
@@ -644,15 +665,15 @@ function read_exchange_table() {
             let suppliid = $(this).attr('data-content').split('|')[5];
             let docinvoi = $(this).attr('data-content').split('|')[6];
 
-            let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}`;
-            //console.log(truk);
+            let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}|${petition}|${costpeti}|${serbrand}`;
+            console.log(truk);
             build_data_structure(truk);
         });
     }
 }
 
 function putNextExchangeNumber(dt) {
-    console.log(dt);
+    //console.log(dt);
     folio = dt;
     read_exchange_table();
 }
@@ -675,12 +696,16 @@ function build_data_structure(pr) {
     "cos" :  "${el[11]}",
     "cin" :  "${el[12]}",
     "sup" :  "${el[13]}",
-    "doc" :  "${el[14]}"
+    "doc" :  "${el[14]}",
+    "pet" :  "${el[15]}",
+    "cpe" :  "${el[16]}",
+    "bra" :  "${el[17]}"
 }]`;
     console.log(' Antes de Insertar', par);
     save_exchange(par);
 }
-function build_update_store_data(pr) {
+
+/* function build_update_store_data(pr) {
     let el = pr.split('|');
     let par = `
 [{
@@ -691,7 +716,7 @@ function build_update_store_data(pr) {
 }]`;
 
     update_store(par);
-}
+} */
 
 /** Graba intercambio de almacenes */
 function save_exchange(pr) {
@@ -703,14 +728,14 @@ function save_exchange(pr) {
     fillField(pagina, par, tipo, selector);
 }
 
-function update_store(ap) {
+/* function update_store(ap) {
     // console.log(ap);
     var pagina = 'MoveStoresIn/UpdateStores';
     var par = ap;
     var tipo = 'html';
     var selector = updated_stores;
     fillField(pagina, par, tipo, selector);
-}
+} */
 
 function exchange_result(dt) {
     $('.resFolio').text(refil(folio, 7));
@@ -737,13 +762,6 @@ function updated_stores(dt) {
 }
 
 /* Generación del folio  */
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (Math.random() * 16) | 0,
-            v = c == 'x' ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-    });
-}
 
 /**  ++++ Omite acentos para su facil consulta */
 function omitirAcentos(text) {
