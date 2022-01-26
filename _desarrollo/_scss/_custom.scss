@@ -226,7 +226,7 @@ ul {
 		border-radius: 6px;
 		padding: 8px 16px;
 		font-weight: 900;
-		font-size: 0.8rem;
+		font-size: 0.8em;
 		color: #212529;
 
 		i {
@@ -700,8 +700,9 @@ table {
 				}
 
 				.items-just {
-					display: inline-block;
-					// float: right;
+					display: block ;
+					float: right;
+
 					.editable {
 						border: 1px solid #dddddd;
 						border-radius: 4px;
@@ -802,6 +803,159 @@ table {
 		}
 	}
 }
+
+.box_comments {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+	background-color: rgba(#FFFFFF, 0.4);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+	
+	.form_comments {
+		width: 600px;
+		height: 300px;
+		padding: 20px;
+		background-color: rgba(#DDDDFD, 0.9);
+		border-radius: 10px;
+		box-shadow: 1px 10px 20px rgba(#000000, 0.3);
+		transition: all 0.8s ease;
+
+
+		textarea {
+			width: 100%;
+			height: 150px;
+			border:none;
+			border-radius: 5px;
+			font-size: 1.1em;
+			padding: 8px;
+			outline: none;
+			color: $setColor;
+		}
+	}
+}
+.devolucion  {
+	color: #EE0000 !important;
+	font-weight: 700;
+}
+.box_comments_show  {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+	background-color: rgba(#FFFFFF, 0.4);
+	display: flex;
+
+	.form_comments_show {
+		position: absolute;
+		top:20px;
+		left:40px;
+		bottom: 40px;
+		width: 100%;
+		padding: 20px;
+		max-width: 800px;
+		background-color: rgba(#DDDDFD, 0.9);
+		border-radius: 10px;
+		box-shadow: 1px 10px 20px rgba(#000000, 0.3);
+	}
+
+	.comments_area  {
+		position: absolute;
+		top: 80px;
+		left: 20px;
+		right: 20px;
+		bottom: 50px;
+		padding: 10px;
+		background-color: #FFFFFF;
+		overflow: auto;
+
+		.commet_item  {
+			width: 100%;
+			display: grid;
+			margin-bottom: 20px;
+			color: #999999;
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-rows: auto;
+			grid-template-areas: "com_comment com_comment com_comment" "com_user com_date com_id";
+			gap: 10px;
+			border-bottom: 1px dashed rgba($setColor, 0.2);
+
+			.com_comment  {
+				grid-area: com_comment;
+				min-height: 30px;
+				font-size: 1.1em;
+				color: #000000;
+			}
+			.com_user  {
+				grid-area: com_user;
+				text-align: left;
+				font-size: 0.9em;
+			}
+			.com_date  {
+				grid-area: com_date;
+				text-align: center;
+				font-size: 0.9em;
+			}
+			.com_id  {
+				grid-area: com_id;
+				text-align: right;
+				font-size: 0.9em;
+			}
+		}
+	}
+
+	button  {
+		position: absolute;
+		bottom: 0px;
+	}
+
+}
+
+.rtnprod_deep {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+	background-color: rgba(#FFFFFF, 0.4);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.rtnprod_frame {
+		width: 600px;
+		height: 400px;
+		padding: 20px;
+		background-color: rgba(#DDDDFD, 0.9);
+		border-radius: 10px;
+		box-shadow: 1px 10px 20px rgba(#000000, 0.3);
+		transition: all 0.8s ease;
+
+		input,
+		textarea {
+			
+			border:none;
+			border-radius: 5px;
+			font-size: 1.1em;
+			padding: 8px;
+			outline: none;
+			color: $setColor;
+		}
+		textarea {
+			width: 100%;
+			height: 150px;
+		}
+	}
+}
+
 
 /* Scrollbar custom */
 /* size */

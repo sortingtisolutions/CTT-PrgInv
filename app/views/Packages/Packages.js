@@ -13,7 +13,7 @@ function inicial() {
     getCategory();
     getSubcategory();
     getProducts();
-    getPackages();
+    getPackages(0);
     //console.log('PASO 1');
     $('#txtPackageName').on('change', function () {
         validator_part01();
@@ -104,7 +104,7 @@ function setting_table_products() {
 // Solicita las categorias
 function getCategory() {
     var pagina = 'Packages/listCategories';
-    var par = '[{"parm":""}]';
+    var par = `[{"param":""}]`;
     var tipo = 'json';
     var selector = putCategory;
     fillField(pagina, par, tipo, selector);
@@ -118,9 +118,9 @@ function getSubcategory() {
     fillField(pagina, par, tipo, selector);
 }
 // Solicita los paquetes
-function getPackages() {
+function getPackages(catId) {
     var pagina = 'Packages/listPackages';
-    var par = `[{"pckId":""}]`;
+    var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putPackages;
     fillField(pagina, par, tipo, selector);
@@ -142,6 +142,7 @@ function putCategory(dt) {
             let H = `<option value="${u.cat_id}" data-content="${u.cat_id}">${u.cat_name}</option>`;
             $('#txtCategoryPack').append(H);
             $('#txtCategoryProduct').append(H);
+            $('#txtCategoryList').append(H);
         });
     }
 
@@ -159,6 +160,11 @@ function putCategory(dt) {
         let id = $(this).val();
         selSubcategoryProduct(id);
         // validator_part02();
+    });
+
+    $('#txtCategoryList').on('change', function () {
+        let catId = $(this).val();
+        getPackages(catId);
     });
 }
 // Mantiene en memoria el set de subcategorias
@@ -204,13 +210,20 @@ function drawProducts(str) {
 
 // Llena la tabla de paquetes
 function putPackages(dt) {
+    $('#txtIdPackages').val(0);
+    $('.form_secundary').slideUp('slow', function () {
+        $('.form_primary').slideDown('slow');
+        active_params();
+    });
+    $('#tblProducts').DataTable().rows().remove().draw();
+
+    let tabla = $('#tblPackages').DataTable();
+    tabla.rows().remove().draw();
     if (dt[0].prd_id != '0') {
-        let tabla = $('#tblPackages').DataTable();
         $.each(dt, function (v, u) {
             tabla.row
                 .add({
-                    editable: `<i class="fas fa-pen choice pack modif" id="E-${u.prd_id}"></i>
-                           <i class="fas fa-times-circle choice pack kill" id="D-${u.prd_id}"></i>`,
+                    editable: `<i class="fas fa-pen choice pack modif" id="E-${u.prd_id}"></i><i class="fas fa-times-circle choice pack kill" id="D-${u.prd_id}"></i>`,
                     pack_sku: `<span class="hide-support" id="SKU-${u.prd_sku}">${u.prd_id}</span>${u.prd_sku}`,
                     packname: u.prd_name,
                     packpric: u.prd_price,

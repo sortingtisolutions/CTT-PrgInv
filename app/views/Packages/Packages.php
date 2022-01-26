@@ -113,11 +113,19 @@
             </div>
 
 
-            <div class="mvst_table">
-                <h1>Paquetes</h1>
+            <div class="mvst_table row">
+            <div class="row rowTop">
+                        <h1>Paquetes</h1>
+                        
+                        <select id="txtCategoryList" class="topList">
+                            <option value="0">SELECCIONA CATÁLOGO</option>
+                        </select>
+                        
+                    </div>
                 <div class="double-column">
                     <div class="left-side">
                         <h3>Paquetes</h3>
+                       
                         <table class="display compact nowrap"  id="tblPackages"  style="width:95%">
                             <thead>
                                 <tr>

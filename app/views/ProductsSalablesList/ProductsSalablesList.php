@@ -45,11 +45,13 @@
             <table class="display compact nowrap"  id="tblSaleDetail" style="min-width: 640px">
                 <thead>
                     <tr>
+                        <th style="width: 20px"></th>    
                         <th style="width: 100px">SKU</th>
                         <th style="width: 400px">Producto</th>
                         <th style="width:  40px">Cant.</th>
                         <th style="width:  50px">Precio</th>
                         <th style="width:  50px">Importe</th>
+                        <th style="width: 100px">Fecha</th>
                     </tr>
                 </thead>
                 <tbody></tbody>

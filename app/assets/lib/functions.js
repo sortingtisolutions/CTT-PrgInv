@@ -202,3 +202,49 @@ function getAbsolutePath() {
     var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
     return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
 }
+
+function addComments(scc, mid) {
+    let H = `
+    <div class="box_comments">
+        <div class="form_comments">
+            <h1>Observaciones</h1>
+            <textarea id="txtComments"></textarea>
+            <button class="bn btn-ok" id="comApply">Aceptar</button>
+            <button class="bn btn-cn" id="comCancel">Cancelar</button>
+        </div>
+    </div>
+    `;
+
+    $('body').append(H);
+
+    $('#comCancel').on('click', function () {
+        $('.box_comments').remove();
+    });
+
+    $('#comApply').on('click', function () {
+        let cmm = $('#txtComments').val();
+        saveComment(scc, mid, cmm);
+        $('.box_comments').remove();
+    });
+}
+
+function showComments(mid) {
+    console.log(mid);
+    let H = `
+    <div class="box_comments_show">
+        <div class="form_comments_show">
+            <h1>Observaciones</h1>
+            <div class="comments_area"></div>
+            <button class="bn btn-ok" id="comClose">Cerrar</button>
+        </div>
+    </div>
+    `;
+
+    $('body').append(H);
+
+    getComments(mid);
+
+    $('#comClose').on('click', function () {
+        $('.box_comments_show').remove();
+    });
+}

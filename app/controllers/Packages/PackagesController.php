@@ -61,10 +61,10 @@ class PackagesController extends Controller
     }
 
 // Lista de paquetes
-    public function listPackages()
+    public function listPackages($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listPackages();
+        $result = $this->model->listPackages($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;

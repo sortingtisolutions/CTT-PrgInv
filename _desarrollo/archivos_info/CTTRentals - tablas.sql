@@ -88,6 +88,19 @@ PRIMARY KEY (`cin_id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Tabla catalogo de monedas';
 
 
+DROP TABLE `cttapp_cire`.`ctt_comments`;
+CREATE TABLE `cttapp_cire`.`ctt_comments` (
+    `com_id`                INT NOT NULL AUTO_INCREMENT     COMMENT 'Id del comentario',
+    `com_source_section`    VARCHAR(50)                     COMMENT 'Sección a la que pertenece',
+    `com_action_id`         INT                             COMMENT 'Id del movimiento de la sección',
+    `com_date`              DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de registro del comentario',
+    `com_user`              VARCHAR(50)                     COMMENT 'Nombre del empleado quee generó el comentario',
+    `com_comment`           VARCHAR(300)                    COMMENT 'Comentario',
+    `com_status`            INT DEFAULT 0                   COMMENT 'Estatus del comentario 1-aplicado 0-no aplicado',
+PRIMARY KEY (`com_id`)) 
+ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Comentarios de las secciones del sistema';
+
+
 DROP TABLE `cttapp_cire`.`ctt_customers`;
 CREATE TABLE `cttapp_cire`.`ctt_customers` (
     `cus_id`                INT NOT NULL AUTO_INCREMENT     COMMENT 'Id del cliente',
@@ -421,6 +434,8 @@ CREATE TABLE `cttapp_cire`.`ctt_sales_details` (
     `sld_name`              VARCHAR(100) NULL               COMMENT 'Nombre del producto',
     `sld_price`             DECIMAL(10,2) NULL              COMMENT 'Precio unitario del producto',
     `sld_quantity`          INT NOT NULL                    COMMENT 'Cantidad',
+    `sld_situation`         VARCHAR(50) NULL                COMMENT 'Situación del producto',
+    `sld_date`              DATETIME NULL DEFAULT CURRENT_TIMESTAMP  COMMENT 'Fecha de registro del movimiento',
     `sal_id`                INT NOT NULL                    COMMENT 'Id de la venta relacion ctt_sales',
     `ser_id`                INT NULL                        COMMENT 'Id de la serie relacion ctt_series',
 PRIMARY KEY (`sld_id`))
