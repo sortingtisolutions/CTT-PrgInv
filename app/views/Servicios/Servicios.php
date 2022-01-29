@@ -22,7 +22,7 @@
 
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="NomServicio" name="NomServicio" type="text" class="form-control form-control-sm" required >
+									<input id="NomServicio" name="NomServicio" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
 									<label for="NomServicio">Nombre Servicio</label>
 								</div>
 							</div>
@@ -30,7 +30,7 @@
                      
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="DesServicio" name="DesServicio" type="text" class="form-control form-control-sm" required >
+									<input id="DesServicio" name="DesServicio" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
 									<label for="DesServicio">Descripcion Servicio</label>
 								</div>
 							</div>
@@ -57,10 +57,10 @@
 								<table id="ServiciosTable" class="display compact nowrap" style="width:100%">         
 										<thead>
 											<tr>
-													<th style="width: 30px"></th>
-													<th style="width: 30px">Id</th>
-													<th style="width: auto">Nombre</th>
-                                       <th style="width: auto">Descripcion</th>
+												<th style="width: 30px"></th>
+												<th style="width: 30px">Id</th>
+												<th style="width: auto">Nombre</th>
+                                       			<th style="width: auto">Descripcion</th>
 											</tr>
 										</thead>
 										<tbody id="tablaServiciosRow">

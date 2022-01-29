@@ -32,7 +32,7 @@ public function SaveDocumento($request_params)
 		$sql = "INSERT INTO ctt_documents(
 				doc_code, doc_name, doc_size, doc_document, doc_content_type, doc_type, dot_id, doc_admission_date)
 				VALUES (
-				'$Code', '$newFileName', $fileSize, '$file', '$fileType', '$fileExtension', '$tipoDocumento','$fechaadmision');";
+					UPPER('$Code'), UPPER('$newFileName'), $fileSize, '$file', '$fileType', '$fileExtension', '$tipoDocumento','$fechaadmision');";
 
 		$this->db->query($sql);
 		$lastid = $this->db->insert_id;
@@ -138,8 +138,8 @@ public function SaveDocumento($request_params)
 			
 					$newFileName = $fileName;
 
-					$qry = "UPDATE ctt_documents SET doc_code = '".$request_params['CodDocumento']."'
-					,doc_name = '".$request_params['NomDocumento']."'
+					$qry = "UPDATE ctt_documents SET doc_code = UPPER('".$request_params['CodDocumento']."')
+					,doc_name = UPPER('".$request_params['NomDocumento']."')
 					,dot_id = '".$request_params['tipoDocumento']."'
 					,doc_size = $fileSize
 					,doc_type = '$fileExtension'
@@ -154,9 +154,9 @@ public function SaveDocumento($request_params)
 				}else {
 
 					$qry = "UPDATE ctt_documents
-					SET doc_code = '".$request_params['CodDocumento']."'
+					SET doc_code = UPPER('".$request_params['CodDocumento']."')
 					,dot_id = '".$request_params['tipoDocumento']."'
-					,doc_name = '".$request_params['NomDocumento']."'
+					,doc_name = UPPER('".$request_params['NomDocumento']."')
 					,doc_admission_date = '".$request_params['fechaadmision']."'
 					WHERE doc_id = ".$request_params['idDocumento'].";";
 

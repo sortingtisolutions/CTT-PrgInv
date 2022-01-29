@@ -97,6 +97,7 @@ public function saveAccesorioByProducto($param)
     $prd_id                     = $this->db->real_escape_string($param['prdId']);
     $prd_parent_id              = $this->db->real_escape_string($param['parentId']);
     $prd_parent_Sku             = $this->db->real_escape_string($param['skuPrdPadre']);
+    $sbc_id                     = $this->db->real_escape_string($param['lsbc_id']);
 
     $countId = 1;
 
@@ -110,7 +111,7 @@ public function saveAccesorioByProducto($param)
     if($countId == 0){
 
         //GENERAMOS EL NUMERO SUCESIVO DEL ACCESORIO
-
+ 
         $qry = "SELECT count(*)+1 FROM ctt_accesories WHERE acr_parent =".$prd_parent_id."";
         $result = $this->db->query($qry);
         if ($row = $result->fetch_row()) {
@@ -123,7 +124,7 @@ public function saveAccesorioByProducto($param)
         //print_r($prd_parent_Sku);
         //exit();
 
-        $qry = "UPDATE ctt_products SET prd_sku = '".$prd_parent_Sku."' WHERE prd_id = ".$prd_id."";
+        $qry = "UPDATE ctt_products SET prd_sku = '$prd_parent_Sku' , sbc_id= '$sbc_id' WHERE prd_id = $prd_id";
         $this->db->query($qry);
 
 /*         print_r($qry);
@@ -170,7 +171,7 @@ public function saveAccesorioByProducto($param)
 // Obtiene detalle del producto
     public function detailPack($param)
     {
-        $prd_id            = $this->db->real_escape_string($param['prdId']);
+        $prd_id  = $this->db->real_escape_string($param['prdId']);
 
         $qry =  "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, 
                         pr.sbc_id, sb.cat_id

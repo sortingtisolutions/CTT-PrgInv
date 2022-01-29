@@ -23,7 +23,7 @@ function inicial() {
    });
    //borra Usuario +
    $('#BorrarProveedor').on('click', function () {
-      DeletProveedor();
+      DeleteProveedor();
    });
 
    $('#LimpiarFormulario').on('click', function () {
@@ -72,7 +72,7 @@ function EditProveedores(id) {
       url: location,
       success: function (respuesta) {
          //console.log(respuesta);
-         $('#NomProveedor').val(respuesta.sup_buseiness_name);
+         $('#NomProveedor').val(respuesta.sup_business_name);
          $('#RfcProveedor').val(respuesta.sup_rfc);
          $('#EmpIdProveedor').val(respuesta.emp_id);
          $('#IdProveedor').val(respuesta.sup_id);
@@ -102,7 +102,7 @@ function UnSelectRowTable() {
    }, 10);
 }
 //BORRAR DATOS DEL PROVEEDOR * *
-function DeletProveedor() {
+function DeleteProveedor() {
    var location = 'Proveedores/DeleteProveedores';
    IdProveedor = $('#IdProveedorBorrar').val();
    $.ajax({
@@ -226,7 +226,7 @@ function getProveedoresTable() {
       dataType: 'JSON',
       url: location,
       _success: function (respuesta) {
-         console.log(respuesta);
+         //console.log(respuesta);
          var renglon = '';
          respuesta.forEach(function (row, index) {
 
@@ -283,8 +283,8 @@ function getProveedoresTable() {
                info: false,
             },
             lengthMenu: [
-               [10, 25, 50, 100, -1],
-               ['10', '25', '50', 'Todo'],
+               [50, 100, -1],
+               ['50','100', 'Todo'],
             ],
             dom: 'Blfrtip',
             buttons: [

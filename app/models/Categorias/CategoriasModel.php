@@ -17,7 +17,7 @@ class CategoriasModel extends Model
 
 
 			$qry = "INSERT INTO ctt_categories(cat_name, cat_status, str_id)
-					VALUES ('$cat_name',1,'$str_id')";
+					VALUES (UPPER('$cat_name'),1,'$str_id')";
 			$this->db->query($qry);	
 			$cat_id = $this->db->insert_id;
 			
@@ -26,9 +26,9 @@ class CategoriasModel extends Model
 // Optiene los Usuaios existentes
 	public function GetCategorias()
 	{
-		$qry = "SELECT ct.*, st.str_name,'0' as cantidad 
-				FROM ctt_categories  AS ct 
-				INNER JOIN ctt_stores		as st ON st.str_id = ct.str_id
+		$qry = "SELECT ct.*, st.str_name,'0' AS cantidad 
+				FROM ctt_categories  	AS ct 
+				INNER JOIN ctt_stores	AS st ON st.str_id = ct.str_id
 				WHERE ct.cat_status = 1 and st.str_status=1 ORDER BY ct.cat_id;";
 
 		return $this->db->query($qry);
@@ -50,13 +50,12 @@ class CategoriasModel extends Model
 
     public function UpdateCategoria($params)
 	{
-        
 		$cat_name 	= $this->db->real_escape_string($params['cat_name']);
 		$cat_id 	= $this->db->real_escape_string($params['cat_id']);
 		$str_id 	= $this->db->real_escape_string($params['str_id']);
 
 		$qry = "UPDATE ctt_categories
-				SET cat_name = '$cat_name',
+				SET cat_name = UPPER('$cat_name'),
 					str_id = '$str_id'
 				WHERE cat_id = $cat_id;";
 		return 	$this->db->query($qry);	

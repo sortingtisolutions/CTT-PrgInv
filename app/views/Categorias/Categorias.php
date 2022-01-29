@@ -17,7 +17,7 @@
                             
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="NomCategoria" name="NomCategoria" type="text" class="form-control form-control-sm" required >
+                                    <input id="NomCategoria" name="NomCategoria" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
                                     <label for="NomCategoria">Nombre Catálogo</label>
                                 </div>
                                 <input id="IdCategoria" name="IdCategoria" type="hidden" >

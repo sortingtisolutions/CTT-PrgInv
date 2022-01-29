@@ -10,4 +10,4 @@ ALTER TABLE ctt_projects_detail ADD COLUMN pjtdt_belongs INT NULL DEFAULT 0 COMM
 
 ALTER TABLE ctt_projects_periods ADD COLUMN pjtdt_belongs INT NULL COMMENT 'Id del detalle padre' AFTER pjtdt_id;
 
-ALTER TABLE ctt_projects_periods ADD COLUMN pjtpd_sequence INT NULL DEFAULT 1 COMMENT 'Secuencia de periodos' AFTER pjtdt_belongs;
+ALTER TABLE ctt_projects_detail ADD COLUMN pjtpd_sequence INT NULL DEFAULT 1 COMMENT 'Secuencia de periodos' AFTER pjtdt_belongs;

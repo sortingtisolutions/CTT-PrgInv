@@ -40,7 +40,7 @@
                     </div> -->
 
                     <!-- Proveedores posición 2 -->
-                    <div class="row list-finder pos3 hide-items">
+                    <div class="row list-finder pos2 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtSuppliers" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" >
                                     <label for="txtSuppliers">Proveedores</label>
@@ -114,13 +114,13 @@
                             <label for="txtQuantity">Cantidad</label>
                         </div>
                         <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos6 hide-items">
-                            <input id="txtSerie" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" >
+                            <input id="txtSerie" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" style="text-transform:uppercase">
                             <label for="txtSerie">Serie</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 hide-items">
-                            <input id="txtMarca" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" >
+                            <input id="txtMarca" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la marca de productos" style="text-transform:uppercase">
                             <label for="txtMarca">Marca</label>
                         </div>
                     </div>
@@ -130,7 +130,7 @@
                             <label for="txtCostImp">Costo Importación</label>
                         </div>
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating hide-items">
-                            <input id="txtPedimento" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos">
+                            <input id="txtPedimento" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar el numero del pedimento" style="text-transform:uppercase">
                             <label for="txtPedimento">No. Pedimento</label>
                         </div>
                     </div>
@@ -138,7 +138,7 @@
                     <!-- Comentarios posición 4 -->
                     <div class="row  pos4 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <textarea class="form-control form-control-sm" id="txtComments" style="height: 60px" rows="3"></textarea>
+                            <textarea class="form-control form-control-sm" id="txtComments" style="height:60px; text-transform:uppercase" rows="3"></textarea>
                             <label for="txtComments">Comentarios</label>
                         </div>
                     </div>

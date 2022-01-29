@@ -416,7 +416,7 @@ function validator() {
         msg += 'Debes seleccionar un almacen destino';
     }
 
-    if ($('#txtSuppliers').val() == 0) {
+    if ($('#txtSuppliers').val() == 0 && $('.pos3').attr('class').indexOf('hide-items') < 0) {
         // && $('.pos2').attr('class').indexOf('hide-items') < 0
         ky = 1;
         msg += 'Debes seleccionar el proveedor';
@@ -684,7 +684,7 @@ function build_data_structure(pr) {
 [{
     "fol" :  "${el[0]}",
     "sku" :  "${el[1]}",
-    "pnm" :  "${el[2]}",
+    "pnm" :  "${el[2].toUpperCase()}",
     "qty" :  "${el[3]}",
     "ser" :  "${el[4]}",
     "str" :  "${el[5]}",

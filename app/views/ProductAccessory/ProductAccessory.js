@@ -3,6 +3,7 @@ let products;
 var productoSelectId = 0;
 var productoSelectSKU = '';
 var accesorioExist = 0;
+var lsbc_id = 0;
 
 var accesorioSkuNew = '';
 
@@ -125,6 +126,7 @@ function putCategory(dt) {
         let ops = `<option value="0" selected>Selecciona una subcategoría</option>`;
         $('#txtSubcategoryPack').html(ops);
         let id = $(this).val();
+        lsbc_id = id;
         selSubcategoryPack(id);
         //validator_part01();
     });
@@ -248,6 +250,7 @@ function selSubcategoryProduct(id) {
         .unbind('change')
         .on('change', function () {
             let id = $(this).val();
+            lsbc_id = id;
             drawProducts(id);
         });
 }
@@ -321,11 +324,12 @@ function deleteTablaProducts() {
 
 function saveAccesoryId(prdId) {
     var pagina = 'ProductAccessory/saveAccesorioByProducto';
-    var par = `[{"prdId":"${prdId}","parentId":"${productoSelectId}","skuPrdPadre":"${productoSelectSKU}"}]`;
+    var par = `[{"prdId":"${prdId}","parentId":"${productoSelectId}","skuPrdPadre":"${productoSelectSKU}","lsbc_id":"${lsbc_id}"}]`;
     var tipo = 'json';
     var selector = putAccesoriesRes;
     fillField(pagina, par, tipo, selector);
 }
+
 function putAccesoriesRes(dt) {
     console.log('respuesta de grabar' + dt);
     accesorioExist = dt;

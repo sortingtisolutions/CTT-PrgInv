@@ -22,21 +22,21 @@
 
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="NomProveedor" name="NomProveedor" type="text" class="form-control form-control-sm" required >
+									<input id="NomProveedor" name="NomProveedor" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
 									<label for="NomProveedor">Nombre Provedor</label>
 								</div>
 							</div>
 
                      <div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="ContactoProveedor" name="ContactoProveedor" type="text" class="form-control form-control-sm" required >
+									<input id="ContactoProveedor" name="ContactoProveedor" type="text" class="form-control form-control-sm" style="text-transform:uppercase">
 									<label for="ContactoProveedor">Contacto Provedor</label>
 								</div>
 							</div>
 
                      <div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="EmailProveedor" name="EmailProveedor" type="text" class="form-control form-control-sm" required>
+									<input id="EmailProveedor" name="EmailProveedor" type="text" class="form-control form-control-sm">
 									<label for="EmailProveedor">Email Provedor</label>
 								</div>
 							</div>
@@ -44,14 +44,14 @@
 
                      <div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="RfcProveedor" name="RfcProveedor" type="text" class="form-control form-control-sm" style="text-transform: uppercase" required>
+									<input id="RfcProveedor" name="RfcProveedor" type="text" class="form-control form-control-sm" style="text-transform:uppercase">
 									<label for="RfcProveedor">RFC Provedor</label>
 								</div>
 							</div>
 
                      <div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="PhoneProveedor" name="PhoneProveedor" type="text" class="form-control form-control-sm" required>
+									<input id="PhoneProveedor" name="PhoneProveedor" type="text" class="form-control form-control-sm" maxlength="13" required>
 									<label for="PhoneProveedor">Telefono Provedor</label>
 								</div>
 							</div>

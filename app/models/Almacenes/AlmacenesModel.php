@@ -16,7 +16,7 @@ class AlmacenesModel extends Model
 		$emp_name 	= $this->db->real_escape_string($params['emp_name']);
 
 		$qry = "INSERT INTO ctt_stores(str_name, str_type,str_status, emp_fullname) 
-				VALUES ('$str_name','$str_type',1,'$emp_name')";
+				VALUES (UPPER('$str_name'),UPPER('$str_type'),1,UPPER('$emp_name'))";
 		$this->db->query($qry);	
 		$str_id = $this->db->insert_id;
 		return $str_id;
@@ -62,9 +62,9 @@ class AlmacenesModel extends Model
 
 		$qry = " UPDATE ctt_stores
 					SET 
-					str_name 		= '$str_name',
-					str_type 		= '$str_type',
-					emp_fullname 	= '$emp_name'
+					str_name 		= UPPER('$str_name'),
+					str_type 		= UPPER('$str_type'),
+					emp_fullname 	= UPPER('$emp_name')
 		WHERE str_id = '$str_id';";
 		$this->db->query($qry);	
 			

@@ -176,8 +176,9 @@ function UnSelectRowTable() {
 
 //BORRAR  * *
 function DeleteDocumentos() {
-    var location = "documentos/DeleteDocumentos";
+    var location = "Documentos/DeleteDocumentos";
     IdDocumento = $('#IdDocumentoBorrar').val();
+    //console.log(IdDocumento);
     $.ajax({
             type: "POST",
             dataType: 'JSON',
