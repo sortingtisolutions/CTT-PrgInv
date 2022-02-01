@@ -627,14 +627,16 @@ function createNewProduct() {
                 itm.attr('data_val', '0');
             }
             let accr = $(this).attr('data_val');
-            console.log(itmId, accr);
-
+            /* console.log(itmId, accr); */
+            
+            /* AGREGA VALORES AL ACCESORIO */
             if (itmId == 'txtPrdLevel') {
                 if(accr == 1){
                 $(`#txtCatId`).val(20);
-                $(`#txtSbcId`).val(142);
+                $(`#txtSbcId`).val(152);
                 $(`#txtCatId`).attr('disabled', true);
                 $(`#txtSbcId`).attr('disabled', true);
+                console.log('Valores del Accesorio, Cat=20, SubCat=152');
             } else {
                 $(`#txtCatId`).val(0);
                 $(`#txtSbcId`).val(0);
@@ -735,7 +737,7 @@ function saveNewProduct() {
                     "prdDi" : "${prdDi}"
                 }]
             `;
-        console.log(par);
+       /*  console.log(par); */
         var pagina = 'Products/saveNewProduct';
         var tipo = 'html';
         var selector = resNewProduct;

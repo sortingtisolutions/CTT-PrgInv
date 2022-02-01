@@ -1,4 +1,7 @@
-let prod, proj, folio;
+let prod,
+    proj,
+    folio,
+    comids = [];
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -10,9 +13,9 @@ $('document').ready(function () {
 function inicial() {
     if (altr == 1) {
         get_stores();
-        get_products();
         get_projects();
         fill_dinamic_table();
+        get_products(5);
 
         $('#lstPayForm')
             .unbind('change')
@@ -32,6 +35,9 @@ function inicial() {
         $('#newQuote').on('click', function () {
             window.location = 'ProductsSalables';
         });
+        $('#newComment').on('click', function () {
+            addComments('sales', '');
+        });
 
         $('.required').on('focus', function () {
             $(this).removeClass('forValid');
@@ -46,6 +52,7 @@ function inicial() {
 }
 
 /** OBTENCION DE DATOS */
+
 /**  Obtiene el listado de almacenes */
 function get_stores() {
     var pagina = 'ProductsSalables/listStores';
@@ -57,9 +64,9 @@ function get_stores() {
 }
 
 /**  Obtiene el listado de productos */
-function get_products() {
+function get_products(strId) {
     var pagina = 'ProductsSalables/listProducts';
-    var par = `[{"strId":""}]`;
+    var par = `[{"strId":"${strId}"}]`;
     var tipo = 'json';
     var selector = put_products;
     caching_events('get_products');
@@ -76,6 +83,10 @@ function get_projects() {
     fillField(pagina, par, tipo, selector);
 }
 
+function put_nextNumber(dt) {
+    console.log(dt);
+}
+
 function put_stores(dt) {
     if (dt[0].str_id > 0) {
         $.each(dt, function (v, u) {
@@ -85,6 +96,13 @@ function put_stores(dt) {
     } else {
         $('#lstStore').html('');
     }
+
+    $('#lstStore')
+        .unbind('change')
+        .on('change', function () {
+            let strId = $(this).val();
+            get_products(strId);
+        });
 }
 
 function put_projects(dt) {
@@ -116,6 +134,8 @@ function put_projects(dt) {
 }
 
 function put_products(dt) {
+    console.log(dt);
+    $('.list_products ul').html('');
     if (dt[0].ser_id > 0) {
         prod = dt;
         let H = '';
@@ -392,8 +412,11 @@ function saleApply() {
     "salCustomerName"   : "${customer}",
     "pjtName"           : "${pjtName}",
     "strId"             : "${strId}",
-    "pjtId"             : "${pjtId}"
+    "pjtId"             : "${pjtId}",
+    "comId"             : "${comids}"
 }]`;
+
+            console.log(par);
 
             // console.log(par);
             clean_required();
@@ -492,4 +515,22 @@ function validator() {
 function clean_required() {
     $('.required').removeClass('forValid');
     $('.required').parent().children('.novalid').remove();
+}
+
+function saveComment(scc, mid, cmm) {
+    let par = `
+    [{
+        "section"       : "${scc}",
+        "sectnId"       : "${mid}",
+        "comment"       : "${cmm}"
+    }]`;
+
+    var pagina = 'ProductsSalables/SaveComments';
+    var tipo = 'html';
+    var selector = setSaveComment;
+    fillField(pagina, par, tipo, selector);
+}
+
+function setSaveComment(dt) {
+    comids.push(dt);
 }

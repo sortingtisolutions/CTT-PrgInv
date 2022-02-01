@@ -24,7 +24,6 @@ class ProductsSalablesController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-    
 // Lista los almacenes
         public function listStores($request_params)
         {
@@ -103,6 +102,17 @@ class ProductsSalablesController extends Controller
         {
             $params =  $this->session->get('user');
             $result = $this->model->SaveSaleDetail($request_params, $params);
+            $res = $result;
+            echo $res;
+        } 
+// Guarda Comentario
+        public function SaveComments($request_params)
+        {
+            $params =  $this->session->get('user');
+            $group = explode('|',$params);
+    
+            $user = $group[2];
+            $result = $this->model->SaveComments($request_params, $user);
             $res = $result;
             echo $res;
         } 

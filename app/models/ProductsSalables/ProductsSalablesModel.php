@@ -9,22 +9,24 @@ class ProductsSalablesModel extends Model
         parent::__construct();
     }
 
-    
+
 // Listado de almacenes
         public function listStores($params)
         {
-            $qry = "SELECT str_id, str_name FROM ctt_stores WHERE str_id = 5 AND str_status = 1;";
+            $qry = "SELECT str_id, str_name FROM ctt_stores WHERE str_id = 5 OR str_type = 'MOVILES' AND str_status = 1;";
             return $this->db->query($qry);
         }    
 
 // Listado de productos
         public function listProducts($params)
         {
+            $strId              = $this->db->real_escape_string($params['strId']);
+
             $qry = "SELECT sr.ser_id, sr.ser_sku, pd.prd_sku, pd.prd_name, pd.prd_price, SUM(sp.stp_quantity) as stock
                     FROM ctt_series AS sr
                     INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
                     INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
-                    WHERE sp.str_id = 5 AND pd.prd_status = 1
+                    WHERE sp.str_id = $strId AND pd.prd_status = 1
                     GROUP BY sr.ser_id, sr.ser_sku, pd.prd_sku, pd.prd_name, pd.prd_price
                     ORDER BY pd.prd_name ASC;";
             return $this->db->query($qry);
@@ -51,20 +53,24 @@ class ProductsSalablesModel extends Model
             $salCustomerName    = $this->db->real_escape_string($params['salCustomerName']);
             $strId              = $this->db->real_escape_string($params['strId']);
             $pjtId              = $this->db->real_escape_string($params['pjtId']);
+            $comId              = $this->db->real_escape_string($params['comId']);
             $pjtName            = $this->db->real_escape_string($params['pjtName']);
             $usrName            = strtoupper($user);
 
-            $qry = "INSERT INTO ctt_sales 
+            $qr1 = "INSERT INTO ctt_sales 
                         (sal_pay_form, sal_number_invoice, sal_customer_name, str_id, pjt_id, sal_saller, sal_project)
                     VALUES
                         ('$salPayForm', '$salNumberInvoice', '$salCustomerName', '$strId', '$pjtId', '$usrName', '$pjtName');";
 
-            $this->db->query($qry);
+            $this->db->query($qr1);
             $salId = $this->db->insert_id;
             $salNumber = str_pad($salId, 7, '0', STR_PAD_LEFT); // Coloca 7 (0000000) digitos en el numero de venta
 
-            $qry1 = "UPDATE ctt_sales SET sal_number = '$salNumber' WHERE sal_id = $salId";
-            $this->db->query($qry1);
+            $qr2 = "UPDATE ctt_sales SET sal_number = '$salNumber' WHERE sal_id = $salId";
+            $this->db->query($qr2);
+
+            $qr3 = "UPDATE ctt_comments SET com_action_id = '$salId', com_status = '1' WHERE com_id in ($comId)";
+            $this->db->query($qr3);
 
             return $salId;
         }    
@@ -93,15 +99,16 @@ public function NextExchange()
             $strId          = $this->db->real_escape_string($params['strId']);
             $pjtId          = $this->db->real_escape_string($params['pjtId']);
             $folio          = $this->db->real_escape_string($params['folio']);
+            $serSt          = 'VENTA';
             $usrName	    = $this->db->real_escape_string($employee_data[2]);
 
             $qry = "INSERT INTO ctt_sales_details 
-                        (sld_sku, sld_name, sld_price, sld_quantity, sal_id, ser_id)
+                        (sld_sku, sld_name, sld_price, sld_quantity, sal_id, ser_id, sld_situation)
                     VALUES
-                        ('$sldSku', '$sldName', '$sldPrice', '$sldQuantity', '$salId', '$serId');";
+                        ('$sldSku', '$sldName', '$sldPrice', '$sldQuantity', '$salId', '$serId', '$serSt');";
             $this->db->query($qry);
             
-            $qry1 = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity - $sldQuantity WHERE ser_id = $serId;";
+            $qry1 = "UPDATE ctt_stores_products SET stp_quantity = stp_quantity - $sldQuantity WHERE ser_id = $serId AND str_id = $strId;";
             $this->db->query($qry1);
 
             $qry2 = "INSERT INTO ctt_stores_exchange 
@@ -140,5 +147,27 @@ public function NextExchange()
             return $this->db->query($qry);
             
         }    
+
+
+
+// Guarda comentario
+    public function SaveComments($params, $user)
+    {
+        $section    = $this->db->real_escape_string($params['section']);
+        $movemId    = $this->db->real_escape_string($params['sectnId']);
+        $comment    = $this->db->real_escape_string($params['comment']);
+        $usrName    = strtoupper($user);
+
+        $qry = "INSERT INTO ctt_comments 
+                    (com_source_section, com_action_id, com_comment, com_user)
+                VALUES
+                    ('$section', '$movemId', '$comment', '$usrName');";
+
+        $this->db->query($qry);
+        $comId = $this->db->insert_id;
+
+        return $comId;
+    }    
+
 
 }

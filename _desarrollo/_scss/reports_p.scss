@@ -76,6 +76,7 @@ section {
             margin-top: 2mm;
             page-break-inside: avoid;
 
+
             .concept {
                 width: 30mm;
                 font-size: 8pt;
@@ -153,11 +154,33 @@ section {
                 text-align: right;
                 
             }
+   
             
+            .retColor {
+                color: #CC0000 ;
+                & > td {
+                color: #CC0000 ;
+                text-decoration: underline;
+                }
+            }
         }
 
         .half {
             width: 50%;
+        }
+    }
+}
+
+.obs_frame  {
+    margin-top: 100px;
+    
+    .obs_comments  {
+        border-bottom: 1px solid #DDDDDD;
+        line-height: 1.5em;
+        .obs_date  {
+            font-weight: 900;
+            line-height: 1.9em;
+            font-size: 0.8em;
         }
     }
 }

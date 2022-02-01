@@ -320,18 +320,16 @@ public function saveEdtSeries($params)
             }
         }
         
-
         $prdSk .=  $NxtId ;
 
         $qry = "INSERT INTO ctt_products (
                     prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
                     prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
-                    prd_insured, sbc_id, srv_id, cin_id, prd_status
-                ) VALUES (
-                    UPPER('$prdSk'), UPPER('$prdNm'), UPPER('$prdEn'), UPPER('$prdCd'), UPPER('$prdNp'), 
-                    UPPER('$prdMd'), UPPER('$prdPr'), UPPER('$prdVs'), UPPER('$prdCm'), UPPER('$prdLv'), 
-                    UPPER('$prdLn'), UPPER('$prdAs'), UPPER('$prdSb'), UPPER('$prdSv'), UPPER('$prdCn'), 
-                    UPPER('$prdSt')
+                    prd_insured, sbc_id, srv_id, cin_id, prd_status) 
+                VALUES (
+                    '$prdSk', UPPER('$prdNm'), UPPER('$prdEn'), UPPER('$prdCd'), UPPER('$prdNp'), 
+                    UPPER('$prdMd'), '$prdPr', '$prdVs', UPPER('$prdCm'), '$prdLv', 
+                    '$prdLn', '$prdAs', '$prdSb', '$prdSv', '$prdCn', '$prdSt'
                 );";
         $this->db->query($qry);
         $prdId = $this->db->insert_id;

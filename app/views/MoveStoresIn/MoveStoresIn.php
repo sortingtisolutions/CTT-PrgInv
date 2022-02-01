@@ -74,8 +74,8 @@
                             <!-- <input type="text" id="txtIdInvoices" name="txtIdInvoices"> -->
                     </div>
 
-                    <!-- Factura posición 3 -->
-                    <div class="row pos4 hide-items">
+                    <!-- Categoria posición 4 -->
+                    <div class="row pos1 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtCategory" class="form-select form-select-sm"><option value="0" selected>Catálogo</option></select>
                             <label for="txtCategory">Catálogo</label>
@@ -83,7 +83,7 @@
                     </div>
 
                     <!-- Productos posición 4 -->
-                    <div class="row list-finder pos4 hide-items">
+                    <div class="row list-finder pos1 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un producto" >
                                     <label for="txtProducts">Productos</label>
@@ -95,7 +95,7 @@
                             </div>
                     </div>
 
-                     <!-- Factura posición 3 -->
+                     <!-- Moneda posición 5 -->
                      <div class="row pos5 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtCoin" class="form-select form-select-sm"><option value="0" selected>Selecciona moneda</option></select>
@@ -103,7 +103,7 @@
                         </div>
                     </div>
 
-                    <!-- Factura posición 5 y 6 -->
+                    <!-- Costo,Cantidad,Serie posición 5,4 y 6 -->
                     <div class="row">
                         <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos5 hide-items">
                         <input id="txtCost" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
@@ -118,32 +118,34 @@
                             <label for="txtSerie">Serie</label>
                         </div>
                     </div>
+                    <!-- Marca 6 -->
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 hide-items">
                             <input id="txtMarca" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la marca de productos" style="text-transform:uppercase">
                             <label for="txtMarca">Marca</label>
                         </div>
                     </div>
+                    <!-- Costo Importacion,Pedimento 5,4  -->
                     <div class="row pos3 hide-items">
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos5 hide-items">
                         <input id="txtCostImp" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
                             <label for="txtCostImp">Costo Importación</label>
                         </div>
-                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating hide-items">
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos5 form-floating hide-items">
                             <input id="txtPedimento" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar el numero del pedimento" style="text-transform:uppercase">
                             <label for="txtPedimento">No. Pedimento</label>
                         </div>
                     </div>
                    
                     <!-- Comentarios posición 4 -->
-                    <div class="row  pos4 hide-items">
+                    <div class="row  pos1 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <textarea class="form-control form-control-sm" id="txtComments" style="height:60px; text-transform:uppercase" rows="3"></textarea>
                             <label for="txtComments">Comentarios</label>
                         </div>
                     </div>
                     <!-- Boton posición 4 -->
-                        <div class="row pos4 hide-items">
+                        <div class="row pos1 hide-items">
                             <div class="col-md-12 mb-5">
                                 <button id="btn_exchange" type="button" class="btn btn-sm btn-primary" >Agregar</button>
                             </div>

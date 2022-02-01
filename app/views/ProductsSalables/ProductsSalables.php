@@ -63,6 +63,8 @@
                                             <label for="txtInvoice">Num Factura:</label> 
                                             <input id="txtInvoice" name="txtInvoice" type="text" class="textbox">
                                         </div>
+
+                                       
                                     </form>
 
                                 </td>
@@ -109,7 +111,9 @@
                         <button class="bn enable" id="addPurchase"> aplicar la venta</button>
                     </div>
                 </div>
-
+                <div class="blocks">
+                    <button class="btn-add" id="newComment"> + agregar observaciones</button>
+                </div>
                 <hr>
             </div>
         </div>

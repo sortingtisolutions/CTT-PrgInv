@@ -207,7 +207,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Código del producto:</td>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Código por el proveedor:</td>
                         <td class="data">
                             <input type="text" id="txtPrdCodeProvider" name="txtPrdCodeProvider" class="textbox" style="width:200px; text-transform:uppercase ">
                             <span class="fail_note hide"></span>

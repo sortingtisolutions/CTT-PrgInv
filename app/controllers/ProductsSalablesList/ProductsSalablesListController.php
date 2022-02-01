@@ -59,5 +59,39 @@ class ProductsSalablesListController extends Controller
             }
             echo $res;
         }
+// Obtiene el listado de comentarios
+        public function getComments($request_params)
+        {
+            $params =  $this->session->get('user');
+            $result = $this->model->getComments($request_params);
+            $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"com_id":"0"}]';	
+            }
+            echo $res;
+        }
+
+// Obtiene el siguiente folio
+    public function NextExchange($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->NextExchange($request_params);
+        $res = $result;
+        echo $res;
+    }         
+// Guarda la devolución
+        public function SaveReturn($request_params)
+        {
+            $params =  $this->session->get('user');
+            $result = $this->model->SaveReturn($request_params, $params);
+            $res = $result;
+            echo $res;
+        }
 
 }

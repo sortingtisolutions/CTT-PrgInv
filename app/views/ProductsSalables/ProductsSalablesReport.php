@@ -10,6 +10,7 @@ $usrId = $_GET['u'];
 $name = $_GET['n'];
 
 $conkey = decodificar($_GET['h']) ;
+$subtotal=0;
 
 $h = explode("|",$conkey);
 
@@ -21,7 +22,7 @@ $qry = "SELECT sl.*, sd.*, pj.pjt_number, pj.pjt_name, st.str_name
         LEFT JOIN ctt_projects As pj ON pj.pjt_id = sl.pjt_id
         WHERE sl.sal_id = $SalId;";
 $res = $conn->query($qry);
-
+$conn->close();
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
@@ -123,18 +124,20 @@ $html .= '
             </thead>
             <tbody>';
 
-for ($i = 0; $i<count($items); $i++){
+for ($i = 0; $i < count($items); $i++){
     $price = $items[$i]['sld_price'] ;
+    $color = '';
+    if ($items[$i]['sld_situation'] == 'DEVOLUCION'){$price = $price * -1; $color = 'retColor';}
     $quant = $items[$i]['sld_quantity'] ;
     $amount = $price * $quant;
     $subtotal += $amount;
 
 $html .= '
-                <tr>
-                    <td class="dat-figure prod">'.  $items[$i]['sld_sku'] . ' - ' . $items[$i]['sld_name'] .'</td>
-                    <td class="dat-figure pric">' . number_format($price , 2,'.',',') . '</td>
-                    <td class="dat-figure qnty">'. $quant .'</td>
-                    <td class="dat-figure amou">' . number_format($amount , 2,'.',',') . '</td>
+                <tr >
+                    <td class="dat-figure prod '. $color .'">'.  $items[$i]['sld_sku'] . ' - ' . $items[$i]['sld_name'] . '</td>
+                    <td class="dat-figure pric '. $color .'">' . number_format($price , 2,'.',',') . '</td>
+                    <td class="dat-figure qnty '. $color .'">'. $quant .'</td>
+                    <td class="dat-figure amou '. $color .'">' . number_format($amount , 2,'.',',') . '</td>
                 </tr>
                 ';
 
@@ -170,9 +173,31 @@ $html .= '
             </tr>
         </tbody>
     </table>
-    <!-- End Tabla de costo base  -->';
+</section>
+    <!-- End Tabla de costo base  -->
+    <div class="obs_frame">
+        <h3>Observaciones</h3>
+    ';
+
+    
+     $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
+     $qr2 = "SELECT * FROM ctt_comments WHERE com_source_section = 'sales' AND com_action_id = $SalId;";
+     $com = $conn->query($qr2);
+     $conn->close();
+
+    while($row = $com->fetch_assoc()){
+        
+        $html .= '  
+        <p class="obs_comments">
+            <span class="obs_date">' . $row['com_date'] . '</span> -
+            <span class="obs_comment">' . $row['com_comment'] . '</span>
+        </p>
+        ';
+    }
+    
 
 
+$html .= '</div>';
 
         
 $foot = '

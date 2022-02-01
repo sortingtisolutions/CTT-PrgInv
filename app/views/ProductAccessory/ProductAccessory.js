@@ -126,13 +126,14 @@ function putCategory(dt) {
         let ops = `<option value="0" selected>Selecciona una subcategoría</option>`;
         $('#txtSubcategoryPack').html(ops);
         let id = $(this).val();
-        lsbc_id = id;
+        //lsbc_id = id;
         selSubcategoryPack(id);
         //validator_part01();
     });
 }
 // Mantiene en memoria el set de subcategorias
 function putSubCategory(dt) {
+    //lsbc_id = dt[0].sbc_id;
     subcategos = dt;
 }
 
@@ -171,11 +172,11 @@ function drawProducts() {
         .unbind('click')
         .on('click', function () {
             let id = $(this).parents('.list-item');
-            console.log('se dio' + id);
-            console.log($(this).val());
+            console.log('SE DIO' + id);
+            //console.log($(this).val());
 
             //console.log( $(this).parents('.list-item').attr('id'));
-            console.log('se dio click em el circulo');
+            //console.log('se dio click en el circulo');
             product_apply(id);
         });
 }
@@ -217,7 +218,6 @@ function putProducts(dt) {
 function selSubcategoryPack(id) {
     deleteTablaAccesorios();
     deleteTablaProducts();
-
     // console.log('selSubcategoryPack');
 
     if (subcategos[0].sbc_id != 0) {
@@ -230,13 +230,15 @@ function selSubcategoryPack(id) {
     }
     $('#txtSubcategoryPack').change(function () {
         let id = $(this).val();
-        // console.log(id);
+        lsbc_id = id;
+        console.log(id);
         getProducts(id);
     });
 }
 
 // Llena el selector de subcategorias
 function selSubcategoryProduct(id) {
+    console.log('SELECC SUBCATE');
     if (subcategos[0].sbc_id != 0) {
         $.each(subcategos, function (v, u) {
             if (u.cat_id === id) {
@@ -251,6 +253,7 @@ function selSubcategoryProduct(id) {
         .on('change', function () {
             let id = $(this).val();
             lsbc_id = id;
+            console.log(id);
             drawProducts(id);
         });
 }
@@ -300,9 +303,8 @@ function getAccesoriesById(prdId) {
     var selector = putAccesoriesById;
     fillField(pagina, par, tipo, selector);
 }
-
+/* carga de accesorios por id */
 function putAccesoriesById(dt) {
-    console.log(' carga de accesorios por id');
     deleteTablaAccesorios();
 
     if (dt[0].prd_id != '') {
@@ -326,12 +328,13 @@ function saveAccesoryId(prdId) {
     var pagina = 'ProductAccessory/saveAccesorioByProducto';
     var par = `[{"prdId":"${prdId}","parentId":"${productoSelectId}","skuPrdPadre":"${productoSelectSKU}","lsbc_id":"${lsbc_id}"}]`;
     var tipo = 'json';
+    console.log(par);
     var selector = putAccesoriesRes;
     fillField(pagina, par, tipo, selector);
 }
 
 function putAccesoriesRes(dt) {
-    console.log('respuesta de grabar' + dt);
+    //console.log('RESPUESTA ', dt);
     accesorioExist = dt;
 }
 
@@ -357,7 +360,7 @@ function load_Accesories(prdId) {
 
 //valido
 function putAccesoriostable(dt) {
-    console.log('llego a carga de accesorios');
+    //console.log('llego a carga de accesorios');
     let tabla = $('#tblProducts').DataTable();
     tabla.rows().remove().draw();
 
@@ -377,14 +380,12 @@ function putAccesoriostable(dt) {
 
 //revisar aqui si no graba producto
 function product_apply(prId) {
-    console.log('llego aqui ii');
-
-    console.log(prId);
+    //console.log(prId);
     let acce = prId.attr('id').split('-');
-    console.log(acce);
+    //console.log(acce);
     //VALIDAR QUE NO EXISTA EL ACCESORIO
     saveAccesoryId(acce[0]);
-    console.log(acce[2]);
+    //console.log(acce[2]);
     //console.log("respuesta conseguida"+accesorioExist);
     setTimeout(() => {
         if (accesorioExist != 0) {

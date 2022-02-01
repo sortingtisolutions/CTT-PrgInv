@@ -12,6 +12,7 @@ class PackagesModel extends Model
 // Listado de categorias
     public function listCategories()
     {
+        
         $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
         return $this->db->query($qry);
     }
@@ -25,9 +26,13 @@ class PackagesModel extends Model
     }
 
 // Listado de paquetes
-public function listPackages()
+public function listPackages($params)
 {
-    $qry = "SELECT * FROM ctt_products WHERE prd_level ='K' AND prd_status =1;";
+    $catId = $this->db->real_escape_string($params['catId']);
+    $condition = $catId == 0 ? '' : ' AND cat_id = ' . $catId;
+    $qry = "SELECT pd.* FROM ctt_products AS pd
+            INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+            WHERE prd_level ='K' AND prd_status = 1 " . $condition . ";";
     return $this->db->query($qry);
 }
 
