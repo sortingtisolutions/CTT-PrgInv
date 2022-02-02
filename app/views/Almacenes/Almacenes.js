@@ -22,14 +22,14 @@ function inicial() {
 }
 
 function settingTable() {
-    let title = 'Lista de Catálogos';
+    let title = 'Lista de Almacenes';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#AlmacenesTable').DataTable({
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, 300, -1],
-            [100, 200, 300, 'Todos'],
+            [50, 100, -1],
+            [50, 100, 'Todos'],
         ],
         buttons: [
             {
@@ -257,7 +257,6 @@ function putUpdateStore(dt) {
         // console.log(dt);
         let ix = goThroughStore(dt);
         // console.log(strs[ix].str_id);
-
         // console.log($(`#${strs[ix].str_id}`).children('td.store-name').html());
 
         $(`#${strs[ix].str_id}`).children('td.store-name').html(strs[ix].str_name);
@@ -292,7 +291,7 @@ function deleteStore(strId) {
         $('#confirmButton').html('').css({display: 'none'});
         $('#Id').val(0);
 
-        console.log('no borra');
+        //console.log('no borra');
     } else {
         $('#confirmModal').modal('show');
 

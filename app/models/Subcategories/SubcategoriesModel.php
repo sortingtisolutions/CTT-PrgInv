@@ -93,7 +93,7 @@ class SubcategoriesModel extends Model
 
 
         $qry = "INSERT INTO ctt_subcategories(sbc_code, sbc_name, sbc_status, cat_id)
-                VALUES('$sbcCode','$sbcName',1,'$catId')";
+                VALUES('$sbcCode',UPPER('$sbcName'),1,'$catId')";
         $this->db->query($qry);	
         $sbcId = $this->db->insert_id;
 		return $sbcId;
@@ -110,9 +110,9 @@ class SubcategoriesModel extends Model
 
         $qry = "UPDATE ctt_subcategories
                 SET 
-                      sbc_name  = '$sbcName'
-                    , sbc_code  = '$sbcCode'
-                    , cat_id    = '$catId'
+                      sbc_name  = UPPER('$sbcName'),
+                      sbc_code  = '$sbcCode' ,
+                      cat_id    = '$catId' ,
                 WHERE sbc_id    = '$sbcId';";
 
         $this->db->query($qry);	
@@ -124,11 +124,11 @@ class SubcategoriesModel extends Model
     {
         $sbcid      = $this->db->real_escape_string($params['sbcId']);
 
-        $qry = "UPDATE ctt_subcategories SET sbc_status  = '0'
-                WHERE sbc_id    = '$sbcid';";
+        $qry = "UPDATE ctt_subcategories SET sbc_status = '0'
+                WHERE sbc_id  = '$sbcid';";
 
         $this->db->query($qry);	
-        return $sbcId;
+        return $sbcid;
     }
 
 

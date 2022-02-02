@@ -289,14 +289,6 @@ function getProveedoresTable() {
             dom: 'Blfrtip',
             buttons: [
                {
-                  extend: 'pdf',
-                  footer: true,
-                  title: title,
-                  filename: filename,
-                  //   className: 'btnDatableAdd',
-                  text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
-               },
-               {
                   extend: 'excel',
                   footer: true,
                   title: title,
@@ -304,7 +296,14 @@ function getProveedoresTable() {
                   //   className: 'btnDatableAdd',
                   text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
                },
-
+               {
+                  extend: 'pdf',
+                  footer: true,
+                  title: title,
+                  filename: filename,
+                  //   className: 'btnDatableAdd',
+                  text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+               },
                {
                   //Botón para imprimir
                   extend: 'print',
