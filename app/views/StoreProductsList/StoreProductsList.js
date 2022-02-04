@@ -25,6 +25,10 @@ function inicial() {
         $('#txtIdProducts').val('');
         $('#txtComments').val('');
     });
+
+    $('#btn_send_detail').on('click', function () {
+        send_api_detail();
+    });
 }
 
 function setting_table() {
@@ -362,4 +366,77 @@ function omitirAcentos(text) {
         text = text.replace(acentos.charAt(i), original.charAt(i));
     }
     return text;
+}
+
+// ***********************************************************************************
+// ***  SECCION PROVISIONAL PARA EL ENVIO DE DETALLE DEL PROYECTO A LA API   *********
+// ***********************************************************************************
+
+function send_api_detail() {
+    console.log('detail');
+
+    var pagina = 'StoreProductsList/listDetailProject';
+    var par = `[{"pjt":""}]`;
+    var tipo = 'json';
+    var selector = putlistDetailProject;
+    fillField(pagina, par, tipo, selector);
+}
+
+function putlistDetailProject(dt) {
+    console.log(dt);
+
+    var data = new FormData();
+    data.append('email', 'cire@test.com');
+    data.append('password', 'C1r322022!');
+
+    var tk = '17|bzWMNHCJUJnK9pWlIoAAQyaJoXpT1zSPDSv7azz7';
+
+    // var url = 'https://cire-rest.rutaip.net/api/auth/login'
+    var url = 'https://fc32-2806-2f0-9060-6eca-e453-f7c2-321e-5ca8.ngrok.io';
+
+    $.ajax({
+        url: url + '/api/auth/login',
+        method: 'POST',
+        timeout: 0,
+        processData: false,
+        mimeType: 'multipart/form-data',
+        contentType: false,
+        data: data,
+        success: function (token) {
+            console.log(token);
+
+            sendDtata(dt, tk, url);
+        },
+        error: function (xhr, textStatus, error) {
+            console.log(xhr);
+            // sendDtata(dt, tk, url);
+        },
+    });
+}
+
+function sendDtata(dt, tk, url) {
+    $.ajax({
+        url: url + '/api/invoice',
+        method: 'POST',
+        timeout: 0,
+        headers: {
+            Authorization: 'Bearer ' + tk,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Accept: '*/*',
+            'Accept-Encoding': 'gzip, deflate, br,',
+        },
+        data: {
+            cve_art: '010D0120003',
+            descr: 'MONITOR FLANDERS SCIENTIFIC 21.5"  MULTI-FORMAT HD/SD-SDI',
+            uni_med: 'pieza',
+            linea: '010D',
+            peso: '10 lt',
+        },
+        success: function (resp) {
+            console.log(resp);
+        },
+        error: function (xhr, textStatus, error) {
+            console.log(xhr, textStatus, error);
+        },
+    });
 }

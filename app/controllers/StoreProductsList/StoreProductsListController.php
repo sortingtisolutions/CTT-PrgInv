@@ -99,21 +99,42 @@ class StoreProductsListController extends Controller
         }
         echo $res;
     } 
-
-
-// Guarda lista de productos en json 
+    
+    
+    // Guarda lista de productos en json 
     public function saveList($request_params)
     {
         $params = $this->session->get('user');
         $par = $request_params['par'];
-
+        
         $dir = ROOT . FOLDER_PATH . '/app/views/StoreProductsList/StoreProductsFile.txt';
-
+        
         $fileJson = fopen( $dir ,"w") or die("problema al escribir el archivo ");
         fwrite($fileJson, $par);
         fclose($fileJson);
-
+        
     } 
+    
+
+
+    // Obtiene del detalle del projeto 
+        public function listDetailProject($request_params)
+        {
+            $params =  $this->session->get('user');
+            $result = $this->model->listDetailProject();
+            $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"cve_art":"0"}]';
+            }
+            echo $res;
+        } 
+
 
 
 }

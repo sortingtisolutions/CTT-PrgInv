@@ -49,7 +49,6 @@
                     </div>
 
                     
-                  
 
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -61,6 +60,14 @@
                     <div class="row">
                         <div class="col-md-8 mb-5">
                             <button type="button" class="btn btn-sm btn-primary disabled" id="btn_products">Agregar</button>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12 mb-12">
+                            <label for="btn_send_detail">Este apartado es provisional y sirve para enviar el detalle del projecto a la API.<br><b>Se envia el proyecto con ID: 1</b></label>
+                            <button type="button" class="btn btn-sm btn-primary" id="btn_send_detail">Detalle de proyecto</button>
                         </div>
                     </div>
 
