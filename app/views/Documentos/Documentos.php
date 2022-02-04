@@ -33,7 +33,7 @@
 
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<input id="NomDocumento" name="NomDocumento" type="text" class="form-control form-control-sm" required >
+									<input id="NomDocumento" name="NomDocumento" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
 									<label for="NomDocumento">Nombre Documento</label>
 								</div>
 							</div>

@@ -10,7 +10,6 @@ class ProductsModel extends Model
     }
 
 
-
 // Listado de categorias
     public function listCategories()
     {
@@ -86,7 +85,7 @@ public function listInvoice()
                 LEFT JOIN ctt_series                AS sr ON sr.prd_id = p.prd_id
                 LEFT JOIN ctt_stores_products       AS sp ON sp.ser_id = sr.ser_id
                 LEFT JOIN ctt_coins                 AS cn ON cn.cin_id = p.cin_id
-                LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = p.prd_id 
+                LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = p.prd_id  AND dc.dcp_source = 'P'
                 LEFT JOIN ctt_documents 			AS dt ON dt.doc_id = dc.doc_id AND dt.dot_id = 2  
                 WHERE prd_status = 1 AND p.prd_level IN ('A', 'P') AND ct.cat_id = $catId
                 GROUP BY p.prd_id, p.prd_sku, p.prd_name, ct.cat_name, sc.sbc_name, sv.srv_name, p.prd_price, p.prd_coin_type, p.prd_english_name 
@@ -98,7 +97,7 @@ public function listInvoice()
     public function listSeries($params)
     {
         $prodId = $this->db->real_escape_string($params['prdId']);
-        $qry = "SELECT 
+        $qry = "SELECT DISTINCT
                       se.ser_id
                     , se.ser_sku
                     , se.ser_serial_number
@@ -133,24 +132,22 @@ public function listInvoice()
     {
         $prdId = $this->db->real_escape_string($params['prdId']);
         $qry = "SELECT pr.*, 
-                        ifnull((
-                                SELECT dt.doc_id FROM ctt_products_documents AS dc 
-                                LEFT JOIN ctt_documents AS dt ON dt.doc_id = dc.doc_id AND  dt.dot_id = 2
-                                WHERE  dt.dot_id = 2 AND dc.prd_id = pr.prd_id
-                                ),0) AS docum, 
-                        ifnull((
-                                SELECT dc.dcp_id FROM ctt_products_documents AS dc 
-                                LEFT JOIN ctt_documents AS dt ON dt.doc_id = dc.doc_id AND  dt.dot_id = 2
-                                WHERE  dt.dot_id = 2 AND dc.prd_id = pr.prd_id
-                                ),0) AS documId
+                    ifnull((
+                            SELECT dt.doc_id FROM ctt_products_documents AS dc 
+                            LEFT JOIN ctt_documents AS dt ON dt.doc_id = dc.doc_id AND  dt.dot_id = 2
+                            WHERE  dt.dot_id = 2 AND dc.prd_id = pr.prd_id
+                            ),0) AS docum, 
+                    ifnull((
+                            SELECT dc.dcp_id FROM ctt_products_documents AS dc 
+                            LEFT JOIN ctt_documents AS dt ON dt.doc_id = dc.doc_id AND  dt.dot_id = 2
+                            WHERE  dt.dot_id = 2 AND dc.prd_id = pr.prd_id
+                            ),0) AS documId
                 FROM ctt_products AS pr
                 WHERE pr.prd_id = $prdId limit 1;";
         return $this->db->query($qry);
     }
 
 
-
-    
 // Obtiene datos de la serie selecionada
     public function getSelectSerie($params)
     {
@@ -194,20 +191,20 @@ public function listInvoice()
 
         $qry = "UPDATE ctt_products
                 SET
-                        prd_sku             = '$prdSk',
-                        prd_name            = '$prdNm',
-                        prd_english_name    = '$prdEn',
-                        prd_code_provider   = '$prdCd',
-                        prd_name_provider   = '$prdNp',
-                        prd_model           = '$prdMd',
-                        prd_price           = '$prdPr',
-                        prd_visibility      = '$prdVs',
-                        prd_comments        = '$prdCm',
-                        prd_lonely          = '$prdLn',
-                        prd_insured         = '$prdAs',
-                        sbc_id              = '$prdSb',
-                        srv_id              = '$prdSv',
-                        cin_id              = '$prdCn'
+                        prd_sku             = UPPER('$prdSk'),
+                        prd_name            = UPPER('$prdNm'),
+                        prd_english_name    = UPPER('$prdEn'),
+                        prd_code_provider   = UPPER('$prdCd'),
+                        prd_name_provider   = UPPER('$prdNp'),
+                        prd_model           = UPPER('$prdMd'),
+                        prd_price           = UPPER('$prdPr'),
+                        prd_visibility      = UPPER('$prdVs'),
+                        prd_comments        = UPPER('$prdCm'),
+                        prd_lonely          = UPPER('$prdLn'),
+                        prd_insured         = UPPER('$prdAs'),
+                        sbc_id              = UPPER('$prdSb'),
+                        srv_id              = UPPER('$prdSv'),
+                        cin_id              = UPPER('$prdCn')
                 WHERE   prd_id              = '$prdId';";
         $this->db->query($qry);
 
@@ -253,9 +250,9 @@ public function saveEdtSeries($params)
    
     $qry = "UPDATE ctt_series
             SET
-                    ser_serial_number   = '$serSr',
+                    ser_serial_number   = UPPER('$serSr'),
                     ser_date_registry   = '$serDt',
-                    ser_comments        = '$serCm'
+                    ser_comments        = UPPER('$serCm')
             WHERE   ser_id              = '$serId';";
     $this->db->query($qry);
 
@@ -282,12 +279,8 @@ public function saveEdtSeries($params)
                     $this->db->query($qry1);
         } 
         
-
-
     return $serId .'|'. $serDc;
 }
-
-
 
 
 // Guarda nuevo producto
@@ -327,17 +320,16 @@ public function saveEdtSeries($params)
             }
         }
         
-
         $prdSk .=  $NxtId ;
 
         $qry = "INSERT INTO ctt_products (
                     prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
                     prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
-                    prd_insured, sbc_id, srv_id, cin_id, prd_status
-                ) VALUES (
-                    '$prdSk', '$prdNm', '$prdEn', '$prdCd', '$prdNp', 
-                    '$prdMd', '$prdPr', '$prdVs', '$prdCm', '$prdLv', '$prdLn', 
-                    '$prdAs', '$prdSb', '$prdSv', '$prdCn', '$prdSt'
+                    prd_insured, sbc_id, srv_id, cin_id, prd_status) 
+                VALUES (
+                    '$prdSk', UPPER('$prdNm'), UPPER('$prdEn'), UPPER('$prdCd'), UPPER('$prdNp'), 
+                    UPPER('$prdMd'), '$prdPr', '$prdVs', UPPER('$prdCm'), '$prdLv', 
+                    '$prdLn', '$prdAs', '$prdSb', '$prdSv', '$prdCn', '$prdSt'
                 );";
         $this->db->query($qry);
         $prdId = $this->db->insert_id;
@@ -363,16 +355,12 @@ public function saveEdtSeries($params)
                         ";
                         $this->db->query($qry1);
             } 
-
             return  $prdCt;
-            
-    
     }
 
 // Guarda nuevo producto
     public function deleteProduct($params)
     {
-
         $prdId = $this->db->real_escape_string($params['prdId']);
         $qry1 = "UPDATE ctt_products SET prd_status = '0' WHERE prd_id = $prdId; ";
         $this->db->query($qry1);
@@ -387,14 +375,12 @@ public function saveEdtSeries($params)
         $this->db->query($qry3);
         
         return $prdId;
-
     }
 
     
 // Guarda nuevo producto
     public function deleteSerie($params)
     {
-
         $serId = $this->db->real_escape_string($params['serId']);
         $prdId = $this->db->real_escape_string($params['prdId']);
 
@@ -405,7 +391,6 @@ public function saveEdtSeries($params)
         $this->db->query($qry2);
 
         return $serId.'|'.$prdId;
-
     }
 }
 

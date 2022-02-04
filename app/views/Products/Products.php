@@ -16,16 +16,6 @@
                     
                     <div class="row rowTop">
                         <h1>Productos</h1>
-<!--                        <div class="row" >
-						<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" value="0" id="checkIsPaquete" check >
-									<label class="form-check-label" for="flexCheckDefault">
-										FILTRAR SOLO PRODUCTOS
-									</label>
-								</div>
-						</div>
-					    </div> -->
                         
                         <select id="txtCategoryList" class="topList">
                             <option value="0">SELECCIONA CATÁLOGO</option>
@@ -101,7 +91,7 @@
                         <td class="concept"><span class="reqsign">*</span> Nombre del producto:</td>
                         <td class="data">
                             <input type="hidden" id="txtPrdId" name="txtPrdId" >
-                            <input type="text" id="txtPrdName" name="txtPrdName" class="textbox required" style="width:300px">
+                            <input type="text" id="txtPrdName" name="txtPrdName" class="textbox required" style="width:300px; text-transform:uppercase">
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
                             <span class="intructions">&nbsp;</span>
                         </td>
@@ -217,9 +207,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Código del producto:</td>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Código por el proveedor:</td>
                         <td class="data">
-                            <input type="text" id="txtPrdCodeProvider" name="txtPrdCodeProvider" class="textbox" style="width:200px">
+                            <input type="text" id="txtPrdCodeProvider" name="txtPrdCodeProvider" class="textbox" style="width:200px; text-transform:uppercase ">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Código del producto definido por el proveedor</span>
                         </td>
@@ -227,7 +217,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Descripción por proveedor:</td>
                         <td class="data">
-                            <input type="text" id="txtPrdNameProvider" name="txtPrdCodeProvider" class="textbox" style="width:300px">
+                            <input type="text" id="txtPrdNameProvider" name="txtPrdCodeProvider" class="textbox" style="width:300px; text-transform:uppercase">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Nombre descriptivo segun el proveedor</span>
                         </td>
@@ -235,7 +225,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Nombre del producto en inglés:</td>
                         <td class="data">
-                            <input type="text" id="txtPrdEnglishName" name="txtPrdEnglishName" class="textbox" style="width:300px">
+                            <input type="text" id="txtPrdEnglishName" name="txtPrdEnglishName" class="textbox" style="width:300px; text-transform:uppercase">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Nombre del producto identificado en inglés</span>
                         </td>
@@ -243,7 +233,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Descripción:</td>
                         <td class="data">
-                            <textarea name="txtPrdComments" id="txtPrdComments" class="textbox" style="width:300px" rows="10"></textarea>
+                            <textarea name="txtPrdComments" id="txtPrdComments" class="textbox" style="width:300px; text-transform:uppercase" rows="10"></textarea>
                             <span class="fail_note hide"></span>
                             <span class="intructions">Descripción del producto</span>
                         </td>
@@ -257,7 +247,7 @@
 
 
 
-<!-- Start Ventana modal AGREGA O MODIFICA PRODUCTO -->
+<!-- Start Ventana modal AGREGA O MODIFICA SERIES -->
 <div class="overlay_background overlay_hide"id="ModifySerieModal">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
@@ -278,7 +268,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign"></span> Numero de serie:</td>
                         <td class="data">
-                            <input type="text" id="txtSerSerialNumber" name="txtSerSerialNumber" class="textbox" style="width:200px">
+                            <input type="text" id="txtSerSerialNumber" name="txtSerSerialNumber" class="textbox" style="width:200px; text-transform:uppercase">
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
                             <span class="intructions">Numero de serie del producto</span>
                         </td>
@@ -335,7 +325,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Descripción:</td>
                         <td class="data">
-                            <textarea name="txtSerComments" id="txtSerComments" class="textbox" style="width:300px" rows="10"></textarea>
+                            <textarea name="txtSerComments" id="txtSerComments" class="textbox" style="width:300px; text-transform:uppercase" rows="10"></textarea>
                             <span class="fail_note hide"></span>
                             <span class="intructions">Descripción del producto</span>
                         </td>
@@ -344,7 +334,7 @@
             </div>
         </div>
     </div>
-<!-- End Ventana modal AGREGA O MODIFICA PRODUCTO -->
+<!-- End Ventana modal AGREGA O MODIFICA SERIES -->
 
 
 <!-- Start Ventana modal ELIMINA PRODUCTO -->

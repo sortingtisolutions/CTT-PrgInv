@@ -29,8 +29,8 @@ function settingTable() {
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, 300, -1],
-            [100, 200, 300, 'Todos'],
+            [50, 100, -1],
+            [50, 100, 'Todos'],
         ],
         buttons: [
             {
@@ -298,6 +298,7 @@ function deleteCategory(catId) {
         });
     }
 }
+
 function putDeleteCategory(dt) {
     getCategories();
     let tabla = $('#CategoriasTable').DataTable();

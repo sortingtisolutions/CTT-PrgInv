@@ -14,7 +14,7 @@ class ServiciosModel extends Model
         $estatus = 0;
 			try {
                 $qry = "INSERT INTO ctt_services(srv_name, srv_description, srv_status)
-                            VALUES('".$params['NomServicio']."','".$params['DesServicio']."',1)";
+                            VALUES(UPPER('".$params['NomServicio']."'), '".$params['DesServicio']."',1)";
 
                 $this->db->query($qry);	
 
@@ -62,12 +62,16 @@ class ServiciosModel extends Model
 
     public function ActualizaServicio($params)
 	{
+		$NomServicio 	= $this->db->real_escape_string($params['NomServicio']);
+		$DesServicio 	= $this->db->real_escape_string($params['DesServicio']);
+		$IdServicio 	= $this->db->real_escape_string($params['IdServicio']);
+		
         $estatus = 0;
 			try {
                 $qry = "UPDATE ctt_services
-                SET srv_name = '".$params['NomServicio']."'
-                ,srv_description = '".$params['DesServicio']."'
-                WHERE srv_id = ".$params['IdServicio'].";";
+                SET srv_name = UPPER('$NomServicio'),
+                srv_description = UPPER('$DesServicio')
+                WHERE srv_id = $IdServicio;";
 
 				$this->db->query($qry);	
 				$estatus = $params['IdServicio'];

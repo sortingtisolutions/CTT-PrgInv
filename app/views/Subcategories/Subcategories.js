@@ -98,8 +98,8 @@ function settingTable() {
         ],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, 200, 300, -1],
-            [50, 100, 200, 300, 'Todos'],
+            [50, 100, 200, -1],
+            [50, 100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -325,7 +325,7 @@ function deleteSubcategory(sbcId) {
         $('#N').html('Cancelar');
         $('#confirmButton').html('Borrar subcategoria').css({display: 'inline'});
         $('#Id').val(sbcId);
-
+        console.log('BORRAR REGISTRO');
         $('#confirmButton').on('click', function () {
             var pagina = 'Subcategories/DeleteSubcategory';
             var par = `[{"sbcId":"${sbcId}"}]`;
@@ -337,6 +337,7 @@ function deleteSubcategory(sbcId) {
 }
 /** ---- Elimina el registro de la subcategoria borrada ---- */
 function putDeleteSubcategory(dt) {
+    console.log('BORRAR LINEA');
     getCategories();
     let tabla = $('#tblSubcategory').DataTable();
     tabla
@@ -346,9 +347,9 @@ function putDeleteSubcategory(dt) {
     $('#confirmModal').modal('hide');
 }
 /** ---- End ELIMINA SUBCATEGORIA ---- */
-/** -------------------------------------------------------------------------- */
 
-/** -------------------------------------------------------------------------- */
+
+
 /** ---- Start LISTADO DE SERIES ---- */
 /** ---- Obtiene las series de la subcategoria seleccionada ---- */
 function selectSeries(reg) {

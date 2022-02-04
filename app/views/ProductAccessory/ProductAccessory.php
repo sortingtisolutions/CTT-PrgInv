@@ -15,7 +15,7 @@
             <div class="mvst_panel">
                 <div class="form-group">
                 <div class="form_primary">
-                    <h4 class="mainTitle">RELACIÓN PRODUCTO ACCESORIO</h4>
+                    <h4 class="mainTitle">RELACIÓN PRODUCTO-ACCESORIO</h4>
 
 
                         <div class="row">
@@ -84,7 +84,7 @@
 
 
             <div class="mvst_table">
-                <h1>Asignacion de accesorios</h1>
+                <h1>Asignacion y selección de accesorios</h1>
                 <div class="double-column">
                     <div class="left-side">
                         <h3>Productos</h3>

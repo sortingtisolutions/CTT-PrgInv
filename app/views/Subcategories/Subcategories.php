@@ -42,7 +42,7 @@
                             <!-- Nombre de la subcategoria -->
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtSubcategory" name="txtSubcategory" type="text" class="form-control form-control-sm" required >
+                                    <input id="txtSubcategory" name="txtSubcategory" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
                                     <label for="txtSubcategory">Nombre Subcategoria</label>
                                 </div>
                                 <input id="txtIdSubcategory" name="txtIdSubcategory" type="hidden" class="form-control form-control-sm" >
@@ -52,7 +52,7 @@
                             <!-- Código de la subcategoria -->
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtSubcategoryCode" name="txtSubcategoryCode" type="text" class="form-control form-control-sm" required >
+                                    <input id="txtSubcategoryCode" name="txtSubcategoryCode" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
                                     <label for="txtSubcategoryCode">Código Subcategoria</label>
                                 </div>
                             </div>

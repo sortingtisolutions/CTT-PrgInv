@@ -24,7 +24,7 @@
 
                         <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="NomAlmacen" name="NomAlmacen" type="text" class="form-control form-control-sm" required>
+                                    <input id="NomAlmacen" name="NomAlmacen" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
                                     <label for="NomAlmacen">Nombre almacen</label>
                                 </div>
                                 <input id="IdAlmacen" name="IdAlmacen" type="hidden">
@@ -32,7 +32,7 @@
 
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="selectRowEncargado" name="selectRowEncargado" type="text" class="form-control form-control-sm" required>
+                                    <input id="selectRowEncargado" name="selectRowEncargado" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required>
                                     <label for="NomAlmacen">Responsable de almacen</label>
 <!--								<select id="selectRowEncargado"  name="selectRowEncargado"  class="form-select form-select-sm" required>
 
@@ -70,15 +70,7 @@
                 <!-- Start área de listado -->
                 <div class="mvst_table">
                     <h1>Almacenes</h1>
-                    <!-- <div class="row" style="margin-bottom: 10px !important;">
-                        <div class="col-md-6"></div>
-                        <div class="col-12 col-md-6 text-right">
-                        <button id="nuevoAlmacen" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AlmacenModal">
-                            <i class="fas fa-user margin-der"> </i>   Nuevo Almacen
-                        </button>
-                        </div>
-                    </div> -->
-
+                    
                     <div class="row">
                         <div class="col-12 col-md-12">		
                                 <table id="AlmacenesTable" class="display compact nowrap" style="width:100%">         
@@ -117,10 +109,6 @@
                         <th style="width: 60px">SKU</th>
                         <th style="width:  220px">Descripción</th>
                         <th style="width: 60px">Cantidades</th>
-                       <!--  <th style="width:  50px">Costo</th>
-                        <th style="width:  50px">Clave status</th>
-                        <th style="width:  50px">Clave etapa</th>
-                        <th style="width: 350px">Comentarios</th> -->
                     </tr>
                 </thead>
             </table>

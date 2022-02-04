@@ -140,5 +140,4 @@ class MoveStoresOutModel extends Model
 		return $this->db->query($qry);
 	}
 
-	
 }
