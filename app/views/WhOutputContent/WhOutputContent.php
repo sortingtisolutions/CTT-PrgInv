@@ -127,7 +127,7 @@
 </div>
 
 
-<!-- Modal Borrar -->
+<!-- Modal Borrar
 <div class="modal fade" id="delPackModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
@@ -150,22 +150,21 @@
                 </div>
             </div>
     </div>
-</div>
+</div>-->
 
-<!-- Start Ventana modal de SERIES seleccionadas del producto-->
-<div class="overlay_background overlay_hide"id="SerieModal">
+<!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
+<div class="overlay_background overlay_hide" id="SerieModal">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
-            <table class="display compact nowrap"  id="tblSerie">
+            <table class="display compact nowrap"  id="tblSerie" style="width: 100%">
                 <thead>
+
                     <tr>
                         <th style="width:  30px"></th>
                         <th style="width: 100px">SKU</th>
                         <th style="width: 350px">Descripcion Producto</th>
                         <th style="width:  70px">Num Serie</th>
                         <th style="width:  50px">Tipo de <br> Producto</th>
-                        <th style="width:  50px">Status</th>
-                        <th style="width:  50px">Disponibles</th>
                     </tr>
                 </thead>
             </table>
@@ -174,11 +173,14 @@
 <!-- End Ventana modal SERIES -->
 
 <!-- Start Ventana modal CHANGESERIES -->
-<div class="overlay_background overlay_hide"id="ChangeSerieModal">
+<div class="overlay_background overlay_hide" id="ChangeSerieModal">
         <div class="overlay_modal">
-            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar 2</span></div>
             <table class="display compact nowrap"  id="tblChangeSerie">
                 <thead>
+                <tr>
+                    <th colspan="6"><span class="btn_back" align="left" >Atras</span></th>
+                </tr>
                     <tr>
                         <th style="width:  30px"></th>
                         <th style="width: 100px">SKU</th>

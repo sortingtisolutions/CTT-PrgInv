@@ -103,6 +103,7 @@ function setting_table_products() {
 
 // Solicita las categorias
 function getCategory() {
+   // console.log('Primer cat');
     var pagina = 'Packages/listCategories';
     var par = `[{"param":""}]`;
     var tipo = 'json';
@@ -111,6 +112,7 @@ function getCategory() {
 }
 // Solicita las subcategorias
 function getSubcategory() {
+    //console.log('Primer sub');
     var pagina = 'Packages/listSubCategories';
     var par = `[{"catId":""}]`;
     var tipo = 'json';
@@ -156,11 +158,23 @@ function putCategory(dt) {
 
     $('#txtCategoryProduct').on('change', function () {
         let ops = `<option value="0" selected>Selecciona una subcategoría</option>`;
+       /*  $('#txtSubcategoryProduct').val();
+        $('#boxProducts').val();
+        $('#listProducts .list-items').val(); */
+        
         $('#txtSubcategoryProduct').html(ops);
         let id = $(this).val();
+        console.log('Limpia', id);
         selSubcategoryProduct(id);
         // validator_part02();
     });
+
+    $('#txtCategoryProduct')
+        .unbind('click')
+        .on('click', function () {
+            $('.list-group').slideUp('slow');
+            //console.log('Click categoria');
+        });
 
     $('#txtCategoryList').on('change', function () {
         let catId = $(this).val();
@@ -196,6 +210,7 @@ function drawProducts(str) {
         .unbind('click')
         .on('click', function () {
             $('.list-group').slideToggle('slow');
+            console.log('Click lista');
             $('.box-items-list i').toggleClass('rotate');
         });
 
@@ -249,6 +264,8 @@ function selSubcategoryPack(id) {
     $('#txtSubcategoryPack')
         .unbind('change')
         .on('change', function () {
+            $('#boxProducts').val();
+            $('#listProducts').val();
             let id = $(this).val();
             validator_part01();
         });
@@ -268,9 +285,20 @@ function selSubcategoryProduct(id) {
     $('#txtSubcategoryProduct')
         .unbind('change')
         .on('change', function () {
+            $('#boxProducts').val();
+            $('#listProducts').val();
+            $('#list-items').val();
             let id = $(this).val();
             drawProducts(id);
         });
+
+    $('#txtSubcategoryProduct')
+        .unbind('click')
+        .on('click', function () {
+            $('.list-group').slideUp('slow');
+            //console.log('Click sucategoria');
+        });
+
 }
 
 // Crea el paquete
