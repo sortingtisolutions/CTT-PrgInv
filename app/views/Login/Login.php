@@ -50,18 +50,18 @@
 						<h1 class="mb-4"><small>Bienvenido a</small><br />CTT Exp & Rentals</h1>
 						<form method="POST" action="<?= FOLDER_PATH . '/Login/signin' ?>">
 							<div class="mb-3">
-								<label for="txtEmployee" class="form-label">Número de empleado</label>
+								<label for="txtEmployee" class="form-label">Número de Usuario</label>
 								<input
 									type="text"
 									class="form-control bg-dark-x border-0"
-									placeholder="Ingresa tu numero de empleado"
+									placeholder="Ingresa tu numero de usuario"
 									id="txtEmployee"
 									name="txtEmployee"
 									autocomplete="off"
 									aria-describedby="employeeHelp"
 								/>
 								<div id="employeeHelp" class="form-text">
-									No compartas tu número de empleado ni tu contraseña.
+									No compartas tu usuario, ni tu contraseña.
 								</div>
 							</div>
 							<div class="mb-3">

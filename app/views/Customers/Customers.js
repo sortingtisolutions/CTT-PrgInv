@@ -15,10 +15,11 @@ $(document).ready(function () {
 function inicial() {
     setTimeout(() => {
         getCustomers();
+        getScores();
+        getCustType();
         /* getSubcategories();
         getServices();
-        getCoins();
-        getDocument();
+        
         getInvoice(); */
     }, 100);
 }
@@ -32,9 +33,37 @@ function getCustomers() {
     fillField(pagina, par, tipo, selector);
 }
 
+/** +++++  Obtiene el producto seleccionado */
+function getSelectCustomer(prdId) {
+    console.log(prdId);
+    var pagina = 'Customers/getSelectCustomer';
+    var par = `[{"prdId":"${prdId}"}]`;
+    var tipo = 'json';
+    var selector = putSelectCustomer;
+    fillField(pagina, par, tipo, selector);
+}
+
+// Solicita las monedas
+function getScores() {
+    var pagina = 'Customers/listScores';
+    var par = '[{"parm":""}]';
+    var tipo = 'json';
+    var selector = putScores;
+    fillField(pagina, par, tipo, selector);
+}
+
+// Solicita las monedas
+function getCustType() {
+    var pagina = 'Customers/listCustType';
+    var par = '[{"parm":""}]';
+    var tipo = 'json';
+    var selector = putCustType;
+    fillField(pagina, par, tipo, selector);
+}
+
 /** +++++  coloca las categorias */
 function putCustomers(dt) {
-    console.log(dt);
+    //console.log(dt);
     prds = dt;
     fillCustomers('0');
 
@@ -91,18 +120,18 @@ function fillCustomers(ft) {
                 var H = `
                 <tr id="${u.cus_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
-                    <td class="sku">${u.cus_name}</td>
-                    <td class="product-name editable" data_action="box" data_edit="cus_contact"> ${u.cus_contact}</td>
-                    <td class="price editable" data_action="box" data_edit="cus_address">${u.cus_address}</td>
-                    <td class="quantity" data-content="${u.cus_address}">${u.cus_address}</td>
-                    <td class="level">${u.cus_email}</td>
-                    <td class="sku editable list">${u.cus_rfc}</td>
-                    <td class="sku">${u.cus_phone}</td>
-                    <td class="cellInvoice center editable fileload">${u.cus_phone_2}</td>
-                    <td class="catalog editable" data_action="list">${u.cus_internal_code}</td>
-                    <td class="catalog editable" data_action="list">${u.cus_qualification}</td>
-                    <td class="catalog editable" data_action="box">${u.cus_legal_representative}</td>
-                    <td class="catalog editable" data_action="box">${u.cus_status}</td>
+                    <td class="product-name" data-content="${u.cus_name}">${u.cus_name}</td>
+                    <td class="product-name">${u.cus_contact}</td>
+                    <td class="product-name">${u.cus_address}</td>
+                    <td class="product-name">${u.cus_email}</td>
+                    <td class="product-name">${u.cus_rfc}</td>
+                    <td class="product-name">${u.cus_phone}</td>
+                    <td class="product-name">${u.cus_phone_2}</td>
+                    <td class="product-name">${u.cus_internal_code}</td>
+                    <td class="sku">${u.cus_qualification}</td>
+                    <td class="sku">${u.cus_legal_representative}</td>
+                    <td class="product-name">${u.cut_name}</td>
+                    <td class="sku">${u.cus_status}</td>
                 </tr>`;
                 $('#tblCustomers tbody').append(H);
             }
@@ -182,18 +211,18 @@ function settingTable() {
         scrollX: true,
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
-            {data: 'produsku', class: 'sku'},
+            {data: 'produsku', class: 'product-name'},
             {data: 'prodname', class: 'product-name'},
-            {data: 'prodpric', class: 'price'},
-            {data: 'prodqtty', class: 'quantity'},
-            {data: 'prodtype', class: 'type'},
-            {data: 'typeserv', class: 'lvl'},
-            {data: 'prodcoin', class: 'sku'},
-            {data: 'prddocum', class: 'cellInvoice center'},
-            {data: 'subcateg', class: 'catalog'},
-            {data: 'categori', class: 'catalog'},
-            {data: 'prodengl', class: 'catalog'},
-            {data: 'prdcomme', class: 'catalog'},
+            {data: 'prodpric', class: 'product-name'},
+            {data: 'prodqtty', class: 'product-name'},
+            {data: 'prodtype', class: 'product-name'},
+            {data: 'typeserv', class: 'product-name'},
+            {data: 'prodcoin', class: 'product-name'},
+            {data: 'prddocum', class: 'product-name'},
+            {data: 'subcateg', class: 'sku'},
+            {data: 'categori', class: 'sku'},
+            {data: 'prodengl', class: 'product-name'},
+            {data: 'prdcomme', class: 'sku'},
         ],
     });
 
@@ -203,6 +232,27 @@ function settingTable() {
             deep_loading('C');
             $('#tblCustomers').DataTable().draw();
         });
+}
+
+/** +++++  coloca los tipos de calificacion */
+function putScores(dt) {
+    if (dt[0].cin_id != '0') {
+        let cinId = dt[0].cin_id;
+        $.each(dt, function (v, u) {
+            var H = `<option value="${u.scr_id}">${u.scr_values}-${u.scr_description}</option>`;
+            $('#txtCinId').append(H);
+        });
+    }
+}
+/** +++++  coloca los tipo productor */
+function putCustType(dt) {
+    if (dt[0].doc_id != '0') {
+        let docId = dt[0].doc_id;
+        $.each(dt, function (v, u) {
+            var H = `<option value="${u.cut_id}">${u.cut_id}-${u.cut_name}</option>`;
+            $('#txtDocId').append(H);
+        });
+    }
 }
 
 
@@ -227,26 +277,7 @@ function putServices(dt) {
         });
     }
 }
-/** +++++  coloca los tipos de moneda */
-function putCoins(dt) {
-    if (dt[0].cin_id != '0') {
-        let cinId = dt[0].cin_id;
-        $.each(dt, function (v, u) {
-            var H = `<option value="${u.cin_id}">${u.cin_code}-${u.cin_name}</option>`;
-            $('#txtCinId').append(H);
-        });
-    }
-}
-/** +++++  coloca los docuemntos */
-function putDocuments(dt) {
-    if (dt[0].doc_id != '0') {
-        let docId = dt[0].doc_id;
-        $.each(dt, function (v, u) {
-            var H = `<option value="${u.doc_id}">${u.doc_name}</option>`;
-            $('#txtDocId').append(H);
-        });
-    }
-}
+
 
 /** +++++  coloca los productos en la tabla */
 /* function putProducts(dt) {
@@ -258,7 +289,7 @@ function putDocuments(dt) {
 
 /** +++++  Activa los iconos */
 function activeIcons() {
-    $('.toLink')
+   /*  $('.toLink')
         .unbind('click')
         .on('click', function () {
             let prd = $(this).parents('tr').attr('id');
@@ -280,17 +311,20 @@ function activeIcons() {
             var selector = putDocument;
             fillField(pagina, par, tipo, selector);
         });
-
+ */
     $('.modif')
         .unbind('click')
         .on('click', function () {
             let sltor = $(this);
             let prdId = sltor.parents('tr').attr('id');
-            let prdNm = 'Modifica producto';
-
+            //let cusNm = sltor.parent('td'[2]).attr('data-content');
+            //(sltor.find('td')[1]).children('.data-content');
+           
+            let prdNm = 'Modifica datos del Cliente';
+            console.log('Dato:', cusNm);
             $('#ProductModal').removeClass('overlay_hide');
-            $('.overlay_closer .title').html(prdNm);
-            getSelectProduct(prdId);
+            $('.overlay_closer .title').html(prdNm, ':', cusNm );
+            getSelectCustomer(prdId);
             $('#ProductModal .btn_close')
                 .unbind('click')
                 .on('click', function () {
@@ -318,15 +352,15 @@ function activeIcons() {
 
                 tabla.row(prdRow).remove().draw();
 
-                var pagina = 'Products/deleteProduct';
+                var pagina = 'Customers/deletCustomers';
                 var par = `[{"prdId":"${Id}"}]`;
                 var tipo = 'html';
-                var selector = putDelProducts;
+                var selector = putDelCustomers;
                 fillField(pagina, par, tipo, selector);
             });
         });
 }
-function putDelProducts(dt) {
+function putDelCustomers(dt) {
     console.log(dt);
 }
 
@@ -354,58 +388,59 @@ function putDocument(dt) {
     a.click();
 }
 
-function putSelectProduct(dt) {
+function putSelectCustomer(dt) {
     cleanProductsFields();
-    let prdId = dt[0].prd_id;
-    let prdName = dt[0].prd_name;
-    let prdSku = dt[0].prd_sku;
-    let prdModel = dt[0].prd_model;
-    let prdPrice = dt[0].prd_price;
-    let prdEnglishName = dt[0].prd_english_name;
-    let prdCodeProvider = dt[0].prd_code_provider;
-    let prdNameProvider = dt[0].prd_name_provider;
-    let prdComments = dt[0].prd_comments;
-    let prdVisibility = dt[0].prd_visibility;
-    let prdLevel = dt[0].prd_level;
-    let prdLonely = dt[0].prd_lonely;
-    let prdInsured = dt[0].prd_insured;
-    let sbcId = dt[0].sbc_id;
-    let catId = $(`#txtSbcId option[value="${sbcId}"]`).attr('data_category');
-    let cinId = dt[0].cin_id;
-    let srvId = dt[0].srv_id;
-    let docId = dt[0].docum;
-    let dcpId = dt[0].documId;
+    //console.log(dt);
+    let cusId = dt[0].cus_id;
+    let cusName = dt[0].cus_name;
+    let cusCont = dt[0].cus_contact;
+    let cusAdrr = dt[0].cus_address;
+    let cusEmail = dt[0].cus_email;
+    let cusRFC = dt[0].cus_rfc;
+    let cusPhone = dt[0].cus_phone;
+    let cusPhone2 = dt[0].cus_phone_2;
+    let cusICod = dt[0].cus_internal_code;
+    let cusQualy = dt[0].cus_qualification;
+    let cusProsp = dt[0].cus_prospect;
+    let cusSpon = dt[0].cus_sponsored;
+    let cusLegalR = dt[0].cus_legal_representative;
+    let cusLegalA = dt[0].cus_legal_act;
+    //let catId = $(`#txtSbcId option[value="${sbcId}"]`).attr('data_category');
+    let cusContr = dt[0].cus_contract;
+    let cusStat = dt[0].cus_status;
+    let docId = dt[0].cus_status;
+    let dcpId = dt[0].cus_status;
 
-    let vsb = prdVisibility == '1' ? ' <i class="fas fa-check-square" data_val="1"></i>' : '<i class="far fa-square" data_val="0"></i>';
+    let vsb = cusStat == '1' ? ' <i class="fas fa-check-square" data_val="1"></i>' : '<i class="far fa-square" data_val="0"></i>';
     // let lvl = prdLevel == 'A' ? ' <i class="fas fa-check-square" data_val="1"></i>' : '<i class="far fa-square" data_val="0"></i>';
-    let lvl = prdLevel == 'A' ? ' Accesorio' : 'Producto';
+    /*let lvl = prdLevel == 'A' ? ' Accesorio' : 'Producto';
     let lnl = prdLonely == '1' ? ' <i class="fas fa-check-square" data_val="1"></i>' : '<i class="far fa-square" data_val="0"></i>';
     let ass = prdInsured == '1' ? ' <i class="fas fa-check-square" data_val="1"></i>' : '<i class="far fa-square" data_val="0"></i>';
 
     $(`#txtCatId`).attr('disabled', true);
-    $(`#txtSbcId`).attr('disabled', true);
+    $(`#txtSbcId`).attr('disabled', true); */
 
-    $('#txtPrdId').val(prdId);
-    $('#txtPrdName').val(prdName);
-    $('#txtPrdSku').val(prdSku);
-    $('#txtPrdModel').val(prdModel);
-    $('#txtPrdPrice').val(prdPrice);
-    $('#txtPrdEnglishName').val(prdEnglishName);
-    $('#txtPrdCodeProvider').val(prdCodeProvider);
-    $('#txtPrdNameProvider').val(prdNameProvider);
-    $('#txtPrdComments').val(prdComments);
-    $(`#txtCatId`).val(catId);
-    $(`#txtSbcId`).val(sbcId);
-    $(`#txtCinId`).val(cinId);
-    $(`#txtSrvId`).val(srvId);
-    $(`#txtDocId`).val(docId);
-    $(`#txtDcpId`).val(dcpId);
-    $('#txtPrdVisibility').html(vsb);
-    $('#txtPrdLevel').html(lvl);
+    $('#txtPrdId').val(cusId);
+    $('#txtCusName').val(cusName);
+    $('#txtCusCont').val(cusCont);
+    $('#txtCusAdrr').val(cusAdrr);
+    $('#txtCusEmail').val(cusEmail);
+    $('#txtCusRFC').val(cusRFC);
+    $('#txtCusPhone').val(cusPhone);
+    $('#txtCusPhone2').val(cusPhone2);
+    $('#txtCusCodI').val(cusICod);
+    $(`#txtCinId`).val(cusQualy);
+    $(`#txtDocId`).val(cusProsp);
+    $(`#txtCusSpon`).val(cusSpon);
+    $(`#txtcusLegalR`).val(cusLegalR);
+    $(`#txtcusLegalA`).val(cusLegalA);
+    $(`#txtcusContr`).val(cusContr);
+    $('#txtCusStat').html(vsb);
+   /* $('#txtPrdLevel').html(lvl);
     $('#txtPrdLonely').html(lnl);
-    $('#txtPrdInsured').html(ass);
+    $('#txtPrdInsured').html(ass); */
 
-    $('#tblEditProduct .checkbox i')
+    $('#tblEditCust .checkbox i')
         .unbind('click')
         .on('click', function () {
             let itm = $(this);
@@ -440,10 +475,10 @@ function saveEditProduct() {
     let ky = validatorProductsFields();
     if (ky == 0) {
         let prdId = $('#txtPrdId').val();
-        let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
-        let prdSk = $('#txtPrdSku').val();
-        let prdMd = $('#txtPrdModel').val();
-        let prdPr = $('#txtPrdPrice').val();
+        let prdNm = $('#txtCusName').val().replace(/\"/g, '°');
+        let prdSk = $('#txtCusCont').val();
+        let prdMd = $('#txtCusAdrr').val();
+        let prdPr = $('#txtCusEmail').val();
         let prdEn = $('#txtPrdEnglishName').val();
         let prdCd = $('#txtPrdCodeProvider').val();
         let prdNp = $('#txtPrdCodeProvider').val();
@@ -492,9 +527,9 @@ function saveEditProduct() {
 
 function resEdtProduct(dt) {
     let prdId = dt.split('|')[0];
-    let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
-    let prdSk = $('#txtPrdSku').val();
-    let prdPr = formato_numero($('#txtPrdPrice').val(), 2, '.', ',');
+    let prdNm = $('#txtCusName').val().replace(/\"/g, '°');
+    let prdSk = $('#txtCusCont').val();
+    let prdPr = formato_numero($('#txtCusEmail').val(), 2, '.', ',');
     let prdEn = $('#txtPrdEnglishName').val();
     let prdCm = $('#txtPrdComments').val();
     // let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
@@ -536,7 +571,7 @@ function createNewProduct() {
     $('#txtPrdVisibility').html('<i class="fas fa-check-square"></i>');
     $('.overlay_closer .title').html(prdNm);
 
-    $('#tblEditProduct .checkbox i')
+    $('#tblEditCust .checkbox i')
         .unbind('click')
         .on('click', function () {
             let itm = $(this);
@@ -611,20 +646,20 @@ function subcategoriesGetCode(sbcId) {
 function fillFieldSkuBox() {
     sku3 = sku3 == '' ? '' : sku3;
     sku4 = sku4 == '' ? '' : '-' + sku4;
-    $('#txtPrdSku').val(sku1 + sku2 + sku3 + sku4);
+    $('#txtCusCont').val(sku1 + sku2 + sku3 + sku4);
 }
 
 function saveNewProduct() {
     let ky = validatorProductsFields();
     if (ky == 0) {
         let prdId = '0';
-        let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
-        let prdSk = $('#txtPrdSku').val();
-        let prdMd = $('#txtPrdModel').val();
-        let prdPr = $('#txtPrdPrice').val();
+        let prdNm = $('#txtCusName').val().replace(/\"/g, '°');
+        let prdSk = $('#txtCusCont').val();
+        let prdMd = $('#txtCusAdrr').val();
+        let prdPr = $('#txtCusEmail').val();
         let prdEn = $('#txtPrdEnglishName').val();
         let prdCd = $('#txtPrdCodeProvider').val();
-        let prdNp = $('#txtPrdNameProvider').val();
+        let prdNp = $('#txtCusNameProvider').val();
         let prdCm = $('#txtPrdComments').val();
         let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
         let prdLv = $('#txtPrdLevel').children('i').attr('data_val');

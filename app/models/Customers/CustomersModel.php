@@ -13,9 +13,36 @@ class CustomersModel extends Model
 // Listado de categorias
     public function listCustomers()
     {
-        $qry = "SELECT * FROM ctt_customers WHERE cus_status = 1;";
+        $qry = "SELECT * FROM ctt_customers as cus
+                INNER JOIN ctt_customers_type as ct ON cus.cut_id = ct.cut_id
+                WHERE cus.cus_status = 1 limit 10;";
         return $this->db->query($qry);
     }
+
+    // Obtiene datos del producto selecionado
+    public function getSelectCustomer($params)
+    {
+        $prdId = $this->db->real_escape_string($params['prdId']);
+        $qry = "SELECT * FROM ctt_customers AS cus
+                INNER JOIN ctt_customers_type AS ct ON cus.cut_id = ct.cut_id
+                WHERE cus.cus_status = 1 AND cus.cus_id = $prdId limit 1;";
+
+      /*   $qry = "SELECT pr.*, 
+                    ifnull((
+                            SELECT dt.doc_id FROM ctt_products_documents AS dc 
+                            LEFT JOIN ctt_documents AS dt ON dt.doc_id = dc.doc_id AND  dt.dot_id = 2
+                            WHERE  dt.dot_id = 2 AND dc.prd_id = pr.prd_id
+                            ),0) AS docum, 
+                    ifnull((
+                            SELECT dc.dcp_id FROM ctt_products_documents AS dc 
+                            LEFT JOIN ctt_documents AS dt ON dt.doc_id = dc.doc_id AND  dt.dot_id = 2
+                            WHERE  dt.dot_id = 2 AND dc.prd_id = pr.prd_id
+                            ),0) AS documId
+                FROM ctt_products AS pr
+                WHERE pr.prd_id = $prdId limit 1;"; */
+        return $this->db->query($qry);
+    }
+
 
 // Listado de categorias
     public function listSubcategories()
@@ -32,17 +59,17 @@ class CustomersModel extends Model
     }
 
 // Listado de tipos de moneda
-    public function listCoins()
+    public function listScores()
     {
-        $qry = "SELECT * FROM ctt_coins WHERE cin_status = 1;";
+        $qry = "SELECT * FROM ctt_scores;";
         return $this->db->query($qry);
     }
 
 
 // Listado de fichas técnicas
-    public function listDocument()
+    public function listCustType()
     {
-        $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id = 2;";
+        $qry = "SELECT * FROM ctt_customers_type;";
         return $this->db->query($qry);
     }
 
@@ -126,26 +153,6 @@ public function listInvoice()
         return $this->db->query($qry);
     }
 
-
-// Obtiene datos del producto selecionado
-    public function getSelectProduct($params)
-    {
-        $prdId = $this->db->real_escape_string($params['prdId']);
-        $qry = "SELECT pr.*, 
-                    ifnull((
-                            SELECT dt.doc_id FROM ctt_products_documents AS dc 
-                            LEFT JOIN ctt_documents AS dt ON dt.doc_id = dc.doc_id AND  dt.dot_id = 2
-                            WHERE  dt.dot_id = 2 AND dc.prd_id = pr.prd_id
-                            ),0) AS docum, 
-                    ifnull((
-                            SELECT dc.dcp_id FROM ctt_products_documents AS dc 
-                            LEFT JOIN ctt_documents AS dt ON dt.doc_id = dc.doc_id AND  dt.dot_id = 2
-                            WHERE  dt.dot_id = 2 AND dc.prd_id = pr.prd_id
-                            ),0) AS documId
-                FROM ctt_products AS pr
-                WHERE pr.prd_id = $prdId limit 1;";
-        return $this->db->query($qry);
-    }
 
 
 // Obtiene datos de la serie selecionada
@@ -359,19 +366,12 @@ public function saveEdtSeries($params)
     }
 
 // Guarda nuevo producto
-    public function deleteProduct($params)
+    public function deletCustomers($params)
     {
         $prdId = $this->db->real_escape_string($params['prdId']);
-        $qry1 = "UPDATE ctt_products SET prd_status = '0' WHERE prd_id = $prdId; ";
-        $this->db->query($qry1);
-        
-        $qry2 = "UPDATE ctt_series SET ser_status = '0' WHERE prd_id = $prdId; ";
-        $this->db->query($qry2);
 
-        $qry3 = "UPDATE ctt_stores_products AS sp
-                INNER JOIN  ctt_series AS sr ON sr.ser_id = sp.ser_id
-                SET sp.stp_quantity = 0
-                WHERE sr.prd_id = $prdId; ";
+        $qry3 = "UPDATE tmp_carga_cat14 SET tempo7=$prdId;";
+        
         $this->db->query($qry3);
         
         return $prdId;

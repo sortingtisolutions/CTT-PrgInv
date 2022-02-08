@@ -85,10 +85,10 @@ public function listServices($request_params)
 
 
 // Lista los tipos de monedas
-public function listCoins($request_params)
+public function listScores($request_params)
 	{
 		$params =  $this->session->get('user');
-		$result = $this->model->listCoins($request_params);
+		$result = $this->model->listScores($request_params);
 		$i = 0;
 		while($row = $result->fetch_assoc()){
 			$rowdata[$i] = $row;
@@ -104,10 +104,10 @@ public function listCoins($request_params)
 
 
 // Lista los documentos de fichas técnicas
-public function listDocument($request_params)
+public function listCustType($request_params)
 	{
 		$params =  $this->session->get('user');
-		$result = $this->model->listDocument($request_params);
+		$result = $this->model->listCustType($request_params);
 		$i = 0;
 		while($row = $result->fetch_assoc()){
 			$rowdata[$i] = $row;
@@ -160,10 +160,10 @@ public function listDocument($request_params)
 
 
 // Obtiene datos del producto seleccionado
-	public function getSelectProduct($request_params)
+	public function getSelectCustomer($request_params)
 	{
 		$params =  $this->session->get('user');
-		$result = $this->model->getSelectProduct($request_params);
+		$result = $this->model->getSelectCustomer($request_params);
 		$i = 0;
 		while($row = $result->fetch_assoc()){
 			$rowdata[$i] = $row;
@@ -252,10 +252,10 @@ public function saveEdtSeries($request_params)
 
 	
 // Borra un producto seleccionado
-	public function deleteProduct($request_params)
+	public function deletCustomers($request_params)
 	{
 		$params =  $this->session->get('user');
-		$result = $this->model->deleteProduct($request_params);
+		$result = $this->model->deletCustomers($request_params);
 		$res = $result ;
 		echo $res;
 	}
