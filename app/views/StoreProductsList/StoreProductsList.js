@@ -4,6 +4,7 @@ let folio;
 let pr = [];
 let link = '';
 let url;
+let urlapi = 'https://cire-rest.rutaip.net';
 
 $(document).ready(function () {
     url = getAbsolutePath();
@@ -383,60 +384,46 @@ function send_api_detail() {
 }
 
 function putlistDetailProject(dt) {
-    console.log(dt);
-
-    var data = new FormData();
-    data.append('email', 'cire@test.com');
-    data.append('password', 'C1r322022!');
-
-    var tk = '17|bzWMNHCJUJnK9pWlIoAAQyaJoXpT1zSPDSv7azz7';
-
-    // var url = 'https://cire-rest.rutaip.net/api/auth/login'
-    var url = 'https://fc32-2806-2f0-9060-6eca-e453-f7c2-321e-5ca8.ngrok.io';
+    var par = '[{"email": "cire@test.com","password":"C1r322022!"}]';
 
     $.ajax({
-        url: url + '/api/auth/login',
-        method: 'POST',
-        timeout: 0,
-        processData: false,
-        mimeType: 'multipart/form-data',
-        contentType: false,
-        data: data,
-        success: function (token) {
-            console.log(token);
-
-            sendDtata(dt, tk, url);
-        },
-        error: function (xhr, textStatus, error) {
-            console.log(xhr);
-            // sendDtata(dt, tk, url);
-        },
-    });
-}
-
-function sendDtata(dt, tk, url) {
-    $.ajax({
-        url: url + '/api/invoice',
-        method: 'POST',
-        timeout: 0,
-        headers: {
-            Authorization: 'Bearer ' + tk,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: '*/*',
-            'Accept-Encoding': 'gzip, deflate, br,',
-        },
-        data: {
-            cve_art: '010D0120003',
-            descr: 'MONITOR FLANDERS SCIENTIFIC 21.5"  MULTI-FORMAT HD/SD-SDI',
-            uni_med: 'pieza',
-            linea: '010D',
-            peso: '10 lt',
-        },
-        success: function (resp) {
-            console.log(resp);
+        url: urlapi + '/api/auth/login',
+        type: 'post',
+        data: parse_data(par),
+        dataType: 'JSON',
+        success: function (tk) {
+            console.log(tk);
+            sendDtata(dt, tk, urlapi);
         },
         error: function (xhr, textStatus, error) {
             console.log(xhr, textStatus, error);
         },
+    });
+}
+
+function sendDtata(dt, tk, urlapi) {
+    $.each(dt, function (v, u) {
+        $.ajax({
+            url: urlapi + '/api/invoice',
+            method: 'POST',
+            timeout: 0,
+            headers: {
+                Authorization: 'Bearer ' + tk.token,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            data: {
+                cve_art: u.cve_art,
+                descr: u.descr,
+                uni_med: 'pieza',
+                linea: u.linea,
+                peso: '10 lt',
+            },
+            success: function (resp) {
+                console.log(resp);
+            },
+            error: function (xhr, textStatus, error) {
+                console.log(xhr, textStatus, error);
+            },
+        });
     });
 }
