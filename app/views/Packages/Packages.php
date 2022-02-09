@@ -20,7 +20,7 @@
 
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtPackageName" type="text" class="form-control form-control-sm" >
+                                <input id="txtPackageName" type="text" class="form-control form-control-sm" style="text-transform:uppercase">
                                 <label for="txtPackageName">Nombre del paquete</label>
                             </div>
                            
@@ -28,7 +28,7 @@
 
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtPackagePrice" type="text" class="form-control form-control-sm" >
+                                <input id="txtPackagePrice" type="text" class="form-control form-control-sm">
                                 <label for="txtPackagePrice">Precio del paquete</label>
                             </div>
                         </div>

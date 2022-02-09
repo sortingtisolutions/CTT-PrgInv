@@ -11,8 +11,9 @@ $(document).ready(function () {
 });
 
 function inicial() {
+
     getProjects(0);
-    //settingTable();
+    settingTable();
 }
 
 /** +++++  Obtiene los proyectos de la base */
@@ -30,6 +31,7 @@ function getSelectProject(pjtid) {
     var tipo = 'json';
     var selector = putSelectProject;
     fillField(pagina, par, tipo, selector);
+    //ALGO
 }
 
 /** +++++  coloca los productos en la tabla */
@@ -42,7 +44,7 @@ function putProducts(dt) {
             var H = `
                 <tr id="${u.pjt_id}">
                     <td class="edit"><i class='fas fa-edit detail'></i></td>
-                    <td class="product-name editable">${u.pjttp_name}</td>
+                    <td class="product-name editable">${u.pjt_name}</td>
                     <td class="product-name editable">${u.pjt_name}</td>
                     <td class="product-name editable">${u.pjt_number}</td>
                     <td class="sku editable list">${u.pjt_date_start}</td>
@@ -52,10 +54,9 @@ function putProducts(dt) {
                 </tr>`;
             $('#tblProducts tbody').append(H);
         });
-        
-        //console.log('1111');
-        activeIcons();
         //settingTable();
+
+        activeIcons();
     } else {
         settingTable();
     }
@@ -63,10 +64,12 @@ function putProducts(dt) {
 
 /** +++++  configura la table de productos */
 function settingTable() {
-    let title = 'Lista de Proyectos';
+    let title = 'Control salida de proyectos';
+
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+  //console.log('1111');
     $('#tblProducts').DataTable({
-        order: [[4, 'desc']],
+        order: [[2, 'desc']],
         dom: 'Blfrtip',
         lengthMenu: [
             [100, 200, 300, -1],
@@ -103,14 +106,7 @@ function settingTable() {
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
             },
-            {
-                // Boton nuevo producto
-                text: 'Nuevo producto',
-                className: 'btn-apply',
-                action: function (e, dt, node, config) {
-                    createNewProduct();
-                },
-            },
+
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -121,23 +117,26 @@ function settingTable() {
         fixedHeader: true,
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
-            {data: 'produsku', class: 'sku'},
-            {data: 'prodname', class: 'sku'},
-            {data: 'prodpric', class: 'sku'},
-            {data: 'prodqtty', class: 'sku'},
-            {data: 'prodtype', class: 'sku'},
-            {data: 'typeserv', class: 'sku'},
-            {data: 'prodcoin', class: 'sku'},
-           // {data: 'prddocum', class: 'sku'},
+            {data: 'pjt_name', class: 'product-name'},
+            {data: 'pjt_number', class: 'product-name'},
+            {data: 'pjt_date_start', class: 'product-name'},
+            {data: 'pjt_date_end', class: 'sku'},
+            {data: 'pjt_date_end', class: 'sku'},
+            {data: 'pjt_date_project', class: 'sku'},
+            {data: 'pjt_location', class: 'product-name'},
         ],
     });
 
-    $('.tblProdMaster')
+    //$('.tblProductsMaster')
+/*
+      $('tblProdMaster')
         .delay(500)
         .slideDown('fast', function () {
             $('.deep_loading').css({display: 'none'});
             $('#tblProducts').DataTable().draw();
-        }); 
+        });
+*/
+
 }
 
 /** +++++  Activa los iconos */
@@ -166,9 +165,9 @@ function activeIcons() {
             Cookies.set('pjtid', pjtid, {expires:1});
 
             window.location = 'WhOutputContent';
-        }); 
+        });
 }
-
+/*
 function putSelectProject(dt) {
     cleanProductsFields();
     console.log(dt);
@@ -205,3 +204,4 @@ function putSelectProject(dt) {
         $('.required').removeClass('fail').parent().children('.fail_note').addClass('hide');
     }
 }
+*/

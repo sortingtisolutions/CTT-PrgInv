@@ -21,6 +21,7 @@ class PackagesModel extends Model
     public function listSubCategories($params)
     {
         $catId = $this->db->real_escape_string($params);
+        
         $qry = "SELECT * FROM ctt_subcategories WHERE sbc_status = 1;";
         return $this->db->query($qry);
     }
