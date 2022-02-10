@@ -14,9 +14,7 @@ function inicial() {
         getCategories();
         deep_loading('O');
         $('.tblProdMaster').css({display: 'none'});
-        // setting_table();
         getPriceList();
-        //$('#LoadingModal').addClass('overlay_hide');
     }, 100);
 }
 
@@ -131,40 +129,6 @@ function putPriceList(dt) {
         active_icons();
     }
 }
-// function x_putPriceList(dt) {
-//     let tabla = $('#tblPriceList').DataTable();
-//     if (dt[0].prd_id != '0') {
-//         var catId = dt[0].cat_id;
-//         $.each(dt, function (v, u) {
-//             pack = u.prd_level == 'K' ? 'fas' : 'far';
-//             let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt"></i></span>`;
-//             let invoice = u.doc_id == 0 ? '' : docInvo;
-//             // console.log(u.prd_id);
-//             tabla.row
-//                 .add({
-//                     editable: `&nbsp;`,
-//                     produsku: `<span class="hide-support">${u.prd_id}</span>${u.prd_sku}`,
-//                     prodname: `<i class="${pack} fa-box-open fa-sm"></i> ${u.prd_name}`,
-//                     prodqtty: `<span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name}|${u.quantity}|${u.prd_level}">${u.quantity}</span>`,
-//                     prodpric: u.prd_price,
-//                     prodcoin: u.prd_coin_type,
-//                     prddocum: invoice,
-//                     categori: u.cat_name,
-//                     subcateg: u.sbc_name,
-//                     typeserv: u.srv_name,
-//                     prodengl: u.prd_english_name,
-//                 })
-//                 .draw();
-//         });
-
-//         num += grp;
-//         // setTimeout(() => {
-//         getPriceList(catId);
-//         // }, 10);
-//     } else {
-//         active_icons();
-//     }
-// }
 
 /** +++++  Obtiene los documentos asociados al producto */
 function getDocuments() {
@@ -184,7 +148,7 @@ function putDocuments(dt) {
 
 // Solicita los tipos de movimiento
 function getCategories() {
-    var pagina = 'Productos/listCategories';
+    var pagina = 'Products/listCategories';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putCategories;
@@ -207,8 +171,6 @@ function putCategories(dt) {
             let id = $(this).val();
             let catName = $(`#txtCategoryList option[value="${id}"]`).val();
             num = 0;
-            //$('.deep_loading').css({display: 'flex'});
-            // getPriceList(catId);
             console.log(catName);
             $('#tblPriceList_filter input').val(catName).trigger('keyup');
         });
@@ -224,8 +186,6 @@ function active_icons() {
             let qty = $(this).attr('data-content').split('|')[2];
             let pkt = $(this).attr('data-content').split('|')[3];
             let pkn = $(this).attr('data-content').split('|')[1];
-
-            console.log(pkt, prd, qty);
 
             if (qty > 0) {
                 if (pkt == 'K') {

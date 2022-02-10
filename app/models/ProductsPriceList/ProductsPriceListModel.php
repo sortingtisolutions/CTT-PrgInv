@@ -9,6 +9,12 @@ class ProductsPriceListModel extends Model
         parent::__construct();
     }
 
+// Listado de categorias
+public function listCategories()
+{
+    $qry = "SELECT cat_id, cat_name FROM ctt_categories WHERE cat_status = 1;";
+    return $this->db->query($qry);
+}
 
 // Listado de Productos
 public function listProducts($params)
