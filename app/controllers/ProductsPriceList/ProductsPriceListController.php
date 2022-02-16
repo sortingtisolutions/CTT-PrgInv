@@ -24,6 +24,27 @@ class ProductsPriceListController extends Controller
 		$this->render(__CLASS__, $params);
 	}
 
+
+// Lista las categorias
+public function listCategories($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->listCategories($request_params);
+    $i = 0;
+    while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+    }
+    if ($i>0){
+        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    } else {
+        $res =  '[{"cat_id":"0"}]';	
+    }
+    echo $res;
+}
+
+
+
 // Lista los productos
 	public function listProducts($request_params)
 	{
