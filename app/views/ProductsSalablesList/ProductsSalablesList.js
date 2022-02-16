@@ -124,7 +124,7 @@ function fillSalesTbl() {
         $.each(sale, function (v, u) {
             var icoView = `<i class="fas fa-eye view"></i>`;
             var icoComm = '';
-            if (sale[0].comments != 0) {
+            if (u.comments != 0) {
                 icoComm = `<i class="far fa-comment-dots comments"></i>`;
             }
             var rw = tabla.row
@@ -230,7 +230,7 @@ function putSalesDetail(dt) {
         var rw = $(this).parents('tr');
         var qtySel = rw.attr('realQty');
         if (qtySel == undefined) {
-            qtySel = rw.children('td.quantity').text();
+            qtySel = rw.children('td.quantity').text('');
         }
         let H = `
             <div class="rtnprod_deep">
@@ -403,17 +403,15 @@ function getComments(salId) {
 }
 
 function putComments(dt) {
-    console.log(dt);
-
-    $.each(dt, function (v, u) {
+    //console.log(dt);
+        $.each(dt, function (v, u) {
         var H = `
             <div class="commet_item">
                 <div class="com_comment">${u.com_comment}</div>
                 <div class="com_date">${u.com_date}</div>
                 <div class="com_id">ID: ${u.com_id}</div>
                 <div class="com_user">${u.com_user}</div>
-            </div>
-        `;
+            </div> `;
 
         $('.comments_area').append(H);
     });

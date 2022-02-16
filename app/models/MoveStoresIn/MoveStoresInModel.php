@@ -42,10 +42,10 @@ class MoveStoresInModel extends Model
         $dotId='0';
         if($extId==9)
         {
-            $dotId='1,4';
+            $dotId='1';
         } elseif($extId==10)
         {
-            $dotId='5'; 
+            $dotId='4'; 
         }
 
         $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id IN ($dotId)";

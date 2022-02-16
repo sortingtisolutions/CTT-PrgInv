@@ -14,12 +14,13 @@
     <div class="contenido ">
         <div class="row">
             <div class="block_01">
+            
                 <div class="row">
 
                     <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 blocks">
                         
                         <div class="  block_01-02">
-                        <span class="titleSection">Proyectos</span>
+                        <span class="titleSection">Proyectos Aprobados</span>
                             <table class="table_information">
                                 <tr>
                                     <td class="concepto"><b>Numero de proyecto</b></td>
@@ -37,7 +38,7 @@
                                     <td class="error">&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class="concepto">Proyecto</td>
+                                    <td class="concepto">Buscar Proyecto</td>
                                     <td class="dato" id="Projects">
                                     <div class="grouper" contenteditable="true" data_identy=""></div>
                                         <i class="fas fa-caret-down turn"></i>

@@ -1489,7 +1489,7 @@ function add_project() {
         <div class="form col-sm-12 col-md-12 col-lg-8 col-xl-8 qst">
             <div class="form_group">
                 <label for="txtProject">Nombre del proyecto:</label>
-                <input type="text" id="txtProject" name="txtProject"  class="textbox"><br>
+                <input type="text" id="txtProject" name="txtProject" class="textbox" autocomplete="off"><br>
                 <span class="alert"></span>
             </div>
 
@@ -1502,7 +1502,7 @@ function add_project() {
 
             <div class="form_group">
                 <label for="txtLocation">Locación:</label>
-                <input type="text" id="txtLocation" name="txtLocation"  class="textbox">
+                <input type="text" id="txtLocation" name="txtLocation" class="textbox" autocomplete="off">
             </div>
 
             <div class="form_group">

@@ -27,41 +27,6 @@ class CustomersModel extends Model
                 INNER JOIN ctt_customers_type AS ct ON cus.cut_id = ct.cut_id
                 WHERE cus.cus_status = 1 AND cus.cus_id = $prdId limit 1;";
 
-      /*   $qry = "SELECT pr.*, 
-                    ifnull((
-                            SELECT dt.doc_id FROM ctt_products_documents AS dc 
-                            LEFT JOIN ctt_documents AS dt ON dt.doc_id = dc.doc_id AND  dt.dot_id = 2
-                            WHERE  dt.dot_id = 2 AND dc.prd_id = pr.prd_id
-                            ),0) AS docum, 
-                    ifnull((
-                            SELECT dc.dcp_id FROM ctt_products_documents AS dc 
-                            LEFT JOIN ctt_documents AS dt ON dt.doc_id = dc.doc_id AND  dt.dot_id = 2
-                            WHERE  dt.dot_id = 2 AND dc.prd_id = pr.prd_id
-                            ),0) AS documId
-                FROM ctt_products AS pr
-                WHERE pr.prd_id = $prdId limit 1;"; */
-        return $this->db->query($qry);
-    }
-
-
-// Listado de categorias
-    public function listSubcategories()
-    {
-        $qry = "SELECT cat_id, sbc_id, sbc_name, sbc_code FROM ctt_subcategories WHERE sbc_status = 1;";
-        return $this->db->query($qry);
-    }
-
-// Listado de servicios
-    public function listServices()
-    {
-        $qry = "SELECT srv_id, srv_name, srv_description FROM ctt_services WHERE srv_status = 1;";
-        return $this->db->query($qry);
-    }
-
-// Listado de tipos de moneda
-    public function listScores()
-    {
-        $qry = "SELECT * FROM ctt_scores;";
         return $this->db->query($qry);
     }
 
@@ -293,76 +258,34 @@ public function saveEdtSeries($params)
 // Guarda nuevo producto
     public function saveNewProduct($params)
     {
-        $prdId = $this->db->real_escape_string($params['prdId']);
-        $prdNm = $this->db->real_escape_string($params['prdNm']);
-        $prdSk = $this->db->real_escape_string($params['prdSk']);
-        $prdMd = $this->db->real_escape_string($params['prdMd']);
-        $prdPr = $this->db->real_escape_string($params['prdPr']);
-        $prdEn = $this->db->real_escape_string($params['prdEn']);
-        $prdCd = $this->db->real_escape_string($params['prdCd']);
-        $prdNp = $this->db->real_escape_string($params['prdNp']);
-        $prdCm = $this->db->real_escape_string($params['prdCm']);
-        $prdVs = $this->db->real_escape_string($params['prdVs']);
-        $prdLv = $this->db->real_escape_string($params['prdLv']);
-        $prdLn = $this->db->real_escape_string($params['prdLn']);
-        $prdAs = $this->db->real_escape_string($params['prdAs']);
-        $prdCt = $this->db->real_escape_string($params['prdCt']);
-        $prdSb = $this->db->real_escape_string($params['prdSb']);
-        $prdCn = $this->db->real_escape_string($params['prdCn']);
-        $prdSv = $this->db->real_escape_string($params['prdSv']);
-        $prdDc = $this->db->real_escape_string($params['prdDc']);
-        $prdDi = $this->db->real_escape_string($params['prdDi']);
-        $prdSt = '1';
-        $NxtId ='';
+        $cusId = $this->db->real_escape_string($params['cusId']);
+        $cusName = $this->db->real_escape_string($params['cusName']);
+        $cusCont = $this->db->real_escape_string($params['cusCont']);
+        $cusAdrr = $this->db->real_escape_string($params['cusAdrr']);
+        $cusEmail = $this->db->real_escape_string($params['cusEmail']);
+        $cusRFC = $this->db->real_escape_string($params['cusRFC']);
+        $cusPhone = $this->db->real_escape_string($params['cusPhone']);
+        $cusPhone2 = $this->db->real_escape_string($params['cusPhone2']);
+        $cusICod = $this->db->real_escape_string($params['cusICod']);
+        $cusQualy = $this->db->real_escape_string($params['cusQualy']);
+        $cusProsp = $this->db->real_escape_string($params['cusProsp']);
+        $cusSpon = $this->db->real_escape_string($params['cusSpon']);
+        $cusLegalR = $this->db->real_escape_string($params['cusLegalR']);
+        $cusLegalA = $this->db->real_escape_string($params['cusLegalA']);
+        $cusContr = $this->db->real_escape_string($params['cusContr']);
+        $cusStat = $this->db->real_escape_string($params['cusStat']);
+      
+        $qry="INSERT INTO ctt_customers(cus_id, cus_name, cus_contact, cus_address, cus_email, cus_rfc, 
+                cus_phone, cus_phone_2, cus_internal_code, cus_qualification, cus_prospect, cus_sponsored, 
+                cus_legal_representative, cus_legal_act, cus_contract, cut_id, cus_status) 
+                VALUES ('', UPPER('$cusName'),UPPER('$cusCont'),UPPER('$cusAdrr'),'$cusEmail',UPPER('$cusRFC'),
+                '$cusPhone','$cusPhone2',UPPER('$cusICod'),'$cusQualy','$cusProsp','$cusSpon',
+                '$cusLegalR','$cusLegalA','$cusContr',0,'$cusStat') ;";
 
-        if ($prdLv == 'P'){
-
-            $NxtId = "SELECT ifnull(max(convert(substring(prd_sku,5,3), signed integer)),0) + 1 AS next
-                FROM ctt_products  WHERE sbc_id = $prdSb;";
-            $rss = $this->db->query($NxtId);
-
-            if ($row = $rss->fetch_row()) {
-                $skires = trim($row[0]);
-                $NxtId = str_pad($skires, 3, "0", STR_PAD_LEFT);
-            }
-        }
-        
-        $prdSk .=  $NxtId ;
-
-        $qry = "INSERT INTO ctt_products (
-                    prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
-                    prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
-                    prd_insured, sbc_id, srv_id, cin_id, prd_status) 
-                VALUES (
-                    '$prdSk', UPPER('$prdNm'), UPPER('$prdEn'), UPPER('$prdCd'), UPPER('$prdNp'), 
-                    UPPER('$prdMd'), '$prdPr', '$prdVs', UPPER('$prdCm'), '$prdLv', 
-                    '$prdLn', '$prdAs', '$prdSb', '$prdSv', '$prdCn', '$prdSt'
-                );";
         $this->db->query($qry);
         $prdId = $this->db->insert_id;
 
-            if ($prdDi == '0'&& $prdDc > '0' ){
-                $qry1 = "INSERT INTO ctt_products_documents 
-                            (dcp_source, prd_id, doc_id) 
-                        VALUES
-                            ('P', '$prdId', '$prdDc')
-                        ";
-                        $this->db->query($qry1);
-
-            } elseif($prdDi > '0' && $prdDc > '0'){
-                $qry1 = "UPDATE ctt_products_documents 
-                        SET  doc_id = '$prdDc'
-                        WHERE dcp_id = '$prdDi';
-                        ";
-                        $this->db->query($qry1);
-
-            } elseif ($prdDi > '0' && $prdDc == '0'){
-                $qry1 = "DELETE FROM ctt_products_documents 
-                        WHERE dcp_id = '$prdDi';
-                        ";
-                        $this->db->query($qry1);
-            } 
-            return  $prdCt;
+        return  $prdId;
     }
 
 // Guarda nuevo producto

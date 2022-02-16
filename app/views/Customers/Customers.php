@@ -15,7 +15,7 @@
                 <div class="mvst_list tblProdMaster">
                     
                     <div class="row rowTop">
-                        <h1>Listado de Clientes</h1>
+                        <h1>Listado de Clientes con un Proyecto</h1>
                         
                         <!-- <select id="txtCategoryList" class="topList">
                             <option value="0">SELECCIONA CATÁLOGO</option>
@@ -78,7 +78,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Direccion: </td>
                         <td class="data">
-                            <input type="text" id="txtCusAdrr" name="txtCusAdrr" class="textbox" style="width:300px; text-transform:uppercase">
+                            <input type="text" id="txtCusAdrr" name="txtCusAdrr" class="textbox  required" style="width:300px; text-transform:uppercase">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Domicilio fiscal del cliente</span>
                         </td>
@@ -86,7 +86,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> E-mail: </td>
                         <td class="data">
-                            <input type="text" id="txtCusEmail" name="txtCusEmail" class="textbox" style="width:150px">
+                            <input type="text" id="txtCusEmail" name="txtCusEmail" class="textbox  required" style="width:150px">
                             <span class="fail_note hide"></span>
                             <span class="intructions">correo electronico</span>
                         </td>
@@ -94,7 +94,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> RFC: </td>
                         <td class="data">
-                            <input type="text" id="txtCusRFC" name="txtCusRFC" class="textbox" style="width:100px; text-transform:uppercase">
+                            <input type="text" id="txtCusRFC" name="txtCusRFC" class="textbox  required" style="width:100px; text-transform:uppercase">
                             <span class="fail_note hide"></span>
                             <span class="intructions">RFC del cliente</span>
                         </td>
@@ -103,13 +103,13 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Telefono Principal: </td>
                         <td class="data">
-                            <input type="text" id="txtCusPhone" name="txtCusPhone" class="textbox" style="width:150px">
+                            <input type="text" id="txtCusPhone" name="txtCusPhone" class="textbox  required" style="width:150px">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Telefono principal de contacto</span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Telefono 2: </td>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Telefono Secundario: </td>
                         <td class="data">
                             <input type="text" id="txtCusPhone2" name="txtCusPhone2" class="textbox" style="width:150px">
                             <span class="fail_note hide"></span>
@@ -126,25 +126,21 @@
                     </tr>
 
                     <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Calificación: </td>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Calificación del Cliente: </td>
                         <td class="data">
-                            <select id="txtCinId" name="txtCinId" class="textbox required" style="width:300px">
+                            <select id="txtQualy" name="txtQualy" class="textbox" style="width:300px">
                                 <option value="0">Calificación</option>
                             </select>
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
                             <span class="intructions">Calificacion segun historial del cliente</span>
                         </td>
                     </tr>
-
                     <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Tipo Productor:</td>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de Cliente: </td>
                         <td class="data">
-                            <select id="txtDocId" name="txtDocId" class="textbox" style="width:300px">
-                                <option value="0">Selecciona Tipo</option>
-                            </select>
-                            <input type="hidden" id="txtDcpId" name="txtDcpId">
+                            <input type="text" id="txtcusProsp" name="txtcusProsp" class="textbox" style="width:200px; text-transform:uppercase">
                             <span class="fail_note hide"></span>
-                            <span class="intructions">Tipo de cliente, segun su funcion</span>
+                            <span class="intructions">Tipo de cliente 0-Prospecto / 1-Cliente con Proyecto</span>
                         </td>
                     </tr>
                     
@@ -156,15 +152,6 @@
                             <span class="intructions">Indica si el cliente esta activo o inactivo</span>
                         </td>
                     </tr>
-
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de Cliente: </td>
-                        <td class="data">
-                            <input type="text" id="txtPrdPrice" name="txtPrdPrice" class="textbox" style="width:200px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Tipo de cliente segun los proyectos</span>
-                        </td>
-                    </tr>
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Patrocinador: </td>
                         <td class="data">
@@ -173,6 +160,19 @@
                             <span class="intructions">Patrocinador</span>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de Producción:</td>
+                        <td class="data">
+                            <select id="txtTypeProd" name="txtTypeProd" class="textbox" style="width:300px">
+                                <option value="0">Selecciona Tipo</option>
+                            </select>
+                            <input type="hidden" id="txtTypeProdId" name="txtTypeProdId">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Tipo de cliente, segun su funcion 1-Casa Productora / 2-Productor</span>
+                        </td>
+                    </tr>
+                    
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Representante Legal: </td>
                         <td class="data">

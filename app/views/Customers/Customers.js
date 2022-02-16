@@ -236,28 +236,28 @@ function settingTable() {
 
 /** +++++  coloca los tipos de calificacion */
 function putScores(dt) {
-    if (dt[0].cin_id != '0') {
-        let cinId = dt[0].cin_id;
+    if (dt[0].scr_id != '0') {
+        let cinId = dt[0].scr_id;
         $.each(dt, function (v, u) {
             var H = `<option value="${u.scr_id}">${u.scr_values}-${u.scr_description}</option>`;
-            $('#txtCinId').append(H);
+            $('#txtQualy').append(H);
         });
     }
 }
 /** +++++  coloca los tipo productor */
 function putCustType(dt) {
-    if (dt[0].doc_id != '0') {
-        let docId = dt[0].doc_id;
+    if (dt[0].cut_id != '0') {
+        let docId = dt[0].cut_id;
         $.each(dt, function (v, u) {
             var H = `<option value="${u.cut_id}">${u.cut_id}-${u.cut_name}</option>`;
-            $('#txtDocId').append(H);
+            $('#txtTypeProd').append(H);
         });
     }
 }
 
 
 /** +++++  coloca las subcategorias */
-function putSubcategories(dt) {
+/* function putSubcategories(dt) {
     subs = dt;
     if (dt[0].sbc_id != '0') {
         let sbcId = dt[0].sbc_id;
@@ -266,9 +266,9 @@ function putSubcategories(dt) {
             $('#txtSbcId').append(H);
         });
     }
-}
+} */
 /** +++++  coloca los tipos de servicio */
-function putServices(dt) {
+/* function putServices(dt) {
     if (dt[0].srv_id != '0') {
         let srvId = dt[0].srv_id;
         $.each(dt, function (v, u) {
@@ -276,7 +276,7 @@ function putServices(dt) {
             $('#txtSrvId').append(H);
         });
     }
-}
+} */
 
 
 /** +++++  coloca los productos en la tabla */
@@ -317,13 +317,15 @@ function activeIcons() {
         .on('click', function () {
             let sltor = $(this);
             let prdId = sltor.parents('tr').attr('id');
-            //let cusNm = sltor.parent('td'[2]).attr('data-content');
+            //let cusNm = $(sltor.find('td')[2]).text();
+            //find('td')[2]).text(prdNm);
             //(sltor.find('td')[1]).children('.data-content');
            
             let prdNm = 'Modifica datos del Cliente';
-            console.log('Dato:', cusNm);
+            //console.log('Dato:', cusNm);
             $('#ProductModal').removeClass('overlay_hide');
-            $('.overlay_closer .title').html(prdNm, ':', cusNm );
+            //$('.overlay_closer .title').html(prdNm, ':', cusNm );
+            $('.overlay_closer .title').html(prdNm);
             getSelectCustomer(prdId);
             $('#ProductModal .btn_close')
                 .unbind('click')
@@ -360,6 +362,7 @@ function activeIcons() {
             });
         });
 }
+
 function putDelCustomers(dt) {
     console.log(dt);
 }
@@ -378,7 +381,7 @@ function filterProduct() {
     }
 }
 
-function putDocument(dt) {
+/* function putDocument(dt) {
     var a = document.createElement('a');
     a.href = 'data:application/octet-stream;base64,' + dt.doc_document;
     a.target = '_blank';
@@ -387,7 +390,7 @@ function putDocument(dt) {
     a.download = dt.doc_name + '.' + dt.doc_type.trim();
     a.click();
 }
-
+ */
 function putSelectCustomer(dt) {
     cleanProductsFields();
     //console.log(dt);
@@ -408,8 +411,8 @@ function putSelectCustomer(dt) {
     //let catId = $(`#txtSbcId option[value="${sbcId}"]`).attr('data_category');
     let cusContr = dt[0].cus_contract;
     let cusStat = dt[0].cus_status;
-    let docId = dt[0].cus_status;
-    let dcpId = dt[0].cus_status;
+    /* let docId = dt[0].cus_status;
+    let dcpId = dt[0].cus_status; */
 
     let vsb = cusStat == '1' ? ' <i class="fas fa-check-square" data_val="1"></i>' : '<i class="far fa-square" data_val="0"></i>';
     // let lvl = prdLevel == 'A' ? ' <i class="fas fa-check-square" data_val="1"></i>' : '<i class="far fa-square" data_val="0"></i>';
@@ -429,8 +432,8 @@ function putSelectCustomer(dt) {
     $('#txtCusPhone').val(cusPhone);
     $('#txtCusPhone2').val(cusPhone2);
     $('#txtCusCodI').val(cusICod);
-    $(`#txtCinId`).val(cusQualy);
-    $(`#txtDocId`).val(cusProsp);
+    $(`#txtQualy`).val(cusQualy);
+    $(`#txtTypeProd`).val(cusProsp);
     $(`#txtCusSpon`).val(cusSpon);
     $(`#txtcusLegalR`).val(cusLegalR);
     $(`#txtcusLegalA`).val(cusLegalA);
@@ -467,6 +470,7 @@ function putSelectCustomer(dt) {
     $('#btn_save')
         .unbind('click')
         .on('click', function () {
+            
             saveEditProduct();
         });
 }
@@ -479,20 +483,20 @@ function saveEditProduct() {
         let prdSk = $('#txtCusCont').val();
         let prdMd = $('#txtCusAdrr').val();
         let prdPr = $('#txtCusEmail').val();
-        let prdEn = $('#txtPrdEnglishName').val();
-        let prdCd = $('#txtPrdCodeProvider').val();
-        let prdNp = $('#txtPrdCodeProvider').val();
-        let prdCm = $('#txtPrdComments').val();
-        let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
-        let prdLl = $('#txtPrdLevel').children('i').attr('data_val');
+        let prdEn = $('#txtCusRFC').val();
+        let prdCd = $('#txtCusPhone').val();
+        let prdNp = $('#txtCusPhone2').val();
+        let prdCm = $('#txtCusCodI').val();
+        let prdVs = $('#txtQualy').children('i').attr('data_val');
+        let prdLl = $('#txtCusStat').children('i').attr('data_val');
         let prdLv = prdLl == '1' ? 'A' : 'P';
         let prdLn = $('#txtPrdLonely').children('i').attr('data_val');
         let prdAs = $('#txtPrdInsured').children('i').attr('data_val');
-        let prdCt = $(`#txtCatId`).val();
-        let prdSb = $(`#txtSbcId`).val();
-        let prdCn = $(`#txtCinId`).val();
-        let prdSv = $(`#txtSrvId`).val();
-        let prdDc = $(`#txtDocId`).val();
+        let prdCt = $(`#txtPrdPrice`).val();
+        let prdSb = $(`#txtCusSpon`).val();
+        let prdCn = $(`#txtcusLegalR`).val();
+        let prdSv = $(`#txtcusLegalA`).val();
+        let prdDc = $(`#txtcusContr`).val();
         let prdDi = $(`#txtDcpId`).val();
 
         var par = `
@@ -518,10 +522,11 @@ function saveEditProduct() {
                     "prdDi" : "${prdDi}"
                 }]
             `;
-        var pagina = 'Customers/saveEdtProduct';
+        console.log('EDITA ',par);
+        /* var pagina = 'Customers/saveEdtProduct';
         var tipo = 'html';
         var selector = resEdtProduct;
-        fillField(pagina, par, tipo, selector);
+        fillField(pagina, par, tipo, selector); */
     }
 }
 
@@ -536,7 +541,7 @@ function resEdtProduct(dt) {
     let prdLv = $('#txtPrdLevel').text().substring(1, 2);
     let prdCt = $(`#txtCatId option:selected`).text();
     let prdSb = $(`#txtSbcId option:selected`).text();
-    let prdCn = $(`#txtCinId option:selected`).val() == 0 ? '' : $(`#txtCinId option:selected`).text().split('-')[0];
+    let prdCn = $(`#txtQualy option:selected`).val() == 0 ? '' : $(`#txtQualy option:selected`).text().split('-')[0];
     let prdSv = $(`#txtSrvId option:selected`).val() == 0 ? '' : $(`#txtSrvId option:selected`).text().split('-')[0];
     let prdDi = $(`#txtDocId option:selected`).val() == 0 ? '' : $(`#txtDocId option:selected`).val();
 
@@ -568,10 +573,10 @@ function createNewProduct() {
     $(`#txtCatId`).attr('disabled', false);
     $(`#txtSbcId`).attr('disabled', false);
     $('#ProductModal').removeClass('overlay_hide');
-    $('#txtPrdVisibility').html('<i class="fas fa-check-square"></i>');
+    $('#txtCusStat').html('<i class="fas fa-check-square"></i>');
     $('.overlay_closer .title').html(prdNm);
 
-    $('#tblEditCust .checkbox i')
+     $('#tblEditCust .checkbox i')
         .unbind('click')
         .on('click', function () {
             let itm = $(this);
@@ -585,10 +590,10 @@ function createNewProduct() {
                 itm.removeAttr('class').addClass('far fa-square');
                 itm.attr('data_val', '0');
             }
-            let accr = $(this).attr('data_val');
-            /* console.log(itmId, accr); */
-            
-            /* AGREGA VALORES AL ACCESORIO */
+        });
+ /*           let accr = $(this).attr('data_val');
+                        
+            // AGREGA VALORES AL ACCESORIO 
             if (itmId == 'txtPrdLevel') {
                 if(accr == 1){
                 $(`#txtCatId`).val(20);
@@ -618,8 +623,10 @@ function createNewProduct() {
             sku4 = '';
 
             fillFieldSkuBox();
-        });
-
+        } 
+    ); */
+ 
+        
     $('#ProductModal .btn_close')
         .unbind('click')
         .on('click', function () {
@@ -652,51 +659,49 @@ function fillFieldSkuBox() {
 function saveNewProduct() {
     let ky = validatorProductsFields();
     if (ky == 0) {
-        let prdId = '0';
-        let prdNm = $('#txtCusName').val().replace(/\"/g, '°');
-        let prdSk = $('#txtCusCont').val();
-        let prdMd = $('#txtCusAdrr').val();
-        let prdPr = $('#txtCusEmail').val();
-        let prdEn = $('#txtPrdEnglishName').val();
-        let prdCd = $('#txtPrdCodeProvider').val();
-        let prdNp = $('#txtCusNameProvider').val();
-        let prdCm = $('#txtPrdComments').val();
-        let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
-        let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
-        prdLv = prdLv == '1' ? 'A' : 'P';
-        let prdLn = $('#txtPrdLonely').children('i').attr('data_val');
-        let prdAs = $('#txtPrdInsured').children('i').attr('data_val');
-        let prdCt = $(`#txtCatId`).val();
-        let prdSb = $(`#txtSbcId`).val();
-        let prdCn = $(`#txtCinId`).val();
-        let prdSv = $(`#txtSrvId`).val();
-        let prdDc = $(`#txtDocId`).val();
-        let prdDi = $(`#txtDcpId`).val();
+        let cusId = '0';
+        let cusName = $('#txtCusName').val().replace(/\"/g, '°');
+        let cusCont = $('#txtCusCont').val();
+        let cusAdrr = $('#txtCusAdrr').val();
+        let cusEmail = $('#txtCusEmail').val();
+        let cusRFC = $('#txtCusRFC').val();
+        let cusPhone = $('#txtCusPhone').val();
+        let cusPhone2 = $('#txtCusPhone2').val();
+        let cusICod = $('#txtCusCodI').val();
+        let cusQualy = $(`#txtQualy option:selected`).text().split('-')[0];
+        let cusProsp = $('#txtcusProsp').val();
+        let cusStat = $('#txtCusStat').children('i').attr('data_val');
+        /* let prdLv = prdLl == '1' ? 'A' : 'P';
+        let prdLn = $('#txtPrdLonely').children('i').attr('data_val'); 
+        let cusProsp = $('#txtPrdInsured').children('i').attr('data_val');
+        /* let cusSpon = $(`#txtPrdPrice`).val(); */
+        let cusSpon = $(`#txtCusSpon`).val();
+        let cusLegalR = $(`#txtcusLegalR`).val();
+        let cusLegalA = $(`#txtcusLegalA`).val();
+        let cusContr = $(`#txtcusContr`).val();
+        /* let cusStat = $(`#txtDcpId`).val(); */
 
         var par = `
                 [{
-                    "prdId" : "${prdId}",
-                    "prdNm" : "${prdNm}",
-                    "prdSk" : "${prdSk}",
-                    "prdMd" : "${prdMd}",
-                    "prdPr" : "${prdPr}",
-                    "prdEn" : "${prdEn}",
-                    "prdCd" : "${prdCd}",
-                    "prdNp" : "${prdNp}",
-                    "prdCm" : "${prdCm}",
-                    "prdVs" : "${prdVs}",
-                    "prdLv" : "${prdLv}",
-                    "prdLn" : "${prdLn}",
-                    "prdAs" : "${prdAs}",
-                    "prdCt" : "${prdCt}",
-                    "prdSb" : "${prdSb}",
-                    "prdCn" : "${prdCn}",
-                    "prdSv" : "${prdSv}",
-                    "prdDc" : "${prdDc}",
-                    "prdDi" : "${prdDi}"
+                    "cusId" : "${cusId}",
+                    "cusName" : "${cusName}",
+                    "cusCont" : "${cusCont}",
+                    "cusAdrr" : "${cusAdrr}",
+                    "cusEmail" : "${cusEmail}",
+                    "cusRFC" : "${cusRFC}",
+                    "cusPhone" : "${cusPhone}",
+                    "cusPhone2" : "${cusPhone2}",
+                    "cusICod" : "${cusICod}",
+                    "cusQualy" : "${cusQualy}",
+                    "cusProsp" : "${cusProsp}",
+                    "cusSpon" : "${cusSpon}",
+                    "cusLegalR" : "${cusLegalR}",
+                    "cusLegalA" : "${cusLegalA}",
+                    "cusContr" : "${cusContr}",
+                    "cusStat" : "${cusStat}"
                 }]
             `;
-       /*  console.log(par); */
+        console.log('NUEVO ', par); 
         var pagina = 'Customers/saveNewProduct';
         var tipo = 'html';
         var selector = resNewProduct;
@@ -705,7 +710,7 @@ function saveNewProduct() {
 }
 function resNewProduct(dt) {
     console.log(dt);
-    $('#txtCategoryList').val(dt).trigger('change');
+    //$('#txtCategoryList').val(dt).trigger('change');
     $('#ProductModal .btn_close').trigger('click');
 }
 

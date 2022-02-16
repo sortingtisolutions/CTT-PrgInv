@@ -598,7 +598,6 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = 'Version de docuemntos de cotizaci√
 
 
 
-
 DROP VIEW ctt_vw_subletting;
 
 CREATE VIEW ctt_vw_subletting AS

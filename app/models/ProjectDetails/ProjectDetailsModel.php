@@ -102,7 +102,7 @@ class ProjectDetailsModel extends Model
             INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
             INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
             LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-            WHERE pc.pjt_id = $pjtId ORDER BY pjtcn_prod_name ASC;";
+            WHERE pc.pjt_id = $pjtId ORDER BY pc.pjtcn_id ASC;";
         return $this->db->query($qry);
     } 
     
@@ -281,11 +281,7 @@ class ProjectDetailsModel extends Model
     {
         $pjtcnId       = $this->db->real_escape_string($params["pjtcnid"]);
 
-        $qry = "SELECT 
-                    pr.prd_id
-                    , pr.prd_sku
-                    , pj.pjtdt_prod_sku
-                    , pr.prd_name
+        $qry = "SELECT pr.prd_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name
                     , pr.prd_level
                     , ct.cat_name
                     , ROW_NUMBER() OVER (partition by pr.prd_sku ORDER BY sr.ser_sku desc) AS reng
@@ -294,8 +290,7 @@ class ProjectDetailsModel extends Model
                 INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
-                WHERE pj.pjtcn_id = $pjtcnId order by reng, pr.prd_sku;
-                ";
+                WHERE pj.pjtcn_id = $pjtcnId order by pj.pjtdt_id;"; //order by reng, pr.prd_sku; ";
         return $this->db->query($qry);
     }
     
@@ -354,7 +349,7 @@ class ProjectDetailsModel extends Model
                     FROM ctt_projects_content AS pc
                     INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                     INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-                    WHERE pc.pjtcn_id = $pjtcn_id; ";
+                    WHERE pc.pjtcn_id = $pjtcn_id order by pc.pjtcn_id; ";
 
         return $this->db->query($qry);
     }
