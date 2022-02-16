@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
+require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
 class ProductsModel extends Model
 {
@@ -61,6 +62,50 @@ public function listInvoice()
                 FROM ctt_products  WHERE sbc_id = $sbcId;";
         return $this->db->query($qry);
     }
+
+
+// Obtiene la lista de productos
+    public function tableProducts($params)
+    {
+
+        $table = 'ctt_vw_products';  
+        $primaryKey = 'producid';
+        $catId= $this->db->real_escape_string($params['catId']);
+        $filter = $this->db->real_escape_string($params['filter']) == '0' ? "'P','A'" : "'P'";
+
+        $where =  "cat_id =" . $catId . " AND prodtype in (" . $filter . ")"; 
+
+        $columns = array(
+            array( 'db' => 'editable', 'dt' => 'editable' ),
+            array( 'db' => 'producid', 'dt' => 'producid' ),
+            array( 'db' => 'produsku', 'dt' => 'produsku' ),
+            array( 'db' => 'prodname', 'dt' => 'prodname' ),
+            array( 'db' => 'prodpric', 'dt' => 'prodpric' ),
+            array( 'db' => 'prodqtty', 'dt' => 'prodqtty' ),
+            array( 'db' => 'prodtype', 'dt' => 'prodtype' ),
+            array( 'db' => 'typeserv', 'dt' => 'typeserv' ),
+            array( 'db' => 'prodcoin', 'dt' => 'prodcoin' ),
+            array( 'db' => 'prddocum', 'dt' => 'prddocum' ),
+            array( 'db' => 'subcateg', 'dt' => 'subcateg' ),
+            array( 'db' => 'categori', 'dt' => 'categori' ),
+            array( 'db' => 'prodengl', 'dt' => 'prodengl' ),
+            array( 'db' => 'prdcomme', 'dt' => 'prdcomme' )
+        );
+
+        $sql_details = array(
+            'user' => USER,
+            'pass' => PASSWORD,
+            'db'   => DB_NAME,
+            'host' => HOST,
+            'charset' => 'utf8',
+        );
+
+        return json_encode(
+            SSP::complex( $_POST, $sql_details, $table, $primaryKey, $columns, null, $where )
+        );
+    }
+
+
 
 
 // Listado de Productos

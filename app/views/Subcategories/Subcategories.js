@@ -62,31 +62,6 @@ function putSubcategories(dt) {
     fillSubcategorieslst();
 }
 
-// /** ---- Llena la tabla de subcategorias ---- */
-// function fillSubcategoriesTbl() {
-//     $('#tblSubcategory tbody').html('');
-
-//     let tabla = $('#tblSubcategory').DataTable();
-
-//     $.each(subs, function (v, u) {
-//         var rw = tabla.row
-//             .add({
-//                 editable: `<i class="fas fa-pen modif"></i><i class="fas fa-times-circle kill"></i>`,
-//                 subccode: u.sbc_code,
-//                 subcname: u.sbc_name,
-//                 catgname: u.cat_name,
-//                 catgcode: u.cat_id,
-//                 quantity: `<span class="toLink">0</span>`,
-//             })
-//             .draw()
-//             .node();
-//         $(rw).attr('id', u.sbc_id);
-//         get_quantity(u.sbc_id);
-//     });
-//     activeActions();
-//     deep_loading('C');
-// }
-
 /** +++++  configura la table de subcategorias */
 function settingTable() {
     let title = 'Lista de subcategorias';
@@ -347,8 +322,6 @@ function putDeleteSubcategory(dt) {
     $('#confirmModal').modal('hide');
 }
 /** ---- End ELIMINA SUBCATEGORIA ---- */
-
-
 
 /** ---- Start LISTADO DE SERIES ---- */
 /** ---- Obtiene las series de la subcategoria seleccionada ---- */

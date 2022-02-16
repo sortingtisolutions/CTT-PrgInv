@@ -121,6 +121,13 @@ public function listDocument($request_params)
 		echo $res;
 	}
 
+// Obtiene la lista de productos
+	public function tableProducts($request_params)
+	{
+		$result = $this->model->tableProducts($request_params);
+		echo $result;
+	}
+
 	
 // Lista los productos
 	public function listProducts($request_params)

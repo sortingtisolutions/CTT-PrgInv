@@ -27,6 +27,7 @@
                         <thead>
                             <tr>
                                 <th style="width:  5px"></th>
+                                <th style="width:  80px"></th>
                                 <th style="width:  85px">SKU</th>
                                 <th style="width: 350px">Nombre</th>
                                 <th style="width:  70px">Precio</th>

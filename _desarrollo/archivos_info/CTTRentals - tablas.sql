@@ -648,6 +648,35 @@ CREATE VIEW ctt_vw_subcategories AS
     GROUP BY sc.sbc_id;
 
 
+DROP VIEW ctt_vw_products;
+CREATE VIEW ctt_vw_products AS
+SELECT 
+	CONCAT('<i class="fas fa-pen modif" data="', pr.prd_id,'"></i><i class="fas fa-times-circle kill" data="', pr.prd_id , '"></i>') AS editable
+	, pr.prd_id 			AS producid
+    , pr.prd_sku			AS produsku
+    , pr.prd_name			AS prodname
+    , pr.prd_price  		AS prodpric 
+    , CONCAT('<span class="toLink">', ifnull((SELECT sum(stp_quantity) FROM ctt_stores_products AS sp
+				INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+				WHERE sr.prd_id = pr.prd_id),0), '</span>')  AS prodqtty
+	, pR.prd_level			AS prodtype
+    , sv.srv_name 			AS typeserv 
+	, cn.cin_code 			AS prodcoin
+    , CONCAT('<i class="fas fa-file-invoice" id="',dc.doc_id,'"></i>') AS prddocum
+    , sc.sbc_name			AS subcateg
+    , ct.cat_name			AS categori
+    , pr.prd_english_name 	AS prodengl
+    , pr.prd_comments		AS prdcomme
+    , ct.cat_id
+FROM ctt_products 					AS pr
+INNER JOIN ctt_coins 				AS cn ON cn.cin_id = pr.cin_id
+INNER JOIN ctt_services             AS sv ON sv.srv_id = pr.srv_id  AND sv.srv_status = '1'
+INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = pr.sbc_id  AND sc.sbc_status = '1'
+INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id  AND ct.cat_status = '1'
+LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = pr.prd_id  AND dc.dcp_source = 'P'
+WHERE pr.prd_status = 1 AND pr.prd_level IN ('A', 'P') ;
+
+
 
 DROP VIEW ctt_vw_project_subletting;
 

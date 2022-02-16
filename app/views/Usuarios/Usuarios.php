@@ -11,15 +11,15 @@
 				<!-- Start área de formularios -->
 				<div class="mvst_panel">
 					<div class="form-group">
-						<h4 id="titulo">Nuevo Usuarios</h4>  
+						<h4 id="titulo">Nuevo Usuario</h4>  
 						<form id="formUsuario" class="row g-3 needs-validation" novalidate>
 
-							<div class="row" hidden>
+							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<input id="EmpIdUsuario" name="EmpIdUsuario" type="text" class="form-control form-control-sm"  autocomplete="off">
-									<input id="lastDate" name="lastDate" type="text" class="form-control form-control-sm"  autocomplete="off">
+									<input id="lastDate"     name="lastDate"     type="text" class="form-control form-control-sm"  autocomplete="off">
 									<input id="userRegistry" name="userRegistry" type="text" class="form-control form-control-sm"  autocomplete="off">
-									<input id="IdUsuario" name="IdUsuario" type="text" class="form-control form-control-sm"  autocomplete="off">
+									<input id="IdUsuario"    name="IdUsuario"    type="text" class="form-control form-control-sm"  autocomplete="off">
 								</div>
 							</div>
 
