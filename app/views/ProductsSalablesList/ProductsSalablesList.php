@@ -12,7 +12,7 @@
         <div class="row mvst_group">
             <div class="mvst_list tblProdMaster">
                 <div class="row rowTop">
-                    <h1>Productos</h1>
+                    <h1>Productos Vendidos</h1>
                 </div>
 
                 <table class="display compact nowrap"  id="tblSales" style="min-width: 1050px">

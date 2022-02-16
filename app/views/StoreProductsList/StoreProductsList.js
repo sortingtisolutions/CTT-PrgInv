@@ -383,15 +383,39 @@ function send_api_detail() {
 }
 
 function putlistDetailProject(dt) {
-    console.log(dt);
+    var form = new FormData();
+    form.append('email', 'cire@test.com');
+    form.append('password', 'C1r322022!');
 
-    var data = new FormData();
-    data.append('email', 'cire@test.com');
-    data.append('password', 'C1r322022!');
+    console.log(form);
+
+    var par = '[{"email": "cire@test.com","password":"C1r322022!"}]';
+
+    $.ajax({
+        url: 'https://cire-rest.rutaip.net/api/auth/login',
+        type: 'post',
+        data: parse_data(par),
+        dataType: 'JSON',
+        cache: false,
+        success: function (dts) {
+            console.log(dts);
+        },
+        error: function (xhr, textStatus, error) {
+            console.log(xhr, textStatus, error);
+        },
+    });
+}
+
+function x_putlistDetailProject(dt) {
+    // console.log(dt);
+
+    var form = new FormData();
+    form.append('email', 'cire@test.com');
+    form.append('password', 'C1r322022!');
 
     var tk = '17|bzWMNHCJUJnK9pWlIoAAQyaJoXpT1zSPDSv7azz7';
 
-    // var url = 'https://cire-rest.rutaip.net/api/auth/login'
+    //var url = 'https://cire-rest.rutaip.net';
     var url = 'https://fc32-2806-2f0-9060-6eca-e453-f7c2-321e-5ca8.ngrok.io';
 
     $.ajax({
@@ -401,7 +425,7 @@ function putlistDetailProject(dt) {
         processData: false,
         mimeType: 'multipart/form-data',
         contentType: false,
-        data: data,
+        data: form,
         success: function (token) {
             console.log(token);
 

@@ -90,8 +90,8 @@
                     <tr>
                         <td class="concept"><span class="reqsign">*</span> Nombre del producto:</td>
                         <td class="data">
-                            <input type="hidden" id="txtPrdId" name="txtPrdId" >
-                            <input type="text" id="txtPrdName" name="txtPrdName" class="textbox required" style="width:300px; text-transform:uppercase">
+                            <input type="hidden" id="txtPrdId" name="txtPrdId" autocomplete="nope" >
+                            <input type="text" id="txtPrdName" name="txtPrdName" class="textbox required" style="width:300px; text-transform:uppercase" autocomplete="nope">
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
                             <span class="intructions">&nbsp;</span>
                         </td>

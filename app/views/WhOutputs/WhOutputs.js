@@ -11,9 +11,12 @@ $(document).ready(function () {
 });
 
 function inicial() {
-
-    getProjects(0);
-    settingTable();
+    setTimeout(() => {
+        deep_loading('O');
+        $('.tblProdMaster').css({display: 'none'});
+        // setting_table();
+        getProjects(0);
+    }, 100);
 }
 
 /** +++++  Obtiene los proyectos de la base */
@@ -25,19 +28,19 @@ function getProjects(catId) {
     fillField(pagina, par, tipo, selector);
 }
 
-function getSelectProject(pjtid) {
+/* function getSelectProject(pjtid) {
     var pagina = 'WhOutputs/getSelectProject';
     var par = `[{"prdId":"${pjtid}"}]`;
     var tipo = 'json';
     var selector = putSelectProject;
     fillField(pagina, par, tipo, selector);
     //ALGO
-}
+} */
 
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
-    console.log(dt);
-    $('#tblProducts tbody').html('');
+    //console.log(dt);
+    $('#tblProyects tbody').html('');
     if (dt[0].pjt_id != '0') {
         var catId = dt[0].cat_id;
         $.each(dt, function (v, u) {
@@ -52,10 +55,9 @@ function putProducts(dt) {
                     <td class="sku editable list">${u.pjt_date_project}</td>
                     <td class="product-name editable">${u.pjt_location}</td>
                 </tr>`;
-            $('#tblProducts tbody').append(H);
+            $('#tblProyects tbody').append(H);
         });
-        //settingTable();
-
+        settingTable();
         activeIcons();
     } else {
         settingTable();
@@ -65,10 +67,9 @@ function putProducts(dt) {
 /** +++++  configura la table de productos */
 function settingTable() {
     let title = 'Control salida de proyectos';
-
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
   //console.log('1111');
-    $('#tblProducts').DataTable({
+    $('#tblProyects').DataTable({
         order: [[2, 'desc']],
         dom: 'Blfrtip',
         lengthMenu: [
@@ -126,16 +127,14 @@ function settingTable() {
             {data: 'pjt_location', class: 'product-name'},
         ],
     });
-
-    //$('.tblProductsMaster')
-/*
-      $('tblProdMaster')
+    console.log('SETTI');
+      $('.tblProdMaster')
         .delay(500)
         .slideDown('fast', function () {
-            $('.deep_loading').css({display: 'none'});
-            $('#tblProducts').DataTable().draw();
+            //$('.deep_loading').css({display: 'none'});
+            $('#tblProyects').DataTable().draw();
+            deep_loading('C');
         });
-*/
 
 }
 
@@ -149,7 +148,7 @@ function activeIcons() {
             console.log(pkt, prd, qty);
 
             if (qty > 0) {
-                getSeries(prd);
+                //getSeries(prd);
             }
         });
 

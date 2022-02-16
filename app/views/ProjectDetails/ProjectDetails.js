@@ -88,7 +88,7 @@ function get_version(pjtId) {
     fillField(pagina, par, tipo, selector);
 }
 
-/**  Obtiene el listado de cotizaciones */
+/**  Obtiene el listado de productos en el proyecto */
 function get_budgets(pjtId) {
     let dstrO = $('#PeriodProject').text().split(' - ')[0];
     let dendO = $('#PeriodProject').text().split(' - ')[1];
@@ -704,7 +704,7 @@ function fill_dinamic_table() {
 /** ++++  Muestra las cuadros de opcion de dias y descuentos */
 function show_minimenues(idsel, x, y) {
     if (idsel != undefined) {
-        console.log(idsel, x, y);
+        //console.log(idsel, x, y);
         let inic = idsel.substring(0, 3);
         let days = get_days_period();
         psy = y - 20;
@@ -894,7 +894,7 @@ function update_totals() {
         let costbase = 0,
             costtrip = 0,
             costtest = 0;
-        costassu = 0;
+            costassu = 0;
         let total = 0;
         $('.frame_content #tblControl tbody tr').each(function (v) {
             let pid = $(this).attr('id');
@@ -951,7 +951,7 @@ function update_totals() {
 
         $('#ttlproducts').html(ttlrws);
 
-        order_subcategories();
+        //order_subcategories();
         set_minimenu();
     }
 }
@@ -1065,6 +1065,7 @@ function fill_budget(pr, ix) {
 
     $('#Products .sel_product').text('');
 
+// AGREGA EL PORCENTJE DEL SEGURO 10%
     let insurance = pr.prd_insured == 0 ? 0 : 0.1;
 
     var par = `
@@ -1088,6 +1089,7 @@ function fill_budget(pr, ix) {
 function load_budget(inx, bdgId) {
     caching_events('load_budget');
 
+// AGREGA EL PORCENTJE DEL SEGURO 10%
     let insurance = prod[inx].prd_insured == 0 ? 0 : 0.1;
     let produ = prod[inx].prd_name.replace(/\"/g, '°');
     let days = get_days_period();
@@ -1150,7 +1152,7 @@ function fill_budget_prods(pd, days, st) {
     caching_events('fill_budget_prods');
     let pds = JSON.parse(pd);
     let sll = '';
-    // console.log(pds);
+    console.log(pds);
     let prodName = pds.pjtcn_prod_name.toString().replace(/°/g, '"');
     let H = `
     <tr id="bdg${pds.prd_id}" class="bdg${pds.prd_id}" 
@@ -2113,9 +2115,11 @@ function shownewproducts(dt) {
 }
 
 function updatesData(sl) {
+    //console.log(sl);
     let rw = $('.frame_content .table_control tbody');
     let rws = rw[0].rows.length - 1;
-    for (var i = 0; i < rws; i++) {
+    for (var i = 0; i <= rws; i++) {
+        //console.log('Actualiza', sl);
         let pjtcnId = rw[0].rows[i].attributes[5].value;
         let pjtdata = rw[0].rows[i].cells[sl].outerText.replace(/%/g, '');
 
@@ -2129,7 +2133,7 @@ function updatesData(sl) {
 }
 
 function show_updatesData(dt) {
-    console.log(dt);
+    console.log('Resultado',dt);
 }
 
 function put_counter_pending(dt) {
