@@ -30,3 +30,21 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Comentarios de las secciones del si
 
 ALTER TABLE ctt_sales_details ADD COLUMN sld_situation VARCHAR(50) NULL COMMENT 'Situación del producto' AFTER sld_quantity;
 ALTER TABLE ctt_sales_details ADD COLUMN sld_date DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de registro del movimiento' AFTER sld_situation;
+
+
+-- Actualizacion del 16 de FEBRERO 2022
+ALTER TABLE ctt_customers ADD COLUMN cus_fill INT NULL DEFAULT '0' COMMENT 'Porcentaje de llenado de campos fiscales' AFTER cus_contract;
+
+CREATE VIEW ctt_vw_projects AS
+SELECT 
+	CONCAT(cu.cus_fill, '%') as custfill
+	, '<i class="fas fa-id-card kill"></i>' as editable
+    , pj.pjt_id as projecid
+    , pj.pjt_number as projnumb
+    , pj.pjt_name as projname 
+    , date_format(pj.pjt_date_project, '%Y/%m/%d') as dateregr
+    , cu.cus_name AS custname
+FROM ctt_projects AS pj
+INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+INNER JOIN ctt_customers As cu ON cu.cus_id = co.cus_id
+WHERE pjt_status = 2;

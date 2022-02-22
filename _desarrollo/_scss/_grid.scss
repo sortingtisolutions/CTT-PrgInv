@@ -1,0 +1,120 @@
+.tr {
+    text-align: right;
+}
+
+.tl {
+    text-align: left;
+}
+
+.tc {
+    text-align: center;
+}
+
+.fw300 {
+    font-weight: 300;
+}
+.fw700 {
+    font-weight: 700;
+}
+.fw900 {
+    font-weight: 900;
+}
+
+.alt {
+    font-size: 1.2em;
+}
+.fsicon {
+    font-size: 1.8em;
+}
+
+.red {
+    color: #bb0000;
+}
+
+.rng {
+    // border: 1px solid #000000;
+    border-radius: 20px;
+    font-size: 0.8em;
+    padding: 2px 8px;
+}
+
+.rng1 {
+    background-color: #f70808;
+    color: #ffffff;
+}
+.rng2 {
+    background-color: #f77707;
+    color: #ffffff;
+}
+
+.rng3 {
+    background-color: #f7d807;
+    color: #000000;
+}
+.rng4 {
+    background-color: #cff707;
+    color: #000000;
+}
+.rng5 {
+    background-color: #8ef707;
+    color: #000000;
+}
+.rng6 {
+    background-color: #1cae04;
+    color: #ffffff;
+}
+
+.customer_modal {
+    .customer_container {
+        display: flex;
+        justify-content: flex-start;
+        .customer_group {
+            width: 30%;
+            padding: 0;
+            margin: 0.5rem;
+            // background-color: #1cae04;
+
+            label,
+            p {
+                padding: 0;
+                margin: 0;
+            }
+            label {
+                opacity: 0.67;
+            }
+
+            .customer_title {
+                font-size: 1rem;
+                font-weight: 700;
+                line-height: 1.5rem;
+            }
+
+            .customer_information {
+                font-size: 0.8rem;
+            }
+            .customer_title,
+            .customer_information {
+                .textbox-required {
+                    border: 1px solid #cc0000;
+                    outline: none;
+                    padding: 0 10px;
+                }
+                span {
+                    color: #cc0000;
+                    font-size: 0.6rem;
+                }
+            }
+
+            .customerPrecent {
+                font-size: 1.1rem;
+                min-height: 60px;
+                padding: 1rem;
+            }
+        }
+        .customer_inputs  {
+            .customer_input  {
+                display: none;
+            }
+        }
+    }
+}

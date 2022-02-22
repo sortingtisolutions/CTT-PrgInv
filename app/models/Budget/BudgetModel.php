@@ -342,7 +342,7 @@ public function saveBudgetList($params)
     public function PromoteProject($params)
     {
         $pjtId                  = $this->db->real_escape_string($params['pjtId']);
-        $qry = "UPDATE ctt_projects SET pjt_status = '2' WHERE pjt_id = $pjtId;";
+        $qry = "UPDATE ctt_projects SET pjt_status = '5' WHERE pjt_id = $pjtId;";
         $this->db->query($qry);
 
         return $pjtId;
