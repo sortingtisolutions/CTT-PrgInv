@@ -658,7 +658,7 @@ SELECT
     , CONCAT('<span class="toLink">', ifnull((SELECT sum(stp_quantity) FROM ctt_stores_products AS sp
 				INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
 				WHERE sr.prd_id = pr.prd_id),0), '</span>')  AS prodqtty
-	, pR.prd_level			AS prodtype
+	, pr.prd_level			AS prodtype
     , sv.srv_name 			AS typeserv 
 	, cn.cin_code 			AS prodcoin
     , CONCAT('<i class="fas fa-file-invoice" id="',dc.doc_id,'"></i>') AS prddocum

@@ -220,10 +220,10 @@ public function getSelectSerie($request_params)
 
 
 // Guarda los cambios de un producto
-	public function saveEdtProduct($request_params)
+	public function saveEditCustomer($request_params)
 	{
 		$params =  $this->session->get('user');
-		$result = $this->model->saveEdtProduct($request_params);
+		$result = $this->model->saveEditCustomer($request_params);
 		$res = $result ;
 		echo $res;
 	}
@@ -241,10 +241,10 @@ public function saveEdtSeries($request_params)
 
 
 // Guarda nuevo producto
-	public function saveNewProduct($request_params)
+	public function saveNewCustomer($request_params)
 	{
 		$params =  $this->session->get('user');
-		$result = $this->model->saveNewProduct($request_params);
+		$result = $this->model->saveNewCustomer($request_params);
 		$res = $result ;
 		echo $res;
 	}
@@ -252,10 +252,10 @@ public function saveEdtSeries($request_params)
 
 	
 // Borra un producto seleccionado
-	public function deletCustomers($request_params)
+	public function deleteCustomers($request_params)
 	{
 		$params =  $this->session->get('user');
-		$result = $this->model->deletCustomers($request_params);
+		$result = $this->model->deleteCustomers($request_params);
 		$res = $result ;
 		echo $res;
 	}

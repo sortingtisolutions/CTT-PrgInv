@@ -30,3 +30,32 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Comentarios de las secciones del si
 
 ALTER TABLE ctt_sales_details ADD COLUMN sld_situation VARCHAR(50) NULL COMMENT 'Situación del producto' AFTER sld_quantity;
 ALTER TABLE ctt_sales_details ADD COLUMN sld_date DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de registro del movimiento' AFTER sld_situation;
+
+--AGREGADOS JORGE JUAREZ
+ALTER TABLE `ctt_series` CHANGE `ser_cost_import` `ser_cost_import` INT(11) NOT NULL COMMENT 'Costo individual de importacion';
+
+ALTER TABLE `ctt_series` ADD `ser_import_petition` VARCHAR(20) NULL DEFAULT NULL COMMENT 'Numero de Pedimento de importación' AFTER `ser_cost_import`;
+
+CREATE TABLE `ctt_scores` (
+	`scr_id` INT NOT NULL AUTO_INCREMENT COMMENT 'Id del Valor',
+	`scr_values` INT NULL DEFAULT '0' COMMENT 'Valor numerico de la calificacion',
+	`scr_description` VARCHAR(100) NULL COMMENT 'Descripcion General de la calificacion',
+	INDEX `ndx_src_id` (`scr_id`)
+) COMMENT='Tabla de calificaciones de los clientes' COLLATE='utf8mb4_general_ci';
+
+ALTER TABLE `ctt_products_packages` CHANGE `pck_quantity` `pck_quantity` INT NULL DEFAULT '1' COMMENT 'Cantidad de productos';
+
+ALTER TABLE `ctt_customers` CHANGE `cus_prospect` `cus_prospect` VARCHAR(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT 'Tipo cliente 1-cliente 0-prospecto';
+ALTER TABLE `ctt_customers` CHANGE `cut_id` `cut_id` INT(11) NOT NULL COMMENT 'Tipo Producción relación con ctt_customer_type';
+
+ALTER TABLE `ctt_customers`
+	CHANGE COLUMN `cus_legal_representative` `cus_legal_representative` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Representante legal' COLLATE 'utf8mb4_general_ci' AFTER `cus_sponsored`;
+
+ALTER TABLE `ctt_customers`
+	CHANGE COLUMN `cus_legal_act` `cus_legal_act` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Nombre Archivo Acta Constitutiva' AFTER `cus_legal_representative`;
+
+ALTER TABLE `ctt_customers`
+	CHANGE COLUMN `cus_contract` `cus_contract` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Nombre Archivo de Contrato de Servicio' AFTER `cus_legal_act`;
+
+ALTER TABLE `ctt_customers`
+	CHANGE COLUMN `cus_status` `cus_status` INT(11) NULL DEFAULT '1' COMMENT 'Estatus del Cliente 1-activo 0-inactivo' AFTER `cut_id`;

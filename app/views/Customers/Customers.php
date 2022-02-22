@@ -50,7 +50,7 @@
 <!-- End Contenedor Listado de PRODUCTOS  -->
 
 <!-- Start Ventana modal AGREGA O MODIFICA PRODUCTO -->
-    <div class="overlay_background overlay_hide"id="ProductModal">
+    <div class="overlay_background overlay_hide"id="CustomerModal">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <div class="formButtons">
@@ -86,7 +86,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> E-mail: </td>
                         <td class="data">
-                            <input type="text" id="txtCusEmail" name="txtCusEmail" class="textbox  required" style="width:150px">
+                            <input type="text" id="txtCusEmail" name="txtCusEmail" class="textbox  required" style="width:250px">
                             <span class="fail_note hide"></span>
                             <span class="intructions">correo electronico</span>
                         </td>
@@ -94,7 +94,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> RFC: </td>
                         <td class="data">
-                            <input type="text" id="txtCusRFC" name="txtCusRFC" class="textbox  required" style="width:100px; text-transform:uppercase">
+                            <input type="text" id="txtCusRFC" name="txtCusRFC" class="textbox  required" style="width:150px; text-transform:uppercase">
                             <span class="fail_note hide"></span>
                             <span class="intructions">RFC del cliente</span>
                         </td>
@@ -128,10 +128,10 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Calificación del Cliente: </td>
                         <td class="data">
-                            <select id="txtQualy" name="txtQualy" class="textbox" style="width:300px">
-                                <option value="0">Calificación</option>
+                            <select id="txtQualy" name="txtQualy" class="textbox" style="width:200px">
+                                <option value="0">Selecciona Calificación</option>
                             </select>
-                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                            <span class="fail_note hide"><!-- <i class="fas fa-arrow-left"></i> --> Campo requerido</span>
                             <span class="intructions">Calificacion segun historial del cliente</span>
                         </td>
                     </tr>
@@ -145,7 +145,7 @@
                     </tr>
                     
                     <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Status: </td>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Status del Cliente: </td>
                         <td class="data">
                             <div id="txtCusStat"  class="checkbox"><i class="far fa-square"></i> </div>
                             <span class="fail_note hide"></span>
@@ -164,10 +164,10 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de Producción:</td>
                         <td class="data">
-                            <select id="txtTypeProd" name="txtTypeProd" class="textbox" style="width:300px">
+                            <select id="txtTypeProd" name="txtTypeProd" class="textbox" style="width:200px">
                                 <option value="0">Selecciona Tipo</option>
                             </select>
-                            <input type="hidden" id="txtTypeProdId" name="txtTypeProdId">
+                            <!-- <input type="hidden" id="txtTypeProdId" name="txtTypeProdId"> -->
                             <span class="fail_note hide"></span>
                             <span class="intructions">Tipo de cliente, segun su funcion 1-Casa Productora / 2-Productor</span>
                         </td>
@@ -215,7 +215,7 @@
                 <div class="row">
                     <input type="hidden" class="form-control" id="txtIdProduct" aria-describedby="basic-addon3">
                     <div class="col-12 text-center">
-                        <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea borrarlo?</span>
+                        <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">Se va a eliminar de la Base de Datos ¿Esta Seguro?</span>
                     </div>
                 </div>
 
