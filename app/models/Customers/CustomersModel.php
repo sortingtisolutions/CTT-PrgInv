@@ -250,6 +250,21 @@ public function saveEdtSeries($params)
         $this->db->query($qry);
         $prdId = $this->db->insert_id;
 
+        $cusId = $prdId;
+
+        $qr2 = "UPDATE ctt_customers SET cus_fill = (
+            WITH fields AS (
+                SELECT 'cus_name' as concepto,    coalesce(LENGTH(cus_name)     < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION
+                SELECT 'cus_address' as concepto, coalesce(LENGTH(cus_address)  < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION
+                SELECT 'cus_email' as concepto,   coalesce(LENGTH(cus_email)    < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION
+                SELECT 'cus_rfc' as concepto,     coalesce(LENGTH(cus_rfc)      < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION
+                SELECT 'cus_phone' as concepto,   coalesce(LENGTH(cus_phone)    < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId UNION
+                SELECT 'cus_legal_representative' as concepto, coalesce(LENGTH(cus_legal_representative) < 1, 1, 0) as emptyField FROM ctt_customers WHERE cus_id = $cusId
+            )
+            SELECT (1-sum(emptyField)/6)*100 AS perc FROM fields )
+        WHERE cus_id = $cusId";
+        $this->db->query($qr2);
+
         return  $prdId;
     }
 

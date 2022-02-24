@@ -108,10 +108,17 @@ CREATE TABLE `cttapp_cire`.`ctt_customers` (
     `cus_contact`           VARCHAR(50)                     COMMENT 'nombre del contacto',
     `cus_address`           VARCHAR(300)                    COMMENT 'Domicilio del cliente',
     `cus_email`             VARCHAR(100)                    COMMENT 'Correo electrónico del cliente',
-    `cus_phone`             VARCHAR(100)                    COMMENT 'Teléfono del cliente',
+    `cus_rfc`               VARCHAR(15)                     COMMENT 'RFC del cliente',
+    `cus_phone`             VARCHAR(11)                     COMMENT 'Teléfono del cliente',
+    `cus_phone_2`           VARCHAR(11)                     COMMENT 'Otro Teléfono',
+    `cus_internal_code`     VARCHAR(5)                      COMMENT 'Clave interna',
     `cus_qualification`     VARCHAR(10)                     COMMENT 'Calificación del cliente',
     `cus_prospect`          VARCHAR(1) DEFAULT 0            COMMENT 'Registro de cliente 1-cliente 0-prospecto',
     `cus_sponsored`         VARCHAR(1) DEFAULT 0            COMMENT 'Cliente con patrocinio 1-con patrocinio 0-sin patrocinio',
+    `cus_legal_representative` INT NULL                     COMMENT 'Representante legal 1-si 0-no',
+    `cus_legal_act`         INT NULL                        COMMENT 'Acta constitutiva 1-si 0-no',
+    `cus_contract`          INT NULL                        COMMENT 'Contrato de servicio 1-si 0-no',
+    `cus_fill`              INT NULL                        COMMENT 'Porcentaje de llenado de campos fiscales',
     `cut_id`                INT NOT NULL                    COMMENT 'Tipo de cliente relacion con ctt_customer_type',
     `cus_status`            INT DEFAULT 1                   COMMENT 'Estatus de la moneda 1-activo 0-inactivo',
 PRIMARY KEY (`cos_id`)) 
@@ -678,7 +685,6 @@ WHERE pr.prd_status = 1 AND pr.prd_level IN ('A', 'P') ;
 
 
 DROP VIEW ctt_vw_project_subletting;
-
 CREATE VIEW ctt_vw_project_subletting AS
 SELECT 
 	num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id,
@@ -688,6 +694,22 @@ SELECT
 	ifnull(sub_id,0) AS sub_id, ifnull(sut_id,0) AS sut_id, ifnull(pjtdt_id,0) AS pjtdt_id,
 	ifnull(pjtcn_id,0) AS pjtcn_id, ifnull(cin_id,0) AS cin_id
 FROM ctt_vw_subletting;
+
+
+DROP VIEW ctt_vw_projects ;
+CREATE VIEW ctt_vw_projects AS
+SELECT 
+	CONCAT(cu.cus_fill, '%') as custfill
+	, '<i class="fas fa-id-card kill"></i>' as editable
+    , pj.pjt_id as projecid
+    , pj.pjt_number as projnumb
+    , pj.pjt_name as projname 
+    , date_format(pj.pjt_date_project, '%Y/%m/%d') as dateregr
+    , cu.cus_name AS custname
+FROM ctt_projects AS pj
+INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+INNER JOIN ctt_customers As cu ON cu.cus_id = co.cus_id
+WHERE pjt_status = 2;
 
 
 

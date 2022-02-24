@@ -13,9 +13,6 @@ ALTER TABLE ctt_projects_periods ADD COLUMN pjtdt_belongs INT NULL COMMENT 'Id d
 ALTER TABLE ctt_projects_periods ADD COLUMN pjtpd_sequence INT NULL DEFAULT 1 COMMENT 'Secuencia de periodos' AFTER pjtdt_belongs;
 
 
-
-
-
 -- Actualizacion del 29 de ENERO 2022
 CREATE TABLE `cttapp_cire`.`ctt_comments` (
     `com_id`                INT NOT NULL AUTO_INCREMENT     COMMENT 'Id del comentario',
@@ -59,3 +56,20 @@ ALTER TABLE `ctt_customers`
 
 ALTER TABLE `ctt_customers`
 	CHANGE COLUMN `cus_status` `cus_status` INT(11) NULL DEFAULT '1' COMMENT 'Estatus del Cliente 1-activo 0-inactivo' AFTER `cut_id`;
+
+-- Actualizacion del 16 de FEBRERO 2022
+ALTER TABLE ctt_customers ADD COLUMN cus_fill INT NULL DEFAULT '0' COMMENT 'Porcentaje de llenado de campos fiscales' AFTER cus_contract;
+
+CREATE VIEW ctt_vw_projects AS
+SELECT 
+	CONCAT(cu.cus_fill, '%') as custfill
+	, '<i class="fas fa-id-card kill"></i>' as editable
+    , pj.pjt_id as projecid
+    , pj.pjt_number as projnumb
+    , pj.pjt_name as projname 
+    , date_format(pj.pjt_date_project, '%Y/%m/%d') as dateregr
+    , cu.cus_name AS custname
+FROM ctt_projects AS pj
+INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+INNER JOIN ctt_customers As cu ON cu.cus_id = co.cus_id
+WHERE pjt_status = 2;
