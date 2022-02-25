@@ -1806,7 +1806,7 @@ function close_modal() {
 
 /** ++++++ Selecciona los productos del listado */
 function sel_product(res, sele) {
-    if (res.length > 3) {
+    if (res.length > 2) {
         $(`#${sele} .list_products ul`).html('');
         let dstrO = $('#PeriodProject').text().split(' - ')[0];
         let dendO = $('#PeriodProject').text().split(' - ')[1];

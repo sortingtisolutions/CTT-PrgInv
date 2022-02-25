@@ -78,8 +78,6 @@
 									<label for="selectRowTipoProveedor" class="form-label"></label>
 								</div>
 							</div>
-
-
 							<div class="row">
 								<div class="col-6">
 									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 1rem !important;" id="GuardarUsuario">Guardar</button>
@@ -158,5 +156,4 @@
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'ProjectList/ProjectList.js' ?>"></script>
-
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
