@@ -1,127 +1,160 @@
-
 <?php 
-	defined('BASEPATH') or exit('No se permite acceso directo'); 
-	require ROOT . FOLDER_PATH . "/app/assets/header.php";
+  	defined('BASEPATH') or exit('No se permite acceso directo'); 
+	  require ROOT . FOLDER_PATH . "/app/assets/header.php";	  
 ?>
-
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
-
-
-
-<!-- Start Contenedor Listado de PROYECTOS  -->
 <div class="container-fluid">
-        <div class="contenido">
-            <div class="row mvst_group">
-                <div class="mvst_list tblProjMaster">
-                    
-                    <div class="row rowTop">
-                        <h1>Proyectos</h1>
-                        
-                        
-                        
-                    </div>
-                    <div id="dvProjects"></div>
-                    <table class="display compact nowrap"  id="tblProjects" >
-                        <thead>
-                            <tr>
-                                <th style="width:  10px"></th>
-                                <th style="width:  10px"></th>
-                                <th style="width:  10px"></th>
-                                <th style="width:  10px"></th>
-                                <th style="width:  60px">No. Proyecto</th>
-                                <th style="width: 250px">Proyecto</th>
-                                <th style="width: 250px">Cliente</th>
-                                <th style="width:  80px">Fecha de inicio</th>
-                                <th style="width:  80px">Fecha de término</th>
-                                <th style="width: 250px">locacion</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-<!-- End Contenedor Listado de PROYECTOS  -->
+	<div class="contenido">
+		<div class="row mvst_group">
+				<!-- Start área de formularios -->
+				<div class="mvst_panel">
+					<div class="form-group">
+						<h4 id="titulo">Cambios en Proyectos</h4>  
+						<form id="formProveedor" class="row g-3 needs-validation" novalidate>
+
+							<div class="row" hidden>
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<input id="IdProveedor" name="IdProveedor" type="text" class="form-control form-control-sm" >
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<input id="NomProveedor" name="NomProveedor" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
+									<label for="NomProveedor">Nombre de Proyecto</label>
+								</div>
+							</div>
+
+                     <div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<input id="ContactoProveedor" name="ContactoProveedor" type="text" class="form-control form-control-sm" style="text-transform:uppercase">
+									<label for="ContactoProveedor">Locacion de Proyecto</label>
+								</div>
+							</div>
+
+					<div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<select id="selectRowTipoProveedor"  name="selectRowTipoProveedor"  class="form-select form-select-sm" autocomplete="off" required >
+									</select>
+									<label for="selectRowTipoProveedor" class="form-label">Cliente asociado al Proyecto</label>
+								</div>
+							</div>
+					<div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<select id="selectRowTipoProveedor"  name="selectRowTipoProveedor"  class="form-select form-select-sm" autocomplete="off" required >
+									</select>
+									<label for="selectRowTipoProveedor" class="form-label">Tipo de Proyecto</label>
+								</div>
+							</div>
+
+                     <div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<input id="EmailProveedor" name="EmailProveedor" type="text" class="form-control form-control-sm">
+									<label for="EmailProveedor">Cliente asociado al Proyecto</label>
+								</div>
+							</div>
 
 
-<!-- Start Ventana modal DATOS DEL CLIENTE -->
-<div class="overlay_background overlay_hide customer_modal"id="CustomerModal">
-        <div class="overlay_modal">
-            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
-            <h1>Información del cliente</h1>
-            <div class="customer_container">
-                <div class="customer_group">
-                    <label for="customerName"><span class="required">*</span> Nombre del cliente</label><br>
-                    <span class="customer_title" id="customerName">Nombre del cliente</span><br><br>
+                     <div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<input id="RfcProveedor" name="RfcProveedor" type="text" class="form-control form-control-sm" style="text-transform:uppercase">
+									<label for="RfcProveedor">Tipo de Proyecto</label>
+								</div>
+							</div>
 
-                    <label for="customerAddress"><span class="required">*</span> Domicilio: </label><br>
-                    <span class="customer_information" id="customerAddress">Direccion</span><br>
-                
-                    <label for="customerEmail"><span class="required">*</span> Email: </label>
-                    <span class="customer_information" id="customerEmail">Email</span><br>
-                    <label for="customerRFC"><span class="required">*</span> RFC: </label>
-                    <span class="customer_information" id="customerRFC">RFC</span><br>
-                    <label for="customerPhone"><span class="required">*</span> Teléfonos: </label>
-                    <span class="customer_information" id="customerPhone">Teléfono</span><br>
-                    <label for="customerRepresentative"><span class="required">*</span> Representante Legal: </label>
-                    <span class="customer_information" id="customerRepresentative">Representante Legal</span><br>
-                    <label for="customerContact">Contacto: </label>
-                    <span class="customer_information" id="customerContact">Contacto</span><br>
-                    <label for="customerType">Tipo de cliente: </label>
-                    <span class="customer_information" id="customerType">Tipo de cliente</span><br>
-                
-                    <p id="customerFieldPrecent" class="customerPrecent">0</p>
-                
-                    <button class="btn btn-ok" id="btnCustomerApply" >Aplicar Cambios</button>
-                </div>
+                     <div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<input id="PhoneProveedor" name="PhoneProveedor" type="text" class="form-control form-control-sm" maxlength="13" required>
+									<label for="PhoneProveedor">	</label>
+								</div>
+							</div>
 
-                <div class="customer_inputs">
-                    <h4>Datos fiscales requeridos</h4>
-                    <div class="customer_input" id="fraCustomerName">
-                        <label for="txtCustomerName">Nombre del cliente</label><br>
-                        <input type="text" name="txtCustomerName" id="txtCustomerName" class="textbox-required">
-                       
-                    </div>
-
-                    <div class="customer_input" id="fraCustomerAddress">
-                        <label for="txtCustomerAddress">Domicilio:</label><br>
-                        <input type="text" name="txtCustomerAddress" id="txtCustomerAddress" class="textbox-required">
-                    </div>
-
-                    <div class="customer_input" id="fraCustomerEmail">
-                        <label for="txtCustomerEmail">Email:</label><br>
-                        <input type="text" name="txtCustomerEmail" id="txtCustomerEmail" class="textbox-required">
-                    </div>
-
-                    <div class="customer_input" id="fraCustomerRFC">
-                        <label for="txtCustomerRFC">RFC:</label><br>
-                        <input type="text" name="txtCustomerRFC" id="txtCustomerRFC" class="textbox-required">
-                    </div>
-
-                    <div class="customer_input" id="fraCustomerPhone">
-                        <label for="txtCustomerPhone">teléfono:</label><br>
-                        <input type="text" name="txtCustomerPhone" id="txtCustomerPhone" class="textbox-required">
-                    </div>
-
-                    <div class="customer_input" id="fraCustomerRepresentative">
-                        <label for="txtCustomerRepresentative">Representante Legal:</label><br>
-                        <input type="text" name="txtCustomerRepresentative" id="txtCustomerRepresentative" class="textbox-required">
-                    </div><br>
-
-                    <input type="hidden" name="txtCustomerId" id="txtCustomerId"><br>
-                    <input type="hidden" name="txtCustomerPercent" id="txtCustomerPercent">
-                </div>
-            </div>
-        </div>
-        
-    </div>
-<!-- End Ventana modal DATOS DEL CLIENTE -->
+							<div class="row">
+								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+									<select id="selectRowTipoProveedor"  name="selectRowTipoProveedor"  class="form-select form-select-sm" autocomplete="off" required >
+									</select>
+									<label for="selectRowTipoProveedor" class="form-label"></label>
+								</div>
+							</div>
 
 
+							<div class="row">
+								<div class="col-6">
+									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 1rem !important;" id="GuardarUsuario">Guardar</button>
+								</div>
+								<div class="col-6">
+									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- End área de formularios -->
 
+				<!-- Start área de listado -->
+				<div class="mvst_table">
+					<h1>Proyectos Aprobados</h1>
+
+					<div class="row">
+						<div class="col-12 col-md-12">		
+								<table id="ProveedoresTable" class="display  display compact nowrap" style="width:120%">         
+										<thead>
+											<tr>
+													<th style="width: 30px"></th>
+													<th style="width: 20px" hidden>Id</th>
+													<th style="width: 300px">Nombre Proyecto</th>
+													<th style="width: 100px" hidden>proyecto Id</th>
+
+													<th style="width: 90px">Numero de Proyecto</th>
+
+													<th style="width: 100px">Tipo de <br>Proyecto</th>
+													<th style="width: 300px">Cliente</th>
+													<th style="width: 300px">Locacion</th>
+													<th style="width: 100px">Tipo Documento</th>
+
+											</tr>
+										</thead>
+										<tbody id="tablaProveedoresRow">
+										</tbody>
+									</table>
+							</div>
+					</div>
+				</div>
+				<!-- End área de listado -->
+			</div>
+	</div>
+</div>
+
+
+<!-- Modal Borrar -->
+<div class="modal fade" id="BorrarProveedorModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered modal-sm">
+					 <div class="modal-content">
+					 <div class="modal-header ">
+					 </div>
+					 <div class="modal-body" style="padding: 0px !important;">
+
+
+					 <div class="row">
+						  <input hidden type="text" class="form-control" id="IdProveedorBorrar" aria-describedby="basic-addon3">
+						  <div class="col-12 text-center">
+								<span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea borrarlo?</span>
+						  </div>
+					 </div>
+
+					 </div>
+						  <div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-danger" id="BorrarProveedor">Borrar</button>
+						  </div>
+					 </div>
+				</div>
+		</div>
+
+
+</div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'ProjectFiscalFields/ProjectFiscalFields.js' ?>"></script>

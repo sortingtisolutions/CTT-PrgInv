@@ -15,7 +15,7 @@ class CustomersModel extends Model
     {
         $qry = "SELECT * FROM ctt_customers as cus
                 INNER JOIN ctt_customers_type as ct ON cus.cut_id = ct.cut_id
-                WHERE cus.cus_status = 1 limit 10;";
+                ORDER BY cus_id desc LIMIT 10;";
         return $this->db->query($qry);
     }
 
@@ -25,7 +25,7 @@ class CustomersModel extends Model
         $prdId = $this->db->real_escape_string($params['prdId']);
         $qry = "SELECT * FROM ctt_customers AS cus
                 INNER JOIN ctt_customers_type AS ct ON cus.cut_id = ct.cut_id
-                WHERE cus.cus_status = 1 AND cus.cus_id = $prdId limit 1;";
+                WHERE cus.cus_id = $prdId limit 1;";
 
         return $this->db->query($qry);
     }
@@ -40,9 +40,9 @@ class CustomersModel extends Model
 
     
 // Listado de facturas
-public function listInvoice()
+public function listScores()
 {
-    $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id IN (1,4,5);";
+    $qry = "SELECT scr_id, scr_values, scr_description FROM ctt_scores;";
     return $this->db->query($qry);
 }
 
@@ -85,83 +85,51 @@ public function listInvoice()
         return $this->db->query($qry);
     }
 
-    // Listado de Productos
-    public function listSeries($params)
-    {
-        $prodId = $this->db->real_escape_string($params['prdId']);
-        $qry = "SELECT DISTINCT
-                      se.ser_id
-                    , se.ser_sku
-                    , se.ser_serial_number
-                    , se.ser_cost
-                    , date_format(se.ser_date_registry, '%d/%m/%Y') AS ser_date_registry
-                    , se.ser_situation
-                    , se.ser_stage
-                    , CASE WHEN se.ser_behaviour = 'R' THEN 'SUBABRRENDADO' ELSE '' END comportamiento
-                    , se.ser_comments
-                    , pd.prd_sku 
-                    , pd.prd_name
-                    , pd.prd_id
-                    , sp.stp_quantity
-                    , st.str_name
-                    , ifnull(dc.doc_id,0) AS doc_id
-                    , dc.doc_name
-                    , dc.dot_id
-                FROM ctt_series as se
-                INNER JOIN ctt_products AS pd ON pd.prd_id = se.prd_id 
-                LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
-                LEFT JOIN ctt_stores As st ON st.str_id = sp.str_id 
-                LEFT JOIN ctt_products_documents AS dt ON dt.prd_id = se.ser_id
-                LEFT JOIN ctt_documents AS dc ON dc.doc_id = dt.doc_id AND dc.dot_id = 1
-                WHERE se.prd_id IN ($prodId) AND sp.stp_quantity > 0
-                ORDER BY se.prd_id, se.ser_sku;";
-        return $this->db->query($qry);
-    }
-
-
-
-// Obtiene datos de la serie selecionada
-    public function getSelectSerie($params)
-    {
-        $serId = $this->db->real_escape_string($params['serId']);
-        $qry = "SELECT sr.ser_id, sr.ser_sku, sr.ser_serial_number, 
-                date_format(sr.ser_date_registry, '%d/%m/%Y') AS ser_date_registry,
-                sp.sup_business_name, sr.ser_cost, sr.ser_comments, 
-                ifnull(dc.doc_id,0) As doc_id, dc.doc_name, dt.dot_id, dt.dot_name, 
-                ds.dcp_source, ifnull(ds.dcp_id,0) AS dcp_id 
-                FROM ctt_series AS sr
-                LEFT JOIN ctt_products_documents AS ds ON ds.prd_id = sr.ser_id
-                LEFT JOIN ctt_documents AS dc ON dc.doc_id = ds.doc_id
-                LEFT JOIN ctt_documents_type AS dt ON dt.dot_id = dc.dot_id AND dt.dot_id = 1
-                LEFT JOIN ctt_suppliers AS sp on sp.sup_id = sr.sup_id
-                WHERE sr.ser_id = $serId ORDER BY dcp_id DESC LIMIT 1;";
-        return $this->db->query($qry);
-    }
-
 
 // Guarda los cambios de un producto
-    public function saveEdtProduct($params)
+    public function saveEditCustomer($params)
     {
-        $prdId = $this->db->real_escape_string($params['prdId']);
-        $prdNm = $this->db->real_escape_string($params['prdNm']);
-        $prdSk = $this->db->real_escape_string($params['prdSk']);
-        $prdMd = $this->db->real_escape_string($params['prdMd']);
-        $prdPr = $this->db->real_escape_string($params['prdPr']);
-        $prdEn = $this->db->real_escape_string($params['prdEn']);
-        $prdCd = $this->db->real_escape_string($params['prdCd']);
-        $prdNp = $this->db->real_escape_string($params['prdNp']);
-        $prdCm = $this->db->real_escape_string($params['prdCm']);
-        $prdVs = $this->db->real_escape_string($params['prdVs']);
-        $prdLv = $this->db->real_escape_string($params['prdLv']);
-        $prdLn = $this->db->real_escape_string($params['prdLn']);
-        $prdAs = $this->db->real_escape_string($params['prdAs']);
-        $prdSb = $this->db->real_escape_string($params['prdSb']);
-        $prdCn = $this->db->real_escape_string($params['prdCn']);
-        $prdSv = $this->db->real_escape_string($params['prdSv']);
-        $prdDc = $this->db->real_escape_string($params['prdDc']);
-        $prdDi = $this->db->real_escape_string($params['prdDi']);
+        $cusId =    $this->db->real_escape_string($params['cusId']);
+        $cusName =  $this->db->real_escape_string($params['cusName']);
+        $cusCont =  $this->db->real_escape_string($params['cusCont']);
+        $cusAdrr =  $this->db->real_escape_string($params['cusAdrr']);
+        $cusEmail = $this->db->real_escape_string($params['cusEmail']);
+        $cusRFC = $this->db->real_escape_string($params['cusRFC']);
+        $cusPhone = $this->db->real_escape_string($params['cusPhone']);
+        $cusPhone2 = $this->db->real_escape_string($params['cusPhone2']);
+        $cusICod = $this->db->real_escape_string($params['cusICod']);
+        $cusQualy = $this->db->real_escape_string($params['cusQualy']);
+        $cusProsp = $this->db->real_escape_string($params['cusProsp']);
+        $cusStat = $this->db->real_escape_string($params['cusStat']);
+        $cusSpon = $this->db->real_escape_string($params['cusSpon']);
+        $TypeProd = $this->db->real_escape_string($params['TypeProd']);
+        $cusLegalR = $this->db->real_escape_string($params['cusLegalR']);
+        $cusLegalA = $this->db->real_escape_string($params['cusLegalA']);
+        $cusContr = $this->db->real_escape_string($params['cusContr']);
 
-        $qry = "UPDATE ctt_products
+ 
+            $qry = "UPDATE ctt_customers 
+                        SET cus_name=       UPPER('$cusName'),
+                        cus_contact=        UPPER('$cusCont'),
+                        cus_address=        UPPER('$cusAdrr'),
+                        cus_email=              ('$cusEmail'),
+                        cus_rfc=            UPPER('$cusRFC'),
+                        cus_phone=              ('$cusPhone'),
+                        cus_phone_2=            ('$cusPhone2'),
+                        cus_internal_code=  UPPER('$cusICod'),
+                        cus_qualification=  UPPER('$cusQualy'),
+                        cus_prospect=       UPPER('$cusProsp'),
+                        cus_sponsored=      UPPER('$cusSpon'),
+                        cus_legal_representative=UPPER('$cusLegalR'),
+                        cus_legal_act=      UPPER('$cusLegalA'),
+                        cus_contract=       UPPER('$cusContr'),
+                        cut_id=                 ('$TypeProd'),
+                        cus_status=             ('$cusStat') 
+                        WHERE cus_id ='$cusId';";
+
+        $this->db->query($qry);
+        return $cusId;
+       /* $qry = "UPDATE ctt_products
                 SET
                         prd_sku             = UPPER('$prdSk'),
                         prd_name            = UPPER('$prdNm'),
@@ -178,9 +146,8 @@ public function listInvoice()
                         srv_id              = UPPER('$prdSv'),
                         cin_id              = UPPER('$prdCn')
                 WHERE   prd_id              = '$prdId';";
-        $this->db->query($qry);
-
-            if ($prdDi == '0'&& $prdDc > '0' ){
+     */
+            /* if ($prdDi == '0'&& $prdDc > '0' ){
                 $qry1 = "INSERT INTO ctt_products_documents 
                             (dcp_source, prd_id, doc_id) 
                         VALUES
@@ -203,9 +170,7 @@ public function listInvoice()
                         $this->db->query($qry1);
             } 
             
-
-
-        return $prdId .'|'. $prdDc;
+ */
     }
 
 
@@ -255,8 +220,8 @@ public function saveEdtSeries($params)
 }
 
 
-// Guarda nuevo producto (Quiere decir Clientes)
-    public function saveNewProduct($params)
+// Guarda nuevo producto
+    public function saveNewCustomer($params)
     {
         $cusId = $this->db->real_escape_string($params['cusId']);
         $cusName = $this->db->real_escape_string($params['cusName']);
@@ -303,16 +268,14 @@ public function saveEdtSeries($params)
         return  $prdId;
     }
 
-// Guarda nuevo producto
-    public function deletCustomers($params)
+// ELIMINAR UN REGISTRO DE UN CLIENTE
+    public function deleteCustomers($params)
     {
-        $prdId = $this->db->real_escape_string($params['prdId']);
+        $cusId = $this->db->real_escape_string($params['cusId']);
 
-        $qry3 = "UPDATE tmp_carga_cat14 SET tempo7=$prdId;";
-        
+        $qry3 = "DELETE FROM ctt_customers WHERE cus_id=$cusId;";
         $this->db->query($qry3);
-        
-        return $prdId;
+        return $cusId;
     }
 
     
