@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No se permite acceso directo');
 require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
-class ProjectListModel extends Model
+class ProjectFiscalFieldsModel extends Model
 {
 
     public function __construct()

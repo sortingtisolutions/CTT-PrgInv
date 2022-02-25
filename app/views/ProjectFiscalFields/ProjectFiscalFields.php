@@ -124,6 +124,6 @@
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
-<script src="<?=  PATH_VIEWS . 'ProjectList/ProjectList.js' ?>"></script>
+<script src="<?=  PATH_VIEWS . 'ProjectFiscalFields/ProjectFiscalFields.js' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

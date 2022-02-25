@@ -1,9 +1,9 @@
 <?php
     defined('BASEPATH') or exit('No se permite acceso directo');
-    require_once ROOT . FOLDER_PATH . '/app/models/ProjectList/ProjectListModel.php';
+    require_once ROOT . FOLDER_PATH . '/app/models/ProjectFiscalFields/ProjectFiscalFieldsModel.php';
     require_once LIBS_ROUTE .'Session.php';
 
-class ProjectListController extends Controller
+class ProjectFiscalFieldsController extends Controller
 {
     private $session;
     public $model;
@@ -11,7 +11,7 @@ class ProjectListController extends Controller
 
     public function __construct()
     {
-        $this->model = new ProjectListModel();
+        $this->model = new ProjectFiscalFieldsModel();
         $this->session = new Session();
         $this->session->init();
         if($this->session->getStatus() === 1 || empty($this->session->get('user')))

@@ -14,7 +14,7 @@ function inicial() {
 }
 
 function getCustomerFields(cusId) {
-    var pagina = 'ProjectList/getCustomerFields';
+    var pagina = 'ProjectFiscalFields/getCustomerFields';
     var par = `[{"cusId":"${cusId}"}]`;
     var tipo = 'json';
     var selector = putCustomerFields;
@@ -77,7 +77,7 @@ function settingTable() {
         },
         processing: true,
         serverSide: true,
-        ajax: {url: 'ProjectList/tableProjects', type: 'POST'},
+        ajax: {url: 'ProjectFiscalFields/tableProjects', type: 'POST'},
         columns: [
             {data: 'smarlock', class: 'smarlock edit fsicon tr', orderable: false},
             {data: 'editable', class: 'editable edit alt tc', orderable: false},
@@ -136,7 +136,7 @@ function activeIcons() {
 function freeProject(pjtId, pjtStatus) {
     console.log(pjtId, pjtStatus);
 
-    var pagina = 'ProjectList/updateStatus';
+    var pagina = 'ProjectFiscalFields/updateStatus';
     var par = `[{"pjtId":"${pjtId}","pjtStatus":"${pjtStatus}"}]`;
     var tipo = 'html';
     var selector = putUpdateProjects;
@@ -242,7 +242,7 @@ function putCustomerFields(dt) {
             "cusPhone"      :   "${cusPhone}",
             "cusLegalRep"   :   "${cusLegalRep}"
         }]`;
-        var pagina = 'ProjectList/updateInfoCustomer';
+        var pagina = 'ProjectFiscalFields/updateInfoCustomer';
         var tipo = 'html';
         var selector = putInfoCustomer;
         fillField(pagina, par, tipo, selector);
