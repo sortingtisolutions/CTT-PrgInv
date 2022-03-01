@@ -698,18 +698,33 @@ FROM ctt_vw_subletting;
 
 DROP VIEW ctt_vw_projects ;
 CREATE VIEW ctt_vw_projects AS
-SELECT 
-	CONCAT(cu.cus_fill, '%') as custfill
-	, '<i class="fas fa-id-card kill"></i>' as editable
-    , pj.pjt_id as projecid
-    , pj.pjt_number as projnumb
-    , pj.pjt_name as projname 
-    , date_format(pj.pjt_date_project, '%Y/%m/%d') as dateregr
-    , cu.cus_name AS custname
-FROM ctt_projects AS pj
-INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-INNER JOIN ctt_customers As cu ON cu.cus_id = co.cus_id
-WHERE pjt_status = 2;
+SELECT
+    CASE
+        WHEN cu.cus_fill <= 16                          THEN concat(    '<span class="rng rng1">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 16 AND cu.cus_fill <= 33     THEN concat(    '<span class="rng rng2">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 33 AND cu.cus_fill <= 50     THEN concat(    '<span class="rng rng3">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 50 AND cu.cus_fill <= 66     THEN concat(    '<span class="rng rng4">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 66 AND cu.cus_fill <= 90     THEN concat(    '<span class="rng rng5">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 99                           THEN concat(    '<span class="rng rng6">',  cu.cus_fill, '%</span>'    )
+    ELSE '' END     AS custfill,
+    CASE
+        WHEN cu.cus_fill < 100                          THEN concat(    '<i class="fas fa-address-card kill" id="',    cu.cus_id,    '"></i>'    )
+    ELSE '' END     AS editable,
+    CASE
+        WHEN pj.pjt_status = '2'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
+        WHEN pj.pjt_status = '5'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
+    ELSE '' END     AS smarlock,
+    pj.pjt_id       AS projecid,
+    pj.pjt_number   AS projnumb,
+    pj.pjt_name     AS projname,
+    pj.pjt_location AS projloca,
+    date_format(pj.pjt_date_start,  '%Y/%m/%d') AS dateinit,
+    date_format(pj.pjt_date_end,    '%Y/%m/%d') AS datefnal,
+    cu.cus_name AS custname
+FROM        ctt_projects AS pj    
+INNER JOIN  ctt_customers_owner AS co  ON co.cuo_id = pj.cuo_id
+INNER JOIN  ctt_customers as cu        ON cu.cus_id = co.cus_id
+WHERE pj.pjt_status IN (2, 5);
 
 
 
