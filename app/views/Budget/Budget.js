@@ -135,8 +135,10 @@ function put_customers(dt) {
     caching_events('put_customers');
     cust = dt;
     $.each(cust, function (v, u) {
-        let H = ` <li id="C${u.cus_id}" class="enable" data_content="${v}|${u.cut_name}">${u.cus_name}</li>`;
-        $('#Customer .list_items ul').append(H);
+        if (u.cut_id == 1) {
+            let H = ` <li id="C${u.cus_id}" class="enable" data_content="${v}|${u.cut_name}">${u.cus_name}</li>`;
+            $('#Customer .list_items ul').append(H);
+        }
     });
     select_customer();
 }
@@ -434,10 +436,10 @@ function add_boton() {
 
         if (posTop > lm) {
             posTop = posTop - (h1 - 20);
-            $('.list_products').css({bottom: '26px'});
-            $('.sel_product').css({top: h1 - 26 + 'px'});
+            $('.list_products').css({bottom: '35px'});
+            $('.sel_product').css({top: h1 - 35 + 'px'});
         } else {
-            $('.list_products').css({top: '20px'});
+            $('.list_products').css({top: '35px'});
             $('.sel_product').css({top: 0});
         }
 
@@ -448,19 +450,20 @@ function add_boton() {
             .slideDown(200);
         $(`.list_products`).css({display: 'none'});
 
-        $('.box_list_products')
-            .unbind('mouseleave')
-            .on('mouseleave', function () {
-                $('.box_list_products').slideUp(200);
-                $('.sel_product').text('');
-                $(`#Products .list_products ul`).html('');
+        $('.close-finder')
+            .unbind('click')
+            .on('click', function () {
+                $('.box_list_products').fadeOut(200, function () {
+                    $('.sel_product .textbox-finder').val('');
+                    $(`#Products .list_products ul`).html('');
+                });
             });
 
-        $('#Products .sel_product')
+        $('#Products .sel_product .textbox-finder')
             .unbind('keyup')
             .on('keyup', function () {
                 let idSel = $(this).parent().attr('id');
-                let text = $(this).text().toUpperCase();
+                let text = $(this).val().toUpperCase();
                 sel_product(text, idSel);
             });
     });
@@ -501,6 +504,7 @@ function select_customer() {
             $('#QualificationProducer').html(cs.cus_qualification);
             $('#Relation .grouper').html('');
             $('#Customer .grouper').attr('data_identy', cs.cus_id);
+            $('#Relation').html('');
             // get_rel_customers(cs.cus_id, cs.cut_id);
             get_rel_projects(cs.cus_id);
             clean_projects_field();
@@ -545,7 +549,6 @@ function selector_projects() {
                 $('i').removeClass('rotar');
                 let pj = proj[indx];
                 $('#C' + pj.cus_id).trigger('click');
-                // $('#R' + pj.cus_parent).trigger('click');
                 idSel.children('.grouper').html('<i class="fas fa-times-circle clean"></i> ' + $(this).html());
                 $('#LocationProject').html(pj.pjt_location);
                 $('#TypeLocation').html(pj.loc_type_location);
@@ -557,6 +560,7 @@ function selector_projects() {
                 $('#IdCuo').val(pj.cuo_id);
                 $('#IdCus').val(pj.cus_id);
                 $('#IdCusPrn').val(pj.cus_parent);
+                fillProducer(pj.cus_parent);
 
                 get_version(pj.pjt_id);
                 fill_dinamic_table();
@@ -612,6 +616,14 @@ function selector_projects() {
                 );
             }
         });
+}
+
+function fillProducer(cusId) {
+    $.each(cust, function (v, u) {
+        if (u.cus_id == cusId) {
+            $('#Relation').html(u.cus_name);
+        }
+    });
 }
 
 function SetUpdatePeriodProject(dt) {
@@ -1031,7 +1043,7 @@ function fill_budget(pr, vr, ix) {
     // console.log(vr);
     // console.log(ix);
 
-    $('#Products .sel_product').text('');
+    $('#Products .sel_product .textbox-finder').val('');
 
     let insurance = pr.prd_insured == 0 ? 0 : 0.1;
 
@@ -1098,9 +1110,8 @@ function registered_product(id) {
             $(this).children('td.qtybase').text(qty);
             rgcnt = 1;
             update_totals();
-            $('.sel_product').text('');
-            $('.box_list_products').slideUp(200, function () {
-                $('#Products .sel_product').trigger('keyup');
+            $('.sel_product .textbox-finder').val('');
+            $('.box_list_products').fadeOut(200, function () {
                 $(`#Products .list_products ul`).html('');
             });
             ky = 1;
@@ -1138,9 +1149,8 @@ function fill_budget_prods(pd, days) {
 
     editable_disable('tbl_dynamic');
 
-    $('.sel_product').text('');
-    $('.box_list_products').slideUp(200, function () {
-        $('#Products .sel_product').trigger('keyup');
+    $('.sel_product .textbox-finder').val('');
+    $('.box_list_products').fadeOut(200, function () {
         $(`#Products .list_products ul`).html('');
     });
 
@@ -1583,10 +1593,20 @@ function add_project() {
         }
     );
 
+    // Llena el selector de clientes
     $.each(cust, function (v, u) {
-        let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
-        $('#txtCustomer').append(H);
-        $('#txtCustomerRel').append(H);
+        if (u.cut_id == 1) {
+            let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
+            $('#txtCustomer').append(H);
+        }
+    });
+
+    // Llena el selector de relacion de clientes
+    $.each(cust, function (v, u) {
+        if (u.cut_id == 2) {
+            let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
+            $('#txtCustomerRel').append(H);
+        }
     });
 
     $('#saveProject').on('click', function () {
@@ -1711,17 +1731,32 @@ function close_modal() {
 
 /** ++++++ Selecciona los productos del listado */
 function sel_product(res, sele) {
-    if (res.length > 3) {
-        $(`#${sele} .list_products ul`).html('');
+    res = res.toUpperCase();
+
+    if (res.length > 2) {
+        // $(`#${sele} .list_products ul`).html('');
         let dstrO = $('#PeriodProject').text().split(' - ')[0];
         let dendO = $('#PeriodProject').text().split(' - ')[1];
         let dstr = moment(dstrO, 'DD/MM/YYYY').format('YYYY-MM-DD');
         let dend = moment(dendO, 'DD/MM/YYYY').format('YYYY-MM-DD');
-        get_products(res, dstr, dend);
-        $('.list_products').css({display: 'block'});
+        if (res.length == 3) {
+            get_products(res.toUpperCase(), dstr, dend);
+        } else {
+            $('#Products .list_products ul li').css({display: 'none'});
+            $('#Products .list_products ul li.enable').each(function (index) {
+                var cm = $(this).attr('data_content').toUpperCase().replace(/|/g, '');
+
+                cm = omitirAcentos(cm);
+                var cr = cm.indexOf(res);
+                if (cr > -1) {
+                    $(this).css({display: 'block'});
+                }
+            });
+        }
+        $('#Products .list_products').css({display: 'block'});
     } else {
         $(`#Products .list_products ul`).html('');
-        $(`.list_products`).css({display: 'none'});
+        $(`#Products .list_products`).css({display: 'none'});
     }
 }
 

@@ -156,8 +156,10 @@ function put_customers(dt) {
     caching_events('put_customers');
     cust = dt;
     $.each(cust, function (v, u) {
-        let H = ` <li id="C${u.cus_id}" class="enable" data_content="${v}|${u.cut_name}">${u.cus_name}</li>`;
-        $('#Customer .list_items ul').append(H);
+        if (u.cut_id == 1) {
+            let H = ` <li id="C${u.cus_id}" class="enable" data_content="${v}|${u.cut_name}">${u.cus_name}</li>`;
+            $('#Customer .list_items ul').append(H);
+        }
     });
     select_customer();
 }
@@ -293,19 +295,21 @@ function put_products(dt) {
         let level = '';
         switch (u.prd_level) {
             case 'A':
-                level = 'ACCESORIOS';
+                level = 'ACCESORIO';
                 break;
             case 'K':
-                level = 'PAQUETES';
+                level = 'PAQUETE';
                 break;
             case 'P':
-                level = 'PRODUCTOS';
+                level = 'PRODUCTO';
                 break;
             default:
         }
         if (u.prd_name != undefined) {
+            // let ava = u.stock > 0 ? 'enable' : 'disable';
+            let ava = 'enable';
             H += `
-                <li data_indx ="${v}" data_content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.srv_id}">
+                <li class="${ava}" data_indx ="${v}" data_content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
                     <div class="prodName">${u.prd_name}</div>
                     <div class="prodStock">${u.stock}</div>
                     <div class="prodLevel">${level}</div>
@@ -455,10 +459,10 @@ function add_boton() {
 
         if (posTop > lm) {
             posTop = posTop - (h1 - 20);
-            $('.list_products').css({bottom: '26px'});
-            $('.sel_product').css({top: h1 - 26 + 'px'});
+            $('.list_products').css({bottom: '35px'});
+            $('.sel_product').css({top: h1 - 35 + 'px'});
         } else {
-            $('.list_products').css({top: '20px'});
+            $('.list_products').css({top: '35px'});
             $('.sel_product').css({top: 0});
         }
 
@@ -472,16 +476,17 @@ function add_boton() {
         $('.box_list_products')
             .unbind('mouseleave')
             .on('mouseleave', function () {
-                $('.box_list_products').slideUp(200);
-                $('.sel_product').text('');
-                $(`#Products .list_products ul`).html('');
+                $('.box_list_products').fadeOut(200, function () {
+                    $('.sel_product .textbox-finder').val('');
+                    $(`#Products .list_products ul`).html('');
+                });
             });
 
-        $('#Products .sel_product')
+        $('#Products .sel_product .textbox-finder')
             .unbind('keyup')
             .on('keyup', function () {
                 let idSel = $(this).parent().attr('id');
-                let text = $(this).text().toUpperCase();
+                let text = $(this).val().toUpperCase();
                 sel_product(text, idSel);
             });
     });
@@ -565,7 +570,6 @@ function selector_projects() {
                 $('i').removeClass('rotar');
                 let pj = proj[indx];
                 $('#C' + pj.cus_id).trigger('click');
-                // $('#R' + pj.cus_parent).trigger('click');
                 idSel.children('.grouper').html('<i class="fas fa-times-circle clean"></i> ' + $(this).html());
                 $('#LocationProject').html(pj.pjt_location);
                 $('#TypeLocation').html(pj.loc_type_location);
@@ -577,6 +581,7 @@ function selector_projects() {
                 $('#IdCuo').val(pj.cuo_id);
                 $('#IdCus').val(pj.cus_id);
                 $('#IdCusPrn').val(pj.cus_parent);
+                fillProducer(pj.cus_parent);
 
                 get_budgets(pj.pjt_id);
                 fill_dinamic_table();
@@ -634,6 +639,14 @@ function selector_projects() {
                 );
             }
         });
+}
+
+function fillProducer(cusId) {
+    $.each(cust, function (v, u) {
+        if (u.cus_id == cusId) {
+            $('#Relation').html(u.cus_name);
+        }
+    });
 }
 
 function SetUpdatePeriodProject(dt) {
@@ -894,7 +907,7 @@ function update_totals() {
         let costbase = 0,
             costtrip = 0,
             costtest = 0;
-            costassu = 0;
+        costassu = 0;
         let total = 0;
         $('.frame_content #tblControl tbody tr').each(function (v) {
             let pid = $(this).attr('id');
@@ -1063,9 +1076,9 @@ function fill_budget(pr, ix) {
     // console.log(pr);
     // console.log(ix);
 
-    $('#Products .sel_product').text('');
+    $('#Products .sel_product .textbox-finder').val('');
 
-// AGREGA EL PORCENTJE DEL SEGURO 10%
+    // AGREGA EL PORCENTJE DEL SEGURO 10%
     let insurance = pr.prd_insured == 0 ? 0 : 0.1;
 
     var par = `
@@ -1089,7 +1102,7 @@ function fill_budget(pr, ix) {
 function load_budget(inx, bdgId) {
     caching_events('load_budget');
 
-// AGREGA EL PORCENTJE DEL SEGURO 10%
+    // AGREGA EL PORCENTJE DEL SEGURO 10%
     let insurance = prod[inx].prd_insured == 0 ? 0 : 0.1;
     let produ = prod[inx].prd_name.replace(/\"/g, '°');
     let days = get_days_period();
@@ -1134,9 +1147,8 @@ function registered_product(id) {
             $(this).children('td.qtybase').text(qty);
             rgcnt = 1;
             update_totals();
-            $('.sel_product').text('');
-            $('.box_list_products').slideUp(200, function () {
-                $('#Products .sel_product').trigger('keyup');
+            $('.sel_product .textbox-finder').val('');
+            $('.box_list_products').fadeOut(200, function () {
                 $(`#Products .list_products ul`).html('');
             });
             ky = 1;
@@ -1152,7 +1164,6 @@ function fill_budget_prods(pd, days, st) {
     caching_events('fill_budget_prods');
     let pds = JSON.parse(pd);
     let sll = '';
-    console.log(pds);
     let prodName = pds.pjtcn_prod_name.toString().replace(/°/g, '"');
     let H = `
     <tr id="bdg${pds.prd_id}" class="bdg${pds.prd_id}" 
@@ -1191,9 +1202,8 @@ function fill_budget_prods(pd, days, st) {
             $(this).attr('contenteditable', true).trigger('focus');
         });
 
-    $('.sel_product').text('');
-    $('.box_list_products').slideUp(200, function () {
-        $('#Products .sel_product').trigger('keyup');
+    $('.sel_product .textbox-finder').val('');
+    $('.box_list_products').fadeOut(200, function () {
         $(`#Products .list_products ul`).html('');
     });
 
@@ -1806,17 +1816,32 @@ function close_modal() {
 
 /** ++++++ Selecciona los productos del listado */
 function sel_product(res, sele) {
-    if (res.length > 3) {
-        $(`#${sele} .list_products ul`).html('');
+    res = res.toUpperCase();
+
+    if (res.length > 2) {
+        // $(`#${sele} .list_products ul`).html('');
         let dstrO = $('#PeriodProject').text().split(' - ')[0];
         let dendO = $('#PeriodProject').text().split(' - ')[1];
         let dstr = moment(dstrO, 'DD/MM/YYYY').format('YYYY-MM-DD');
         let dend = moment(dendO, 'DD/MM/YYYY').format('YYYY-MM-DD');
-        get_products(res, dstr, dend);
-        $('.list_products').css({display: 'block'});
+        if (res.length == 3) {
+            get_products(res.toUpperCase(), dstr, dend);
+        } else {
+            $('#Products .list_products ul li').css({display: 'none'});
+            $('#Products .list_products ul li.enable').each(function (index) {
+                var cm = $(this).attr('data_content').toUpperCase().replace(/|/g, '');
+
+                cm = omitirAcentos(cm);
+                var cr = cm.indexOf(res);
+                if (cr > -1) {
+                    $(this).css({display: 'block'});
+                }
+            });
+        }
+        $('#Products .list_products').css({display: 'block'});
     } else {
         $(`#Products .list_products ul`).html('');
-        $(`.list_products`).css({display: 'none'});
+        $(`#Products .list_products`).css({display: 'none'});
     }
 }
 
@@ -2067,7 +2092,7 @@ function add_new_product(pd) {
 
     let dytritt = daytrip / 2;
     let daysini = dytritt + daytest;
-   // let daysfnl = (dytritt + daybase)-1;
+    // let daysfnl = (dytritt + daybase)-1;
 
     let daysfnl = dytritt + daybase - 1;
     let prjDStr = moment(proj[0].pjt_date_start, 'DD/MM/YYYY').subtract('days', daysini).format('YYYYMMDD');
@@ -2133,7 +2158,7 @@ function updatesData(sl) {
 }
 
 function show_updatesData(dt) {
-    console.log('Resultado',dt);
+    console.log('Resultado', dt);
 }
 
 function put_counter_pending(dt) {
