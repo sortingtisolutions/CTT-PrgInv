@@ -1,7 +1,6 @@
 let cust, proj, relc, vers, prod, disc, budg;
 let rgcnt = 1,
-    rgevn = 0,
-    rgscn = 0;
+    rgevn = 0;
 
 $('document').ready(function () {
     url = getAbsolutePath();
