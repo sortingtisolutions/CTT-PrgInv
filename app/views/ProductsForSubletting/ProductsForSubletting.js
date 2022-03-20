@@ -7,27 +7,20 @@ $(document).ready(function () {
 });
 
 function inicial() {
-    if (altr == 1) {
-        folio = getFolio();
-        setting_table(0);
-        get_Proyectos();
-        get_coins();
-        get_suppliers();
-        get_stores();
-        confirm_alert();
+    folio = getFolio();
+    setting_table();
+    get_Proyectos();
+    get_coins();
+    get_suppliers();
+    get_stores();
 
-        $('#txtPrice').on('blur', function () {
-            validator();
-        });
-        $('#btn_subletting').on('click', function () {
-            let acc = $(this).attr('data_accion');
-            updating_serie(acc);
-        });
-    } else {
-        setTimeout(() => {
-            inicial();
-        }, 100);
-    }
+    $('#txtPrice').on('blur', function () {
+        validator();
+    });
+    $('#btn_subletting').on('click', function () {
+        let acc = $(this).attr('data_accion');
+        updating_serie(acc);
+    });
 }
 
 /** ++++  Setea el calendario ++++++ */
@@ -61,21 +54,20 @@ function setting_datepicket(sl, di, df) {
 }
 
 /** ++++  Setea la tabla ++++++ */
-function setting_table(pjtId) {
-    $('#tblProductForSubletting').DataTable().destroy();
+function setting_table() {
     let title = 'Productos en subarrendo';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
     $('#tblProductForSubletting').DataTable({
-        order: [3, 'asc'],
+        order: [[1, 'desc']],
         dom: 'Blfrtip',
         select: {
             style: 'single',
             info: false,
         },
         lengthMenu: [
-            [40, 100, 200, 300, -1],
-            [40, 100, 200, 300, 'Todos'],
+            [100, 200, 300, -1],
+            [100, 200, 300, 'Todos'],
         ],
         buttons: [
             {
@@ -125,23 +117,16 @@ function setting_table(pjtId) {
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,
         fixedHeader: true,
-        createdRow: function (nRow, aData, iDataIndex) {
-            $(nRow).attr('id', aData['subcatid']);
-        },
-        processing: true,
-        serverSide: true,
-        ajax: {url: 'ProductsForSubletting/tableProducts', type: 'POST', data: {pjtId: pjtId}},
         columns: [
-            {data: 'editable', name: 'editable', class: 'edit'},
-            {data: 'pjt_id', name: 'pjt_id', class: 'id hide'},
-            {data: 'prd_name', name: 'prodname', class: 'product-name'},
-            {data: 'pjtdt_prod_sku', name: 'produsku', class: 'sku'},
-            {data: 'sub_price', name: 'prodpric', class: 'price'},
-            {data: 'sup_business_name', name: 'supplier', class: 'supply'},
-            {data: 'str_name', name: 'storesrc', class: 'stores'},
-            {data: 'sub_date_start', name: 'datestar', class: 'date'},
-            {data: 'sub_date_end', name: 'date_end', class: 'date'},
-            {data: 'sub_comments', name: 'comments', class: 'comments'},
+            {data: 'editable', class: 'edit'},
+            {data: 'prodname', class: 'product-name'},
+            {data: 'prod_sku', class: 'sku'},
+            {data: 'prodpric', class: 'price'},
+            {data: 'supplier', class: 'supply'},
+            {data: 'storesrc', class: 'stores'},
+            {data: 'datestar', class: 'date'},
+            {data: 'date_end', class: 'date'},
+            {data: 'comments', class: 'comments'},
         ],
     });
 }
@@ -191,19 +176,17 @@ function get_stores() {
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
     pj = dt;
+    console.log(pj);
     $.each(dt, function (v, u) {
-        let H = `<option style="background_color: #CC0000;" data_indx="${v}" value="${u.pjt_id}">${u.pjs_name} - ${u.pjt_name}</option>`;
+        let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
         $('#txtProject').append(H);
     });
     $('#txtProject').on('change', function () {
         px = parseInt($('#txtProject option:selected').attr('data_indx'));
-        let pjtid = 0;
-        if (px >= 0) {
-            pjtid = pj[px].pjt_id;
-            // deep_loading('O');
-        }
-        $('#txtIdProject').val(pjtid);
-        setting_table(pjtid);
+        $('#txtIdProject').val(pj[px].pjt_id);
+        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
+        $('.objet').addClass('objHidden');
+        get_products(pj[px].pjt_id);
     });
 }
 
@@ -215,33 +198,26 @@ function put_Products(dt) {
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblProductForSubletting tbody tr').remove() : '';
     let tabla = $('#tblProductForSubletting').DataTable();
-
     tabla.rows().remove().draw();
-    $('.objet').addClass('objHidden');
     let cn = 0;
     $.each(pd, function (v, u) {
         let datestart = u.sub_date_start;
         let dateend = u.sub_date_end;
 
-        // if (datestart == null) {
-        //     datestart = define_days('i', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
-        // }
-        // if (dateend == null) {
-        //     dateend = define_days('f', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
-        // }
+        if (datestart == null) {
+            datestart = define_days('i', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
+        }
+        if (dateend == null) {
+            dateend = define_days('f', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
+        }
         let sku = u.pjtdt_prod_sku;
         if (sku == 'Pendiente') {
             sku = `<span class="pending">${sku}</sku>`;
         }
-        let date01 = moment(Date());
-        let date02 = moment(dateend, 'DD/MM/YYYY');
-        let difdays = date02.diff(date01, 'days');
-
-        let alert = difdays > 0 && difdays < 6 ? 'yellow' : difdays <= 0 ? 'red' : 'trans';
-
+        // editable: `<i id="k${u.pjtdt_id}" class="fas fa-times-circle kill"></i>`,
         tabla.row
             .add({
-                editable: `<div class="dyalt ${alert}"></div> <i id="k${u.pjtdt_id}" class="fas fa-times-circle kill" style="display:none"></i>`,
+                editable: `<i id="k${u.pjtdt_id}" class="fas fa-certificate"></i>`,
                 prodname: u.prd_name,
                 prod_sku: sku,
                 prodpric: u.sub_price,
@@ -314,8 +290,6 @@ function put_Products(dt) {
                 $('.objet').addClass('objHidden');
             }
         });
-
-    deep_loading('C');
 }
 
 /**  ++++   Coloca las monedas en el listado del input */
@@ -378,7 +352,7 @@ function updating_serie(acc) {
         "seriesId"  :   "${seriesId}",
         "projecId"  :   "${projecId}"
     }]`;
-
+    console.log(acc);
     if (acc == 'add') {
         var pagina = 'ProductsForSubletting/saveSubletting';
     } else {
@@ -389,6 +363,7 @@ function updating_serie(acc) {
     fillField(pagina, par, tipo, selector);
 }
 function put_save_subleting(dt) {
+    console.log(dt);
     let tr = $('#' + dt[0].pjtdt_id);
     $($(tr[0].cells[2])).html(dt[0].pjtdt_prod_sku);
     $($(tr[0].cells[3])).html(dt[0].sub_price);
@@ -405,6 +380,7 @@ function put_save_subleting(dt) {
 
     tr.trigger('click');
     tr.removeClass('selected');
+    $('.objet').addClass('objHidden');
 }
 
 /*  ++++++++ Valida los campos  +++++++ */
