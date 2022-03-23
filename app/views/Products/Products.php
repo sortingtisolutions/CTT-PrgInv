@@ -23,13 +23,12 @@
                         
                     </div>
                     <div id="dvProducts"></div>
-                    <table class="display compact nowrap"  id="tblProducts" style="min-width: 1880px">
+                    <table class="display compact nowrap order-column"  id="tblProducts" style="min-width:1885px; width:100%";>
                         <thead>
                             <tr>
-                                <th style="width:  5px"></th>
-                                <th style="width:  80px"></th>
-                                <th style="width:  85px">SKU</th>
-                                <th style="width: 350px">Nombre</th>
+                                <th style="width:  30px"></th>
+                                <th style="width:  80px">SKU</th>
+                                <th style="width: 300px">Nombre</th>
                                 <th style="width:  70px">Precio</th>
                                 <th style="width:  40px">Existencias</th>
                                 <th style="width:  30px">Tipo</th>
@@ -38,11 +37,11 @@
                                 <th style="width:  40px">Ficha<br>Técnica</th>
                                 <th style="width: 220px">Subcategoría</th>
                                 <th style="width: 220px">Catálogo</th>
-                                <th style="width: 350px">Nombre ingles</th>
-                                <th style="width: 350px">Descripción según proveedor</th>
+                                <th style="width: 300px">Nombre ingles</th>
+                                <th style="width:  auto">Descripción según proveedor</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        
                     </table>
 
                 </div>

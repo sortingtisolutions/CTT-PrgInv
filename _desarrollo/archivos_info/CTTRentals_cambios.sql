@@ -170,11 +170,11 @@ SELECT
   , pr.prd_sku			AS produsku
   , pr.prd_name			AS prodname
   , pr.prd_price  		AS prodpric 
-  , CONCAT('<span class="toLink">', prd_stock , '</span>')  AS prodqtty
+  , CONCAT('<span class="toLink">', prd_stock , '</span> ')  AS prodqtty
 	, pr.prd_level			AS prodtype
   , sv.srv_name 			AS typeserv 
 	, cn.cin_code 			AS prodcoin
-  , CONCAT('<i class="fas fa-file-invoice" id="',dc.doc_id,'"></i>') AS prddocum
+  , CONCAT('<i class="fas fa-file-invoice" id="',dc.doc_id,'"></i> ') AS prddocum
   , sc.sbc_name			AS subcateg
   , ct.cat_name			AS categori
   , pr.prd_english_name 	AS prodengl
