@@ -176,6 +176,7 @@ function get_stores() {
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
     pj = dt;
+    console.log(pj);
     $.each(dt, function (v, u) {
         let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
         $('#txtProject').append(H);
@@ -184,7 +185,11 @@ function put_Proyectos(dt) {
         px = parseInt($('#txtProject option:selected').attr('data_indx'));
         $('#txtIdProject').val(pj[px].pjt_id);
         // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
+<<<<<<< HEAD
 
+=======
+        $('.objet').addClass('objHidden');
+>>>>>>> 9e6c3049e9b2feb906f808e806c7981a8296eb23
         get_products(pj[px].pjt_id);
     });
 }
@@ -197,6 +202,10 @@ function put_Products(dt) {
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblProductForSubletting tbody tr').remove() : '';
     let tabla = $('#tblProductForSubletting').DataTable();
+<<<<<<< HEAD
+=======
+    tabla.rows().remove().draw();
+>>>>>>> 9e6c3049e9b2feb906f808e806c7981a8296eb23
     let cn = 0;
     $.each(pd, function (v, u) {
         let datestart = u.sub_date_start;
@@ -212,10 +221,10 @@ function put_Products(dt) {
         if (sku == 'Pendiente') {
             sku = `<span class="pending">${sku}</sku>`;
         }
-
+        // editable: `<i id="k${u.pjtdt_id}" class="fas fa-times-circle kill"></i>`,
         tabla.row
             .add({
-                editable: `<i id="k${u.pjtdt_id}" class="fas fa-times-circle kill"></i>`,
+                editable: `<i id="k${u.pjtdt_id}" class="fas fa-certificate"></i>`,
                 prodname: u.prd_name,
                 prod_sku: sku,
                 prodpric: u.sub_price,
@@ -350,7 +359,7 @@ function updating_serie(acc) {
         "seriesId"  :   "${seriesId}",
         "projecId"  :   "${projecId}"
     }]`;
-
+    console.log(acc);
     if (acc == 'add') {
         var pagina = 'ProductsForSubletting/saveSubletting';
     } else {
@@ -361,6 +370,7 @@ function updating_serie(acc) {
     fillField(pagina, par, tipo, selector);
 }
 function put_save_subleting(dt) {
+    console.log(dt);
     let tr = $('#' + dt[0].pjtdt_id);
     $($(tr[0].cells[2])).html(dt[0].pjtdt_prod_sku);
     $($(tr[0].cells[3])).html(dt[0].sub_price);
@@ -377,6 +387,7 @@ function put_save_subleting(dt) {
 
     tr.trigger('click');
     tr.removeClass('selected');
+    $('.objet').addClass('objHidden');
 }
 
 /*  ++++++++ Valida los campos  +++++++ */

@@ -13,7 +13,7 @@ class ProductsForSublettingModel extends Model
 public function listProyects($store)
 {
     $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status = 2 ;";
+    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (2,5) ;";
     return $this->db->query($qry);
 }    
 
@@ -155,22 +155,29 @@ public function listProyects($store)
     }
 
 // Agrega el registro de relación almacen producto
-    public function InsertProducts($param)
-    {
-        $idPrd 			= $this->db->real_escape_string($param['ser']);
-        $idStrSrc 		= $this->db->real_escape_string($param['sti']);
-        $quantity 		= $this->db->real_escape_string($param['qty']);
+    // public function InsertProducts($param)
+    // {
+    //     $idPrd 			= $this->db->real_escape_string($param['ser']);
+    //     $idStrSrc 		= $this->db->real_escape_string($param['sti']);
+    //     $quantity 		= $this->db->real_escape_string($param['qty']);
 
-        $qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id) VALUES ($quantity, $idStrSrc, $idPrd);";
-        return $this->db->query($qry);
-    }
+    //     $qry = "INSERT INTO ctt_stores_products 
+    //                 (stp_quantity, str_id, ser_id) 
+    //             VALUES 
+    //                 ($quantity, $idStrSrc, $idPrd);";
+    //     return $this->db->query($qry);
+    // }
 
 // Proceso de subarrendo
     public function checkSerie($param)
     {
         $producId 		= $this->db->real_escape_string($param['producId']);
 
-        $qry = "SELECT count(*) as skuCount FROM ctt_series WHERE prd_id = $producId AND LEFT(RIGHT(ser_sku, 4),1) ='R' AND pjtdt_id = 0;";
+        $qry = "SELECT  count(*) as skuCount 
+                  FROM  ctt_series 
+                 WHERE  prd_id = $producId 
+                   AND  LEFT(RIGHT(ser_sku, 4),1) ='R' 
+                   AND  pjtdt_id = 0;";
         return $this->db->query($qry);
     }    
 
@@ -178,7 +185,6 @@ public function listProyects($store)
     public function addNewSku($params)
     {
         $pjDetail 		= $this->db->real_escape_string($params['pjDetail']);
-
         $producId 		= $this->db->real_escape_string($params['producId']);
         $produSku 		= $this->db->real_escape_string($params['produSku']);
         $seriCost 		= $this->db->real_escape_string($params['seriCost']);
@@ -211,10 +217,19 @@ public function listProyects($store)
                     prd_id, sup_id, cin_id, pjtdt_id
                 )
                 SELECT 
+<<<<<<< HEAD
                     '$newSku', '$serieNew', '$seriCost', ser_status, ser_situation, ser_stage, curdate(),
                     '1', ser_behaviour, '$comments', 
                     prd_id, '$supplier','$tpCoinId','$pjDetail'
                 FROM ctt_series AS sr  WHERE prd_id = $producId limit 1;";
+=======
+                    '$newSku', '$serieNew', '$seriCost', ifnull(sr.ser_status,1), ifnull(sr.ser_situation,'EA'), ifnull(sr.ser_stage, 'R'), curdate(),
+                    '1', ifnull(sr.ser_behaviour,'C'), '$comments', 
+                    pd.prd_id, '$supplier','$tpCoinId','$pjDetail'
+                FROM ctt_series AS sr  
+                RIGHT JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
+                WHERE pd.prd_id = $producId LIMIT 1;";
+>>>>>>> 9e6c3049e9b2feb906f808e806c7981a8296eb23
         $this->db->query($qry1);
         $serieId = $this->db->insert_id;
 
@@ -230,15 +245,19 @@ public function listProyects($store)
                     sub_price, sub_quantity, sub_comments, 
                     ser_id, sup_id, prj_id, cin_id)
                 SELECT 
+<<<<<<< HEAD
                     ser_cost, '1', '$comments', ser_id, 
+=======
+                    ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
+>>>>>>> 9e6c3049e9b2feb906f808e806c7981a8296eb23
                     '$supplier', '$projecId', '$tpCoinId' 
                 FROM ctt_series WHERE pjtdt_id = $pjDetail;";
         $this->db->query($qry3);
 
         $qry4 = " INSERT INTO ctt_stores_products 
-                    (stp_quantity, str_id, ser_id) 
+                    (stp_quantity, str_id, ser_id, prd_id) 
                 VALUES 
-                    ('1','$storesId', '$serieId');";
+                    ('1','$storesId', '$serieId','$producId');";
         $this->db->query($qry4);
 
         return $pjDetail;
@@ -248,7 +267,6 @@ public function listProyects($store)
     public function changeSubletting($params)
     {
         $pjDetail 		= $this->db->real_escape_string($params['pjDetail']);
-
         $producId 		= $this->db->real_escape_string($params['producId']);
         $produSku 		= $this->db->real_escape_string($params['produSku']);
         $seriCost 		= $this->db->real_escape_string($params['seriCost']);
@@ -264,8 +282,6 @@ public function listProyects($store)
         $qry1 = "UPDATE ctt_series 
                     SET 
                         cin_id = '$tpCoinId', 
-                        ser_reserve_start = '$dtResIni', 
-                        ser_reserve_end = '$dtResFin', 
                         ser_cost = '$seriCost'
                     WHERE ser_id = '$seriesId';";
         $this->db->query($qry1);

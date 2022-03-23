@@ -138,7 +138,10 @@ public function NextExchange()
         $this->db->query($qry2);
 
 
-		$qry3 = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id) VALUES ($exc_quantity, $str_id, $serId);";
+		$qry3 = "INSERT INTO 
+                    ctt_stores_products (stp_quantity, str_id, ser_id, prd_id) 
+                VALUES 
+                    ($exc_quantity, $str_id, $serId, $prd_id);";
         $this->db->query($qry3);
 
         

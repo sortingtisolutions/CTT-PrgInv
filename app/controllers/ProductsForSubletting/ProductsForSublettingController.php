@@ -43,6 +43,7 @@ class ProductsForSublettingController extends Controller
         echo $res;
     } 
 // Lista los productos
+<<<<<<< HEAD
      public function listProducts($request_params)
      {
          $params =  $this->session->get('user');
@@ -59,6 +60,24 @@ class ProductsForSublettingController extends Controller
          }
          echo $res;
      } 
+=======
+    public function listProducts($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProducts($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
+>>>>>>> 9e6c3049e9b2feb906f808e806c7981a8296eb23
 
 // Lista los proveedores de subarrendo
     public function listSuppliers($request_params)

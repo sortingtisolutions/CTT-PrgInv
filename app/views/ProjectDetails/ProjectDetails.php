@@ -196,7 +196,10 @@
 
     <!-- Start Lista de productos -->
     <div class="box_list_products" id="Products" >
-        <div class="sel_product" contenteditable="true"></div>
+    <div class="sel_product">
+            <i class="far fa-times-circle close-finder"></i>
+            <input type="text" id="txtSearchProduct" name="txtSearchProduct" class="textbox-finder">
+        </div>
         <div class="list_products">
             <ul></ul>
         </div>

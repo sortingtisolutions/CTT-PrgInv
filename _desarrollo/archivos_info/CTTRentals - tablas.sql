@@ -267,6 +267,7 @@ CREATE TABLE `cttapp_cire`.`ctt_products` (
     `prd_expendable`        VARCHAR(1) DEFAULT '0'          COMMENT 'Producto para venta expendable  1 = Expendable, 0 = No expendable',
     `prd_lonely`            VARCHAR(1)                      COMMENT 'Se puede rentar sin accesosrios 1-si, 0-no',
     `prd_insured`           VARCHAR(1)                      COMMENT 'Cotiza seguro 1-si, 0-no',
+    `prd_stock`             INT NULL                        COMMENT 'Cantidad existente en almacenes',
     `doc_id`                INT NULL                        COMMENT 'Id del docuemnto para relacionar la ficha técnica ctt_products_documents',
     `sbc_id`                INT NULL                        COMMENT 'Id de la subcategoría relacion ctt_subcategories',
     `srv_id`                INT NULL                        COMMENT 'Id del tipo de servicio relacion ctt_services',
@@ -497,6 +498,7 @@ CREATE TABLE `cttapp_cire`.`ctt_stores_products` (
     `stp_quantity`        INT NOT NULL DEFAULT 0          COMMENT 'Cantidad de productos',
     `str_id`              INT NOT NULL                    COMMENT 'Id del almacen relacion ctt_store',
     `ser_id`              INT NOT NULL                    COMMENT 'Id del numero de serie relacion ctt_series',
+    `prd_id`              INT NOT NULL                    COMMENT 'Id del producto relacion ctt_products',
 PRIMARY KEY (`stp_id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT ='Tabla de cantidad de productos en almacen';
 
@@ -658,24 +660,22 @@ DROP VIEW ctt_vw_products;
 CREATE VIEW ctt_vw_products AS
 SELECT 
 	CONCAT('<i class="fas fa-pen modif" data="', pr.prd_id,'"></i><i class="fas fa-times-circle kill" data="', pr.prd_id , '"></i>') AS editable
-	, pr.prd_id 			AS producid
-    , pr.prd_sku			AS produsku
-    , pr.prd_name			AS prodname
-    , pr.prd_price  		AS prodpric 
-    , CONCAT('<span class="toLink">', ifnull((SELECT sum(stp_quantity) FROM ctt_stores_products AS sp
-				INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
-				WHERE sr.prd_id = pr.prd_id),0), '</span>')  AS prodqtty
-	, pr.prd_level			AS prodtype
-    , sv.srv_name 			AS typeserv 
-	, cn.cin_code 			AS prodcoin
+	, pr.prd_id                     AS producid
+    , pr.prd_sku                    AS produsku
+    , pr.prd_name                   AS prodname
+    , pr.prd_price                  AS prodpric 
+    , CONCAT('<span class="toLink">', prd_stock , '</span>')  AS prodqtty
+	, pr.prd_level                  AS prodtype
+    , sv.srv_name                   AS typeserv 
+	, cn.cin_code                   AS prodcoin
     , CONCAT('<i class="fas fa-file-invoice" id="',dc.doc_id,'"></i>') AS prddocum
-    , sc.sbc_name			AS subcateg
-    , ct.cat_name			AS categori
-    , pr.prd_english_name 	AS prodengl
-    , pr.prd_comments		AS prdcomme
+    , sc.sbc_name                   AS subcateg
+    , ct.cat_name                   AS categori
+    , pr.prd_english_name           AS prodengl
+    , pr.prd_comments               AS prdcomme
     , ct.cat_id
-FROM ctt_products 					AS pr
-INNER JOIN ctt_coins 				AS cn ON cn.cin_id = pr.cin_id
+FROM ctt_products                   AS pr
+INNER JOIN ctt_coins                AS cn ON cn.cin_id = pr.cin_id
 INNER JOIN ctt_services             AS sv ON sv.srv_id = pr.srv_id  AND sv.srv_status = '1'
 INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = pr.sbc_id  AND sc.sbc_status = '1'
 INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id  AND ct.cat_status = '1'
@@ -698,23 +698,38 @@ FROM ctt_vw_subletting;
 
 DROP VIEW ctt_vw_projects ;
 CREATE VIEW ctt_vw_projects AS
-SELECT 
-	CONCAT(cu.cus_fill, '%') as custfill
-	, '<i class="fas fa-id-card kill"></i>' as editable
-    , pj.pjt_id as projecid
-    , pj.pjt_number as projnumb
-    , pj.pjt_name as projname 
-    , date_format(pj.pjt_date_project, '%Y/%m/%d') as dateregr
-    , cu.cus_name AS custname
-FROM ctt_projects AS pj
-INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-INNER JOIN ctt_customers As cu ON cu.cus_id = co.cus_id
-WHERE pjt_status = 2;
+SELECT
+    CASE
+        WHEN cu.cus_fill <= 16                          THEN concat(    '<span class="rng rng1">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 16 AND cu.cus_fill <= 33     THEN concat(    '<span class="rng rng2">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 33 AND cu.cus_fill <= 50     THEN concat(    '<span class="rng rng3">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 50 AND cu.cus_fill <= 66     THEN concat(    '<span class="rng rng4">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 66 AND cu.cus_fill <= 90     THEN concat(    '<span class="rng rng5">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 99                           THEN concat(    '<span class="rng rng6">',  cu.cus_fill, '%</span>'    )
+    ELSE '' END     AS custfill,
+    CASE
+        WHEN cu.cus_fill < 100                          THEN concat(    '<i class="fas fa-address-card kill" id="',    cu.cus_id,    '"></i>'    )
+    ELSE '' END     AS editable,
+    CASE
+        WHEN pj.pjt_status = '2'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
+        WHEN pj.pjt_status = '5'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
+    ELSE '' END     AS smarlock,
+    pj.pjt_id       AS projecid,
+    pj.pjt_number   AS projnumb,
+    pj.pjt_name     AS projname,
+    pj.pjt_location AS projloca,
+    date_format(pj.pjt_date_start,  '%Y/%m/%d') AS dateinit,
+    date_format(pj.pjt_date_end,    '%Y/%m/%d') AS datefnal,
+    cu.cus_name AS custname
+FROM        ctt_projects AS pj    
+INNER JOIN  ctt_customers_owner AS co  ON co.cuo_id = pj.cuo_id
+INNER JOIN  ctt_customers as cu        ON cu.cus_id = co.cus_id
+WHERE pj.pjt_status IN (2, 5);
 
 
 
-DROP TRIGGER actualiza_subcategorias;
-CREATE TRIGGER actualiza_subcategorias AFTER UPDATE ON ctt_stores_products
+DROP TRIGGER update_categories;
+CREATE TRIGGER update_categories AFTER UPDATE ON ctt_stores_products
 FOR EACH ROW
     UPDATE ctt_subcategories as sc SET sbc_quantity = (
         SELECT  ifnull(sum(sp.stp_quantity),0) 
@@ -723,3 +738,15 @@ FOR EACH ROW
         INNER JOIN ctt_products             AS pr ON pr.prd_id = sr.prd_id
         WHERE sr.ser_status = 1 AND pr.prd_level IN ('P','K') and pr.sbc_id = sc.sbc_id
     );
+
+
+DROP TRIGGER update_products;
+CREATE TRIGGER update_products AFTER UPDATE ON ctt_stores_products
+FOR EACH ROW
+UPDATE ctt_products as sc SET prd_stock = (
+SELECT  ifnull(sum(sp.stp_quantity),0) 
+        FROM  ctt_stores_products           AS sp
+        INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
+        INNER JOIN ctt_products             AS pr ON pr.prd_id = sr.prd_id
+        WHERE sr.ser_status = 1 AND pr.prd_level IN ('P','K') AND sr.prd_id = sc.prd_id
+) WHERE sp.prd_id = prd_id;
