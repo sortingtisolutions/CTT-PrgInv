@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
+require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
 class ProductsForSublettingModel extends Model
 {
@@ -13,7 +14,9 @@ class ProductsForSublettingModel extends Model
 public function listProyects($store)
 {
     $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status = 2 ;";
+    $qry = "SELECT * FROM ctt_projects as pj 
+            INNER JOIN ctt_projects_status as ps ON ps.pjs_status = pj.pjt_status
+            WHERE pjt_status in (2,3,4,5);";
     return $this->db->query($qry);
 }    
 
@@ -30,6 +33,39 @@ public function listProyects($store)
                     ifnull(pjtcn_id,0) AS pjtcn_id, ifnull(cin_id,0) AS cin_id
                 FROM ctt_vw_subletting WHERE pjt_id = $pjtId;";
         return $this->db->query($qry);
+    }    
+
+// Listado de Productos
+    public function tableProducts($params)
+    {
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $table = 'ctt_vw_project_subletting';  
+        $primaryKey = 'num';
+        $whereResult = null;
+        $whereAll = "pjt_id = '" . $pjtId . "'";
+        $columns = array(
+            array( 'db' => '', 'dt' => 'editable' ),
+            array( 'db' => 'pjt_id', 'dt' => 'pjt_id' ),
+            array( 'db' => 'prd_name', 'dt' => 'prd_name' ),
+            array( 'db' => 'pjtdt_prod_sku', 'dt' => 'pjtdt_prod_sku' ),
+            array( 'db' => 'sub_price', 'dt' => 'sub_price' ),
+            array( 'db' => 'sup_business_name', 'dt' => 'sup_business_name' ),
+            array( 'db' => 'str_name', 'dt' => 'str_name' ),
+            array( 'db' => 'sub_date_start', 'dt' => 'sub_date_start' ),
+            array( 'db' => 'sub_date_end', 'dt' => 'sub_date_end' ),
+            array( 'db' => 'sub_comments', 'dt' => 'sub_comments' ),
+        );
+        $sql_details = array(
+            'user' => USER,
+            'pass' => PASSWORD,
+            'db'   => DB_NAME,
+            'host' => HOST,
+            'charset' => 'utf8',
+        );
+
+        return json_encode(
+            SSP::complex( $_POST, $sql_details, $table, $primaryKey, $columns, $whereResult, $whereAll )
+        );
     }    
 
 
@@ -207,12 +243,12 @@ public function listProyects($store)
         // Agrega la nueva serie
         $qry1 = "INSERT INTO ctt_series (
                     ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, ser_date_registry, 
-                    ser_reserve_count, ser_behaviour, ser_comments, 
+                    ser_reserve_start, ser_reserve_end, ser_reserve_count, ser_behaviour, ser_comments, 
                     prd_id, sup_id, cin_id, pjtdt_id
                 )
                 SELECT 
                     '$newSku', '$serieNew', '$seriCost', ser_status, ser_situation, ser_stage, curdate(),
-                    '1', ser_behaviour, '$comments', 
+                    '$dtResIni', '$dtResFin', '1', ser_behaviour, '$comments', 
                     prd_id, '$supplier','$tpCoinId','$pjDetail'
                 FROM ctt_series AS sr  WHERE prd_id = $producId limit 1;";
         $this->db->query($qry1);
@@ -227,10 +263,10 @@ public function listProyects($store)
 
         // Agrega el nuevo registro en la tabla de subarrendos
         $qry3 = "INSERT INTO ctt_subletting (
-                    sub_price, sub_quantity, sub_comments, 
+                    sub_price, sub_quantity, sub_date_start, sub_date_end, sub_comments, 
                     ser_id, sup_id, prj_id, cin_id)
                 SELECT 
-                    ser_cost, '1', '$comments', ser_id, 
+                    ser_cost, '1', ser_reserve_start, ser_reserve_end, '$comments', ser_id, 
                     '$supplier', '$projecId', '$tpCoinId' 
                 FROM ctt_series WHERE pjtdt_id = $pjDetail;";
         $this->db->query($qry3);

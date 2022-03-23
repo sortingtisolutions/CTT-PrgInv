@@ -7,20 +7,27 @@ $(document).ready(function () {
 });
 
 function inicial() {
-    folio = getFolio();
-    setting_table();
-    get_Proyectos();
-    get_coins();
-    get_suppliers();
-    get_stores();
+    if (altr == 1) {
+        folio = getFolio();
+        setting_table(0);
+        get_Proyectos();
+        get_coins();
+        get_suppliers();
+        get_stores();
+        confirm_alert();
 
-    $('#txtPrice').on('blur', function () {
-        validator();
-    });
-    $('#btn_subletting').on('click', function () {
-        let acc = $(this).attr('data_accion');
-        updating_serie(acc);
-    });
+        $('#txtPrice').on('blur', function () {
+            validator();
+        });
+        $('#btn_subletting').on('click', function () {
+            let acc = $(this).attr('data_accion');
+            updating_serie(acc);
+        });
+    } else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
 }
 
 /** ++++  Setea el calendario ++++++ */
@@ -54,20 +61,21 @@ function setting_datepicket(sl, di, df) {
 }
 
 /** ++++  Setea la tabla ++++++ */
-function setting_table() {
+function setting_table(pjtId) {
+    $('#tblProductForSubletting').DataTable().destroy();
     let title = 'Productos en subarrendo';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
     $('#tblProductForSubletting').DataTable({
-        order: [[1, 'desc']],
+        order: [3, 'asc'],
         dom: 'Blfrtip',
         select: {
             style: 'single',
             info: false,
         },
         lengthMenu: [
-            [100, 200, 300, -1],
-            [100, 200, 300, 'Todos'],
+            [40, 100, 200, 300, -1],
+            [40, 100, 200, 300, 'Todos'],
         ],
         buttons: [
             {
@@ -117,18 +125,87 @@ function setting_table() {
         scrollY: 'calc(100vh - 200px)',
         scrollX: true,
         fixedHeader: true,
+        createdRow: function (nRow, aData, iDataIndex) {
+            $(nRow).attr('id', aData['subcatid']);
+        },
+        processing: true,
+        serverSide: true,
+        ajax: {url: 'ProductsForSubletting/tableProducts', type: 'POST', data: {pjtId: pjtId}},
         columns: [
-            {data: 'editable', class: 'edit'},
-            {data: 'prodname', class: 'product-name'},
-            {data: 'prod_sku', class: 'sku'},
-            {data: 'prodpric', class: 'price'},
-            {data: 'supplier', class: 'supply'},
-            {data: 'storesrc', class: 'stores'},
-            {data: 'datestar', class: 'date'},
-            {data: 'date_end', class: 'date'},
-            {data: 'comments', class: 'comments'},
+            {data: 'editable', name: 'editable', class: 'edit'},
+            {data: 'pjt_id', name: 'pjt_id', class: 'id hide'},
+            {data: 'prd_name', name: 'prodname', class: 'product-name'},
+            {data: 'pjtdt_prod_sku', name: 'produsku', class: 'sku'},
+            {data: 'sub_price', name: 'prodpric', class: 'price'},
+            {data: 'sup_business_name', name: 'supplier', class: 'supply'},
+            {data: 'str_name', name: 'storesrc', class: 'stores'},
+            {data: 'sub_date_start', name: 'datestar', class: 'date'},
+            {data: 'sub_date_end', name: 'date_end', class: 'date'},
+            {data: 'sub_comments', name: 'comments', class: 'comments'},
         ],
     });
+    ActiveAction();
+   }
+
+function ActiveAction(){
+    var tablefull = $('#tblProductForSubletting tbody tr').length;
+    console.log(tablefull);
+    if (tablefull == 0){
+        setTimeout(() => {
+            ActiveAction();
+        }, 1000);
+    } else{
+        console.log('PASO 1');
+        $('#tblProductForSubletting tbody tr')
+            .unbind('click')
+            .on('click', function () {
+                let selected = $(this).attr('class').indexOf('selected');
+                console.log(selected);
+                if (selected < 0) {
+                    $('.objet').removeClass('objHidden');
+                    let rw = $(this);
+                    console.log(rw[0].cells[2].outerText);
+                    //let ix = rw[0].attributes[2].value;
+
+                    let prodname = rw[0].cells[1].outerText;
+                    let serieSku = rw[0].cells[2].outerText;
+                    let subprice = rw[0].cells[3].outerText;
+                    let datestar = rw[0].cells[6].outerText;
+                    let datesend = rw[0].cells[7].outerText;
+                    let comments = rw[0].cells[8].outerText;
+                    let projdeta = rw[0].attributes[1].value;
+                    let producId = rw[0].attributes[4].value;
+                    let storesId = rw[0].attributes[5].value;
+                    let suppliId = rw[0].attributes[7].value;
+                    let tpcoinId = rw[0].attributes[8].value;
+                    let produSku = rw[0].attributes[9].value;
+                    let seriesId = rw[0].attributes[10].value;
+
+                    $('.nameProduct').html(prodname);
+                    $('#txtIdProduct').val(producId);
+                    $('#txtPrice').val(subprice);
+                    $('#txtCoinType').val(tpcoinId);
+                    $('#txtSupplier').val(suppliId);
+                    $('#txtStoreSource').val(storesId);
+                    $('#txtSkuProduct').val(produSku);
+                    $('#txtSkuSerie').val(serieSku);
+                    $('#txtIdSerie').val(seriesId);
+                    $('#txtProjectDetail').val(projdeta);
+                    $('#txtComments').val(comments);
+                    setting_datepicket($('#txtPeriod'), datestar, datesend);
+
+                    if (serieSku == 'Pendiente') {
+                        $('#btn_subletting').attr('data_accion', 'add');
+                    } else {
+                        $('#btn_subletting').attr('data_accion', 'chg');
+                    }
+                } else {
+                    $('.objet').addClass('objHidden');
+                }
+            });
+        }
+
+
 }
 
 /**  +++++ Obtiene los datos de los proyectos activos +++++  */
@@ -177,15 +254,18 @@ function get_stores() {
 function put_Proyectos(dt) {
     pj = dt;
     $.each(dt, function (v, u) {
-        let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
+        let H = `<option style="background_color: #CC0000;" data_indx="${v}" value="${u.pjt_id}">${u.pjs_name} - ${u.pjt_name}</option>`;
         $('#txtProject').append(H);
     });
     $('#txtProject').on('change', function () {
         px = parseInt($('#txtProject option:selected').attr('data_indx'));
-        $('#txtIdProject').val(pj[px].pjt_id);
-        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
-
-        get_products(pj[px].pjt_id);
+        let pjtid = 0;
+        if (px >= 0) {
+            pjtid = pj[px].pjt_id;
+            // deep_loading('O');
+        }
+        $('#txtIdProject').val(pjtid);
+        setting_table(pjtid);
     });
 }
 
@@ -197,25 +277,33 @@ function put_Products(dt) {
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblProductForSubletting tbody tr').remove() : '';
     let tabla = $('#tblProductForSubletting').DataTable();
+
+    tabla.rows().remove().draw();
+    $('.objet').addClass('objHidden');
     let cn = 0;
     $.each(pd, function (v, u) {
         let datestart = u.sub_date_start;
         let dateend = u.sub_date_end;
 
-        if (datestart == null) {
-            datestart = define_days('i', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
-        }
-        if (dateend == null) {
-            dateend = define_days('f', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
-        }
+        // if (datestart == null) {
+        //     datestart = define_days('i', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
+        // }
+        // if (dateend == null) {
+        //     dateend = define_days('f', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
+        // }
         let sku = u.pjtdt_prod_sku;
         if (sku == 'Pendiente') {
             sku = `<span class="pending">${sku}</sku>`;
         }
+        let date01 = moment(Date());
+        let date02 = moment(dateend, 'DD/MM/YYYY');
+        let difdays = date02.diff(date01, 'days');
+
+        let alert = difdays > 0 && difdays < 6 ? 'yellow' : difdays <= 0 ? 'red' : 'trans';
 
         tabla.row
             .add({
-                editable: `<i id="k${u.pjtdt_id}" class="fas fa-times-circle kill"></i>`,
+                editable: `<div class="dyalt ${alert}"></div> <i id="k${u.pjtdt_id}" class="fas fa-times-circle kill" style="display:none"></i>`,
                 prodname: u.prd_name,
                 prod_sku: sku,
                 prodpric: u.sub_price,
@@ -247,6 +335,7 @@ function put_Products(dt) {
         .unbind('click')
         .on('click', function () {
             let selected = $(this).attr('class').indexOf('selected');
+            //console.log(selected);
             if (selected < 0) {
                 $('.objet').removeClass('objHidden');
                 let rw = $(this);
@@ -288,6 +377,8 @@ function put_Products(dt) {
                 $('.objet').addClass('objHidden');
             }
         });
+
+    deep_loading('C');
 }
 
 /**  ++++   Coloca las monedas en el listado del input */

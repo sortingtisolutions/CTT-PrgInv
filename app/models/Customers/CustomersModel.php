@@ -15,7 +15,7 @@ class CustomersModel extends Model
     {
         $qry = "SELECT * FROM ctt_customers as cus
                 INNER JOIN ctt_customers_type as ct ON cus.cut_id = ct.cut_id
-                ORDER BY cus_id desc LIMIT 10;";
+                ORDER BY cus_id asc LIMIT 100;";
         return $this->db->query($qry);
     }
 
