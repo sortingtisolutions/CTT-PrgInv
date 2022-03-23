@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <?php
     defined('BASEPATH') or exit('No se permite acceso directo');
     require_once ROOT . FOLDER_PATH . '/app/models/ProjectFiscalFields/ProjectFiscalFieldsModel.php';
@@ -66,4 +64,3 @@ class ProjectFiscalFieldsController extends Controller
     }
 
 }
->>>>>>> 9e6c3049e9b2feb906f808e806c7981a8296eb23

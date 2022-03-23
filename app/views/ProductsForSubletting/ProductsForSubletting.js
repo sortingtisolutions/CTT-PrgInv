@@ -185,11 +185,7 @@ function put_Proyectos(dt) {
         px = parseInt($('#txtProject option:selected').attr('data_indx'));
         $('#txtIdProject').val(pj[px].pjt_id);
         // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
-<<<<<<< HEAD
-
-=======
         $('.objet').addClass('objHidden');
->>>>>>> 9e6c3049e9b2feb906f808e806c7981a8296eb23
         get_products(pj[px].pjt_id);
     });
 }
@@ -202,10 +198,7 @@ function put_Products(dt) {
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblProductForSubletting tbody tr').remove() : '';
     let tabla = $('#tblProductForSubletting').DataTable();
-<<<<<<< HEAD
-=======
     tabla.rows().remove().draw();
->>>>>>> 9e6c3049e9b2feb906f808e806c7981a8296eb23
     let cn = 0;
     $.each(pd, function (v, u) {
         let datestart = u.sub_date_start;
