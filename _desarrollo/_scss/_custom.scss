@@ -1034,6 +1034,29 @@ table {
 	padding: 0px;
 }
 
+.msgError  {
+	position: fixed;
+	top: 40px;
+	left: 40px;
+	right: 40px;
+	bottom: 40px;
+	background-color: #f5eec0;
+	font-weight: 700;
+	z-index: 1000;
+	font-size: 1.3em;
+	border: 3px solid #f5cc4e;
+	overflow: auto;
+	padding: 10px;
+	box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+
+&.reposo{
+	display: none;
+}
+
+
+	
+}
+
 @media screen and (max-width: 780px) {
 	.container-fluid {
 		padding: 5px;

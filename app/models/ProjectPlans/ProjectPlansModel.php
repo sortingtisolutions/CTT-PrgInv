@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
 
-class ProjectDetailsModel extends Model
+class ProjectPlansModel extends Model
 {
 
     public function __construct()
@@ -24,7 +24,7 @@ class ProjectDetailsModel extends Model
 // Listado de proyectos
     public function listProjects($params)
     {
-
+        // Debe leer todos los proyectos que se encuentren en estaus 2 - Presupuesto
         $pjId = $this->db->real_escape_string($params['pjId']);
 
         $qry = "SELECT 
@@ -48,62 +48,20 @@ class ProjectDetailsModel extends Model
                 INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-                WHERE pj.pjt_status in (3,4) ORDER BY pj.pjt_id DESC;
+                WHERE pj.pjt_status = '2' ORDER BY pj.pjt_id DESC;
                 ";
         return $this->db->query($qry);
     }    
 
+
     
 // Listado de tipos de proyectos
-    public function listProjectsType($params)
-    {
+public function listProjectsType($params)
+{
 
-        $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
-        return $this->db->query($qry);
-    }  
-
-
-    
-// Actualiza los datos del proyecto
-    public function UpdateProject($params)
-    {
-        $cuo_id         = $this->db->real_escape_string($params['cuoId']);
-        $cus_id         = $this->db->real_escape_string($params['cusId']); 
-        $cus_Parent     = $this->db->real_escape_string($params['cusParent']);
-
-        $qry01 = "  UPDATE      ctt_customers_owner 
-                        SET     cus_id      = '$cus_id', 
-                                cus_parent  = '$cus_Parent'
-                        WHERE   cuo_id      = '$cuo_id';";
-
-        $this->db->query($qry01);
-
-        $pjt_id                 = $this->db->real_escape_string($params['projId']); 
-        $pjt_name               = $this->db->real_escape_string($params['pjtName']); 
-        $pjt_date_start         = $this->db->real_escape_string($params['pjtDateStart']);
-        $pjt_date_end           = $this->db->real_escape_string($params['pjtDateEnd']); 
-        $pjt_location           = $this->db->real_escape_string($params['pjtLocation']);
-        $pjt_type               = $this->db->real_escape_string($params['pjtType']);
-        $loc_id                 = $this->db->real_escape_string($params['locId']);
-
-
-        $qry02 = "UPDATE    ctt_projects
-                    SET     pjt_name        = 'ucase($pjt_name)', 
-                            pjt_date_start  = '$pjt_date_start', 
-                            pjt_date_end    = '$pjt_date_end',
-                            pjt_location    = 'ucase($pjt_location)', 
-                            pjttp_id        = '$pjt_type',  
-                            cuo_id          = '$cuo_id',
-                            loc_id          = '$loc_id'
-                    WHERE   pjt_id          =  $pjt_id;
-                    ";
-        $this->db->query($qry02);
-
-        return $pjt_id;
-
-    }
-
-
+    $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
+    return $this->db->query($qry);
+}        
 
 
 // Promueve proyecto
@@ -214,6 +172,51 @@ class ProjectDetailsModel extends Model
         return $this->db->query($qry);
     }
  
+
+
+// Actualiza los datos del proyecto
+    public function UpdateProject($params)
+    {
+        $cuo_id         = $this->db->real_escape_string($params['cuoId']);
+        $cus_id         = $this->db->real_escape_string($params['cusId']); 
+        $cus_Parent     = $this->db->real_escape_string($params['cusParent']);
+
+        $qry01 = "  UPDATE      ctt_customers_owner 
+                        SET     cus_id      = '$cus_id', 
+                                cus_parent  = '$cus_Parent'
+                        WHERE   cuo_id      = '$cuo_id';";
+
+        $this->db->query($qry01);
+
+        $pjt_id                 = $this->db->real_escape_string($params['projId']); 
+        $pjt_name               = $this->db->real_escape_string($params['pjtName']); 
+        $pjt_date_start         = $this->db->real_escape_string($params['pjtDateStart']);
+        $pjt_date_end           = $this->db->real_escape_string($params['pjtDateEnd']); 
+        $pjt_location           = $this->db->real_escape_string($params['pjtLocation']);
+        $pjt_type               = $this->db->real_escape_string($params['pjtType']);
+        $loc_id                 = $this->db->real_escape_string($params['locId']);
+
+
+        $qry02 = "UPDATE    ctt_projects
+                    SET    pjt_name        = 'ucase($pjt_name)', 
+                            pjt_date_start  = '$pjt_date_start', 
+                            pjt_date_end    = '$pjt_date_end',
+                            pjt_location    = 'ucase($pjt_location)', 
+                            pjttp_id        = '$pjt_type',  
+                            cuo_id          = '$cuo_id',
+                            loc_id          = '$loc_id'
+                    WHERE   pjt_id          =  $pjt_id;
+                    ";
+        $this->db->query($qry02);
+
+        return $pjt_id;
+
+    }
+
+
+
+
+
 // Actualiza las fechas del proyecto
     public function UpdatePeriodProject($params)
     {
@@ -554,7 +557,7 @@ class ProjectDetailsModel extends Model
     }
 
 
-//  Coloca el proyecto en estado de precancelado
+//  Cambia es estado del proyecto a precancelado
     public function cancelProject($params)
     {
         $pjtId = $this->db->real_escape_string($params["pjtId"]);

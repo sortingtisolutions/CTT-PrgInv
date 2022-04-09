@@ -38,7 +38,7 @@ class ProjectsListModel extends Model
 				INNER JOIN ctt_customers_owner AS cuw ON pr.cuo_id = cuw.cuo_id
 				INNER JOIN ctt_customers AS cu ON cu.cus_id = cuw.cus_id
 				INNER JOIN ctt_projects_status AS prs ON prs.pjs_status=pr.pjt_status
-				WHERE pjt_id = $idSup and pr.pjt_status = 2;";
+				WHERE pjt_id = $idSup and pr.pjt_status = 3;";
 
 		/* $qry = "SELECT sup_id, sup_business_name, sup_contact, sup_rfc, sup_email, sup_phone, sut_id 
 		FROM ctt_suppliers WHERE sup_id = $idSup ;"; */

@@ -170,6 +170,7 @@ hr {
         text-align: right;
         color: $setColor;
         vertical-align: top;
+        // text-transform: uppercase;
     }
     .error {
         color: #cc0000;
@@ -178,7 +179,7 @@ hr {
     .dato {
         vertical-align: top;
         font-weight: 900;
-        color: #666666;
+        color: #333333;
         position: relative;
         width: calc(100% - 140px);
 
@@ -217,7 +218,7 @@ hr {
         }
         .customerType {
             position: absolute;
-            top: 18px;
+            top: 14px;
             span {
                 color: $dark;
                 font-size: 0.8em;
@@ -634,8 +635,9 @@ hr {
     }
 
     .box_modal {
-        width: 80%;
-        height: 80%;
+        width: 95%;
+        height: 85%;
+        max-width: 800px;
         background-color: #ffffff;
         border-radius: 6px;
         box-shadow: 0px 6px 12px 12px rgba(0, 0, 0, 0.3);

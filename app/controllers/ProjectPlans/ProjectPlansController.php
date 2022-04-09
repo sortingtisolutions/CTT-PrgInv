@@ -1,9 +1,9 @@
 <?php
     defined('BASEPATH') or exit('No se permite acceso directo');
-    require_once ROOT . FOLDER_PATH . '/app/models/ProjectDetails/ProjectDetailsModel.php';
+    require_once ROOT . FOLDER_PATH . '/app/models/ProjectPlans/ProjectPlansModel.php';
     require_once LIBS_ROUTE .'Session.php';
 
-class ProjectDetailsController extends Controller
+class ProjectPlansController extends Controller
 {
     private $session;
     public $model;
@@ -11,7 +11,7 @@ class ProjectDetailsController extends Controller
 
     public function __construct()
     {
-        $this->model = new ProjectDetailsModel();
+        $this->model = new ProjectPlansModel();
         $this->session = new Session();
         $this->session->init();
         if($this->session->getStatus() === 1 || empty($this->session->get('user')))
@@ -62,7 +62,7 @@ class ProjectDetailsController extends Controller
 
     } 
 
-        
+    
 // Lista los tipos de proyectos
     public function listProjectsType($request_params)
     {
@@ -81,7 +81,6 @@ class ProjectDetailsController extends Controller
         echo $res;
 
     } 
-
 
 
     // Lista los proyectos
@@ -221,6 +220,16 @@ class ProjectDetailsController extends Controller
     } 
 
 
+    
+// Actualiza datos del proyecto
+    public function UpdateProject($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->UpdateProject($request_params);
+        echo $result;
+    } 
+
+
 
     
 
@@ -251,18 +260,6 @@ public function updatePeriods($request_params)
 }
 
 
-// Actualiza datos del proyecto
-    public function UpdateProject($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->UpdateProject($request_params);
-        echo $result;
-    } 
-
-
-
-
-
 // Genera el archivo del proyecto
     public function saveProjectList($request_params)
     {   
@@ -284,7 +281,7 @@ public function updatePeriods($request_params)
         } else {
             $res =  '[{"prd_id":"0"}]';	
         }
-        $dir = ROOT . FOLDER_PATH . '/app/views/ProjectDetails/ProjectDetailsFile-'. $user .'.json';
+        $dir = ROOT . FOLDER_PATH . '/app/views/ProjectPlans/ProjectPlansFile-'. $user .'.json';
 
         if (file_exists($dir)) unlink($dir);
 

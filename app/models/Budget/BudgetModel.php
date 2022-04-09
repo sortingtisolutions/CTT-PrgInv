@@ -23,11 +23,26 @@ class BudgetModel extends Model
 // Listado de proyectos
     public function listProjects($params)
     {
+        // Debe leer todos los proyectos que se encuentren en estaus 1 - Cotización
+        $pjId = $this->db->real_escape_string($params['pjId']);
 
-        $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name,  DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project, 
-                    DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start, DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end, 
-                    pj.pjt_location, pj.pjt_status, pj.cuo_id, pj.loc_id, co.cus_id, co.cus_parent, lo.loc_type_location,
-                    pt.pjttp_name
+        $qry = "SELECT 
+                    pj.pjt_id  
+                    , pj.pjt_number 
+                    , pj.pjt_name  
+                    , DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project 
+                    , DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start 
+                    , DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end 
+                    , pj.pjt_location 
+                    , pj.pjt_status 
+                    , pj.cuo_id 
+                    , pj.loc_id 
+                    , co.cus_id 
+                    , co.cus_parent 
+                    , lo.loc_type_location 
+                    , pt.pjttp_name 
+                    , pt.pjttp_id
+                    , '$pjId' as pjId
                 FROM ctt_projects AS pj
                 INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
@@ -114,17 +129,9 @@ public function listProjectsType($params)
                         WHEN bdg_prod_level ='K' THEN 
                             (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = bg.prd_id)
                         WHEN bdg_prod_level ='P' THEN 
-                            (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
-                            INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                            WHERE prd_id =  bg.prd_id
-                            AND  pjtdt_id = 0 AND sr.ser_status = 1
-                            )
+                            (SELECT prd_stock FROM ctt_products WHERE prd_id = bg.prd_id)
                         ELSE 
-                            (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
-                            INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                            WHERE prd_id =  bg.prd_id
-                            AND  pjtdt_id = 0 AND sr.ser_status = 1
-                            )
+                        (SELECT prd_stock FROM ctt_products WHERE prd_id = bg.prd_id)
                         END AS bdg_stock
                 FROM ctt_budget AS bg
                 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
@@ -132,6 +139,7 @@ public function listProjectsType($params)
                 LEFT JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 WHERE bg.ver_id = $verId ORDER BY bdg_prod_name ASC;";
+
         return $this->db->query($qry);
     }    
 
@@ -161,13 +169,13 @@ public function listDiscounts($params)
                     WHEN prd_level ='P' THEN 
                         (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                         INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                        WHERE prd_id =  pd.prd_id
+                        WHERE st.prd_id =  pd.prd_id
                         AND  pjtdt_id = 0 AND sr.ser_status = 1
                         )
                     ELSE 
                         (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
                         INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                        WHERE prd_id =  pd.prd_id
+                        WHERE st.prd_id =  pd.prd_id
                         AND  pjtdt_id = 0 AND sr.ser_status = 1
                         )
                     END AS stock
@@ -261,10 +269,27 @@ public function listProductsRelated($params)
         $pjt_id                 = $params['pjtId'];
 
 
-        $qry = "INSERT INTO 
-                    ctt_budget (bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_prod_level, bdg_quantity, bdg_days_base, bdg_discount_base, bdg_days_trip, bdg_discount_trip, bdg_days_test, bdg_discount_test,bdg_insured, ver_id, prd_id ) 
-                VALUES
-                    ('$bdg_prod_sku','$bdg_prod_name','$bdg_prod_price', '$bdg_prod_level','$bdg_quantity','$bdg_days_base','$bdg_discount_base','$bdg_days_trip','$bdg_discount_trip','$bdg_days_test','$bdg_discount_test','$bdg_insured','$ver_id','$prd_id');
+        $qry = "INSERT INTO ctt_budget (
+                    bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_prod_level, 
+                    bdg_quantity, bdg_days_base, bdg_discount_base, bdg_days_trip, 
+                    bdg_discount_trip, bdg_days_test, bdg_discount_test,bdg_insured, 
+                    ver_id, prd_id 
+                ) VALUES (
+                    '$bdg_prod_sku',
+                    'ucase($bdg_prod_name)',    
+                    '$bdg_prod_price',      
+                    '$bdg_prod_level',
+                    '$bdg_quantity',
+                    '$bdg_days_base',           
+                    '$bdg_discount_base',   
+                    '$bdg_days_trip',
+                    '$bdg_discount_trip',
+                    '$bdg_days_test',
+                    '$bdg_discount_test',
+                    '$bdg_insured',
+                    '$ver_id',
+                    '$prd_id'
+                );
                 ";
             $this->db->query($qry);
             $result = $this->db->insert_id;
@@ -298,11 +323,17 @@ public function listProductsRelated($params)
         $cuo_id                 = $cuoId;
         $loc_id                 = $this->db->real_escape_string($params['locId']);
 
-        $qry02 = "INSERT INTO ctt_projects
-                        (pjt_name, pjt_date_start, pjt_date_end, pjt_location, pjttp_id, cuo_id, loc_id)
-                    VALUES
-                        ('$pjt_name', '$pjt_date_start','$pjt_date_end', '$pjt_location', $pjt_type, $cuo_id, $loc_id);
-                ";
+        $qry02 = "INSERT INTO ctt_projects (
+                    pjt_name, pjt_date_start, pjt_date_end, pjt_location, pjttp_id, cuo_id, loc_id
+                ) VALUES (
+                    'ucase($pjt_name)', 
+                    '$pjt_date_start',
+                    '$pjt_date_end', 
+                    'ucase($pjt_location)', 
+                    $pjt_type, 
+                    $cuo_id, 
+                    $loc_id
+                );";
         $this->db->query($qry02);
         $pjtId = $this->db->insert_id;
 
@@ -317,6 +348,46 @@ public function listProductsRelated($params)
 
 
     }
+
+
+// Actualiza los datos del proyecto
+public function UpdateProject($params)
+{
+    $cuo_id         = $this->db->real_escape_string($params['cuoId']);
+    $cus_id         = $this->db->real_escape_string($params['cusId']); 
+    $cus_Parent     = $this->db->real_escape_string($params['cusParent']);
+
+    $qry01 = "  UPDATE      ctt_customers_owner 
+                    SET     cus_id      = '$cus_id', 
+                            cus_parent  = '$cus_Parent'
+                    WHERE   cuo_id      = '$cuo_id';";
+
+    $this->db->query($qry01);
+
+    $pjt_id                 = $this->db->real_escape_string($params['projId']); 
+    $pjt_name               = $this->db->real_escape_string($params['pjtName']); 
+    $pjt_date_start         = $this->db->real_escape_string($params['pjtDateStart']);
+    $pjt_date_end           = $this->db->real_escape_string($params['pjtDateEnd']); 
+    $pjt_location           = $this->db->real_escape_string($params['pjtLocation']);
+    $pjt_type               = $this->db->real_escape_string($params['pjtType']);
+    $loc_id                 = $this->db->real_escape_string($params['locId']);
+
+
+    $qry02 = "UPDATE    ctt_projects
+                 SET    pjt_name        = 'ucase($pjt_name)', 
+                        pjt_date_start  = '$pjt_date_start', 
+                        pjt_date_end    = '$pjt_date_end',
+                        pjt_location    = 'ucase($pjt_location)', 
+                        pjttp_id        = '$pjt_type',  
+                        cuo_id          = '$cuo_id',
+                        loc_id          = '$loc_id'
+                WHERE   pjt_id          =  $pjt_id;
+                ";
+    $this->db->query($qry02);
+
+    return $pjt_id;
+
+}
 
 
 // Promueve proyecto
@@ -341,8 +412,9 @@ public function saveBudgetList($params)
 // Promueve proyecto
     public function PromoteProject($params)
     {
+        /* Actualiza el estado en 2 convirtiendolo en presupuesto  */
         $pjtId                  = $this->db->real_escape_string($params['pjtId']);
-        $qry = "UPDATE ctt_projects SET pjt_status = '5' WHERE pjt_id = $pjtId;";
+        $qry = "UPDATE ctt_projects SET pjt_status = '2' WHERE pjt_id = $pjtId;";
         $this->db->query($qry);
 
         return $pjtId;
@@ -355,7 +427,10 @@ public function saveBudgetList($params)
         $pjtId                  = $this->db->real_escape_string($params['pjtId']);
         $pjtDateStart           = $this->db->real_escape_string($params['pjtDateStart']);
         $pjtDateEnd             = $this->db->real_escape_string($params['pjtDateEnd']);
-        $qry = "UPDATE ctt_projects SET pjt_date_start = '$pjtDateStart', pjt_date_end = '$pjtDateEnd' WHERE pjt_id = $pjtId;";
+        $qry = "UPDATE ctt_projects 
+                   SET pjt_date_start   = '$pjtDateStart', 
+                       pjt_date_end     = '$pjtDateEnd' 
+                 WHERE pjt_id = $pjtId;";
         $this->db->query($qry);
 
         return $pjtId;
@@ -389,7 +464,7 @@ public function saveBudgetList($params)
                     pjtcn_days_test, pjtcn_discount_test, pjtcn_insured,  ver_id, prd_id, pjt_id
                 )
                 SELECT 
-                    bg.bdg_prod_sku, bg.bdg_prod_name, bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_quantity,  
+                    bg.bdg_prod_sku, ucase(bg.bdg_prod_name), bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_quantity,  
                     bg.bdg_days_base, bg.bdg_discount_base, bg.bdg_days_trip, bg.bdg_discount_trip,
                     bg.bdg_days_test, bg.bdg_discount_test, bg.bdg_insured, bg.ver_id, bg.prd_id, vr.pjt_id 
                 FROM ctt_budget AS bg
@@ -464,19 +539,11 @@ public function saveBudgetList($params)
             $this->db->query($qry3);
         }
 
-        // $dateStart = new DateTime($dtinic);
-        // $dateEnd   = new DateTime($dtfinl);
-        // $diff = $dateStart->diff($dateEnd);
-        // $daysCount = $diff->days;
+        $qry4 = "INSERT INTO ctt_projects_periods 
+                    (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
+                VALUES 
+                    ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId')";
 
-        $qry4 = "INSERT INTO ctt_projects_periods (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) VALUES 
-            ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId')";
-
-        // for ($i = 0; $i <= $daysCount; $i++){
-        //     $dateSet = date("Y-m-d", strtotime($dtinic. "+" . $i . " day"));
-        //     $qry4 .= "('$dateSet', $pjtdtId),";
-        // }
-        //$qry4 = substr($qry4, 0,-1);
 
         $this->db->query($qry4);
 

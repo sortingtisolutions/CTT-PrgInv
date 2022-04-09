@@ -4,6 +4,8 @@
 		<div class="logo"></div>
 	</footer>
 
+<div id="msgError" class="msgError reposo"></div>	
+
 
 	<!-- Scripts -->
 

@@ -712,7 +712,8 @@ SELECT
     ELSE '' END     AS editable,
     CASE
         WHEN pj.pjt_status = '2'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
-        WHEN pj.pjt_status = '5'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
+        WHEN pj.pjt_status = '3'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
+        WHEN pj.pjt_status = '4'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
     ELSE '' END     AS smarlock,
     pj.pjt_id       AS projecid,
     pj.pjt_number   AS projnumb,
@@ -724,7 +725,7 @@ SELECT
 FROM        ctt_projects AS pj    
 INNER JOIN  ctt_customers_owner AS co  ON co.cuo_id = pj.cuo_id
 INNER JOIN  ctt_customers as cu        ON cu.cus_id = co.cus_id
-WHERE pj.pjt_status IN (2, 5);
+WHERE pj.pjt_status IN (2, 3, 4);
 
 
 

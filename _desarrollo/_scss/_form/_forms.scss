@@ -3,18 +3,147 @@
 @import "radio";
 // @import "textarea";
 
-.form-group {
-    background-color: $grey-form;
-    border-radius: 4px;
-    height: 99.9vh;
-    overflow: auto;
-    padding: 40px 4px 40px 4px;
+.form__modal-group {
     color: $inputs-label;
-}
+    height: 20px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 115px 1fr;
+    column-gap: 10px;
+    position: relative;
 
-@media screen and (max-width: 750px) {
-    .form-group {
-        padding: 40px 10px 10px 10px;
+    label {
+        text-align: right;
+        color: #666666;
+        // border: 1px solid #00cc00;
         
     }
+
+    .textbox {
+        border: 1px solid #dddddd;
+        border-radius: 3px;
+        padding: 3px 30px 3px 5px;
+        color: #777777;
+        outline: none;
+        font-weight: 700;
+        color: #000000;
+        text-transform: uppercase;
+
+        &.textbox-alert {
+            border-color: #cc0000;
+            background-color: rgba(#cc0000, 0.05);
+        }
+    }
+
+    .textAlert {
+        position: absolute;
+        top: 22px;
+        left: 125px;
+        height: 16px;
+        overflow: hidden;
+        color: $alert;
+        font-weight: 700;
+        visibility: hidden;
+        // border: 1px solid #CC0000;
+    }
+
+    .icoTextBox {
+        position: absolute;
+        top: 8px;
+        right: 6px;
+        font-size: 1.2em;
+    }
+
+    .wt1 {
+        width: 10%;
+    }
+    .wt2 {
+        width: 20%;
+    }
+    .wt3 {
+        width: 30%;
+    }
+    .wt4 {
+        width: 40%;
+    }
+    .wt5 {
+        width: 50%;
+    }
+    .wt6 {
+        width: 60%;
+    }
+    .wt7 {
+        width: 70%;
+    }
+    .wt8 {
+        width: 80%;
+    }
+    .wt9 {
+        width: 90%;
+    }
+    .wtf {
+        width: 100%;
+    }
 }
+
+.form__modal {
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 270px;
+    grid-template-rows: 1fr 70px;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+
+    .form__modal-fields {
+        grid-area: 1 / 1 / 2 / 2;
+        background-color: #ffffff;
+        overflow: visible;
+        padding: 20px;
+    }
+    .form__modal-bottons {
+        grid-area: 2 / 1 / 3 / 2;
+        background-color: #ffffff;
+        padding: 5px 20px;
+    }
+    .form__modal-image {
+        grid-area: 1 / 2 / 3 / 3;
+
+        &.image {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
+            border-radius: 0px 6px 6px 0px;
+        }
+        &.img01 {
+            background-image: url("../img/programer/20.png");
+        }
+        &.img02 {
+            background-image: url("../img/programer/21.png");
+        }
+    }
+}
+
+@media screen and (max-width: 770px) {
+    .box_modal_deep {
+        .box_modal {
+            width: 95%;
+            height: 95%;
+            border-radius: 80px;
+        }
+    }
+
+    .form__modal {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 70px;
+
+        .form__modal-image {
+            display: none;
+        }
+    }
+}
+
+
+

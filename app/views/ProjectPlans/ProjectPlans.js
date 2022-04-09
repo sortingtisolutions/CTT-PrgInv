@@ -1,7 +1,7 @@
-let cust, proj, relc, vers, prod, disc, budg;
-let rgcnt = 1,
+var cust, proj, relc, vers, prod, disc, budg;
+var rgcnt = 1,
     rgevn = 0;
-let dss;
+var dss;
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -21,7 +21,7 @@ function inicial() {
 /** OBTENCION DE DATOS */
 /**  Obtiene el listado de clientes */
 function get_customers() {
-    var pagina = 'ProjectDetails/listCustomers';
+    var pagina = 'ProjectPlans/listCustomers';
     var par = `[{"prm":""}]`;
     var tipo = 'json';
     var selector = put_customers;
@@ -31,7 +31,7 @@ function get_customers() {
 
 /**  Obtiene el listado de proyectos */
 function get_projects(pjId) {
-    var pagina = 'ProjectDetails/listProjects';
+    var pagina = 'ProjectPlans/listProjects';
     var par = `[{"pjId":"${pjId}"}]`;
     var tipo = 'json';
     var selector = put_projects;
@@ -41,7 +41,7 @@ function get_projects(pjId) {
 
 /** Obtiene el listado de los tipos de proyecto */
 function load_project_type() {
-    var pagina = 'ProjectDetails/listProjectsType';
+    var pagina = 'ProjectPlans/listProjectsType';
     var par = `[{"pjt":""}]`;
     var tipo = 'json';
     var selector = put_projects_type;
@@ -51,7 +51,7 @@ function load_project_type() {
 
 /**  Obtiene los Id's de los elementos relacionados con la seleccion del cliente */
 function get_rel_customers(cusId, cutId) {
-    var pagina = 'ProjectDetails/listCustomersDef';
+    var pagina = 'ProjectPlans/listCustomersDef';
     var par = `[{"cusId":"${cusId}", "cutId":"${cutId}"}]`;
     var tipo = 'json';
     var selector = put_rel_customers;
@@ -61,7 +61,7 @@ function get_rel_customers(cusId, cutId) {
 
 /**  Obtiene los Id's de los elementos relacionados con la seleccion del cliente */
 function get_customers_owner() {
-    var pagina = 'ProjectDetails/listCustomersOwn';
+    var pagina = 'ProjectPlans/listCustomersOwn';
     var par = `[{"cusId":"", "cutId":""}]`;
     var tipo = 'json';
     var selector = put_customers_owner;
@@ -70,7 +70,7 @@ function get_customers_owner() {
 }
 /**  Obtiene los Id's de los proyectos relacionados con la seleccion del cliente */
 function get_rel_projects(id, prn) {
-    var pagina = 'ProjectDetails/listProjectsDef';
+    var pagina = 'ProjectPlans/listProjectsDef';
     var par = `[{"cusId":"${id}"}]`;
     var tipo = 'json';
     var selector = put_rel_projects;
@@ -80,7 +80,7 @@ function get_rel_projects(id, prn) {
 
 /**  Obtiene el listado de proyectos */
 function get_version(pjtId) {
-    var pagina = 'ProjectDetails/listVersion';
+    var pagina = 'ProjectPlans/listVersion';
     var par = `[{"pjtId":"${pjtId}"}]`;
     var tipo = 'json';
     var selector = put_version;
@@ -94,7 +94,7 @@ function get_budgets(pjtId) {
     let dendO = $('#PeriodProject').text().split(' - ')[1];
     let dstr = moment(dstrO, 'DD/MM/YYYY').format('YYYY-MM-DD');
     let dend = moment(dendO, 'DD/MM/YYYY').format('YYYY-MM-DD');
-    var pagina = 'ProjectDetails/listBudgets';
+    var pagina = 'ProjectPlans/listBudgets';
     var par = `[{"pjtId":"${pjtId}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = put_budgets;
@@ -104,7 +104,7 @@ function get_budgets(pjtId) {
 
 /**  Obtiene el listado de descuentos */
 function get_discounts() {
-    var pagina = 'ProjectDetails/listDiscounts';
+    var pagina = 'ProjectPlans/listDiscounts';
     var par = `[{"level":"1"}]`;
     var tipo = 'json';
     var selector = put_discounts;
@@ -114,7 +114,7 @@ function get_discounts() {
 
 /**  Obtiene el listado de productos */
 function get_products(word, dstr, dend) {
-    var pagina = 'ProjectDetails/listProducts';
+    var pagina = 'ProjectPlans/listProducts';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = put_products;
@@ -124,7 +124,7 @@ function get_products(word, dstr, dend) {
 
 /**  Obtiene el listado de relacionados al prducto*/
 function get_products_related(id, tp, pj) {
-    var pagina = 'ProjectDetails/listProductsRelated';
+    var pagina = 'ProjectPlans/listProductsRelated';
     var par = `[{"prdId":"${id}","type":"${tp}","pjtcnid":"${pj}"}]`;
     var tipo = 'json';
     var selector = put_products_related;
@@ -134,7 +134,7 @@ function get_products_related(id, tp, pj) {
 
 /**  Obtiene el listado de relacionados al prducto por periodo */
 function get_products_asigned(id, tp, pj) {
-    var pagina = 'ProjectDetails/listProductsAsigned';
+    var pagina = 'ProjectPlans/listProductsAsigned';
     var par = `[{"prdId":"${id}","type":"${tp}","pjtcnid":"${pj}"}]`;
     var tipo = 'json';
     var selector = put_products_asigned;
@@ -143,7 +143,7 @@ function get_products_asigned(id, tp, pj) {
 }
 /**  Obtiene el listado de relacionados al prducto  */
 function get_counter_pending(pj, qt, pd) {
-    var pagina = 'ProjectDetails/counterPending';
+    var pagina = 'ProjectPlans/counterPending';
     var par = `[{"pjtcnId":"${pj}", "quantity":"${qt}", "prdId":"${pd}"}]`;
     var tipo = 'json';
     var selector = put_counter_pending;
@@ -639,7 +639,7 @@ function selector_projects(pjId) {
                             }]
                             `;
                         console.log(par);
-                        var pagina = 'ProjectDetails/UpdatePeriodProject';
+                        var pagina = 'ProjectPlans/UpdatePeriodProject';
                         var tipo = 'html';
                         var selector = SetUpdatePeriodProject;
                         fillField(pagina, par, tipo, selector);
@@ -648,7 +648,6 @@ function selector_projects(pjId) {
             }
         });
 
-    console.log(pjId);
     if (pjId > 0) {
         $('#P' + pjId).trigger('click');
     }
@@ -838,7 +837,8 @@ function build_menu_control() {
     let H = `
         <ul class="menu_block">
             <li class="menu_button" id="printr"><i class="fas fa-print"></i> Imprimir</li>
-            <li class="menu_button" id="cancel"><i class="fas fa-ban"></i> Cancelar proyecto</li>
+            <li class="menu_button" id="mkproj"><i class="fas fa-save"></i> Hacer Proyecto</li>
+             <li class="menu_button" id="cancel" hidden><i class="fas fa-ban"></i> Cancelar proyecto</li>
         </ul>
         `;
     $('.menu_control').html(H);
@@ -847,8 +847,8 @@ function build_menu_control() {
         let acc = $(this).attr('id');
         switch (acc) {
             case 'mkproj':
-                // alert('Convertir Cotizacion a proyecto');
-                make_project();
+                alert('Desarrollo en proceso..\nConvertir presupuesto a proyecto');
+                // make_project();
                 break;
             case 'printr':
                 // alert('Imprimir proyecto');
@@ -1022,7 +1022,7 @@ function save_version() {
             "verCode"         : "${verCode}"
         }]`;
 
-        var pagina = 'ProjectDetails/SaveVersion';
+        var pagina = 'ProjectPlans/SaveVersion';
         var tipo = 'html';
         var selector = save_budget;
         fillField(pagina, par, tipo, selector);
@@ -1070,7 +1070,7 @@ function save_budget(verId) {
                     "pjtId"           : "${pjtId}"
                 }]`;
 
-                var pagina = 'ProjectDetails/SaveBudget';
+                var pagina = 'ProjectPlans/SaveBudget';
                 var tipo = 'html';
                 var selector = resp_budget;
                 fillField(pagina, par, tipo, selector);
@@ -1652,7 +1652,7 @@ function edit_project(pj) {
                         clean_projects_field();
                     });
 
-                var pagina = 'ProjectDetails/UpdateProject';
+                var pagina = 'ProjectPlans/UpdateProject';
                 var tipo = 'html';
                 var selector = load_project;
                 fillField(pagina, par, tipo, selector);
@@ -1805,148 +1805,18 @@ function formatProject() {
 /**  Agrega nuevo proyecto */
 function add_project() {
     caching_events('add_project');
-    $('.box_modal_deep').css({display: 'flex'});
-    $('.box_modal').animate(
-        {
-            top: '70px',
-        },
-        500
-    );
+
     clean_projects_field();
     clean_customer_field();
+    formatProject();
 
-    let H = `
-    <div class="row">
-        <div class="form col-sm-12 col-md-12 col-lg-8 col-xl-8 qst">
-            <div class="form_group">
-                <label for="txtProject">Nombre del proyecto:</label>
-                <input type="text" id="txtProject" name="txtProject"  class="textbox"><br>
-                <span class="alert"></span>
-            </div>
-
-            <div class="form_group" id="reportrange">
-                <label for="txtPeriodProject">Periodo:</label><br>
-                <input type="text" id="txtPeriodProject"  name="txtPeriodProject" class="textbox">
-                <i class="fas fa-calendar-alt"></i><br>
-                <span class="alert"></span>
-            </div>
-
-            <div class="form_group">
-                <label for="txtLocation">Locación:</label>
-                <input type="text" id="txtLocation" name="txtLocation"  class="textbox">
-            </div>
-
-            <div class="form_group">
-                <label for="txtTypeProject">Tipo de proyecto:</label>
-                <select id="txtTypeProject" name="txtTypeProject" class="form-select" >
-                    <option value="0"> Selecciona un tipo de proyecto</option>
-                </select>
-                <span class="alert"></span>
-            </div>
-
-            <div class="form_group">
-                <label for="txtTypeLocation">Tipo de locación:</label>
-                <select id="txtTypeLocation" name="txtTypeLocation" class="form-select" >
-                    <option value="1"> LOCAL</option>
-                    <option value="2"> FORANEO</option>
-                </select>
-            </div>
-
-            <div class="form_group">
-                <label for="txtCustomer">Cliente:</label>
-                <select id="txtCustomer" class="form-select">
-                    <option value="0"> Ninguno</option>
-                </select>
-                <span class="alert"></span>
-            </div>
-
-            <div class="form_group">
-                <label for="txtCustomerRel">Relación:</label>
-                <select id="txtCustomerRel" class="form-select">
-                    <option value="0"> Ninguno</option>
-                </select>
-                <span class="alert"></span>
-            </div>
-            <div class="space_end"></div>
-
-            <div class="fix_buttons">
-                <button class="bn btn-ok" id="saveProject">agregar proyecto</button>
-                <button class="bn btn-cn">Cancelar</button>
-            </div>
-        </div>
-        <div class="form col-sm-12 col-md-12 col-lg-4 col-xl-4 image img02"></div>
-    </div>
-`;
-
-    $('.box_modal').html(H);
-
-    load_project_type();
-
-    let fecha = moment(Date()).format('DD/MM/YYYY');
-
-    $('#reportrange').daterangepicker(
-        {
-            autoApply: true,
-            locale: {
-                format: 'DD/MM/YYYY',
-                separator: ' - ',
-                applyLabel: 'Apply',
-                cancelLabel: 'Cancel',
-                fromLabel: 'From',
-                toLabel: 'To',
-                customRangeLabel: 'Custom',
-                weekLabel: 'W',
-                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                firstDay: 1,
-            },
-            showCustomRangeLabel: false,
-            startDate: fecha,
-            endDate: fecha,
-            minDate: fecha,
-            opens: 'right',
-        },
-        function (start, end, label) {
-            $('#txtPeriodProject').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
-            $('#txtPeriodProject').parent().children('span').html('');
-            // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
-        }
-    );
-
-    $.each(cust, function (v, u) {
-        let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
-        $('#txtCustomer').append(H);
-        $('#txtCustomerRel').append(H);
-    });
+    $('.form__modal-fields h3').html('NUEVO PROYECTO');
 
     $('#saveProject').on('click', function () {
-        let ky = 0;
-
-        if ($('#txtProject').val() == '') {
-            ky = 1;
-            $('#txtProject').parent().children('span').html('Debes agregar Nombre del proyecto');
-        }
-        if ($('#txtPeriodProject').val() == '') {
-            ky = 1;
-            $('#txtPeriodProject').parent().children('span').html('Debes agregar las fechas del projecto');
-        }
-        console.log($('#txtTypeProject option:selected').val());
-        if ($('#txtTypeProject option:selected').val() == '0') {
-            ky = 1;
-            $('#txtTypeProject').parent().children('span').html('Debes seleccionar el tipo de projecto');
-        }
-        if ($('#txtCustomer option:selected').val() == '0') {
-            ky = 1;
-            $('#txtCustomer').parent().children('span').html('Debes seleccionar un cliente');
-        }
-
+        let ky = validatorFields($('#formProject'));
         if (ky == 0) {
             save_project();
         }
-    });
-
-    $('.textbox').on('focus', function () {
-        $(this).parent().children('span').html('');
     });
 
     $('#txtCustomer').on('change', function () {
@@ -1956,9 +1826,7 @@ function add_project() {
         $('#txtCustomerRel option[value="' + cte + '"]').hide();
     });
 
-    $('.btn-cn').on('click', function () {
-        close_modal();
-    });
+    $('.box_modal').animate({top: '70px'}, 500);
 }
 
 /**  Coloca los datos del proyecto del formulario en la cotización */
@@ -2008,7 +1876,7 @@ function save_project() {
             clean_projects_field();
         });
 
-    var pagina = 'ProjectDetails/SaveProject';
+    var pagina = 'ProjectPlans/SaveProject';
     var tipo = 'html';
     var selector = load_project;
     fillField(pagina, par, tipo, selector);
@@ -2020,6 +1888,14 @@ function load_project(dt) {
 
     $('#Projects .list_items ul').html('');
     get_projects(dt);
+
+    // caching_events('load_project');
+    // $('#Projects .list_items ul').html('');
+    // get_projects();
+
+    // setTimeout(() => {
+    //     $('#P' + dt).trigger('click');
+    // }, 2000);
 }
 
 /**  Cierra la ventana del modal */
@@ -2145,7 +2021,7 @@ function make_project() {
 function print_project() {
     let projectId = $('#IdProject').val();
     console.log(projectId);
-    var pagina = 'ProjectDetails/saveProjectList';
+    var pagina = 'ProjectPlans/saveProjectList';
     var par = `[{"pjtId":"${projectId}"}]`;
     var tipo = 'html';
     var selector = printProject;
@@ -2156,14 +2032,14 @@ function printProject(dt) {
     console.log(dt);
     let usr = dt.split('|')[0];
     let nme = dt.split('|')[1];
-    window.open(url + 'app/views/ProjectDetails/ProjectDetailsReport.php?u=' + usr + '&n=' + nme, '_blank');
+    window.open(url + 'app/views/ProjectPlans/ProjectPlansReport.php?u=' + usr + '&n=' + nme, '_blank');
 }
 
 function cancel_proyect() {
     var rsp = confirm('Haz solicitado cancelar este proyecto.\n¿Estas seguro de realizar esta tarea?');
     if (rsp) {
         let projectId = $('#IdProject').val();
-        var pagina = 'ProjectDetails/cancelProject';
+        var pagina = 'ProjectPlans/cancelProject';
         var par = `[{"pjtId":"${projectId}"}]`;
         var tipo = 'html';
         var selector = show_cancel_proyect;
@@ -2173,7 +2049,7 @@ function cancel_proyect() {
 
 function show_cancel_proyect(dt) {
     clean_projects_field();
-    get_projects(0);
+    get_projects();
 }
 
 /**  +++++ Cachando eventos   */
@@ -2247,7 +2123,7 @@ function updating_quantity(rw, qn, qa, ac) {
 
 // secuencia de incremento en la cantidad de productos
 function sequenceIncreaseQty(par) {
-    var pagina = 'ProjectDetails/increaseQuantity';
+    var pagina = 'ProjectPlans/increaseQuantity';
     var tipo = 'html';
     var selector = show_increase_quantity;
     caching_events('updating_quantity-increase');
@@ -2260,7 +2136,7 @@ function show_increase_quantity(dt) {
 
 // secuencia de disminucion en la cantidad de productos
 function sequenceDecreaseQty(pjtcnid, rem) {
-    var pagina = 'ProjectDetails/decreaseQuantity';
+    var pagina = 'ProjectPlans/decreaseQuantity';
     let par = `[{"pjtcnid":"${pjtcnid}","pos":"${rem}"}]`;
     var tipo = 'html';
     var selector = show_decrease_quantity;
@@ -2281,7 +2157,7 @@ function killProductBase(id) {
         sequenceDecreaseQty(pjtcnid, qt);
     }
 
-    var pagina = 'ProjectDetails/killProduct';
+    var pagina = 'ProjectPlans/killProduct';
     let par = `[{"pjtcnid":"${pjtcnid}"}]`;
     var tipo = 'html';
     var selector = show_killProductBase;
@@ -2341,7 +2217,7 @@ function add_new_product(pd) {
     }]
     `;
     //console.log(par);
-    var pagina = 'ProjectDetails/addNewProduct';
+    var pagina = 'ProjectPlans/addNewProduct';
     var tipo = 'json';
     var selector = shownewproducts;
     caching_events('add_new_product');
@@ -2370,7 +2246,7 @@ function updatesData(sl) {
         let pjtcnId = rw[0].rows[i].attributes[5].value;
         let pjtdata = rw[0].rows[i].cells[sl].outerText.replace(/%/g, '');
 
-        var pagina = 'ProjectDetails/updateData';
+        var pagina = 'ProjectPlans/updateData';
         var par = `[{"pjtcnId":"${pjtcnId}", "data":"${pjtdata}", "field":"${sl}"}]`;
         var tipo = 'json';
         var selector = show_updatesData;
@@ -2497,7 +2373,7 @@ function editPeriod(id) {
                     "pjtId"         : "${pj.pjt_id}"
                 }]
                 `;
-            var pagina = 'ProjectDetails/UpdatePeriodProject';
+            var pagina = 'ProjectPlans/UpdatePeriodProject';
             var tipo = 'html';
             var selector = SetUpdatePeriodProject;
             fillField(pagina, par, tipo, selector);
@@ -2506,7 +2382,7 @@ function editPeriod(id) {
 }
 
 function update_range_data(id, d1, d2) {
-    var pagina = 'ProjectDetails/updatePeriods';
+    var pagina = 'ProjectPlans/updatePeriods';
     var par = `[{"pjt":""}]`;
     var tipo = 'json';
     var selector = put_projects_type;
@@ -2542,7 +2418,7 @@ function apply_period_changes() {
             }
         ]`;
 
-            var pagina = 'ProjectDetails/settingRangePeriods';
+            var pagina = 'ProjectPlans/settingRangePeriods';
             var tipo = 'html';
             var selector = put_period_changes;
             fillField(pagina, par, tipo, selector);
@@ -2551,7 +2427,7 @@ function apply_period_changes() {
         });
         console.log(itms.length, iddt);
 
-        var pagina = 'ProjectDetails/deleteRangePeriods';
+        var pagina = 'ProjectPlans/deleteRangePeriods';
         var par = `[{"pjtdtId" : "${iddt}","sequenc" : "${itms.length}"}]`;
         var tipo = 'html';
         var selector = put_period_changes;

@@ -1,5 +1,4 @@
 
-
 <?php 
 	defined('BASEPATH') or exit('No se permite acceso directo'); 
 	require ROOT . FOLDER_PATH . "/app/assets/header.php";
@@ -15,11 +14,13 @@
     <div class="contenido ">
         <div class="row">
             <div class="block_01">
+            
                 <div class="row">
+
                     <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 blocks">
                         
                         <div class="  block_01-02">
-                        <span class="titleSection">Cotizaciones</span>
+                        <span class="titleSection">Presupuesto</span>
                             <table class="table_information">
                                 <tr>
                                     <td class="concepto"><b>Numero de proyecto</b></td>
@@ -51,7 +52,7 @@
                                     <td class="concepto">Locación</td>
                                     <td class="dato" id="LocationProject"></td>
                                 </tr>
-                                <tr class="overpast">
+                                <tr>
                                     <td class="concepto">Periodo</td>
                                     <td class="dato" id="PeriodProject"></td>
                                 </tr>
@@ -59,10 +60,10 @@
                                     <td class="concepto">Tipo de locación</td>
                                     <td class="dato" id="TypeLocation"></td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td class="concepto">Fecha del proyecto</td>
                                     <td class="dato" id="DateProject"></td>
-                                </tr>
+                                </tr> -->
                                 <tr>
                                     <td class="concepto">Tipo de proyecto</td>
                                     <td class="dato" id="TypeProject"></td>
@@ -76,7 +77,7 @@
                                     <td class="enlace"></td>
                                 </tr>
                             </table>
-                            <button class="btn-add right" id="addProject"> + Agregar proyecto</button>
+                            <!-- <button class="btn-add right" id="addProject"> + Agregar proyecto</button> -->
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 blocks">
@@ -146,11 +147,11 @@
             </div>
             <div class="block_02">
                 <div class="blocks">
-                    <button class="btn-add" id="newQuote"> + nueva cotización</button>
+                    <button class="btn-add" id="newQuote"></button>
                 </div>
                 <hr>
                 <div class="blocks">
-                    <div class="half left concepto">cotización base</div>
+                    <div class="half left concepto">Costo base</div>
                     <div class="half right dato" id="costbase">0</div>
                 </div>
                 <div class="blocks">
@@ -170,6 +171,7 @@
                     <div class="half left concepto">Total</div>
                     <div class="half right total dato" id="total">0</div>
                 </div>
+                
                 <div class="blocks total">
                     <div class="half left concepto">&nbsp;</div>
                     <div class="half right total dato" >&nbsp;</div>
@@ -177,12 +179,6 @@
                 <div class="blocks">
                     <div class="half left concepto">Num. productos</div>
                     <div class="half right dato" id="ttlproducts">0</div>
-                </div>
-                
-                <div class="blocks">
-                    <div class="full text_center">
-                        <button class="bn disable" id="addBudget"> Guardar cotización</button>
-                    </div>
                 </div>
                 <hr>
                 <div class="blocks" id="versions">
@@ -200,11 +196,10 @@
 
     <!-- Start Lista de productos -->
     <div class="box_list_products" id="Products" >
-        <div class="sel_product">
+    <div class="sel_product">
             <i class="far fa-times-circle close-finder"></i>
             <input type="text" id="txtSearchProduct" name="txtSearchProduct" class="textbox-finder">
         </div>
-        
         <div class="list_products">
             <ul></ul>
         </div>
@@ -230,18 +225,10 @@
 <!-- End Modales -->
 
 
-<!-- Start Modales -->
-<div class="box_loading_deep">
-    <div class="box_loading">
-    <i class="fas fa-spinner"></i> Promoviendo Cotización ...
-    </div>
-</div>
-<!-- End Modales -->
-
-
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
-<script src="<?=  PATH_VIEWS . 'Budget/Budget.js' ?>"></script>
+<script src="<?=  PATH_VIEWS . 'ProjectPlans/ProjectPlans.js' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
+
