@@ -659,16 +659,16 @@ CREATE VIEW ctt_vw_subcategories AS
 DROP VIEW ctt_vw_products;
 CREATE VIEW ctt_vw_products AS
 SELECT 
-	CONCAT('<i class="fas fa-pen modif" data="', pr.prd_id,'"></i><i class="fas fa-times-circle kill" data="', pr.prd_id , '"></i>') AS editable
+	CONCAT('<i class="fas fa-pen modif" data="', pr.prd_id,'"></i><i class="fas fa-times-circle kill" data="', pr.prd_id , '"></i> ') AS editable
 	, pr.prd_id                     AS producid
     , pr.prd_sku                    AS produsku
     , pr.prd_name                   AS prodname
     , pr.prd_price                  AS prodpric 
-    , CONCAT('<span class="toLink">', prd_stock , '</span>')  AS prodqtty
+    , CONCAT('<span class="toLink">', prd_stock , '</span> ')  AS prodqtty
 	, pr.prd_level                  AS prodtype
     , sv.srv_name                   AS typeserv 
 	, cn.cin_code                   AS prodcoin
-    , CONCAT('<i class="fas fa-file-invoice" id="',dc.doc_id,'"></i>') AS prddocum
+    , CONCAT('<i class="fas fa-file-invoice" id="',dc.doc_id,'"></i> ') AS prddocum
     , sc.sbc_name                   AS subcateg
     , ct.cat_name                   AS categori
     , pr.prd_english_name           AS prodengl
@@ -712,7 +712,8 @@ SELECT
     ELSE '' END     AS editable,
     CASE
         WHEN pj.pjt_status = '2'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
-        WHEN pj.pjt_status = '5'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
+        WHEN pj.pjt_status = '3'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
+        WHEN pj.pjt_status = '4'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
     ELSE '' END     AS smarlock,
     pj.pjt_id       AS projecid,
     pj.pjt_number   AS projnumb,
@@ -724,7 +725,7 @@ SELECT
 FROM        ctt_projects AS pj    
 INNER JOIN  ctt_customers_owner AS co  ON co.cuo_id = pj.cuo_id
 INNER JOIN  ctt_customers as cu        ON cu.cus_id = co.cus_id
-WHERE pj.pjt_status IN (2, 5);
+WHERE pj.pjt_status IN (2, 3, 4);
 
 
 

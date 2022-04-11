@@ -10,7 +10,7 @@ $('document').ready(function () {
 
 function inicial() {
     get_customers();
-    get_projects();
+    get_projects('0');
     get_discounts();
     button_actions();
     get_customers_owner();
@@ -28,9 +28,9 @@ function get_customers() {
 }
 
 /**  Obtiene el listado de proyectos */
-function get_projects() {
+function get_projects(pjId) {
     var pagina = 'Budget/listProjects';
-    var par = `[{"prm":""}]`;
+    var par = `[{"pjId":"${pjId}"}]`;
     var tipo = 'json';
     var selector = put_projects;
     caching_events('get_projects');
@@ -153,7 +153,7 @@ function put_projects(dt) {
             $('#Projects .list_items ul').append(H);
         });
 
-        selector_projects();
+        selector_projects(proj[0].pjId);
     } else {
         $('#Projects .list_items ul').html('');
     }
@@ -202,7 +202,7 @@ function put_rel_projects(dt) {
             }
         });
     });
-    selector_projects();
+    selector_projects(0);
 }
 /**  Llena el listado de versiones */
 function put_version(dt) {
@@ -502,7 +502,7 @@ function select_customer() {
             $('#EmailProducer').html(cs.cus_email);
             $('#PhoneProducer').html(cs.cus_phone);
             $('#QualificationProducer').html(cs.cus_qualification);
-            $('#Relation .grouper').html('');
+            $('#Relation').html('');
             $('#Customer .grouper').attr('data_identy', cs.cus_id);
             $('#Relation').html('');
             // get_rel_customers(cs.cus_id, cs.cut_id);
@@ -536,7 +536,7 @@ function select_relation() {
 }
 
 /** Proyectos */
-function selector_projects() {
+function selector_projects(pjId) {
     caching_events('selector_projects');
     $('#Projects .list_items ul li')
         .unbind('click')
@@ -560,11 +560,19 @@ function selector_projects() {
                 $('#IdCuo').val(pj.cuo_id);
                 $('#IdCus').val(pj.cus_id);
                 $('#IdCusPrn').val(pj.cus_parent);
+
+                $('.pjtEdit').removeClass('hide');
                 fillProducer(pj.cus_parent);
 
                 get_version(pj.pjt_id);
                 fill_dinamic_table();
                 add_boton();
+
+                $('.pjtEdit')
+                    .unbind('click')
+                    .on('click', function () {
+                        edit_project(pj);
+                    });
 
                 $('#Projects i.clean')
                     .unbind('click')
@@ -616,6 +624,13 @@ function selector_projects() {
                 );
             }
         });
+
+    console.log(pjId);
+    if (pjId > 0) {
+        $('#P' + pjId).trigger('click');
+    }
+
+    // $('#P' + dt).trigger('click');
 }
 
 function fillProducer(cusId) {
@@ -768,7 +783,7 @@ function build_menu_control() {
     let H = `
         <ul class="menu_block">
             <li class="menu_version" data_content=""></li>
-            <li class="menu_button" id="mkproj"><i class="fas fa-upload"></i> Hacer proyecto</li>
+            <li class="menu_button" id="mkproj"><i class="fas fa-save"></i> Hacer presupuesto</li>
             <li class="menu_button" id="printr"><i class="fas fa-print"></i> Imprimir</li>
         </ul>
         `;
@@ -839,13 +854,14 @@ function clean_projects_field() {
     $('#costtest').html(0);
     $('#costassu').html(0);
     $('#total').html(0);
+    $('.pjtEdit').addClass('hide');
 }
 /** Limpia clientes */
 function clean_customer_field() {
     caching_events('clean_customer_field');
     $('#Customer .grouper').html('');
     $('#Customer .grouper').attr('data_identy', '');
-    $('#Relation .grouper').html('');
+    $('#Relation').html('');
     $('#Relation').parent().children('.concepto').html('');
     $('#AddressProducer').html('');
     $('#EmailProducer').html('');
@@ -1454,7 +1470,6 @@ function add_client() {
 
 /**  Coloca los datos del cliente del formulario en la cotización */
 function save_costumer() {
-    caching_events('save_costumer');
     let CustomerName = $('#txtCustomerName').val();
     let CustomerContact = $('#txtCustomerContact').val();
     let CustomerAddress = $('#txtCustomerAddress').val();
@@ -1481,85 +1496,159 @@ function save_costumer() {
     close_modal();
 }
 
-/**  Agrega nuevo proyecto */
-function add_project() {
-    caching_events('add_project');
-    $('.box_modal_deep').css({display: 'flex'});
-    $('.box_modal').animate(
-        {
-            top: '70px',
-        },
-        500
-    );
-    clean_projects_field();
-    clean_customer_field();
+/**  Edita proyecto */
+function edit_project(pj) {
+    console.log(pj);
 
+    formatProject();
+    $('.form__modal-fields h3').html('Edita PROYECTO');
+
+    setTimeout(() => {
+        $('#txtProjectId').val(pj.pjt_id);
+        $('#txtProject').val(pj.pjt_name);
+        $('#txtPeriodProject').val(pj.pjt_date_start + ' - ' + pj.pjt_date_end);
+        $('#txtLocation').val(pj.pjt_location);
+        $('#txtCustomerOwner').val(pj.cuo_id);
+        $(`#txtTypeProject option[value = "${pj.pjttp_id}"]`).attr('selected', 'selected');
+        $(`#txtTypeLocation option[value = "${pj.loc_id}"]`).attr('selected', 'selected');
+        $(`#txtCustomer option[value = "${pj.cus_id}"]`).attr('selected', 'selected');
+        $(`#txtCustomerRel option[value = "${pj.cus_parent}"]`).attr('selected', 'selected');
+
+        $('.box_modal').animate({top: '70px'}, 500);
+
+        $('#saveProject').on('click', function () {
+            let ky = validatorFields($('#formProject'));
+            if (ky == 0) {
+                let projId = $('#txtProjectId').val();
+                let projName = $('#txtProject').val();
+                let projLocation = $('#txtLocation').val();
+                let cuoId = $('#txtCustomerOwner').val();
+                let projLocationTypeValue = $('#txtTypeLocation option:selected').val();
+                let projPeriod = $('#txtPeriodProject').val();
+                let projType = $('#txtTypeProject option:selected').val();
+                let cusCte = $('#txtCustomer option:selected').val();
+                let cusCteRel = $('#txtCustomerRel option:selected').val();
+
+                let projDateStart = moment(projPeriod.split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
+                let projDateEnd = moment(projPeriod.split(' - ')[1], 'DD/MM/YYYY').format('YYYYMMDD');
+
+                let par = `
+                [{
+                    "projId"        : "${projId}",
+                    "pjtName"       : "${projName}",
+                    "pjtLocation"   : "${projLocation}",
+                    "pjtDateStart"  : "${projDateStart}",
+                    "pjtDateEnd"    : "${projDateEnd}",
+                    "pjtType"       : "${projType}",
+                    "locId"         : "${projLocationTypeValue}",
+                    "cuoId"         : "${cuoId}",
+                    "cusId"         : "${cusCte}",
+                    "cusParent"     : "${cusCteRel}"
+                }]
+                `;
+
+                console.log(par);
+
+                close_modal();
+
+                $('#Projects i.clean')
+                    .unbind('click')
+                    .on('click', function () {
+                        clean_projects_field();
+                    });
+
+                var pagina = 'Budget/UpdateProject';
+                var tipo = 'html';
+                var selector = load_project;
+                fillField(pagina, par, tipo, selector);
+            }
+        });
+    }, 500);
+}
+
+function formatProject() {
     let H = `
-    <div class="row">
-        <div class="form col-sm-12 col-md-12 col-lg-8 col-xl-8 qst">
-            <div class="form_group">
+    <div class="form__modal">
+        <div class="form__modal-fields" id="formProject">
+            <h3></h3>
+            <input type="hidden" id="txtProjectId" name="txtProjectId">
+            <div class="form__modal-group">
                 <label for="txtProject">Nombre del proyecto:</label>
-                <input type="text" id="txtProject" name="txtProject" class="textbox" autocomplete="off"><br>
-                <span class="alert"></span>
+                <input type="text" id="txtProject" name="txtProject" class="textbox wtf required" autocomplete="off">
+                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Quieres agregar Nombre del proyecto</span>
             </div>
 
-            <div class="form_group" id="reportrange">
-                <label for="txtPeriodProject">Periodo:</label><br>
-                <input type="text" id="txtPeriodProject"  name="txtPeriodProject" class="textbox">
-                <i class="fas fa-calendar-alt" id="calendar"></i><br>
-                <span class="alert"></span>
+            <div class="form__modal-group" id="reportrange">
+                <label for="txtPeriodProject">Periodo:</label>
+                <input type="text" id="txtPeriodProject"  name="txtPeriodProject" class="textbox wtf required" autocomplete="off">
+                <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
+                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
             </div>
 
-            <div class="form_group">
+            <div class="form__modal-group">
                 <label for="txtLocation">Locación:</label>
-                <input type="text" id="txtLocation" name="txtLocation" class="textbox" autocomplete="off">
+                <input type="text" id="txtLocation" name="txtLocation" class="textbox wtf" autocomplete="off"><br>
+                <span class="textAlert"></span>
             </div>
-
-            <div class="form_group">
+                
+            <div class="form__modal-group">
                 <label for="txtTypeProject">Tipo de proyecto:</label>
-                <select id="txtTypeProject" name="txtTypeProject" class="form-select" >
-                    <option value="0"> Selecciona un tipo de proyecto</option>
+                <select id="txtTypeProject" name="txtTypeProject" class="textbox wtf required" >
+                    <option value="0"></option>
                 </select>
-                <span class="alert"></span>
+                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de projecto</span>
             </div>
-
-            <div class="form_group">
+                
+            <div class="form__modal-group">
                 <label for="txtTypeLocation">Tipo de locación:</label>
-                <select id="txtTypeLocation" name="txtTypeLocation" class="form-select" >
-                    <option value="1"> Local</option>
-                    <option value="2"> Foraneo</option>
+                <select id="txtTypeLocation" name="txtTypeLocation" class="textbox" >
+                    <option value="0"></option>
+                    <option value="1"> LOCAL</option>
+                    <option value="2"> FORANEO</option>
                 </select>
+                <span class="textAlert"></span>
             </div>
 
-            <div class="form_group">
+            <div class="form__modal-group">
                 <label for="txtCustomer">Cliente:</label>
-                <select id="txtCustomer" class="form-select">
-                    <option value="0"> Ninguno</option>
+                <select id="txtCustomer" class="textbox wtf">
+                    <option value="0"></option>
                 </select>
-                <span class="alert"></span>
+                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar un cliente</span>
+            </div>
+            <input type="hidden" name="txtCustomerOwner"  id="txtCustomerOwner">
+
+            <div class="form__modal-group">
+                <label for="txtCustomerRel">Productor:</label>
+                <select id="txtCustomerRel" class="textbox wtf">
+                    <option value="0"></option>
+                </select>
+                <span class="textAlert"></span>
             </div>
 
-            <div class="form_group">
-                <label for="txtCustomerRel">Relación:</label>
-                <select id="txtCustomerRel" class="form-select">
-                    <option value="0"> Ninguno</option>
-                </select>
-                <span class="alert"></span>
-            </div>
-            <div class="space_end"></div>
 
-            <div class="fix_buttons">
-                <button class="bn btn-ok" id="saveProject">agregar proyecto</button>
-                <button class="bn btn-cn">Cancelar</button>
-            </div>
+        
         </div>
-        <div class="form col-sm-12 col-md-12 col-lg-4 col-xl-4 image img02"></div>
+        <div class="form__modal-bottons">
+            <button class="bn btn-ok" id="saveProject">agregar proyecto</button>
+            <button class="bn btn-cn">Cancelar</button>
+        </div>
+        <div class="form__modal-image image img02">
+            
+        </div>
     </div>
-`;
+    `;
 
     $('.box_modal').html(H);
-
-    load_project_type();
+    $('.box_modal_deep').css({display: 'flex'});
+    $('.textbox').on('focus', function () {
+        let group = $(this).parent();
+        looseAlert(group);
+    });
+    setTimeout(() => {
+        clean_projects_field();
+        clean_customer_field();
+    }, 1000);
 
     let fecha = moment(Date()).format('DD/MM/YYYY');
 
@@ -1584,14 +1673,18 @@ function add_project() {
             startDate: fecha,
             endDate: fecha,
             minDate: fecha,
-            opens: 'right',
+            opens: 'left',
         },
         function (start, end, label) {
             $('#txtPeriodProject').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+            looseAlert($('#txtPeriodProject').parent());
+
             // $('#txtPeriodProject').parent().children('span').html('');
             // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
         }
     );
+
+    load_project_type();
 
     // Llena el selector de clientes
     $.each(cust, function (v, u) {
@@ -1609,34 +1702,23 @@ function add_project() {
         }
     });
 
+    $('.btn-cn').on('click', function () {
+        close_modal();
+    });
+}
+
+/**  Agrega nuevo proyecto */
+function add_project() {
+    caching_events('add_project');
+    formatProject();
+
+    $('.form__modal-fields h3').html('NUEVO PROYECTO');
+
     $('#saveProject').on('click', function () {
-        let ky = 0;
-
-        if ($('#txtProject').val() == '') {
-            ky = 1;
-            $('#txtProject').parent().children('span').html('Debes agregar Nombre del proyecto');
-        }
-        if ($('#txtPeriodProject').val() == '') {
-            ky = 1;
-            $('#txtPeriodProject').parent().children('span').html('Debes agregar las fechas del projecto');
-        }
-        console.log($('#txtTypeProject option:selected').val());
-        if ($('#txtTypeProject option:selected').val() == '0') {
-            ky = 1;
-            $('#txtTypeProject').parent().children('span').html('Debes seleccionar el tipo de projecto');
-        }
-        if ($('#txtCustomer option:selected').val() == '0') {
-            ky = 1;
-            $('#txtCustomer').parent().children('span').html('Debes seleccionar un cliente');
-        }
-
+        let ky = validatorFields($('#formProject'));
         if (ky == 0) {
             save_project();
         }
-    });
-
-    $('.textbox').on('focus', function () {
-        $(this).parent().children('span').html('');
     });
 
     $('#txtCustomer').on('change', function () {
@@ -1646,9 +1728,7 @@ function add_project() {
         $('#txtCustomerRel option[value="' + cte + '"]').hide();
     });
 
-    $('.btn-cn').on('click', function () {
-        close_modal();
-    });
+    $('.box_modal').animate({top: '70px'}, 500);
 }
 
 /**  Coloca los datos del proyecto del formulario en la cotización */
@@ -1706,13 +1786,10 @@ function save_project() {
 
 /**  ++++++ Inicia la carga de proyectos */
 function load_project(dt) {
-    caching_events('load_project');
-    $('#Projects .list_items ul').html('');
-    get_projects();
+    console.log(dt);
 
-    setTimeout(() => {
-        $('#P' + dt).trigger('click');
-    }, 2000);
+    $('#Projects .list_items ul').html('');
+    get_projects(dt);
 }
 
 /**  Cierra la ventana del modal */
@@ -1917,4 +1994,17 @@ function modal_loading() {
         },
         500
     );
+}
+
+function validatorFields(frm) {
+    let ky = 0;
+    frm.find('.required').each(function () {
+        if ($(this).val() == '' || $(this).val() == 0) {
+            $(this).addClass('textbox-alert');
+            $(this).parent().children('.textAlert').css({visibility: 'visible'});
+
+            ky = 1;
+        }
+    });
+    return ky;
 }

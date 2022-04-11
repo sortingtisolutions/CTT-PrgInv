@@ -34,7 +34,7 @@ class WhOutputsModel extends Model
          pj.pjt_location, pj.pjt_status,pj.pjt_id
         FROM ctt_projects AS pj INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id 
         LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id 
-        WHERE pj.pjt_status = '2' ORDER BY pjt_date_start ASC;";
+        WHERE pj.pjt_status = '4' ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }
 

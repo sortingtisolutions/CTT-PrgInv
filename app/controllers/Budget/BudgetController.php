@@ -256,6 +256,16 @@ public function listProductsRelated($request_params)
         $result = $this->model->SaveProject($request_params);
         echo $result;
     } 
+    
+// Actualiza datos del proyecto
+    public function UpdateProject($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->UpdateProject($request_params);
+        echo $result;
+    } 
+
+
 
 // Actualiza las fechas del proyecto
     public function UpdatePeriodProject($request_params)

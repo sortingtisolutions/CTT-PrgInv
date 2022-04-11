@@ -106,7 +106,8 @@ SELECT
     ELSE '' END     AS editable,
     CASE
         WHEN pj.pjt_status = '2'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
-        WHEN pj.pjt_status = '5'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
+        WHEN pj.pjt_status = '3'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
+        WHEN pj.pjt_status = '4'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
     ELSE '' END     AS smarlock,
     pj.pjt_id       AS projecid,
     pj.pjt_number   AS projnumb,
@@ -118,7 +119,7 @@ SELECT
 FROM        ctt_projects AS pj    
 INNER JOIN  ctt_customers_owner AS co  ON co.cuo_id = pj.cuo_id
 INNER JOIN  ctt_customers as cu        ON cu.cus_id = co.cus_id
-WHERE pj.pjt_status IN (2, 5);
+WHERE pj.pjt_status IN (2, 3, 4);
 
 
 
@@ -170,11 +171,11 @@ SELECT
   , pr.prd_sku			AS produsku
   , pr.prd_name			AS prodname
   , pr.prd_price  		AS prodpric 
-  , CONCAT('<span class="toLink">', prd_stock , '</span>')  AS prodqtty
+  , CONCAT('<span class="toLink">', prd_stock , '</span> ')  AS prodqtty
 	, pr.prd_level			AS prodtype
   , sv.srv_name 			AS typeserv 
 	, cn.cin_code 			AS prodcoin
-  , CONCAT('<i class="fas fa-file-invoice" id="',dc.doc_id,'"></i>') AS prddocum
+  , CONCAT('<i class="fas fa-file-invoice" id="',dc.doc_id,'"></i> ') AS prddocum
   , sc.sbc_name			AS subcateg
   , ct.cat_name			AS categori
   , pr.prd_english_name 	AS prodengl
@@ -212,3 +213,42 @@ SELECT  ifnull(sum(sp.stp_quantity),0)
         INNER JOIN ctt_products             AS pr ON pr.prd_id = sr.prd_id
         WHERE sr.ser_status = 1 AND pr.prd_level IN ('P','K') AND sr.prd_id = sc.prd_id
 ) WHERE sp.prd_id = prd_id;
+
+
+
+
+
+
+
+
+-- Actualizacion del 7 de ABRIL 2022
+DROP VIEW ctt_vw_projects ;
+CREATE VIEW ctt_vw_projects AS
+SELECT
+    CASE
+        WHEN cu.cus_fill <= 16                          THEN concat(    '<span class="rng rng1">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 16 AND cu.cus_fill <= 33     THEN concat(    '<span class="rng rng2">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 33 AND cu.cus_fill <= 50     THEN concat(    '<span class="rng rng3">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 50 AND cu.cus_fill <= 66     THEN concat(    '<span class="rng rng4">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 66 AND cu.cus_fill <= 90     THEN concat(    '<span class="rng rng5">',  cu.cus_fill, '%</span>'    )
+        WHEN cu.cus_fill > 99                           THEN concat(    '<span class="rng rng6">',  cu.cus_fill, '%</span>'    )
+    ELSE '' END     AS custfill,
+    CASE
+        WHEN cu.cus_fill < 100                          THEN concat(    '<i class="fas fa-address-card kill" id="',    cu.cus_id,    '"></i>'    )
+    ELSE '' END     AS editable,
+    CASE
+        WHEN pj.pjt_status = '2'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
+        WHEN pj.pjt_status = '3'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
+        WHEN pj.pjt_status = '4'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
+    ELSE '' END     AS smarlock,
+    pj.pjt_id       AS projecid,
+    pj.pjt_number   AS projnumb,
+    pj.pjt_name     AS projname,
+    pj.pjt_location AS projloca,
+    date_format(pj.pjt_date_start,  '%Y/%m/%d') AS dateinit,
+    date_format(pj.pjt_date_end,    '%Y/%m/%d') AS datefnal,
+    cu.cus_name AS custname
+FROM        ctt_projects AS pj    
+INNER JOIN  ctt_customers_owner AS co  ON co.cuo_id = pj.cuo_id
+INNER JOIN  ctt_customers as cu        ON cu.cus_id = co.cus_id
+WHERE pj.pjt_status IN (2, 3, 4);

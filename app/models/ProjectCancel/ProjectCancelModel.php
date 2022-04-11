@@ -21,16 +21,17 @@ class ProjectCancelModel extends Model
                 FROM ctt_projects AS pj
                 INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 INNER JOIN ctt_customers AS cl ON cl.cus_id = co.cus_id
-                WHERE pj.pjt_status = 3";
+                WHERE pj.pjt_status in (5)";
         return $this->db->query($qry);
 
     }
 
     public function CancelProject($params)
     {
+        /* Actualiza el estado en 2 convirtiendolo en presupuesto  */
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $qr1 = "UPDATE ctt_projects
-                   SET pjt_status = '4'
+                   SET pjt_status = '6'
                  WHERE pjt_id = $pjtId;";
         
         $this->db->query($qr1);

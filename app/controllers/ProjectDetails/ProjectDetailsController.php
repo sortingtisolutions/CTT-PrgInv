@@ -62,6 +62,27 @@ class ProjectDetailsController extends Controller
 
     } 
 
+        
+// Lista los tipos de proyectos
+    public function listProjectsType($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProjectsType($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+
+    } 
+
+
 
     // Lista los proyectos
     public function listBudgets($request_params)
@@ -228,6 +249,18 @@ public function updatePeriods($request_params)
     $result = $this->model->updatePeriods($request_params);
     echo $result;
 }
+
+
+// Actualiza datos del proyecto
+    public function UpdateProject($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->UpdateProject($request_params);
+        echo $result;
+    } 
+
+
+
 
 
 // Genera el archivo del proyecto

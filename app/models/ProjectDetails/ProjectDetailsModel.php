@@ -25,18 +25,85 @@ class ProjectDetailsModel extends Model
     public function listProjects($params)
     {
 
-        $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name,  DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project, 
-                    DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start, DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end, 
-                    pj.pjt_location, pj.pjt_status, pj.cuo_id, pj.loc_id, co.cus_id, co.cus_parent, lo.loc_type_location,
-                    pt.pjttp_name
+        $pjId = $this->db->real_escape_string($params['pjId']);
+
+        $qry = "SELECT 
+                    pj.pjt_id  
+                    , pj.pjt_number 
+                    , pj.pjt_name  
+                    , DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project 
+                    , DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start 
+                    , DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end 
+                    , pj.pjt_location 
+                    , pj.pjt_status 
+                    , pj.cuo_id 
+                    , pj.loc_id 
+                    , co.cus_id 
+                    , co.cus_parent 
+                    , lo.loc_type_location 
+                    , pt.pjttp_name 
+                    , pt.pjttp_id
+                    , '$pjId' as pjId
                 FROM ctt_projects AS pj
                 INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-                WHERE pj.pjt_status in (2,5) ORDER BY pj.pjt_id DESC;
+                WHERE pj.pjt_status in (3,4) ORDER BY pj.pjt_id DESC;
                 ";
         return $this->db->query($qry);
     }    
+
+    
+// Listado de tipos de proyectos
+    public function listProjectsType($params)
+    {
+
+        $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
+        return $this->db->query($qry);
+    }  
+
+
+    
+// Actualiza los datos del proyecto
+    public function UpdateProject($params)
+    {
+        $cuo_id         = $this->db->real_escape_string($params['cuoId']);
+        $cus_id         = $this->db->real_escape_string($params['cusId']); 
+        $cus_Parent     = $this->db->real_escape_string($params['cusParent']);
+
+        $qry01 = "  UPDATE      ctt_customers_owner 
+                        SET     cus_id      = '$cus_id', 
+                                cus_parent  = '$cus_Parent'
+                        WHERE   cuo_id      = '$cuo_id';";
+
+        $this->db->query($qry01);
+
+        $pjt_id                 = $this->db->real_escape_string($params['projId']); 
+        $pjt_name               = $this->db->real_escape_string($params['pjtName']); 
+        $pjt_date_start         = $this->db->real_escape_string($params['pjtDateStart']);
+        $pjt_date_end           = $this->db->real_escape_string($params['pjtDateEnd']); 
+        $pjt_location           = $this->db->real_escape_string($params['pjtLocation']);
+        $pjt_type               = $this->db->real_escape_string($params['pjtType']);
+        $loc_id                 = $this->db->real_escape_string($params['locId']);
+
+
+        $qry02 = "UPDATE    ctt_projects
+                    SET     pjt_name        = 'ucase($pjt_name)', 
+                            pjt_date_start  = '$pjt_date_start', 
+                            pjt_date_end    = '$pjt_date_end',
+                            pjt_location    = 'ucase($pjt_location)', 
+                            pjttp_id        = '$pjt_type',  
+                            cuo_id          = '$cuo_id',
+                            loc_id          = '$loc_id'
+                    WHERE   pjt_id          =  $pjt_id;
+                    ";
+        $this->db->query($qry02);
+
+        return $pjt_id;
+
+    }
+
+
 
 
 // Promueve proyecto
@@ -80,29 +147,21 @@ class ProjectDetailsModel extends Model
         $dend = $this->db->real_escape_string($params['dend']);
 
         $qry = "SELECT pc.*, pj.pjt_id, sb.sbc_name,
-                date_format(pj.pjt_date_start, '%Y%m%d') AS pjt_date_start, 
-                date_format(pj.pjt_date_end, '%Y%m%d') AS pjt_date_end, pd.srv_id,
-                CASE 
-                    WHEN pjtcn_prod_level ='K' THEN 
-                        (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pc.prd_id)
-                    WHEN pjtcn_prod_level ='P' THEN 
-                        (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
-                        INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                        WHERE prd_id =  pc.prd_id
-                        AND  pjtdt_id = 0 AND sr.ser_status = 1
-                        )
-                    ELSE 
-                        (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
-                        INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                        WHERE prd_id =  pc.prd_id
-                        AND  pjtdt_id = 0 AND sr.ser_status = 1
-                        )
-                    END AS bdg_stock
-            FROM ctt_projects_content AS pc
-            INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
-            INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-            LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-            WHERE pc.pjt_id = $pjtId ORDER BY pc.pjtcn_id ASC;";
+                    date_format(pj.pjt_date_start, '%Y%m%d') AS pjt_date_start, 
+                    date_format(pj.pjt_date_end, '%Y%m%d') AS pjt_date_end, pd.srv_id,
+                    CASE 
+                        WHEN pjtcn_prod_level ='K' THEN 
+                            (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pc.prd_id)
+                        WHEN pjtcn_prod_level ='P' THEN 
+                            (SELECT prd_stock FROM ctt_products WHERE prd_id = pc.prd_id)
+                        ELSE 
+                            (SELECT prd_stock FROM ctt_products WHERE prd_id = pc.prd_id)
+                        END AS bdg_stock
+                FROM ctt_projects_content AS pc
+                INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
+                INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
+                LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+                WHERE pc.pjt_id = $pjtId ORDER BY pc.pjtcn_id ASC;";
         return $this->db->query($qry);
     } 
     
@@ -382,7 +441,7 @@ class ProjectDetailsModel extends Model
                     pjtcn_days_test,    pjtcn_discount_test,    pjtcn_insured,          pjtcn_prod_level,
                     prd_id, pjt_id) 
                 VALUES (
-                    '$pjtcn_prod_sku',  '$pjtcn_prod_name',     '$pjtcn_prod_price',    '$pjtcn_quantity',
+                    '$pjtcn_prod_sku',  'ucase($pjtcn_prod_name)',     '$pjtcn_prod_price',    '$pjtcn_quantity',
                     '$pjtcn_days_base', '$pjtcn_discount_base', '$pjtcn_days_trip',     '$pjtcn_discount_trip',
                     '$pjtcn_days_test', '$pjtcn_discount_test', '$pjtcn_insured',       '$pjtcn_prod_level',
                     '$prd_id','$pjt_id');
@@ -495,12 +554,12 @@ class ProjectDetailsModel extends Model
     }
 
 
-//  Obtiene los accesorios relacionados
+//  Coloca el proyecto en estado de precancelado
     public function cancelProject($params)
     {
         $pjtId = $this->db->real_escape_string($params["pjtId"]);
 
-        $qry = "UPDATE ctt_projects SET pjt_status = 3 WHERE  pjt_id = $pjtId;";
+        $qry = "UPDATE ctt_projects SET pjt_status = 5 WHERE  pjt_id = $pjtId;";
         $this->db->query($qry);
 
         return $pjtId ;

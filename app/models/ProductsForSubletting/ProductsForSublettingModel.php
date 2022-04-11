@@ -13,7 +13,7 @@ class ProductsForSublettingModel extends Model
 public function listProyects($store)
 {
     $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (2,5) ;";
+    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (2,3,4) ;";
     return $this->db->query($qry);
 }    
 
@@ -223,7 +223,9 @@ public function listProyects($store)
                 FROM ctt_series AS sr  
                 RIGHT JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
                 WHERE pd.prd_id = $producId LIMIT 1;";
+                
         $this->db->query($qry1);
+
         $serieId = $this->db->insert_id;
 
         // Actualiza el detalle del proyecto con la serie

@@ -38,7 +38,7 @@
                                     <td class="error">&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class="concepto">Buscar Proyecto</td>
+                                    <td class="concepto"><i class="fas fa-tools pjtEdit hide"></i> Proyecto</td>
                                     <td class="dato" id="Projects">
                                     <div class="grouper" contenteditable="true" data_identy=""></div>
                                         <i class="fas fa-caret-down turn"></i>

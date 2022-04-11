@@ -47,29 +47,14 @@ function parse_data(P) {
 }
 
 function show_error(xhr, textStatus, error, selector) {
-    var error = xhr.responseText.substring(0, 5);
-    if (error == 'ERROR') {
-        window.location = 'index2.html';
-    }
-    var errors =
-        'xhr.statusText: ' +
-        xhr.statusText +
-        '<br>status: ' +
-        xhr.statusText +
-        '<br>textStatus: ' +
-        textStatus +
-        '<br>error: ' +
-        error +
-        '<br>xhr.responseText: ' +
-        xhr.responseText +
-        '<br>selector: ' +
-        selector.name;
-    //alert('error ' + xhr.responseText);
-    var H = '';
-    H += errors;
-    alert(H);
-    console.log(error, selector.name);
-    //$('#msgError').append(H)
+    var H = `
+    Selector: ${selector.name} <br>
+    StatusText: ${xhr.statusText} <br>
+    Status: ${xhr.textStatus} <br>
+    textStatus: ${textStatus} <br>
+    Error: ${error} <br>
+    ResponseText: ${xhr.responseText} <br>`;
+    $('#msgError').html(H).removeClass('reposo');
 }
 
 // RELLENA CON CEROS A LA IZQUIERDA
@@ -247,4 +232,12 @@ function showComments(mid) {
     $('#comClose').on('click', function () {
         $('.box_comments_show').remove();
     });
+}
+
+function looseAlert(grp) {
+    grp.children('.textbox').removeClass('textbox-alert');
+
+    grp.children('.textAlert').css({visibility: 'hidden'});
+
+    console.log(grp.attr('class'));
 }

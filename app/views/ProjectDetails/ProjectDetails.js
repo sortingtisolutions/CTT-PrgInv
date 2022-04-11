@@ -12,7 +12,7 @@ $('document').ready(function () {
 
 function inicial() {
     get_customers();
-    get_projects();
+    get_projects('0');
     get_discounts();
     button_actions();
     //  get_customers_owner();
@@ -30,9 +30,9 @@ function get_customers() {
 }
 
 /**  Obtiene el listado de proyectos */
-function get_projects() {
+function get_projects(pjId) {
     var pagina = 'ProjectDetails/listProjects';
-    var par = `[{"prm":""}]`;
+    var par = `[{"pjId":"${pjId}"}]`;
     var tipo = 'json';
     var selector = put_projects;
     caching_events('get_projects');
@@ -174,7 +174,7 @@ function put_projects(dt) {
             $('#Projects .list_items ul').append(H);
         });
 
-        selector_projects();
+        selector_projects(proj[0].pjId);
     } else {
         $('#Projects .list_items ul').html('');
     }
@@ -223,7 +223,7 @@ function put_rel_projects(dt) {
             }
         });
     });
-    selector_projects();
+    selector_projects(0);
 }
 /**  Llena el listado de versiones */
 function put_version(dt) {
@@ -524,7 +524,7 @@ function select_customer() {
             $('#EmailProducer').html(cs.cus_email);
             $('#PhoneProducer').html(cs.cus_phone);
             $('#QualificationProducer').html(cs.cus_qualification);
-            $('#Relation .grouper').html('');
+            $('#Relation').html('');
             $('#Customer .grouper').attr('data_identy', cs.cus_id);
             // get_rel_customers(cs.cus_id, cs.cut_id);
             get_rel_projects(cs.cus_id);
@@ -557,7 +557,7 @@ function select_relation() {
 }
 
 /** Proyectos */
-function selector_projects() {
+function selector_projects(pjId) {
     caching_events('selector_projects');
     $('#Projects .list_items ul li')
         .unbind('click')
@@ -581,11 +581,19 @@ function selector_projects() {
                 $('#IdCuo').val(pj.cuo_id);
                 $('#IdCus').val(pj.cus_id);
                 $('#IdCusPrn').val(pj.cus_parent);
+
+                $('.pjtEdit').removeClass('hide');
                 fillProducer(pj.cus_parent);
 
                 get_budgets(pj.pjt_id);
                 fill_dinamic_table();
                 add_boton();
+
+                $('.pjtEdit')
+                    .unbind('click')
+                    .on('click', function () {
+                        edit_project(pj);
+                    });
 
                 $('#Projects i.clean')
                     .unbind('click')
@@ -639,6 +647,11 @@ function selector_projects() {
                 );
             }
         });
+
+    console.log(pjId);
+    if (pjId > 0) {
+        $('#P' + pjId).trigger('click');
+    }
 }
 
 function fillProducer(cusId) {
@@ -882,13 +895,14 @@ function clean_projects_field() {
     $('#costassu').html(0);
     $('#total').html(0);
     $('#ttlproducts').html(0);
+    $('.pjtEdit').addClass('hide');
 }
 /** Limpia clientes */
 function clean_customer_field() {
     caching_events('clean_customer_field');
     $('#Customer .grouper').html('');
     $('#Customer .grouper').attr('data_identy', '');
-    $('#Relation .grouper').html('');
+    $('#Relation').html('');
     $('#Relation').parent().children('.concepto').html('');
     $('#AddressProducer').html('');
     $('#EmailProducer').html('');
@@ -1577,6 +1591,217 @@ function save_costumer() {
     close_modal();
 }
 
+/**  Edita proyecto */
+function edit_project(pj) {
+    console.log(pj);
+
+    formatProject();
+    $('.form__modal-fields h3').html('Edita PROYECTO');
+
+    setTimeout(() => {
+        $('#txtProjectId').val(pj.pjt_id);
+        $('#txtProject').val(pj.pjt_name);
+        $('#txtPeriodProject').val(pj.pjt_date_start + ' - ' + pj.pjt_date_end);
+        $('#txtLocation').val(pj.pjt_location);
+        $('#txtCustomerOwner').val(pj.cuo_id);
+        $(`#txtTypeProject option[value = "${pj.pjttp_id}"]`).attr('selected', 'selected');
+        $(`#txtTypeLocation option[value = "${pj.loc_id}"]`).attr('selected', 'selected');
+        $(`#txtCustomer option[value = "${pj.cus_id}"]`).attr('selected', 'selected');
+        $(`#txtCustomerRel option[value = "${pj.cus_parent}"]`).attr('selected', 'selected');
+
+        $('.box_modal').animate({top: '70px'}, 500);
+
+        $('#saveProject').on('click', function () {
+            let ky = validatorFields($('#formProject'));
+            if (ky == 0) {
+                let projId = $('#txtProjectId').val();
+                let projName = $('#txtProject').val();
+                let projLocation = $('#txtLocation').val();
+                let cuoId = $('#txtCustomerOwner').val();
+                let projLocationTypeValue = $('#txtTypeLocation option:selected').val();
+                let projPeriod = $('#txtPeriodProject').val();
+                let projType = $('#txtTypeProject option:selected').val();
+                let cusCte = $('#txtCustomer option:selected').val();
+                let cusCteRel = $('#txtCustomerRel option:selected').val();
+
+                let projDateStart = moment(projPeriod.split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
+                let projDateEnd = moment(projPeriod.split(' - ')[1], 'DD/MM/YYYY').format('YYYYMMDD');
+
+                let par = `
+                [{
+                    "projId"        : "${projId}",
+                    "pjtName"       : "${projName}",
+                    "pjtLocation"   : "${projLocation}",
+                    "pjtDateStart"  : "${projDateStart}",
+                    "pjtDateEnd"    : "${projDateEnd}",
+                    "pjtType"       : "${projType}",
+                    "locId"         : "${projLocationTypeValue}",
+                    "cuoId"         : "${cuoId}",
+                    "cusId"         : "${cusCte}",
+                    "cusParent"     : "${cusCteRel}"
+                }]
+                `;
+
+                console.log(par);
+
+                close_modal();
+
+                $('#Projects i.clean')
+                    .unbind('click')
+                    .on('click', function () {
+                        clean_projects_field();
+                    });
+
+                var pagina = 'ProjectDetails/UpdateProject';
+                var tipo = 'html';
+                var selector = load_project;
+                fillField(pagina, par, tipo, selector);
+            }
+        });
+    }, 500);
+}
+
+function formatProject() {
+    let H = `
+    <div class="form__modal">
+        <div class="form__modal-fields" id="formProject">
+            <h3></h3>
+            <input type="hidden" id="txtProjectId" name="txtProjectId">
+            <div class="form__modal-group">
+                <label for="txtProject">Nombre del proyecto:</label>
+                <input type="text" id="txtProject" name="txtProject" class="textbox wtf required" autocomplete="off">
+                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Quieres agregar Nombre del proyecto</span>
+            </div>
+
+            <div class="form__modal-group" id="reportrange">
+                <label for="txtPeriodProject">Periodo:</label>
+                <input type="text" id="txtPeriodProject"  name="txtPeriodProject" class="textbox wtf required" autocomplete="off">
+                <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
+                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
+            </div>
+
+            <div class="form__modal-group">
+                <label for="txtLocation">Locación:</label>
+                <input type="text" id="txtLocation" name="txtLocation" class="textbox wtf" autocomplete="off"><br>
+                <span class="textAlert"></span>
+            </div>
+                
+            <div class="form__modal-group">
+                <label for="txtTypeProject">Tipo de proyecto:</label>
+                <select id="txtTypeProject" name="txtTypeProject" class="textbox wtf required" >
+                    <option value="0"></option>
+                </select>
+                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de projecto</span>
+            </div>
+                
+            <div class="form__modal-group">
+                <label for="txtTypeLocation">Tipo de locación:</label>
+                <select id="txtTypeLocation" name="txtTypeLocation" class="textbox" >
+                    <option value="0"></option>
+                    <option value="1"> LOCAL</option>
+                    <option value="2"> FORANEO</option>
+                </select>
+                <span class="textAlert"></span>
+            </div>
+
+            <div class="form__modal-group">
+                <label for="txtCustomer">Cliente:</label>
+                <select id="txtCustomer" class="textbox wtf">
+                    <option value="0"></option>
+                </select>
+                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar un cliente</span>
+            </div>
+            <input type="hidden" name="txtCustomerOwner"  id="txtCustomerOwner">
+
+            <div class="form__modal-group">
+                <label for="txtCustomerRel">Productor:</label>
+                <select id="txtCustomerRel" class="textbox wtf">
+                    <option value="0"></option>
+                </select>
+                <span class="textAlert"></span>
+            </div>
+
+
+        
+        </div>
+        <div class="form__modal-bottons">
+            <button class="bn btn-ok" id="saveProject">agregar proyecto</button>
+            <button class="bn btn-cn">Cancelar</button>
+        </div>
+        <div class="form__modal-image image img02">
+            
+        </div>
+    </div>
+    `;
+
+    $('.box_modal').html(H);
+    $('.box_modal_deep').css({display: 'flex'});
+    $('.textbox').on('focus', function () {
+        let group = $(this).parent();
+        looseAlert(group);
+    });
+    setTimeout(() => {
+        clean_projects_field();
+        clean_customer_field();
+    }, 1000);
+
+    let fecha = moment(Date()).format('DD/MM/YYYY');
+
+    $('#calendar').daterangepicker(
+        {
+            autoApply: true,
+            locale: {
+                format: 'DD/MM/YYYY',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                firstDay: 1,
+            },
+            showCustomRangeLabel: false,
+            singleDatePicker: false,
+            startDate: fecha,
+            endDate: fecha,
+            minDate: fecha,
+            opens: 'left',
+        },
+        function (start, end, label) {
+            $('#txtPeriodProject').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+            looseAlert($('#txtPeriodProject').parent());
+
+            // $('#txtPeriodProject').parent().children('span').html('');
+            // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+        }
+    );
+
+    load_project_type();
+
+    // Llena el selector de clientes
+    $.each(cust, function (v, u) {
+        if (u.cut_id == 1) {
+            let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
+            $('#txtCustomer').append(H);
+        }
+    });
+
+    // Llena el selector de relacion de clientes
+    $.each(cust, function (v, u) {
+        if (u.cut_id == 2) {
+            let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
+            $('#txtCustomerRel').append(H);
+        }
+    });
+
+    $('.btn-cn').on('click', function () {
+        close_modal();
+    });
+}
+
 /**  Agrega nuevo proyecto */
 function add_project() {
     caching_events('add_project');
@@ -1622,8 +1847,8 @@ function add_project() {
             <div class="form_group">
                 <label for="txtTypeLocation">Tipo de locación:</label>
                 <select id="txtTypeLocation" name="txtTypeLocation" class="form-select" >
-                    <option value="1"> Local</option>
-                    <option value="2"> Foraneo</option>
+                    <option value="1"> LOCAL</option>
+                    <option value="2"> FORANEO</option>
                 </select>
             </div>
 
@@ -1791,13 +2016,10 @@ function save_project() {
 
 /**  ++++++ Inicia la carga de proyectos */
 function load_project(dt) {
-    caching_events('load_project');
-    $('#Projects .list_items ul').html('');
-    get_projects();
+    console.log(dt);
 
-    setTimeout(() => {
-        $('#P' + dt).trigger('click');
-    }, 2000);
+    $('#Projects .list_items ul').html('');
+    get_projects(dt);
 }
 
 /**  Cierra la ventana del modal */
@@ -1951,7 +2173,7 @@ function cancel_proyect() {
 
 function show_cancel_proyect(dt) {
     clean_projects_field();
-    get_projects();
+    get_projects(0);
 }
 
 /**  +++++ Cachando eventos   */
@@ -2340,4 +2562,17 @@ function apply_period_changes() {
 
 function put_period_changes(dt) {
     console.log(dt);
+}
+
+function validatorFields(frm) {
+    let ky = 0;
+    frm.find('.required').each(function () {
+        if ($(this).val() == '' || $(this).val() == 0) {
+            $(this).addClass('textbox-alert');
+            $(this).parent().children('.textAlert').css({visibility: 'visible'});
+
+            ky = 1;
+        }
+    });
+    return ky;
 }
