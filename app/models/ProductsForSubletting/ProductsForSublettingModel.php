@@ -217,19 +217,12 @@ public function listProyects($store)
                     prd_id, sup_id, cin_id, pjtdt_id
                 )
                 SELECT 
-<<<<<<< HEAD
-                    '$newSku', '$serieNew', '$seriCost', ser_status, ser_situation, ser_stage, curdate(),
-                    '1', ser_behaviour, '$comments', 
-                    prd_id, '$supplier','$tpCoinId','$pjDetail'
-                FROM ctt_series AS sr  WHERE prd_id = $producId limit 1;";
-=======
                     '$newSku', '$serieNew', '$seriCost', ifnull(sr.ser_status,1), ifnull(sr.ser_situation,'EA'), ifnull(sr.ser_stage, 'R'), curdate(),
                     '1', ifnull(sr.ser_behaviour,'C'), '$comments', 
                     pd.prd_id, '$supplier','$tpCoinId','$pjDetail'
                 FROM ctt_series AS sr  
                 RIGHT JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
                 WHERE pd.prd_id = $producId LIMIT 1;";
->>>>>>> 9e6c3049e9b2feb906f808e806c7981a8296eb23
         $this->db->query($qry1);
         $serieId = $this->db->insert_id;
 
@@ -242,14 +235,10 @@ public function listProyects($store)
 
         // Agrega el nuevo registro en la tabla de subarrendos
         $qry3 = "INSERT INTO ctt_subletting (
-                    sub_price, sub_quantity, sub_comments, 
+                    sub_price, sub_quantity, sub_date_start, sub_date_end, sub_comments, 
                     ser_id, sup_id, prj_id, cin_id)
                 SELECT 
-<<<<<<< HEAD
-                    ser_cost, '1', '$comments', ser_id, 
-=======
                     ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
->>>>>>> 9e6c3049e9b2feb906f808e806c7981a8296eb23
                     '$supplier', '$projecId', '$tpCoinId' 
                 FROM ctt_series WHERE pjtdt_id = $pjDetail;";
         $this->db->query($qry3);

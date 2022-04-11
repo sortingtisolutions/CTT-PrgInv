@@ -72,6 +72,7 @@ public function listInvoice()
         $primaryKey = 'producid';
         $catId= $this->db->real_escape_string($params['catId']);
         $filter = $this->db->real_escape_string($params['filter']) == '0' ? "'P','A'" : "'P'";
+        // writeToConsole($table);
 
         $where =  "cat_id =" . $catId . " AND prodtype in (" . $filter . ")"; 
 
@@ -103,6 +104,15 @@ public function listInvoice()
         return json_encode(
             SSP::complex( $_POST, $sql_details, $table, $primaryKey, $columns, null, $where )
         );
+    }
+
+    public function writeToConsole($dt)
+    {
+        $console = $dt;
+        if (is_array($console)){
+            $console = implode(',', $console);
+        }
+        echo "<script>console.log('console: " . $console . "') </script>";
     }
 
 

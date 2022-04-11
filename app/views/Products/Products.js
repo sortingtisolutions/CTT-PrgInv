@@ -259,7 +259,7 @@ function settingTable(catId) {
     // $('#tblProducts').DataTable().destroy();
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     var tabla = $('#tblProducts').DataTable({
-        order: [[1, 'asc']],
+        order: [[1, 'desc']],
         dom: 'Blfrtip',
         lengthMenu: [
             [100, 200, 300, -1],
@@ -328,7 +328,7 @@ function settingTable(catId) {
         ajax: {url: 'Products/tableProducts', type: 'POST', data: {catId: catId, filter: flt}},
         columns: [
             {data: 'editable', class: 'editable edit', orderable: false},
-            {data: 'producid', class: 'producid id hide'},
+            //{data: 'producid', class: 'producid id hide'},
             {data: 'produsku', class: 'produsku sku'},
             {data: 'prodname', class: 'prodname product-name'},
             {data: 'prodpric', class: 'prodpric price'},
@@ -347,7 +347,9 @@ function settingTable(catId) {
     $('.tblProdMaster')
         .delay(1000)
         .slideDown('fast', function () {
-            //$('#tblProducts').DataTable().draw();
+            // tabla.reload();
+            console.log('Recarga');
+            $('.produsku').trigger('click');
             activeIcons();
             deep_loading('C');
         });

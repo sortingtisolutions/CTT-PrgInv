@@ -12,7 +12,7 @@ $(document).ready(function () {
 function inicial() {
     setTimeout(() => {
         getCategories();
-        deep_loading('o');
+        deep_loading('O');
         $('.tblProdMaster').css({display: 'none'});
         getPriceList();
     }, 100);
