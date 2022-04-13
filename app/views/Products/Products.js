@@ -329,6 +329,7 @@ function settingTable(catId) {
         columnDefs: [{targets: -1, data: null, defaultContent: '<butotn>click</button>'}],
         columns: [
             {data: 'editable', class: 'editable edit', orderable: false},
+            //{data: 'producid', class: 'producid id hide'},
             {data: 'produsku', class: 'produsku sku'},
             {data: 'prodname', class: 'prodname product-name'},
             {data: 'prodpric', class: 'prodpric price'},
