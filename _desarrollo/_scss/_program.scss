@@ -4,6 +4,7 @@
     background-color: transparent;
     color: #888888;
     font-size: 0.9em;
+
     &:hover {
         color: #000000;
         font-weight: 900;
@@ -14,6 +15,7 @@
         bottom: 1px;
     }
 }
+
 .titleSection {
     font-family: $font_secundary;
     font-size: 1.8em;
@@ -50,6 +52,7 @@
         color: #ffffff;
     }
 }
+
 .disable {
     border-color: #dddddd;
     color: #dddddd;
@@ -64,10 +67,12 @@
         color: #ffffff;
     }
 }
+
 h6 {
     font-size: 1.2em;
     font-family: $font_secundary;
 }
+
 hr {
     margin: 5px 0 20px 0;
 }
@@ -97,6 +102,7 @@ hr {
         padding: 4px;
     }
 }
+
 .block_02 {
     width: 250px;
     height: 100vh;
@@ -112,31 +118,38 @@ hr {
             font-size: 1.3em;
             padding-top: 10px;
         }
+
         &.documents {
             color: #999999;
             cursor: pointer;
+
             &:hover {
                 color: $setColor;
                 font-weight: 900;
                 background-color: #eeeeee;
             }
         }
+
         .full {
             width: 100%;
         }
+
         .half {
             border-bottom: 1px dotted #eeeeee;
             display: inline-block;
             padding: 0;
+
             &.left {
                 width: 40%;
                 text-align: left;
             }
+
             &.right {
                 width: 58%;
                 text-align: right;
             }
         }
+
         .concepto {
             background-color: #ffffff;
             font-size: 1.1em;
@@ -144,6 +157,7 @@ hr {
             color: $setColor;
             font-family: $font_secundary;
         }
+
         .dato {
             background-color: #ffffff;
             font-size: 1.2em;
@@ -158,13 +172,16 @@ hr {
     width: 100%;
     font-family: $font_primary;
     border-collapse: collapse;
+
     tr.overpast:hover {
-        background-color: rgba($setColor,0.1);
+        background-color: rgba($setColor, 0.1);
     }
+
     td {
         padding: 0px 5px;
         //  border:1px solid #CCCCCC;
     }
+
     .concepto {
         width: 130px;
         text-align: right;
@@ -172,10 +189,12 @@ hr {
         vertical-align: top;
         // text-transform: uppercase;
     }
+
     .error {
         color: #cc0000;
         font-weight: 900;
     }
+
     .dato {
         vertical-align: top;
         font-weight: 900;
@@ -186,6 +205,7 @@ hr {
         .serc {
             visibility: hidden;
         }
+
         .search {
             border-radius: 4px;
             width: 200px;
@@ -194,9 +214,11 @@ hr {
             outline: none;
             border: 1px solid $color_btn_default_top;
             font-size: 1.2em;
+
             &:focus {
                 background-color: rgba(10, 5, 5, 0.08);
-                & ~ .serc {
+
+                &~.serc {
                     visibility: visible;
                 }
             }
@@ -212,13 +234,16 @@ hr {
             display: inline-block;
             position: absolute;
             outline: none;
+
             &:focus {
                 background-color: rgba(10, 5, 5, 0.03);
             }
         }
+
         .customerType {
             position: absolute;
             top: 14px;
+
             span {
                 color: $dark;
                 font-size: 0.8em;
@@ -235,10 +260,12 @@ hr {
             right: 0;
             z-index: 10;
             transition: 0.3s ease all;
+
             &.turn.rotar {
                 transform: rotate(180deg);
             }
         }
+
         .list_items {
             position: absolute;
             top: 20px;
@@ -263,12 +290,14 @@ hr {
                     background-color: rgba(100, 100, 100, 0.03);
                     border-bottom: 1px dashed $setColor;
                 }
+
                 &.enable {
                     color: $setColor;
                 }
             }
         }
     }
+
     .enlace {
         vertical-align: top;
         text-align: right;
@@ -286,7 +315,7 @@ hr {
             }
         }
     }
- 
+
     .formSales {
         width: 100%;
 
@@ -309,6 +338,7 @@ hr {
                 border-radius: 3px;
                 outline: none;
             }
+
             .textbox {
                 min-width: 200px;
                 padding: 4px 5px;
@@ -317,7 +347,7 @@ hr {
                 outline: none;
             }
 
-       
+
         }
 
         .hide {
@@ -337,6 +367,7 @@ hr {
         font-weight: 900;
         padding: 4px 0;
     }
+
     td {
         color: #333333;
         border-bottom: 1px dotted #dddddd;
@@ -344,22 +375,28 @@ hr {
         overflow: hidden;
         font-weight: 500;
     }
+
     tbody {
         border-top: 1px solid $setColor;
     }
+
     // ANCHOS DE COLUMNAS
     .w1 {
         width: 350px;
     }
+
     .w2 {
         width: 80px;
     }
+
     .w3 {
         width: 100px;
     }
+
     .w4 {
         width: 50px;
     }
+
     .w5 {
         width: 450px;
     }
@@ -372,21 +409,26 @@ hr {
     .zone_01 {
         background-color: rgba(144, 146, 158, 0.01);
     }
+
     .zone_02 {
         background-color: rgba(144, 146, 158, 0.05);
     }
+
     .zone_03 {
         background-color: rgba(144, 146, 158, 0.08);
     }
+
     // ESTILOS DE COLUMNAS
 
     th.product {
         background-color: #ffffff;
     }
+
     .product {
         text-align: left;
         position: relative;
-        &:hover > i.fa-bars {
+
+        &:hover>i.fa-bars {
             display: block;
         }
 
@@ -398,14 +440,17 @@ hr {
             display: none;
             cursor: pointer;
             font-size: 15px;
+
             &:hover {
                 color: $setColor;
             }
         }
+
         i.fa-ellipsis-v {
             color: #eeeeee;
         }
     }
+
     .quantity {
         text-align: right;
         padding-right: 13px;
@@ -425,24 +470,30 @@ hr {
             margin-left: 3px;
         }
     }
+
     .price {
         text-align: right;
         padding-right: 12px;
     }
+
     .cost {
         text-align: right;
         padding-right: 12px;
         font-weight: 900;
     }
+
     .days {
         text-align: center;
     }
+
     .desct {
         text-align: center;
     }
+
     .sel {
         position: relative;
-        &:hover > i {
+
+        &:hover>i {
             display: block;
         }
 
@@ -468,6 +519,7 @@ hr {
     overflow: hidden;
     // box-shadow: 1px 5px 10px rgba(0,0,0,0.2);
     display: none;
+
     .sel_product {
         width: 100%;
         position: absolute;
@@ -479,7 +531,7 @@ hr {
         top: 0;
         outline: none;
         z-index: 10;
-       
+
 
         i {
             position: absolute;
@@ -487,6 +539,7 @@ hr {
             top: 10px;
             font-size: 0.8rem;
         }
+
         .textbox-finder {
             border: none;
             outline: none;
@@ -495,6 +548,7 @@ hr {
             font-size: 1.1em;
             font-weight: 700;
             text-transform: uppercase;
+
             &:focus {
                 background-color: #f6f6f6;
                 border: 1px dotted #000000;
@@ -527,19 +581,39 @@ hr {
             // }
 
             .prodName {
-                width: 350px;
+                width: 380px;
                 float: left;
             }
+
             .prodStock {
                 width: 20px;
                 float: left;
                 text-align: center;
             }
-            .prodLevel {
-                width: 80px;
+
+            .prodReserved {
+                width: 20px;
                 float: left;
-                text-align: left;
+                text-align: center;
             }
+
+            .prodLevel {
+                width: 30px;
+                float: left;
+                text-align: center;
+
+                i {
+                    font-size: 1.3em;
+
+                    &:hover {
+                        font-size: 1.4em;
+                        background-color: $setColor;
+                        color: #FFFF99;
+                    }
+
+                }
+            }
+
             .prodsubct {
                 width: auto;
                 float: left;
@@ -548,6 +622,94 @@ hr {
         }
     }
 }
+
+.menuStock {
+    background-color: #FFFFFF;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 60px;
+    left: 100px;
+    bottom: 60px;
+    right: 60px;
+    z-index: 1000;
+
+    .rowProyect {
+        width: 100%;
+        display: flex;
+
+
+        .tit {
+            border-style: solid;
+            border-width: 1px;
+            border-color: #FFFFFF #CCCCCC #CCCCCC #FFFFFF;
+            padding: 6px 10px;
+            background-color: #EEEEEE;
+            font-weight: 700;
+        }
+
+        .dat {
+            border-style: dotted;
+            border-width: 1px;
+            border-color: #FFFFFF #CFCFCF #CFCFCF #FFFFFF;
+            padding: 4px 10px;
+            background-color: #FFFFFF;
+        }
+
+        .proyectRibbon {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            i {
+                font-size: 1.8em;
+                cursor: pointer;
+
+                &:hover {
+                    color: #0099BB;
+                }
+            }
+
+            .proyectProduct {
+                font-size: 1.6em;
+                font-family: $font_secundary;
+            }
+        }
+
+        .proyectName {
+            width: 50%;
+        }
+        .proyectStatus {
+            width: 10%;
+        }
+
+        .proyectSku,
+        .proyectSerie {
+            width: 10%;
+        }
+
+        .proyectDateIni,
+        .proyectDateFin {
+            width: 10%;
+        }
+
+
+    }
+
+}
+
+.txtcnt {
+    text-align: center;
+}
+
+.txtrgt {
+    text-align: right;
+}
+
+.txtlft {
+    text-align: left;
+}
+
 
 .box_minimenu {
     width: 150px;
@@ -563,6 +725,7 @@ hr {
     color: $color_deep_table;
     z-index: 100;
     display: none;
+
     &::before {
         position: absolute;
         width: 0;
@@ -597,6 +760,7 @@ hr {
         }
     }
 }
+
 .box_loading_deep,
 .box_modal_deep {
     position: fixed;
@@ -643,9 +807,11 @@ hr {
         box-shadow: 0px 6px 12px 12px rgba(0, 0, 0, 0.3);
         position: absolute;
         top: 120%;
+
         .row {
             height: 100%;
         }
+
         .space_end {
             height: 50px;
         }
@@ -656,6 +822,7 @@ hr {
             bottom: 0px;
             z-index: 100;
         }
+
         .form {
             padding: 30px 0;
 
@@ -688,6 +855,7 @@ hr {
                     top: 0;
                     left: 0;
                 }
+
                 .form-select {
                     position: absolute;
                     border: none;
@@ -697,6 +865,7 @@ hr {
                     width: 95%;
                     z-index: 10;
                 }
+
                 .textbox {
                     border: none;
                     padding: 0 10px 0 50px;
@@ -707,12 +876,14 @@ hr {
                     top: 20px;
                     left: 0;
                 }
+
                 .fa-calendar-alt {
                     position: absolute;
                     top: 20px;
                     font-size: 1.8em;
                     color: #cccccc;
                     cursor: pointer;
+
                     &:hover {
                         color: $setColor;
                     }
@@ -729,6 +900,7 @@ hr {
                     right: 10px;
                 }
             }
+
             &.qst {
                 padding: 60px 30px 30px 30px;
                 height: 100%;
@@ -742,22 +914,28 @@ hr {
                 height: 100%;
                 border-radius: 0px 6px 6px 0px;
             }
+
             &.img01 {
                 background-image: url("../img/programer/20.png");
             }
+
             &.img02 {
                 background-image: url("../img/programer/21.png");
             }
+
             .error {
                 label {
                     color: $btn-red;
                 }
+
                 .textbox {
                     background-color: transparent;
                 }
+
                 border-color: $btn-red;
                 background-color: rgba($btn-red, 0.2);
             }
+
             .list_select {
                 position: relative;
                 height: 50px;
@@ -787,15 +965,18 @@ hr {
                 }
             }
         }
+
         .product_container {
             width: 100%;
 
             h2 {
                 font-size: 1.7em;
+
                 span {
                     font-size: 0.8em;
                 }
             }
+
             .subcatego,
             .catego {
                 // float: right;
@@ -821,20 +1002,24 @@ hr {
                     &.pdd_prc {
                         text-align: right;
                     }
+
                     &.blk {
                         font-weight: 700;
                         color: #000000;
                         // font-size: 1.1em;
                         padding-top: 20px;
                     }
+
                     &.dep {
                         padding-left: 30px;
                     }
+
                     &.pnd {
                         color: rgba($btn-red, 0.8);
                         background-color: rgba($btn-red, 0.04);
                         border-bottom: 1px dashed rgba($btn-red, 0.3);
                     }
+
                     &.pdd_nam {
                         text-overflow: ellipsis;
                         overflow: hidden;
@@ -846,12 +1031,12 @@ hr {
     }
 }
 
-.serie_group  {
+.serie_group {
     width: 100%;
     height: 100px;
     border-bottom: 1px solid #DDDDDD;
 
-    .serie_top  {
+    .serie_top {
         width: 100%;
         height: 25%;
         padding: 4px 0;
@@ -863,7 +1048,8 @@ hr {
             font-weight: 700;
         }
     }
-    .serie_bottom  {
+
+    .serie_bottom {
         width: 100%;
         height: 40px;
         overflow-y: visible;
@@ -878,7 +1064,8 @@ hr {
 .forValid {
     border: 1px solid #cc0000 !important;
     background-color: rgba(#cc0000, 0.1);
-    &~.novalid{
+
+    &~.novalid {
         color: #cc0000;
         font-size: 1.2em;
         position: absolute;
@@ -891,6 +1078,7 @@ hr {
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
@@ -915,6 +1103,7 @@ hr {
         }
     }
 }
+
 .box_days {
     width: 70px;
     height: 30px;
@@ -943,6 +1132,7 @@ hr {
 
     ul {
         border-bottom: 1px dashed $setColor;
+
         li {
             display: inline-block;
         }
@@ -967,11 +1157,13 @@ hr {
         font-size: 0.9em;
         padding: 3px 10px;
         cursor: pointer;
+
         &:hover {
             color: #000000;
             font-weight: 700;
             text-shadow: -1px -1px 1px #ffffff;
         }
+
         i {
             font-size: 1.2em;
         }

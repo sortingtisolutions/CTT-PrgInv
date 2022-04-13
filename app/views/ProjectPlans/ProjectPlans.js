@@ -151,6 +151,16 @@ function get_counter_pending(pj, qt, pd) {
     fillField(pagina, par, tipo, selector);
 }
 
+/**  Obtiene el listado de projectos del producto  */
+function get_StockProjects(prdId) {
+    var pagina = 'ProjectPlans/stockProdcuts';
+    var par = `[{"prdId":"${prdId}"}]`;
+    var tipo = 'json';
+    var selector = put_StockProjects;
+    caching_events('get_products');
+    fillField(pagina, par, tipo, selector);
+}
+
 /**  Llena el listado de prductores */
 function put_customers(dt) {
     caching_events('put_customers');
@@ -310,22 +320,83 @@ function put_products(dt) {
             let ava = 'enable';
             H += `
                 <li class="${ava}" data_indx ="${v}" data_content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
-                    <div class="prodName">${u.prd_name}</div>
-                    <div class="prodStock">${u.stock}</div>
-                    <div class="prodLevel">${level}</div>
-                    <div class="prodsubct">${u.sbc_name}</div>
+                    <div class="prodEvent prodName">${u.prd_name}</div>
+                    <div class="prodEvent prodStock">${u.stock}</div>
+                    <div class="prodEvent prodReserved">0</div>
+                    <div class="prodLevel"><i class="fas fa-bars" id="${v}"></i></div>
+                    <div class="prodEvent prodsubct">${u.sbc_name}</div>
+                    
                 </li>
             `;
         }
     });
     $('.list_products ul').html(H);
 
-    $('.list_products ul li')
+    $('.list_products ul li .prodEvent ')
         .unbind('click')
         .on('click', function () {
-            let inx = $(this).attr('data_indx');
+            let inx = $(this).parent('li').attr('data_indx');
             fill_budget(prod[inx], inx);
         });
+
+    $('.prodLevel i').on('click', function () {
+        let inx = $(this).attr('id');
+        let prdId = prod[inx].prd_id;
+        console.log(prdId);
+
+        let H = `
+            <div class="menuStock" style="display:none;">
+                <div class="rowProyect">
+                    <div class="proyectRibbon tit">
+                        <span class="proyectProduct">Nombre del producto</span>
+                        <i class="far fa-window-close closeWindow"></i>
+                    </div>
+                </div>    
+                <div class="rowProyect">
+                    <div class="proyectName tit txtlft">Proyecto</div>
+                    <div class="proyectSku tit txtcnt">SKU</div>
+                    <div class="proyectSerie tit txtcnt">Serie</div>
+                    <div class="proyectStatus tit txtcnt">Estatus</div>
+                    <div class="proyectDateIni tit txtcnt">Fecha de Inicio</div>
+                    <div class="proyectDateFin tit txtcnt">Fecha de Término</div>
+                </div>
+                   
+            </div>
+        `;
+
+        $('body').prepend(H);
+
+        $('.menuStock').fadeIn('slow');
+
+        $('.closeWindow').on('click', function () {
+            $('.menuStock').fadeOut('slow', function () {
+                $(this).remove();
+            });
+        });
+
+        get_StockProjects(prdId);
+    });
+}
+
+function put_StockProjects(dt) {
+    console.log(dt);
+
+    let prdname = dt[0].prd_name;
+    $('.proyectProduct').html(prdname);
+
+    $.each(dt, function (v, u) {
+        let H = `
+        <div class="rowProyect">
+            <div class="proyectName dat txtlft">${u.pjt_name}</div>
+            <div class="proyectSku dat txtcnt">${u.ser_sku}</div>
+            <div class="proyectSerie dat txtcnt">${u.ser_serial_number}</div>
+            <div class="proyectStatus dat txtcnt">${u.ser_situation}</div>
+            <div class="proyectDateIni dat txtcnt">${u.pjtpd_day_start}</div>
+            <div class="proyectDateFin dat txtcnt">${u.pjtpd_day_end}</div>
+        </div>
+        `;
+        $('.menuStock').append(H);
+    });
 }
 
 /**  Activa los botones de acciones */
@@ -473,12 +544,14 @@ function add_boton() {
             .slideDown(200);
         $(`.list_products`).css({display: 'none'});
 
-        $('.box_list_products')
-            .unbind('mouseleave')
-            .on('mouseleave', function () {
+        $('.close-finder')
+            .unbind('click')
+            .on('click', function () {
                 $('.box_list_products').fadeOut(200, function () {
                     $('.sel_product .textbox-finder').val('');
                     $(`#Products .list_products ul`).html('');
+
+                    $('.menuStock').remove();
                 });
             });
 

@@ -326,6 +326,7 @@ function settingTable(catId) {
         processing: true,
         serverSide: true,
         ajax: {url: 'Products/tableProducts', type: 'POST', data: {catId: catId, filter: flt}},
+        columnDefs: [{targets: -1, data: null, defaultContent: '<butotn>click</button>'}],
         columns: [
             {data: 'editable', class: 'editable edit', orderable: false},
             {data: 'produsku', class: 'produsku sku'},
@@ -344,11 +345,11 @@ function settingTable(catId) {
     });
 
     $('.tblProdMaster')
-        .delay(1000)
+        .delay(2000)
         .slideDown('fast', function () {
-            // tabla.reload();
+            //tabla.reload();
             console.log('Recarga');
-            $('.produsku').trigger('click');
+            //$('th.produsku').trigger('click');
             activeIcons();
             deep_loading('C');
         });
@@ -363,21 +364,21 @@ function getModalSeries(id) {
 
 /** +++++  Activa los iconos */
 function activeIcons() {
-    // $('span.toLink')
-    //     .unbind('click')
-    //     .on('click', function () {
-    //         let id = $(this).parents('tr');
-    //         let prd = id.attr('id');
-    //         let qty = $(this).text();
-    //         let pkt = id.children('td.prodtype').text();
-    //         let pkn = id.children('td.prodname').text();
-    //         // let qty = $(this).parent().attr('data-content').split('|')[2];
-    //         // let pkt = $(this).parent().attr('data-content').split('|')[3];
-    //         // let pkn = $(this).parent().attr('data-content').split('|')[1];
-    //         if (qty > 0) {
-    //             getSeries(prd);
-    //         }
-    //     });
+    $('span.toLink')
+        .unbind('click')
+        .on('click', function () {
+            let id = $(this).parents('tr');
+            let prd = id.attr('id');
+            let qty = $(this).text();
+            let pkt = id.children('td.prodtype').text();
+            let pkn = id.children('td.prodname').text();
+            // let qty = $(this).parent().attr('data-content').split('|')[2];
+            // let pkt = $(this).parent().attr('data-content').split('|')[3];
+            // let pkn = $(this).parent().attr('data-content').split('|')[1];
+            if (qty > 0) {
+                getSeries(prd);
+            }
+        });
 
     $('.invoiceView')
         .unbind('click')

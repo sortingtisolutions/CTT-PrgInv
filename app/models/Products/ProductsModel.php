@@ -327,7 +327,7 @@ public function saveEdtSeries($params)
                     ";
                     $this->db->query($qry1);
 
-        } elseif ($prdDi > '0' && $serDc == '0'){
+        } elseif ($serDi > '0' && $serDc == '0'){
             $qry1 = "DELETE FROM ctt_products_documents 
                      WHERE dcp_id = '$serDi';
                     ";

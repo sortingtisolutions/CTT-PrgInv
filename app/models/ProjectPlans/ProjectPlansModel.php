@@ -138,23 +138,35 @@ public function listProjectsType($params)
                     WHEN prd_level ='K' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
                     WHEN prd_level ='P' THEN 
-                        (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
-                        INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                        WHERE prd_id =  pd.prd_id
-                        AND  pjtdt_id = 0 AND sr.ser_status = 1
-                        )
+                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
-                        (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
-                        INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                        WHERE prd_id =  pd.prd_id
-                        AND  pjtdt_id = 0 AND sr.ser_status = 1
-                        )
+                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
                     END AS stock
             FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
             WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 
                 AND upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%'
             ORDER BY pd.prd_name ;";
+        return $this->db->query($qry);
+    } 
+
+// Listado de stock del productos
+    public function stockProdcuts($params)
+    {
+
+        $prdId = $this->db->real_escape_string($params['prdId']);
+
+        $qry = "SELECT
+                    pr.prd_name, ifnull(pj.pjt_name,'') as pjt_name, sr.ser_sku, sr.ser_serial_number, 
+                    sr.ser_situation, ifnull(pe.pjtpd_day_start,'') as pjtpd_day_start, 
+                    ifnull(pe.pjtpd_day_end,'') as pjtpd_day_end, pr.prd_id 
+                FROM ctt_series                 AS sr
+                INNER JOIN ctt_products         AS pr ON pr.prd_id = sr.prd_id
+                LEFT JOIN ctt_projects_detail   AS pd ON pd.pjtdt_id = sr.pjtdt_id
+                LEFT JOIN ctt_projects_content  AS pc ON pc.pjtcn_id = pd.pjtcn_id
+                LEFT JOIN ctt_projects          AS pj ON pj.pjt_id = pc.pjt_id
+                LEFT JOIN ctt_projects_periods  AS pe ON pe.pjtdt_id = sr.pjtdt_id
+                WHERE sr.prd_id = $prdId;";
         return $this->db->query($qry);
     } 
 
@@ -394,19 +406,9 @@ public function listProjectsType($params)
                             WHEN pjtcn_prod_level ='K' THEN 
                                 (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pc.prd_id)
                             WHEN pjtcn_prod_level ='P' THEN 
-                                (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
-                                INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                                WHERE prd_id =  pc.prd_id
-                                AND sr.pjtdt_id = 0
-                                AND sr.ser_status = 1
-                                )
+                                (SELECT prd_stock FROM ctt_products WHERE prd_id = pc.prd_id)
                             ELSE 
-                                (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
-                                INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                                WHERE prd_id =  pc.prd_id
-                                AND sr.pjtdt_id = 0
-                                AND sr.ser_status = 1
-                                )
+                                (SELECT prd_stock FROM ctt_products WHERE prd_id = pc.prd_id)
                             END AS bdg_stock
                     FROM ctt_projects_content AS pc
                     INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
