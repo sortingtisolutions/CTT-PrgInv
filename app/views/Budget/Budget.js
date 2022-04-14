@@ -130,6 +130,16 @@ function get_products_related(id, tp) {
     fillField(pagina, par, tipo, selector);
 }
 
+/**  Obtiene el listado de projectos del producto  */
+function get_StockProjects(prdId) {
+    var pagina = 'Budget/stockProdcuts';
+    var par = `[{"prdId":"${prdId}"}]`;
+    var tipo = 'json';
+    var selector = put_StockProjects;
+    caching_events('get_products');
+    fillField(pagina, par, tipo, selector);
+}
+
 /**  Llena el listado de prductores */
 function put_customers(dt) {
     caching_events('put_customers');
@@ -1247,6 +1257,7 @@ function set_minimenu() {
             var H = `
         <li data_content="${prdId}" class="mini_option killProd"><i class="fas fa-trash"></i> Eliminar</li>
         <li data_content="${prdId}" data_level="${prdLvl}" class="mini_option infoProd"><i class="fas fa-info-circle"></i> Información</li>
+        <li data_content="${prdId}" data_level="${prdLvl}" class="mini_option stokProd"><i class="fas fa-archive"></i> Inventario</li>
             `;
             $('.list_menu ul').html(H);
 
@@ -1274,10 +1285,76 @@ function set_minimenu() {
                         case 'infoProd':
                             show_info_product(prdId, prdLvl);
                             break;
+                        case 'stokProd':
+                            stock_product(prdId, prdLvl);
+                            break;
                         default:
                     }
                 });
         });
+}
+
+function stock_product(prdId, prdLvl) {
+    console.log(prdId, prdLvl);
+
+    let H = `
+            <div class="menuStock" style="display:none;">
+            <div class="rowProyect-title">
+
+                <div class="rowProyect">
+                    <div class="proyectRibbon tit">
+                        <span class="proyectProduct">Nombre del producto</span>
+                        <i class="far fa-window-close closeWindow"></i>
+                    </div>
+                </div>    
+
+                <div class="rowProyect">
+                    <div class="proyectName tit txtlft">Proyecto</div>
+                    <div class="proyectSku tit txtcnt">SKU</div>
+                    <div class="proyectSerie tit txtcnt">Serie</div>
+                    <div class="proyectStatus tit txtcnt">Estatus</div>
+                    <div class="proyectDateIni tit txtcnt">Fecha de Inicio</div>
+                    <div class="proyectDateFin tit txtcnt">Fecha de Término</div>
+                </div>
+
+            </div>
+
+            <div class="rowProyect-grid"></div>
+            
+        </div>
+    `;
+
+    $('body').prepend(H);
+    $('.menuStock').fadeIn('slow');
+
+    $('.closeWindow').on('click', function () {
+        $('.menuStock').fadeOut('slow', function () {
+            $(this).remove();
+        });
+    });
+
+    get_StockProjects(prdId);
+}
+
+function put_StockProjects(dt) {
+    console.log(dt);
+
+    let prdname = dt[0].prd_name;
+    $('.proyectProduct').html(prdname);
+
+    $.each(dt, function (v, u) {
+        let H = `
+        <div class="rowProyect">
+            <div class="proyectName dat txtlft">${u.pjt_name}</div>
+            <div class="proyectSku dat txtcnt">${u.ser_sku}</div>
+            <div class="proyectSerie dat txtcnt">${u.ser_serial_number}</div>
+            <div class="proyectStatus dat txtcnt">${u.ser_situation}</div>
+            <div class="proyectDateIni dat txtcnt">${u.pjtpd_day_start}</div>
+            <div class="proyectDateFin dat txtcnt">${u.pjtpd_day_end}</div>
+        </div>
+        `;
+        $('.rowProyect-grid').append(H);
+    });
 }
 
 function order_subcategories() {
