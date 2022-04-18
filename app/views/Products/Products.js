@@ -331,6 +331,7 @@ function settingTable(catId) {
         processing: true,
         serverSide: true,
         ajax: {url: 'Products/tableProducts', type: 'POST', data: {catId: catId, filter: flt}},
+        columnDefs: [{targets: -1, data: null, defaultContent: '<butotn>click</button>'}],
         columns: [
             {data: 'editable', class: 'editable edit', orderable: false},
             //{data: 'producid', class: 'producid id hide'},
@@ -350,7 +351,7 @@ function settingTable(catId) {
     });
     
     $('.tblProdMaster')
-        .delay(1000)
+        .delay(2000)
         .slideDown('fast', function () {
             // tabla.reload();
             

@@ -131,7 +131,7 @@ public function listProjectsType($params)
                         WHEN bdg_prod_level ='P' THEN 
                             (SELECT prd_stock FROM ctt_products WHERE prd_id = bg.prd_id)
                         ELSE 
-                        (SELECT prd_stock FROM ctt_products WHERE prd_id = bg.prd_id)
+                            (SELECT prd_stock FROM ctt_products WHERE prd_id = bg.prd_id)
                         END AS bdg_stock
                 FROM ctt_budget AS bg
                 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
@@ -167,17 +167,9 @@ public function listDiscounts($params)
                     WHEN prd_level ='K' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
                     WHEN prd_level ='P' THEN 
-                        (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
-                        INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                        WHERE st.prd_id =  pd.prd_id
-                        AND  pjtdt_id = 0 AND sr.ser_status = 1
-                        )
+                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
-                        (SELECT ifnull(SUM(stp_quantity),0) FROM ctt_series AS sr 
-                        INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id 
-                        WHERE st.prd_id =  pd.prd_id
-                        AND  pjtdt_id = 0 AND sr.ser_status = 1
-                        )
+                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
                     END AS stock
             FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
