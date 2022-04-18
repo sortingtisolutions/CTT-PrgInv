@@ -16,7 +16,7 @@
         text-align: right;
         color: #666666;
         // border: 1px solid #00cc00;
-        
+
     }
 
     .textbox {
@@ -54,36 +54,47 @@
         font-size: 1.2em;
     }
 
-    .wt1 {
-        width: 10%;
-    }
-    .wt2 {
-        width: 20%;
-    }
-    .wt3 {
-        width: 30%;
-    }
-    .wt4 {
-        width: 40%;
-    }
-    .wt5 {
-        width: 50%;
-    }
-    .wt6 {
-        width: 60%;
-    }
-    .wt7 {
-        width: 70%;
-    }
-    .wt8 {
-        width: 80%;
-    }
-    .wt9 {
-        width: 90%;
-    }
-    .wtf {
-        width: 100%;
-    }
+}
+
+
+.wt1 {
+    width: 10%;
+}
+
+.wt2 {
+    width: 20%;
+}
+
+.wt3 {
+    width: 30%;
+}
+
+.wt4 {
+    width: 40%;
+}
+
+.wt5 {
+    width: 50%;
+}
+
+.wt6 {
+    width: 60%;
+}
+
+.wt7 {
+    width: 70%;
+}
+
+.wt8 {
+    width: 80%;
+}
+
+.wt9 {
+    width: 90%;
+}
+
+.wtf {
+    width: 100%;
 }
 
 .form__modal {
@@ -102,11 +113,13 @@
         overflow: visible;
         padding: 20px;
     }
+
     .form__modal-bottons {
         grid-area: 2 / 1 / 3 / 2;
         background-color: #ffffff;
         padding: 5px 20px;
     }
+
     .form__modal-image {
         grid-area: 1 / 2 / 3 / 3;
 
@@ -117,9 +130,11 @@
             height: 100%;
             border-radius: 0px 6px 6px 0px;
         }
+
         &.img01 {
             background-image: url("../img/programer/20.png");
         }
+
         &.img02 {
             background-image: url("../img/programer/21.png");
         }
@@ -144,6 +159,3 @@
         }
     }
 }
-
-
-

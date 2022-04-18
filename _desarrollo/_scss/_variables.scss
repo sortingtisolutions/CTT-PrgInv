@@ -9,7 +9,8 @@ $inputs-label: #2c333a;
 //$color_btn_default_top: #6aaceb;
 // $color_btn_default_bot: #32689b;
 
-$setColor: #3c5878;
+$setColor: hsla(212, 33%, 35%, 1);
+$setColorHover: hsla(212, 33%, 16%, 1);
 
 $color_btn_default_top: rgba($setColor, 0.4);
 $color_btn_default_bot: rgba($setColor, 1);
@@ -23,9 +24,11 @@ $color_deep_modl: rgba(#000000, 0.6);
 $color_btn_cancela_top: rgba(223, 45, 1, 0.3);
 $color_btn_cancela_bot: rgba(158, 42, 13, 0.8);
 
-$font_primary: "Shadows Into Light", sans-serif;
+$font_primary: "Shadows Into Light",
+sans-serif;
 //$font_primary: "Titillium Web", sans-serif;
-$font_secundary: "Bebas Neue", cursive;
+$font_secundary: "Bebas Neue",
+cursive;
 $font_color_principal: #999999;
 $light: #f0f0f0;
 $dark: $color_btn_default_bot; //#3c5878; // #283446;

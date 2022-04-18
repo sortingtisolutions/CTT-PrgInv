@@ -561,8 +561,8 @@ hr {
         max-height: 200px;
         background-color: #ffffff;
         border: 1px dotted #bbbbbb;
-        box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.2);
-        padding: 10px;
+        box-shadow: 5px -5px 15px rgba(0, 0, 0, 0.2);
+        // padding: 10px;
         overflow: auto;
         position: absolute;
         top: 20px;
@@ -572,8 +572,8 @@ hr {
         li {
             cursor: pointer;
             clear: both;
-            border-bottom: 1px dashed #dddddd;
-            padding: 1px 0;
+            border-bottom: 1px dashed #eeeeee;
+            padding: 2px 2px;
             overflow: hidden;
             // &:hover {
             //     border-bottom: 1px dashed $setColor;
@@ -586,7 +586,7 @@ hr {
             }
 
             .prodStock {
-                width: 20px;
+                width: 50px;
                 float: left;
                 text-align: center;
             }
@@ -632,6 +632,14 @@ hr {
     bottom: 60px;
     right: 60px;
     z-index: 1000;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 78px 1fr;
+
+
+    .rowProyect-grid {
+        overflow: scroll;
+    }
 
     .rowProyect {
         width: 100%;
@@ -645,7 +653,13 @@ hr {
             padding: 6px 10px;
             background-color: #EEEEEE;
             font-weight: 700;
+
+            &:last-child {
+                margin-right: 12px;
+            }
         }
+
+
 
         .dat {
             border-style: dotted;
@@ -674,18 +688,20 @@ hr {
                 font-size: 1.6em;
                 font-family: $font_secundary;
             }
+
         }
 
         .proyectName {
             width: 50%;
         }
+
         .proyectStatus {
-            width: 10%;
+            width: 60px;
         }
 
         .proyectSku,
         .proyectSerie {
-            width: 10%;
+            width: 13%;
         }
 
         .proyectDateIni,

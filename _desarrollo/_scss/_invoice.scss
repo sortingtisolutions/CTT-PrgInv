@@ -1,0 +1,673 @@
+:root {
+    --in-white: hsl(360, 100%, 100%);
+    --in-black: hsl(0 0% 0%);
+    --in-gray: hsl(236, 0%, 96%);
+    --in-oxford: hsl(236, 3%, 75%);
+    --br-gray-soft: hsl(236, 3%, 94%);
+    --br-gray-medium: hsl(236, 3%, 80%);
+    --br-gray-hard: hsl(236, 3%, 40%);
+    --br-gray-hard-alfa: hsla(236, 3%, 40%, 0.09);
+
+    // Cabezas de columna
+    --cl-color-costBase: hsla(236, 3%, 40%, 0.03);
+    --cl-color-costTrip: hsla(236, 3%, 40%, 0.09);
+    --cl-color-costTest: hsla(236, 3%, 40%, 0.15);
+
+    // Modales
+    --md-shadow-color: hsla(0, 0%, 0%, 0.5);
+
+}
+
+
+.invoice__container {
+    color: var(--in-black);
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 1fr 14rem;
+    grid-template-rows: 2rem auto;
+    font-size: 1.2em;
+
+
+
+    .invoice__section-panel,
+    .invoice__section-button,
+    .invoice__section-sidebar {
+        background-color: var(--in-gray);
+    }
+
+    // panel superior: nombre del proyecto y tablero de control
+    .invoice__section-panel {
+        font-size: 1.4em;
+        font-family: $font-secundary;
+        font-weight: 100;
+        padding: 0.2rem;
+        display: flex;
+        justify-content: space-between;
+
+        .panel__name {
+            visibility: hidden;
+
+
+            i {
+                margin-left: 10px;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .invoice__section-button {
+        padding-top: .25rem;
+        padding-left: .6rem;
+    }
+
+    // panel sidebar: Muestra totales, lista de versiones y boton de comentarios
+    .invoice__section-sidebar {
+        display: grid;
+        grid-template-rows: 12rem auto 2.8rem;
+
+        // Totales
+        .sidebar__totals {
+            font-family: $font-secundary;
+
+            table {
+                font-size: 1.2em;
+                border-collapse: collapse;
+                width: 100%;
+
+                tr {
+                    border-top: 1px dotted var(--in-oxford);
+
+                    &:first-child,
+                    &:last-child {
+                        border-top: none;
+                    }
+
+                    td {
+                        padding: 0 0.4rem;
+                    }
+                }
+
+                .totals-numbers {
+                    text-align: right;
+                }
+            }
+        }
+
+        .sidebar__versions {
+            padding: .5rem 0;
+
+
+            .version__button {
+                padding: .5rem;
+            }
+
+            .version__list-title {
+                font-family: $font-secundary;
+                font-size: 1.2em;
+                text-align: center;
+                width: 100%;
+                display: inline-block;
+
+            }
+
+            .version__list {
+                position: relative;
+                height: 95%;
+
+                ul {
+
+                    position: absolute;
+                    width: 100%;
+                    bottom: 0;
+                    top: 1.8rem;
+                    // left: 0;
+                    // right: 0;
+                    overflow: scroll;
+
+                    li {
+                        padding: .1rem .8rem;
+                        cursor: pointer;
+
+                        &:hover {
+                            font-weight: 700;
+                        }
+
+                        span {
+                            display: inline-block;
+                            width: 50%;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+        }
+
+        .sidebar__comments {
+            padding: .6rem .4rem;
+        }
+
+        .invoice_button {
+            visibility: hidden;
+        }
+
+
+    }
+
+    .invoice__section-panel,
+    .invoice__section-button {
+        z-index: 50;
+    }
+
+
+
+
+    // Parrilla de productos seleccionados
+    .invoice__section-grid {
+        height: auto;
+        overflow: hidden;
+        background-color: var(--in-gray);
+
+        // Panel de control
+        .invoice_controlPanel {
+            padding: .4rem .8rem;
+            position: relative;
+
+
+            .menu-sections {
+                position: absolute;
+                top: 2.0rem;
+                left: 1.0rem;
+                width: auto;
+                min-height: 50px;
+                padding: .4rem;
+                background-color: $setColor;
+                border-radius: .3rem;
+                z-index: 300;
+                display: none;
+
+                ul li {
+                    padding: .1rem .8rem .1rem .2rem;
+                    color: #ffffff;
+                    text-shadow: 1px 1px 1px #000000;
+                    font-size: 1.1em;
+                    font-weight: 700;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: $setColorHover;
+                    }
+
+                    i {
+                        font-size: 1.1em;
+                        padding: .2rem;
+                    }
+                }
+
+            }
+
+            .invoice_button {
+                visibility: hidden;
+            }
+        }
+
+        .invoice__box-table {
+            background-color: #ffffff;
+            width: 100%;
+            height: 90%;
+
+            table {
+                width: 100%;
+                color: #666666;
+                font-weight: 100;
+                width: 880px;
+
+                .coltrip,
+                .coltest {
+                    content: '';
+                    display: none;
+                }
+
+                thead th {
+                    background-color: var(--in-gray);
+                    text-align: center;
+                    padding: 2rem 0.2rem 0.1rem 0.2rem;
+                    overflow: none;
+
+                    .invoice_col_header {
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+
+                        &.costBase {
+                            left: -360px;
+                            width: 460px;
+                            background-color: var(--cl-color-costBase);
+                        }
+
+                        &.costTrip {
+                            left: -140px;
+                            width: 240px;
+                            background-color: var(--cl-color-costTrip);
+                        }
+
+                        &.costTest {
+                            left: -140px;
+                            width: 240px;
+                            background-color: var(--cl-color-costTest);
+                        }
+
+                    }
+
+                    &.colcontrol {
+                        padding: 0;
+
+                        i {
+                            padding: .2rem .4rem;
+                            border: 1px solid $setColor;
+                            border-radius: .3rem;
+                            font-size: 1.2em;
+                            cursor: pointer;
+
+                            &:hover {
+                                background-color: $setColor;
+                                color: var(--in-white);
+                            }
+                        }
+                    }
+
+                }
+
+                tbody {
+
+                    &.sections_products {
+                        display: none;
+                    }
+
+                    th,
+                    td {
+                        background-color: var(--in-white);
+                        border-bottom: 1px dotted var(--br-gray-medium);
+                        border-right: 1px dotted var(--br-gray-medium);
+                        padding: 0.2rem 0.8rem;
+
+                        &:last-child {
+                            border-right: none;
+                        }
+                    }
+
+                    .col_product {
+                        overflow: hidden;
+                        width: 400px;
+
+                        .menu_product {
+                            position: absolute;
+                            top: .45rem;
+                            right: .45rem;
+                            cursor: pointer;
+
+                        }
+
+                        .elipsis {
+                            width: 360px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+
+                        &.botton_prod {
+                            height: 40px;
+
+                        }
+                    }
+
+                    .col_quantity,
+                    .col_days {
+                        width: 60px;
+                        text-align: center;
+                    }
+
+                    .col_price,
+                    .col_cost {
+                        width: 100px;
+                        text-align: right;
+                    }
+
+                    .col_discount {
+                        width: 80px;
+                        text-align: center;
+                    }
+
+                    .col_section {
+                        height: 3.5rem;
+                        padding-bottom: 0.1rem;
+                        vertical-align: bottom;
+                        font-family: $font-primary;
+                        font-size: 1.1em;
+                        border-top: 1px solid var(--in-black);
+                        border-bottom: 1px solid var(--in-black);
+                    }
+
+                    .input_invoice {
+                        width: 100%;
+                        padding: 0;
+                        text-align: center;
+                        border: none;
+                        outline-color: hsla(49, 100%, 49%, 1);
+                    }
+
+                    &.col_caret {
+                        width: 20px;
+                        padding: 0;
+                    }
+
+
+                }
+            }
+        }
+
+    }
+
+
+    // MODALES EMERGENTES
+    // Emergente: Información del proyecto y cliente seleccionado
+    .invoice__section-details {
+        position: absolute;
+        top: -100%;
+        right: 0;
+        left: 0;
+        height: 300px;
+        background-color: var(--in-white);
+        transition: all 1s ease;
+        z-index: 40;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        .detail__box {
+            padding: 1rem;
+
+            .detail_group {
+                display: flex;
+                gap: .3rem;
+
+                .concept {
+                    width: 150px;
+                    text-align: right;
+                }
+
+                .data {
+                    font-weight: 700;
+
+                }
+            }
+        }
+
+    }
+
+
+    // Emergente: Seleccionados de clientes y proyectos
+    .invoice__section-finder {
+        position: absolute;
+        top: -100%;
+        left: 0;
+        right: 0;
+        height: 15rem;
+        background-color: var(--in-white);
+        transition: all 1s ease;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        z-index: 40;
+
+        .finder__box {
+            padding: 0.5rem;
+            position: relative;
+
+            i {
+                position: absolute;
+                top: 1.2rem;
+                right: 1.2rem;
+                color: var(--in-oxford);
+            }
+
+            .finder_list {
+                margin-top: .5rem;
+                height: 180px;
+                overflow: scroll;
+
+                ul li {
+                    padding: 0.1rem 0.3rem;
+                    border-bottom: 1px solid var(--in-gray);
+                    color: var(--in-oxford);
+
+                    &.active {
+                        background-color: var(--br-gray-medium);
+                        color: var(--in-white);
+                    }
+
+
+                    &.alive {
+                        color: var(--in-black);
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: var(--in-gray);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Emergente: Listado de productos
+    .invoice__section-products {
+        top: 50px;
+        left: 260px;
+        right: 20px;
+        bottom: 80px;
+        display: none;
+
+        .productos__box-table {
+            background-color: var(--in-gray);
+            width: 100%;
+            height: 88%;
+
+
+            table {
+                color: #666666;
+                font-weight: 100;
+                width: 940px;
+
+                thead th {
+                    background-color: var(--in-gray);
+                    border-right: 1px dotted var(--br-gray-medium);
+                    text-align: center;
+                    padding: .5rem 0.2rem;
+                    overflow: none;
+                }
+
+                tbody {
+
+                    tr {
+                        cursor: copy;
+
+                        &:hover>th,
+                        &:hover>td {
+                            background-color: var(--br-gray-hard-alfa);
+                        }
+                    }
+
+                    th,
+                    td {
+                        background-color: var(--in-white);
+                        border-bottom: 1px dotted var(--br-gray-medium);
+                        border-right: 1px dotted var(--br-gray-medium);
+                        padding: 0.2rem 0.8rem;
+
+                    }
+
+
+                    .col_product {
+                        width: 400px;
+                        overflow: hidden;
+
+
+                        .elipsis {
+                            width: 360px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+
+
+
+                    }
+
+                    .col_quantity,
+                    .col_type {
+                        width: 70px;
+                        text-align: center;
+                    }
+
+                    .col_category {
+                        width: 400px;
+                    }
+                }
+            }
+        }
+    }
+
+    // Emergente: Menu de productos
+    .invoice__menu-products {
+        position: absolute;
+        top: 35%;
+        left: 35%;
+        width: auto;
+        min-height: 50px;
+        padding: .4rem;
+        background-color: $setColor;
+        border-radius: .3rem;
+        z-index: 300;
+        display: none;
+
+        ul li {
+            padding: .2rem .8rem .2rem .2rem;
+            color: #ffffff;
+            text-shadow: 1px 1px 1px #000000;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $setColorHover;
+            }
+
+            i {
+                font-size: 1.1em;
+                padding: .2rem;
+            }
+        }
+    }
+
+
+}
+
+
+// Estilos generales
+.invoice-border {
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--br-gray-soft) var(--br-gray-medium) var(--br-gray-medium) var(--br-gray-soft);
+}
+
+.invoiceInput {
+    border: 1px solid var(--in-oxford);
+    border-radius: .25rem;
+    padding: .3rem;
+    font-weight: 700;
+    outline: none;
+    text-transform: uppercase;
+
+    &::placeholder {
+        color: var(--in-oxford);
+    }
+}
+
+.invoice_button {
+    padding: .2rem .3rem;
+    font-size: 0.9em;
+    font-weight: 100;
+    border: 1px solid var(--in-oxford);
+    border-radius: .1rem;
+    text-transform: lowercase;
+    cursor: pointer;
+
+    &:hover {
+        border-color: var(--br-gray-hard);
+        background-color: var(--br-gray-hard-alfa);
+    }
+
+    i {
+        padding: 0 .3rem;
+    }
+}
+
+.finderInput {
+    background-color: transparent;
+    border: 1px solid var(--in-oxford);
+    border-radius: .3rem;
+    padding: 0 .2rem;
+    outline: none;
+}
+
+
+.modalTable {
+    position: fixed;
+    box-shadow: 10px 10px 25px var(--md-shadow-color);
+    background-color: var(--in-white);
+    z-index: 500;
+
+    .modal__header {
+        background-color: var(--in-gray);
+        width: 100%;
+        padding: .4rem .4rem;
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.3em;
+
+        i {
+            font-size: 1.3em;
+            margin-right: .5rem;
+            padding: .3rem;
+            border-radius: .3rem;
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--in-oxford);
+                color: var(--in-white);
+            }
+        }
+
+    }
+}
+
+.withShadow {
+    box-shadow: 5px 10px 20px var(--md-shadow-color);
+}
+
+.invoice__modal-general {
+    background-color: #ffffff;
+    left: 30px;
+    top: 30px;
+    right: 30px;
+    bottom: 30px;
+    display: none;
+}
+
+.rotate180 {
+    transform: rotate(180deg);
+    transform: all .5s;
+}

@@ -64,6 +64,30 @@ class ProjectDetailsModel extends Model
 
 
     
+// Listado de stock del productos
+public function stockProdcuts($params)
+{
+
+    $prdId = $this->db->real_escape_string($params['prdId']);
+
+    $qry = "SELECT
+                pr.prd_name, ifnull(pj.pjt_name,'') as pjt_name, sr.ser_sku, sr.ser_serial_number, 
+                sr.ser_situation, ifnull(pe.pjtpd_day_start,'') as pjtpd_day_start, 
+                ifnull(pe.pjtpd_day_end,'') as pjtpd_day_end, pr.prd_id 
+            FROM ctt_series                 AS sr
+            INNER JOIN ctt_products         AS pr ON pr.prd_id = sr.prd_id
+            LEFT JOIN ctt_projects_detail   AS pd ON pd.pjtdt_id = sr.pjtdt_id
+            LEFT JOIN ctt_projects_content  AS pc ON pc.pjtcn_id = pd.pjtcn_id
+            LEFT JOIN ctt_projects          AS pj ON pj.pjt_id = pc.pjt_id
+            LEFT JOIN ctt_projects_periods  AS pe ON pe.pjtdt_id = sr.pjtdt_id
+            WHERE sr.prd_id = $prdId;";
+    return $this->db->query($qry);
+} 
+
+
+
+
+    
 // Actualiza los datos del proyecto
     public function UpdateProject($params)
     {

@@ -237,6 +237,28 @@ public function listProductsRelated($request_params)
     echo $res;
 } 
 
+
+// Lista los proyectos en donde se encuentra un producto
+public function stockProdcuts($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->stockProdcuts($request_params);
+    $i = 0;
+    while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+    }
+    if ($i>0){
+        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    } else {
+        $res =  '[{"prd_name":"0"}]';	
+    }
+    echo $res;
+} 
+
+
+
+
 // Guarda la cotización
     public function SaveBudget($request_params)
     {
