@@ -9,6 +9,7 @@ header {
     grid-template-columns: repeat(5, 1fr);
     z-index: 200;
 }
+
 .logos {
     width: 250px;
     padding: 5px 2px 0px 5px;
@@ -22,10 +23,12 @@ header {
     text-align: right;
     grid-column: 8 / span 1;
     height: 2.0rem;
+
     i {
         margin: 0 5px;
     }
 }
+
 .menu_bar {
     display: none;
 }
@@ -38,6 +41,7 @@ nav {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
 }
+
 nav ul {
     list-style: none;
     padding: 0%;
@@ -47,9 +51,11 @@ nav li {
     line-height: 2.2rem;
     position: relative;
 }
+
 .menu {
     grid-column: 1 / span 6;
 }
+
 .menu ul {
     position: absolute;
 }
@@ -75,7 +81,7 @@ nav a:hover {
     /* width: 90%; */
 }
 
-.menu > li {
+.menu>li {
     float: left;
 }
 
@@ -87,6 +93,7 @@ nav li li {
     transition: all 0.05s;
     width: 220px;
     position: relative;
+
     i {
         position: absolute;
         right: 0.75rem;
@@ -94,15 +101,15 @@ nav li li {
     }
 }
 
-nav li:hover > ul > li {
+nav li:hover>ul>li {
     max-height: 100vh;
     overflow: visible;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     border-right: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.5);
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.5);
 }
 
-.menu > li > ul {
+.menu>li>ul {
     top: 100%;
 }
 
@@ -115,11 +122,10 @@ nav li:hover > ul > li {
 @media screen and (max-width: 1000px) {
     header {
         position: fixed;
-        height: 55px;
+        height: 40px;
         display: block;
 
-        .logos {
-        }
+        // .logos {}
 
         .sign-out {
             position: absolute;
@@ -153,25 +159,30 @@ nav li:hover > ul > li {
             width: 100%;
             display: block;
         }
+
         .menu {
             display: block;
             grid-template-columns: 1fr;
             grid-template-rows: 1fr 1fr;
         }
+
         .menu ul {
             position: relative;
         }
+
         nav li {
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             line-height: 3.5rem;
         }
 
-        .menu > li > ul {
+        .menu>li>ul {
             top: 100%;
         }
-        .menu > li > ul > li {
+
+        .menu>li>ul>li {
             padding-left: 20px;
         }
+
         .menu ul ul {
             left: 0;
             top: 0;
@@ -192,8 +203,8 @@ nav li:hover > ul > li {
             width: 100%;
             overflow: hidden;
             color: #ffffff;
-            font-size: 25px;
-            padding: 10px;
+            font-size: 20px;
+            padding: 6px 12px;
             text-align: right;
         }
     }

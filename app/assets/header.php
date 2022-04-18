@@ -25,7 +25,7 @@
             href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Titillium+Web:wght@400;600&display=swap"
             rel="stylesheet"
         />
-        
+        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/sticky-table.css' ?>">
 
 
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/estilos.css' ?>" />
@@ -40,6 +40,8 @@
         <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 
         <script src="<?=  PATH_ASSETS . 'lib/tables/tables.js' ?>"></script>
+      
+
 
 
     </head>
