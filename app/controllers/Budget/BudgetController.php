@@ -218,6 +218,7 @@ class BudgetController extends Controller
         echo $res;
     } 
 
+
     
 // Lista los relacionados al producto
 public function listProductsRelated($request_params)

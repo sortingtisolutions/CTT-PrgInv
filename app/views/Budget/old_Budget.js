@@ -1132,6 +1132,7 @@ function registered_product(id) {
     let ky = 0;
     $('.frame_content table tbody tr').each(function () {
         let idp = $(this).attr('id');
+
         if (id == idp) {
             let qty = parseInt($(this).children('td.qtybase').text()) + 1;
             $(this).children('td.qtybase').text(qty);

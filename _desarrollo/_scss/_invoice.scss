@@ -9,13 +9,39 @@
     --br-gray-hard-alfa: hsla(236, 3%, 40%, 0.09);
 
     // Cabezas de columna
-    --cl-color-costBase: hsla(236, 3%, 40%, 0.03);
+    --cl-color-costBase: hsla(236, 3%, 40%, 0.05);
     --cl-color-costTrip: hsla(236, 3%, 40%, 0.09);
     --cl-color-costTest: hsla(236, 3%, 40%, 0.15);
 
     // Modales
     --md-shadow-color: hsla(0, 0%, 0%, 0.5);
 
+    --rw-bg-color_warning: hsla(0, 87%, 40%, .1);
+    --rw-fg-color_warning: hsla(0, 87%, 40%, 1);
+
+    --rw-bg-color_busy: hsla(219, 87%, 40%, .1);
+    --rw-fg-color_busy: hsla(219, 87%, 40%, 1);
+
+}
+
+.emergent__warning {
+    position: fixed;
+    width: 300px;
+    height: 150px;
+    background-color: var(--in-white);
+    border-radius: .6rem;
+    box-shadow: 0 0 20px var(--md-shadow-color);
+    top: 30%;
+    left: 30%;
+    z-index: 1000;
+    padding: 1rem;
+    font-size: 1.5em;
+    text-align: center;
+
+    p {
+        text-align: center;
+        width: 100%;
+    }
 }
 
 
@@ -241,26 +267,59 @@
                     .invoice_col_header {
                         position: absolute;
                         top: 0;
-                        bottom: 0;
 
                         &.costBase {
-                            left: -360px;
-                            width: 460px;
-                            background-color: var(--cl-color-costBase);
+                            left: -320px;
+                            width: 420px;
                         }
 
-                        &.costTrip {
-                            left: -140px;
-                            width: 240px;
-                            background-color: var(--cl-color-costTrip);
-                        }
-
+                        &.costTrip,
                         &.costTest {
-                            left: -140px;
-                            width: 240px;
-                            background-color: var(--cl-color-costTest);
+                            left: -110px;
+                            width: 210px;
                         }
 
+
+                    }
+
+                    .costBase,
+                    &.colbase {
+                        background-color: var(--cl-color-costBase);
+                    }
+
+                    .costTrip,
+                    &.coltrip {
+                        background-color: var(--cl-color-costTrip);
+                    }
+
+                    .costTest,
+                    &.coltest {
+                        background-color: var(--cl-color-costTest);
+                    }
+
+
+                    .selectionInput {
+                        position: absolute;
+                        bottom: -0.2rem;
+                        left: .5rem;
+                        font-size: 1.0em;
+                        padding: .1rem .3rem;
+                        background-color: #ffffff;
+                        border-radius: .3rem;
+                        box-shadow: 0 0 4px var(--br-gray-medium);
+                        cursor: pointer;
+                        display: none;
+                        transition: all 0.4s;
+
+                        &:hover {
+                            transform: scale(1.5);
+                        }
+
+                    }
+
+                    &:hover>.selectionInput {
+                        display: block;
+                        transition: all 0.4s;
                     }
 
                     &.colcontrol {
@@ -309,7 +368,12 @@
                             top: .45rem;
                             right: .45rem;
                             cursor: pointer;
+                            display: none;
 
+                        }
+
+                        &:hover>.menu_product {
+                            display: block;
                         }
 
                         .elipsis {
@@ -338,18 +402,47 @@
                     }
 
                     .col_discount {
-                        width: 80px;
+                        width: 50px;
                         text-align: center;
+                        font-size: 0.9em;
+                        opacity: 0.8;
+                        position: relative;
+
+                        .selectioncell {
+                            position: absolute;
+                            top: .2rem;
+                            left: -5px;
+                            font-size: 1.0em;
+                            padding: .1rem .3rem;
+                            background-color: #ffffff;
+                            border-radius: .3rem;
+                            box-shadow: 0 0 4px var(--br-gray-medium);
+                            cursor: pointer;
+                            display: none;
+                            transition: all 0.4s;
+
+                            &:hover {
+                                transform: scale(1.5);
+                            }
+
+                        }
+
+                        &:hover>.selectioncell {
+                            display: block;
+                            transition: all 0.4s;
+                        }
                     }
 
                     .col_section {
-                        height: 3.5rem;
+                        height: 3.0rem;
                         padding-bottom: 0.1rem;
                         vertical-align: bottom;
                         font-family: $font-primary;
                         font-size: 1.1em;
                         border-top: 1px solid var(--in-black);
                         border-bottom: 1px solid var(--in-black);
+
+
                     }
 
                     .input_invoice {
@@ -363,6 +456,10 @@
                     &.col_caret {
                         width: 20px;
                         padding: 0;
+
+                        i {
+                            display: block;
+                        }
                     }
 
 
@@ -465,7 +562,7 @@
     // Emergente: Listado de productos
     .invoice__section-products {
         top: 50px;
-        left: 260px;
+        left: 180px;
         right: 20px;
         bottom: 80px;
         display: none;
@@ -497,6 +594,10 @@
                         &:hover>th,
                         &:hover>td {
                             background-color: var(--br-gray-hard-alfa);
+                        }
+
+                        &.oculto {
+                            display: none;
                         }
                     }
 
@@ -575,6 +676,73 @@
 
 }
 
+.table_hidden {
+    display: none;
+}
+
+.table_template {
+    color: #666666;
+    font-weight: 100;
+    font-size: 0.9em;
+
+    thead th {
+        background-color: var(--in-gray);
+        border-right: 1px dotted var(--br-gray-medium);
+        text-align: center;
+        padding: .5rem 0.2rem;
+        overflow: none;
+    }
+
+    tbody {
+
+        tr {
+            cursor: copy;
+
+            &:hover>th,
+            &:hover>td {
+                background-color: var(--br-gray-hard-alfa);
+            }
+
+            &.oculto {
+                display: none;
+            }
+        }
+
+        th,
+        td {
+            // background-color: var(--in-white);
+            border-bottom: 1px dotted var(--br-gray-medium);
+            border-right: 1px dotted var(--br-gray-medium);
+            padding: 0.2rem 0.8rem;
+
+        }
+
+        .levelProd {
+            background-color: var(--cl-color-costTrip);
+            color: var(--in-black);
+            font-weight: 900;
+            font-size: 1.1em;
+        }
+
+        .levelSituation {
+            background-color: var(--rw-bg-color_busy);
+            color: var(--rw-fg-color_busy);
+            font-weight: 700;
+        }
+
+    }
+}
+
+.invoice__modalBackgound {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: hsla(0, 0%, 0%, 0.5);
+    z-index: 400;
+    display: none;
+}
 
 // Estilos generales
 .invoice-border {
@@ -612,6 +780,50 @@
 
     i {
         padding: 0 .3rem;
+    }
+}
+
+.invoiceMainInput {
+    position: absolute;
+    width: 70px;
+    height: 40px;
+    background-color: #ffffff;
+    border-radius: .3rem;
+    display: flex;
+    overflow: hidden;
+    padding: .5rem;
+    display: none;
+
+    .input_invoice {
+        width: 100%;
+        padding: 0;
+        text-align: center;
+        border: none;
+        outline-color: hsla(49, 100%, 49%, 1);
+    }
+}
+
+.invoiceMainSelect {
+    position: absolute;
+    width: 80px;
+    height: 130px;
+    background-color: #ffffff;
+    border-radius: .3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow: hidden;
+    padding: .3rem;
+    z-index: 100;
+    display: none;
+
+    .input_invoice {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        text-align: center;
+        border: none;
+        outline: none;
     }
 }
 
@@ -670,4 +882,13 @@
 .rotate180 {
     transform: rotate(180deg);
     transform: all .5s;
+}
+
+
+
+@media screen and (max-width: 800px) {
+
+    .invoice__section-products {
+        left: 80px;
+    }
 }

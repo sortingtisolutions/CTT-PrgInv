@@ -89,166 +89,295 @@ ADD
   COLUMN cus_fill INT NULL DEFAULT '0' COMMENT 'Porcentaje de llenado de campos fiscales'
 AFTER
   cus_contract;
-    
-DROP VIEW ctt_vw_projects ;
+DROP VIEW ctt_vw_projects;
 CREATE VIEW ctt_vw_projects AS
 SELECT
-    CASE
-        WHEN cu.cus_fill <= 16                          THEN concat(    '<span class="rng rng1">',  cu.cus_fill, '%</span>'    )
-        WHEN cu.cus_fill > 16 AND cu.cus_fill <= 33     THEN concat(    '<span class="rng rng2">',  cu.cus_fill, '%</span>'    )
-        WHEN cu.cus_fill > 33 AND cu.cus_fill <= 50     THEN concat(    '<span class="rng rng3">',  cu.cus_fill, '%</span>'    )
-        WHEN cu.cus_fill > 50 AND cu.cus_fill <= 66     THEN concat(    '<span class="rng rng4">',  cu.cus_fill, '%</span>'    )
-        WHEN cu.cus_fill > 66 AND cu.cus_fill <= 90     THEN concat(    '<span class="rng rng5">',  cu.cus_fill, '%</span>'    )
-        WHEN cu.cus_fill > 99                           THEN concat(    '<span class="rng rng6">',  cu.cus_fill, '%</span>'    )
-    ELSE '' END     AS custfill,
-    CASE
-        WHEN cu.cus_fill < 100                          THEN concat(    '<i class="fas fa-address-card kill" id="',    cu.cus_id,    '"></i>'    )
-    ELSE '' END     AS editable,
-    CASE
-        WHEN pj.pjt_status = '2'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
-        WHEN pj.pjt_status = '3'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
-        WHEN pj.pjt_status = '4'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
-    ELSE '' END     AS smarlock,
-    pj.pjt_id       AS projecid,
-    pj.pjt_number   AS projnumb,
-    pj.pjt_name     AS projname,
-    pj.pjt_location AS projloca,
-    date_format(pj.pjt_date_start,  '%Y/%m/%d') AS dateinit,
-    date_format(pj.pjt_date_end,    '%Y/%m/%d') AS datefnal,
-    cu.cus_name AS custname
-FROM        ctt_projects AS pj    
-INNER JOIN  ctt_customers_owner AS co  ON co.cuo_id = pj.cuo_id
-INNER JOIN  ctt_customers as cu        ON cu.cus_id = co.cus_id
-WHERE pj.pjt_status IN (2, 3, 4);
-
-
-
+  CASE
+    WHEN cu.cus_fill <= 16 THEN concat(
+      '<span class="rng rng1">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    WHEN cu.cus_fill > 16
+    AND cu.cus_fill <= 33 THEN concat(
+      '<span class="rng rng2">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    WHEN cu.cus_fill > 33
+    AND cu.cus_fill <= 50 THEN concat(
+      '<span class="rng rng3">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    WHEN cu.cus_fill > 50
+    AND cu.cus_fill <= 66 THEN concat(
+      '<span class="rng rng4">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    WHEN cu.cus_fill > 66
+    AND cu.cus_fill <= 90 THEN concat(
+      '<span class="rng rng5">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    WHEN cu.cus_fill > 99 THEN concat(
+      '<span class="rng rng6">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    ELSE ''
+  END AS custfill,
+  CASE
+    WHEN cu.cus_fill < 100 THEN concat(
+      '<i class="fas fa-address-card kill" id="',
+      cu.cus_id,
+      '"></i>'
+    )
+    ELSE ''
+  END AS editable,
+  CASE
+    WHEN pj.pjt_status = '2' THEN concat(
+      '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',
+      pj.pjt_id,
+      '"></i>'
+    )
+    WHEN pj.pjt_status = '3' THEN concat(
+      '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',
+      pj.pjt_id,
+      '"></i>'
+    )
+    WHEN pj.pjt_status = '4' THEN concat(
+      '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',
+      pj.pjt_id,
+      '"></i>'
+    )
+    ELSE ''
+  END AS smarlock,
+  pj.pjt_id AS projecid,
+  pj.pjt_number AS projnumb,
+  pj.pjt_name AS projname,
+  pj.pjt_location AS projloca,
+  date_format(pj.pjt_date_start, '%Y/%m/%d') AS dateinit,
+  date_format(pj.pjt_date_end, '%Y/%m/%d') AS datefnal,
+  cu.cus_name AS custname
+FROM
+  ctt_projects AS pj
+  INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+  INNER JOIN ctt_customers as cu ON cu.cus_id = co.cus_id
+WHERE
+  pj.pjt_status IN (2, 3, 4);
 -- Actualizacion del 19 de MARZO 2022
-
-
--- Paso 1
--- Elimina el trigger que actualiza las categorias
-DROP TRIGGER actualiza_subcategorias;
-
+  -- Paso 1
+  -- Elimina el trigger que actualiza las categorias
+  DROP TRIGGER actualiza_subcategorias;
 -- Paso 2
--- Elimina el trigger que actualiza las los productos ( si no existe omite este paso )
-DROP TRIGGER update_products;
-
+  -- Elimina el trigger que actualiza las los productos ( si no existe omite este paso )
+  DROP TRIGGER update_products;
 -- Paso 3
--- Agrega el campo de STOCK en la tabla de productos
+  -- Agrega el campo de STOCK en la tabla de productos
 ALTER TABLE
   ctt_products
 ADD
   COLUMN prd_stock INT NULL COMMENT 'Cantidad existente en almacenes'
 AFTER
   prd_insured;
-
-
 -- Paso 4
--- Agrega el campo de prd_id en la tabla de ctt_stores_products
+  -- Agrega el campo de prd_id en la tabla de ctt_stores_products
 ALTER TABLE
   ctt_stores_products
 ADD
   COLUMN prd_id INT NULL COMMENT 'Id del producto asociado a la serie'
 AFTER
   ser_id;
-
 -- Paso 5
--- Actualiza el campo de prd_id la tabla en ctt_stores_products  
-UPDATE ctt_stores_products AS sp
-INNER JOIN  ctt_series AS sr ON sr.ser_id = sp.ser_id
-SET sp.prd_id = sr.prd_id
-WHERE sp.prd_id is null; 
-
-
+  -- Actualiza el campo de prd_id la tabla en ctt_stores_products
+UPDATE
+  ctt_stores_products AS sp
+  INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+SET
+  sp.prd_id = sr.prd_id
+WHERE
+  sp.prd_id is null;
 -- Paso 6
--- Elimina la vista de ctt_vw_productos y creaela nuevamente
-DROP VIEW ctt_vw_products;
+  -- Elimina la vista de ctt_vw_productos y creaela nuevamente
+  DROP VIEW ctt_vw_products;
 CREATE VIEW ctt_vw_products AS
-SELECT 
-	CONCAT('<i class="fas fa-pen modif" data="', pr.prd_id,'"></i><i class="fas fa-times-circle kill" data="', pr.prd_id , '"></i>') AS editable
-	, pr.prd_id 			AS producid
-  , pr.prd_sku			AS produsku
-  , pr.prd_name			AS prodname
-  , pr.prd_price  		AS prodpric 
-  , CONCAT('<span class="toLink">', prd_stock , '</span> ')  AS prodqtty
-	, pr.prd_level			AS prodtype
-  , sv.srv_name 			AS typeserv 
-	, cn.cin_code 			AS prodcoin
-  , CONCAT('<i class="fas fa-file-invoice" id="',dc.doc_id,'"></i> ') AS prddocum
-  , sc.sbc_name			AS subcateg
-  , ct.cat_name			AS categori
-  , pr.prd_english_name 	AS prodengl
-  , pr.prd_comments		AS prdcomme
-  , ct.cat_id
-FROM ctt_products 					AS pr
-INNER JOIN ctt_coins 				AS cn ON cn.cin_id = pr.cin_id
-INNER JOIN ctt_services             AS sv ON sv.srv_id = pr.srv_id  AND sv.srv_status = '1'
-INNER JOIN ctt_subcategories        AS sc ON sc.sbc_id = pr.sbc_id  AND sc.sbc_status = '1'
-INNER JOIN ctt_categories           AS ct ON ct.cat_id = sc.cat_id  AND ct.cat_status = '1'
-LEFT JOIN ctt_products_documents    AS dc ON dc.prd_id = pr.prd_id  AND dc.dcp_source = 'P'
-WHERE pr.prd_status = 1 AND pr.prd_level IN ('A', 'P') ;
-
-
+SELECT
+  CONCAT(
+    '<i class="fas fa-pen modif" data="',
+    pr.prd_id,
+    '"></i><i class="fas fa-times-circle kill" data="',
+    pr.prd_id,
+    '"></i>'
+  ) AS editable,
+  pr.prd_id AS producid,
+  pr.prd_sku AS produsku,
+  pr.prd_name AS prodname,
+  pr.prd_price AS prodpric,
+  CONCAT('<span class="toLink">', prd_stock, '</span> ') AS prodqtty,
+  pr.prd_level AS prodtype,
+  sv.srv_name AS typeserv,
+  cn.cin_code AS prodcoin,
+  CONCAT(
+    '<i class="fas fa-file-invoice" id="',
+    dc.doc_id,
+    '"></i> '
+  ) AS prddocum,
+  sc.sbc_name AS subcateg,
+  ct.cat_name AS categori,
+  pr.prd_english_name AS prodengl,
+  pr.prd_comments AS prdcomme,
+  ct.cat_id
+FROM
+  ctt_products AS pr
+  INNER JOIN ctt_coins AS cn ON cn.cin_id = pr.cin_id
+  INNER JOIN ctt_services AS sv ON sv.srv_id = pr.srv_id
+  AND sv.srv_status = '1'
+  INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id
+  AND sc.sbc_status = '1'
+  INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
+  AND ct.cat_status = '1'
+  LEFT JOIN ctt_products_documents AS dc ON dc.prd_id = pr.prd_id
+  AND dc.dcp_source = 'P'
+WHERE
+  pr.prd_status = 1
+  AND pr.prd_level IN ('A', 'P');
 -- Paso 7
--- Genera el trigger que actualiza el stock de subcategorias
-CREATE TRIGGER update_categories AFTER UPDATE ON ctt_stores_products
-FOR EACH ROW
-    UPDATE ctt_subcategories as sc SET sbc_quantity = (
-        SELECT  ifnull(sum(sp.stp_quantity),0) 
-        FROM  ctt_stores_products           AS sp
-        INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
-        INNER JOIN ctt_products             AS pr ON pr.prd_id = sr.prd_id
-        WHERE sr.ser_status = 1 AND pr.prd_level IN ('P','K') and pr.sbc_id = sc.sbc_id
-    );
-
--- Paso 8 
--- Genera el trigger que actualiza el stock de productos
-CREATE TRIGGER update_products AFTER UPDATE ON ctt_stores_products
-FOR EACH ROW
-UPDATE ctt_products as sc SET prd_stock = (
-SELECT  ifnull(sum(sp.stp_quantity),0) 
-        FROM  ctt_stores_products           AS sp
-        INNER JOIN ctt_series               AS sr ON sr.ser_id = sp.ser_id
-        INNER JOIN ctt_products             AS pr ON pr.prd_id = sr.prd_id
-        WHERE sr.ser_status = 1 AND pr.prd_level IN ('P','K') AND sr.prd_id = sc.prd_id
-) WHERE sp.prd_id = prd_id;
-
-
-
-
-
-
-
-
+  -- Genera el trigger que actualiza el stock de subcategorias
+  CREATE TRIGGER update_categories
+AFTER
+UPDATE
+  ON ctt_stores_products FOR EACH ROW
+UPDATE
+  ctt_subcategories as sc
+SET
+  sbc_quantity = (
+    SELECT
+      ifnull(sum(sp.stp_quantity), 0)
+    FROM
+      ctt_stores_products AS sp
+      INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+      INNER JOIN ctt_products AS pr ON pr.prd_id = sr.prd_id
+    WHERE
+      sr.ser_status = 1
+      AND pr.prd_level IN ('P', 'K')
+      and pr.sbc_id = sc.sbc_id
+  );
+-- Paso 8
+  -- Genera el trigger que actualiza el stock de productos
+  CREATE TRIGGER update_products
+AFTER
+UPDATE
+  ON ctt_stores_products FOR EACH ROW
+UPDATE
+  ctt_products as sc
+SET
+  prd_stock = (
+    SELECT
+      ifnull(sum(sp.stp_quantity), 0)
+    FROM
+      ctt_stores_products AS sp
+      INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
+      INNER JOIN ctt_products AS pr ON pr.prd_id = sr.prd_id
+    WHERE
+      sr.ser_status = 1
+      AND pr.prd_level IN ('P', 'K')
+      AND sr.prd_id = sc.prd_id
+  )
+WHERE
+  sp.prd_id = prd_id;
 -- Actualizacion del 7 de ABRIL 2022
-DROP VIEW ctt_vw_projects ;
+  DROP VIEW ctt_vw_projects;
 CREATE VIEW ctt_vw_projects AS
 SELECT
-    CASE
-        WHEN cu.cus_fill <= 16                          THEN concat(    '<span class="rng rng1">',  cu.cus_fill, '%</span>'    )
-        WHEN cu.cus_fill > 16 AND cu.cus_fill <= 33     THEN concat(    '<span class="rng rng2">',  cu.cus_fill, '%</span>'    )
-        WHEN cu.cus_fill > 33 AND cu.cus_fill <= 50     THEN concat(    '<span class="rng rng3">',  cu.cus_fill, '%</span>'    )
-        WHEN cu.cus_fill > 50 AND cu.cus_fill <= 66     THEN concat(    '<span class="rng rng4">',  cu.cus_fill, '%</span>'    )
-        WHEN cu.cus_fill > 66 AND cu.cus_fill <= 90     THEN concat(    '<span class="rng rng5">',  cu.cus_fill, '%</span>'    )
-        WHEN cu.cus_fill > 99                           THEN concat(    '<span class="rng rng6">',  cu.cus_fill, '%</span>'    )
-    ELSE '' END     AS custfill,
-    CASE
-        WHEN cu.cus_fill < 100                          THEN concat(    '<i class="fas fa-address-card kill" id="',    cu.cus_id,    '"></i>'    )
-    ELSE '' END     AS editable,
-    CASE
-        WHEN pj.pjt_status = '2'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
-        WHEN pj.pjt_status = '3'                        THEN concat(    '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',    pj.pjt_id,    '"></i>'    )
-        WHEN pj.pjt_status = '4'                        THEN concat(    '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',    pj.pjt_id,    '"></i>'    )
-    ELSE '' END     AS smarlock,
-    pj.pjt_id       AS projecid,
-    pj.pjt_number   AS projnumb,
-    pj.pjt_name     AS projname,
-    pj.pjt_location AS projloca,
-    date_format(pj.pjt_date_start,  '%Y/%m/%d') AS dateinit,
-    date_format(pj.pjt_date_end,    '%Y/%m/%d') AS datefnal,
-    cu.cus_name AS custname
-FROM        ctt_projects AS pj    
-INNER JOIN  ctt_customers_owner AS co  ON co.cuo_id = pj.cuo_id
-INNER JOIN  ctt_customers as cu        ON cu.cus_id = co.cus_id
-WHERE pj.pjt_status IN (2, 3, 4);
+  CASE
+    WHEN cu.cus_fill <= 16 THEN concat(
+      '<span class="rng rng1">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    WHEN cu.cus_fill > 16
+    AND cu.cus_fill <= 33 THEN concat(
+      '<span class="rng rng2">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    WHEN cu.cus_fill > 33
+    AND cu.cus_fill <= 50 THEN concat(
+      '<span class="rng rng3">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    WHEN cu.cus_fill > 50
+    AND cu.cus_fill <= 66 THEN concat(
+      '<span class="rng rng4">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    WHEN cu.cus_fill > 66
+    AND cu.cus_fill <= 90 THEN concat(
+      '<span class="rng rng5">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    WHEN cu.cus_fill > 99 THEN concat(
+      '<span class="rng rng6">',
+      cu.cus_fill,
+      '%</span>'
+    )
+    ELSE ''
+  END AS custfill,
+  CASE
+    WHEN cu.cus_fill < 100 THEN concat(
+      '<i class="fas fa-address-card kill" id="',
+      cu.cus_id,
+      '"></i>'
+    )
+    ELSE ''
+  END AS editable,
+  CASE
+    WHEN pj.pjt_status = '2' THEN concat(
+      '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',
+      pj.pjt_id,
+      '"></i>'
+    )
+    WHEN pj.pjt_status = '3' THEN concat(
+      '<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="',
+      pj.pjt_id,
+      '"></i>'
+    )
+    WHEN pj.pjt_status = '4' THEN concat(
+      '<i class="fas fa-toggle-off toggle-icon" title="liberado" id="',
+      pj.pjt_id,
+      '"></i>'
+    )
+    ELSE ''
+  END AS smarlock,
+  pj.pjt_id AS projecid,
+  pj.pjt_number AS projnumb,
+  pj.pjt_name AS projname,
+  pj.pjt_location AS projloca,
+  date_format(pj.pjt_date_start, '%Y/%m/%d') AS dateinit,
+  date_format(pj.pjt_date_end, '%Y/%m/%d') AS datefnal,
+  cu.cus_name AS custname
+FROM
+  ctt_projects AS pj
+  INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+  INNER JOIN ctt_customers as cu ON cu.cus_id = co.cus_id
+WHERE
+  pj.pjt_status IN (2, 3, 4);
+-- Actualizacion del 18 de ABRIL 2022
+ALTER TABLE
+  ctt_budget
+ADD
+  COLUMN bdg_section SMALLINT(1) NULL DEFAULT 1 COMMENT 'Numero de seccion'
+AFTER
+  bdg_prod_level;
+ALTER TABLE
+  ctt_budget
+ADD
+  COLUMN bdg_days_cost INT COMMENT 'Días en cotización en renta'
+AFTER
+  bdg_days_base;

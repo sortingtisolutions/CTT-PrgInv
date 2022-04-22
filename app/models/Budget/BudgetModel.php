@@ -119,8 +119,6 @@ public function listProjectsType($params)
     public function listBudgets($params)
     {
         $verId = $this->db->real_escape_string($params['verId']);
-        $dstr = $this->db->real_escape_string($params['dstr']);
-        $dend = $this->db->real_escape_string($params['dend']);
 
         $qry = "SELECT bg.*, pj.pjt_id, sb.sbc_name,
                     date_format(pj.pjt_date_start, '%Y%m%d') AS pjt_date_start, 
