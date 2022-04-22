@@ -116,8 +116,6 @@ public function listInvoice()
     }
 
 
-
-
 // Listado de Productos
     public function listProducts($params)
     {
