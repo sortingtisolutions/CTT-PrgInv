@@ -28,38 +28,38 @@
 
     <!-- Parilla de productos seleccionado -->
     <div class="invoice__section invoice__section-grid invoice-border">
-        <div class="invoice_controlPanel invoice-border">
+        <div class="invoice_controlPanel">
             <span class="invoice_button addSection"><i class="fas fa-plus"></i>Agrega Sección</span>
             <span class="invoice_button toPrint"><i class="fas fa-print"></i> Imprimir</span>
             <span class="invoice_button toSave"><i class="fas fa-save"></i> Hacer proyecto</span>
             <div class="menu-sections">
                 <ul>
-                    <li class="equipoBase"          data_option="1">EQUIPO BASE</li>
-                    <li class="equipoExtra"         data_option="2">EQUIPO EXTRA</li>
-                    <li class="equipoPorDia"        data_option="3">EQUIPO POR DIAS</li>
-                    <li class="equipoSubarrendo"    data_option="4">EQUIPO POR SUBARRENDO</li>
+                    <li class="equipoBase"          data_option="1">Equipo Base</li>
+                    <li class="equipoExtra"         data_option="2">Equipo Extra</li>
+                    <li class="equipoPorDia"        data_option="3">Equipo por Días</li>
+                    <li class="equipoSubarrendo"    data_option="4">Equipo por subarrendo</li>
                 </ul>
             </div>
         </div>
         <div class="invoice__box-table" id="invoiceTable">
-            <table>
+            <table >
                 <thead>
                     <tr>
                         
-                        <th>Producto</th>
-                        <th class="colbase"><i class="fas fa-caret-down selectionInput quantityBase inpt"></i>Cant.</th>
-                        <th class="colbase">Precio</th>
-                        <th class="colbase"><i class="fas fa-caret-down selectionInput daysBase inpt"></i>Días</th>
-                        <th class="colbase"><i class="fas fa-caret-down selectionInput daysCost inpt"></i>Dias Cobro</th>
-                        <th class="colbase"><i class="fas fa-caret-down selectionInput discountBase selt"></i>Desc.</th>
-                        <th class="colbase"><div class="invoice_col_header costBase">COSTO BASE</div>Costo</th>
-                        <th class="coltrip"><i class="fas fa-caret-down selectionInput daysTrip inpt"></i>Días</th>
-                        <th class="coltrip"><i class="fas fa-caret-down selectionInput discountTrip selt"></i>Desc</th>
-                        <th class="coltrip"><div class="invoice_col_header costTrip">COSTO VIAJE</div>Costo</th>
-                        <th class="coltest"><i class="fas fa-caret-down selectionInput daysTest inpt"></i>Dias</th>
-                        <th class="coltest"><i class="fas fa-caret-down selectionInput discountTest selt"></i>Desc.</th>
-                        <th class="coltest"><div class="invoice_col_header costTest">COSTO PRUEBAS</div>Costo</th>
-                        <th class="colcontrol"><i class="fas fa-caret-left showColumns rotate180" title="Muestra y oculta columnas de viaje y pruebas"></i></th>
+                        <th class="wclprod">Producto</th>
+                        <th class="wcldays colbase"><i class="fas fa-caret-down selectionInput quantityBase inpt"></i>Cant.</th>
+                        <th class="wclnumb colbase">Precio</th>
+                        <th class="wcldays colbase"><i class="fas fa-caret-down selectionInput daysBase inpt"></i>Días<br>Renta</th>
+                        <th class="wclnumb colbase"><i class="fas fa-caret-down selectionInput daysCost inpt"></i>Dias<br>Cobro</th>
+                        <th class="wcldisc colbase"><i class="fas fa-caret-down selectionInput discountBase selt"></i>Desc.</th>
+                        <th class="wclnumb colbase"><div class="invoice_col_header costBase">COSTO BASE</div>Costo</th>
+                        <th class="wcldays coltrip"><i class="fas fa-caret-down selectionInput daysTrip inpt"></i>Días</th>
+                        <th class="wcldisc coltrip"><i class="fas fa-caret-down selectionInput discountTrip selt"></i>Desc</th>
+                        <th class="wclnumb coltrip"><div class="invoice_col_header costTrip">COSTO VIAJE</div>Costo</th>
+                        <th class="wcldays coltest"><i class="fas fa-caret-down selectionInput daysTest inpt"></i>Dias</th>
+                        <th class="wcldisc coltest"><i class="fas fa-caret-down selectionInput discountTest selt"></i>Desc.</th>
+                        <th class="wclnumb coltest"><div class="invoice_col_header costTest">COSTO PRUEBAS</div>Costo</th>
+                        <th class="wclexpn colcontrol"><i class="fas fa-caret-left showColumns rotate180" title="Muestra y oculta columnas de viaje y pruebas"></i></th>
                     </tr>
                 </thead>
 
@@ -69,75 +69,58 @@
                 <!-- EQUIPO BASE -->
                 <tbody  class="sections_products" id="SC1">
                     <tr|>
-                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> EQUIPO BASE</th>
-                        <td colspan="12" class="col_section"></td>
+                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Base</th>
+                        <td colspan="13" class="col_section"></td>
                     </tr|>
                     <tr class="sections_products lastrow">
                         <th class="col_product botton_prod">
                             <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
                         </th>
-                        <td colspan=13></td>
+                        <td colspan=14></td>
                     </tr> 
                 </tbody>
                 <!-- EQUIPO EXTRA -->
                 <tbody class="sections_products" id="SC2">
                     <tr>
-                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> EQUIPO EXTRA</th>
-                        <td colspan="12" class="col_section"></td>
+                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Extra</th>
+                        <td colspan="13" class="col_section"></td>
                     </tr>
                     <tr class="sections_products lastrow">
                         <th class="col_product botton_prod">
                             <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
                         </th>
-                        <td colspan=13></td>
+                        <td colspan=14></td>
                     </tr> 
                 </tbody>
                 <!-- EQUIPO POR DIA -->
                 <tbody class="sections_products" id="SC3">
                     <tr>
-                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> EQUIPO POR DIA</th>
-                        <td colspan="12" class="col_section"></td>
+                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por Día</th>
+                        <td colspan="13" class="col_section"></td>
                     </tr>
                     <tr class="sections_products lastrow">
                         <th class="col_product botton_prod">
                             <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
                         </th>
-                        <td colspan=13></td>
+                        <td colspan=14></td>
                     </tr> 
                 </tbody>
                 <!-- EQUIPO POR SUBARRENDO -->
                 <tbody class="sections_products" id="SC4">
                     <tr>
-                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> EQUIPO POR SUBARRENDO</th>
-                        <td colspan="12" class="col_section"></td>
+                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por subarrendo</th>
+                        <td colspan="13" class="col_section"></td>
                     </tr>
                     <tr class="sections_products lastrow">
                         <th class="col_product botton_prod">
                             <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
                         </th>
-                        <td colspan=13></td>
+                        <td colspan=14></td>
                     </tr> 
 
                     
                 </tbody>
-                <tbody>
-                    <tr>
-                        <th class="col_product colbase"></th>
-                        <td class="col_quantity colbase"></td>
-                        <td class="col_price colbase"></td>
-                        <td class="col_days colbase"></td>
-                        <td class="col_days colbase"></td>
-                        <td class="col_discount colbase"></td>
-                        <td class="col_cost colbase"></td>
-                        <td class="col_days coltrip"></td>
-                        <td class="col_discount coltrip"></td>
-                        <td class="col_cost coltrip"></td>
-                        <td class="col_days coltest"></td>
-                        <td class="col_discount coltest"></td>
-                        <td class="col_cost coltest"></td>
-                        <td class="col_caret colcontrol"></td>
-                    </tr> 
-                </tbody>
+                
             </table>
         </div>
     </div>
@@ -343,7 +326,7 @@
             <div class="modal__header-concept">&nbsp;Listados de productos</div>
             <i class="far fa-window-close closeModal"></i>
         </div>
-        <div class="modal__body invoice-border">
+        <div class="modal__body">
         </div>
     </div>
 
@@ -357,11 +340,11 @@
     </div>
 
     <!-- Fondo obscuro -->
-    <div class="invoice__modalBackgound">fondo</div>
+    <div class="invoice__modalBackgound"></div>
 
 
     <!-- Plantilla de tablas modales -->
-    <div  id="infoProductTemplate" class="table_hidden">
+    <div id="infoProductTemplate" class="table_hidden box_template">
         <table class="table_template" style = "min-width: 600px; width:100%;" >
             <thead>
                 <tr>
@@ -373,7 +356,7 @@
             <tbody></tbody>
         </table>
     </div>
-    <div  id="stockProductTemplate" class="table_hidden">
+    <div id="stockProductTemplate" class="table_hidden box_template">
         <table class="table_template" style = "min-width:1150px; width:auto;">
             <thead>
                 <tr>

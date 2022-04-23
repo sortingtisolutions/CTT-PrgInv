@@ -1,7 +1,7 @@
 :root {
     --in-white: hsl(360, 100%, 100%);
     --in-black: hsl(0 0% 0%);
-    --in-gray: hsl(236, 0%, 96%);
+    --in-gray: hsl(236, 65%, 98.5%);
     --in-oxford: hsl(236, 3%, 75%);
     --br-gray-soft: hsl(236, 3%, 94%);
     --br-gray-medium: hsl(236, 3%, 80%);
@@ -9,9 +9,9 @@
     --br-gray-hard-alfa: hsla(236, 3%, 40%, 0.09);
 
     // Cabezas de columna
-    --cl-color-costBase: hsla(236, 3%, 40%, 0.05);
-    --cl-color-costTrip: hsla(236, 3%, 40%, 0.09);
-    --cl-color-costTest: hsla(236, 3%, 40%, 0.15);
+    --cl-color-costBase: hsla(236, 65%, 99%, 1);
+    --cl-color-costTrip: hsla(236, 65%, 98%, 1);
+    --cl-color-costTest: hsla(236, 65%, 96%, 1);
 
     // Modales
     --md-shadow-color: hsla(0, 0%, 0%, 0.5);
@@ -55,13 +55,12 @@
     display: grid;
     grid-template-columns: 1fr 14rem;
     grid-template-rows: 2rem auto;
-    font-size: 1.2em;
+    font-size: 1.1em;
 
 
 
     .invoice__section-panel,
-    .invoice__section-button,
-    .invoice__section-sidebar {
+    .invoice__section-button {
         background-color: var(--in-gray);
     }
 
@@ -99,14 +98,17 @@
         // Totales
         .sidebar__totals {
             font-family: $font-secundary;
+            color: #666666;
+            letter-spacing: 0.05em;
 
             table {
-                font-size: 1.2em;
+                font-size: 1.1em;
                 border-collapse: collapse;
                 width: 100%;
+                margin-top: .5rem;
 
                 tr {
-                    border-top: 1px dotted var(--in-oxford);
+                    // border-top: 1px dotted var(--in-oxford);
 
                     &:first-child,
                     &:last-child {
@@ -114,7 +116,7 @@
                     }
 
                     td {
-                        padding: 0 0.4rem;
+                        padding: 0.1rem 0.4rem;
                     }
                 }
 
@@ -196,7 +198,6 @@
     .invoice__section-grid {
         height: auto;
         overflow: hidden;
-        background-color: var(--in-gray);
 
         // Panel de control
         .invoice_controlPanel {
@@ -247,21 +248,33 @@
             height: 90%;
 
             table {
-                width: 100%;
                 color: #666666;
                 font-weight: 100;
-                width: 880px;
+                font-size: 0.9em;
+
+                &.expanded {
+                    min-width: 1350px;
+                    width: 100%;
+                }
+
+                &.collapsed {
+                    min-width: 930px;
+                    width: 100%;
+                }
+
 
                 .coltrip,
                 .coltest {
                     content: '';
                     display: none;
+                    transition: all 1s;
                 }
 
                 thead th {
                     background-color: var(--in-gray);
                     text-align: center;
-                    padding: 2rem 0.2rem 0.1rem 0.2rem;
+                    vertical-align: bottom;
+                    padding: 1.1rem 0.2rem 0.0rem 0.2rem;
                     overflow: none;
 
                     .invoice_col_header {
@@ -269,33 +282,23 @@
                         top: 0;
 
                         &.costBase {
-                            left: -320px;
-                            width: 420px;
+                            left: -356px;
+                            width: 448px;
+                            background-color: rgba(0, 0, 0, 0.02);
                         }
 
                         &.costTrip,
                         &.costTest {
-                            left: -110px;
-                            width: 210px;
+                            left: -103px;
+                            width: 198px;
+                            background-color: rgba(0, 0, 0, 0.05);
                         }
 
 
                     }
 
-                    .costBase,
-                    &.colbase {
-                        background-color: var(--cl-color-costBase);
-                    }
 
-                    .costTrip,
-                    &.coltrip {
-                        background-color: var(--cl-color-costTrip);
-                    }
 
-                    .costTest,
-                    &.coltest {
-                        background-color: var(--cl-color-costTest);
-                    }
 
 
                     .selectionInput {
@@ -350,9 +353,10 @@
                     th,
                     td {
                         background-color: var(--in-white);
-                        border-bottom: 1px dotted var(--br-gray-medium);
-                        border-right: 1px dotted var(--br-gray-medium);
-                        padding: 0.2rem 0.8rem;
+                        border-bottom: 1px dashed var(--br-gray-soft);
+                        border-right: 1px dotted var(--br-gray-soft);
+                        padding: 0.6em 0.8em 0.25rem 0.8rem;
+
 
                         &:last-child {
                             border-right: none;
@@ -361,7 +365,6 @@
 
                     .col_product {
                         overflow: hidden;
-                        width: 400px;
 
                         .menu_product {
                             position: absolute;
@@ -377,7 +380,7 @@
                         }
 
                         .elipsis {
-                            width: 360px;
+                            width: 90%;
                             white-space: nowrap;
                             overflow: hidden;
                             text-overflow: ellipsis;
@@ -391,22 +394,23 @@
 
                     .col_quantity,
                     .col_days {
-                        width: 60px;
                         text-align: center;
                     }
 
                     .col_price,
                     .col_cost {
-                        width: 100px;
                         text-align: right;
                     }
 
+                    .col_cost {
+                        font-weight: 700;
+                    }
+
                     .col_discount {
-                        width: 50px;
                         text-align: center;
                         font-size: 0.9em;
-                        opacity: 0.8;
                         position: relative;
+                        color: #999999;
 
                         .selectioncell {
                             position: absolute;
@@ -434,13 +438,13 @@
                     }
 
                     .col_section {
-                        height: 3.0rem;
+                        height: 2.0rem;
                         padding-bottom: 0.1rem;
                         vertical-align: bottom;
                         font-family: $font-primary;
                         font-size: 1.1em;
-                        border-top: 1px solid var(--in-black);
-                        border-bottom: 1px solid var(--in-black);
+                        // border-top: 1px solid var(--in-oxford);
+                        border-bottom: 2px solid var(--br-gray-soft);
 
 
                     }
@@ -451,10 +455,15 @@
                         text-align: center;
                         border: none;
                         outline-color: hsla(49, 100%, 49%, 1);
+                        background-color: transparent;
+
+                        &:focus {
+                            background-color: var(--in-white);
+                        }
                     }
 
                     &.col_caret {
-                        width: 20px;
+
                         padding: 0;
 
                         i {
@@ -462,7 +471,43 @@
                         }
                     }
 
+                }
 
+
+                th.costBase,
+                th.colbase {
+                    background-color: var(--cl-color-costBase);
+                }
+
+                th.costTrip,
+                .coltrip {
+                    background-color: var(--cl-color-costTrip);
+                }
+
+                th.costTest,
+                .coltest {
+                    background-color: var(--cl-color-costTest);
+                }
+
+                .wclprod {
+                    min-width: 500px;
+                    width: auto;
+                }
+
+                .wcldays {
+                    width: 60px;
+                }
+
+                .wclnumb {
+                    width: 100px;
+                }
+
+                .wcldisc {
+                    width: 50px;
+                }
+
+                .wclexpn {
+                    width: 20px;
                 }
             }
         }
@@ -568,20 +613,23 @@
         display: none;
 
         .productos__box-table {
-            background-color: var(--in-gray);
             width: 100%;
             height: 88%;
+            font-size: 0.9em;
+
 
 
             table {
                 color: #666666;
                 font-weight: 100;
-                width: 940px;
+                min-width: 940px;
+                width: 100%;
 
                 thead th {
                     background-color: var(--in-gray);
                     border-right: 1px dotted var(--br-gray-medium);
                     text-align: center;
+                    vertical-align: bottom;
                     padding: .5rem 0.2rem;
                     overflow: none;
                 }
@@ -863,6 +911,14 @@
             }
         }
 
+    }
+
+    .modal__body {
+        position: absolute;
+        top: 2.8rem;
+        bottom: 0;
+        left: 0;
+        right: 0;
     }
 }
 

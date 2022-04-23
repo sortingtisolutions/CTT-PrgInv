@@ -109,6 +109,13 @@ function eventsAction() {
             sectionShowHide();
         });
 
+    $('.version__button')
+        .unbind('click')
+        .on('click', function () {
+            let nRows = $('.frame_content table tbody tr').length;
+            console.log(nrowa);
+        });
+
     expandCollapseSection();
 }
 
@@ -117,12 +124,12 @@ function expandCollapseSection() {
         $('.showColumns').addClass('rotate180');
         $('.coltrip').hide().children('.input_invoice').attr('disable', 'true');
         $('.coltest').hide().children('.input_invoice').attr('disable', 'true');
-        $('.showColumns').parents('table').width('830px');
+        $('.showColumns').parents('table').removeAttr('class').addClass('collapsed');
     } else {
         $('.showColumns').removeClass('rotate180');
         $('.coltrip').show().children('.input_invoice').attr('disable', 'false');
         $('.coltest').show().children('.input_invoice').attr('disable', 'false');
-        $('.showColumns').parents('table').width('1250px');
+        $('.showColumns').parents('table').removeAttr('class').addClass('expanded');
     }
 }
 
@@ -480,26 +487,26 @@ function fill_budget_prods(jsn, days) {
     let prdName = pds.bdg_prod_name.replace(/°/g, '"');
     let H = `
     <tr id="bdg${pds.prd_id}" data_sku="${pds.bdg_prod_sku}" data_insured="${pds.bdg_insured}" data_level="${pds.bdg_prod_level}" class="budgetRow">
-        <th class="col_product colbase product"><div class="elipsis" title="${prdName}">${prdName}</div><i class="fas fa-bars menu_product" id="mnu${pds.prd_id}"></i></th>
-        <td class="col_quantity colbase quantityBase"><input type="text" class="input_invoice" value="${pds.bdg_quantity}" tabindex=1></td>
-        <td class="col_price colbase priceBase">${mkn(pds.bdg_prod_price, 'n')}</td>
-        <td class="col_days colbase daysBase"><input type="text" class="input_invoice" value="${pds.bdg_days_base}" tabindex=2></td>
-        <td class="col_days colbase daysCost"><input type="text" class="input_invoice" value="${pds.bdg_days_cost}" tabindex=3></td>
-        <td class="col_discount colbase discountBase"><i class="fas fa-caret-left selectioncell"></i><span class="discData">${
+        <th class="wclprod col_product product"><div class="elipsis" title="${prdName}">${prdName}</div><i class="fas fa-bars menu_product" id="mnu${pds.prd_id}"></i></th>
+        <td class="wcldays col_quantity colbase quantityBase"><input type="text" class="input_invoice" value="${pds.bdg_quantity}" tabindex=1></td>
+        <td class="wclnumb col_price colbase priceBase">${mkn(pds.bdg_prod_price, 'n')}</td>
+        <td class="wcldays col_days colbase daysBase"><input type="text" class="input_invoice" value="${pds.bdg_days_base}" tabindex=2></td>
+        <td class="wcldays col_days colbase daysCost"><input type="text" class="input_invoice" value="${pds.bdg_days_cost}" tabindex=3></td>
+        <td class="wcldisc col_discount colbase discountBase"><i class="fas fa-caret-left selectioncell"></i><span class="discData">${
             parseFloat(pds.bdg_discount_base) * 100
         }<small>%</small></span></td>
-        <td class="col_cost colbase costBase">0.00</td>
-        <td class="col_days coltrip daysTrip"><input type="text" class="input_invoice" value="${pds.bdg_days_trip}" tabindex=4></td>
-        <td class="col_discount coltrip discountTrip"><i class="fas fa-caret-left selectioncell"></i><span class="discData">${
+        <td class="wclnumb col_cost colbase costBase">0.00</td>
+        <td class="wcldays col_days coltrip daysTrip"><input type="text" class="input_invoice" value="${pds.bdg_days_trip}" tabindex=4></td>
+        <td class="wcldisc col_discount coltrip discountTrip"><i class="fas fa-caret-left selectioncell"></i><span class="discData">${
             parseFloat(pds.bdg_discount_trip) * 100
         }<small>%</small></span></td>
-        <td class="col_cost coltrip costTrip">0.00</td>
-        <td class="col_days coltest daysTest"><input type="text" class="input_invoice" value="${pds.bdg_days_test}" tabindex=5></td>
-        <td class="col_discount coltest discountTest"><i class="fas fa-caret-left selectioncell"></i><span class="discData">${
+        <td class="wclnumb col_cost coltrip costTrip">0.00</td>
+        <td class="wcldays col_days coltest daysTest"><input type="text" class="input_invoice" value="${pds.bdg_days_test}" tabindex=5></td>
+        <td class="wcldisc col_discount coltest discountTest"><i class="fas fa-caret-left selectioncell"></i><span class="discData">${
             parseFloat(pds.bdg_discount_test) * 100
         }<small>%</small></span></td>
-        <td class="col_cost coltest costTest">0.00</td>
-        <td class="col_caret colcontrol"></td>
+        <td class="wclnumb col_cost coltest costTest">0.00</td>
+        <td class="wclexpn col_caret colcontrol"></td>
     </tr>  
     `;
     $(`#SC${pds.bdg_section}`).show();
