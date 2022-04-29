@@ -12,8 +12,9 @@
     <div class="invoice__section invoice__section-panel invoice-border">
         <div class="panel__name">
             <i class="fas fa-caret-square-down projectInformation"></i>
-            <span id="projectName" data_id=""></span>
+            <span id="projectName" data_id="" title=""></span>
         </div>
+        <div class="panel__title">COTIZACIÓN</div>
         <div class="panel__finder">
             <i class="fas fa-search projectfinder"></i>
         </div>
@@ -22,16 +23,17 @@
 
     <!-- Botones de reseteo -->
     <div class="invoice__section invoice__section-button invoice-border">
-        <span class="invoice_button"><i class="fas fa-plus"></i>nueva cotización</span>
+        <span class="invoice_button" id="newQuote"><i class="fas fa-plus"></i>nueva cotización</span>
     </div>
 
 
     <!-- Parilla de productos seleccionado -->
     <div class="invoice__section invoice__section-grid invoice-border">
         <div class="invoice_controlPanel">
+            <span class="version_current"></span>
             <span class="invoice_button addSection"><i class="fas fa-plus"></i>Agrega Sección</span>
             <span class="invoice_button toPrint"><i class="fas fa-print"></i> Imprimir</span>
-            <span class="invoice_button toSave"><i class="fas fa-save"></i> Hacer proyecto</span>
+            <span class="invoice_button toSave"><i class="fas fa-save"></i> Generar presupuesto</span>
             <div class="menu-sections">
                 <ul>
                     <li class="equipoBase"          data_option="1">Equipo Base</li>
@@ -154,11 +156,11 @@
                     </tr>
                     <tr>
                         <td class="totals-concept">&nbsp;</td>
-                        <td class="totals-numbers"></td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td class="totals-concept">NUMERO DE PRODUCTOS</td>
-                        <td class="totals-numbers">0</td>
+                        <td class="totals-numbers simple">0</td>
                     </tr>
                 </table>
         </div>
@@ -181,7 +183,7 @@
 
         <!-- Boton de comentarios -->
         <div class="sidebar__comments invoice-border"> 
-            <span class="invoice_button">
+            <span class="invoice_button toComment">
                 <i class="far fa-comment-alt"></i> Comentarios
             </span> 
         </div>
@@ -190,93 +192,93 @@
     
     <!-- Informacion del proyecto y cliente seleccionado -->
     <div class="invoice__section-details invoice-border">
-        <div class="detail__box detail__box-project invoice-border">
-            <div class="detail_group">
-                <div class="concept">Número:</div>
-                <div class="data" id="projectNumber"></div>
+        <div class="detail__box detail__box-project ">
+            <div class="detail__box-fullRow">
+                <span class="invoice_button" id="btnEditProject"><i class="fas fa-plus"></i>Editar proyecto</span>
             </div>
+            <table>
+                <tr>
+                    <td class="concept">Numero:</td>
+                    <td class="data" id="projectNumber"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Locación:</td>
+                    <td class="data" id="projectLocation"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Periodo:</td>
+                    <td class="data calendar" id="projectPeriod"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Tipo de locación:</td>
+                    <td class="data" id="projectLocationType"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Tipo de proyecto:</td>
+                    <td class="data" id="projectType"></td>
+                </tr>
+            </table>
 
-            <div class="detail_group">
-                <div class="concept">Locación:</div>
-                <div class="data" id="projectLocation"></div>
-            </div>
+            <hr>
 
-            <div class="detail_group">
-                <div class="concept">Periodo:</div>
-                <div class="data" id="projectPeriod"></div>
-            </div>
-
-            <div class="detail_group">
-                <div class="concept">Tipo de locación:</div>
-                <div class="data" id="projectLocationType"></div>
-            </div>
-
-            <div class="detail_group">
-                <div class="concept">Tipo de proyecto:</div>
-                <div class="data" id="projectType"></div>
-            </div>
-            <p>&nbsp;</p>
-
-            <div class="detail_group">
-            <span class="invoice_button"><i class="fas fa-plus"></i>Editar proyecto</span>
-            </div>
-        </div>
-        <div class="detail__box detail__box-customer invoice-border">
-            <div class="detail_group">
-                <div class="concept">Cliente:</div>
-                <div class="data" id="CustomerName"></div>
-            </div>
-            <div class="detail_group">
-                <div class="concept"></div>
-                <div class="data" id="CustomerType"></div>
-            </div>
-
-            <div class="detail_group">
-                <div class="concept">Productor responsable:</div>
-                <div class="data" id="CustomerProducer"></div>
-            </div>
-
-            <div class="detail_group">
-                <div class="concept">Domicilio:</div>
-                <div class="data" id="CustomerAddress"></div>
-            </div>
-
-            <div class="detail_group">
-                <div class="concept">Correo electrónico:</div>
-                <div class="data" id="CustomerEmail"></div>
-            </div>
-
-            <div class="detail_group">
-                <div class="concept">Teléfono:</div>
-                <div class="data" id="CustomerPhone"></div>
-            </div>
-
-            <div class="detail_group">
-                <div class="concept">Calificación:</div>
-                <div class="data" id="CustomerQualification"></div>
-            </div>
+            <table>
+                <tr>
+                    <td class="concept">Cliente:</td>
+                    <td class="data" id="CustomerName"></td>
+                </tr>
+                <tr>
+                    <td class="concept"></td>
+                    <td class="data flash" id="CustomerType"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Productor responsable:</td>
+                    <td class="data" id="CustomerProducer"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Domicilio:</td>
+                    <td class="data" id="CustomerAddress"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Correo electrónico:</td>
+                    <td class="data" id="CustomerEmail"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Teléfono:</td>
+                    <td class="data" id="CustomerPhone"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Calificación:</td>
+                    <td class="data" id="CustomerQualification"></td>
+                </tr>
+            </table>
 
 
         </div>
+        
     </div>
 
 
     <!-- Buscador de clientes y proyectos -->
     <div class="invoice__section-finder invoice-border">
-        <div class="finder__box">
-            <input type="text" name="txtCustomer" id="txtCustomer" placeholder="Cliente" class="invoiceInput wtf">
-            <i class="fas fa-times"></i>
+        <div class="finder__box" id="groupCustomer">
+            <input type="text" name="txtCustomer" id="txtCustomer" placeholder="Cliente" class="invoiceInput inputSearch wtf">
+            <i class="fas fa-times cleanInput"></i>
             <div class="finder_list finder_list-customer">
                 <ul> </ul>
             </div>
         </div>
-        <div class="finder__box">
-        <input type="text" name="txtCliente" id="txtCliente" placeholder="Proyecto" class="invoiceInput wtf">
-            <i class="fas fa-times"></i>
+        <div class="finder__box" id="groupProject">
+        <input type="text" name="txtProject" id="txtProject" placeholder="Proyecto" class="invoiceInput inputSearch wtf">
+            <i class="fas fa-times cleanInput"></i>
             <div class="finder_list finder_list-projects">
                 <ul></ul>
             </div>
 
+        </div>
+
+        <div class="finder__box"></div>
+        <div class="finder__box-buttons">
+            <span class="invoice_button" id="btnNewProject"><i class="fas fa-plus"></i>nuevo proyecto</span>
         </div>
     </div>
 
@@ -371,8 +373,109 @@
             <tbody></tbody>
         </table>
     </div>
+    <div id="dataProjectTemplate" class="table_hidden box_template">
+        <div class="project_data-box">
+            <table  id="formProject">
+                <tr>
+                    <td>Nombre del proyecto</td>
+                    <td class="projectName">
+                        <input type="hidden" name="txtProjectIdEdt" id="txtProjectIdEdt" class="textbox">
+                        <input type="text" id="txtProjectEdt" name="txtProjectEdt" class="textbox wtf required" autocomplete="off">
+                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Quieres agregar Nombre del proyecto</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Periodo</td>
+                    <td>
+                        <input type="text" id="txtPeriodProjectEdt"  name="txtPeriodProjectEdt" class="textbox wtf required" autocomplete="off">
+                        <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
+                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Locación</td>
+                    <td>
+                        <input type="text" id="txtLocationEdt" name="txtLocationEdt" class="textbox wtf" autocomplete="off"><br>
+                        <span class="textAlert"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tipo de proyecto</td>
+                    <td>
+                        <select  id="txtTypeProjectEdt" name="txtTypeProjectEdt" class="textbox wtf required" >
+                            <option value="0"></option>
+                        </select>
+                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de projecto</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tipo de locación</td>
+                    <td>
+                        <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox" >
+                            <option value="0" selected></option>
+                            <option value="1"> LOCAL</option>
+                            <option value="2"> FORANEO</option>
+                        </select>
+                        <span class="textAlert"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Cliente</td>
+                    <td>
+                        <select id="txtCustomerEdt" class="textbox wtf">
+                            <option value="0"></option>
+                        </select>
+                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar un cliente</span>
+                        <input type="hidden" name="txtCustomerOwnerEdt"  id="txtCustomerOwnerEdt">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Productor</td>
+                    <td>
+                        <select id="txtCustomerRelEdt" class="textbox wtf">
+                            <option value="0"></option>
+                        </select>
+                        <span class="textAlert"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    
+                    <td colspan=2>
+                        <button class="bn btn-ok" id="saveProject"></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="commentsTemplates" class="table_hidden box_template">
+        <div class="comments__box">
+            <!-- Lista de comentarios -->
+            <div class="comments__list"></div>
+            <!-- Captura de cumentario -->
+            <div class="comments__addNew">
+                <label for="txtComment">Escribe comentario</label><br>
+                <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput"></textarea><br>
+                <span class="invoice_button" id="newComment"><i class="fas fa-plus"></i>guardar comentario</span>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- loading -->
+    <div class="invoice__loading modalLoading">
+        <div class="box_loading">
+            <p class="text_loading">
+                Promoviendo cotización<br>
+                <i class="fas fa-spinner spin"></i> 
+                </p>
+            <p>La cotización se encuentra en proceso de ser promovida a presupuesto, este proceso puede tradar varios minutos</p>
+        </div>
+    </div>
     
 </div>
+
 
 
 

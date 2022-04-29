@@ -375,9 +375,11 @@ ADD
   COLUMN bdg_section SMALLINT(1) NULL DEFAULT 1 COMMENT 'Numero de seccion'
 AFTER
   bdg_prod_level;
-ALTER TABLE
-  ctt_budget
-ADD
-  COLUMN bdg_days_cost INT COMMENT 'Días en cotización en renta'
-AFTER
-  bdg_days_base;
+
+ALTER TABLE ctt_budget ADD COLUMN bdg_days_cost INT COMMENT 'Días en cotización en renta' AFTER bdg_days_base;
+
+
+
+  -- Actualizacion del 25 de ABRIL 2022
+ALTER TABLE ctt_projects_content ADD COLUMN pjtcn_days_cost INT COMMENT 'Días en cotización en renta' AFTER pjtcn_days_base;
+

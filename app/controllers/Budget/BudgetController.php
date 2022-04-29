@@ -119,6 +119,23 @@ class BudgetController extends Controller
         }
         echo $res;
     } 
+// Lista los comentarios del proyecto
+    public function listComments($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listComments($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"com_id":"0"}]';	
+        }
+        echo $res;
+    } 
 
 
     
@@ -269,6 +286,26 @@ public function stockProdcuts($request_params)
         
     } 
 
+// Guarda el comentario
+    public function InsertComment($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->InsertComment($request_params, $params);
+
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"com_id":"0"}]';	
+        }
+        echo $res;
+        
+    } 
+
 
     
     
@@ -372,11 +409,13 @@ public function ProcessProjectProduct($request_params)
         $params =  $this->session->get('user');
         $pjtcnt = $this->model->SaveProjectContent($request_params);
         $result = $this->model->GetProjectContent($request_params);
-
+        
+       
       
         while($row = $result->fetch_assoc()){
             $dtstar = $row["pjt_date_start"];
             $dybase = $row["pjtcn_days_base"];
+            $dycost = $row["pjtcn_days_cost"];
             $dytrip = $row["pjtcn_days_trip"] / 2;
             $dytest = $row["pjtcn_days_test"];
             $quanty = $row["pjtcn_quantity"];
@@ -416,6 +455,7 @@ public function ProcessProjectProduct($request_params)
                         'bdglvl' => $bdglvl,
                         'bdgqty' => $ttlqty,
                         'dybase' => $dybase,
+                        'dycost' => $dycost,
                         'dsbase' => $dsbase,
                         'dytrip' => $dytrip,
                         'dstrip' => $dstrip,
@@ -442,6 +482,7 @@ public function ProcessProjectProduct($request_params)
                         'bdglvl' => $bdglvl,
                         'bdgqty' => $ttlqty,
                         'dybase' => $dybase,
+                        'dycost' => $dycost,
                         'dsbase' => $dsbase,
                         'dytrip' => $dytrip,
                         'dstrip' => $dstrip,
@@ -471,6 +512,7 @@ public function ProcessProjectProduct($request_params)
                             'bdglvl' => 'A',
                             'bdgqty' => $ttlqty,
                             'dybase' => $dybase,
+                            'dycost' => $dycost,
                             'dsbase' => $dsbase,
                             'dytrip' => $dytrip,
                             'dstrip' => $dstrip,
@@ -504,6 +546,7 @@ public function ProcessProjectProduct($request_params)
                             'bdglvl' => 'P',
                             'bdgqty' => $ttlqty,
                             'dybase' => $dybase,
+                            'dycost' => $dycost,
                             'dsbase' => $dsbase,
                             'dytrip' => $dytrip,
                             'dstrip' => $dstrip,
@@ -533,6 +576,7 @@ public function ProcessProjectProduct($request_params)
                                 'bdglvl' => 'A',
                                 'bdgqty' => $ttlqty,
                                 'dybase' => $dybase,
+                                'dycost' => $dycost,
                                 'dsbase' => $dsbase,
                                 'dytrip' => $dytrip,
                                 'dstrip' => $dstrip,
@@ -550,6 +594,7 @@ public function ProcessProjectProduct($request_params)
         }
 
         echo $dtinic . '|' . $dtfinl;
+        
         
     } 
 }

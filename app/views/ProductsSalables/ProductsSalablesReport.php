@@ -256,7 +256,7 @@ $mpdf->SetHTMLFooter($foot);
 $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 $mpdf->Output(
-    "Venta.pdf",
+    "Cotizacion-". $items[0]['ver_code'].".pdf",
     "I"
 );
 

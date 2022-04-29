@@ -3,10 +3,13 @@
     --in-black: hsl(0 0% 0%);
     --in-gray: hsl(236, 65%, 98.5%);
     --in-oxford: hsl(236, 3%, 75%);
+
     --br-gray-soft: hsl(236, 3%, 94%);
     --br-gray-medium: hsl(236, 3%, 80%);
     --br-gray-hard: hsl(236, 3%, 40%);
     --br-gray-hard-alfa: hsla(236, 3%, 40%, 0.09);
+
+    --br-invoice-button: hsla(230, 30%, 90%, 1);
 
     // Cabezas de columna
     --cl-color-costBase: hsla(236, 65%, 99%, 1);
@@ -75,12 +78,17 @@
 
         .panel__name {
             visibility: hidden;
+            width: 400px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
 
 
             i {
                 margin-left: 10px;
                 margin-right: 10px;
                 cursor: pointer;
+
             }
         }
     }
@@ -192,8 +200,6 @@
     }
 
 
-
-
     // Parrilla de productos seleccionados
     .invoice__section-grid {
         height: auto;
@@ -239,6 +245,12 @@
 
             .invoice_button {
                 visibility: hidden;
+            }
+
+            .version_current {
+                font-family: $font-secundary;
+                font-size: 1.3em;
+                padding-right: 1rem;
             }
         }
 
@@ -515,6 +527,8 @@
     }
 
 
+
+
     // MODALES EMERGENTES
     // Emergente: Información del proyecto y cliente seleccionado
     .invoice__section-details {
@@ -522,31 +536,74 @@
         top: -100%;
         right: 0;
         left: 0;
-        height: 300px;
+        bottom: 100%;
+        width: 450px;
         background-color: var(--in-white);
         transition: all 1s ease;
         z-index: 40;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+
 
         .detail__box {
-            padding: 1rem;
+            padding: .5rem;
 
-            .detail_group {
-                display: flex;
-                gap: .3rem;
+            table {
+                width: 100%;
 
                 .concept {
+                    font-weight: 300;
+                    font-size: 0.9em;
                     width: 150px;
-                    text-align: right;
+                    text-align: end;
+                    padding-right: .3rem;
+                    color: #777777;
                 }
 
                 .data {
                     font-weight: 700;
+                    width: auto;
+
+
+                    &.flash {
+                        padding-bottom: 1rem;
+                        padding-top: 0;
+
+
+
+                        &>span {
+                            border: 1px solid $setColor;
+                            padding: .1rem .5rem;
+                            font-size: .8em;
+                            border-radius: .6rem;
+                            background-color: hsl(230, 50%, 95%);
+                            font-weight: 600;
+                            text-transform: uppercase;
+                        }
+                    }
+
+                    &.calendar {
+                        position: relative;
+
+                        i {
+                            position: absolute;
+                            right: 0;
+                            font-size: 1.4em;
+                        }
+                    }
 
                 }
             }
+
+            .detail__box-fullRow {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+            }
+
+
+
         }
+
+
 
     }
 
@@ -556,17 +613,23 @@
         position: absolute;
         top: -100%;
         left: 0;
-        right: 0;
-        height: 15rem;
+        right: 14rem;
+        height: 18rem;
         background-color: var(--in-white);
         transition: all 1s ease;
         display: grid;
         grid-template-columns: 1fr 1fr;
         z-index: 40;
 
+        .finder__box-buttons {
+            text-align: end;
+            padding: .5rem;
+        }
+
         .finder__box {
             padding: 0.5rem;
             position: relative;
+            font-size: 1em;
 
             i {
                 position: absolute;
@@ -721,7 +784,63 @@
         }
     }
 
+    //Emergente: Comentarios
+    .comments__box {
+        width: 100%;
+        height: 100%;
+        padding: 1.1rem;
+        display: grid;
+        grid-template-rows: 1fr 170px;
 
+        .comments__list {
+            border: 1px solid var(--br-gray-soft);
+            border-radius: .5rem;
+            margin-bottom: .5rem;
+            padding: .5rem;
+            overflow-y: scroll;
+
+            .comment__group {
+                border-bottom: 1px solid var(--br-gray-soft);
+                // margin-bottom: 1rem;
+                padding: .2rem;
+                width: 100%;
+
+                &:hover {
+                    background-color: var(--cl-color-costBase);
+                }
+
+                .comment__box {
+                    width: 100%;
+                }
+
+                .comment__box-date {
+                    text-align: right;
+                    font-size: .9em;
+                    color: var(--in-oxford);
+
+                    i {
+                        padding: 0 .5rem;
+                    }
+                }
+
+                .comment__box-user {
+                    text-align: left;
+                    font-size: .9em;
+                    color: var(--in-oxford);
+                }
+
+            }
+        }
+
+        .comments__addNew {
+            background-color: var(--br-gray-soft);
+            padding: .5rem;
+
+            .invoice_button {
+                background-color: var(--in-white) !important;
+            }
+        }
+    }
 }
 
 .table_hidden {
@@ -816,8 +935,8 @@
     padding: .2rem .3rem;
     font-size: 0.9em;
     font-weight: 100;
-    border: 1px solid var(--in-oxford);
-    border-radius: .1rem;
+    border: 1px solid var(--br-invoice-button);
+    border-radius: .3rem;
     text-transform: lowercase;
     cursor: pointer;
 
@@ -828,6 +947,7 @@
 
     i {
         padding: 0 .3rem;
+
     }
 }
 
@@ -914,6 +1034,7 @@
     }
 
     .modal__body {
+
         position: absolute;
         top: 2.8rem;
         bottom: 0;
@@ -922,12 +1043,17 @@
     }
 }
 
+.modalLoading {
+    position: fixed;
+    z-index: 500;
+}
+
 .withShadow {
     box-shadow: 5px 10px 20px var(--md-shadow-color);
 }
 
 .invoice__modal-general {
-    background-color: #ffffff;
+    background-color: var(--in-white);
     left: 30px;
     top: 30px;
     right: 30px;
@@ -935,12 +1061,109 @@
     display: none;
 }
 
+.invoice__loading {
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    .box_loading {
+        width: 370px;
+        height: 180px;
+        background-color: var(--in-white);
+        box-shadow: 0px 0px 50px var(--md-shadow-color);
+        border-radius: .3rem;
+        padding: 1rem;
+        text-align: center;
+
+        .text_loading {
+            font-size: 1.5rem;
+            text-transform: capitalize;
+
+            .spin {
+                color: hsl(200, 85%, 50%);
+                font-size: 2em;
+                padding: 0.5rem;
+                animation: rotar 2s infinite;
+            }
+        }
+    }
+}
+
+.project_data-box {
+
+    table {
+        width: 80%;
+
+        td {
+            position: relative;
+            padding-top: 1.1rem;
+
+            &:first-child {
+                text-align: right;
+                vertical-align: top;
+                padding-top: 1.4rem;
+                width: 12rem;
+                color: #777777;
+            }
+
+        }
+
+        .textbox {
+
+            border: 1px solid #dddddd;
+            border-radius: 3px;
+            padding: 3px 30px 3px 5px;
+            color: #777777;
+            outline: none;
+            font-weight: 700;
+            color: #000000;
+            text-transform: uppercase;
+
+            &.textbox-alert {
+                border-color: #cc0000;
+                background-color: rgba(#cc0000, 0.05);
+            }
+        }
+
+        .textAlert {
+            position: absolute;
+            top: 1.3rem;
+            left: .6rem;
+            height: 1rem;
+            overflow: hidden;
+            color: $alert;
+            font-weight: 700;
+            visibility: hidden;
+        }
+
+        .icoTextBox {
+            position: absolute;
+            top: 24px;
+            right: 6px;
+            font-size: 1.2em;
+        }
+    }
+}
+
+
 .rotate180 {
     transform: rotate(180deg);
     transform: all .5s;
 }
 
+@keyframes rotar {
+    from {
+        transform: rotate(0deg);
+    }
 
+    to {
+        transform: rotate(360deg);
+    }
+}
 
 @media screen and (max-width: 800px) {
 

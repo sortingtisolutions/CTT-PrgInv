@@ -54,12 +54,27 @@ class BudgetModel extends Model
 
     
 // Listado de tipos de proyectos
-public function listProjectsType($params)
-{
+    public function listProjectsType($params)
+    {
 
-    $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
-    return $this->db->query($qry);
-}    
+        $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
+        return $this->db->query($qry);
+    }    
+
+    
+// Listado los comentarios del proyecto
+    public function listComments($params)
+    {
+        $pjtId = $this->db->real_escape_string($params['pjId']);
+
+
+        $qry = "SELECT com_id, com_date,com_user, com_comment 
+                FROM ctt_comments 
+                WHERE com_source_section = 'projects' 
+                AND com_action_id = $pjtId
+                ORDER BY com_date ASC;";
+        return $this->db->query($qry);
+    }    
 
 
     
@@ -256,7 +271,42 @@ public function stockProdcuts($params)
         $qry = "INSERT INTO ctt_version (ver_code, pjt_id) VALUES ('$verCode', $pjtId);";
         $this->db->query($qry);
         $result = $this->db->insert_id;
-        return $result;
+        return $result . '|' . $pjtId;
+    }
+
+// Agrega Comentario
+    public function InsertComment($params, $userParam)
+    {
+
+        $group = explode('|',$userParam);
+    
+        $user   = $group[2];
+        $pjtId  = $this->db->real_escape_string($params['pjtId']);
+        $comSrc = $this->db->real_escape_string($params['comSrc']);
+        $comComment  = $this->db->real_escape_string($params['comComment']);
+
+        $qry1 = "INSERT INTO ctt_comments (
+                        com_source_section, 
+                        com_action_id, 
+                        com_user, 
+                        com_comment, 
+                        com_status
+                ) VALUES (
+                        '$comSrc', 
+                        $pjtId, 
+                        '$user',
+                        '$comComment',
+                        1
+                );";
+        $this->db->query($qry1);
+        $comId = $this->db->insert_id;
+
+        $qry2 = "   SELECT com_id, com_date, com_user, com_comment 
+                    FROM ctt_comments 
+                    WHERE com_id = $comId;";
+        return $this->db->query($qry2);
+
+
     }
 
 
@@ -271,6 +321,7 @@ public function stockProdcuts($params)
         $bdg_prod_price         = $params['bdgPricBs'];
         $bdg_quantity           = $params['bdgQtysBs'];
         $bdg_days_base          = $params['bdgDaysBs'];
+        $bdg_days_cost          = $params['bdgDaysCs'];
         $bdg_discount_base      = $params['bdgDescBs'];
         $bdg_days_trip          = $params['bdgDaysTp'];
         $bdg_discount_trip      = $params['bdgDescTp'];
@@ -284,16 +335,17 @@ public function stockProdcuts($params)
 
         $qry = "INSERT INTO ctt_budget (
                     bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_prod_level, 
-                    bdg_quantity, bdg_days_base, bdg_discount_base, bdg_days_trip, 
+                    bdg_quantity, bdg_days_base, bdg_days_cost, bdg_discount_base, bdg_days_trip, 
                     bdg_discount_trip, bdg_days_test, bdg_discount_test,bdg_insured, 
                     ver_id, prd_id 
                 ) VALUES (
                     '$bdg_prod_sku',
-                    'ucase($bdg_prod_name)',    
+                    '$bdg_prod_name',    
                     '$bdg_prod_price',      
                     '$bdg_prod_level',
                     '$bdg_quantity',
                     '$bdg_days_base',           
+                    '$bdg_days_cost',           
                     '$bdg_discount_base',   
                     '$bdg_days_trip',
                     '$bdg_discount_trip',
@@ -339,10 +391,10 @@ public function stockProdcuts($params)
         $qry02 = "INSERT INTO ctt_projects (
                     pjt_name, pjt_date_start, pjt_date_end, pjt_location, pjttp_id, cuo_id, loc_id
                 ) VALUES (
-                    'ucase($pjt_name)', 
+                    '$pjt_name', 
                     '$pjt_date_start',
                     '$pjt_date_end', 
-                    'ucase($pjt_location)', 
+                    '$pjt_location', 
                     $pjt_type, 
                     $cuo_id, 
                     $loc_id
@@ -387,10 +439,10 @@ public function UpdateProject($params)
 
 
     $qry02 = "UPDATE    ctt_projects
-                 SET    pjt_name        = 'ucase($pjt_name)', 
+                 SET    pjt_name        = '$pjt_name', 
                         pjt_date_start  = '$pjt_date_start', 
                         pjt_date_end    = '$pjt_date_end',
-                        pjt_location    = 'ucase($pjt_location)', 
+                        pjt_location    = '$pjt_location', 
                         pjttp_id        = '$pjt_type',  
                         cuo_id          = '$cuo_id',
                         loc_id          = '$loc_id'
@@ -473,12 +525,12 @@ public function saveBudgetList($params)
 
         $qry = "INSERT INTO ctt_projects_content (
                     pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_prod_level, pjtcn_quantity, 
-                    pjtcn_days_base, pjtcn_discount_base, pjtcn_days_trip, pjtcn_discount_trip, 
+                    pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_days_trip, pjtcn_discount_trip, 
                     pjtcn_days_test, pjtcn_discount_test, pjtcn_insured,  ver_id, prd_id, pjt_id
                 )
                 SELECT 
-                    bg.bdg_prod_sku, ucase(bg.bdg_prod_name), bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_quantity,  
-                    bg.bdg_days_base, bg.bdg_discount_base, bg.bdg_days_trip, bg.bdg_discount_trip,
+                    bg.bdg_prod_sku, bg.bdg_prod_name, bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_quantity,  
+                    bg.bdg_days_base, bg.bdg_days_cost, bg.bdg_discount_base, bg.bdg_days_trip, bg.bdg_discount_trip,
                     bg.bdg_days_test, bg.bdg_discount_test, bg.bdg_insured, bg.ver_id, bg.prd_id, vr.pjt_id 
                 FROM ctt_budget AS bg
                 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id

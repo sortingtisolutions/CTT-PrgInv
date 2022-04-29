@@ -1,4 +1,5 @@
-let cust, proj, prod, vers, budg;
+let cust, proj, prod, vers, budg, tpprd, relc;
+var swpjt = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 
 $('document').ready(function () {
@@ -8,14 +9,16 @@ $('document').ready(function () {
 });
 
 function inicial() {
-    sticky_table();
+    stickyTable();
     eventsAction();
-    get_projects('0');
-    get_customers();
-    get_discounts();
+    getProjects('0');
+    getCustomers();
+    getCustomersOwner();
+    getDiscounts();
+    getProjectType();
 }
 
-function sticky_table() {
+function stickyTable() {
     $(`#invoiceTable table`).sticky({
         top: 'thead tr:first-child',
         left: 'tr th:first-child',
@@ -36,10 +39,10 @@ function eventsAction() {
 
             let rotate = $(this).attr('class').indexOf('rotate180');
             if (rotate >= 0) {
-                $('.invoice__section-details').css({top: '-100%'});
+                $('.invoice__section-details').css({top: '-100%', bottom: '100%'});
                 $(this).removeClass('rotate180');
             } else {
-                $('.invoice__section-details').css({top: '32px'});
+                $('.invoice__section-details').css({top: '32px', bottom: '0px'});
                 $(this).addClass('rotate180');
             }
         });
@@ -48,7 +51,7 @@ function eventsAction() {
     $('.projectfinder')
         .unbind('click')
         .on('click', function () {
-            $('.invoice__section-details').css({top: '-100%'});
+            $('.invoice__section-details').css({top: '-100%', bottom: '100%'});
             $('.projectInformation').removeClass('rotate180');
 
             let open = $(this).attr('class').indexOf('open');
@@ -92,6 +95,7 @@ function eventsAction() {
             $(`#SC${item}`).show();
         });
 
+    // Despliega la lista de productos para agregar a la cotización
     $('.invoice__box-table .invoice_button')
         .unbind('click')
         .on('click', function () {
@@ -99,6 +103,7 @@ function eventsAction() {
 
             showListProducts(item);
         });
+
     // Elimina la sección de la cotización
     $('.removeSection')
         .unbind('click')
@@ -109,11 +114,97 @@ function eventsAction() {
             sectionShowHide();
         });
 
+    // Guarda nueva version
     $('.version__button')
         .unbind('click')
         .on('click', function () {
-            let nRows = $('.frame_content table tbody tr').length;
-            console.log(nrowa);
+            let nRows = $('.invoice__box-table table tbody tr.budgetRow').length;
+            if (nRows > 0) {
+                let pjtId = $('.version_current').attr('data_project');
+                let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data_code');
+
+                let vr = parseInt(verCurr.substring(1, 10));
+                let verNext = 'C' + refil(vr + 1, 4);
+
+                let par = `
+                [{
+                    "pjtId"           : "${pjtId}",
+                    "verCode"         : "${verNext}"
+                }]`;
+
+                var pagina = 'Budget/SaveVersion';
+                var tipo = 'html';
+                var selector = saveBudget;
+                fillField(pagina, par, tipo, selector);
+            }
+        });
+
+    // Edita los datos del proyecto
+    $('#btnEditProject')
+        .unbind('click')
+        .on('click', function () {
+            let pjtId = $('.projectInformation').attr('data_project');
+            editProject(pjtId);
+        });
+    // Agrega nuevo proyecto
+    $('#btnNewProject')
+        .unbind('click')
+        .on('click', function () {
+            newProject();
+        });
+
+    // Agrega nueva cotización
+    $('#newQuote')
+        .unbind('click')
+        .on('click', function () {
+            window.location = 'Budget';
+        });
+
+    // Agrega nueva cotización
+    $('#newQuote')
+        .unbind('click')
+        .on('click', function () {
+            window.location = 'Budget';
+        });
+
+    // Agrega nueva cotización
+    $('.toSave')
+        .unbind('click')
+        .on('click', function () {
+            let pjtId = $('.version_current').attr('data_project');
+            promoteProject(pjtId);
+        });
+    // Imprime la cotización en pantalla
+    $('.toPrint')
+        .unbind('on')
+        .on('click', function () {
+            let verId = $('.version_current').attr('data_version');
+            printBudget(verId);
+        });
+
+    // Busca los elementos que coincidan con lo escrito el input de cliente y poyecto
+    $('.inputSearch')
+        .unbind('keyup')
+        .on('keyup', function () {
+            let id = $(this);
+            let obj = id.parents('.finder__box').attr('id');
+            let txt = id.val().toUpperCase();
+            sel_items(txt, obj);
+        });
+
+    $('.cleanInput')
+        .unbind('click')
+        .on('click', function () {
+            let id = $(this).parents('.finder__box').children('.invoiceInput');
+            id.val('');
+            id.trigger('keyup');
+        });
+
+    // Abre el modal de comentarios
+    $('.sidebar__comments .toComment')
+        .unbind('click')
+        .on('click', function () {
+            showModalComments();
         });
 
     expandCollapseSection();
@@ -135,73 +226,98 @@ function expandCollapseSection() {
 
 /** OBTENCION DE DATOS */
 /**  Obtiene el listado de proyectos */
-function get_projects(pjId) {
+function getProjects(pjId) {
+    swpjt = 0;
     var pagina = 'Budget/listProjects';
     var par = `[{"pjId":"${pjId}"}]`;
     var tipo = 'json';
-    var selector = put_projects;
+    var selector = putProjects;
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de clientes */
-function get_customers() {
+function getCustomers() {
     var pagina = 'Budget/listCustomers';
     var par = `[{"prm":""}]`;
     var tipo = 'json';
-    var selector = put_customers;
+    var selector = putCustomers;
+    fillField(pagina, par, tipo, selector);
+}
+/**  Obtiene los Id's de los elementos relacionados con la seleccion del cliente */
+function getCustomersOwner() {
+    var pagina = 'Budget/listCustomersOwn';
+    var par = `[{"cusId":"", "cutId":""}]`;
+    var tipo = 'json';
+    var selector = putCustomersOwner;
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de proyectos */
-function get_version(pjtId) {
+function getVersion(pjtId) {
     var pagina = 'Budget/listVersion';
     var par = `[{"pjtId":"${pjtId}"}]`;
     var tipo = 'json';
-    var selector = put_version;
+    var selector = putVersion;
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de productos */
-function get_products(word, dstr, dend) {
+function getProducts(word, dstr, dend) {
     var pagina = 'Budget/listProducts';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
-    var selector = put_products;
+    var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de cotizaciones */
-function get_budgets() {
+function getBudgets() {
     var pagina = 'Budget/listBudgets';
     var par = `[{"verId":"${vers}"}]`;
     var tipo = 'json';
-    var selector = put_budgets;
+    var selector = putBudgets;
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de descuentos */
-function get_discounts() {
+function getDiscounts() {
     var pagina = 'Budget/listDiscounts';
     var par = `[{"level":"1"}]`;
     var tipo = 'json';
-    var selector = put_discounts;
+    var selector = putDiscounts;
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de relacionados al prducto*/
-function get_products_related(id, tp) {
+function getProductsRelated(id, tp) {
     var pagina = 'Budget/listProductsRelated';
     var par = `[{"prdId":"${id}","type":"${tp}"}]`;
     var tipo = 'json';
-    var selector = put_products_related;
+    var selector = putProductsRelated;
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de projectos del producto  */
-function get_StockProjects(prdId) {
+function getStockProjects(prdId) {
     var pagina = 'ProjectPlans/stockProdcuts';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
-    var selector = put_StockProjects;
+    var selector = putStockProjects;
+    fillField(pagina, par, tipo, selector);
+}
+/** Obtiene el listado de los tipos de proyecto */
+function getProjectType() {
+    var pagina = 'Budget/listProjectsType';
+    var par = `[{"pjt":""}]`;
+    var tipo = 'json';
+    var selector = putProjectsType;
+    fillField(pagina, par, tipo, selector);
+}
+/** Obtiene el listado de los comentarios del proyecto */
+function getComments(pjtId) {
+    var pagina = 'Budget/listComments';
+    var par = `[{"pjId":"${pjtId}"}]`;
+    var tipo = 'json';
+    var selector = putComments;
     fillField(pagina, par, tipo, selector);
 }
 
 /** LLENA DE DATOS */
 /**  Llena el listado de proyectos */
-function put_projects(dt) {
+function putProjects(dt) {
     if (dt[0].pjt_id > 0) {
         proj = dt;
         $.each(proj, function (v, u) {
@@ -209,14 +325,15 @@ function put_projects(dt) {
             $('.finder_list-projects ul').append(H);
         });
 
-        selector_projects(proj[0].pjId);
+        selectorProjects(proj[0].pjId);
+        swpjt = 1;
     } else {
         $('.finder_list-projects ul').html('');
     }
 }
 
 /**  Llena el listado de prductores */
-function put_customers(dt) {
+function putCustomers(dt) {
     cust = dt;
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
@@ -224,69 +341,173 @@ function put_customers(dt) {
             $('.finder_list-customer ul').append(H);
         }
     });
-    select_customer();
+    selectCustomer();
+}
+/**  Llena el listado de prductores */
+function putCustomersOwner(dt) {
+    relc = dt;
+}
+
+/**  Llena el listado de descuentos */
+function putDiscounts(dt) {
+    $.each(dt, function (v, u) {
+        let H = `<option value="${u.dis_discount}">${u.dis_discount * 100}%</option>`;
+        $('#selDiscount').append(H);
+    });
 }
 
 /**  Llena el listado de versiones */
-function put_version(dt) {
+function putVersion(dt) {
     $('.version__list ul').html('');
     if (dt[0].ver_id != 0) {
-        $('.version__list-title').html('DOCUEMNTOS');
+        let firstVersion = dt[0].ver_id;
+        $('.version__list-title').html('DOCUEMENTOS');
         $.each(dt, function (v, u) {
-            let H = `<li id="V${u.ver_id}"><span>${u.ver_code}</span><span> ${moment(u.ver_date).format('DD-MMM-yyyy')}</span></li> `;
+            let H = `<li id="V${u.ver_id}" data_code="${u.ver_code}"><span>${u.ver_code}</span><span> ${moment(u.ver_date).format('DD-MMM-yyyy')}</span></li> `;
 
             $('.version__list ul').append(H);
         });
 
         $('.version__list ul li').on('click', function () {
             let version = $(this).attr('id').substring(1, 100);
+            let versionCode = $(this).attr('data_code');
             vers = version;
-            get_budgets();
+
+            $('.version_current')
+                .html('Version: ' + dt[0].ver_code)
+                .attr('data_version', version)
+                .attr('data_versionCode', versionCode);
+
+            getBudgets();
             showButtonVersion('H');
+            showButtonComments('S');
             showButtonToPrint('S');
             showButtonToSave('S');
         });
+
+        $('#V' + firstVersion).trigger('click');
     }
 }
 
-function selector_projects(pjtId) {
+/** Llena el listado de los tipos de proyecto */
+function putProjectsType(dt) {
+    tpprd = dt;
+}
+
+function selectorProjects(pjId) {
     $('.finder_list-projects ul li')
-        .unbind('clic')
+        .unbind('click')
         .on('click', function () {
-            let status = $(this).attr('class');
-            if (status == 'alive') {
-                let idSel = $(this).parents('.dato');
-                let indx = $(this).attr('data_content').split('|')[0];
-                let pj = proj[indx];
-
-                $('.panel__name').css({visibility: 'visible'}).children('span').html(pj.pjt_name).attr('data_id', pj.pjt_id);
-
-                $('#projectNumber').html(pj.pjt_number);
-                $('#projectLocation').html(pj.pjt_location);
-                $('#projectPeriod').html(`<span>${pj.pjt_date_start} - ${pj.pjt_date_end}</span><i class="fas fa-calendar-alt id="periodcalendar""></i>`);
-                $('#projectLocationType').html(pj.loc_type_location);
-                $('#projectType').html(pj.pjttp_name);
-                fillProducer(pj.cus_parent);
-                get_version(pj.pjt_id);
-
-                $.each(cust, function (v, u) {
-                    if (u.cus_id == pj.cus_id) {
-                        $('#CustomerName').html(u.cus_name);
-                        $('#CustomerType').html(u.cut_name);
-                        $('#CustomerAddress').html(u.cus_address);
-                        $('#CustomerEmail').html(u.cus_email);
-                        $('#CustomerPhone').html(u.cus_phone);
-                        $('#CustomerQualification').html(u.cus_qualificaton);
-                    }
-                });
-
-                $('.projectfinder').trigger('click');
-                $('.invoice_controlPanel .addSection').css({visibility: 'visible'});
-            }
+            cleanQuoteTable();
+            showButtonVersion('H');
+            showButtonToPrint('H');
+            showButtonToSave('H');
+            actionSelProject($(this));
+            $('.projectfinder').trigger('click');
         });
 }
 
-function select_customer() {
+function actionSelProject(obj) {
+    let status = obj.attr('class');
+
+    if (status == 'alive') {
+        let idSel = obj.parents('.dato');
+        let indx = obj.attr('data_content').split('|')[0];
+        let pj = proj[indx];
+
+        $('.panel__name').css({visibility: 'visible'}).children('span').html(pj.pjt_name).attr('data_id', pj.pjt_id).attr('title', pj.pjt_name);
+        $('#projectNumber').html(pj.pjt_number);
+        $('#projectLocation').html(pj.pjt_location);
+        $('#projectPeriod').html(`<span>${pj.pjt_date_start} - ${pj.pjt_date_end}</span><i class="fas fa-calendar-alt id="periodcalendar"></i>`);
+        $('#projectLocationType').html(pj.loc_type_location);
+        $('#projectType').html(pj.pjttp_name);
+        fillProducer(pj.cus_parent);
+        getVersion(pj.pjt_id);
+        getCalendarPeriods(pj);
+
+        $('.version_current').attr('data_project', pj.pjt_id);
+        $('.projectInformation').attr('data_project', pj.pjt_id);
+
+        $.each(cust, function (v, u) {
+            if (u.cus_id == pj.cus_id) {
+                $('#CustomerName').html(u.cus_name);
+                $('#CustomerType').html(`<span>${u.cut_name}</span>`);
+                $('#CustomerAddress').html(u.cus_address);
+                $('#CustomerEmail').html(u.cus_email);
+                $('#CustomerPhone').html(u.cus_phone);
+                $('#CustomerQualification').html(u.cus_qualificaton);
+            }
+        });
+
+        $('.invoice_controlPanel .addSection').css({visibility: 'visible'});
+    }
+}
+
+function getCalendarPeriods(pj) {
+    let fecha = moment(Date()).format('DD/MM/YYYY');
+    console.log(fecha);
+    $('#projectPeriod').daterangepicker(
+        {
+            showDropdowns: true,
+            autoApply: true,
+            locale: {
+                format: 'DD/MM/YYYY',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                firstDay: 1,
+            },
+            showCustomRangeLabel: false,
+            singleDatePicker: false,
+            startDate: fecha,
+            endDate: fecha,
+            minDate: fecha,
+            opens: 'left',
+        },
+        function (start, end, label) {
+            $('#projectPeriod span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+            let projDateStart = start.format('YYYYMMDD');
+            let projDateEnd = end.format('YYYYMMDD');
+
+            let par = `
+        [{
+            "pjtDateStart"  : "${projDateStart}",
+            "pjtDateEnd"    : "${projDateEnd}",
+            "pjtId"         : "${pj.pjt_id}"
+        }]
+        `;
+            var pagina = 'Budget/UpdatePeriodProject';
+            var tipo = 'html';
+            var selector = SetUpdatePeriodProject;
+            fillField(pagina, par, tipo, selector);
+        }
+    );
+}
+
+function SetUpdatePeriodProject(dt) {
+    console.log(dt);
+    let topDays = getDaysPeriod();
+    $('.invoice__box-table table tbody tr.budgetRow').each(function (v) {
+        let tr = $(this);
+        console.log(tr.attr('id'));
+        let bdgDaysBase = tr.children('td.daysBase').children('.input_invoice').val();
+        console.log(bdgDaysBase, topDays);
+        if (bdgDaysBase > topDays) {
+            tr.children('td.daysBase').children('.input_invoice').val(topDays);
+        }
+    });
+
+    updateTotals();
+    showButtonVersion('S');
+}
+
+function selectCustomer() {
     $('.finder_list-customer ul li')
         .unbind('click')
         .on('click', function () {
@@ -308,14 +529,6 @@ function select_customer() {
         });
 }
 
-/**  Llena el listado de descuentos */
-function put_discounts(dt) {
-    $.each(dt, function (v, u) {
-        let H = `<option value="${u.dis_discount}">${u.dis_discount * 100}%</option>`;
-        $('#selDiscount').append(H);
-    });
-}
-
 function fillProducer(cusId) {
     $.each(cust, function (v, u) {
         if (u.cus_id == cusId) {
@@ -334,7 +547,7 @@ function showListProducts(item) {
         .unbind('keyup')
         .on('keyup', function () {
             let text = $(this).val().toUpperCase();
-            sel_product(text);
+            selProduct(text);
         });
 
     $('.close_listProducts').on('click', function () {
@@ -355,7 +568,7 @@ function sel_product(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 3) {
-            get_products(res.toUpperCase(), dstr, dend);
+            getProducts(res.toUpperCase(), dstr, dend);
         } else {
             rowCurr.css({display: 'none'});
             rowCurr.each(function (index) {
@@ -385,7 +598,7 @@ function omitirAcentos(text) {
     return text;
 }
 
-function put_products(dt) {
+function putProducts(dt) {
     prod = dt;
     $.each(dt, function (v, u) {
         let H = `
@@ -400,19 +613,19 @@ function put_products(dt) {
 
     $('#listProductsTable table tbody tr').on('click', function () {
         let inx = $(this).attr('data_indx');
-        fill_budget(prod[inx], vers, inx);
+        fillBudget(prod[inx], vers, inx);
     });
 }
 
-function fill_budget(pr, vr, ix) {
+function fillBudget(pr, vr, ix) {
     let nRows = $(`#listProductsTable table tbody tr`).length;
-    load_budget(ix, nRows);
+    loadBudget(ix, nRows);
 }
 
-function load_budget(inx, bdgId) {
+function loadBudget(inx, bdgId) {
     let insurance = prod[inx].prd_insured == 0 ? 0 : 0.1;
     let produ = prod[inx].prd_name.replace(/\"/g, '°');
-    let days = get_days_period();
+    let days = getDaysPeriod();
     let section = $('.productos__box-table').attr('data_section').substring(2, 5);
 
     let par = `{
@@ -437,19 +650,19 @@ function load_budget(inx, bdgId) {
     }
     `;
 
-    let ky = registered_product('bdg' + prod[inx].prd_id);
+    let ky = registeredProduct('bdg' + prod[inx].prd_id);
     console.log(ky);
     if (ky == 0) {
-        fill_budget_prods(par, days);
+        fillBudgetProds(par, days);
     }
 
-    update_totals();
+    updateTotals();
     showButtonVersion('S');
     showButtonToPrint('H');
     showButtonToSave('H');
 }
 
-function registered_product(id) {
+function registeredProduct(id) {
     ky = 0;
     $('#invoiceTable table tbody tr').each(function () {
         let idp = $(this).attr('id');
@@ -462,27 +675,27 @@ function registered_product(id) {
     return ky;
 }
 
-function put_budgets(dt) {
+function putBudgets(dt) {
     budg = dt;
-    let days = get_days_period();
+    let days = getDaysPeriod();
 
     $('.budgetRow').remove();
 
     if (budg[0].bdg_id > 0) {
         $.each(budg, function (v, u) {
             let jsn = JSON.stringify(u);
-            fill_budget_prods(jsn, days);
+            fillBudgetProds(jsn, days);
         });
     }
     expandCollapseSection();
-    update_totals();
+    updateTotals();
     sectionShowHide();
 }
 
 // *************************************************
 // Llena el listado de productos seleccionados
 // *************************************************
-function fill_budget_prods(jsn, days) {
+function fillBudgetProds(jsn, days) {
     let pds = JSON.parse(jsn);
     let prdName = pds.bdg_prod_name.replace(/°/g, '"');
     let H = `
@@ -511,7 +724,7 @@ function fill_budget_prods(jsn, days) {
     `;
     $(`#SC${pds.bdg_section}`).show();
     $(`#SC${pds.bdg_section} tr.lastrow`).before(H);
-    sticky_table();
+    stickyTable();
     expandCollapseSection();
     activeInputSelector();
 }
@@ -521,10 +734,14 @@ function activeInputSelector() {
     $('.input_invoice')
         .unbind('blur')
         .on('blur', function () {
-            update_totals();
-            showButtonVersion('S');
+            updateTotals();
             showButtonToPrint('H');
             showButtonToSave('H');
+
+            let bgRows = $('#invoiceTable table tbody tr.budgetRow').length;
+            if (bgRows > 0) {
+                showButtonVersion('S');
+            }
         });
 
     // Muestra los seletores generales de columna para cantidad, dias y descuentos
@@ -538,41 +755,43 @@ function activeInputSelector() {
             let posLeft = id.offset().left;
             let posTop = id.offset().top - 20;
             let selector = section;
-
-            if (typeSet == 'inpt') {
-                $('.invoiceMainInput')
-                    .unbind('mouseleave')
-                    .css({top: posTop + 'px', left: posLeft + 'px'})
-                    .fadeIn(400)
-                    .on('mouseleave', function () {
-                        $('.invoiceMainInput').fadeOut(400);
-                    })
-                    .children('.input_invoice')
-                    .val('')
-                    .unbind('keyup')
-                    .on('keyup', function (e) {
-                        let data = e.target.value;
-                        console.log(selector);
-                        $(`td.${selector} .input_invoice`).val(data);
-                    });
-            }
-            if (typeSet == 'selt') {
-                $('.invoiceMainSelect')
-                    .unbind('mouseleave')
-                    .css({top: posTop + 'px', left: posLeft + 'px'})
-                    .fadeIn(400)
-                    .on('mouseleave', function () {
-                        $('.invoiceMainSelect').fadeOut(400);
-                    })
-                    .children('.input_invoice')
-                    .val('')
-                    .unbind('change')
-                    .on('change', function (e) {
-                        let data = e.target.value;
-                        data = data * 100 + '<small>%</small>';
-                        $(`td.${selector} .discData`).html(data);
-                        $('.invoiceMainSelect').fadeOut(400);
-                    });
+            let nRows = $('.invoice__box-table table tbody tr.budgetRow').length;
+            if (nRows > 0) {
+                if (typeSet == 'inpt') {
+                    $('.invoiceMainInput')
+                        .unbind('mouseleave')
+                        .css({top: posTop + 'px', left: posLeft + 'px'})
+                        .fadeIn(400)
+                        .on('mouseleave', function () {
+                            $('.invoiceMainInput').fadeOut(400);
+                        })
+                        .children('.input_invoice')
+                        .val('')
+                        .unbind('keyup')
+                        .on('keyup', function (e) {
+                            let data = e.target.value;
+                            console.log(selector);
+                            $(`td.${selector} .input_invoice`).val(data);
+                        });
+                }
+                if (typeSet == 'selt') {
+                    $('.invoiceMainSelect')
+                        .unbind('mouseleave')
+                        .css({top: posTop + 'px', left: posLeft + 'px'})
+                        .fadeIn(400)
+                        .on('mouseleave', function () {
+                            $('.invoiceMainSelect').fadeOut(400);
+                        })
+                        .children('.input_invoice')
+                        .val('')
+                        .unbind('change')
+                        .on('change', function (e) {
+                            let data = e.target.value;
+                            data = data * 100 + '<small>%</small>';
+                            $(`td.${selector} .discData`).html(data);
+                            $('.invoiceMainSelect').fadeOut(400);
+                        });
+                }
             }
         });
 
@@ -646,10 +865,10 @@ function activeInputSelector() {
 // Elimina el registro de la cotizacion
 function killProduct(bdgId) {
     let H = `<div class="emergent__warning">
-                <p>¿Realmente requieres de eliminar este producto?</p>
-                <button id="killYes" class="btn btn-primary">Si</button>  
-                <button id="killNo" class="btn btn-danger">No</button>  
-            </div>`;
+    <p>¿Realmente requieres de eliminar este producto?</p>
+    <button id="killYes" class="btn btn-primary">Si</button>  
+    <button id="killNo" class="btn btn-danger">No</button>  
+    </div>`;
 
     $('body').append(H);
 
@@ -659,7 +878,7 @@ function killProduct(bdgId) {
         if (resp == 'killYes') {
             $('#' + bdgId).fadeOut(500, function () {
                 $('#' + bdgId).remove();
-                update_totals();
+                updateTotals();
                 showButtonVersion('S');
                 showButtonToPrint('H');
                 showButtonToSave('H');
@@ -669,8 +888,9 @@ function killProduct(bdgId) {
     });
 }
 
+// Muestra la información del producto seleccionado
 function infoProduct(bdgId, type) {
-    get_products_related(bdgId.substring(3, 20), type);
+    getProductsRelated(bdgId.substring(3, 20), type);
 
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
@@ -680,8 +900,8 @@ function infoProduct(bdgId, type) {
     $('.invoice__modal-general .modal__header-concept').html('Productos Relacionados');
     closeModals();
 }
-
-function put_products_related(dt) {
+// Muestra la información de productos relacionados
+function putProductsRelated(dt) {
     $.each(dt, function (v, u) {
         let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
         let H = `
@@ -697,9 +917,9 @@ function put_products_related(dt) {
         top: 'thead tr:first-child',
     });
 }
-
+// Muestra el inventario de productos
 function stockProduct(bdgId, type) {
-    get_StockProjects(bdgId.substring(3, 20));
+    getStockProjects(bdgId.substring(3, 20));
 
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
@@ -709,7 +929,7 @@ function stockProduct(bdgId, type) {
     closeModals();
 }
 
-function put_StockProjects(dt) {
+function putStockProjects(dt) {
     console.log(dt);
     $.each(dt, function (v, u) {
         let situation = u.ser_situation != 'D' ? 'class="levelSituation"' : '';
@@ -731,8 +951,364 @@ function put_StockProjects(dt) {
     });
 }
 
+function editProject(pjtId) {
+    $('.invoice__modalBackgound').fadeIn('slow');
+    $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
+    let template = $('#dataProjectTemplate');
+    $('.invoice__modal-general .modal__body').append(template.html());
+    $('.invoice__modal-general .modal__header-concept').html('Edición de datos del proyecto');
+    closeModals();
+    fillContent();
+    fillData();
+}
+
+function fillContent() {
+    // configura el calendario de seleccion de periodos
+    let fecha = moment(Date()).format('DD/MM/YYYY');
+
+    $('#calendar').daterangepicker(
+        {
+            autoApply: true,
+            locale: {
+                format: 'DD/MM/YYYY',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                customRangeLabel: 'Custom',
+                weekLabel: 'W',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                firstDay: 1,
+            },
+            showCustomRangeLabel: false,
+            singleDatePicker: false,
+            startDate: fecha,
+            endDate: fecha,
+            minDate: fecha,
+        },
+        function (start, end, label) {
+            $('#txtPeriodProjectEdt').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+            looseAlert($('#txtPeriodProjectEdt').parent());
+
+            // $('#txtPeriodProject').parent().children('span').html('');
+            // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+        }
+    );
+    // Llena el selector de tipo de proyecto
+    $.each(tpprd, function (v, u) {
+        let H = `<option value="${u.pjttp_id}"> ${u.pjttp_name}</option>`;
+        $('#txtTypeProjectEdt').append(H);
+    });
+    // Llena el selector de clientes
+    $.each(cust, function (v, u) {
+        if (u.cut_id == 1) {
+            let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
+            $('#txtCustomerEdt').append(H);
+        }
+    });
+    // Llena el selector de relacion de clientes
+    $.each(cust, function (v, u) {
+        if (u.cut_id == 2) {
+            let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
+            $('#txtCustomerRelEdt').append(H);
+        }
+    });
+
+    $('.textbox')
+        .unbind('focus')
+        .on('focus', function () {
+            let group = $(this).parent();
+            looseAlert(group);
+        });
+}
+
+function fillData() {
+    let pj = proj;
+    $('#txtProjectIdEdt').val(pj[0].pjt_id);
+    $('#txtProjectEdt').val(pj[0].pjt_name);
+    $('#txtPeriodProjectEdt').val(pj[0].pjt_date_start + ' - ' + pj[0].pjt_date_end);
+    $('#txtLocationEdt').val(pj[0].pjt_location);
+    $('#txtCustomerOwnerEdt').val(pj[0].cuo_id);
+    $(`#txtTypeProjectEdt option[value = "${pj[0].pjttp_id}"]`).attr('selected', 'selected');
+    $(`#txtTypeLocationEdt option[value = "${pj[0].loc_id}"]`).attr('selected', 'selected');
+    $(`#txtCustomerEdt option[value = "${pj[0].cus_id}"]`).attr('selected', 'selected');
+    $(`#txtCustomerRelEdt option[value = "${pj[0].cus_parent}"]`).attr('selected', 'selected');
+
+    $('#saveProject').html('Guardar cambios').removeAttr('class').addClass('bn btn-ok update');
+
+    $('#saveProject.update')
+        .unbind('click')
+        .on('click', function () {
+            let ky = validatorFields($('#formProject'));
+            if (ky == 0) {
+                let projId = $('#txtProjectIdEdt').val();
+                let projName = $('#txtProjectEdt').val();
+                let projLocation = $('#txtLocationEdt').val();
+                let cuoId = $('#txtCustomerOwnerEdt').val();
+                let projLocationTypeValue = $('#txtTypeLocationEdt option:selected').val();
+                let projPeriod = $('#txtPeriodProjectEdt').val();
+                let projType = $('#txtTypeProjectEdt option:selected').val();
+                let cusCte = $('#txtCustomerEdt option:selected').val();
+                let cusCteRel = $('#txtCustomerRelEdt option:selected').val();
+
+                let projDateStart = moment(projPeriod.split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
+                let projDateEnd = moment(projPeriod.split(' - ')[1], 'DD/MM/YYYY').format('YYYYMMDD');
+
+                let par = `
+                [{
+                    "projId"        : "${projId}",
+                    "pjtName"       : "${projName.toUpperCase()}",
+                    "pjtLocation"   : "${projLocation.toUpperCase()}",
+                    "pjtDateStart"  : "${projDateStart}",
+                    "pjtDateEnd"    : "${projDateEnd}",
+                    "pjtType"       : "${projType}",
+                    "locId"         : "${projLocationTypeValue}",
+                    "cuoId"         : "${cuoId}",
+                    "cusId"         : "${cusCte}",
+                    "cusParent"     : "${cusCteRel}"
+                }]
+                `;
+
+                // console.log(par);
+                var pagina = 'Budget/UpdateProject';
+                var tipo = 'html';
+                var selector = loadProject;
+                fillField(pagina, par, tipo, selector);
+            }
+        });
+}
+
+function loadProject(dt) {
+    $('.finder_list-projects ul').html('');
+    getProjects(dt);
+    waitShowProject(dt);
+    automaticCloseModal();
+}
+
+function waitShowProject(pjtId) {
+    if (swpjt == 1) {
+        let obj = $('#P' + pjtId);
+        actionSelProject(obj);
+    } else {
+        setTimeout(() => {
+            waitShowProject(pjtId);
+        }, 500);
+    }
+}
+
+function newProject() {
+    $('.invoice__modalBackgound').fadeIn('slow');
+    $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
+    let template = $('#dataProjectTemplate');
+    $('.invoice__modal-general .modal__body').append(template.html());
+    $('.invoice__modal-general .modal__header-concept').html('Nuevo proyecto');
+    $('#saveProject').html('Guardar proyecto').removeAttr('class').addClass('bn btn-ok insert');
+    closeModals();
+    fillContent();
+    actionNewProject();
+}
+function actionNewProject() {
+    $('#saveProject.insert')
+        .unbind('click')
+        .on('click', function () {
+            let ky = validatorFields($('#formProject'));
+            if (ky == 0) {
+                let projId = $('#txtProjectIdEdt').val();
+                let projName = $('#txtProjectEdt').val();
+                let projLocation = $('#txtLocationEdt').val();
+                // let cuoId = $('#txtCustomerOwnerEdt').val();
+                let projLocationTypeValue = $('#txtTypeLocationEdt option:selected').val();
+                let projPeriod = $('#txtPeriodProjectEdt').val();
+                let projType = $('#txtTypeProjectEdt option:selected').val();
+                let cusCte = $('#txtCustomerEdt option:selected').val();
+                let cusCteRel = $('#txtCustomerRelEdt option:selected').val();
+
+                let projDateStart = moment(projPeriod.split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
+                let projDateEnd = moment(projPeriod.split(' - ')[1], 'DD/MM/YYYY').format('YYYYMMDD');
+
+                let cuoId = 0;
+                $.each(relc, function (v, u) {
+                    if (cusCte == u.cus_id && cusCteRel == u.cus_parent) {
+                        cuoId = u.cuo_id;
+                    }
+                });
+
+                let par = `
+            [{
+                "projId"        : "${projId}",
+                "pjtName"       : "${projName.toUpperCase()}",
+                "pjtLocation"   : "${projLocation.toUpperCase()}",
+                "pjtDateStart"  : "${projDateStart}",
+                "pjtDateEnd"    : "${projDateEnd}",
+                "pjtType"       : "${projType}",
+                "locId"         : "${projLocationTypeValue}",
+                "cuoId"         : "${cuoId}",
+                "cusId"         : "${cusCte}",
+                "cusParent"     : "${cusCteRel}"
+            }]
+            `;
+
+                console.log(par);
+                var pagina = 'Budget/SaveProject';
+                var tipo = 'html';
+                var selector = loadProject;
+                fillField(pagina, par, tipo, selector);
+            }
+        });
+}
+
+// *************************************************
+// Lista los comentarios al proyecto
+// *************************************************
+function showModalComments() {
+    let template = $('#commentsTemplates');
+    let pjtId = $('.version_current').attr('data_project');
+
+    $('.invoice__modalBackgound').fadeIn('slow');
+    $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
+    $('.invoice__modal-general .modal__body').append(template.html());
+    $('.invoice__modal-general .modal__header-concept').html('Comentarios');
+    closeModals();
+    fillComments(pjtId);
+}
+
+function fillComments(pjtId) {
+    console.log(pjtId);
+    // Agrega nuevo comentario
+    $('#newComment')
+        .unbind('click')
+        .on('click', function () {
+            console.log('Comentraios');
+            let pjtId = $('.version_current').attr('data_project');
+
+            let comSrc = 'projects';
+            let comComment = $('#txtComment').val();
+
+            if (comComment.length > 3) {
+                let par = `
+                    [{
+                        "comSrc"        : "${comSrc}",
+                        "comComment"    : "${comComment}",
+                        "pjtId"         : "${pjtId}"
+                    }]
+                    `;
+                var pagina = 'Budget/InsertComment';
+                var tipo = 'json';
+                console.log(par);
+                var selector = addComment;
+                fillField(pagina, par, tipo, selector);
+            }
+        });
+
+    getComments(pjtId);
+}
+function putComments(dt) {
+    $('.comments__list').html('');
+    if (dt[0].com_id > 0) {
+        $.each(dt, function (v, u) {
+            console.log(u);
+            fillCommnetElements(u);
+        });
+    }
+}
+
+function fillCommnetElements(u) {
+    console.log(u.com_comment);
+    let H = `
+        <div class="comment__group">
+            <div class="comment__box comment__box-date"><i class="far fa-clock"></i>${u.com_date}</div>
+            <div class="comment__box comment__box-text">${u.com_comment}</div>
+            <div class="comment__box comment__box-user">${u.com_user}</div>
+        </div>
+    `;
+
+    $('.comments__list').prepend(H);
+}
+
+function addComment(dt) {
+    console.log(dt[0]);
+    fillCommnetElements(dt[0]);
+    $('#txtComment').val('');
+}
+
+// *************************************************
+// imprime la cotización
+// *************************************************
+
+function printBudget(verId) {
+    let user = Cookies.get('user').split('|');
+    let v = verId;
+    let u = user[0];
+    let n = user[2];
+    let h = localStorage.getItem('host');
+
+    console.log(user);
+
+    window.open(`${url}app/views/Budget/BudgetReport.php?v=${v}&u=${u}&n=${n}&h=${h}`, '_blank');
+}
+
+// *************************************************
+// Guarda la cotización seleccionada
+// *************************************************
+function saveBudget(dt) {
+    let verId = dt.split('|')[0];
+    let pjtId = dt.split('|')[1];
+
+    $('#invoiceTable table tbody tr.budgetRow').each(function () {
+        let tr = $(this);
+        let prdId = tr.attr('id').substring(3, 10);
+        let bdgSku = tr.attr('data_sku');
+        let bdgLevel = tr.attr('data_level');
+        let bdgProduct = tr.children('th.product').children('.elipsis').text().replace(/\"/g, '°');
+        let bdgQuantity = tr.children('td.quantityBase').children('.input_invoice').val();
+        let bdgPriceBase = tr.children('td.priceBase').text().replace(/,/g, '');
+        let bdgDaysBase = tr.children('td.daysBase').children('.input_invoice').val();
+        let bdgDaysCost = tr.children('td.daysCost').children('.input_invoice').val();
+        let bdgDesctBase = parseFloat(tr.children('td.discountBase').text()) / 100;
+        let bdgDaysTrip = tr.children('td.daysTrip').children('.input_invoice').val();
+        let bdgDescTrip = parseFloat(tr.children('td.discountTrip').text()) / 100;
+        let bdgDaysTest = tr.children('td.daysTest').children('.input_invoice').val();
+        let bdgDescTest = parseFloat(tr.children('td.discountTest').text()) / 100;
+        let bdgInsured = tr.attr('data_insured');
+
+        if (bdgSku != undefined) {
+            let par = `
+            [{
+                "bdgSku"          : "${bdgSku}",
+                "bdgLevel"        : "${bdgLevel}",
+                "bdgProduc"       : "${bdgProduct.toUpperCase()}",
+                "bdgPricBs"       : "${bdgPriceBase}",
+                "bdgQtysBs"       : "${bdgQuantity}",
+                "bdgDaysBs"       : "${bdgDaysBase}",
+                "bdgDaysCs"       : "${bdgDaysCost}",
+                "bdgDescBs"       : "${bdgDesctBase}",
+                "bdgDaysTp"       : "${bdgDaysTrip}",
+                "bdgDescTp"       : "${bdgDescTrip}",
+                "bdgDaysTr"       : "${bdgDaysTest}",
+                "bdgDescTr"       : "${bdgDescTest}",
+                "bdgInsured"      : "${bdgInsured}",
+                "verId"           : "${verId}",
+                "prdId"           : "${prdId}",
+                "pjtId"           : "${pjtId}"
+            }]`;
+
+            var pagina = 'Budget/SaveBudget';
+            var tipo = 'html';
+            var selector = respBudget;
+            fillField(pagina, par, tipo, selector);
+        }
+    });
+}
+
+function respBudget(dt) {
+    console.log(dt);
+    getVersion(dt);
+}
+
 /**  ++++  Obtiene los días definidos para el proyectos */
-function get_days_period() {
+function getDaysPeriod() {
     let Period = $('#projectPeriod span').text();
     let start = moment(Period.split(' - ')[0], 'DD/MM/YYYY');
     let end = moment(Period.split(' - ')[1], 'DD/MM/YYYY');
@@ -757,7 +1333,7 @@ function mkn(cf, tp) {
 }
 
 // Actualiza los totales
-function update_totals() {
+function updateTotals() {
     let costbase = 0,
         costtrip = 0,
         costtest = 0,
@@ -830,6 +1406,29 @@ function showButtonToSave(acc) {
     elm = $('.invoice_controlPanel .toSave');
     acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
 }
+function showButtonComments(acc) {
+    elm = $('.sidebar__comments .toComment');
+    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+}
+function cleanQuoteTable() {
+    $('#invoiceTable table tbody.sections_products').each(function () {
+        let id = $(this);
+        let status = id.css('display');
+        if (status == 'table-row-group') {
+            id.hide().find('tr.budgetRow').remove();
+        }
+    });
+}
+function cleanVersionList() {
+    $('.version__list-title').html('');
+    $('.version__list ul li').remove();
+}
+function cleanTotalsArea() {
+    $('.sidebar__totals .totals-numbers').html('0.00');
+    $('.sidebar__totals .totals-numbers.simple').html('0');
+    $('.version_current').html('').attr('data_version', null).attr('data_project', null).attr('data_versionCode', null);
+}
+/** *************************************************************** */
 
 /** ***** MUESTRA Y OCULTA ELEMENTOS DEL MENU DE SECCIONES ******** */
 function sectionShowHide() {
@@ -849,9 +1448,114 @@ function closeModals(table) {
     $('.invoice__modal-general .modal__header .closeModal')
         .unbind('click')
         .on('click', function () {
-            $('.invoice__modal-general').slideUp(400, function () {
-                $('.invoice__modalBackgound').fadeOut(400);
-                $('.invoice__modal-general .modal__body').html('');
-            });
+            automaticCloseModal();
         });
+}
+
+function automaticCloseModal() {
+    $('.invoice__modal-general').slideUp(400, function () {
+        $('.invoice__modalBackgound').fadeOut(400);
+        $('.invoice__modal-general .modal__body').html('');
+    });
+}
+
+function modalLoading(acc) {
+    if (acc == 'S') {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading').slideDown('slow').css({'z-index': 401, display: 'flex'});
+    } else {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+        });
+    }
+}
+
+/**  +++ Oculta los elementos del listado que no cumplen con la cadena  */
+function sel_items(txt, obj) {
+    if (txt.length < 1) {
+        $(`#${obj} .finder_list ul li`).css({display: 'block'});
+    } else {
+        $(`#${obj} .finder_list ul li`).css({display: 'none'});
+    }
+
+    $(`#${obj} .finder_list ul li`).each(function (index) {
+        var cm = $(this).text().toUpperCase();
+
+        cm = omitirAcentos(cm);
+        var cr = cm.indexOf(txt);
+        if (cr > -1) {
+            //            alert($(this).children().html())
+            $(this).css({display: 'block'});
+        }
+    });
+}
+
+/** ***** VALIDA EL LLENADO DE LOS CAMPOS ******* */
+function validatorFields(frm) {
+    let ky = 0;
+    frm.find('.required').each(function () {
+        if ($(this).val() == '' || $(this).val() == 0) {
+            $(this).addClass('textbox-alert');
+            $(this).parent().children('.textAlert').css({visibility: 'visible'});
+
+            ky = 1;
+        }
+    });
+    return ky;
+}
+
+/* ************************************************************************ */
+/* PROMUEVE COTIZACION A PRESEUPUESTO                                       */
+/* ************************************************************************ */
+function promoteProject(pjtId) {
+    modalLoading('S');
+
+    var pagina = 'Budget/PromoteProject';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'html';
+    var selector = showPromoteProject;
+    fillField(pagina, par, tipo, selector);
+}
+function showPromoteProject(dt) {
+    let verId = $('.invoice_controlPanel .version_current').attr('data_version');
+    var pagina = 'Budget/PromoteVersion';
+    var par = `[{"verId":"${verId}","pjtId":"${dt}"}]`;
+    var tipo = 'html';
+    var selector = showPromoteVersion;
+    fillField(pagina, par, tipo, selector);
+}
+
+function showPromoteVersion(dt) {
+    console.log(dt);
+    let pjtId = dt.split('|')[0];
+    $('#P' + pjtId).remove();
+
+    showPromoteBudget(dt);
+}
+
+function showPromoteBudget(dt) {
+    let pjtId = dt.split('|')[0];
+    let verId = dt.split('|')[1];
+
+    var pagina = 'Budget/ProcessProjectProduct';
+    var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
+    var tipo = 'html';
+    var selector = showResult;
+    fillField(pagina, par, tipo, selector);
+}
+
+function showResult(dt) {
+    console.log(dt);
+    modalLoading('H');
+    cleanFormat();
+}
+
+function cleanFormat() {
+    showButtonVersion('H');
+    showButtonToPrint('H');
+    showButtonToSave('H');
+    showButtonComments('H');
+    cleanQuoteTable();
+    cleanVersionList();
+    cleanTotalsArea();
 }
