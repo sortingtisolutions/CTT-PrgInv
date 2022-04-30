@@ -559,7 +559,7 @@ function showListProducts(item) {
 }
 
 /** ++++++ Selecciona los productos del listado */
-function sel_product(res) {
+function selProduct(res) {
     res = res.toUpperCase();
     let rowCurr = $('#listProductsTable table tbody tr');
     let hearCnt = $('#listProductsTable table tbody tr th');
@@ -1505,7 +1505,7 @@ function validatorFields(frm) {
 }
 
 /* ************************************************************************ */
-/* PROMUEVE COTIZACION A PRESEUPUESTO                                       */
+/* PROMUEVE COTIZACION A PRESUPUESTO                                       */
 /* ************************************************************************ */
 function promoteProject(pjtId) {
     modalLoading('S');
