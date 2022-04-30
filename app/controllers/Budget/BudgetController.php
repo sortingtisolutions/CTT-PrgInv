@@ -59,7 +59,6 @@ class BudgetController extends Controller
             $res =  '[{"pjt_id":"0"}]';	
         }
         echo $res;
-
     } 
 
     
