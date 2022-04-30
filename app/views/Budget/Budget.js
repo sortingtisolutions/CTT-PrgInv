@@ -122,7 +122,9 @@ function eventsAction() {
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data_project');
                 let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data_code');
-
+                if (verCurr == undefined) {
+                    verCurr = 'V0';
+                }
                 let vr = parseInt(verCurr.substring(1, 10));
                 let verNext = 'C' + refil(vr + 1, 4);
 
