@@ -160,7 +160,7 @@
                     </tr>
                     <tr>
                         <td class="totals-concept">NUMERO DE PRODUCTOS</td>
-                        <td class="totals-numbers simple">0</td>
+                        <td class="totals-numbers simple" id="numberProducts">0</td>
                     </tr>
                 </table>
         </div>

@@ -447,7 +447,6 @@ function actionSelProject(obj) {
 
 function getCalendarPeriods(pj) {
     let fecha = moment(Date()).format('DD/MM/YYYY');
-    console.log(fecha);
     $('#projectPeriod').daterangepicker(
         {
             showDropdowns: true,
@@ -1274,12 +1273,14 @@ function saveBudget(dt) {
         let bdgDaysTest = tr.children('td.daysTest').children('.input_invoice').val();
         let bdgDescTest = parseFloat(tr.children('td.discountTest').text()) / 100;
         let bdgInsured = tr.attr('data_insured');
+        let bdgSection = tr.parents('tbody').attr('id').substring(2, 5);
 
         if (bdgSku != undefined) {
             let par = `
             [{
                 "bdgSku"          : "${bdgSku}",
                 "bdgLevel"        : "${bdgLevel}",
+                "bdgSection"      : "${bdgSection}",
                 "bdgProduc"       : "${bdgProduct.toUpperCase()}",
                 "bdgPricBs"       : "${bdgPriceBase}",
                 "bdgQtysBs"       : "${bdgQuantity}",
@@ -1305,7 +1306,6 @@ function saveBudget(dt) {
 }
 
 function respBudget(dt) {
-    console.log(dt);
     getVersion(dt);
 }
 
@@ -1393,6 +1393,9 @@ function updateTotals() {
     totlCost = costbase + costtrip + costtest + costassu;
 
     $('#costTotal').html(mkn(totlCost, 'n'));
+
+    let ttlrws = $('#invoiceTable').find('tbody tr.budgetRow').length;
+    $('#numberProducts').html(ttlrws);
 }
 
 /** ***** MUESTRA Y OCULTA BOTONES ******* */

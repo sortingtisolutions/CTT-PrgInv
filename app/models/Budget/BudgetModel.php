@@ -317,6 +317,7 @@ public function stockProdcuts($params)
 
         $bdg_prod_sku           = $params['bdgSku'];
         $bdg_prod_level         = $params['bdgLevel'];
+        $bdg_section            = $params['bdgSection'];
         $bdg_prod_name          = str_replace('°','"',$params['bdgProduc']);
         $bdg_prod_price         = $params['bdgPricBs'];
         $bdg_quantity           = $params['bdgQtysBs'];
@@ -334,25 +335,26 @@ public function stockProdcuts($params)
 
 
         $qry = "INSERT INTO ctt_budget (
-                    bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_prod_level, 
+                    bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_prod_level, bdg_section, 
                     bdg_quantity, bdg_days_base, bdg_days_cost, bdg_discount_base, bdg_days_trip, 
                     bdg_discount_trip, bdg_days_test, bdg_discount_test,bdg_insured, 
                     ver_id, prd_id 
                 ) VALUES (
-                    '$bdg_prod_sku',
+                    '$bdg_prod_sku', 
                     '$bdg_prod_name',    
                     '$bdg_prod_price',      
-                    '$bdg_prod_level',
-                    '$bdg_quantity',
+                    '$bdg_prod_level', 
+                    '$bdg_section',  
+                    '$bdg_quantity', 
                     '$bdg_days_base',           
                     '$bdg_days_cost',           
                     '$bdg_discount_base',   
-                    '$bdg_days_trip',
-                    '$bdg_discount_trip',
-                    '$bdg_days_test',
-                    '$bdg_discount_test',
-                    '$bdg_insured',
-                    '$ver_id',
+                    '$bdg_days_trip', 
+                    '$bdg_discount_trip', 
+                    '$bdg_days_test', 
+                    '$bdg_discount_test', 
+                    '$bdg_insured', 
+                    '$ver_id', 
                     '$prd_id'
                 );
                 ";
