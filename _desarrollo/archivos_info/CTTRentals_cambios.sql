@@ -383,3 +383,33 @@ ALTER TABLE ctt_budget ADD COLUMN bdg_days_cost INT COMMENT 'Días en cotizació
   -- Actualizacion del 25 de ABRIL 2022
 ALTER TABLE ctt_projects_content ADD COLUMN pjtcn_days_cost INT COMMENT 'Días en cotización en renta' AFTER pjtcn_days_base;
 
+
+
+
+
+  -- Actualizacion del 02 de MAYO 2022
+ALTER TABLE ctt_projects_content ADD COLUMN pjtcn_section INT COMMENT 'Numero de seccion' AFTER pjtcn_prod_level;
+
+CREATE TABLE ctt_projects_version (
+  `pjtvr_id` 		          int(11) NOT NULL AUTO_INCREMENT       COMMENT 'Id del contenido del projecto',
+  `pjtvr_prod_sku`        varchar(15) DEFAULT NULL              COMMENT 'SKU identificador del producto',
+  `pjtvr_prod_name`       varchar(100) DEFAULT NULL             COMMENT 'Nombre del producto',
+  `pjtvr_prod_price`      decimal(10,2) DEFAULT NULL            COMMENT 'Precio unitario del producto',
+  `pjtvr_quantity`        int(11) DEFAULT NULL                  COMMENT 'Cantidad de productos',
+  `pjtvr_days_base`       int(11) DEFAULT NULL                  COMMENT 'Días solicitados en renta',
+  `pjtvr_days_cost`       int(11) DEFAULT NULL                  COMMENT 'Días en cotización en renta',
+  `pjtvr_discount_base`   decimal(10,2) DEFAULT NULL            COMMENT 'Descuento aplicado a la renta',
+  `pjtvr_days_trip`       int(11) DEFAULT NULL                  COMMENT 'Días solicitados en viaje',
+  `pjtvr_discount_trip`   decimal(10,2) DEFAULT NULL            COMMENT 'Descuento aplicado al viaje',
+  `pjtvr_days_test`       int(11) DEFAULT NULL                  COMMENT 'Días solicitados en prueba',
+  `pjtvr_discount_test`   decimal(10,2) DEFAULT NULL            COMMENT 'Descuento aplicado en prueba',
+  `pjtvr_insured`         decimal(10,2) DEFAULT 0.10            COMMENT 'Porcentaje de seguro',
+  `pjtvr_prod_level`      varchar(1) DEFAULT 'P'                COMMENT 'Nivel del producto  K=Kit, P=Producto',
+  `pjtvr_section`         INT(11)                               COMMENT 'Numero de seccion',
+  `pjtvr_status`          varchar(1) DEFAULT '1'                COMMENT 'Status del contendo del proyecto 1-activo 0-inactivo',
+  `ver_id`                int(11) NOT NULL                      COMMENT 'FK Id de la version relación ctt_version',
+  `prd_id`                int(11) NOT NULL                      COMMENT 'FK Id del producto relación ctt_products',
+  `pjt_id`                int(11) NOT NULL                      COMMENT 'FK Id del proyecto relación ctt_proyect',
+  PRIMARY KEY (`pjtvr_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Contenido de la version del proyecto';
+

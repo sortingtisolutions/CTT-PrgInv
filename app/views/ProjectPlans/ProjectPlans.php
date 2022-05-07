@@ -1,4 +1,3 @@
-
 <?php 
 	defined('BASEPATH') or exit('No se permite acceso directo'); 
 	require ROOT . FOLDER_PATH . "/app/assets/header.php";
@@ -8,221 +7,477 @@
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 
+<div class="invoice__container">
+    <!-- Nombre del proyecto y tablero de control -->
+    <div class="invoice__section invoice__section-panel invoice-border">
+        <div class="panel__name">
+            <i class="fas fa-caret-square-down projectInformation"></i>
+            <span id="projectName" data_id="" title=""></span>
+        </div>
+        <div class="panel__title">PRESUPUESTO</div>
+        <div class="panel__finder">
+            <i class="fas fa-search projectfinder"></i>
+        </div>
+    </div>
 
 
-<div class="container-fluid">
-    <div class="contenido ">
-        <div class="row">
-            <div class="block_01">
-            
-                <div class="row">
+    <!-- Botones de reseteo -->
+    <div class="invoice__section invoice__section-button invoice-border">
+        <!-- <span class="invoice_button" id="newQuote"><i class="fas fa-plus"></i>nueva cotización</span> -->
+    </div>
 
-                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 blocks">
+
+    <!-- Parilla de productos seleccionado -->
+    <div class="invoice__section invoice__section-grid invoice-border">
+        <div class="invoice_controlPanel">
+            <span class="version_current"></span>
+            <span class="invoice_button addSection"><i class="fas fa-plus"></i>Agrega Sección</span>
+            <span class="invoice_button toPrint"><i class="fas fa-print"></i> Imprimir</span>
+            <span class="invoice_button toSave"><i class="fas fa-save"></i> Generar presupuesto</span>
+            <div class="menu-sections">
+                <ul>
+                    <li class="equipoBase"          data_option="1">Equipo Base</li>
+                    <li class="equipoExtra"         data_option="2">Equipo Extra</li>
+                    <li class="equipoPorDia"        data_option="3">Equipo por Días</li>
+                    <li class="equipoSubarrendo"    data_option="4">Equipo por subarrendo</li>
+                </ul>
+            </div>
+        </div>
+        <div class="invoice__box-table" id="invoiceTable">
+            <table >
+                <thead>
+                    <tr>
                         
-                        <div class="  block_01-02">
-                        <span class="titleSection">Presupuesto</span>
-                            <table class="table_information">
-                                <tr>
-                                    <td class="concepto"><b>Numero de proyecto</b></td>
-                                    <td class="dato" id="numProject">
-                                        <div class="search" contenteditable="true" ></div>
-                                        <i class="fas fa-search serc"></i>
-                                        <input type="hidden" id="IdProject">
-                                        <input type="hidden" id="IdCus">
-                                        <input type="hidden" id="IdCusPrn">
-                                        <input type="hidden" id="IdCuo">
-                                    </td>
-                                </tr>    
-                                <tr>
-                                    <td class="concepto"></td>
-                                    <td class="error">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td class="concepto"><i class="fas fa-tools pjtEdit hide"></i> Proyecto</td>
-                                    <td class="dato" id="Projects">
-                                    <div class="grouper" contenteditable="true" data_identy=""></div>
-                                        <i class="fas fa-caret-down turn"></i>
+                        <th class="wclprod">Producto</th>
+                        <th class="wcldays colbase"><i class="fas fa-caret-down selectionInput quantityBase inpt"></i>Cant.</th>
+                        <th class="wclnumb colbase">Precio</th>
+                        <th class="wcldays colbase"><i class="fas fa-caret-down selectionInput daysBase inpt"></i>Días<br>Renta</th>
+                        <th class="wclnumb colbase"><i class="fas fa-caret-down selectionInput daysCost inpt"></i>Dias<br>Cobro</th>
+                        <th class="wcldisc colbase"><i class="fas fa-caret-down selectionInput discountBase selt"></i>Desc.</th>
+                        <th class="wclnumb colbase"><div class="invoice_col_header costBase">COSTO BASE</div>Costo</th>
+                        <th class="wcldays coltrip"><i class="fas fa-caret-down selectionInput daysTrip inpt"></i>Días</th>
+                        <th class="wcldisc coltrip"><i class="fas fa-caret-down selectionInput discountTrip selt"></i>Desc</th>
+                        <th class="wclnumb coltrip"><div class="invoice_col_header costTrip">COSTO VIAJE</div>Costo</th>
+                        <th class="wcldays coltest"><i class="fas fa-caret-down selectionInput daysTest inpt"></i>Dias</th>
+                        <th class="wcldisc coltest"><i class="fas fa-caret-down selectionInput discountTest selt"></i>Desc.</th>
+                        <th class="wclnumb coltest"><div class="invoice_col_header costTest">COSTO PRUEBAS</div>Costo</th>
+                        <th class="wclexpn colcontrol"><i class="fas fa-caret-left showColumns rotate180" title="Muestra y oculta columnas de viaje y pruebas"></i></th>
+                    </tr>
+                </thead>
 
-                                        <div class="list_items">
-                                            <ul></ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="concepto">Locación</td>
-                                    <td class="dato" id="LocationProject"></td>
-                                </tr>
-                                <tr>
-                                    <td class="concepto">Periodo</td>
-                                    <td class="dato" id="PeriodProject"></td>
-                                </tr>
-                                <tr>
-                                    <td class="concepto">Tipo de locación</td>
-                                    <td class="dato" id="TypeLocation"></td>
-                                </tr>
-                                <!-- <tr>
-                                    <td class="concepto">Fecha del proyecto</td>
-                                    <td class="dato" id="DateProject"></td>
-                                </tr> -->
-                                <tr>
-                                    <td class="concepto">Tipo de proyecto</td>
-                                    <td class="dato" id="TypeProject"></td>
-                                </tr>
-                                <tr>
-                                    <td class="concepto">Versión</td>
-                                    <td class="dato" id="version"></td>
-                                </tr>
-                                <tr>
-                                    <td class="concepto"></td>
-                                    <td class="enlace"></td>
-                                </tr>
-                            </table>
-                            <!-- <button class="btn-add right" id="addProject"> + Agregar proyecto</button> -->
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 blocks">
-                        <div class="  block_01-01 ">
-                        <span class="titleSection">&nbsp;</span>
-                            <table class="table_information">
-                                <tr>
-                                    <td class="concepto">Nombre del Cliente</td>
-                                    <td class="dato" id="Customer" >
-                                        <div class="grouper" 
-                                        
-                                        contenteditable="true" data_identy=""></div>
-                                        <div class="customerType"></div>
-                                        <i class="fas fa-caret-down turn"></i>
-
-                                        <div class="list_items">
-                                            <ul></ul>
-                                        </div>
-                                    </td>
-                                </tr> 
-                                <tr>
-                                    <td class="concepto" style="heigth:30px">&nbsp;</td>
-                                    <td class="dato"></td>
-                                </tr>   
-
-                                <tr>
-                                    <td class="concepto">&nbsp;</td>
-                                    <td class="dato" id="Relation"></td>
-                                </tr>    
-                            
-                                <tr>
-                                    <td class="concepto">Domicilio</td>
-                                    <td class="dato" id="AddressProducer"></td>
-                                </tr>
-                                <tr>
-                                    <td class="concepto">Correo electrónico</td>
-                                    <td class="dato" id="EmailProducer"></td>
-                                </tr>
-                                <tr>
-                                    <td class="concepto">Teléfono</td>
-                                    <td class="dato" id="PhoneProducer"></td>
-                                </tr>
-                                <tr>
-                                    <td class="concepto">Calificación</td>
-                                    <td class="dato" id="QualificationProducer"></td>
-                                </tr>
-                                <tr>
-                                    <td class="concepto"></td>
-                                    <td class="enlace">&nbsp;</td>
-                                </tr>
-                            </table>
-
-                            <!-- <button class="btn-add right" id="addProducer"> + Agregar cliente</button> -->
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 blocks">
-                        <div class="block_01-02">
-                            <div class="menu_control"></div>
-                            <div id="tbl_dynamic" class="tbl_dynamic"></div>
-                        </div>   
-                    </div>
-                </div>
-
-            </div>
-            <div class="block_02">
-                <div class="blocks">
-                    <button class="btn-add" id="newQuote"></button>
-                </div>
-                <hr>
-                <div class="blocks">
-                    <div class="half left concepto">Costo base</div>
-                    <div class="half right dato" id="costbase">0</div>
-                </div>
-                <div class="blocks">
-                    <div class="half left concepto">Costo viaje</div>
-                    <div class="half right dato" id="costtrip">0</div>
-                </div>
-                <div class="blocks">
-                    <div class="half left concepto">Costo pruebas</div>
-                    <div class="half right dato" id="costtest">0</div>
-                </div>
-                <div class="blocks">
-                    <div class="half left concepto">Seguro</div>
-                    <div class="half right dato" id="costassu">0</div>
-                </div>
-
-                <div class="blocks total">
-                    <div class="half left concepto">Total</div>
-                    <div class="half right total dato" id="total">0</div>
-                </div>
                 
-                <div class="blocks total">
-                    <div class="half left concepto">&nbsp;</div>
-                    <div class="half right total dato" >&nbsp;</div>
-                </div>
-                <div class="blocks">
-                    <div class="half left concepto">Num. productos</div>
-                    <div class="half right dato" id="ttlproducts">0</div>
-                </div>
-                <hr>
-                <div class="blocks" id="versions">
 
-                </div>
+                
+                <!-- EQUIPO BASE -->
+                <tbody  class="sections_products" id="SC1">
+                    <tr|>
+                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Base</th>
+                        <td colspan="13" class="col_section"></td>
+                    </tr|>
+                    <tr class="sections_products lastrow">
+                        <th class="col_product botton_prod">
+                            <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
+                        </th>
+                        <td colspan=14></td>
+                    </tr> 
+                </tbody>
+                <!-- EQUIPO EXTRA -->
+                <tbody class="sections_products" id="SC2">
+                    <tr>
+                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Extra</th>
+                        <td colspan="13" class="col_section"></td>
+                    </tr>
+                    <tr class="sections_products lastrow">
+                        <th class="col_product botton_prod">
+                            <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
+                        </th>
+                        <td colspan=14></td>
+                    </tr> 
+                </tbody>
+                <!-- EQUIPO POR DIA -->
+                <tbody class="sections_products" id="SC3">
+                    <tr>
+                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por Día</th>
+                        <td colspan="13" class="col_section"></td>
+                    </tr>
+                    <tr class="sections_products lastrow">
+                        <th class="col_product botton_prod">
+                            <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
+                        </th>
+                        <td colspan=14></td>
+                    </tr> 
+                </tbody>
+                <!-- EQUIPO POR SUBARRENDO -->
+                <tbody class="sections_products" id="SC4">
+                    <tr>
+                        <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por subarrendo</th>
+                        <td colspan="13" class="col_section"></td>
+                    </tr>
+                    <tr class="sections_products lastrow">
+                        <th class="col_product botton_prod">
+                            <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
+                        </th>
+                        <td colspan=14></td>
+                    </tr> 
+
+                    
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+
+
+    <!-- Totales y versiones -->
+    <div class="invoice__section invoice__section-sidebar">
+
+        <!-- Totales -->
+        <div class="sidebar__totals invoice-border">
+            <table>
+                <tr>
+                    <td class="totals-concept">COTIZACION BASE</td>
+                    <td class="totals-numbers" id="costBase">0.00</td>
+                    </tr>
+                    <tr>
+                        <td class="totals-concept">COSTO VIAJE</td>
+                        <td class="totals-numbers" id="costTrip">0.00</td>
+                    </tr>
+                    <tr>
+                        <td class="totals-concept">COSTO PRUEBAS</td>
+                        <td class="totals-numbers" id="costTest">0.00</td>
+                    </tr>
+                    <tr>
+                        <td class="totals-concept">SEGURO</td>
+                        <td class="totals-numbers" id="insuTotal">0.00</td>
+                    </tr>
+                    <tr>
+                        <td class="totals-concept">TOTAL</td>
+                        <td class="totals-numbers" id="costTotal">0.00</td>
+                    </tr>
+                    <tr>
+                        <td class="totals-concept">&nbsp;</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="totals-concept">NUMERO DE PRODUCTOS</td>
+                        <td class="totals-numbers simple">0</td>
+                    </tr>
+                </table>
+        </div>
+
+        <!-- Versiones de documentos guardados -->
+        <div class="sidebar__versions invoice-border">
+            <div class="version__button">
+                <span class="invoice_button toSaveBudget">
+                <i class="fas fa-save"></i> Guardar
+               </span> 
+               <span class="invoice_button toSaveBudgetAs">
+                <i class="fas fa-save"></i> Guardar nueva
+               </span> 
             </div>
+            <div class="version__list">
+                <span class="version__list-title"></span>
+                <ul>
+                    <!-- <li><span>Version</span><span>Fecha</span></li> -->
+
+                </ul>
+            </div>
+        </div>
+
+        <!-- Boton de comentarios -->
+        <div class="sidebar__comments invoice-border"> 
+            <span class="invoice_button toComment">
+                <i class="far fa-comment-alt"></i> Comentarios
+            </span> 
+        </div>
+    </div>
+    
+    
+    <!-- Informacion del proyecto y cliente seleccionado -->
+    <div class="invoice__section-details invoice-border">
+        <div class="detail__box detail__box-project ">
+            <div class="detail__box-fullRow">
+                <span class="invoice_button" id="btnEditProject"><i class="fas fa-plus"></i>Editar proyecto</span>
+            </div>
+            <table>
+                <tr>
+                    <td class="concept">Numero:</td>
+                    <td class="data" id="projectNumber"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Locación:</td>
+                    <td class="data" id="projectLocation"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Periodo:</td>
+                    <td class="data calendar" id="projectPeriod"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Tipo de locación:</td>
+                    <td class="data" id="projectLocationType"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Tipo de proyecto:</td>
+                    <td class="data" id="projectType"></td>
+                </tr>
+            </table>
+
+            <hr>
+
+            <table>
+                <tr>
+                    <td class="concept">Cliente:</td>
+                    <td class="data" id="CustomerName"></td>
+                </tr>
+                <tr>
+                    <td class="concept"></td>
+                    <td class="data flash" id="CustomerType"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Productor responsable:</td>
+                    <td class="data" id="CustomerProducer"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Domicilio:</td>
+                    <td class="data" id="CustomerAddress"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Correo electrónico:</td>
+                    <td class="data" id="CustomerEmail"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Teléfono:</td>
+                    <td class="data" id="CustomerPhone"></td>
+                </tr>
+                <tr>
+                    <td class="concept">Calificación:</td>
+                    <td class="data" id="CustomerQualification"></td>
+                </tr>
+            </table>
 
 
         </div>
-            
-                
-            
         
     </div>
 
-    <!-- Start Lista de productos -->
-    <div class="box_list_products" id="Products" >
-    <div class="sel_product">
-            <i class="far fa-times-circle close-finder"></i>
-            <input type="text" id="txtSearchProduct" name="txtSearchProduct" class="textbox-finder">
-        </div>
-        <div class="list_products">
-            <ul></ul>
-        </div>
-    </div>
-    <!-- End Lista de productos -->
 
-    <!-- Start Minimenues -->
-    <div class="box_minimenu" id="MiniMenu" >
-        <div class="list_menu">
-            <ul></ul>
+    <!-- Buscador de clientes y proyectos -->
+    <div class="invoice__section-finder invoice-border">
+        <div class="finder__box" id="groupCustomer">
+            <input type="text" name="txtCustomer" id="txtCustomer" placeholder="Cliente" class="invoiceInput inputSearch wtf">
+            <i class="fas fa-times cleanInput"></i>
+            <div class="finder_list finder_list-customer">
+                <ul> </ul>
+            </div>
+        </div>
+        <div class="finder__box" id="groupProject">
+        <input type="text" name="txtProject" id="txtProject" placeholder="Proyecto" class="invoiceInput inputSearch wtf">
+            <i class="fas fa-times cleanInput"></i>
+            <div class="finder_list finder_list-projects">
+                <ul></ul>
+            </div>
+
+        </div>
+
+        <div class="finder__box"></div>
+        <!-- <div class="finder__box-buttons">
+            <span class="invoice_button" id="btnNewProject"><i class="fas fa-plus"></i>nuevo proyecto</span>
+        </div> -->
+    </div>
+
+
+        <!-- Listado de productos -->
+    <div class="invoice__section-products invoice-border modalTable">
+        <div class="modal__header  invoice-border">
+            <div class="modal__header-concept">&nbsp;Listados de productos</div>
+            <i class="far fa-window-close close_listProducts"></i>
+        </div>
+        <div class="modal__header  invoice-border">
+            <input type="text" name="txtProductFinder" id="txtProductFinder" autocomplete="off" placeholder="buscar producto" class="finderInput wt5">
+            
+        </div>
+
+
+        <div class="productos__box-table" id="listProductsTable">
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Existencias</th>
+                    <th>Tipo</th>
+                    <th>Catálogo</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        </div>
+        
+    </div>
+
+
+    <!-- Mini menu de opciones de producto -->
+    <div class="invoice__menu-products invoice-border withShadow">
+        <ul>
+            <li class="event_killProduct"><i class="fas fa-trash"></i> Elimina Producto</li>
+            <li class="event_InfoProduct"><i class="fas fa-info-circle"></i> Información</li>
+            <li class="event_PerdProduct" hidden><i class="fas fa-calendar-week"></i> Periodos</li>
+            <li class="event_StokProduct"><i class="fas fa-layer-group"></i> Inventario</li>
+        </ul>
+    </div>
+
+    <!-- Modal General  -->
+    <div class="invoice__modal-general invoice-border modalTable">
+        <div class="modal__header invoice-border">
+            <div class="modal__header-concept">&nbsp;Listados de productos</div>
+            <i class="far fa-window-close closeModal"></i>
+        </div>
+        <div class="modal__body">
         </div>
     </div>
-    <!-- End Minimenues --> 
+
+
+    <!-- input de cantidad y descuentos -->
+    <div class="invoiceMainInput withShadow">
+        <input type="text" name="txtMainInput"  id="txtMainInput" class="input_invoice">
+    </div>
+    <div class="invoiceMainSelect withShadow">
+        <select name="selDiscount" id="selDiscount" class="input_invoice" size="6"></select>
+    </div>
+
+    <!-- Fondo obscuro -->
+    <div class="invoice__modalBackgound"></div>
+
+
+    <!-- Plantilla de tablas modales -->
+    <div id="infoProductTemplate" class="table_hidden box_template">
+        <table class="table_template" style = "min-width: 600px; width:100%;" >
+            <thead>
+                <tr>
+                    <th style = "width: 150px">SKU</th>
+                    <th style = "width:  50px">Tipo</th>
+                    <th style = "min-width: 400px; width: auto;">Nombre del producto</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div id="stockProductTemplate" class="table_hidden box_template">
+        <table class="table_template" style = "min-width:1150px; width:auto;">
+            <thead>
+                <tr>
+                    <th style = "width:150px">SKU</th>
+                    <th style = "width:150px">Serie</th>
+                    <th style = "width:50px">Status</th>
+                    <th style = "min-width:500px; width: auto">Proyecto</th>
+                    <th style = "width:150px">Fecha de inicio</th>
+                    <th style = "width:150px">Fecha de término</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div id="dataProjectTemplate" class="table_hidden box_template">
+        <div class="project_data-box">
+            <table  id="formProject">
+                <tr>
+                    <td>Nombre del proyecto</td>
+                    <td class="projectName">
+                        <input type="hidden" name="txtProjectIdEdt" id="txtProjectIdEdt" class="textbox">
+                        <input type="text" id="txtProjectEdt" name="txtProjectEdt" class="textbox wtf required" autocomplete="off">
+                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Quieres agregar Nombre del proyecto</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Periodo</td>
+                    <td>
+                        <input type="text" id="txtPeriodProjectEdt"  name="txtPeriodProjectEdt" class="textbox wtf required" autocomplete="off">
+                        <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
+                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Locación</td>
+                    <td>
+                        <input type="text" id="txtLocationEdt" name="txtLocationEdt" class="textbox wtf" autocomplete="off"><br>
+                        <span class="textAlert"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tipo de proyecto</td>
+                    <td>
+                        <select  id="txtTypeProjectEdt" name="txtTypeProjectEdt" class="textbox wtf required" >
+                            <option value="0"></option>
+                        </select>
+                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de projecto</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tipo de locación</td>
+                    <td>
+                        <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox" >
+                            <option value="0" selected></option>
+                            <option value="1"> LOCAL</option>
+                            <option value="2"> FORANEO</option>
+                        </select>
+                        <span class="textAlert"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Cliente</td>
+                    <td>
+                        <select id="txtCustomerEdt" class="textbox wtf">
+                            <option value="0"></option>
+                        </select>
+                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar un cliente</span>
+                        <input type="hidden" name="txtCustomerOwnerEdt"  id="txtCustomerOwnerEdt">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Productor</td>
+                    <td>
+                        <select id="txtCustomerRelEdt" class="textbox wtf">
+                            <option value="0"></option>
+                        </select>
+                        <span class="textAlert"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    
+                    <td colspan=2>
+                        <button class="bn btn-ok" id="saveProject"></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="commentsTemplates" class="table_hidden box_template">
+        <div class="comments__box">
+            <!-- Lista de comentarios -->
+            <div class="comments__list"></div>
+            <!-- Captura de cumentario -->
+            <div class="comments__addNew">
+                <label for="txtComment">Escribe comentario</label><br>
+                <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput"></textarea><br>
+                <span class="invoice_button" id="newComment"><i class="fas fa-plus"></i>guardar comentario</span>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- loading -->
+    <div class="invoice__loading modalLoading">
+        <div class="box_loading">
+            <p class="text_loading">
+                Guardando documento<br>
+                <i class="fas fa-spinner spin"></i> 
+                </p>
+            <p>Este proceso puede tradar varios minutos, le recomendamos no salir de la página ni cerrar el navegador.</p>
+        </div>
+    </div>
     
-  
-
 </div>
-
-<!-- Start Modales -->
-<div class="box_modal_deep">
-    <div class="box_modal"></div>
-</div>
-<!-- End Modales -->
 
 
 
@@ -231,4 +486,3 @@
 <script src="<?=  PATH_VIEWS . 'ProjectPlans/ProjectPlans.js' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
-

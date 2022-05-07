@@ -5,6 +5,7 @@
 	margin: 0;
 	box-sizing: border-box;
 }
+
 body {
 	font-family: $font_primary;
 	font-size: 12px;
@@ -24,19 +25,23 @@ h1 {
 	font-size: 1.9em;
 	border-bottom: 1px solid #0d75d6;
 }
+
 h2 {
 	font-size: 1.7rem;
 }
+
 h3 {
 	font-size: 1.5rem;
 }
+
 h4 {
 	font-size: 1.3rem;
 }
 
 .bg-dark {
-	background-color: $dark !important;
+	background-color: $dark  !important;
 }
+
 .bg-dark-x {
 	background-color: $dark-x;
 }
@@ -45,8 +50,10 @@ ul {
 	padding: 0;
 	list-style: none;
 }
+
 .rowTop {
 	position: relative;
+
 	.topList {
 		display: inline-block;
 		width: 200px;
@@ -61,21 +68,25 @@ ul {
 
 // start LOGIN  -------------
 .login-section {
+
 	.form-control,
 	.btn {
 		min-height: 1.125em;
 		line-height: initial;
 		color: $light;
 	}
+
 	input {
 		color: $dark;
 		border: 1px solid $light;
+
 		&:focus,
 		&:valid {
 			background-color: #000000;
 		}
 	}
 }
+
 .set-login {
 	max-width: 500px;
 	color: $light;
@@ -94,23 +105,28 @@ ul {
 .img-1 {
 	background-image: url(../img/slider/slider-001.jpg);
 }
+
 .img-2 {
 	background-image: url(../img/slider/slider-002.jpg);
 }
+
 .img-3 {
 	background-image: url(../img/slider/slider-003.jpg);
 }
+
 // end LOGIN  -------------
 
-.form-floating > .form-control {
+.form-floating>.form-control {
 	height: 100%;
 	padding: 0.5rem 0.5rem;
+
 	&:not(:placeholder-shown) {
 		padding-top: 2em;
 		padding-bottom: 0.8em;
 	}
 }
-.form-floating > label {
+
+.form-floating>label {
 	padding: 0.8em 1.5em;
 	opacity: 0.8;
 	color: $inputs-label;
@@ -127,10 +143,12 @@ ul {
 	.mvst_panel {
 		overflow: auto;
 		height: 100%;
-		padding: 0;
+		padding: 3rem .5rem;
+		background-color: $fondo-panel;
 		z-index: 10;
 		grid-column: 1 / span 1;
 	}
+
 	.mvst_table {
 		width: 100%;
 		overflow: auto;
@@ -146,6 +164,7 @@ ul {
 			.left-side {
 				grid-column: 1 / span 1;
 			}
+
 			.right-side {
 				grid-column: 2 / span 1;
 			}
@@ -187,22 +206,27 @@ ul {
 		border-radius: 5px;
 	}
 }
+
 .objHidden {
 	display: none;
 }
+
 .form-group {
 	.form_primary {
 		display: block;
 	}
+
 	.form_secundary {
 		display: none;
 	}
 }
+
 .mb-2 {
 	margin-bottom: 0.1em !important;
 }
+
 .form-floating {
-	& > .form-select {
+	&>.form-select {
 		height: calc(4em + 1px);
 		padding: 1em 0.9em;
 		font-size: 0.9em;
@@ -215,14 +239,16 @@ ul {
 			padding: 13px;
 		}
 	}
+
 	input,
 	textarea {
 		font-size: 0.8em;
 		font-weight: 900;
 	}
+
 	.box-items-list {
 		width: 100%;
-		background-color: #ffffff;
+		background-color: #ffffFF;
 		border-radius: 6px;
 		padding: 8px 16px;
 		font-weight: 900;
@@ -234,6 +260,7 @@ ul {
 			font-size: 1.05rem;
 			color: #212529;
 			transition: all 0.3s ease;
+
 			&.rotate {
 				transform: rotate(180deg);
 			}
@@ -249,22 +276,27 @@ ul {
 .text-right {
 	text-align: right;
 }
+
 .text-center {
 	text-align: center;
 }
+
 .dataTables_wrapper {
 	display: block;
 	font-size: 0.9em;
+
 	.dataTables_filter {
 		label {
 			display: block;
 			color: $inputs-label;
 		}
 	}
-	div.dataTables_scrollBody > table {
+
+	div.dataTables_scrollBody>table {
 		margin: 0;
 	}
 }
+
 div.dataTables_wrapper div.dataTables_filter input {
 	margin-left: 0.5em;
 	display: inline-block;
@@ -286,6 +318,7 @@ div.dataTables_wrapper div.dataTables_length select {
 		background-color: transparent;
 	}
 }
+
 div.dataTables_wrapper .btn,
 div.dataTables_wrapper div.btn-group button.btn-secundary {
 	margin-left: 0;
@@ -297,6 +330,7 @@ div.dataTables_wrapper div.btn-group button.btn-secundary {
 	border: none;
 	border-radius: 0;
 }
+
 div.dataTables_wrapper div.btn-group button.btn-excel,
 div.dataTables_wrapper div.btn-group button.btn-pdf,
 div.dataTables_wrapper div.btn-group button.btn-print,
@@ -310,6 +344,7 @@ div.dataTables_wrapper div.btn-group button.btn-apply {
 	background-color: $dark;
 	color: #ffffff;
 	border-radius: 8px !important;
+
 	&:hover {
 		background-color: $dark-x;
 	}
@@ -318,14 +353,17 @@ div.dataTables_wrapper div.btn-group button.btn-apply {
 		background-color: $dark-x;
 	}
 }
+
 div.dataTables_wrapper div.btn-group button.btn-excel,
 div.dataTables_wrapper div.btn-group button.btn-pdf,
 div.dataTables_wrapper div.btn-group button.btn-print {
 	width: auto;
 }
+
 div.dataTables_wrapper div.btn-group button.btn-apply {
 	width: auto;
 }
+
 div.dataTables_wrapper div.btn-group button.hidden-field {
 	display: none;
 }
@@ -338,6 +376,7 @@ div.dataTables_wrapper .dataTables_paginate .paginate_button {
 	padding: 2px 4px;
 	background-color: #ffffff;
 	border: none;
+
 	&:hover {
 		background-color: #cc0000;
 	}
@@ -346,6 +385,7 @@ div.dataTables_wrapper .dataTables_paginate .paginate_button {
 		padding: 0.35rem 0.63rem;
 		border-radius: 4px;
 		border: none;
+
 		// background-color: $dark;
 		// color: #ffffff;
 		&:hover {
@@ -359,15 +399,18 @@ div.dataTables_wrapper .dataTables_paginate .paginate_button {
 			.page-link {
 				background-color: $dark;
 			}
+
 			&:hover {
 				background-color: none;
 			}
 		}
+
 		&:hover {
 			background-color: none;
 		}
 	}
 }
+
 .pending {
 	color: #cc0000;
 	border: 1px solid #cc0000;
@@ -375,6 +418,7 @@ div.dataTables_wrapper .dataTables_paginate .paginate_button {
 	background-color: rgba(#cc0000, 0.1);
 	padding: 1px 6px;
 }
+
 .notify {
 	font-size: 1.2rem;
 	text-align: center;
@@ -383,43 +427,53 @@ div.dataTables_wrapper .dataTables_paginate .paginate_button {
 	padding: 4px;
 	display: block;
 }
+
 .hide {
 	display: none;
 }
+
 table {
 	tr {
 		.hide_row {
 			display: none;
 		}
 	}
+
 	td {
 		padding: 0 4px;
+
 		i {
 			margin: 1px 6px;
 			cursor: pointer;
+
 			&.kill {
 				font-size: 1.3em;
 				color: $btn-red;
 				opacity: 1;
+
 				&:hover {
 					color: $btn-red;
 					opacity: 0.5;
 				}
 			}
+
 			&.modif {
 				font-size: 1.5em;
 				color: $dark;
 				opacity: 1;
+
 				&:hover {
 					color: $dark;
 					opacity: 0.5;
 				}
 			}
+
 			&.docum {
 				color: $btn-blue;
 				font-size: 1.5rem;
 				opacity: 1;
 				text-align: center;
+
 				&:hover {
 					color: $btn-blue;
 					opacity: 0.5;
@@ -447,6 +501,7 @@ table {
 			}
 		}
 	}
+
 	td.edit {
 		text-align: center;
 
@@ -455,19 +510,24 @@ table {
 			height: 10px;
 			border-radius: 20px;
 		}
+
 		.yellow {
 			background-color: #ffc310;
 		}
+
 		.red {
 			background-color: #dd0000;
 		}
 	}
+
 	.hide-support {
 		display: none;
 	}
+
 	td.sku {
 		text-align: center;
 	}
+
 	td.center {
 		text-align: center;
 	}
@@ -475,6 +535,7 @@ table {
 	td.bold {
 		font-weight: 900;
 	}
+
 	td.product-name {
 		text-align: left;
 		font-weight: 700;
@@ -507,34 +568,42 @@ table {
 
 			&.toLink {
 				cursor: pointer;
+
 				&:hover {
 					background-color: #cc0000;
 				}
 			}
 		}
 	}
+
 	td.price {
 		text-align: right;
 	}
+
 	td.serie-product {
 		text-align: center;
 	}
+
 	td.code-type_s,
 	td.code-type_t {
 		text-align: center;
 		font-weight: 900;
 	}
+
 	td.store-name_s,
 	td.store-name_t {
 		text-align: center;
 	}
+
 	td.date {
 		text-align: center;
 		color: $setColor;
 		font-weight: 900;
 	}
+
 	td.comments {
 		width: 350px;
+
 		div {
 			width: 350px;
 			text-align: left;
@@ -544,10 +613,12 @@ table {
 			white-space: nowrap;
 		}
 	}
+
 	td.cellInvoice {
 		text-align: center;
 		position: relative;
 		width: 50px;
+
 		i {
 			font-size: 1.8em;
 			position: absolute;
@@ -555,6 +626,7 @@ table {
 			left: 25px;
 		}
 	}
+
 	td.concept {
 		width: 200px;
 		font-size: 0.9em;
@@ -565,6 +637,7 @@ table {
 		vertical-align: top;
 		overflow: hidden;
 	}
+
 	td.data {
 		width: auto;
 		padding: 3px 5px 0 0;
@@ -582,26 +655,32 @@ table {
 				background-color: #ffffee;
 				border-color: #cccccc;
 			}
+
 			&.fail {
 				border-color: #bb0000;
 				background-color: rgba($color: #bb0000, $alpha: 0.1);
 			}
 		}
+
 		.checkbox {
 			font-size: 1.4em;
+
 			.fa-square {
 				color: $texboxColorBorder;
 			}
 		}
+
 		.fail_note {
 			color: #bb0000;
 			font-size: 0.8em;
 			font-weight: 900;
 			margin-left: 10px;
+
 			&.hide {
 				display: none;
 			}
 		}
+
 		.intructions {
 			display: block;
 			width: 400px;
@@ -635,16 +714,19 @@ table {
 		}
 	}
 }
+
 .btn {
 	border-radius: 1.5em;
 	padding: 6px 20px;
 	font-size: 1em;
 	margin: 2px 5px;
 }
+
 .btn-primary {
 	background-color: $dark;
 	border: $dark;
 }
+
 .btn-danger {
 	background-color: $btn-red;
 	border: $btn-red;
@@ -662,6 +744,7 @@ table {
 
 .list-finder {
 	position: relative;
+
 	.list-group {
 		width: auto;
 		min-width: 300px;
@@ -675,6 +758,7 @@ table {
 		&.list-hide {
 			display: none;
 		}
+
 		.list-items {
 			font-size: 0.9em;
 			border-radius: 5px;
@@ -694,13 +778,14 @@ table {
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
+
 				&:hover {
 					background-color: rgba(0, 0, 0, 0.3);
 					color: #ffffff;
 				}
 
 				.items-just {
-					display: block ;
+					display: block;
 					float: right;
 
 					.editable {
@@ -710,11 +795,13 @@ table {
 						margin-left: 20px;
 						display: inline-block;
 					}
+
 					i {
 						// float: right;
 						display: inline-block;
 						margin: 0 10px;
 						font-size: 1.4em;
+
 						&:hover {
 							opacity: 0.5;
 						}
@@ -735,6 +822,7 @@ table {
 	right: 0;
 	background-color: rgba(255, 255, 255, 0.4);
 	z-index: 100;
+
 	&.overlay_hide {
 		visibility: hidden;
 	}
@@ -776,6 +864,7 @@ table {
 				margin-top: 4px;
 				display: inline-block;
 				cursor: pointer;
+
 				&:hover {
 					background-color: $dark;
 					color: $light;
@@ -792,6 +881,7 @@ table {
 			padding: 10px;
 			border-bottom: 1px solid #eeeeee;
 		}
+
 		.formContent {
 			position: absolute;
 			top: 110px;
@@ -815,8 +905,8 @@ table {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	
-	
+
+
 	.form_comments {
 		width: 600px;
 		height: 300px;
@@ -830,7 +920,7 @@ table {
 		textarea {
 			width: 100%;
 			height: 150px;
-			border:none;
+			border: none;
 			border-radius: 5px;
 			font-size: 1.1em;
 			padding: 8px;
@@ -839,11 +929,13 @@ table {
 		}
 	}
 }
-.devolucion  {
+
+.devolucion {
 	color: #EE0000 !important;
 	font-weight: 700;
 }
-.box_comments_show  {
+
+.box_comments_show {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -855,8 +947,8 @@ table {
 
 	.form_comments_show {
 		position: absolute;
-		top:20px;
-		left:40px;
+		top: 20px;
+		left: 40px;
 		bottom: 40px;
 		width: 100%;
 		padding: 20px;
@@ -866,7 +958,7 @@ table {
 		box-shadow: 1px 10px 20px rgba(#000000, 0.3);
 	}
 
-	.comments_area  {
+	.comments_area {
 		position: absolute;
 		top: 80px;
 		left: 20px;
@@ -876,34 +968,37 @@ table {
 		background-color: #FFFFFF;
 		overflow: auto;
 
-		.commet_item  {
+		.commet_item {
 			width: 100%;
 			display: grid;
 			margin-bottom: 20px;
 			color: #999999;
 			grid-template-columns: repeat(3, 1fr);
 			grid-template-rows: auto;
-			grid-template-areas: "com_comment com_comment com_comment" "com_user com_date com_id";
+			grid-template-areas: "com_comment com_comment com_comment""com_user com_date com_id";
 			gap: 10px;
 			border-bottom: 1px dashed rgba($setColor, 0.2);
 
-			.com_comment  {
+			.com_comment {
 				grid-area: com_comment;
 				min-height: 30px;
 				font-size: 1.1em;
 				color: #000000;
 			}
-			.com_user  {
+
+			.com_user {
 				grid-area: com_user;
 				text-align: left;
 				font-size: 0.9em;
 			}
-			.com_date  {
+
+			.com_date {
 				grid-area: com_date;
 				text-align: center;
 				font-size: 0.9em;
 			}
-			.com_id  {
+
+			.com_id {
 				grid-area: com_id;
 				text-align: right;
 				font-size: 0.9em;
@@ -911,7 +1006,7 @@ table {
 		}
 	}
 
-	button  {
+	button {
 		position: absolute;
 		bottom: 0px;
 	}
@@ -941,14 +1036,15 @@ table {
 
 		input,
 		textarea {
-			
-			border:none;
+
+			border: none;
 			border-radius: 5px;
 			font-size: 1.1em;
 			padding: 8px;
 			outline: none;
 			color: $setColor;
 		}
+
 		textarea {
 			width: 100%;
 			height: 150px;
@@ -963,6 +1059,7 @@ table {
 	width: 12px;
 	height: 12px;
 }
+
 /* Track */
 ::-webkit-scrollbar-track {
 	box-shadow: inset 0 0 5px transparent;
@@ -973,11 +1070,13 @@ table {
 	background-color: transparent;
 	margin: 10px;
 }
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
 	background: #f0f0f0;
 	border-radius: 5px;
 }
+
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
 	background: $setColor;
@@ -1005,6 +1104,7 @@ table {
 	font-weight: 200 !important;
 	color: black;
 }
+
 #suggestions {
 	box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, 0.2);
 	height: auto;
@@ -1025,7 +1125,8 @@ table {
 
 .row {
 	margin: 0;
-	& > * {
+
+	&>* {
 		padding: 0 1px;
 	}
 }
@@ -1034,7 +1135,7 @@ table {
 	padding: 0px;
 }
 
-.msgError  {
+.msgError {
 	position: fixed;
 	top: 40px;
 	left: 40px;
@@ -1047,14 +1148,14 @@ table {
 	border: 3px solid #f5cc4e;
 	overflow: auto;
 	padding: 10px;
-	box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
 
-&.reposo{
-	display: none;
-}
+	&.reposo {
+		display: none;
+	}
 
 
-	
+
 }
 
 @media screen and (max-width: 780px) {
@@ -1070,6 +1171,7 @@ table {
 			}
 		}
 	}
+
 	.mvst_group {
 		display: block;
 		grid-template-columns: 1fr;
@@ -1083,6 +1185,7 @@ table {
 			grid-column: 1 / span 1;
 			grid-row: 1 / span 1;
 		}
+
 		.mvst_table {
 			width: 100%;
 			grid-column: 1 / span 1;
@@ -1096,6 +1199,7 @@ table {
 				.left-side {
 					grid-area: 1 / 1 /2 /2;
 				}
+
 				.right-side {
 					grid-area: 2 / 1 / 3 / 2;
 				}

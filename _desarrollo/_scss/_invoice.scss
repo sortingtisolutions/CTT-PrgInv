@@ -173,10 +173,26 @@
                             font-weight: 700;
                         }
 
-                        span {
+                        .element_code,
+                        .element_date {
                             display: inline-block;
-                            width: 50%;
-                            text-align: center;
+                            width: 45%;
+                        }
+
+                        .element_code {
+                            text-align: left;
+                            padding-left: 0.2rem;
+
+                        }
+
+                        .element_date {
+                            text-align: right;
+                        }
+
+                        .element_caret {
+                            display: inline-block;
+                            width: 10%;
+                            text-align: right;
                         }
                     }
                 }

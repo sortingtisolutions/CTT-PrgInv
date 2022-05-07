@@ -514,7 +514,7 @@ public function saveBudgetList($params)
         $pjtId         = $this->db->real_escape_string($params['pjtId']);
         $verId         = $this->db->real_escape_string($params['verId']);
 
-        $qry = "UPDATE ctt_version SET ver_status = 'P' WHERE ver_id = $verId;";
+        $qry = "UPDATE ctt_version SET ver_status = 'R', ver_current = '1', ver_code = 'R0001' WHERE ver_id = $verId;";
         $this->db->query($qry);
 
         return $pjtId.'|'. $verId;
@@ -525,19 +525,34 @@ public function saveBudgetList($params)
 
         $verId        = $this->db->real_escape_string($params['verId']);
 
-        $qry = "INSERT INTO ctt_projects_content (
-                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_prod_level, pjtcn_quantity, 
+        $qry1 = "INSERT INTO ctt_projects_content (
+                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_prod_level, pjtcn_section, pjtcn_quantity, 
                     pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_days_trip, pjtcn_discount_trip, 
                     pjtcn_days_test, pjtcn_discount_test, pjtcn_insured,  ver_id, prd_id, pjt_id
                 )
                 SELECT 
-                    bg.bdg_prod_sku, bg.bdg_prod_name, bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_quantity,  
+                    bg.bdg_prod_sku, bg.bdg_prod_name, bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_section, bg.bdg_quantity,  
                     bg.bdg_days_base, bg.bdg_days_cost, bg.bdg_discount_base, bg.bdg_days_trip, bg.bdg_discount_trip,
                     bg.bdg_days_test, bg.bdg_discount_test, bg.bdg_insured, bg.ver_id, bg.prd_id, vr.pjt_id 
                 FROM ctt_budget AS bg
                 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
                 WHERE bg.ver_id = $verId;";
-        return $this->db->query($qry);
+        $this->db->query($qry1);
+
+        $qry2 = "INSERT INTO ctt_projects_version (
+                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_prod_level, pjtvr_section, pjtvr_quantity, 
+                    pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, 
+                    pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,  ver_id, prd_id, pjt_id
+                )
+                SELECT 
+                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_prod_level, pjtcn_section, pjtcn_quantity, 
+                    pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_days_trip, pjtcn_discount_trip, 
+                    pjtcn_days_test, pjtcn_discount_test, pjtcn_insured,  ver_id, prd_id, pjt_id 
+                FROM ctt_projects_content
+                WHERE ver_id = $verId;";
+
+        return $this->db->query($qry2);
+
     }
 
     

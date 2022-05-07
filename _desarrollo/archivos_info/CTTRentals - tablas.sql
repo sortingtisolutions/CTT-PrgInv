@@ -289,6 +289,7 @@ CREATE TABLE 'cttapp_cire'.'ctt_projects_content' (
   'pjtcn_discount_test' DECIMAL(10, 2) NULL COMMENT 'Descuento aplicado en prueba',
   'pjtcn_insured' DECIMAL(10, 2) NULL DEFAULT.1 COMMENT 'Porcentaje de seguro',
   'pjtcn_prod_level' VARCHAR(1) DEFAULT 'P' COMMENT 'Nivel del producto  K=Kit, P=Producto',
+  `pjtcn_section`         INT(11)                               COMMENT 'Numero de seccion',
   'pjtcn_status' VARCHAR(1) DEFAULT '1' COMMENT 'Status del contendo del proyecto 1-activo 0-inactivo',
   'ver_id' INT NOT NULL COMMENT 'FK Id de la version relación ctt_version',
   'prd_id' INT NOT NULL COMMENT 'FK Id del producto relación ctt_products',
@@ -320,6 +321,31 @@ CREATE TABLE 'cttapp_cire'.'ctt_projects_type' (
   'pjttp_max_download' INT(11) NOT NULL COMMENT 'Horas maximas requeridos para carga/descarga',
   PRIMARY KEY ('pjttp_id')
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = 'Tipos de proyectos o eventos que se ofrecen y siministran';
+
+DROP TABLE ctt_projects_version;
+CREATE TABLE ctt_projects_version (
+  `pjtvr_id` 		          int(11) NOT NULL AUTO_INCREMENT       COMMENT 'Id del contenido del projecto',
+  `pjtvr_prod_sku`        varchar(15) DEFAULT NULL              COMMENT 'SKU identificador del producto',
+  `pjtvr_prod_name`       varchar(100) DEFAULT NULL             COMMENT 'Nombre del producto',
+  `pjtvr_prod_price`      decimal(10,2) DEFAULT NULL            COMMENT 'Precio unitario del producto',
+  `pjtvr_quantity`        int(11) DEFAULT NULL                  COMMENT 'Cantidad de productos',
+  `pjtvr_days_base`       int(11) DEFAULT NULL                  COMMENT 'Días solicitados en renta',
+  `pjtvr_days_cost`       int(11) DEFAULT NULL                  COMMENT 'Días en cotización en renta',
+  `pjtvr_discount_base`   decimal(10,2) DEFAULT NULL            COMMENT 'Descuento aplicado a la renta',
+  `pjtvr_days_trip`       int(11) DEFAULT NULL                  COMMENT 'Días solicitados en viaje',
+  `pjtvr_discount_trip`   decimal(10,2) DEFAULT NULL            COMMENT 'Descuento aplicado al viaje',
+  `pjtvr_days_test`       int(11) DEFAULT NULL                  COMMENT 'Días solicitados en prueba',
+  `pjtvr_discount_test`   decimal(10,2) DEFAULT NULL            COMMENT 'Descuento aplicado en prueba',
+  `pjtvr_insured`         decimal(10,2) DEFAULT 0.10            COMMENT 'Porcentaje de seguro',
+  `pjtvr_prod_level`      varchar(1) DEFAULT 'P'                COMMENT 'Nivel del producto  K=Kit, P=Producto',
+  `pjtvr_section`         INT(11)                               COMMENT 'Numero de seccion',
+  `pjtvr_status`          varchar(1) DEFAULT '1'                COMMENT 'Status del contendo del proyecto 1-activo 0-inactivo',
+  `ver_id`                int(11) NOT NULL                      COMMENT 'FK Id de la version relación ctt_version',
+  `prd_id`                int(11) NOT NULL                      COMMENT 'FK Id del producto relación ctt_products',
+  `pjt_id`                int(11) NOT NULL                      COMMENT 'FK Id del proyecto relación ctt_proyect',
+  PRIMARY KEY (`pjtvr_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Contenido de la version del proyecto';
+
 DROP TABLE 'cttapp_cire'.'ctt_series';
 CREATE TABLE 'cttapp_cire'.'ctt_series' (
   'ser_id' INT NOT NULL AUTO_INCREMENT COMMENT 'Id de la serie',
