@@ -1,6 +1,7 @@
 var pos = 0;
 let altr = '0';
 function fillField(pagina, par, tipo, selector) {
+    // console.log(pagina);
     $.ajax({
         url: pagina,
         type: 'post',

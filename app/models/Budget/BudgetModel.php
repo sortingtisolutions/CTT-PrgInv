@@ -592,8 +592,8 @@ public function saveBudgetList($params)
 
             $qry1 = "UPDATE ctt_series 
                         SET 
-                            ser_situation = 'EA',
-                            ser_stage = 'R',
+                            ser_situation = 'PP',
+                            ser_stage = 'PP',
                             ser_reserve_count = ser_reserve_count + 1
                             WHERE ser_id = $serie;";
             $this->db->query($qry1);

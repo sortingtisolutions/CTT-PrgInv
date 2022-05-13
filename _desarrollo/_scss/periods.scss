@@ -1,0 +1,226 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.periods_content {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    .invoice_button {
+        margin: 0.5rem 1rem .2rem 1rem;
+        width: 100px;
+        display: block;
+        font-size: 0.7rem;
+        position: absolute;
+        top: -2.6rem;
+        right: 3.5rem;
+    }
+}
+
+#periodsTable {
+    width: 100%;
+    border-collapse: collapse;
+    color: hsl(204, 0%, 70%);
+    // border: 1px solid #000000;
+
+
+    thead tr {
+        border-bottom: 2px solid #cccccc;
+
+        td,
+        th {
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        th {
+
+            &:first-child {
+                padding-left: 1rem;
+            }
+
+            &.thSerie {
+                height: 45px;
+                display: flex;
+                align-items: flex-end;
+                justify-content: flex-start;
+                position: relative;
+
+                .numdia {
+                    height: 15px;
+                    width: 20px;
+                    font-size: 0.6rem;
+                    font-weight: 100;
+                    border-left: 1px solid #ffffff;
+                    padding: 0;
+                    text-align: center;
+
+                    &:last-child {
+                        border-right: 1px solid #ffffff;
+                    }
+
+                }
+
+                .numdia-inhabil {
+                    background-color: #f6f6f6;
+                }
+
+
+            }
+
+
+        }
+
+        .titMonth {
+            font-size: 0.7rem;
+            font-weight: 100;
+            color: #666666;
+            position: absolute;
+            top: 0.6rem;
+            text-align: center;
+            text-transform: capitalize;
+        }
+
+    }
+
+    tbody {
+        th {
+            width: 250px;
+            background: #FDFDFD;
+
+            .name_serie {
+                border-bottom: 1px dotted #f0f0f0;
+                padding: 0.2rem 1rem;
+                display: block;
+                text-align: left;
+            }
+        }
+
+        td {
+            display: flex;
+            padding: 0;
+            margin: 0;
+            position: relative;
+
+            .seldia {
+                width: 20px;
+                height: 30px;
+                border-left: 1px solid #f0f0f0;
+                padding: 0;
+
+                &:last-child {
+                    border-right: 1px solid #f0f0f0;
+                }
+
+
+            }
+
+            .seldia-habil {
+                &:hover {
+                    background-color: hsl(114, 53%, 90%);
+                    border-radius: 6px;
+                    height: 18px;
+                    margin-top: 0.25rem;
+                }
+            }
+
+            .seldia-inhabil {
+                background-color: #f6f6f6;
+            }
+
+            .rango {
+                width: 20px;
+                height: 18px;
+                background-color: hsl(106, 90%, 65%);
+                position: absolute;
+                top: 4px;
+                border-radius: 6px;
+
+                .killme {
+                    display: none;
+                    color: #333333;
+                    position: absolute;
+                    top: .2rem;
+                    left: .05rem;
+
+                    &:hover {
+                        color: #ffffff;
+                    }
+                }
+
+
+                &:hover>.killme {
+                    display: block;
+                }
+
+                .rango__info {
+                    position: absolute;
+                    top: .5rem;
+                    width: 170px;
+                    height: 80px;
+                    padding: 0.6rem;
+                    color: #666666;
+                    font-size: 0.7rem;
+                    background-color: hsla(0, 90%, 100%, 0.9);
+                    border: 1px solid #DDDDDD;
+                    border-radius: 0.4rem;
+                    box-shadow: 0 5px 15px hsla(0, 0%, 0%, 0.3);
+                    z-index: 100;
+                    transition: all .5s ease;
+                    display: none;
+
+                    hr {
+                        margin: 0;
+                    }
+
+                    span {
+                        display: inline-block;
+                    }
+
+                    .info__sku {
+                        font-weight: 700;
+                        width: 100%;
+                    }
+
+                    .info__start,
+                    .info__days {
+                        width: 48%;
+                        text-align: left;
+                    }
+
+                    .info__end,
+                    .info__segmen {
+                        width: 48%;
+                        text-align: right;
+                    }
+
+                }
+
+
+            }
+
+            .displayable {
+
+                &:hover>.rango__info {
+                    display: block;
+                }
+            }
+
+        }
+
+    }
+}
+
+.ui-resizable-e {
+    background-image: url('');
+}
+
+.contador {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    z-index: 10000;
+}

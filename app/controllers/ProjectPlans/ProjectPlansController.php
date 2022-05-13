@@ -265,10 +265,10 @@ class ProjectPlansController extends Controller
 //
 
 // Lista los proyectos en donde se encuentra un producto
-    public function stockProdcuts($request_params)
+    public function stockProducts($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->stockProdcuts($request_params);
+        $result = $this->model->stockProducts($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -283,26 +283,29 @@ class ProjectPlansController extends Controller
     } 
 //
 
-// Actualiza la tabla concentradora del contenido del proyecto
+/** ==== Actualiza la tabla concentradora del contenido del proyecto =========================  */
     public function updateMice($request_params)
     {
         $params =  $this->session->get('user');
         $result = $this->model->updateMice($request_params);
         echo $result;
     }
-//
 
-// Actualiza la tabla concentradora del contenido del proyecto
+
+/** ==== Agrega producto a la tabla concentradora ============================================  */
     public function AddProductMice($request_params)
     {
         $params =  $this->session->get('user');
         $result = $this->model->AddProductMice($request_params);
         echo $result;
     }
-//
+
 
 /** ==== Actualiza contenido de la version actual ============================================  */
-    public function SaveBudget($request_params){
+    public function SaveBudget($request_params)
+    {
+
+        $verId     = $request_params['verId'];
         $params = $this->session->get('user');
         $result = $this->model->SaveBudget($request_params);
 
@@ -313,27 +316,47 @@ class ProjectPlansController extends Controller
             $qtyAct = intval($qtyAct);
             $qtyAnt = intval($qtyAnt);
 
-            echo $qtyAct;
-            echo $qtyAnt;
+            $param = array(
+                'prodId' => $row["prd_id"],
+                'pjetId' => $row["pjtvr_id"],
+                'prdlvl' => $row['pjtvr_prod_level'],
+                'servId' => $row['srv_id'],
+                'dtinic' => $row['pjt_date_start'],
+                'dtfinl' => $row['pjt_date_end'],
+            );
 
+           print_r( $param);
+          
             if ($action == 'U'){
-                echo 'Actualiza ';
+                echo 'Actualiza - ';
                 if ($qtyAct > $qtyAnt){
-                    echo 'Agrega ' . ($qtyAct - $qtyAnt);
+                    $dif = $qtyAct - $qtyAnt;
+                    for ($i=1; $i <= $dif; $i++){
+                        $updQty = $this-> AddQuantityDetail($param);
+                    }
                 } else if ($qtyAct < $qtyAnt){
-                    echo 'Quita ' . ($qtyAnt - $qtyAct);
+                    $dif = $qtyAnt - $qtyAct;
+                     for ($i=1; $i <= $dif; $i++){
+                        $updQty = $this-> KillQuantityDetail($param);
+                    }
                 }
             }
             if ($action == 'D'){
                 echo 'Borra ';
+                for ($i=1; $i <= $qtyAct; $i++){
+                    $updQty = $this-> KillQuantityDetail($param);
+                }
             }
             if ($action == 'A'){
-                echo 'Agrega ';
+                for ($i=1; $i <= $qtyAct; $i++){
+                    $updQty = $this-> AddQuantityDetail($param);
+                }
             }
              
             
         }
 
+        return true;
 
     }
 
@@ -541,6 +564,110 @@ class ProjectPlansController extends Controller
        echo $pjtId . '|' . $rowcr;
         
     } 
-// -
 
+/** ==== Agregar productos nuevos ============================================================  */
+    public function AddProducts()
+    {
+
+    }
+/** ==== Agrega una nueva serie al detalle del proyecto ======================================  */
+    public function AddQuantityDetail($params)
+    {
+        $prodId =  $params['prodId'];
+        $pjetId =  $params['pjetId'];
+        $prdLvl =  $params['prdlvl'];
+        $servId =  $params['servId'];
+        $dtinic =  $params['dtinic'];
+        $dtfinl =  $params['dtfinl'];
+
+        if ($servId == '1'){
+            if ($prdLvl == 'A'){
+                $param = array(
+                    'prodId' => $prodId, 
+                    'pjetId' => $pjetId, 
+                    'dtinic' => $dtinic, 
+                    'dtfinl' => $dtfinl, 
+                    'detlId' => 0,
+                );
+                $serie = $this->model->SettingSeries($param);
+            } elseif($prdLvl == 'P'){
+                
+                $prdparam = array(
+                    'prodId' => $prodId, 
+                    'pjetId' => $pjetId, 
+                    'dtinic' => $dtinic, 
+                    'dtfinl' => $dtfinl, 
+                    'detlId' => 0,
+                );
+                $detlId = $this->model->SettingSeries($prdparam);
+                
+                $accesory = $this->model->GetAccesories($prodId);
+                while($acc = $accesory->fetch_assoc()){
+
+                    $aprodId = $acc["prd_id"];
+                    $apjetId = $pjetId;
+
+                    $accparams = array(
+                        'prodId' => $aprodId, 
+                        'pjetId' => $apjetId,
+                        'dtinic' => $dtinic, 
+                        'dtfinl' => $dtfinl,
+                        'detlId' => $detlId,
+                    );
+                    $serie = $this->model->SettingSeries($accparams);
+                }
+               
+            } elseif($prdLvl == 'K'){
+                $products = $this->model->GetProducts($prodId);
+                while($pkt = $products->fetch_assoc()){
+                    $kprodId = $pkt["prd_id"];
+                    $kpjetId = $pjetId;
+
+                    $pktparams = array(
+                        'prodId' => $kprodId, 
+                        'pjetId' => $kpjetId,
+                        'dtinic' => $dtinic, 
+                        'dtfinl' => $dtfinl,
+                        'detlId' => 0,
+                    );
+                    $detlId = $this->model->SettingSeries($pktparams);
+
+                    $accesory = $this->model->GetAccesories($kprodId);
+                    while($acc = $accesory->fetch_assoc()){
+
+                        $aprodId = $acc["prd_id"];
+                        $apjetId = $pjetId;
+    
+                        $accparams = array(
+                            'prodId' => $aprodId, 
+                            'pjetId' => $apjetId,
+                            'dtinic' => $dtinic, 
+                            'dtfinl' => $dtfinl,
+                            'detlId' => $detlId,
+                        );
+                        $serie = $this->model->SettingSeries($accparams);
+                    }
+                }
+            }
+
+        } elseif ($servId == '2'){
+
+        }
+        return true;
+    }
+
+   
+
+
+/** ==== Elimina la serie correspondiente en el detalle del proyecto =========================  */
+    public function KillQuantityDetail($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->KillQuantityDetail($request_params);
+        $res = $result;
+        echo $res;
+    }
+
+
+/** ==========================================================================================  */
 }
