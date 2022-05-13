@@ -27,6 +27,13 @@
 
 }
 
+.cuadroMovible {
+    width: 200px;
+    height: 200px;
+    background-color: #FFFF00;
+    z-index: 10000;
+}
+
 .emergent__warning {
     position: fixed;
     width: 300px;
@@ -889,6 +896,8 @@
             &.oculto {
                 display: none;
             }
+
+
         }
 
         th,
@@ -898,19 +907,38 @@
             border-right: 1px dotted var(--br-gray-medium);
             padding: 0.2rem 0.8rem;
 
+
+            .pending {
+                font-size: .55rem;
+                font-weight: 700;
+                letter-spacing: 0.05rem;
+            }
+
+            &.levelAccesory {
+                padding-left: 2rem;
+            }
+
         }
 
         .levelProd {
-            background-color: var(--cl-color-costTrip);
+            background-color: var(--cl-color-costTest);
+            border-top: 2px solid var(--br-gray-medium);
             color: var(--in-black);
-            font-weight: 900;
+            font-weight: 700;
             font-size: 1.1em;
         }
+
+
 
         .levelSituation {
             background-color: var(--rw-bg-color_busy);
             color: var(--rw-fg-color_busy);
             font-weight: 700;
+        }
+
+        .rwpending {
+            color: var(--rw-fg-color_warning);
+            background-color: var(--rw-bg-color_warning);
         }
 
     }
@@ -1050,7 +1078,6 @@
     }
 
     .modal__body {
-
         position: absolute;
         top: 2.8rem;
         bottom: 0;
@@ -1068,7 +1095,8 @@
     box-shadow: 5px 10px 20px var(--md-shadow-color);
 }
 
-.invoice__modal-general {
+.invoice__modal-general,
+.invoice__modal-periods {
     background-color: var(--in-white);
     left: 30px;
     top: 30px;
@@ -1111,6 +1139,12 @@
 
 .project_data-box {
 
+    display: grid;
+    grid-template-columns: 1fr 20%;
+    grid-template-rows: 100%;
+    height: 100%;
+
+
     table {
         width: 80%;
 
@@ -1140,8 +1174,8 @@
             text-transform: uppercase;
 
             &.textbox-alert {
-                border-color: #cc0000;
-                background-color: rgba(#cc0000, 0.05);
+                border-color: var(--rw-fg-color_warning);
+                background-color: var(--rw-bg-color_warning);
             }
         }
 
@@ -1163,6 +1197,25 @@
             font-size: 1.2em;
         }
     }
+
+    .image_random {
+        background-color: var(--in-oxford);
+        background-image: url("../img/programer/21.png");
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+}
+
+.iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.periods__box {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 

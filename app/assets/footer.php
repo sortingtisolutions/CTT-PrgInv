@@ -20,7 +20,7 @@
 	<script src="<?= PATH_ASSETS . 'lib/forms/forms.js' ?>"></script>
 	<script src="<?= PATH_ASSETS . 'lib/easy-gantt.js' ?>"></script>
 	<script src="<?= PATH_ASSETS . 'lib/sticky.js' ?>"></script>
-
+	
 	
 </body>
 </html>

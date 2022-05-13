@@ -446,6 +446,7 @@
                     </td>
                 </tr>
             </table>
+            <div class="image_random"></div>
         </div>
     </div>
     <div id="commentsTemplates" class="table_hidden box_template">

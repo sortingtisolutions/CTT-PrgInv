@@ -125,13 +125,12 @@ function eventsAction() {
                 let pjtId = $('.version_current').attr('data_project');
                 let verCurr = $('.version_current').attr('data_version');
 
-                // modalLoading('S');
+                modalLoading('S');
                 let par = `
                 [{
                     "pjtId"  : "${pjtId}",
                     "verId"  : "${verCurr}"
                 }]`;
-                console.log(par);
 
                 var pagina = 'ProjectPlans/SaveBudget';
                 var tipo = 'html';
@@ -183,7 +182,7 @@ function eventsAction() {
         });
     // Imprime la cotización en pantalla
     $('.toPrint')
-        .unbind('on')
+        .unbind('click')
         .on('click', function () {
             let verId = $('.version_current').attr('data_version');
             printBudget(verId);
@@ -299,7 +298,7 @@ function getProductsRelated(id, tp) {
 }
 /**  Obtiene el listado de projectos del producto  */
 function getStockProjects(prdId) {
-    var pagina = 'ProjectPlans/stockProdcuts';
+    var pagina = 'ProjectPlans/stockProducts';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
     var selector = putStockProjects;
@@ -384,23 +383,25 @@ function putVersion(dt) {
             $('.version__list ul').append(H);
         });
 
-        $('.version__list ul li').on('click', function () {
-            let version = $(this).attr('id').substring(1, 100);
-            let versionCode = $(this).attr('data_code');
-            let pjtId = $(this).attr('data_project');
-            vers = version;
+        $('.version__list ul li')
+            .unbind('click')
+            .on('click', function () {
+                let version = $(this).attr('id').substring(1, 100);
+                let versionCode = $(this).attr('data_code');
+                let pjtId = $(this).attr('data_project');
+                vers = version;
 
-            $('.version_current')
-                .html('Version: ' + dt[0].ver_code)
-                .attr('data_version', version)
-                .attr('data_versionCode', versionCode);
+                $('.version_current')
+                    .html('Version: ' + dt[0].ver_code)
+                    .attr('data_version', version)
+                    .attr('data_versionCode', versionCode);
 
-            getBudgets(pjtId);
-            showButtonVersion('H');
-            showButtonComments('S');
-            showButtonToPrint('S');
-            showButtonToSave('S');
-        });
+                getBudgets(pjtId);
+                showButtonVersion('H');
+                showButtonComments('S');
+                showButtonToPrint('S');
+                showButtonToSave('S');
+            });
 
         $('#V' + firstVersion).trigger('click');
     }
@@ -566,12 +567,14 @@ function showListProducts(item) {
             selProduct(text);
         });
 
-    $('.close_listProducts').on('click', function () {
-        $('.invoice__section-products').fadeOut(400, function () {
-            $('#listProductsTable table tbody').html('');
-            $('#txtProductFinder').val('');
+    $('.close_listProducts')
+        .unbind('click')
+        .on('click', function () {
+            $('.invoice__section-products').fadeOut(400, function () {
+                $('#listProductsTable table tbody').html('');
+                $('#txtProductFinder').val('');
+            });
         });
-    });
 }
 
 /** ++++++ Selecciona los productos del listado */
@@ -627,10 +630,12 @@ function putProducts(dt) {
         $('#listProductsTable table tbody').append(H);
     });
 
-    $('#listProductsTable table tbody tr').on('click', function () {
-        let inx = $(this).attr('data_indx');
-        fillBudget(prod[inx], vers, inx);
-    });
+    $('#listProductsTable table tbody tr')
+        .unbind('click')
+        .on('click', function () {
+            let inx = $(this).attr('data_indx');
+            fillBudget(prod[inx], vers, inx);
+        });
 }
 
 function fillBudget(pr, vr, ix) {
@@ -859,42 +864,47 @@ function activeInputSelector() {
                     $('.invoiceMainSelect').fadeOut(400);
                 });
         });
-
+    let id;
     $('.menu_product')
         .unbind('click')
         .on('click', function () {
-            let id = $(this);
+            id = $(this);
             let posLeft = id.offset().left - 20;
             let posTop = id.offset().top - 100;
-
             $('.invoice__menu-products')
                 .css({top: posTop + 'px', left: posLeft + 'px'})
-                .fadeIn(400)
-                .unbind('mouseleave')
-                .on('mouseleave', function () {
-                    $('.invoice__menu-products').fadeOut(400);
-                })
-                .children('ul')
-                .children('li')
-                .unbind('click')
-                .on('click', function () {
-                    let event = $(this).attr('class');
-                    let bdgId = id.parents('tr').attr('id');
-                    let type = id.parents('tr').attr('data_level');
-                    console.log(bdgId, event);
-                    switch (event) {
-                        case 'event_killProduct':
-                            killProduct(bdgId);
-                            break;
-                        case 'event_InfoProduct':
-                            infoProduct(bdgId, type);
-                            break;
-                        case 'event_StokProduct':
-                            stockProduct(bdgId);
-                            break;
-                        default:
-                    }
-                });
+                .fadeIn(400);
+        });
+
+    $('.invoice__menu-products')
+        .unbind('mouseleave')
+        .on('mouseleave', function () {
+            $('.invoice__menu-products').fadeOut(400);
+        });
+
+    $('.invoice__menu-products ul li')
+        .unbind('click')
+        .on('click', function () {
+            let event = $(this).attr('class');
+            let bdgId = id.parents('tr').attr('id');
+            let type = id.parents('tr').attr('data_level');
+            if (type != 'K') {
+                switch (event) {
+                    case 'event_killProduct':
+                        killProduct(bdgId);
+                        break;
+                    case 'event_InfoProduct':
+                        infoProduct(bdgId, type);
+                        break;
+                    case 'event_PerdProduct':
+                        periodProduct(bdgId);
+                        break;
+                    case 'event_StokProduct':
+                        stockProduct(bdgId);
+                        break;
+                    default:
+                }
+            }
         });
 }
 
@@ -908,24 +918,26 @@ function killProduct(bdgId) {
 
     $('body').append(H);
 
-    $('.emergent__warning .btn').on('click', function () {
-        let obj = $(this);
-        let resp = obj.attr('id');
-        if (resp == 'killYes') {
-            $('#' + bdgId).fadeOut(500, function () {
-                let pjtId = $('.version_current').attr('data_project');
-                let section = $(this).parents('tbody').attr('id').substring(2, 5);
-                let pid = bdgId.substring(3, 10);
-                updateTotals();
-                showButtonVersion('S');
-                showButtonToPrint('H');
-                showButtonToSave('H');
-                updateMice(pjtId, pid, 'pjtvr_quantity', 0, section, 'D');
-                $('#' + bdgId).remove();
-            });
-        }
-        obj.parent().remove();
-    });
+    $('.emergent__warning .btn')
+        .unbind('click')
+        .on('click', function () {
+            let obj = $(this);
+            let resp = obj.attr('id');
+            if (resp == 'killYes') {
+                $('#' + bdgId).fadeOut(500, function () {
+                    let pjtId = $('.version_current').attr('data_project');
+                    let section = $(this).parents('tbody').attr('id').substring(2, 5);
+                    let pid = bdgId.substring(3, 10);
+                    updateTotals();
+                    showButtonVersion('S');
+                    showButtonToPrint('H');
+                    showButtonToSave('H');
+                    updateMice(pjtId, pid, 'pjtvr_quantity_ant', 0, section, 'D');
+                    $('#' + bdgId).remove();
+                });
+            }
+            obj.parent().remove();
+        });
 }
 
 // Muestra la información del producto seleccionado
@@ -942,21 +954,48 @@ function infoProduct(bdgId, type) {
 }
 // Muestra la información de productos relacionados
 function putProductsRelated(dt) {
+    $('.invoice__modal-general table tbody').html('');
     $.each(dt, function (v, u) {
         let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
-        let H = `
+        let pending = u.pjtdt_prod_sku.toUpperCase() == 'PENDIENTE' ? 'pending' : 'free';
+        if (u.prd_level == 'P') {
+            let H = `
             <tr ${levelProduct}>
                 <td>${u.prd_sku}</td>
+                <td><span class="${pending}">${u.pjtdt_prod_sku.toUpperCase()}</span></td>
                 <td>${u.prd_level}</td>
                 <td>${u.prd_name}</td>
+                <td>${u.cat_name}</td>
             </tr>
+            ${putProductsRelatedSons(dt, u.prd_id)}
         `;
-        $('.invoice__modal-general table tbody').append(H);
+            $('.invoice__modal-general table tbody').append(H);
+        }
     });
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
 }
+function putProductsRelatedSons(dt, pr) {
+    let H = '';
+    $.each(dt, function (v, u) {
+        if (u.acr_parent == pr) {
+            let levelProduct = u.prd_level == 'A' ? 'class="levelAccesory"' : '';
+            let pending = u.pjtdt_prod_sku.toUpperCase() == 'PENDIENTE' ? 'pending' : 'free';
+            H += `
+            <tr >
+                <td>${u.prd_sku}</td>
+                <td><span class="${pending}">${u.pjtdt_prod_sku.toUpperCase()}</span></td>
+                <td>${u.prd_level}</td>
+                <td ${levelProduct} >${u.prd_name}</td>
+                <td>${u.cat_name}</td>
+            </tr>
+            `;
+        }
+    });
+    return H;
+}
+
 // Muestra el inventario de productos
 function stockProduct(bdgId, type) {
     getStockProjects(bdgId.substring(3, 20));
@@ -968,17 +1007,20 @@ function stockProduct(bdgId, type) {
     $('.invoice__modal-general .modal__header-concept').html('inventarios del producto');
     closeModals();
 }
-
 function putStockProjects(dt) {
     console.log(dt);
+    $('.invoice__modal-general table tbody').html('');
     if (dt[0].prd_name != 0) {
         $.each(dt, function (v, u) {
-            let situation = u.ser_situation != 'D' ? 'class="levelSituation"' : '';
+            let empty = u.pjtdt_prod_sku.toUpperCase() == 'PENDIENTE' ? u.pjtdt_prod_sku.toUpperCase() : '';
+            let pending = u.pjtdt_prod_sku.toUpperCase() == 'PENDIENTE' ? 'pending' : '';
+            let situation = u.ser_situation != 'D' ? 'class="levelSituation rw' + pending + '"' : 'class="rw' + pending + '"';
             let H = `
             <tr ${situation}>
+                <td><span class="${pending}">${empty}</span></td>
                 <td>${u.ser_sku}</td>
                 <td>${u.ser_serial_number}</td>
-                <td>${u.ser_situation}</td>
+                <td>${u.ser_situation}</td> 
                 <td>${u.pjt_name}</td>
                 <td>${u.pjtpd_day_start}</td>
                 <td>${u.pjtpd_day_end}</td>
@@ -993,6 +1035,7 @@ function putStockProjects(dt) {
     });
 }
 
+// Edita los datos del proyecto
 function editProject(pjtId) {
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
@@ -1215,7 +1258,6 @@ function showModalComments() {
     closeModals();
     fillComments(pjtId);
 }
-
 function fillComments(pjtId) {
     console.log(pjtId);
     // Agrega nuevo comentario
@@ -1255,7 +1297,6 @@ function putComments(dt) {
         });
     }
 }
-
 function fillCommnetElements(u) {
     console.log(u.com_comment);
     let H = `
@@ -1268,7 +1309,6 @@ function fillCommnetElements(u) {
 
     $('.comments__list').prepend(H);
 }
-
 function addComment(dt) {
     console.log(dt[0]);
     fillCommnetElements(dt[0]);
@@ -1293,6 +1333,10 @@ function printBudget(verId) {
 
 function saveBudget(dt) {
     console.log(dt);
+
+    let pjtId = $('.version_current').attr('data_project');
+    getBudgets(pjtId);
+    modalLoading('H');
 }
 
 // *************************************************
@@ -1517,8 +1561,8 @@ function closeModals(table) {
 
 function automaticCloseModal() {
     $('.invoice__modal-general').slideUp(400, function () {
-        $('.invoice__modalBackgound').fadeOut(400);
         $('.invoice__modal-general .modal__body').html('');
+        $('.invoice__modalBackgound').fadeOut(400);
     });
 }
 
@@ -1568,7 +1612,7 @@ function validatorFields(frm) {
 }
 
 /* ************************************************************************ */
-/* PROMUEVE COTIZACION A PRESEUPUESTO                                       */
+/* PROMUEVE COTIZACION A PRESUPUESTO                                        */
 /* ************************************************************************ */
 function promoteProject(pjtId) {
     modalLoading('S');
@@ -1587,7 +1631,6 @@ function showPromoteProject(dt) {
     var selector = showPromoteVersion;
     fillField(pagina, par, tipo, selector);
 }
-
 function showPromoteVersion(dt) {
     console.log(dt);
     let pjtId = dt.split('|')[0];
@@ -1595,7 +1638,6 @@ function showPromoteVersion(dt) {
 
     showPromoteBudget(dt);
 }
-
 function showPromoteBudget(dt) {
     let pjtId = dt.split('|')[0];
     let verId = dt.split('|')[1];
@@ -1606,13 +1648,11 @@ function showPromoteBudget(dt) {
     var selector = showResult;
     fillField(pagina, par, tipo, selector);
 }
-
 function showResult(dt) {
     console.log(dt);
     modalLoading('H');
     cleanFormat();
 }
-
 function cleanFormat() {
     showButtonVersion('H');
     showButtonToPrint('H');
@@ -1622,7 +1662,6 @@ function cleanFormat() {
     cleanVersionList();
     cleanTotalsArea();
 }
-
 function getDataMice() {
     let pjtId = $('.version_current').attr('data_project');
     $('.budgetRow').each(function (v) {
@@ -1687,7 +1726,6 @@ function getDataMice() {
         }
     });
 }
-
 function updateMice(pj, pd, fl, dt, sc, ac) {
     // pj --- Id del proyecto
     // pd --- Id del producto
@@ -1695,7 +1733,7 @@ function updateMice(pj, pd, fl, dt, sc, ac) {
     // dt --- Valor del campo
     // sc --- numero de la seccion
     // ac --- Accion a realizar
-    console.log(pj, pd, fl, dt, sc, ac);
+    // console.log(pj, pd, fl, dt, sc, ac);
 
     var par = `[{
         "pjtId"      :   "${pj}",
@@ -1712,4 +1750,33 @@ function updateMice(pj, pd, fl, dt, sc, ac) {
 }
 function receiveResponseMice(dt) {
     console.log(dt);
+}
+
+/* ************************************************************************ */
+/* DEFINE LOS PERIODOS DE CADA SERIE DEL PRODUCTO SELECCIONADO              */
+/* ************************************************************************ */
+
+/* ==== Define los periodos de cada serie ======================== */
+function periodProduct(prd) {
+    let prdId = prd.substring(3, 10);
+    let pjtId = $('.version_current').attr('data_project');
+
+    $('.invoice__modalBackgound').fadeIn('slow');
+    $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
+    let template = $('#PeriodsTemplates');
+    $('.invoice__modal-general .modal__body').append(template.html());
+    $('.invoice__modal-general .modal__header-concept').html('Periodos ');
+    $('#periodBox').html('');
+    $('#periodBox').attr('data-project', pjtId).attr('data-product', prdId);
+
+    var pagina = 'Periods/exec';
+    var par = `[{"pjId":"${pjtId}"}]`;
+    var tipo = 'html';
+    var selector = putPeriods;
+    fillField(pagina, par, tipo, selector);
+    closeModals();
+}
+
+function putPeriods(dt) {
+    $('#periodBox').html(dt);
 }

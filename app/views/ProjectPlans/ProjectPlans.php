@@ -3,6 +3,7 @@
 	require ROOT . FOLDER_PATH . "/app/assets/header.php";
 ?>
 
+
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
@@ -33,7 +34,7 @@
             <span class="version_current"></span>
             <span class="invoice_button addSection"><i class="fas fa-plus"></i>Agrega Sección</span>
             <span class="invoice_button toPrint"><i class="fas fa-print"></i> Imprimir</span>
-            <span class="invoice_button toSave"><i class="fas fa-save"></i> Generar presupuesto</span>
+            <span class="invoice_button toSave"><i class="fas fa-save"></i> Generar proyecto</span>
             <div class="menu-sections">
                 <ul>
                     <li class="equipoBase"          data_option="1">Equipo Base</li>
@@ -320,7 +321,7 @@
         <ul>
             <li class="event_killProduct"><i class="fas fa-trash"></i> Elimina Producto</li>
             <li class="event_InfoProduct"><i class="fas fa-info-circle"></i> Información</li>
-            <li class="event_PerdProduct" hidden><i class="fas fa-calendar-week"></i> Periodos</li>
+            <li class="event_PerdProduct"><i class="fas fa-calendar-week"></i> Periodos</li>
             <li class="event_StokProduct"><i class="fas fa-layer-group"></i> Inventario</li>
         </ul>
     </div>
@@ -328,11 +329,10 @@
     <!-- Modal General  -->
     <div class="invoice__modal-general invoice-border modalTable">
         <div class="modal__header invoice-border">
-            <div class="modal__header-concept">&nbsp;Listados de productos</div>
+            <div class="modal__header-concept"></div>
             <i class="far fa-window-close closeModal"></i>
         </div>
-        <div class="modal__body">
-        </div>
+        <div class="modal__body"></div>
     </div>
 
 
@@ -354,8 +354,10 @@
             <thead>
                 <tr>
                     <th style = "width: 150px">SKU</th>
+                    <th style = "width:  90px"></th>
                     <th style = "width:  50px">Tipo</th>
-                    <th style = "min-width: 400px; width: auto;">Nombre del producto</th>
+                    <th style = "min-width: 300px; width: auto;">Nombre del producto</th>
+                    <th style = "width: 300px">Catálogo</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -365,9 +367,10 @@
         <table class="table_template" style = "min-width:1150px; width:auto;">
             <thead>
                 <tr>
+                    <th style = "width: 80px"></th>
                     <th style = "width:150px">SKU</th>
                     <th style = "width:150px">Serie</th>
-                    <th style = "width:50px">Status</th>
+                    <th style = "width: 50px">Status</th>
                     <th style = "min-width:500px; width: auto">Proyecto</th>
                     <th style = "width:150px">Fecha de inicio</th>
                     <th style = "width:150px">Fecha de término</th>
@@ -449,6 +452,7 @@
                     </td>
                 </tr>
             </table>
+            <div class="image_random"></div>
         </div>
     </div>
     <div id="commentsTemplates" class="table_hidden box_template">
@@ -464,6 +468,13 @@
             </div>
         </div>
     </div>
+    <div id="PeriodsTemplates" class="table_hidden box_template">
+        <div class="periods__box" id="periodBox"></div>
+    </div>
+
+
+
+
 
 
     <!-- loading -->
@@ -479,10 +490,12 @@
     
 </div>
 
+<!-- <div class="cuadroMovible"></div> -->
 
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
-<script src="<?=  PATH_VIEWS . 'ProjectPlans/ProjectPlans.js' ?>"></script>
+<script src="<?=  PATH_VIEWS  . 'ProjectPlans/ProjectPlans.js' ?>"></script>
+
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
