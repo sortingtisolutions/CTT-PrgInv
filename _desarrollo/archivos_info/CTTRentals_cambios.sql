@@ -413,3 +413,37 @@ CREATE TABLE ctt_projects_version (
   PRIMARY KEY (`pjtvr_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Contenido de la version del proyecto';
 
+
+
+ -- Actualizacion del 13 de MAYO 2022
+CREATE TABLE `ctt_projects_mice` (
+  `pjtvr_id`            int(11) NOT NULL AUTO_INCREMENT         COMMENT 'Id del contenido del projecto',
+  `pjtvr_action`        varchar(2) DEFAULT 'N'                  COMMENT 'Action que debe realizar',
+  `pjtvr_prod_sku`      varchar(15) DEFAULT NULL                COMMENT 'SKU identificador del producto',
+  `pjtvr_prod_name`     varchar(100) DEFAULT NULL               COMMENT 'Nombre del producto',
+  `pjtvr_prod_price`    decimal(10,2) DEFAULT NULL              COMMENT 'Precio unitario del producto',
+  `pjtvr_quantity`      int(11) DEFAULT NULL                    COMMENT 'Cantidad de productos',
+  `pjtvr_quantity_ant`  int(11) DEFAULT NULL                    COMMENT 'Cantidad anterior',
+  `pjtvr_days_base`     int(11) DEFAULT NULL                    COMMENT 'Días solicitados en renta',
+  `pjtvr_days_cost`     int(11) DEFAULT NULL                    COMMENT 'Días en cotización en renta',
+  `pjtvr_discount_base` decimal(10,2) DEFAULT NULL              COMMENT 'Descuento aplicado a la renta',
+  `pjtvr_days_trip`     int(11) DEFAULT NULL                    COMMENT 'Días solicitados en viaje',
+  `pjtvr_discount_trip` decimal(10,2) DEFAULT NULL              COMMENT 'Descuento aplicado al viaje',
+  `pjtvr_days_test`     int(11) DEFAULT NULL                    COMMENT 'Días solicitados en prueba',
+  `pjtvr_discount_test` decimal(10,2) DEFAULT NULL              COMMENT 'Descuento aplicado en prueba',
+  `pjtvr_insured`       decimal(10,2) DEFAULT 0.10              COMMENT 'Porcentaje de seguro',
+  `pjtvr_prod_level`    varchar(1) DEFAULT 'P'                  COMMENT 'Nivel del producto  K=Kit, P=Producto',
+  `pjtvr_section`       int(11) DEFAULT NULL                    COMMENT 'Numero de seccion',
+  `pjtvr_status`        varchar(1) DEFAULT '1'                  COMMENT 'Status del contendo del proyecto 1-activo 0-inactivo',
+  `ver_id`              int(11) NOT NULL                        COMMENT 'FK Id de la version relación ctt_version',
+  `prd_id`              int(11) NOT NULL                        COMMENT 'FK Id del producto relación ctt_products',
+  `pjt_id`              int(11) NOT NULL                        COMMENT 'FK Id del proyecto relación ctt_proyect',
+  PRIMARY KEY (`pjtvr_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='Contenido de la version del proyecto';
+
+ALTER TABLE ctt_version ADD COLUMN ver_current smallint COMMENT 'Id de la version actual' AFTER ver_status;
+
+
+-- Actualizacion del 14 de MAYO 2022
+ALTER TABLE ctt_version ADD COLUMN CHANGE COLUMN ver_current ver_active SMALLINT(1) NULL DEFAULT 0 COMMENT 'Version activa en pantalla';
+ALTER TABLE ctt_version ADD COLUMN `ver_master` SMALLINT(1) NULL DEFAULT 0 COMMENT 'Version Maestra en Base de datos' AFTER `ver_active`

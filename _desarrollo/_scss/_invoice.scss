@@ -3,6 +3,7 @@
     --in-black: hsl(0 0% 0%);
     --in-gray: hsl(236, 65%, 98.5%);
     --in-oxford: hsl(236, 3%, 75%);
+    --in-green: hsl(129, 88%, 43%);
 
     --br-gray-soft: hsl(236, 3%, 94%);
     --br-gray-medium: hsl(236, 3%, 80%);
@@ -183,7 +184,7 @@
                         .element_code,
                         .element_date {
                             display: inline-block;
-                            width: 45%;
+                            width: 40%;
                         }
 
                         .element_code {
@@ -198,8 +199,13 @@
 
                         .element_caret {
                             display: inline-block;
-                            width: 10%;
+                            width: 7%;
                             text-align: right;
+                        }
+
+                        .element_caret-master {
+                            font-size: 0.9em;
+                            color: var(--in-green);
                         }
                     }
                 }
@@ -430,6 +436,21 @@
                     .col_quantity,
                     .col_days {
                         text-align: center;
+                        position: relative;
+
+                        .col_quantity-pending {
+                            width: 7px;
+                            height: 7px;
+                            background-color: var(--rw-fg-color_warning);
+                            border-radius: 50%;
+                            position: absolute;
+                            top: .7rem;
+                            left: .5rem;
+
+                            &:hover {
+                                transform: scale(1.7);
+                            }
+                        }
                     }
 
                     .col_price,
@@ -765,6 +786,9 @@
                     .col_type {
                         width: 70px;
                         text-align: center;
+                        position: relative;
+
+
                     }
 
                     .col_category {

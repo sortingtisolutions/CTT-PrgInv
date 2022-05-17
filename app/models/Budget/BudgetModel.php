@@ -514,7 +514,7 @@ public function saveBudgetList($params)
         $pjtId         = $this->db->real_escape_string($params['pjtId']);
         $verId         = $this->db->real_escape_string($params['verId']);
 
-        $qry = "UPDATE ctt_version SET ver_status = 'R', ver_current = '1', ver_code = 'R0001' WHERE ver_id = $verId;";
+        $qry = "UPDATE ctt_version SET ver_status = 'R', ver_active = '1', ver_master = '1', ver_code = 'R0001' WHERE ver_id = $verId;";
         $this->db->query($qry);
 
         return $pjtId.'|'. $verId;
@@ -592,8 +592,8 @@ public function saveBudgetList($params)
 
             $qry1 = "UPDATE ctt_series 
                         SET 
-                            ser_situation = 'PP',
-                            ser_stage = 'PP',
+                            ser_situation = 'EA',
+                            ser_stage = 'R',
                             ser_reserve_count = ser_reserve_count + 1
                             WHERE ser_id = $serie;";
             $this->db->query($qry1);

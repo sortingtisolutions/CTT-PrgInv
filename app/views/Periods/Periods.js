@@ -97,14 +97,12 @@ function iniciador() {
             let pos = parseInt($(this).attr('data-position'));
             let dtstart = moment(fechaInicial, 'YYYYMMDD').format('D');
 
-            // let posIni = parseInt($(this).attr('data-eldia')) * widthDay - widthDay;
             let posIni = parseInt(pos * widthDay) - widthDay;
 
             let elm = $(this).parents('tr').data('detail');
             let ix = getIndexSerie(elm);
 
             let td = $(this).parent('td');
-            // H = `<div class="rango" style="left:${posIni}px" data-attributes="${attribs}">${rngFrame}${killme}</div>`;
             H = `<div class="rango" style="left:${posIni}px" data-element="${series[ix].pjtdt_id}" data-segment="1"  data-range = "">${rngFrame}${killme}</div>`;
             td.append(H);
             resizing();
@@ -124,8 +122,54 @@ function iniciador() {
     $('.toApplyPeriods')
         .unbind('click')
         .on('click', function () {
-            console.log('Guarada los cambios de periodo');
+            let item = '';
+            let arrg = '';
+
+            let pjtdt_id = '';
+            let gpo = $('#periodsTable tbody tr td div.rango');
+            gpo.each(function (v) {
+                let pjtdtId = $(this).data('element');
+
+                if (item != pjtdtId) {
+                    pjtdt_id += pjtdtId + ',';
+                    item = pjtdtId;
+                }
+                arrg++;
+            });
+            pjtdt_id = pjtdt_id.substring(0, pjtdt_id.length - 1);
+
+            var pagina = 'Periods/deletePeriods';
+            var par = `[{"pjtdtId":"${pjtdt_id}", "counter":"${arrg}"}]`;
+            var tipo = 'html';
+            var selector = putDeletePeriods;
+            fillField(pagina, par, tipo, selector);
         });
+}
+
+function putDeletePeriods(dt) {
+    let cnt = dt.split('|')[0];
+    let gpo = $('#periodsTable tbody tr td div.rango');
+    gpo.each(function () {
+        let pjtdtId = $(this).data('element');
+        let sequency = $(this).data('segment');
+        let start = $(this).data('range').split('-')[0];
+        let end = $(this).data('range').split('-')[1];
+        let data = {pjtdtId: pjtdtId, sequency: sequency, start: start, end: end, cnt: cnt};
+        let par = '[' + JSON.stringify(data) + ']';
+        var pagina = 'Periods/savePeriods';
+        var tipo = 'html';
+        var selector = putSavePeriods;
+        fillField(pagina, par, tipo, selector);
+    });
+}
+
+var cnts = 0;
+function putSavePeriods(dt) {
+    cnts++;
+    if (dt == cnts) {
+        cnts = 0;
+        automaticCloseModal();
+    }
 }
 
 function numberSegments(id) {
@@ -181,7 +225,6 @@ function killSegment() {
             let segment = $(this);
             let id = segment.parents('tr').data('detail');
             segment.parent().remove();
-            console.log(id);
             numberSegments(id);
         });
 }
@@ -191,7 +234,7 @@ function setSeries() {
     let rowbusy = 0;
     $('#periodsTable tbody').html('');
     $.each(series, function (v, u) {
-        if (sr != u.serie) {
+        if (sr != u.pjtdt_id) {
             let nameSerie = u.pjtdt_prod_sku != 'Pendiente' ? u.serie.split('-')[1] : '<span class="pending">PENDIENTE</span>';
             H = `
             <tr data-detail="${u.pjtdt_id}">
@@ -293,6 +336,7 @@ function updateCounterStatus(elm) {
 
 function getFullProjectRangePeriod() {
     let pjtId = $('#periodBox').attr('data-project');
+
     var pagina = 'Periods/getPeriodProject';
     var par = `[{"pjtId":"${pjtId}"}]`;
     var tipo = 'json';
@@ -316,6 +360,7 @@ function getSerieRangePeriod() {
 }
 function putSerieRangePeriod(dt) {
     if (dt[0].ser_id != '0') {
+        $('.toApplyPeriods').attr('data-detail', dt[0].pjtcn_id);
         series = dt;
         iniciador();
     }

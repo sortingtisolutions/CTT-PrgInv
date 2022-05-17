@@ -61,6 +61,27 @@ class PeriodsController extends Controller
         }
         echo $res;
     }
+
+
+/** ==== Elimina los registros de los periodos correspondientes ==============================  */
+    public function deletePeriods($request_params)
+    {
+
+        $params =  $this->session->get('user');
+        $result = $this->model->deletePeriods($request_params);
+
+        echo $request_params['counter'] .'|'. $result;
+    }
+
+/** ==== Gruarda los nuevos periodos  ========================================================  */
+    public function savePeriods($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->savePeriods($request_params);
+
+        echo $request_params['cnt'];
+    }
+
 /** ==========================================================================================  */
 
 }

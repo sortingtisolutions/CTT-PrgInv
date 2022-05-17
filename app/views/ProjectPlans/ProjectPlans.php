@@ -13,19 +13,19 @@
     <div class="invoice__section invoice__section-panel invoice-border">
         <div class="panel__name">
             <i class="fas fa-caret-square-down projectInformation"></i>
-            <span id="projectName" data_id="" title=""></span>
+            <span id="projectName" data-id="" title=""></span>
         </div>
         <div class="panel__title">PRESUPUESTO</div>
         <div class="panel__finder">
             <i class="fas fa-search projectfinder"></i>
         </div>
-    </div>
+     </div>
 
 
     <!-- Botones de reseteo -->
     <div class="invoice__section invoice__section-button invoice-border">
         <!-- <span class="invoice_button" id="newQuote"><i class="fas fa-plus"></i>nueva cotización</span> -->
-    </div>
+     </div>
 
 
     <!-- Parilla de productos seleccionado -->
@@ -37,10 +37,10 @@
             <span class="invoice_button toSave"><i class="fas fa-save"></i> Generar proyecto</span>
             <div class="menu-sections">
                 <ul>
-                    <li class="equipoBase"          data_option="1">Equipo Base</li>
-                    <li class="equipoExtra"         data_option="2">Equipo Extra</li>
-                    <li class="equipoPorDia"        data_option="3">Equipo por Días</li>
-                    <li class="equipoSubarrendo"    data_option="4">Equipo por subarrendo</li>
+                    <li class="equipoBase"          data-option="1">Equipo Base</li>
+                    <li class="equipoExtra"         data-option="2">Equipo Extra</li>
+                    <li class="equipoPorDia"        data-option="3">Equipo por Días</li>
+                    <li class="equipoSubarrendo"    data-option="4">Equipo por subarrendo</li>
                 </ul>
             </div>
         </div>
@@ -64,7 +64,7 @@
                         <th class="wclnumb coltest"><div class="invoice_col_header costTest">COSTO PRUEBAS</div>Costo</th>
                         <th class="wclexpn colcontrol"><i class="fas fa-caret-left showColumns rotate180" title="Muestra y oculta columnas de viaje y pruebas"></i></th>
                     </tr>
-                </thead>
+                 </thead>
 
                 
 
@@ -81,7 +81,7 @@
                         </th>
                         <td colspan=14></td>
                     </tr> 
-                </tbody>
+                 </tbody>
                 <!-- EQUIPO EXTRA -->
                 <tbody class="sections_products" id="SC2">
                     <tr>
@@ -94,7 +94,7 @@
                         </th>
                         <td colspan=14></td>
                     </tr> 
-                </tbody>
+                 </tbody>
                 <!-- EQUIPO POR DIA -->
                 <tbody class="sections_products" id="SC3">
                     <tr>
@@ -107,7 +107,7 @@
                         </th>
                         <td colspan=14></td>
                     </tr> 
-                </tbody>
+                 </tbody>
                 <!-- EQUIPO POR SUBARRENDO -->
                 <tbody class="sections_products" id="SC4">
                     <tr>
@@ -122,11 +122,11 @@
                     </tr> 
 
                     
-                </tbody>
+                 </tbody>
                 
-            </table>
+             </table>
         </div>
-    </div>
+     </div>
 
 
     <!-- Totales y versiones -->
@@ -161,7 +161,7 @@
                     </tr>
                     <tr>
                         <td class="totals-concept">NUMERO DE PRODUCTOS</td>
-                        <td class="totals-numbers simple">0</td>
+                        <td class="totals-numbers simple"  id="prodTotal">0</td>
                     </tr>
                 </table>
         </div>
@@ -362,7 +362,7 @@
             </thead>
             <tbody></tbody>
         </table>
-    </div>
+     </div>
     <div id="stockProductTemplate" class="table_hidden box_template">
         <table class="table_template" style = "min-width:1150px; width:auto;">
             <thead>
@@ -378,7 +378,7 @@
             </thead>
             <tbody></tbody>
         </table>
-    </div>
+     </div>
     <div id="dataProjectTemplate" class="table_hidden box_template">
         <div class="project_data-box">
             <table  id="formProject">
@@ -454,7 +454,7 @@
             </table>
             <div class="image_random"></div>
         </div>
-    </div>
+     </div>
     <div id="commentsTemplates" class="table_hidden box_template">
         <div class="comments__box">
             <!-- Lista de comentarios -->
@@ -467,10 +467,10 @@
 
             </div>
         </div>
-    </div>
+     </div>
     <div id="PeriodsTemplates" class="table_hidden box_template">
         <div class="periods__box" id="periodBox"></div>
-    </div>
+     </div>
 
 
 
@@ -486,7 +486,7 @@
                 </p>
             <p>Este proceso puede tradar varios minutos, le recomendamos no salir de la página ni cerrar el navegador.</p>
         </div>
-    </div>
+     </div>
     
 </div>
 

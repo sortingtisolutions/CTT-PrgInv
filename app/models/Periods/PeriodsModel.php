@@ -11,7 +11,7 @@ class PeriodsModel extends Model
 
     
 /** ====== Obtiene el periodo total del proyecto  ============================================  */
-    function getPeriodProject($params){
+    public function getPeriodProject($params){
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $qry = "SELECT 
                     date_format(pjt_date_start, '%Y%m%d') AS pjt_date_start, 
@@ -22,7 +22,7 @@ class PeriodsModel extends Model
     }
 
 /** ====== Obtiene los periodos de las series  ===============================================  */
-    function getPeriodSeries($params){
+    public function getPeriodSeries($params){
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $prdId = $this->db->real_escape_string($params['prdId']);
         $qry = "SELECT 
@@ -43,5 +43,48 @@ class PeriodsModel extends Model
                 WHERE cn.pjt_id = '$pjtId' AND pd.prd_id = '$prdId'
                 ORDER BY pd.pjtdt_prod_sku, pp.pjtpd_day_start, pp.pjtpd_sequence;";
         return $this->db->query($qry);
+    }
+
+/** ==== Gruarda los periodos correspondientes ===============================================  */
+    public function deletePeriods($params)
+    {
+        $pjtdtId = $this->db->real_escape_string($params['pjtdtId']);
+
+        $qry1 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id IN ($pjtdtId);";
+        $this->db->query($qry1);
+
+        $qry2 = "DELETE FROM ctt_projects_periods WHERE pjtdt_belongs IN ($pjtdtId);";
+        $this->db->query($qry2);
+
+        return 1;
+    }    
+
+
+/** ==== Gruarda los periodos correspondientes ===============================================  */
+    public function savePeriods($params)
+    {
+        $pjtdtId    = $this->db->real_escape_string($params['pjtdtId']);
+        $sequency   = $this->db->real_escape_string($params['sequency']);
+        $start      = $this->db->real_escape_string($params['start']);
+        $end        = $this->db->real_escape_string($params['end']);
+
+        $qry1 = "INSERT INTO ctt_projects_periods
+                    (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs, pjtpd_sequence)
+                SELECT 
+                    '$start' as pjtpd_day_start, '$end' as pjtpd_day_end, 
+                    pjtdt_id, pjtdt_belongs, '$sequency' as pjtdt_sequence  
+                FROM ctt_projects_detail WHERE pjtdt_id = $pjtdtId;";
+        $this->db->query($qry1);
+
+        $qry2 = "INSERT INTO ctt_projects_periods
+                    (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs, pjtpd_sequence)
+                SELECT 
+                    '$start' as pjtpd_day_start, '$end' as pjtpd_day_end, 
+                    pjtdt_id, pjtdt_belongs, '$sequency' as pjtdt_sequence  
+                FROM ctt_projects_detail WHERE pjtdt_belongs = $pjtdtId;";
+        $this->db->query($qry2);
+        
+        return 1;
+
     }
 }

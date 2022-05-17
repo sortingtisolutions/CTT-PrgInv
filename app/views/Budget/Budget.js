@@ -362,10 +362,16 @@ function putDiscounts(dt) {
 function putVersion(dt) {
     $('.version__list ul').html('');
     if (dt[0].ver_id != 0) {
+        $('.version__list-title').html('DOCUMENTOS');
         let firstVersion = dt[0].ver_id;
-        $('.version__list-title').html('DOCUEMENTOS');
+        let caret = '';
         $.each(dt, function (v, u) {
-            let H = `<li id="V${u.ver_id}" data_code="${u.ver_code}"><span>${u.ver_code}</span><span> ${moment(u.ver_date).format('DD-MMM-yyyy')}</span></li> `;
+            caret = firstVersion == u.ver_id ? '<i class="fas fa-caret-right"></i>' : '';
+            let H = `<li id="V${u.ver_id}" data_code="${u.ver_code}">
+                        <span class="element_caret">${caret}</span>
+                        <span class="element_code">${u.ver_code}</span>
+                        <span class="element_date"> ${moment(u.ver_date).format('DD-MMM-yyyy')}</span>
+                    </li> `;
 
             $('.version__list ul').append(H);
         });
@@ -375,8 +381,11 @@ function putVersion(dt) {
             let versionCode = $(this).attr('data_code');
             vers = version;
 
+            $('.element_caret').html('');
+            $('#V' + version + ' .element_caret').html('<i class="fas fa-caret-right"></i>');
+
             $('.version_current')
-                .html('Version: ' + dt[0].ver_code)
+                .html('Version: ' + versionCode)
                 .attr('data_version', version)
                 .attr('data_versionCode', versionCode);
 

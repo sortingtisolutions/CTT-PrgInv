@@ -1,4 +1,4 @@
-let cust, proj, prod, vers, budg, tpprd, relc;
+let cust, proj, prod, vers, budg, tpprd, relc, interfase;
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
@@ -70,7 +70,6 @@ function eventsAction() {
         .unbind('click')
         .on('click', function () {
             let rotate = $(this).attr('class').indexOf('rotate180');
-            console.log(rotate);
             viewStatus = rotate >= 0 ? 'E' : 'C';
             expandCollapseSection();
         });
@@ -90,7 +89,8 @@ function eventsAction() {
     $('.menu-sections ul li')
         .unbind('click')
         .on('click', function () {
-            let item = $(this).attr('data_option');
+            let item = $(this).attr('data-option');
+
             $(this).hide();
 
             $(`#SC${item}`).show();
@@ -122,20 +122,22 @@ function eventsAction() {
             let boton = $(this).html();
             let nRows = $('.invoice__box-table table tbody tr.budgetRow').length;
             if (nRows > 0) {
-                let pjtId = $('.version_current').attr('data_project');
-                let verCurr = $('.version_current').attr('data_version');
+                let pjtId = $('.version_current').attr('data-project');
+                let verCurr = $('.version_current').attr('data-version');
 
                 modalLoading('S');
                 let par = `
                 [{
                     "pjtId"  : "${pjtId}",
-                    "verId"  : "${verCurr}"
+                    "verId"  : "${verCurr}",
+                    "action" : "${interfase}"
                 }]`;
 
                 var pagina = 'ProjectPlans/SaveBudget';
                 var tipo = 'html';
                 var selector = saveBudget;
                 fillField(pagina, par, tipo, selector);
+                modalLoading('H');
             }
         });
 
@@ -146,8 +148,8 @@ function eventsAction() {
             let boton = $(this).html();
             let nRows = $('.invoice__box-table table tbody tr.budgetRow').length;
             if (nRows > 0) {
-                let pjtId = $('.version_current').attr('data_project');
-                let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data_code');
+                let pjtId = $('.version_current').attr('data-project');
+                let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data-code');
 
                 let vr = parseInt(verCurr.substring(1, 10));
                 let verNext = 'R' + refil(vr + 1, 4);
@@ -169,7 +171,7 @@ function eventsAction() {
     $('#btnEditProject')
         .unbind('click')
         .on('click', function () {
-            let pjtId = $('.projectInformation').attr('data_project');
+            let pjtId = $('.projectInformation').attr('data-project');
             editProject(pjtId);
         });
 
@@ -177,14 +179,14 @@ function eventsAction() {
     $('.toSave')
         .unbind('click')
         .on('click', function () {
-            let pjtId = $('.version_current').attr('data_project');
+            let pjtId = $('.version_current').attr('data-project');
             promoteProject(pjtId);
         });
     // Imprime la cotización en pantalla
     $('.toPrint')
         .unbind('click')
         .on('click', function () {
-            let verId = $('.version_current').attr('data_version');
+            let verId = $('.version_current').attr('data-version');
             printBudget(verId);
         });
 
@@ -273,9 +275,9 @@ function getProducts(word, dstr, dend) {
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de cotizaciones */
-function getBudgets(pjtId) {
+function getBudgets(pjtId, verId) {
     var pagina = 'ProjectPlans/listBudgets';
-    var par = `[{"pjtId":"${pjtId}"}]`;
+    var par = `[{"pjtId":"${pjtId}","verId":"${verId}"}]`;
     var tipo = 'json';
     var selector = putBudgets;
     fillField(pagina, par, tipo, selector);
@@ -320,6 +322,14 @@ function getComments(pjtId) {
     var selector = putComments;
     fillField(pagina, par, tipo, selector);
 }
+/** Obtiene el conteo productos para subarrendo */
+function getCounterPending(pjtcnId, prdId) {
+    var pagina = 'ProjectPlans/countPending';
+    var par = `[{"pjtcnId":"${pjtcnId}","prdId":"${prdId}"}]`;
+    var tipo = 'json';
+    var selector = putCounterPending;
+    fillField(pagina, par, tipo, selector);
+}
 
 /** LLENA DE DATOS */
 /**  Llena el listado de proyectos */
@@ -327,7 +337,7 @@ function putProjects(dt) {
     if (dt[0].pjt_id > 0) {
         proj = dt;
         $.each(proj, function (v, u) {
-            let H = ` <li id="P${u.pjt_id}" class="alive" data_content="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}">${u.pjt_name}</li>`;
+            let H = ` <li id="P${u.pjt_id}" class="alive" data-content="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}">${u.pjt_name}</li>`;
             $('.finder_list-projects ul').append(H);
         });
 
@@ -343,7 +353,7 @@ function putCustomers(dt) {
     cust = dt;
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
-            let H = ` <li id="C${u.cus_id}" class="alive" data_content="${v}|${u.cut_name}">${u.cus_name}</li>`;
+            let H = ` <li id="C${u.cus_id}" class="alive" data-content="${v}|${u.cut_name}">${u.cus_name}</li>`;
             $('.finder_list-customer ul').append(H);
         }
     });
@@ -366,19 +376,23 @@ function putDiscounts(dt) {
 function putVersion(dt) {
     $('.version__list ul').html('');
     if (dt[0].ver_id != 0) {
-        $('.version__list-title').html('DOCUEMENTOS');
+        $('.version__list-title').html('DOCUMENTOS');
         let firstVersion = '';
         let caret = '';
         $.each(dt, function (v, u) {
-            if (u.ver_current == 1) {
+            let master = u.ver_master == 1 ? '<i class="fas fa-check-circle"></i>' : '';
+            if (u.ver_active == 1) {
                 firstVersion = u.ver_id;
                 caret = '<i class="fas fa-caret-right"></i>';
             } else {
                 caret = '';
             }
-            let H = `<li id="V${u.ver_id}" data_code="${u.ver_code}" data_project="${u.pjt_id}"><span class="element_caret">${caret}</span><span class="element_code">${
-                u.ver_code
-            }</span><span class="element_date"> ${moment(u.ver_date).format('DD-MMM-yyyy')}</span></li> `;
+            let H = `<li id="V${u.ver_id}" data-code="${u.ver_code}" data-master="${u.ver_master}" data-active="${u.ver_active}" data-project="${u.pjt_id}">
+                        <span class="element_caret element_caret-master">${master}</span>
+                        <span class="element_caret element_caret-active">${caret}</span>
+                        <span class="element_code">${u.ver_code}</span>
+                        <span class="element_date"> ${moment(u.ver_date).format('DD-MMM-yyyy')}</span>
+                    </li> `;
 
             $('.version__list ul').append(H);
         });
@@ -387,24 +401,51 @@ function putVersion(dt) {
             .unbind('click')
             .on('click', function () {
                 let version = $(this).attr('id').substring(1, 100);
-                let versionCode = $(this).attr('data_code');
-                let pjtId = $(this).attr('data_project');
+
+                let pjtId = $(this).attr('data-project');
                 vers = version;
 
-                $('.version_current')
-                    .html('Version: ' + dt[0].ver_code)
-                    .attr('data_version', version)
-                    .attr('data_versionCode', versionCode);
+                let versionCode = $(this).data('code');
+                let versionId = $(this).attr('id').substring(1, 100);
+                let versionMaster = $(this).data('master');
+                let versionActive = $(this).data('active');
 
-                getBudgets(pjtId);
+                $('.version_current')
+                    .html('Version: ' + versionCode)
+                    .attr('data-version', version)
+                    .attr('data-code', versionCode)
+                    .attr('data-master', versionMaster)
+                    .attr('data-active', versionActive);
+
+                getBudgets(pjtId, versionId);
                 showButtonVersion('H');
                 showButtonComments('S');
-                showButtonToPrint('S');
-                showButtonToSave('S');
+                updateActiveVersion(version);
+
+                if (versionMaster == 1) {
+                    interfase = 'MST';
+                } else {
+                    interfase = 'ACT';
+                }
             });
 
         $('#V' + firstVersion).trigger('click');
     }
+}
+
+function updateActiveVersion(verId) {
+    $('.element_caret-active').html('');
+
+    let li = $('#V' + verId);
+    let caret = li.children('.element_caret-active');
+    caret.html('<i class="fas fa-caret-right"></i>');
+}
+function updateMasterVersion(verId) {
+    $('.element_caret-master').html('');
+
+    let li = $('#V' + verId);
+    let caret = li.children('.element_caret-master');
+    caret.html('<i class="fas fa-check-circle"></i>');
 }
 
 /** Llena el listado de los tipos de proyecto */
@@ -430,10 +471,10 @@ function actionSelProject(obj) {
 
     if (status == 'alive') {
         let idSel = obj.parents('.dato');
-        let indx = obj.attr('data_content').split('|')[0];
+        let indx = obj.attr('data-content').split('|')[0];
         let pj = proj[indx];
 
-        $('.panel__name').css({visibility: 'visible'}).children('span').html(pj.pjt_name).attr('data_id', pj.pjt_id).attr('title', pj.pjt_name);
+        $('.panel__name').css({visibility: 'visible'}).children('span').html(pj.pjt_name).attr('data-id', pj.pjt_id).attr('title', pj.pjt_name);
         $('#projectNumber').html(pj.pjt_number);
         $('#projectLocation').html(pj.pjt_location);
         $('#projectPeriod').html(`<span>${pj.pjt_date_start} - ${pj.pjt_date_end}</span><i class="fas fa-calendar-alt id="periodcalendar"></i>`);
@@ -443,8 +484,8 @@ function actionSelProject(obj) {
         getVersion(pj.pjt_id);
         getCalendarPeriods(pj);
 
-        $('.version_current').attr('data_project', pj.pjt_id);
-        $('.projectInformation').attr('data_project', pj.pjt_id);
+        $('.version_current').attr('data-project', pj.pjt_id);
+        $('.projectInformation').attr('data-project', pj.pjt_id);
 
         $.each(cust, function (v, u) {
             if (u.cus_id == pj.cus_id) {
@@ -508,13 +549,10 @@ function getCalendarPeriods(pj) {
 }
 
 function SetUpdatePeriodProject(dt) {
-    console.log(dt);
     let topDays = getDaysPeriod();
     $('.invoice__box-table table tbody tr.budgetRow').each(function (v) {
         let tr = $(this);
-        console.log(tr.attr('id'));
         let bdgDaysBase = tr.children('td.daysBase').children('.input_invoice').val();
-        console.log(bdgDaysBase, topDays);
         if (bdgDaysBase > topDays) {
             tr.children('td.daysBase').children('.input_invoice').val(topDays);
         }
@@ -529,8 +567,8 @@ function selectCustomer() {
         .unbind('click')
         .on('click', function () {
             let idSel = $(this).parents('.dato');
-            let indx = $(this).attr('data_content').split('|')[0];
-            let type = $(this).attr('data_content').split('|')[1];
+            let indx = $(this).attr('data-content').split('|')[0];
+            let type = $(this).attr('data-content').split('|')[1];
             let cs = cust[indx];
 
             $('#CustomerName').html(cs.cus_name);
@@ -541,8 +579,6 @@ function selectCustomer() {
                     $(`#P${pjtId}`).addClass('alive');
                 }
             });
-
-            console.log(idSel, indx, type);
         });
 }
 
@@ -558,7 +594,7 @@ function fillProducer(cusId) {
 function showListProducts(item) {
     $('.invoice__section-products').fadeIn('slow');
 
-    $('.productos__box-table').attr('data_section', item);
+    $('.productos__box-table').attr('data-section', item);
 
     $('#txtProductFinder')
         .unbind('keyup')
@@ -591,7 +627,7 @@ function selProduct(res) {
         } else {
             rowCurr.css({display: 'none'});
             rowCurr.each(function (index) {
-                var cm = $(this).attr('data_content').toUpperCase().replace(/|/g, '');
+                var cm = $(this).attr('data-content').toUpperCase().replace(/|/g, '');
 
                 cm = omitirAcentos(cm);
                 var cr = cm.indexOf(res);
@@ -621,7 +657,7 @@ function putProducts(dt) {
     prod = dt;
     $.each(dt, function (v, u) {
         let H = `
-            <tr data_indx ="${v}" data_content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
+            <tr data-indx ="${v}" data-content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
                 <th class="col_product" title="${u.prd_name}"><div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_type">${u.prd_level}</td>
@@ -633,7 +669,7 @@ function putProducts(dt) {
     $('#listProductsTable table tbody tr')
         .unbind('click')
         .on('click', function () {
-            let inx = $(this).attr('data_indx');
+            let inx = $(this).attr('data-indx');
             fillBudget(prod[inx], vers, inx);
         });
 }
@@ -647,35 +683,33 @@ function loadBudget(inx, bdgId) {
     let insurance = prod[inx].prd_insured == 0 ? 0 : 0.1;
     let produ = prod[inx].prd_name.replace(/\"/g, '°');
     let days = getDaysPeriod();
-    let section = $('.productos__box-table').attr('data_section').substring(2, 5);
-    let pjtId = $('.version_current').attr('data_project');
-    let verId = $('.version_current').attr('data_version');
+    let section = $('.productos__box-table').attr('data-section').substring(2, 5);
+    let pjtId = $('.version_current').attr('data-project');
+    let verId = $('.version_current').attr('data-version');
 
     let par = `{
-        "pjtcn_id"            : "0",
-        "pjtcn_prod_sku"      : "${prod[inx].prd_sku}",
-        "pjtcn_prod_name"     : "${produ}",
-        "pjtcn_prod_price"    : "${prod[inx].prd_price}",
-        "pjtcn_quantity"      : "1",
-        "pjtcn_days_base"     : "${days}",
-        "pjtcn_days_cost"     : "${days}",
-        "pjtcn_discount_base" : "0",
-        "pjtcn_days_trip"     : "0",
-        "pjtcn_discount_trip" : "0",
-        "pjtcn_days_test"     : "0",
-        "pjtcn_discount_test" : "0",
-        "pjtcn_insured"       : "${insurance}",
-        "pjtcn_prod_level"    : "${prod[inx].prd_level}",
+        "pjtvr_id"            : "0",
+        "pjtvr_prod_sku"      : "${prod[inx].prd_sku}",
+        "pjtvr_prod_name"     : "${produ}",
+        "pjtvr_prod_price"    : "${prod[inx].prd_price}",
+        "pjtvr_quantity"      : "1",
+        "pjtvr_days_base"     : "${days}",
+        "pjtvr_days_cost"     : "${days}",
+        "pjtvr_discount_base" : "0",
+        "pjtvr_days_trip"     : "0",
+        "pjtvr_discount_trip" : "0",
+        "pjtvr_days_test"     : "0",
+        "pjtvr_discount_test" : "0",
+        "pjtvr_insured"       : "${insurance}",
+        "pjtvr_prod_level"    : "${prod[inx].prd_level}",
         "prd_id"              : "${prod[inx].prd_id}",
         "pjt_id"              : "${pjtId}",
         "ver_id"              : "${verId}",
-        "pjtcn_stock"         : "${prod[inx].stock}",
+        "pjtvr_stock"         : "${prod[inx].stock}",
         "sbc_name"            : "${prod[inx].sbc_name}",
-        "pjtcn_section"       : "${section}"
+        "pjtvr_section"       : "${section}"
     }
     `;
-
-    console.log(par);
 
     let ky = registeredProduct('bdg' + prod[inx].prd_id);
     let stus = 'A';
@@ -695,7 +729,6 @@ function loadBudget(inx, bdgId) {
 }
 
 function putAddProductMice(dt) {
-    console.log(dt);
     $('#bdg0').attr('id', 'bdg' + dt);
 }
 
@@ -718,7 +751,7 @@ function putBudgets(dt) {
 
     $('.budgetRow').remove();
 
-    if (budg[0].pjtcn_id > 0) {
+    if (budg[0].pjtvr_id > 0) {
         $.each(budg, function (v, u) {
             let jsn = JSON.stringify(u);
             let stus = 'N';
@@ -736,38 +769,114 @@ function putBudgets(dt) {
 function fillBudgetProds(jsn, days, stus) {
     let pds = JSON.parse(jsn);
 
-    let prdName = pds.pjtcn_prod_name.replace(/°/g, '"');
+    let prdName = pds.pjtvr_prod_name.replace(/°/g, '"');
     let H = `
-    <tr id="bdg${pds.prd_id}" data_sku="${pds.pjtcn_prod_sku}" data_status="${stus}" data_insured="${pds.pjtcn_insured}" data_level="${pds.pjtcn_prod_level}" class="budgetRow">
-        <th class="wclprod col_product product"><div class="elipsis" title="${prdName}">${prdName}</div><i class="fas fa-bars menu_product" id="mnu${pds.prd_id}"></i></th>
-        <td class="wcldays col_quantity colbase quantityBase"><input type="text" class="input_invoice" value="${pds.pjtcn_quantity}" data_real="${
-        pds.pjtcn_quantity
-    }" tabindex=1></td>
-        <td class="wclnumb col_price colbase priceBase">${mkn(pds.pjtcn_prod_price, 'n')}</td>
-        <td class="wcldays col_days colbase daysBase"><input type="text" class="input_invoice" value="${pds.pjtcn_days_base}" data_real="${pds.pjtcn_days_base}" tabindex=2></td>
-        <td class="wcldays col_days colbase daysCost"><input type="text" class="input_invoice" value="${pds.pjtcn_days_cost}" data_real="${pds.pjtcn_days_cost}" tabindex=3></td>
-        <td class="wcldisc col_discount colbase discountBase" data_real="${
-            parseFloat(pds.pjtcn_discount_base) * 100
-        }"><i class="fas fa-caret-left selectioncell"></i><span class="discData">${parseFloat(pds.pjtcn_discount_base) * 100}<small>%</small></span></td>
+    <tr id="bdg${pds.prd_id}" 
+        data-sku     = "${pds.pjtvr_prod_sku}" 
+        data-status  = "${stus}" 
+        data-insured = "${pds.pjtvr_insured}" 
+        data-level   = "${pds.pjtvr_prod_level}" 
+        data-mice    = "${pds.pjtvr_id}" 
+        class="budgetRow">
+
+    <!-- Nombre del Producto -->
+        <th class="wclprod col_product product">
+            <div class="elipsis" title="${prdName}">${prdName}</div>
+            <i class = "fas fa-bars menu_product" id="mnu${pds.prd_id}"></i>
+        </th>
+        
+    <!-- Cantidad -->
+        <td class="wcldays col_quantity colbase quantityBase">
+            <input type="text" class="input_invoice" 
+                value="${pds.pjtvr_quantity}" 
+                data-real="${pds.pjtvr_quantity}" 
+                tabindex=1>
+           
+        </td>
+        
+    <!-- Precio -->
+        <td class="wclnumb col_price colbase priceBase">${mkn(pds.pjtvr_prod_price, 'n')}</td>
+        
+    <!-- Dias Base -->
+        <td class="wcldays col_days colbase daysBase">
+            <input type="text" class="input_invoice" 
+                value="${pds.pjtvr_days_base}" 
+                data-real="${pds.pjtvr_days_base}" 
+                tabindex=2>
+        </td>
+
+    <!-- Dias costo -->
+        <td class="wcldays col_days colbase daysCost">
+            <input type="text" class="input_invoice" 
+                value="${pds.pjtvr_days_cost}" 
+                data-real="${pds.pjtvr_days_cost}" 
+                tabindex=3>
+        </td>
+
+    <!-- Descuento base -->
+        <td class="wcldisc col_discount colbase discountBase" data-real="${parseFloat(pds.pjtvr_discount_base) * 100}">
+            <i class="fas fa-caret-left selectioncell"></i>
+            <span class="discData">${parseFloat(pds.pjtvr_discount_base) * 100}<small>%</small></span>
+        </td>
+
+    <!-- Costo base -->
         <td class="wclnumb col_cost colbase costBase">0.00</td>
-        <td class="wcldays col_days coltrip daysTrip"><input type="text" class="input_invoice" value="${pds.pjtcn_days_trip}" data_real="${pds.pjtcn_days_trip}" tabindex=4></td>
-        <td class="wcldisc col_discount coltrip discountTrip" data_real="${
-            parseFloat(pds.pjtcn_discount_trip) * 100
-        }"><i class="fas fa-caret-left selectioncell"></i><span class="discData">${parseFloat(pds.pjtcn_discount_trip) * 100}<small>%</small></span></td>
+
+    <!-- Dias viaje -->
+        <td class="wcldays col_days coltrip daysTrip">
+            <input type="text" class="input_invoice" 
+                value="${pds.pjtvr_days_trip}" 
+                data-real="${pds.pjtvr_days_trip}" 
+                tabindex=4>
+        </td>
+
+    <!-- Descuento viaje -->
+        <td class="wcldisc col_discount coltrip discountTrip" data-real="${parseFloat(pds.pjtvr_discount_trip) * 100}">
+            <i class="fas fa-caret-left selectioncell"></i>
+            <span class="discData">${parseFloat(pds.pjtvr_discount_trip) * 100}<small>%</small></span>
+        </td>
+        
+    <!-- Costo viaje -->
         <td class="wclnumb col_cost coltrip costTrip">0.00</td>
-        <td class="wcldays col_days coltest daysTest"><input type="text" class="input_invoice" value="${pds.pjtcn_days_test}" data_real="${pds.pjtcn_days_test}" tabindex=5></td>
-        <td class="wcldisc col_discount coltest discountTest" data_real="${
-            parseFloat(pds.pjtcn_discount_test) * 100
-        }"><i class="fas fa-caret-left selectioncell"></i><span class="discData">${parseFloat(pds.pjtcn_discount_test) * 100}<small>%</small></span></td>
+
+    <!-- Dias prueba -->
+        <td class="wcldays col_days coltest daysTest">
+            <input type="text" class="input_invoice" 
+                value="${pds.pjtvr_days_test}" 
+                data-real="${pds.pjtvr_days_test}" 
+                tabindex=5>
+        </td>
+
+    <!-- Descuento prueba -->
+        <td class="wcldisc col_discount coltest discountTest" data-real="${parseFloat(pds.pjtvr_discount_test) * 100}">
+            <i class="fas fa-caret-left selectioncell"></i>
+            <span class="discData">${parseFloat(pds.pjtvr_discount_test) * 100}<small>%</small></span>
+        </td>
+        
+    <!-- Costo prueba -->
         <td class="wclnumb col_cost coltest costTest">0.00</td>
+
+    <!-- Boton de expancion -->
         <td class="wclexpn col_caret colcontrol"></td>
+
     </tr>  
     `;
-    $(`#SC${pds.pjtcn_section}`).show();
-    $(`#SC${pds.pjtcn_section} tr.lastrow`).before(H);
+    $(`#SC${pds.pjtvr_section}`).show();
+    $(`#SC${pds.pjtvr_section} tr.lastrow`).before(H);
+
     stickyTable();
     expandCollapseSection();
     activeInputSelector();
+
+    getCounterPending(pds.pjtvr_id, pds.prd_id);
+}
+
+function putCounterPending(dt) {
+    if (dt[0].counter > 0) {
+        let word = dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
+        $(`#bdg${dt[0].prd_id} .col_quantity`).append(`<div class="col_quantity-pending" title="${word} en pendiente"></div>`);
+    }
+    purgeInterfase();
 }
 
 function activeInputSelector() {
@@ -811,7 +920,6 @@ function activeInputSelector() {
                         .unbind('keyup')
                         .on('keyup', function (e) {
                             let data = e.target.value;
-                            console.log(selector);
                             $(`td.${selector} .input_invoice`).val(data);
                         });
                 }
@@ -887,7 +995,7 @@ function activeInputSelector() {
         .on('click', function () {
             let event = $(this).attr('class');
             let bdgId = id.parents('tr').attr('id');
-            let type = id.parents('tr').attr('data_level');
+            let type = id.parents('tr').attr('data-level');
             if (type != 'K') {
                 switch (event) {
                     case 'event_killProduct':
@@ -925,7 +1033,7 @@ function killProduct(bdgId) {
             let resp = obj.attr('id');
             if (resp == 'killYes') {
                 $('#' + bdgId).fadeOut(500, function () {
-                    let pjtId = $('.version_current').attr('data_project');
+                    let pjtId = $('.version_current').attr('data-project');
                     let section = $(this).parents('tbody').attr('id').substring(2, 5);
                     let pid = bdgId.substring(3, 10);
                     updateTotals();
@@ -1008,7 +1116,6 @@ function stockProduct(bdgId, type) {
     closeModals();
 }
 function putStockProjects(dt) {
-    console.log(dt);
     $('.invoice__modal-general table tbody').html('');
     if (dt[0].prd_name != 0) {
         $.each(dt, function (v, u) {
@@ -1076,9 +1183,6 @@ function fillContent() {
         function (start, end, label) {
             $('#txtPeriodProjectEdt').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
             looseAlert($('#txtPeriodProjectEdt').parent());
-
-            // $('#txtPeriodProject').parent().children('span').html('');
-            // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
         }
     );
     // Llena el selector de tipo de proyecto
@@ -1156,7 +1260,6 @@ function fillData() {
                 }]
                 `;
 
-                // console.log(par);
                 var pagina = 'ProjectPlans/UpdateProject';
                 var tipo = 'html';
                 var selector = loadProject;
@@ -1221,21 +1324,19 @@ function actionNewProject() {
                 });
 
                 let par = `
-            [{
-                "projId"        : "${projId}",
-                "pjtName"       : "${projName.toUpperCase()}",
-                "pjtLocation"   : "${projLocation.toUpperCase()}",
-                "pjtDateStart"  : "${projDateStart}",
-                "pjtDateEnd"    : "${projDateEnd}",
-                "pjtType"       : "${projType}",
-                "locId"         : "${projLocationTypeValue}",
-                "cuoId"         : "${cuoId}",
-                "cusId"         : "${cusCte}",
-                "cusParent"     : "${cusCteRel}"
-            }]
-            `;
-
-                console.log(par);
+                [{
+                    "projId"        : "${projId}",
+                    "pjtName"       : "${projName.toUpperCase()}",
+                    "pjtLocation"   : "${projLocation.toUpperCase()}",
+                    "pjtDateStart"  : "${projDateStart}",
+                    "pjtDateEnd"    : "${projDateEnd}",
+                    "pjtType"       : "${projType}",
+                    "locId"         : "${projLocationTypeValue}",
+                    "cuoId"         : "${cuoId}",
+                    "cusId"         : "${cusCte}",
+                    "cusParent"     : "${cusCteRel}"
+                }]
+                `;
                 var pagina = 'ProjectPlans/SaveProject';
                 var tipo = 'html';
                 var selector = loadProject;
@@ -1249,7 +1350,7 @@ function actionNewProject() {
 // *************************************************
 function showModalComments() {
     let template = $('#commentsTemplates');
-    let pjtId = $('.version_current').attr('data_project');
+    let pjtId = $('.version_current').attr('data-project');
 
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
@@ -1259,28 +1360,25 @@ function showModalComments() {
     fillComments(pjtId);
 }
 function fillComments(pjtId) {
-    console.log(pjtId);
     // Agrega nuevo comentario
     $('#newComment')
         .unbind('click')
         .on('click', function () {
-            console.log('Comentraios');
-            let pjtId = $('.version_current').attr('data_project');
+            let pjtId = $('.version_current').attr('data-project');
 
             let comSrc = 'projects';
             let comComment = $('#txtComment').val();
 
             if (comComment.length > 3) {
                 let par = `
-                    [{
-                        "comSrc"        : "${comSrc}",
-                        "comComment"    : "${comComment}",
-                        "pjtId"         : "${pjtId}"
-                    }]
-                    `;
+                [{
+                    "comSrc"        : "${comSrc}",
+                    "comComment"    : "${comComment}",
+                    "pjtId"         : "${pjtId}"
+                }]
+                `;
                 var pagina = 'ProjectPlans/InsertComment';
                 var tipo = 'json';
-                console.log(par);
                 var selector = addComment;
                 fillField(pagina, par, tipo, selector);
             }
@@ -1292,13 +1390,11 @@ function putComments(dt) {
     $('.comments__list').html('');
     if (dt[0].com_id > 0) {
         $.each(dt, function (v, u) {
-            console.log(u);
             fillCommnetElements(u);
         });
     }
 }
 function fillCommnetElements(u) {
-    console.log(u.com_comment);
     let H = `
         <div class="comment__group">
             <div class="comment__box comment__box-date"><i class="far fa-clock"></i>${u.com_date}</div>
@@ -1309,8 +1405,8 @@ function fillCommnetElements(u) {
 
     $('.comments__list').prepend(H);
 }
+
 function addComment(dt) {
-    console.log(dt[0]);
     fillCommnetElements(dt[0]);
     $('#txtComment').val('');
 }
@@ -1326,16 +1422,15 @@ function printBudget(verId) {
     let n = user[2];
     let h = localStorage.getItem('host');
 
-    console.log(user);
-
     window.open(`${url}app/views/ProjectPlans/ProjectPlansReport.php?v=${v}&u=${u}&n=${n}&h=${h}`, '_blank');
 }
 
 function saveBudget(dt) {
-    console.log(dt);
-
-    let pjtId = $('.version_current').attr('data_project');
-    getBudgets(pjtId);
+    let pjtId = $('.version_current').attr('data-project');
+    let verId = dt;
+    getBudgets(pjtId, verId);
+    updateActiveVersion(verId);
+    updateMasterVersion(verId);
     modalLoading('H');
 }
 
@@ -1345,70 +1440,23 @@ function saveBudget(dt) {
 function saveBudgetAs(dt) {
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-    let rowCurent = 0;
-    rowsTotal = $('#invoiceTable table tbody tr.budgetRow').length;
 
-    $('#invoiceTable table tbody tr.budgetRow').each(function () {
-        let tr = $(this);
-        let prdId = tr.attr('id').substring(3, 10);
-        let pjtvrSku = tr.attr('data_sku');
-        let pjtvrLevel = tr.attr('data_level');
-        let pjtvrProduct = tr.children('th.product').children('.elipsis').text().replace(/\"/g, '°');
-        let pjtvrQuantity = tr.children('td.quantityBase').children('.input_invoice').val();
-        let pjtvrPriceBase = tr.children('td.priceBase').text().replace(/,/g, '');
-        let pjtvrDaysBase = tr.children('td.daysBase').children('.input_invoice').val();
-        let pjtvrDaysCost = tr.children('td.daysCost').children('.input_invoice').val();
-        let pjtvrDesctBase = parseFloat(tr.children('td.discountBase').text()) / 100;
-        let pjtvrDaysTrip = tr.children('td.daysTrip').children('.input_invoice').val();
-        let pjtvrDescTrip = parseFloat(tr.children('td.discountTrip').text()) / 100;
-        let pjtvrDaysTest = tr.children('td.daysTest').children('.input_invoice').val();
-        let pjtvrDescTest = parseFloat(tr.children('td.discountTest').text()) / 100;
-        let pjtvrInsured = tr.attr('data_insured');
-        let pjtvrSection = tr.parents('tbody').attr('id').substring(2, 5);
-        let pjtvrStatus = tr.attr('data_status');
-        rowCurent++;
-
-        if (pjtvrSku != undefined) {
-            let par = `
+    let par = `
             [{
-                "pjtvrSku"          : "${pjtvrSku}",
-                "pjtvrLevel"        : "${pjtvrLevel}",
-                "pjtvrSection"      : "${pjtvrSection}",
-                "pjtvrProduc"       : "${pjtvrProduct.toUpperCase()}",
-                "pjtvrPricBs"       : "${pjtvrPriceBase}",
-                "pjtvrQtysBs"       : "${pjtvrQuantity}",
-                "pjtvrDaysBs"       : "${pjtvrDaysBase}",
-                "pjtvrDaysCs"       : "${pjtvrDaysCost}",
-                "pjtvrDescBs"       : "${pjtvrDesctBase}",
-                "pjtvrDaysTp"       : "${pjtvrDaysTrip}",
-                "pjtvrDescTp"       : "${pjtvrDescTrip}",
-                "pjtvrDaysTr"       : "${pjtvrDaysTest}",
-                "pjtvrDescTr"       : "${pjtvrDescTest}",
-                "pjtvrInsured"      : "${pjtvrInsured}",
-                "pjtvrStatus"       : "${pjtvrStatus}",
-                "rowCurent"         : "${rowCurent}",
                 "verId"             : "${verId}",
-                "prdId"             : "${prdId}",
                 "pjtId"             : "${pjtId}"
             }]`;
 
-            var pagina = 'ProjectPlans/SaveBudgetAs';
-            var tipo = 'html';
-            var selector = respBudget;
-            fillField(pagina, par, tipo, selector);
-        }
-    });
+    var pagina = 'ProjectPlans/SaveBudgetAs';
+    var tipo = 'html';
+    var selector = respBudget;
+    fillField(pagina, par, tipo, selector);
 }
 
 let rwcur = 0;
 function respBudget(dt) {
-    rwcur++;
-    let items = dt.split('|');
-    if (rwcur == rowsTotal) {
-        getVersion(items[0]);
-        modalLoading('H');
-        rwcur = 0;
-    }
+    getVersion(dt);
+    modalLoading('H');
 }
 
 /**  ++++  Obtiene los días definidos para el proyectos */
@@ -1442,16 +1490,17 @@ function updateTotals() {
         costtrip = 0,
         costtest = 0,
         costassu = 0,
-        totlCost = 0;
+        totlCost = 0,
+        totlPrds = 0;
     $('.budgetRow').each(function (v) {
         let pid = $(this).attr('id');
 
         let qtybs = parseInt($(this).children('td.quantityBase').children('.input_invoice').val());
-        let qtyan = parseInt($(this).children('td.quantityBase').children('.input_invoice').attr('data_quantity'));
+        let qtyan = parseInt($(this).children('td.quantityBase').children('.input_invoice').attr('data-quantity'));
         let prcbs = parseFloat(pure_num($(this).children('td.priceBase').text()));
         let daybs = parseInt($(this).children('td.daysCost').children('.input_invoice').val());
         let desbs = parseFloat($(this).children('td.discountBase').text());
-        let assur = $(this).attr('data_insured');
+        let assur = $(this).attr('data-insured');
 
         stt01 = qtybs * prcbs; // Importe de cantidad x precio
         stt02 = stt01 * daybs; // Costo de Importe x días base
@@ -1486,12 +1535,14 @@ function updateTotals() {
 
         assre = stt01 * assur;
         costassu += assre; // Total de Seguro
+        totlPrds++;
     });
 
     $('#costBase').html(mkn(costbase, 'n'));
     $('#costTrip').html(mkn(costtrip, 'n'));
     $('#costTest').html(mkn(costtest, 'n'));
     $('#insuTotal').html(mkn(costassu, 'n'));
+    $('#prodTotal').html(mkn(totlPrds, 's'));
 
     totlCost = costbase + costtrip + costtest + costassu;
 
@@ -1509,10 +1560,19 @@ function showButtonToPrint(acc) {
     elm = $('.invoice_controlPanel .toPrint');
     acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
 }
+function showMenuProduct(acc) {
+    elm = $('#invoiceTable tbody tr.budgetRow .menu_product');
+    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+}
 function showButtonToSave(acc) {
     elm = $('.invoice_controlPanel .toSave');
     acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
 }
+function showLedPending(acc) {
+    elm = $('.col_quantity-pending');
+    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+}
+
 function showButtonComments(acc) {
     elm = $('.sidebar__comments .toComment');
     acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
@@ -1533,7 +1593,7 @@ function cleanVersionList() {
 function cleanTotalsArea() {
     $('.sidebar__totals .totals-numbers').html('0.00');
     $('.sidebar__totals .totals-numbers.simple').html('0');
-    $('.version_current').html('').attr('data_version', null).attr('data_project', null).attr('data_versionCode', null);
+    $('.version_current').html('').attr('data-version', null).attr('data-project', null).attr('data-code', null);
 }
 /** *************************************************************** */
 
@@ -1543,9 +1603,9 @@ function sectionShowHide() {
         let status = $(this).css('display');
         let id = $(this).attr('id').substring(2, 5);
         if (status == 'table-row-group') {
-            $(`.invoice__section .menu-sections li[data_option="${id}"] `).css({display: 'none'});
+            $(`.invoice__section .menu-sections li[data-option="${id}"] `).css({display: 'none'});
         } else {
-            $(`.invoice__section .menu-sections li[data_option="${id}"] `).css({display: 'block'});
+            $(`.invoice__section .menu-sections li[data-option="${id}"] `).css({display: 'block'});
         }
     });
 }
@@ -1624,7 +1684,7 @@ function promoteProject(pjtId) {
     fillField(pagina, par, tipo, selector);
 }
 function showPromoteProject(dt) {
-    let verId = $('.invoice_controlPanel .version_current').attr('data_version');
+    let verId = $('.invoice_controlPanel .version_current').attr('data-version');
     var pagina = 'ProjectPlans/PromoteVersion';
     var par = `[{"verId":"${verId}","pjtId":"${dt}"}]`;
     var tipo = 'html';
@@ -1632,7 +1692,6 @@ function showPromoteProject(dt) {
     fillField(pagina, par, tipo, selector);
 }
 function showPromoteVersion(dt) {
-    console.log(dt);
     let pjtId = dt.split('|')[0];
     $('#P' + pjtId).remove();
 
@@ -1649,7 +1708,6 @@ function showPromoteBudget(dt) {
     fillField(pagina, par, tipo, selector);
 }
 function showResult(dt) {
-    console.log(dt);
     modalLoading('H');
     cleanFormat();
 }
@@ -1663,64 +1721,64 @@ function cleanFormat() {
     cleanTotalsArea();
 }
 function getDataMice() {
-    let pjtId = $('.version_current').attr('data_project');
+    let pjtId = $('.version_current').attr('data-project');
     $('.budgetRow').each(function (v) {
         let pid = parseInt($(this).attr('id').substring(3, 10));
         let section = $(this).parents('tbody').attr('id').substring(2, 5);
 
         /** == Valida la cantidad ======== */
         let quantity_act = parseInt($(this).children('td.quantityBase').children('.input_invoice').val());
-        let quantity_ant = parseInt($(this).children('td.quantityBase').children('.input_invoice').attr('data_real'));
-        $(this).children('td.quantityBase').children('.input_invoice').attr('data_real', quantity_act);
+        let quantity_ant = parseInt($(this).children('td.quantityBase').children('.input_invoice').attr('data-real'));
+        $(this).children('td.quantityBase').children('.input_invoice').attr('data-real', quantity_act);
         if (quantity_act != quantity_ant) {
             updateMice(pjtId, pid, 'pjtvr_quantity', quantity_act, section, 'U');
         }
 
         let daysBase_act = parseInt($(this).children('td.daysBase').children('.input_invoice').val());
-        let daysBase_ant = parseInt($(this).children('td.daysBase').children('.input_invoice').attr('data_real'));
-        $(this).children('td.daysBase').children('.input_invoice').attr('data_real', daysBase_act);
+        let daysBase_ant = parseInt($(this).children('td.daysBase').children('.input_invoice').attr('data-real'));
+        $(this).children('td.daysBase').children('.input_invoice').attr('data-real', daysBase_act);
         if (daysBase_act != daysBase_ant) {
             updateMice(pjtId, pid, 'pjtvr_days_base', daysBase_act, section, 'U');
         }
 
         let daysCost_act = parseInt($(this).children('td.daysCost').children('.input_invoice').val());
-        let daysCost_ant = parseInt($(this).children('td.daysCost').children('.input_invoice').attr('data_real'));
-        $(this).children('td.daysCost').children('.input_invoice').attr('data_real', daysCost_act);
+        let daysCost_ant = parseInt($(this).children('td.daysCost').children('.input_invoice').attr('data-real'));
+        $(this).children('td.daysCost').children('.input_invoice').attr('data-real', daysCost_act);
         if (daysCost_act != daysCost_ant) {
             updateMice(pjtId, pid, 'pjtvr_days_cost', daysCost_act, section, 'U');
         }
 
         let discountBase_act = parseFloat($(this).children('td.discountBase').text());
-        let discountBase_ant = parseFloat($(this).children('td.discountBase').attr('data_real'));
-        $(this).children('td.discountBase').attr('data_real', discountBase_act);
+        let discountBase_ant = parseFloat($(this).children('td.discountBase').attr('data-real'));
+        $(this).children('td.discountBase').attr('data-real', discountBase_act);
         if (discountBase_act != discountBase_ant) {
             updateMice(pjtId, pid, 'pjtvr_discount_base', discountBase_act / 100, section, 'U');
         }
 
         let daysTrip_act = parseInt($(this).children('td.daysTrip').children('.input_invoice').val());
-        let daysTrip_ant = parseInt($(this).children('td.daysTrip').children('.input_invoice').attr('data_real'));
-        $(this).children('td.daysTrip').children('.input_invoice').attr('data_real', daysTrip_act);
+        let daysTrip_ant = parseInt($(this).children('td.daysTrip').children('.input_invoice').attr('data-real'));
+        $(this).children('td.daysTrip').children('.input_invoice').attr('data-real', daysTrip_act);
         if (daysTrip_act != daysTrip_ant) {
             updateMice(pjtId, pid, 'pjtvr_days_trip', daysTrip_act, section, 'U');
         }
 
         let discountTrip_act = parseFloat($(this).children('td.discountTrip').text());
-        let discountTrip_ant = parseFloat($(this).children('td.discountTrip').attr('data_real'));
-        $(this).children('td.discountTrip').attr('data_real', discountTrip_act);
+        let discountTrip_ant = parseFloat($(this).children('td.discountTrip').attr('data-real'));
+        $(this).children('td.discountTrip').attr('data-real', discountTrip_act);
         if (discountTrip_act != discountTrip_ant) {
             updateMice(pjtId, pid, 'pjtvr_discount_trip', discountTrip_act / 100, section, 'U');
         }
 
         let daysTest_act = parseInt($(this).children('td.daysTest').children('.input_invoice').val());
-        let daysTest_ant = parseInt($(this).children('td.daysTest').children('.input_invoice').attr('data_real'));
-        $(this).children('td.daysTest').children('.input_invoice').attr('data_real', daysTest_act);
+        let daysTest_ant = parseInt($(this).children('td.daysTest').children('.input_invoice').attr('data-real'));
+        $(this).children('td.daysTest').children('.input_invoice').attr('data-real', daysTest_act);
         if (daysTest_act != daysTest_ant) {
             updateMice(pjtId, pid, 'pjtvr_days_test', daysTest_act, section, 'U');
         }
 
         let discountTest_act = parseFloat($(this).children('td.discountTest').text());
-        let discountTest_ant = parseFloat($(this).children('td.discountTest').attr('data_real'));
-        $(this).children('td.discountTest').attr('data_real', discountTest_act);
+        let discountTest_ant = parseFloat($(this).children('td.discountTest').attr('data-real'));
+        $(this).children('td.discountTest').attr('data-real', discountTest_act);
         if (discountTest_act != discountTest_ant) {
             updateMice(pjtId, pid, 'pjtvr_discount_test', discountTest_act / 100, section, 'U');
         }
@@ -1749,7 +1807,7 @@ function updateMice(pj, pd, fl, dt, sc, ac) {
     fillField(pagina, par, tipo, selector);
 }
 function receiveResponseMice(dt) {
-    console.log(dt);
+    // console.log(dt);
 }
 
 /* ************************************************************************ */
@@ -1759,7 +1817,7 @@ function receiveResponseMice(dt) {
 /* ==== Define los periodos de cada serie ======================== */
 function periodProduct(prd) {
     let prdId = prd.substring(3, 10);
-    let pjtId = $('.version_current').attr('data_project');
+    let pjtId = $('.version_current').attr('data-project');
 
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
@@ -1779,4 +1837,22 @@ function periodProduct(prd) {
 
 function putPeriods(dt) {
     $('#periodBox').html(dt);
+}
+
+function purgeInterfase() {
+    switch (interfase) {
+        case 'MST':
+            showButtonToPrint('S');
+            showButtonToSave('S');
+            showMenuProduct('S');
+            showLedPending('S');
+            break;
+        case 'ACT':
+            showButtonToPrint('H');
+            showButtonToSave('H');
+            showMenuProduct('H');
+            showLedPending('H');
+            break;
+        default:
+    }
 }
