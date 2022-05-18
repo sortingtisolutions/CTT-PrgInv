@@ -282,6 +282,18 @@ class ProjectPlansController extends Controller
         echo $res;
     } 
 //
+
+
+/** ==== Promueve el presupuesto a proyecto ==================================================  */
+    public function promoteToProject($request_params)
+    {   
+        $params =  $this->session->get('user');
+        $result = $this->model->promoteToProject($request_params);
+        echo $result;
+    } 
+
+
+
 /** ==== Cuenta el numero de productos que se encuentran en pendiente ========================  */
     public function countPending($request_params)
     {
@@ -327,25 +339,25 @@ class ProjectPlansController extends Controller
         $action    = $request_params['action'];
 
         if ($action == 'ACT'){
-            // convierte una version activa a una version master
+            //ACT convierte una version activa a una version master
             $version        = $this->model->settingMasterVersion($pjtId, $verId);
             $projectVersion = $this->model->settingProjectVersion($pjtId, $verId);
-            $projectContent = $this->model->settingProjectContent($pjtId, $verId);
             $periods        = $this->model->cleanPeriods($pjtId);
             $series         = $this->model->restoreSeries($pjtId);
             $detail         = $this->model->cleanDetail($pjtId);
-            $result         = $this->model->getProjectVersion($verId);
+            $projectContent = $this->model->settingProjectContent($pjtId, $verId);
+            $result         = $this->model->getProjectVersion($pjtId);
             $response       = $this->setSeries($result);
 
         } else {
-            // actualiza los datos de una version maestra
+            //MST actualiza los datos de una version maestra 
             $projectVersion = $this->model->settingProjectVersion($pjtId, $verId);
             $projectContent = $this->model->settingProjectContent($pjtId, $verId);
             $result         = $this->model->getVersionMice($pjtId, $verId);
             $response       = $this->updateSeries($result);
         }
 
-        echo $response;
+        echo $verId . '|'. $pjtId;
 
     }
 
@@ -843,21 +855,23 @@ class ProjectPlansController extends Controller
     public function SaveBudgetAs($request_params)
     {
 
-        $params = $this->session->get('user');
-        $budget = $this->model->SaveBudgetAs($request_params);
+        $params         = $this->session->get('user');
+        $par            = $this->model->SaveVersion($request_params);
 
-        $response = explode('|', $budget);
-        $verId = $response[0];
-        $pjtId = $response[1];
+        $pack           = explode('|', $par);
+        $verId          = $pack[0];
+        $pjtId          = $pack[1];
 
-        $periods    = $this->model->cleanPeriods($pjtId);
-        $series     = $this->model->restoreSeries($pjtId);
-        $detail     = $this->model->cleanDetail($pjtId);
-        $content    = $this->model->settingProjectContent($pjtId, $verId);
-        $result    = $this->model->getProjectVersion( $verId);
-        $response   = $this->setSeries($result);
-        
-        echo $verId;
+        $periods        = $this->model->cleanPeriods($pjtId);
+        $series         = $this->model->restoreSeries($pjtId);
+        $detail         = $this->model->cleanDetail($pjtId);
+        $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
+        $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
+        $result         = $this->model->getProjectVersion($pjtId);
+        $response       = $this->setSeries($result);
+
+        echo $verId . '|'. $pjtId;
+
     } 
 
 
@@ -958,7 +972,7 @@ class ProjectPlansController extends Controller
         $params =  $this->session->get('user');
         $result = $this->model->KillQuantityDetail($request_params);
         $res = $result;
-        echo $res;
+        return $res;
     }
 
 

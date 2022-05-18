@@ -10,7 +10,8 @@ class ProjectPlansModel extends Model
     }
 
     
-// Listado de proyectos
+/** ====== Listado de proyectos ==============================================================  */
+
     public function listProjects($params)
     {
         // Debe leer todos los proyectos que se encuentren en estaus 2 - Presupuesto
@@ -41,7 +42,7 @@ class ProjectPlansModel extends Model
                 ";
         return $this->db->query($qry);
     }    
-// Listado de versiones
+/** ====== Listado de versiones ==============================================================  */
     public function listVersion($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);
@@ -50,17 +51,11 @@ class ProjectPlansModel extends Model
         return $this->db->query($qry3);
     }    
 
-// Listado de contenido de projecto
+/** ====== Listado de contenido del proyecto =================================================  */
     public function listBudgets($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $verId = $this->db->real_escape_string($params['verId']);
-
-        $qry1 = "UPDATE ctt_version SET ver_active = 0 WHERE pjt_id = $pjtId;";
-        $this->db->query($qry1);
-
-        $qry2 = "UPDATE ctt_version SET ver_active = 1 WHERE ver_id = $verId;";
-        $this->db->query($qry2);
 
         $qry3 = "DELETE FROM ctt_projects_mice WHERE pjt_id = $pjtId;";
         $this->db->query($qry3);
@@ -97,7 +92,7 @@ class ProjectPlansModel extends Model
     } 
 
     
-// Listado de clientes
+/** ====== Listado clientes ==================================================================  */
     public function listCustomers($params)
     {
         $prd = $this->db->real_escape_string($params['prm']);
@@ -108,14 +103,14 @@ class ProjectPlansModel extends Model
         return $this->db->query($qry);
     }    
 
-// Listado de relaciones de clientes
+/** ====== Listado de relaciones de clientes =================================================  */
     public function listCustomersOwn($params)
     {
         $qry = "SELECT * FROM ctt_customers_owner";
         return $this->db->query($qry);
     }    
 
-// Listado de descuentos
+/** ====== Listado de descuentos =============================================================  */
     public function listDiscounts($params)
     {
         $level = $this->db->real_escape_string($params['level']);
@@ -124,7 +119,7 @@ class ProjectPlansModel extends Model
     }    
 
         
-// Listado de tipos de proyectos
+/** ====== Listado de los tipos de proyecto ==================================================  */
     public function listProjectsType($params)
     {
 
@@ -134,7 +129,7 @@ class ProjectPlansModel extends Model
 
 
 
-// Listado de productos
+/** ====== Listado de productos ==============================================================  */
     public function listProducts($params)
     {
 
@@ -161,7 +156,7 @@ class ProjectPlansModel extends Model
     } 
 
     
-// Listado los comentarios del proyecto
+/** ====== Lista los comentarios registrados al proyecto =====================================  */
     public function listComments($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjId']);
@@ -175,8 +170,25 @@ class ProjectPlansModel extends Model
         return $this->db->query($qry);
     }    
 
+/** ====== Promueve el presupuesto a proyecto ================================================  */
+    public function promoteToProject($params)
+    {
+        $pjtId         = $this->db->real_escape_string($params['pjtId']);
+        $verId         = $this->db->real_escape_string($params['verId']);
+
+        $qry = "UPDATE ctt_projects SET pjt_status = '3' WHERE pjt_id = $pjtId;";
+        $this->db->query($qry);
 
 
+        $qry = "UPDATE ctt_version SET ver_status = 'P', ver_active = '1', ver_master = '1', ver_code = 'P0001' WHERE ver_id = $verId;";
+        $this->db->query($qry);
+
+
+
+        
+
+        return $pjtId.'|'. $verId;
+    }  
     
 /** ====== Listado de productos relacionados como accesosrios ================================  */
     public function listProductsRelated($params)
@@ -225,7 +237,7 @@ class ProjectPlansModel extends Model
     } 
 
 
-/** ====== Muestra el inventario de productos en almacen =====================================  */
+/** ====== cuenta los productos que no se tiene en existencia y estan solicitados  ===========  */
     public function countPending($params)
     {
 
@@ -363,7 +375,7 @@ class ProjectPlansModel extends Model
         $verMaster  = '1';
         $verStatus  = 'R';
 
-        $qry1 = "UPDATE ctt_version SET ver_active = 0, ver_master = 0 WHERE pjt_id = $pjtId";
+        $qry1 = "UPDATE ctt_version SET ver_active = 0, ver_master = 0 WHERE pjt_id = $pjtId;";
         $this->db->query($qry1);
 
         $qry2 = "INSERT INTO ctt_version 
@@ -465,15 +477,15 @@ class ProjectPlansModel extends Model
         $this->db->query($qry1);
         
         $qry2 = "INSERT INTO ctt_projects_version (
-                    pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
+                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, 
                     pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id)  
                 SELECT 
-                    pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
+                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, 
                     pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id 
                 FROM ctt_projects_mice WHERE pjtvr_action != 'D' AND pjt_id = $pjtId;";
-            return $this->db->query($qry2);
+        return $this->db->query($qry2);
 
      }
     public function settingProjectContent($pjtId, $verId)
@@ -487,22 +499,18 @@ class ProjectPlansModel extends Model
 
      }
   
-     public function getProjectVersion($verId)
+     public function getProjectVersion($pjtId)
      {
-
-        $qry1 = " SELECT * 
-                  FROM ctt_projects_content AS pc
-                  INNER JOIN ctt_version AS vr ON vr.ver_id = pc.ver_id
-                  INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-                  INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-                  WHERE pc.ver_id = $verId;";
+        $qry1 = "SELECT * FROM ctt_projects_content as pc 
+                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
+                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
+                 WHERE pj.pjt_id = $pjtId;";
         return $this->db->query($qry1);
        
      }
   
     public function getVersionMice($verId)
     {
-
             $qry1 = "SELECT * 
                      FROM ctt_projects_mice AS pc
                      INNER JOIN ctt_version AS vr ON vr.ver_id = pc.ver_id
@@ -513,11 +521,9 @@ class ProjectPlansModel extends Model
      }
 
 /** ====== Agrega contenido de la nueva version ==============================================  */
-    public function SaveBudgetAs($params)
+    public function settinProjectVersion($pjtId, $verId )
     {
-        $ver_id                   = $params['verId'];
-        $pjt_id                   = $params['pjtId'];
-
+ 
         $qry = "INSERT INTO ctt_projects_version (
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost,
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,
@@ -526,13 +532,11 @@ class ProjectPlansModel extends Model
                 SELECT 
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost,
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,
-                    pjtvr_prod_level, pjtvr_section, pjtvr_status, $ver_id as ver_id, prd_id, pjt_id
-                FROM ctt_projects_mice WHERE pjt_id = $pjt_id;";
+                    pjtvr_prod_level, pjtvr_section, pjtvr_status, '$verId' as ver_id, prd_id, pjt_id
+                FROM ctt_projects_mice WHERE pjt_id = $pjtId;";
 
-            $this->db->query($qry);
-            $result = $this->db->insert_id;
+        return $this->db->query($qry);
             
-            return $ver_id.'|'.$pjt_id;
     }
 
 /** ====== Elimina los periodos de las series correspondientes al periodo ====================  */

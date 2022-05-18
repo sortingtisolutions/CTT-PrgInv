@@ -123,21 +123,19 @@ function eventsAction() {
             let nRows = $('.invoice__box-table table tbody tr.budgetRow').length;
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data-project');
-                let verCurr = $('.version_current').attr('data-version');
+                let verId = $('.version_current').attr('data-version');
 
                 modalLoading('S');
                 let par = `
                 [{
                     "pjtId"  : "${pjtId}",
-                    "verId"  : "${verCurr}",
+                    "verId"  : "${verId}",
                     "action" : "${interfase}"
                 }]`;
-
                 var pagina = 'ProjectPlans/SaveBudget';
                 var tipo = 'html';
                 var selector = saveBudget;
                 fillField(pagina, par, tipo, selector);
-                modalLoading('H');
             }
         });
 
@@ -149,10 +147,13 @@ function eventsAction() {
             let nRows = $('.invoice__box-table table tbody tr.budgetRow').length;
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data-project');
-                let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data-code');
+                // let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data-code');
+                let verCurr = lastVersionFinder();
 
                 let vr = parseInt(verCurr.substring(1, 10));
+
                 let verNext = 'R' + refil(vr + 1, 4);
+
                 modalLoading('S');
                 let par = `
                 [{
@@ -160,9 +161,9 @@ function eventsAction() {
                     "verCode"         : "${verNext}"
                 }]`;
 
-                var pagina = 'ProjectPlans/SaveVersion';
+                var pagina = 'ProjectPlans/SaveBudgetAs';
                 var tipo = 'html';
-                var selector = saveBudgetAs;
+                var selector = putSaveBudgetAs;
                 fillField(pagina, par, tipo, selector);
             }
         });
@@ -180,7 +181,8 @@ function eventsAction() {
         .unbind('click')
         .on('click', function () {
             let pjtId = $('.version_current').attr('data-project');
-            promoteProject(pjtId);
+            let verId = $('.version_current').attr('data-version');
+            promoteProject(pjtId, verId);
         });
     // Imprime la cotización en pantalla
     $('.toPrint')
@@ -1411,6 +1413,16 @@ function addComment(dt) {
     $('#txtComment').val('');
 }
 
+function lastVersionFinder() {
+    let lstversion = [];
+
+    $('.version__list ul li').each(function () {
+        lstversion.push($(this).data('code'));
+    });
+    let listado = lstversion.sort();
+    return listado.sort().reverse()[0];
+}
+
 // *************************************************
 // imprime la cotización
 // *************************************************
@@ -1426,9 +1438,12 @@ function printBudget(verId) {
 }
 
 function saveBudget(dt) {
-    let pjtId = $('.version_current').attr('data-project');
-    let verId = dt;
+    let verId = dt.split('|')[0];
+    let pjtId = dt.split('|')[1];
+    console.log(pjtId, verId);
     getBudgets(pjtId, verId);
+    interfase = 'MST';
+    purgeInterfase();
     updateActiveVersion(verId);
     updateMasterVersion(verId);
     modalLoading('H');
@@ -1437,25 +1452,12 @@ function saveBudget(dt) {
 // *************************************************
 // Guarda la cotización seleccionada
 // *************************************************
-function saveBudgetAs(dt) {
+function putSaveBudgetAs(dt) {
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
 
-    let par = `
-            [{
-                "verId"             : "${verId}",
-                "pjtId"             : "${pjtId}"
-            }]`;
-
-    var pagina = 'ProjectPlans/SaveBudgetAs';
-    var tipo = 'html';
-    var selector = respBudget;
-    fillField(pagina, par, tipo, selector);
-}
-
-let rwcur = 0;
-function respBudget(dt) {
-    getVersion(dt);
+    interfase = 'MST';
+    getVersion(pjtId);
     modalLoading('H');
 }
 
@@ -1672,16 +1674,18 @@ function validatorFields(frm) {
 }
 
 /* ************************************************************************ */
-/* PROMUEVE COTIZACION A PRESUPUESTO                                        */
+/* PROMUEVE PRESUPUESTO A PROYECTO                                          */
 /* ************************************************************************ */
-function promoteProject(pjtId) {
+function promoteProject(pjtId, verId) {
     modalLoading('S');
 
-    var pagina = 'ProjectPlans/PromoteProject';
-    var par = `[{"pjtId":"${pjtId}"}]`;
-    var tipo = 'html';
-    var selector = showPromoteProject;
-    fillField(pagina, par, tipo, selector);
+    console.log(pjtId, verId);
+
+    // var pagina = 'ProjectPlans/promoteToProject';
+    // var par = `[{"pjtId":"${pjtId}", "verId":"${verId}"}]`;
+    // var tipo = 'html';
+    // var selector = showPromoteProject;
+    // fillField(pagina, par, tipo, selector);
 }
 function showPromoteProject(dt) {
     let verId = $('.invoice_controlPanel .version_current').attr('data-version');
