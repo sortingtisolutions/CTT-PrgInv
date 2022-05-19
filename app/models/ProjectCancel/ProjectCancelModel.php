@@ -25,10 +25,23 @@ class ProjectCancelModel extends Model
         return $this->db->query($qry);
 
     }
+/** Habilita el projecto                                                           ====  */    
+    public function EnableProject($params)
+    {
+        /* Actualiza el estado en 3, status de proyecto   */
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $qr1 = "UPDATE ctt_projects
+                SET pjt_status = '3'
+                WHERE pjt_id = $pjtId;";
+        
+        $this->db->query($qr1);
 
+        return $pjtId;
+    }
+/** Cancela el proyecto definitivamente                                            ====  */
     public function CancelProject($params)
     {
-        /* Actualiza el estado en 2 convirtiendolo en presupuesto  */
+        /* Actualiza el estado en 6, status de cancelado definitivamente   */
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $qr1 = "UPDATE ctt_projects
                    SET pjt_status = '6'
@@ -36,22 +49,49 @@ class ProjectCancelModel extends Model
         
         $this->db->query($qr1);
 
-        $qr2 = "UPDATE ctt_series
-                    SET 
-                        ser_reserve_start = NULL,
-                        ser_reserve_end = NULL,
-                        ser_situation ='D',
-                        ser_stage = 'D',
-                        pjtdt_id = 0
-                WHERE pjtdt_id IN (
-                SELECT pjtdt_id FROM ctt_projects_detail WHERE pjtcn_id IN (
-                    SELECT pjtcn_id FROM ctt_projects_content WHERE pjt_id = $pjtId 
-                ));";
-        $this->db->query($qr2);
-
         $qr3 = "UPDATE ctt_subletting SET sub_date_end = now() WHERE prj_id = $pjtId;";
         $this->db->query($qr3);
 
         return $pjtId;
     }
+
+
+
+/** Elimina los periodos de las series correspondientes al periodo                 ====  */
+    public function cleanPeriods($params)
+    {
+        $pjtId = $this->db->real_escape_string($params);
+        $qry = "DELETE FROM ctt_projects_periods WHERE pjtdt_id IN (
+                    SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
+                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtcn_id = pdt.pjtcn_id
+                    WHERE pcn.pjt_id = $pjtId
+                );";
+        return $this->db->query($qry);
+    }
+
+    
+/** Restaura las series del proyecto a productos disponibles                       ====  */
+    public function restoreSeries($params)
+    {
+        $pjtId = $this->db->real_escape_string($params);
+        $qry = "UPDATE ctt_series 
+                SET ser_situation = 'D', ser_stage ='D', pjtdt_id = 0 
+                WHERE pjtdt_id IN (
+                    SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
+                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtcn_id = pdt.pjtcn_id
+                    WHERE pcn.pjt_id = $pjtId
+                );";
+        return $this->db->query($qry);
+    }
+
+/** Elimina los registros del detalle del proyecto                                 ====  */
+    public function cleanDetail($params)
+    {
+        $pjtId = $this->db->real_escape_string($params);
+        $qry = "DELETE FROM ctt_projects_detail WHERE pjtcn_id IN  (
+                    SELECT pjtcn_id FROM ctt_projects_content WHERE pjt_id = $pjtId
+                );";
+        return $this->db->query($qry);
+    }
+
 }

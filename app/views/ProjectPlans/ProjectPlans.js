@@ -683,7 +683,8 @@ function fillBudget(pr, vr, ix) {
 
 function loadBudget(inx, bdgId) {
     let insurance = prod[inx].prd_insured == 0 ? 0 : 0.1;
-    let produ = prod[inx].prd_name.replace(/\"/g, '°');
+    let produ = prod[inx].prd_name.replace(/\"/g, '°').replace(/\,/g, '^');
+    let subct = prod[inx].sbc_name.replace(/\"/g, '°').replace(/\,/g, '^');
     let days = getDaysPeriod();
     let section = $('.productos__box-table').attr('data-section').substring(2, 5);
     let pjtId = $('.version_current').attr('data-project');
@@ -708,7 +709,7 @@ function loadBudget(inx, bdgId) {
         "pjt_id"              : "${pjtId}",
         "ver_id"              : "${verId}",
         "pjtvr_stock"         : "${prod[inx].stock}",
-        "sbc_name"            : "${prod[inx].sbc_name}",
+        "sbc_name"            : "${subct}",
         "pjtvr_section"       : "${section}"
     }
     `;
@@ -769,9 +770,11 @@ function putBudgets(dt) {
 // Llena el listado de productos seleccionados
 // *************************************************
 function fillBudgetProds(jsn, days, stus) {
+    
+
     let pds = JSON.parse(jsn);
 
-    let prdName = pds.pjtvr_prod_name.replace(/°/g, '"');
+    let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
     let H = `
     <tr id="bdg${pds.prd_id}" 
         data-sku     = "${pds.pjtvr_prod_sku}" 
@@ -1681,19 +1684,21 @@ function promoteProject(pjtId, verId) {
 
     console.log(pjtId, verId);
 
-    // var pagina = 'ProjectPlans/promoteToProject';
-    // var par = `[{"pjtId":"${pjtId}", "verId":"${verId}"}]`;
-    // var tipo = 'html';
-    // var selector = showPromoteProject;
-    // fillField(pagina, par, tipo, selector);
+    var pagina = 'ProjectPlans/promoteToProject';
+    var par = `[{"pjtId":"${pjtId}", "verId":"${verId}"}]`;
+    var tipo = 'html';
+    var selector = showPromoteProject;
+    fillField(pagina, par, tipo, selector);
 }
 function showPromoteProject(dt) {
-    let verId = $('.invoice_controlPanel .version_current').attr('data-version');
-    var pagina = 'ProjectPlans/PromoteVersion';
-    var par = `[{"verId":"${verId}","pjtId":"${dt}"}]`;
-    var tipo = 'html';
-    var selector = showPromoteVersion;
-    fillField(pagina, par, tipo, selector);
+
+    setTimeout(() => {
+        modalLoading('H');
+        setTimeout(() => {
+            window.location = 'ProjectPlans';
+        },1000);
+    }, 3000);
+
 }
 function showPromoteVersion(dt) {
     let pjtId = dt.split('|')[0];
@@ -1852,7 +1857,7 @@ function purgeInterfase() {
             showLedPending('S');
             break;
         case 'ACT':
-            showButtonToPrint('H');
+            // showButtonToPrint('H');
             showButtonToSave('H');
             showMenuProduct('H');
             showLedPending('H');

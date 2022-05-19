@@ -151,7 +151,7 @@ class BudgetModel extends Model
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
                 LEFT JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                WHERE bg.ver_id = $verId ORDER BY bdg_prod_name ASC;";
+                WHERE bg.ver_id = $verId ORDER BY bdg_id ASC;";
 
         return $this->db->query($qry);
     }    

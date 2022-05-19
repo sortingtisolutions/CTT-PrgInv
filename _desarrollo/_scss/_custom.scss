@@ -446,8 +446,20 @@ table {
 			margin: 1px 6px;
 			cursor: pointer;
 
+			&.active {
+				font-size: 1.5em;
+				color: hsl(198, 100%, 48%);
+				opacity: 1;
+
+				&:hover {
+					color: hsl(198, 100%, 48%);
+					;
+					opacity: 0.5;
+				}
+			}
+
 			&.kill {
-				font-size: 1.3em;
+				font-size: 1.5em;
 				color: $btn-red;
 				opacity: 1;
 

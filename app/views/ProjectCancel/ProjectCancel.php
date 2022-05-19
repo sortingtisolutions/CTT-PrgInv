@@ -40,26 +40,24 @@
 <!-- End Contenedor Listado de PRODUCTOS  -->
 
 
-<!-- Modal Borrar -->
-<!-- <div class="modal fade" id="cancelProjectModal" tabindex="-1" aria-labelledby="cancelProjectModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-header "></div>
-                    <div class="modal-body" style="padding: 0px !important;">
-                        <div class="row">
-                            <input hidden type="text" class="form-control" id="IdCategoriaBorrar" aria-describedby="basic-addon3">
-                                <div class="col-12 text-center">
-                                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea cancelarlo?</span>
-                                </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No cancelar</button>
-                        <button type="button" class="btn btn-danger" id="cancelProjectButton">Cancelar proyecto</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+
+
+
+    <!-- Fondo obscuro -->
+    <div class="invoice__modalBackgound"></div>
+
+    <!-- loading -->
+    <div class="invoice__loading modalLoading">
+        <div class="box_loading">
+            <p class="text_loading"><span>
+
+            </span>
+                <br>
+                <i class="fas fa-spinner spin"></i> 
+                </p>
+            <p>Este proceso puede tradar varios minutos, le recomendamos no salir de la página ni cerrar el navegador.</p>
+        </div>
+     </div>
 
 
 

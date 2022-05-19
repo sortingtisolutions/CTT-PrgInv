@@ -176,16 +176,13 @@ class ProjectPlansModel extends Model
         $pjtId         = $this->db->real_escape_string($params['pjtId']);
         $verId         = $this->db->real_escape_string($params['verId']);
 
-        $qry = "UPDATE ctt_projects SET pjt_status = '3' WHERE pjt_id = $pjtId;";
-        $this->db->query($qry);
+        $qry1 = "UPDATE ctt_projects SET pjt_status = '3' WHERE pjt_id = $pjtId;";
+        $this->db->query($qry1);
 
 
-        $qry = "UPDATE ctt_version SET ver_status = 'P', ver_active = '1', ver_master = '1', ver_code = 'P0001' WHERE ver_id = $verId;";
-        $this->db->query($qry);
-
-
-
-        
+        $qry2 = "UPDATE ctt_version SET ver_status = 'P', ver_active = '1', ver_master = '1', ver_code = 'P0001' WHERE ver_id = $verId;";
+        $this->db->query($qry2);
+       
 
         return $pjtId.'|'. $verId;
     }  

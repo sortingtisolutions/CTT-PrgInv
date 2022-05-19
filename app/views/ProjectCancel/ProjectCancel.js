@@ -111,7 +111,7 @@ function fillProjectsTable(ix) {
     let tabla = $('#tblProjects').DataTable();
     tabla.row
         .add({
-            editable: `<i class="fas fa-times-circle kill" id ="md${pjts[ix].pjt_id}"></i>`,
+            editable: `<i class="fas fa-upload active" title="Habilita el proyecto" data-element="${pjts[ix].pjt_id}"></i><i class="fas fa-download kill" title="Cancela el proyecto definitivamente" data-element="${pjts[ix].pjt_id}" id="md${pjts[ix].pjt_id}"></i>`,
             projnumb: pjts[ix].pjt_number,
             projname: pjts[ix].pjt_name,
             dateregi: pjts[ix].date_regs,
@@ -132,13 +132,15 @@ function actionButtons() {
         .unbind('click')
         .on('click', function () {
             let acc = $(this).attr('class').split(' ')[2];
-            let pjtId = $(this).parents('tr').attr('id');
+            let pjtId = $(this).data('element');
 
             switch (acc) {
-                case 'modif':
-                    //editProject(pjtId);
+                case 'active':
+                    enableProject(pjtId);
+                    console.log('habilita proyecto');
                     break;
                 case 'kill':
+                    console.log('Elimina proyecto');
                     CancelProyect(pjtId);
                     break;
                 default:
@@ -147,28 +149,61 @@ function actionButtons() {
 }
 
 function CancelProyect(pjtId) {
-    $('#confirmModal').modal('show');
+    let H = `<div class="emergent__warning">
+    <p>¿Realmente requieres de borrar este producto?</p>
+    <button id="killYes" class="btn btn-primary">Si</button>  
+    <button id="killNo" class="btn btn-danger">No</button>  
+    </div>`;
 
-    $('#confirmModalLevel').html('¿Seguro que desea cancelar el proyecto?');
-    $('#N').html('No cancelar');
-    $('#confirmButton').html('Cancelar proyecto');
-    $('#Id').val(pjtId);
+    $('body').append(H);
 
-    $('#confirmButton').on('click', function () {
-        var pagina = 'ProjectCancel/CancelProject';
-        var par = `[{"pjtId":"${pjtId}"}]`;
-        var tipo = 'html';
-        var selector = putCancelProject;
-        fillField(pagina, par, tipo, selector);
-    });
+    $('.emergent__warning .btn')
+        .unbind('click')
+        .on('click', function () {
+            let obj = $(this);
+            let resp = obj.attr('id');
+            if (resp == 'killYes') {
+                modalLoading('S', 'Cancelando proyecto');
+                var pagina = 'ProjectCancel/CancelProject';
+                var par = `[{"pjtId":"${pjtId}"}]`;
+                var tipo = 'html';
+                var selector = putCancelProject;
+                fillField(pagina, par, tipo, selector);
+            }
+            obj.parent().remove();
+        });
+}
+
+function enableProject(pjtId) {
+    console.log(pjtId);
+    modalLoading('S', 'Habilitando proyecto');
+    var pagina = 'ProjectCancel/EnableProject';
+    var par = `[{"pjtId":"${pjtId}"}]`;
+    var tipo = 'html';
+    var selector = putCancelProject;
+    fillField(pagina, par, tipo, selector);
 }
 
 function putCancelProject(dt) {
-    getProjects();
+    console.log(dt);
+    // getProjects();
     let tabla = $('#tblProjects').DataTable();
     tabla
         .row($(`#${dt}`))
         .remove()
         .draw();
-    $('#confirmModal').modal('hide');
+    modalLoading('H');
+}
+
+function modalLoading(acc, msg) {
+    if (acc == 'S') {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading').slideDown('slow').css({'z-index': 401, display: 'flex'});
+        $('.invoice__loading .text_loading > span').html(msg);
+    } else {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+            $('.invoice__loading .text_loading > span').html('');
+        });
+    }
 }
