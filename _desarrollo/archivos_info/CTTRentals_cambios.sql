@@ -445,5 +445,31 @@ ALTER TABLE ctt_version ADD COLUMN ver_current smallint COMMENT 'Id de la versio
 
 
 -- Actualizacion del 14 de MAYO 2022
-ALTER TABLE ctt_version ADD COLUMN CHANGE COLUMN ver_current ver_active SMALLINT(1) NULL DEFAULT 0 COMMENT 'Version activa en pantalla';
+ALTER TABLE ctt_version CHANGE COLUMN ver_current ver_active SMALLINT(1) NULL DEFAULT 0 COMMENT 'Version activa en pantalla';
 ALTER TABLE ctt_version ADD COLUMN `ver_master` SMALLINT(1) NULL DEFAULT 0 COMMENT 'Version Maestra en Base de datos' AFTER `ver_active`
+
+
+
+
+
+
+
+-- Actualizacion del 24 de MAYO 2022
+ALTER TABLE ctt_products ADD COLUMN `prd_reserved` INT NULL DEFAULT 0 COMMENT 'Cantidad reservado' AFTER `prd_stock`;
+
+
+
+DROP TRIGGER update_products;
+CREATE TRIGGER update_products AFTER UPDATE ON ctt_stores_products FOR EACH ROW
+UPDATE ctt_products as sc
+SET prd_stock = (
+	select  count(*) from ctt_series where prd_id = sc.prd_id
+) WHERE sc.prd_id = prd_id ;
+
+
+
+
+ ALTER TABLE `ctt_series` ADD INDEX indx_prd_id (`prd_id` ASC) ;
+
+ 
+ ALTER TABLE `ctt_stores_products` ADD INDEX indx_prd_id (`prd_id` ASC) ;

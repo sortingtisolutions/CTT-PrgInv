@@ -588,6 +588,29 @@ table {
 		}
 	}
 
+	td.reserved {
+		text-align: center;
+
+		span {
+			padding: 2px 6px;
+			background-color: hsl(30, 100%, 80%);
+			color: #000000;
+			font-weight: 900;
+			font-size: 0.8em;
+			margin: 2px 0;
+			border-radius: 5px;
+
+			&.toView {
+				cursor: pointer;
+
+				&:hover {
+					background-color: hsl(30, 100%, 50%);
+					color: #FFFFFF;
+				}
+			}
+		}
+	}
+
 	td.price {
 		text-align: right;
 	}

@@ -22,6 +22,7 @@
                             <th style="width:  70px">SKU</th>
                             <th style="width: 350px">Producto</th>
                             <th style="width:  60px">Existencias</th>
+                            <th style="width:  60px">Reservados</th>
                             <th style="width:  70px">Precio</th>
                             <th style="width:  50px">Moneda</th>
                             <th style="width:  40px">Ficha<br>Técnica</th>

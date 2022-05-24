@@ -14,7 +14,7 @@ function inicial() {
         getCategories();
         deep_loading('O');
         $('.tblProdMaster').css({display: 'none'});
-        getPriceList();
+        getPriceList(0);
     }, 100);
 }
 
@@ -74,6 +74,7 @@ function setting_table() {
             {data: 'produsku', class: 'sku'},
             {data: 'prodname', class: 'product-name'},
             {data: 'prodqtty', class: 'quantity'},
+            {data: 'prodresv', class: 'reserved'},
             {data: 'prodpric', class: 'price'},
             {data: 'prodcoin', class: 'sku'},
             {data: 'prddocum', class: 'cellInvoice center'},
@@ -92,7 +93,10 @@ function setting_table() {
         });
 }
 
-/** +++++  Obtiene los productos de la base */
+/**
+ * Obtien el listado de los productos
+ * @param {number} catId Recibe el ID del catalogo
+ */
 function getPriceList(catId) {
     var pagina = 'ProductsPriceList/listProducts';
     var par = `[{"catId":"${catId}","grp":"${grp}","num":"${num}"}]`;
@@ -101,7 +105,10 @@ function getPriceList(catId) {
     fillField(pagina, par, tipo, selector);
 }
 
-/** +++++  coloca los productos en la tabla */
+/**
+ * Presenta el listado de los productos con sus precios
+ * @param {string} dt JSON con el listado obtenido de los produtos
+ */
 function putPriceList(dt) {
     if (dt[0].prd_id != '0') {
         var catId = dt[0].cat_id;
@@ -109,12 +116,15 @@ function putPriceList(dt) {
             pack = u.prd_level == 'K' ? 'fas' : 'far';
             let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt"></i></span>`;
             let invoice = u.doc_id == 0 ? '' : docInvo;
+            let reserved = u.prd_reserved > 0 ? `<span class="toView" data-content="${u.prd_id}" data-level="${u.prd_level}">${u.prd_reserved}</span>` : '';
+
             var H = `
                 <tr class="odd">
                     <td class="edit"></td>
                     <td class="sku"><span class="hide-support">${u.prd_id}</span>${u.prd_sku}</td>
                     <td class="product-name"><i class="${pack} fa-box-open fa-sm"></i> ${u.prd_name}</td>
-                    <td class="quantity"><span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name}|${u.quantity}|${u.prd_level}">${u.quantity}</span></td>
+                    <td class="quantity"><span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name}|${u.prd_stock}|${u.prd_level}">${u.prd_stock}</span></td>
+                    <td class="reserved">${reserved}</td>
                     <td class="price">${u.prd_price}</td>
                     <td class="sku">${u.prd_coin_type}</td>
                     <td class="cellInvoice center">${invoice}</td>
@@ -128,6 +138,16 @@ function putPriceList(dt) {
         setting_table();
         active_icons();
     }
+}
+
+function getProductReserve(prdId, prdLvl) {
+    var pagina = 'ProductsPriceList/listProductsReserve';
+    var par = `[{"prdId":"${prdId}", "prdLvl":"${prdLvl}"}]`;
+    var tipo = 'json';
+    var selector = putProductReserve;
+
+    console.log(par);
+    fillField(pagina, par, tipo, selector);
 }
 
 /** +++++  Obtiene los documentos asociados al producto */
@@ -194,6 +214,15 @@ function active_icons() {
                     getSeries(prd);
                 }
             }
+        });
+
+    $('.toView')
+        .unbind('click')
+        .on('click', function () {
+            let prd = $(this).data('content');
+            let pkt = $(this).data('level');
+            console.log('Vista de reservados' + prd);
+            getProductReserve(prd, pkt);
         });
 
     $('.invoiceView')
@@ -371,4 +400,8 @@ function build_modal_serie(dt) {
             })
             .draw();
     });
+}
+
+function putProductReserve(dt) {
+    console.log(dt);
 }
