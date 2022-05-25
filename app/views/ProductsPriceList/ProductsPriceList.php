@@ -88,6 +88,28 @@
 <!-- End Ventana modal PRODUCTOS -->
 
 
+
+<!-- Start Ventana modal PRODUCTOS RESERVADOS  -->
+<div class="overlay_background overlay_hide" id="ReservedModal">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <table class="display compact nowrap"  id="tblReservedList" style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width: 120px">SKU</th>
+                        <th style="width: 100px">Numero de serie</th>
+                        <th style="width:  60px">Etapa</th>
+                        <th style="width:  auto">Nombre del proyecto</th>
+                        <th style="width:  70px">Fecha Inicial</th>
+                        <th style="width:  70px">Fecha Final</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+<!-- End Ventana modal PRODUCTOS RESERVADOS -->
+
+
 <!-- Start Ventana modal PRODUCTOS -->
 <div class="overlay_background overlay_hide" id="LoadingModal">
 

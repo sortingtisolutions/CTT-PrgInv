@@ -471,5 +471,15 @@ SET prd_stock = (
 
  ALTER TABLE `ctt_series` ADD INDEX indx_prd_id (`prd_id` ASC) ;
 
- 
+
  ALTER TABLE `ctt_stores_products` ADD INDEX indx_prd_id (`prd_id` ASC) ;
+
+
+
+DROP TRIGGER `update_products_reserve`;
+ CREATE TRIGGER update_products_reserve AFTER UPDATE ON ctt_series FOR EACH ROW
+UPDATE ctt_products as sc
+SET prd_reserved = (
+	select  count(*) from ctt_series where pjtdt_id > 0  and  prd_id = sc.prd_id
+)
+WHERE sc.prd_id = prd_id;

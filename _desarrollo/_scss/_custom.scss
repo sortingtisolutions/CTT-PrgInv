@@ -857,6 +857,7 @@ table {
 	right: 0;
 	background-color: rgba(255, 255, 255, 0.4);
 	z-index: 100;
+	transition: all .5s ease;
 
 	&.overlay_hide {
 		visibility: hidden;

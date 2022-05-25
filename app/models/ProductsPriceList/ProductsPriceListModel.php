@@ -113,11 +113,12 @@ public function listProducts($params)
     public function listProductsReserve($params)
     {
         $prdId = $this->db->real_escape_string($params['prdId']);   
-        $prdLvl = $this->db->real_escape_string($params['prdLvl']);
+        $prdLv = $this->db->real_escape_string($params['prdLv']);
+        $prdNm = $this->db->real_escape_string($params['prdNm']);
 
 
-        if ($prdLvl == 'K'){
-            $qry = "SELECT pd.prd_id,  pd.prd_name,  sr.ser_sku, sr.ser_situation, pj.pjt_name, 
+        if ($prdLv == 'K'){
+            $qry = "SELECT '$prdNm' as name, sr.ser_sku, sr.ser_serial_number, sr.ser_situation, pj.pjt_name, 
                         date_format( pj.pjt_date_start, '%Y-%m-%d') AS pjt_date_start, 
                         date_format( pj.pjt_date_end, '%Y-%m-%d') AS pjt_date_end
                     FROM ctt_products_packages as pk 
@@ -129,7 +130,7 @@ public function listProducts($params)
                     WHERE pk.prd_parent = $prdId  ORDER BY pd.prd_name,  pj.pjt_name DESC;
                     ";
         } else {
-            $qry = "SELECT pd.prd_name, sr.ser_sku, sr.ser_situation, pj.pjt_name, 
+            $qry = "SELECT '$prdNm' as name, sr.ser_sku, sr.ser_serial_number, sr.ser_situation, pj.pjt_name, 
                         date_format( pj.pjt_date_start, '%Y-%m-%d') as pjt_date_start, 
                         date_format( pj.pjt_date_end, '%Y-%m-%d') as pjt_date_end
                     FROM ctt_products as pd 

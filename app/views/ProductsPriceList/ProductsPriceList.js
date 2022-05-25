@@ -116,7 +116,8 @@ function putPriceList(dt) {
             pack = u.prd_level == 'K' ? 'fas' : 'far';
             let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt"></i></span>`;
             let invoice = u.doc_id == 0 ? '' : docInvo;
-            let reserved = u.prd_reserved > 0 ? `<span class="toView" data-content="${u.prd_id}" data-level="${u.prd_level}">${u.prd_reserved}</span>` : '';
+            let reserved =
+                u.prd_reserved > 0 ? `<span class="toView" data-content="${u.prd_id}" data-name="${u.prd_name}" data-level="${u.prd_level}">${u.prd_reserved}</span>` : '';
 
             var H = `
                 <tr class="odd">
@@ -140,13 +141,11 @@ function putPriceList(dt) {
     }
 }
 
-function getProductReserve(prdId, prdLvl) {
+function getProductReserve(prdId, prdLv, prdNm) {
     var pagina = 'ProductsPriceList/listProductsReserve';
-    var par = `[{"prdId":"${prdId}", "prdLvl":"${prdLvl}"}]`;
+    var par = `[{"prdId":"${prdId}", "prdLv":"${prdLv}", "prdNm":"${prdNm}"}]`;
     var tipo = 'json';
     var selector = putProductReserve;
-
-    console.log(par);
     fillField(pagina, par, tipo, selector);
 }
 
@@ -221,8 +220,9 @@ function active_icons() {
         .on('click', function () {
             let prd = $(this).data('content');
             let pkt = $(this).data('level');
+            let pnm = $(this).data('name');
             console.log('Vista de reservados' + prd);
-            getProductReserve(prd, pkt);
+            getProductReserve(prd, pkt, pnm);
         });
 
     $('.invoiceView')
@@ -404,4 +404,50 @@ function build_modal_serie(dt) {
 
 function putProductReserve(dt) {
     console.log(dt);
+
+    $('#ReservedModal').removeClass('overlay_hide');
+
+    $('#tblReservedList').DataTable({
+        destroy: true,
+        order: [[4, 'desc']],
+        lengthMenu: [
+            [20, 50, 100, -1],
+            [20, 50, 100, 'Todos'],
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 280px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'seriesku', width: '100px', class: 'sku'},
+            {data: 'serinumb', width: '100px', class: 'serial'},
+            {data: 'sersitua', width: ' 60px', class: 'situation'},
+            {data: 'projname', class: 'projectName'},
+            {data: 'projstar', width: ' 70px', class: 'date'},
+            {data: 'projeend', width: ' 70px', class: 'date'},
+        ],
+    });
+
+    $('.btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('.overlay_background').addClass('overlay_hide');
+        });
+
+    build_modal_reserved(dt);
+}
+
+function build_modal_reserved(dt) {
+    let tabla = $('#tblReservedList').DataTable();
+    $('.overlay_closer .title').html(`${dt[0].name}`);
+    tabla.rows().remove().draw();
+
+    $.each(dt, function (v, u) {
+        tabla.row
+            .add({seriesku: u.ser_sku, serinumb: u.ser_serial_number, sersitua: u.ser_situation, projname: u.pjt_name, projstar: u.pjt_date_start, projeend: u.pjt_date_end})
+            .draw();
+    });
 }
