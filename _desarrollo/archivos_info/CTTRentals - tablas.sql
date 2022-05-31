@@ -387,13 +387,15 @@ CREATE TABLE IF NOT EXISTS `ctt_profiles_modules` (
 DROP TABLE IF EXISTS `ctt_projects`;
 CREATE TABLE IF NOT EXISTS `ctt_projects` (
     `pjt_id`                    int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'Id del proyecto',
+    `pjt_parent`                int(11) NOT NULL                                COMMENT 'Proyecto padre',
     `pjt_number`                varchar(50) DEFAULT NULL                        COMMENT 'Numero del proyecto',
     `pjt_name`                  varchar(100) DEFAULT NULL                       COMMENT 'Nombre del proyecto',
     `pjt_date_project`          datetime DEFAULT current_timestamp()            COMMENT 'Fecha de generación del proyecto',
     `pjt_date_start`            datetime DEFAULT NULL                           COMMENT 'Fecha de inicio del proyecto',
     `pjt_date_end`              datetime DEFAULT NULL                           COMMENT 'Fecha de fin del proyecto',
+    `pjt_time`                  varchar(200) DEFAULT NULL                       COMMENT 'Tiempo de duración del proyecto',
     `pjt_location`              varchar(200) DEFAULT NULL                       COMMENT 'Ubicación del desarrollo del proyecto',
-    `pjt_status`                varchar(1) DEFAULT '1'                          COMMENT 'Estatus del proyecto 1-Activo, 0-Inactivo',
+    `pjt_status`                varchar(2) DEFAULT '1'                          COMMENT 'Estatus del proyecto',
     `cuo_id`                    int(11) NOT NULL                                COMMENT 'FK Id de propietario relacion con ctt_costumer_owner',
     `loc_id`                    int(11) NOT NULL                                COMMENT 'FK Id de la locación relación ctt_location',
     `pjttp_id`                  int(11) NOT NULL                                COMMENT 'Fk Id del Tipo de projecto relacion ctt_projects_type',

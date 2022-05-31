@@ -381,77 +381,111 @@
      </div>
     <div id="dataProjectTemplate" class="table_hidden box_template">
         <div class="project_data-box">
-            <table  id="formProject">
-                <tr>
-                    <td>Nombre del proyecto</td>
-                    <td class="projectName">
-                        <input type="hidden" name="txtProjectIdEdt" id="txtProjectIdEdt" class="textbox">
-                        <input type="text" id="txtProjectEdt" name="txtProjectEdt" class="textbox wtf required" autocomplete="off">
-                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Quieres agregar Nombre del proyecto</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Periodo</td>
-                    <td>
-                        <input type="text" id="txtPeriodProjectEdt"  name="txtPeriodProjectEdt" class="textbox wtf required" autocomplete="off">
-                        <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
-                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Locación</td>
-                    <td>
-                        <input type="text" id="txtLocationEdt" name="txtLocationEdt" class="textbox wtf" autocomplete="off"><br>
-                        <span class="textAlert"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Tipo de proyecto</td>
-                    <td>
-                        <select  id="txtTypeProjectEdt" name="txtTypeProjectEdt" class="textbox wtf required" >
-                            <option value="0"></option>
-                        </select>
-                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de projecto</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Tipo de locación</td>
-                    <td>
-                        <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox" >
-                            <option value="0" selected></option>
-                            <option value="1"> LOCAL</option>
-                            <option value="2"> FORANEO</option>
-                        </select>
-                        <span class="textAlert"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Cliente</td>
-                    <td>
-                        <select id="txtCustomerEdt" class="textbox wtf">
-                            <option value="0"></option>
-                        </select>
-                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar un cliente</span>
-                        <input type="hidden" name="txtCustomerOwnerEdt"  id="txtCustomerOwnerEdt">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Productor</td>
-                    <td>
-                        <select id="txtCustomerRelEdt" class="textbox wtf">
-                            <option value="0"></option>
-                        </select>
-                        <span class="textAlert"></span>
-                    </td>
-                </tr>
+            <div class="project_data-table">
+                <table  id="formProject">
+                    <tr>
+                        <td>Nombre del proyecto</td>
+                        <td class="projectName">
+                            <input type="hidden" name="txtProjectIdEdt" id="txtProjectIdEdt" class="textbox">
+                            <input type="text" id="txtProjectEdt" name="txtProjectEdt" class="textbox wtf required" autocomplete="off">
+                            <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Quieres agregar Nombre del proyecto</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Periodo</td>
+                        <td>
+                            <input type="text" id="txtPeriodProjectEdt"  name="txtPeriodProjectEdt" class="textbox wtf required" autocomplete="off">
+                            <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
+                            <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Duración del proyecto</td>
+                        <td>
+                            <input type="text" id="txtTimeProject" name="txtTimeProject" class="textbox wt5" autocomplete="off"><br>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Locación</td>
+                        <td>
+                            <input type="text" id="txtLocationEdt" name="txtLocationEdt" class="textbox wtf" autocomplete="off"><br>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tipo de proyecto</td>
+                        <td>
+                            <select  id="txtTypeProjectEdt" name="txtTypeProjectEdt" class="textbox wtf required" >
+                                <option value="0"></option>
+                            </select>
+                            <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de proyecto</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tipo de locación</td>
+                        <td>
+                            <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox required" >
+                                <option value = "1" selected> LOCAL</option>
+                                <option value = "2"> FORANEO</option>
+                            </select>
+                            <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de locación</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Cliente</td>
+                        <td>
+                            <select id="txtCustomerEdt" class="textbox wtf">
+                                <option value="0"></option>
+                            </select>
+                            <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar un cliente</span>
+                            <input type="hidden" name="txtCustomerOwnerEdt"  id="txtCustomerOwnerEdt">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Productor</td>
+                        <td>
+                            <select id="txtCustomerRelEdt" class="textbox wtf">
+                                <option value="0"></option>
+                            </select>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
 
-                <tr>
+
+                    <tr>
+                        <td>Tipo de dependencia</td>
+                        <td>
+                            <select id="txtProjectDepend" class="textbox wt3 project__selection">
+                                <option value="0" selected>PROYECTO UNICO</option>
+                                <option value="1">PROYECTO ADJUNTO</option>
+                                <option value="2">PROYECTO PADRE</option>
+                            </select>
+                            <p class = "textbox__result" id="resProjectDepend"></p>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
+
                     
-                    <td colspan=2>
-                        <button class="bn btn-ok" id="saveProject"></button>
-                    </td>
-                </tr>
-            </table>
+                    <tr class="hide">
+                        <td>Proyecto padre</td>
+                        <td>
+                            <select id="txtProjectParent" class="textbox wtf project__selection" >
+                                <option value="0"></option>
+                            </select>
+                            <p class="textbox__result" id="resProjectParent"></p>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        
+                        <td colspan=2>
+                            <button class="bn btn-ok" id="saveProject"></button>
+                        </td>
+                    </tr>
+                </table>
+            </div>    
             <div class="image_random"></div>
         </div>
      </div>

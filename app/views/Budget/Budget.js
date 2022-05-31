@@ -1,4 +1,4 @@
-let cust, proj, prod, vers, budg, tpprd, relc;
+let cust, proj, prod, vers, budg, tpprd, relc, proPar;
 var swpjt = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 
@@ -12,6 +12,7 @@ function inicial() {
     stickyTable();
     eventsAction();
     getProjects('0');
+    getProjectsParents();
     getCustomers();
     getCustomersOwner();
     getDiscounts();
@@ -236,6 +237,15 @@ function getProjects(pjId) {
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
 }
+/**  Obtiene el listado de proyectos padre */
+function getProjectsParents() {
+    swpjt = 0;
+    var pagina = 'Budget/listProjectsParents';
+    var par = `[{"pjId":""}]`;
+    var tipo = 'json';
+    var selector = putProjectsParents;
+    fillField(pagina, par, tipo, selector);
+}
 /**  Obtiene el listado de clientes */
 function getCustomers() {
     var pagina = 'Budget/listCustomers';
@@ -331,6 +341,16 @@ function putProjects(dt) {
         swpjt = 1;
     } else {
         $('.finder_list-projects ul').html('');
+    }
+}
+/**  Llena el listado de proyectos padre */
+function putProjectsParents(dt) {
+    proPar = dt;
+    if (dt[0].pjt_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.pjt_id}">${u.pjt_name}</option>`;
+            $('#txtProjectParent').append(H);
+        });
     }
 }
 
@@ -1035,16 +1055,41 @@ function fillContent() {
 }
 
 function fillData() {
+    $('.textbox__result').show();
+    $('.project__selection').hide();
+
     let pj = proj;
     $('#txtProjectIdEdt').val(pj[0].pjt_id);
     $('#txtProjectEdt').val(pj[0].pjt_name);
     $('#txtPeriodProjectEdt').val(pj[0].pjt_date_start + ' - ' + pj[0].pjt_date_end);
+    $('#txtTimeProject').val(pj[0].pjt_time);
     $('#txtLocationEdt').val(pj[0].pjt_location);
     $('#txtCustomerOwnerEdt').val(pj[0].cuo_id);
     $(`#txtTypeProjectEdt option[value = "${pj[0].pjttp_id}"]`).attr('selected', 'selected');
     $(`#txtTypeLocationEdt option[value = "${pj[0].loc_id}"]`).attr('selected', 'selected');
     $(`#txtCustomerEdt option[value = "${pj[0].cus_id}"]`).attr('selected', 'selected');
     $(`#txtCustomerRelEdt option[value = "${pj[0].cus_parent}"]`).attr('selected', 'selected');
+
+    let depend = pj[0].pjt_parent;
+    let boxDepend = depend != '0' ? 'PROYECTO ADJUNTO' : 'PROYECTO UNICO';
+
+    $(`#resProjectDepend`).html(boxDepend);
+
+    let selection = pj[0].pjt_parent;
+    if (selection == 1) {
+        $('#txtProjectParent').parents('tr').removeAttr('class');
+        $(`#txtProjectParent option[value = "${selection}"]`).attr('selected', 'selected');
+        let parent = '';
+        $.each(proPar, function (v, u) {
+            if (pj[0].pjt_parent == u.pjt_id) {
+                parent = u.pjt_name;
+            }
+        });
+        $('#resProjectParent').html(parent);
+    } else {
+        $('#txtProjectParent').parents('tr').addClass('hide');
+        $(`#txtProjectParent option[value = "0"]`).attr('selected', 'selected');
+    }
 
     $('#saveProject').html('Guardar cambios').removeAttr('class').addClass('bn btn-ok update');
 
@@ -1059,6 +1104,7 @@ function fillData() {
                 let cuoId = $('#txtCustomerOwnerEdt').val();
                 let projLocationTypeValue = $('#txtTypeLocationEdt option:selected').val();
                 let projPeriod = $('#txtPeriodProjectEdt').val();
+                let projTime = $('#txtTimeProject').val();
                 let projType = $('#txtTypeProjectEdt option:selected').val();
                 let cusCte = $('#txtCustomerEdt option:selected').val();
                 let cusCteRel = $('#txtCustomerRelEdt option:selected').val();
@@ -1073,19 +1119,19 @@ function fillData() {
                     "pjtLocation"   : "${projLocation.toUpperCase()}",
                     "pjtDateStart"  : "${projDateStart}",
                     "pjtDateEnd"    : "${projDateEnd}",
+                    "pjtTime"       : "${projTime}",
                     "pjtType"       : "${projType}",
                     "locId"         : "${projLocationTypeValue}",
                     "cuoId"         : "${cuoId}",
                     "cusId"         : "${cusCte}",
                     "cusParent"     : "${cusCteRel}"
-                }]
-                `;
+                }]`;
 
                 // console.log(par);
                 var pagina = 'Budget/UpdateProject';
                 var tipo = 'html';
                 var selector = loadProject;
-                fillField(pagina, par, tipo, selector);
+                //   fillField(pagina, par, tipo, selector);
             }
         });
 }
@@ -1118,6 +1164,21 @@ function newProject() {
     closeModals();
     fillContent();
     actionNewProject();
+
+    $('.textbox__result').hide();
+    $('.project__selection').show();
+
+    $('#txtProjectDepend')
+        .unbind('change')
+        .on('change', function () {
+            let selection = $(this).val();
+            if (selection == 1) {
+                $('#txtProjectParent').parents('tr').removeAttr('class');
+            } else {
+                $('#txtProjectParent').parents('tr').addClass('hide');
+                $(`#txtProjectParent option[value = "0"]`).attr('selected', 'selected');
+            }
+        });
 }
 function actionNewProject() {
     $('#saveProject.insert')
@@ -1128,15 +1189,35 @@ function actionNewProject() {
                 let projId = $('#txtProjectIdEdt').val();
                 let projName = $('#txtProjectEdt').val();
                 let projLocation = $('#txtLocationEdt').val();
-                // let cuoId = $('#txtCustomerOwnerEdt').val();
                 let projLocationTypeValue = $('#txtTypeLocationEdt option:selected').val();
                 let projPeriod = $('#txtPeriodProjectEdt').val();
+                let projTime = $('#txtTimeProject').val();
                 let projType = $('#txtTypeProjectEdt option:selected').val();
                 let cusCte = $('#txtCustomerEdt option:selected').val();
                 let cusCteRel = $('#txtCustomerRelEdt option:selected').val();
+                let proDepend = $('#txtProjectDepend option:selected').val();
 
                 let projDateStart = moment(projPeriod.split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
                 let projDateEnd = moment(projPeriod.split(' - ')[1], 'DD/MM/YYYY').format('YYYYMMDD');
+
+                let proStatus = '';
+                let proParent = '';
+
+                switch (proDepend) {
+                    case '0':
+                        proStatus = 1;
+                        proParent = 0;
+                        break;
+                    case '1':
+                        proStatus = 1;
+                        proParent = $('#txtProjectParent option:selected').val();
+                        break;
+                    case '2':
+                        proStatus = 40;
+                        proParent = 0;
+                        break;
+                    default:
+                }
 
                 let cuoId = 0;
                 $.each(relc, function (v, u) {
@@ -1152,15 +1233,17 @@ function actionNewProject() {
                 "pjtLocation"   : "${projLocation.toUpperCase()}",
                 "pjtDateStart"  : "${projDateStart}",
                 "pjtDateEnd"    : "${projDateEnd}",
+                "pjtTime"       : "${projTime}",
                 "pjtType"       : "${projType}",
                 "locId"         : "${projLocationTypeValue}",
                 "cuoId"         : "${cuoId}",
                 "cusId"         : "${cusCte}",
-                "cusParent"     : "${cusCteRel}"
+                "cusParent"     : "${cusCteRel}",
+                "pjtParent"     : "${proParent}",
+                "pjtStatus"     : "${proStatus}"
             }]
             `;
 
-                console.log(par);
                 var pagina = 'Budget/SaveProject';
                 var tipo = 'html';
                 var selector = loadProject;

@@ -24,12 +24,14 @@ class ProjectPlansModel extends Model
                     , DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project 
                     , DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start 
                     , DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end
+                    , pj.pjt_time
                     , pj.pjt_location 
                     , pj.pjt_status 
                     , pj.cuo_id 
                     , pj.loc_id 
                     , co.cus_id 
                     , co.cus_parent 
+                    , pj.pjt_parent 
                     , lo.loc_type_location 
                     , pt.pjttp_name 
                     , pt.pjttp_id
@@ -41,7 +43,22 @@ class ProjectPlansModel extends Model
                 WHERE pj.pjt_status = '2' ORDER BY pj.pjt_id DESC;
                 ";
         return $this->db->query($qry);
+
+
+    }   
+    
+/** ====== Listado de proyectos padre ========================================================  */        
+    public function listProjectsParents($params)
+    {
+        // Debe leer todos los proyectos que se encuentren en estaus 40 - Cotización
+        $qry = "SELECT pjt_id, pjt_name  
+                FROM ctt_projects 
+                WHERE pjt_status = '40' ORDER BY pjt_name ASC;
+                ";
+        return $this->db->query($qry);
     }    
+
+
 /** ====== Listado de versiones ==============================================================  */
     public function listVersion($params)
     {
@@ -327,6 +344,7 @@ class ProjectPlansModel extends Model
         $pjt_name               = $this->db->real_escape_string($params['pjtName']); 
         $pjt_date_start         = $this->db->real_escape_string($params['pjtDateStart']);
         $pjt_date_end           = $this->db->real_escape_string($params['pjtDateEnd']); 
+        $pjt_time               = $this->db->real_escape_string($params['pjtTime']); 
         $pjt_location           = $this->db->real_escape_string($params['pjtLocation']);
         $pjt_type               = $this->db->real_escape_string($params['pjtType']);
         $loc_id                 = $this->db->real_escape_string($params['locId']);
@@ -336,6 +354,7 @@ class ProjectPlansModel extends Model
                     SET     pjt_name        = '$pjt_name', 
                             pjt_date_start  = '$pjt_date_start', 
                             pjt_date_end    = '$pjt_date_end',
+                            pjt_time        = '$pjt_time',
                             pjt_location    = '$pjt_location', 
                             pjttp_id        = '$pjt_type',  
                             cuo_id          = '$cuo_id',

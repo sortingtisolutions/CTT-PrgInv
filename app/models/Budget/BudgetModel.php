@@ -33,12 +33,14 @@ class BudgetModel extends Model
                     , DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project 
                     , DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start 
                     , DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end 
+                    , pj.pjt_time
                     , pj.pjt_location 
                     , pj.pjt_status 
                     , pj.cuo_id 
                     , pj.loc_id 
                     , co.cus_id 
                     , co.cus_parent 
+                    , pj.pjt_parent 
                     , lo.loc_type_location 
                     , pt.pjttp_name 
                     , pt.pjttp_id
@@ -48,6 +50,17 @@ class BudgetModel extends Model
                 INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
                 WHERE pj.pjt_status = '1' ORDER BY pj.pjt_id DESC;
+                ";
+        return $this->db->query($qry);
+    }    
+
+    // Listado de proyectos padre
+    public function listProjectsParents($params)
+    {
+        // Debe leer todos los proyectos que se encuentren en estaus 40 - Cotización
+        $qry = "SELECT pjt_id, pjt_name  
+                FROM ctt_projects 
+                WHERE pjt_status = '40' ORDER BY pjt_name ASC;
                 ";
         return $this->db->query($qry);
     }    
@@ -385,18 +398,24 @@ public function stockProdcuts($params)
         $pjt_name               = $this->db->real_escape_string($params['pjtName']); 
         $pjt_date_start         = $this->db->real_escape_string($params['pjtDateStart']);
         $pjt_date_end           = $this->db->real_escape_string($params['pjtDateEnd']); 
+        $pjt_time               = $this->db->real_escape_string($params['pjtTime']); 
         $pjt_location           = $this->db->real_escape_string($params['pjtLocation']);
         $pjt_type               = $this->db->real_escape_string($params['pjtType']);
         $cuo_id                 = $cuoId;
         $loc_id                 = $this->db->real_escape_string($params['locId']);
+        $pjt_parent             = $this->db->real_escape_string($params['pjtParent']);
+        $pjt_status             = $this->db->real_escape_string($params['pjtStatus']);
 
         $qry02 = "INSERT INTO ctt_projects (
-                    pjt_name, pjt_date_start, pjt_date_end, pjt_location, pjttp_id, cuo_id, loc_id
+                    pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, pjttp_id, cuo_id, loc_id
                 ) VALUES (
+                    '$pjt_parent', 
                     '$pjt_name', 
                     '$pjt_date_start',
                     '$pjt_date_end', 
+                    '$pjt_time', 
                     '$pjt_location', 
+                    '$pjt_status',
                     $pjt_type, 
                     $cuo_id, 
                     $loc_id
@@ -435,6 +454,7 @@ public function UpdateProject($params)
     $pjt_name               = $this->db->real_escape_string($params['pjtName']); 
     $pjt_date_start         = $this->db->real_escape_string($params['pjtDateStart']);
     $pjt_date_end           = $this->db->real_escape_string($params['pjtDateEnd']); 
+    $pjt_time               = $this->db->real_escape_string($params['pjtTime']); 
     $pjt_location           = $this->db->real_escape_string($params['pjtLocation']);
     $pjt_type               = $this->db->real_escape_string($params['pjtType']);
     $loc_id                 = $this->db->real_escape_string($params['locId']);
@@ -444,10 +464,11 @@ public function UpdateProject($params)
                  SET    pjt_name        = '$pjt_name', 
                         pjt_date_start  = '$pjt_date_start', 
                         pjt_date_end    = '$pjt_date_end',
+                        pjt_time        = '$pjt_time',
                         pjt_location    = '$pjt_location', 
                         pjttp_id        = '$pjt_type',  
                         cuo_id          = '$cuo_id',
-                        loc_id          = '$loc_id'
+                        loc_id          = '$loc_id',
                 WHERE   pjt_id          =  $pjt_id;
                 ";
     $this->db->query($qry02);

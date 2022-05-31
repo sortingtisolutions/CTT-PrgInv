@@ -1,4 +1,4 @@
-let cust, proj, prod, vers, budg, tpprd, relc, interfase;
+let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase;
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
@@ -13,6 +13,7 @@ function inicial() {
     stickyTable();
     eventsAction();
     getProjects('0');
+    getProjectsParents();
     getCustomers();
     getCustomersOwner();
     getDiscounts();
@@ -244,6 +245,15 @@ function getProjects(pjId) {
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
 }
+/**  Obtiene el listado de proyectos padre */
+function getProjectsParents() {
+    swpjt = 0;
+    var pagina = 'ProjectPlans/listProjectsParents';
+    var par = `[{"pjId":""}]`;
+    var tipo = 'json';
+    var selector = putProjectsParents;
+    fillField(pagina, par, tipo, selector);
+}
 /**  Obtiene el listado de clientes */
 function getCustomers() {
     var pagina = 'ProjectPlans/listCustomers';
@@ -347,6 +357,16 @@ function putProjects(dt) {
         swpjt = 1;
     } else {
         $('.finder_list-projects ul').html('');
+    }
+}
+/**  Llena el listado de proyectos padre */
+function putProjectsParents(dt) {
+    proPar = dt;
+    if (dt[0].pjt_id > 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.pjt_id}">${u.pjt_name}</option>`;
+            $('#txtProjectParent').append(H);
+        });
     }
 }
 
@@ -770,8 +790,6 @@ function putBudgets(dt) {
 // Llena el listado de productos seleccionados
 // *************************************************
 function fillBudgetProds(jsn, days, stus) {
-    
-
     let pds = JSON.parse(jsn);
 
     let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
@@ -1219,10 +1237,14 @@ function fillContent() {
 }
 
 function fillData() {
+    $('.textbox__result').show();
+    $('.project__selection').hide();
+
     let pj = proj;
     $('#txtProjectIdEdt').val(pj[0].pjt_id);
     $('#txtProjectEdt').val(pj[0].pjt_name);
     $('#txtPeriodProjectEdt').val(pj[0].pjt_date_start + ' - ' + pj[0].pjt_date_end);
+    $('#txtTimeProject').val(pj[0].pjt_time);
     $('#txtLocationEdt').val(pj[0].pjt_location);
     $('#txtCustomerOwnerEdt').val(pj[0].cuo_id);
     $(`#txtTypeProjectEdt option[value = "${pj[0].pjttp_id}"]`).attr('selected', 'selected');
@@ -1231,6 +1253,27 @@ function fillData() {
     $(`#txtCustomerRelEdt option[value = "${pj[0].cus_parent}"]`).attr('selected', 'selected');
 
     $('#saveProject').html('Guardar cambios').removeAttr('class').addClass('bn btn-ok update');
+
+    let depend = pj[0].pjt_parent;
+    let boxDepend = depend != '0' ? 'PROYECTO ADJUNTO' : 'PROYECTO UNICO';
+
+    $(`#resProjectDepend`).html(boxDepend);
+
+    let selection = pj[0].pjt_parent;
+    if (selection == 1) {
+        $('#txtProjectParent').parents('tr').removeAttr('class');
+        $(`#txtProjectParent option[value = "${selection}"]`).attr('selected', 'selected');
+        let parent = '';
+        $.each(proPar, function (v, u) {
+            if (pj[0].pjt_parent == u.pjt_id) {
+                parent = u.pjt_name;
+            }
+        });
+        $('#resProjectParent').html(parent);
+    } else {
+        $('#txtProjectParent').parents('tr').addClass('hide');
+        $(`#txtProjectParent option[value = "0"]`).attr('selected', 'selected');
+    }
 
     $('#saveProject.update')
         .unbind('click')
@@ -1243,6 +1286,7 @@ function fillData() {
                 let cuoId = $('#txtCustomerOwnerEdt').val();
                 let projLocationTypeValue = $('#txtTypeLocationEdt option:selected').val();
                 let projPeriod = $('#txtPeriodProjectEdt').val();
+                let projTime = $('#txtTimeProject').val();
                 let projType = $('#txtTypeProjectEdt option:selected').val();
                 let cusCte = $('#txtCustomerEdt option:selected').val();
                 let cusCteRel = $('#txtCustomerRelEdt option:selected').val();
@@ -1257,6 +1301,7 @@ function fillData() {
                     "pjtLocation"   : "${projLocation.toUpperCase()}",
                     "pjtDateStart"  : "${projDateStart}",
                     "pjtDateEnd"    : "${projDateEnd}",
+                    "pjtTime"       : "${projTime}",
                     "pjtType"       : "${projType}",
                     "locId"         : "${projLocationTypeValue}",
                     "cuoId"         : "${cuoId}",
@@ -1691,14 +1736,12 @@ function promoteProject(pjtId, verId) {
     fillField(pagina, par, tipo, selector);
 }
 function showPromoteProject(dt) {
-
     setTimeout(() => {
         modalLoading('H');
         setTimeout(() => {
             window.location = 'ProjectPlans';
-        },1000);
+        }, 1000);
     }, 3000);
-
 }
 function showPromoteVersion(dt) {
     let pjtId = dt.split('|')[0];

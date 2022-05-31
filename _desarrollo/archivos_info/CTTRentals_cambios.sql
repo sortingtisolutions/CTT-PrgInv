@@ -483,3 +483,12 @@ SET prd_reserved = (
 	select  count(*) from ctt_series where pjtdt_id > 0  and  prd_id = sc.prd_id
 )
 WHERE sc.prd_id = prd_id;
+
+
+
+
+
+-- Actualizacion del 26 de MAYO 2022
+ALTER TABLE ctt_projects ADD COLUMN `pjt_parent` INT NULL DEFAULT 0 COMMENT 'Proyecto padre' AFTER `pjt_id`;
+
+ALTER TABLE ctt_projects ADD COLUMN `pjt_time` VARCHAR(200) NULL  COMMENT 'Tiempo de duración del proyecto' AFTER `pjt_date_end`;

@@ -240,5 +240,5 @@ function looseAlert(grp) {
 
     grp.children('.textAlert').css({visibility: 'hidden'});
 
-    console.log(grp.attr('class'));
+    // console.log(grp.attr('class'));
 }
