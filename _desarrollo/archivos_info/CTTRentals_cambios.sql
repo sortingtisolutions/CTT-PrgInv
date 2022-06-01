@@ -445,7 +445,7 @@ ALTER TABLE ctt_version ADD COLUMN ver_current smallint COMMENT 'Id de la versio
 
 
 -- Actualizacion del 14 de MAYO 2022
-ALTER TABLE ctt_version CHANGE COLUMN ver_current ver_active SMALLINT(1) NULL DEFAULT 0 COMMENT 'Version activa en pantalla';
+ALTER TABLE ctt_version CHANGE COLUMN `ver_current` `ver_active` SMALLINT(1) NULL DEFAULT 0 COMMENT 'Version activa en pantalla';
 ALTER TABLE ctt_version ADD COLUMN `ver_master` SMALLINT(1) NULL DEFAULT 0 COMMENT 'Version Maestra en Base de datos' AFTER `ver_active`
 
 

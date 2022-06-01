@@ -1167,6 +1167,7 @@ function putStockProjects(dt) {
 
 // Edita los datos del proyecto
 function editProject(pjtId) {
+    let inx = findIndex(pjtId, proj);
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
     let template = $('#dataProjectTemplate');
@@ -1174,7 +1175,7 @@ function editProject(pjtId) {
     $('.invoice__modal-general .modal__header-concept').html('Edición de datos del proyecto');
     closeModals();
     fillContent();
-    fillData();
+    fillData(inx);
 }
 
 function fillContent() {
@@ -1236,36 +1237,36 @@ function fillContent() {
         });
 }
 
-function fillData() {
+function fillData(inx) {
     $('.textbox__result').show();
     $('.project__selection').hide();
 
     let pj = proj;
-    $('#txtProjectIdEdt').val(pj[0].pjt_id);
-    $('#txtProjectEdt').val(pj[0].pjt_name);
-    $('#txtPeriodProjectEdt').val(pj[0].pjt_date_start + ' - ' + pj[0].pjt_date_end);
-    $('#txtTimeProject').val(pj[0].pjt_time);
-    $('#txtLocationEdt').val(pj[0].pjt_location);
-    $('#txtCustomerOwnerEdt').val(pj[0].cuo_id);
-    $(`#txtTypeProjectEdt option[value = "${pj[0].pjttp_id}"]`).attr('selected', 'selected');
-    $(`#txtTypeLocationEdt option[value = "${pj[0].loc_id}"]`).attr('selected', 'selected');
-    $(`#txtCustomerEdt option[value = "${pj[0].cus_id}"]`).attr('selected', 'selected');
-    $(`#txtCustomerRelEdt option[value = "${pj[0].cus_parent}"]`).attr('selected', 'selected');
+    $('#txtProjectIdEdt').val(pj[inx].pjt_id);
+    $('#txtProjectEdt').val(pj[inx].pjt_name);
+    $('#txtPeriodProjectEdt').val(pj[inx].pjt_date_start + ' - ' + pj[inx].pjt_date_end);
+    $('#txtTimeProject').val(pj[inx].pjt_time);
+    $('#txtLocationEdt').val(pj[inx].pjt_location);
+    $('#txtCustomerOwnerEdt').val(pj[inx].cuo_id);
+    $(`#txtTypeProjectEdt option[value = "${pj[inx].pjttp_id}"]`).attr('selected', 'selected');
+    $(`#txtTypeLocationEdt option[value = "${pj[inx].loc_id}"]`).attr('selected', 'selected');
+    $(`#txtCustomerEdt option[value = "${pj[inx].cus_id}"]`).attr('selected', 'selected');
+    $(`#txtCustomerRelEdt option[value = "${pj[inx].cus_parent}"]`).attr('selected', 'selected');
 
     $('#saveProject').html('Guardar cambios').removeAttr('class').addClass('bn btn-ok update');
 
-    let depend = pj[0].pjt_parent;
+    let depend = pj[inx].pjt_parent;
     let boxDepend = depend != '0' ? 'PROYECTO ADJUNTO' : 'PROYECTO UNICO';
 
     $(`#resProjectDepend`).html(boxDepend);
 
-    let selection = pj[0].pjt_parent;
+    let selection = pj[inx].pjt_parent;
     if (selection == 1) {
         $('#txtProjectParent').parents('tr').removeAttr('class');
         $(`#txtProjectParent option[value = "${selection}"]`).attr('selected', 'selected');
         let parent = '';
         $.each(proPar, function (v, u) {
-            if (pj[0].pjt_parent == u.pjt_id) {
+            if (pj[inx].pjt_parent == u.pjt_id) {
                 parent = u.pjt_name;
             }
         });
@@ -1907,4 +1908,15 @@ function purgeInterfase() {
             break;
         default:
     }
+}
+
+function findIndex(id, dt) {
+    inx = -1;
+    $.each(dt, function (v, u) {
+        if (id == u.pjt_id) {
+            inx = v;
+        }
+    });
+
+    return inx;
 }
