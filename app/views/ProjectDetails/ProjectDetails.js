@@ -974,7 +974,7 @@ function activeInputSelector() {
             }
         });
 
-    // Muestra los selectores dedescuento por celda
+    // Muestra los selectores de descuento por celda
     $('.selectioncell')
         .unbind('click')
         .on('click', function () {
@@ -1002,6 +1002,7 @@ function activeInputSelector() {
                     $('.invoiceMainSelect').fadeOut(400);
                 });
         });
+
     let id;
     $('.menu_product')
         .unbind('click')
@@ -1080,8 +1081,6 @@ function killProduct(bdgId) {
 
 // Muestra la información del producto seleccionado
 function infoProduct(bdgId, type) {
-    getProductsRelated(bdgId.substring(3, 20), type);
-
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
     let template = $('#infoProductTemplate');
@@ -1089,14 +1088,18 @@ function infoProduct(bdgId, type) {
     // template.show();
     $('.invoice__modal-general .modal__header-concept').html('Productos Relacionados');
     closeModals();
+    setTimeout(() => {
+        getProductsRelated(bdgId.substring(3, 20), type);
+    }, 500);
 }
 // Muestra la información de productos relacionados
 function putProductsRelated(dt) {
     $('.invoice__modal-general table tbody').html('');
     $.each(dt, function (v, u) {
         let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
-        let pending = u.pjtdt_prod_sku.toUpperCase() == 'PENDIENTE' ? 'pending' : 'free';
-        if (u.prd_level == 'P') {
+        let prodSku = u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
+        let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
+        if (u.prd_level != 'K') {
             let H = `
             <tr ${levelProduct}>
                 <td>${u.prd_sku}</td>
@@ -1119,7 +1122,8 @@ function putProductsRelatedSons(dt, pr) {
     $.each(dt, function (v, u) {
         if (u.acr_parent == pr) {
             let levelProduct = u.prd_level == 'A' ? 'class="levelAccesory"' : '';
-            let pending = u.pjtdt_prod_sku.toUpperCase() == 'PENDIENTE' ? 'pending' : 'free';
+            let prodSku = u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
+            let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
             H += `
             <tr >
                 <td>${u.prd_sku}</td>
@@ -1268,7 +1272,6 @@ function fillData(inx) {
     $(`#resProjectDepend`).html(boxDepend);
 
     let selection = pj[inx].pjt_parent;
-    console.log(selection, proPar);
     if (selection == 1) {
         $('#txtProjectParent').parents('tr').removeAttr('class');
         $(`#txtProjectParent option[value = "${selection}"]`).attr('selected', 'selected');
@@ -1909,4 +1912,15 @@ function purgeInterfase() {
             break;
         default:
     }
+}
+
+function findIndex(id, dt) {
+    inx = -1;
+    $.each(dt, function (v, u) {
+        if (id == u.pjt_id) {
+            inx = v;
+        }
+    });
+
+    return inx;
 }

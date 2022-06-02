@@ -586,40 +586,69 @@ public function listProjectsParents($request_params)
             );
 
             // print_r( $param);
-        
-            if ($action == 'U'){
-                
-                if ($qtyAct > $qtyAnt){
-                    $dif = $qtyAct - $qtyAnt;
-                    for ($i=1; $i <= $dif; $i++){
-                        echo 'Update ';
-                        $updQty = $this-> AddQuantityDetail($param);
+
+
+            switch ($action){
+                case 'U' :
+                    if ($qtyAct > $qtyAnt){
+                        $dif = $qtyAct - $qtyAnt;
+                        for ($i=1; $i <= $dif; $i++){
+                            echo 'Update ';
+                            $updQty = $this-> AddQuantityDetail($param);
+                        }
+                    } else if ($qtyAct < $qtyAnt){
+                        $dif = $qtyAnt - $qtyAct;
+                        for ($i=1; $i <= $dif; $i++){
+                            $updQty = $this-> KillQuantityDetail($param);
+                        }
                     }
-                } else if ($qtyAct < $qtyAnt){
-                    $dif = $qtyAnt - $qtyAct;
-                    for ($i=1; $i <= $dif; $i++){
+                    break;
+                case 'D':
+                    for ($i=1; $i <= $qtyAct; $i++){
                         $updQty = $this-> KillQuantityDetail($param);
                     }
-                }
+                    break;
+                case 'A':
+                    for ($i=1; $i <= $qtyAct; $i++){
+                        $updQty = $this-> AddQuantityDetail($param);
+                    }
+                    break;
+                default:
             }
-            if ($action == 'D'){
-                echo 'Borra ';
-                for ($i=1; $i <= $qtyAct; $i++){
-                    $updQty = $this-> KillQuantityDetail($param);
-                }
-            }
-            if ($action == 'A'){
-                for ($i=1; $i <= $qtyAct; $i++){
-                    $updQty = $this-> AddQuantityDetail($param);
-                }
-            }
+        
+            // if ($action == 'U'){
+                
+            //     if ($qtyAct > $qtyAnt){
+            //         $dif = $qtyAct - $qtyAnt;
+            //         for ($i=1; $i <= $dif; $i++){
+            //             echo 'Update ';
+            //             $updQty = $this-> AddQuantityDetail($param);
+            //         }
+            //     } else if ($qtyAct < $qtyAnt){
+            //         $dif = $qtyAnt - $qtyAct;
+            //         for ($i=1; $i <= $dif; $i++){
+            //             $updQty = $this-> KillQuantityDetail($param);
+            //         }
+            //     }
+            // }
+            // if ($action == 'D'){
+            //     echo 'Borra ';
+            //     for ($i=1; $i <= $qtyAct; $i++){
+            //         $updQty = $this-> KillQuantityDetail($param);
+            //     }
+            // }
+            // if ($action == 'A'){
+            //     for ($i=1; $i <= $qtyAct; $i++){
+            //         $updQty = $this-> AddQuantityDetail($param);
+            //     }
+            // }
             
             
         }
         return 1;
     }
 
-
+/*
     public function old_SaveBudget($request_params)
     {
 
@@ -869,6 +898,7 @@ public function listProjectsParents($request_params)
         echo $verId;
 
     }
+*/
 
 /** ==== Guarda contenido de la nueva version ================================================  */
     public function SaveBudgetAs($request_params)

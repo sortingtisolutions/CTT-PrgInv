@@ -40,10 +40,25 @@ class ProjectDetailsModel extends Model
                 INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-                WHERE pj.pjt_status = '3' ORDER BY pj.pjt_id DESC;
+                WHERE pj.pjt_status in ('3','4') ORDER BY pj.pjt_id DESC;
+                ";
+        return $this->db->query($qry);
+
+
+    }    
+    
+/** ====== Listado de proyectos padre ========================================================  */        
+    public function listProjectsParents($params)
+    {
+        // Debe leer todos los proyectos que se encuentren en estaus 40 - Cotización
+        $qry = "SELECT pjt_id, pjt_name  
+                FROM ctt_projects 
+                WHERE pjt_status = '40' ORDER BY pjt_name ASC;
                 ";
         return $this->db->query($qry);
     }    
+
+
 /** ====== Listado de versiones ==============================================================  */
     public function listVersion($params)
     {
@@ -93,16 +108,6 @@ class ProjectDetailsModel extends Model
 
     } 
     
-/** ====== Listado de proyectos padre ========================================================  */        
-public function listProjectsParents($params)
-{
-    // Debe leer todos los proyectos que se encuentren en estaus 40 - Cotización
-    $qry = "SELECT pjt_id, pjt_name  
-            FROM ctt_projects 
-            WHERE pjt_status = '40' ORDER BY pjt_name ASC;
-            ";
-    return $this->db->query($qry);
-}    
     
 /** ====== Listado clientes ==================================================================  */
     public function listCustomers($params)
@@ -181,6 +186,23 @@ public function listProjectsParents($params)
                 ORDER BY com_date ASC;";
         return $this->db->query($qry);
     }    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /** ====== Listado de productos relacionados como accesosrios ================================  */
     public function listProductsRelated($params)
@@ -348,7 +370,7 @@ public function listProjectsParents($params)
 
 
 
-/** ====== Promueve el presupuesto a proyecto ================================================  */
+/** ====== Cancela proyecto ===============================================================  */
 public function cancelProject($params)
 {
     $pjtId         = $this->db->real_escape_string($params['pjtId']);

@@ -382,6 +382,8 @@ class ProjectPlansModel extends Model
 
     
 
+
+    
 /** ====== Guarda una nueva version ==========================================================  */
     public function SaveVersion($params)
     {
@@ -493,11 +495,11 @@ class ProjectPlansModel extends Model
         $this->db->query($qry1);
         
         $qry2 = "INSERT INTO ctt_projects_version (
-                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
+                    pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, 
                     pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id)  
                 SELECT 
-                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
+                    pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, 
                     pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id 
                 FROM ctt_projects_mice WHERE pjtvr_action != 'D' AND pjt_id = $pjtId;";
