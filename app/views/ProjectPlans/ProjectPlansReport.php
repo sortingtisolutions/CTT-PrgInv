@@ -33,7 +33,7 @@ $qry = "SELECT * , ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) AS ver_date
         INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
         INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
         INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-        LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+        INNER JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
         WHERE bg.ver_id = $verId order by bg.pjtvr_section;";
 
 $res = $conn->query($qry);
@@ -84,7 +84,7 @@ $html = '
         <div class="container">
             <div class="name-report">
                 <p>
-                    <span class="number">Proyecto '. $items[0]['ver_code'] .'</span>
+                    <span class="number">Presupuesto '. $items[0]['ver_code'] .'</span>
                 <br>
                     <span class="date">'.  $items[0]['ver_date_real'] .'</span>
                 </p>
@@ -635,7 +635,7 @@ $mpdf->SetHTMLFooter($foot);
 $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 $mpdf->Output(
-    "Proyecto.pdf",
+    "Presupuesto.pdf",
     \Mpdf\Output\Destination::INLINE
 );
 

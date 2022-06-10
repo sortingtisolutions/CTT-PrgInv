@@ -3,13 +3,17 @@
     margin: 0;
     box-sizing: border-box;
 }
+
 body {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 8pt;
+    font-size: 7pt;
 }
+
 table {
     border-collapse: collapse;
     width: 100%;
+    font-size: 7pt;
+
     td {
         padding: 0;
         margin: 0;
@@ -20,9 +24,11 @@ table {
 .top-color {
     background-color: #ffffff;
 }
+
 .side-color {
     width: 30mm;
 }
+
 header {
     background-color: #ffffff;
 
@@ -32,6 +38,7 @@ header {
 
         .box-logo {
             text-align: left;
+
             .img-logo {
                 width: 20mm;
                 margin: 3mm 2.5mm 0 2.5mm;
@@ -44,6 +51,7 @@ section {
     .container {
         margin-right: 10mm;
         padding-left: 30mm;
+        font-size: 0.9em;
 
         .name-report {
             width: 100%;
@@ -53,6 +61,7 @@ section {
             border: 1px solid #DDDDDD;
             border-radius: 2mm;
             overflow: hidden;
+
             .number {
                 font-size: 1.8rem;
                 font-weight: 700;
@@ -60,16 +69,18 @@ section {
         }
 
         h1 {
-            margin-top: 10mm;
+            margin-top: 5mm;
             width: 100%;
             text-align: right;
         }
+
         h2 {
-            margin-top: 10mm;
+            margin-top: 5mm;
             margin-bottom: 0mm;
 
             width: 100%;
         }
+
         .table-data {
             // width: 100%;
             margin-bottom: 2mm;
@@ -79,13 +90,14 @@ section {
 
             .concept {
                 width: 30mm;
-                font-size: 8pt;
+                font-size: 1.0em;
                 text-align: right;
                 color: #666666;
                 padding-right: 2mm;
             }
+
             .data {
-                font-size: 8pt;
+                font-size: 1.0em;
                 font-weight: 700;
                 text-align: left;
                 padding-bottom: 2px;
@@ -94,73 +106,95 @@ section {
             .tit-totals {
                 text-align: right;
                 color: #666666;
-                padding: 5mm 5mm 0 0;
+                padding: 0 5mm 0 0;
                 width: 25%;
             }
+
             .dat-totals {
                 text-align: right;
                 color: #000000;
                 font-weight: 900;
                 font-size: 1.3rem;
-                padding: 0 5mm 5mm 0;
+                padding: 0 2mm 0 0;
             }
 
             .tit-figure {
                 padding: 2mm 0;
                 border-bottom: 2px solid #000000;
+
             }
 
             th.prod {
-                width: 100mm;
+                width: 70mm;
                 text-align: center;
             }
+
             th.pric,
             th.disc {
                 width: 15mm;
-                text-align: right;
+                text-align: center;
             }
+
             th.amou {
                 width: 20mm;
             }
+
             th.qnty,
             th.days {
-                width: 10mm;
-                text-align: right;
+                width: 8mm;
+                text-align: center;
+
             }
 
             .dat-figure {
-                padding: 0.9mm 0;
+                padding: 0.5mm 1.2mm;
                 border-bottom: 1px dotted #cccccc;
+                border-right: 1px solid #cccccc;
+                font-size: 1.0em;
+
+
             }
+
             .tot-figure {
-                padding: 1.9mm 0;
+                padding: 1.9mm 1.2mm;
                 border-top: 2px dotted #000000;
                 font-weight: bold;
             }
+
+            .tot-main {
+                padding: 1.0mm 1.2mm;
+                font-weight: bold;
+            }
+
             td.prod {
                 font-weight: 700;
             }
+
             td.pric,
             td.disc,
             td.amou {
                 text-align: right;
+                // background-color: #ffddff;
             }
+
             td.qnty,
             td.days {
-                width: 15mm;
+                // background-color: #ffffee;
                 text-align: right;
             }
+
             td.totl {
                 text-align: right;
-                
+
             }
-   
-            
+
+
             .retColor {
-                color: #CC0000 ;
-                & > td {
-                color: #CC0000 ;
-                text-decoration: underline;
+                color: #CC0000;
+
+                &>td {
+                    color: #CC0000;
+                    text-decoration: underline;
                 }
             }
         }
@@ -171,13 +205,14 @@ section {
     }
 }
 
-.obs_frame  {
+.obs_frame {
     margin-top: 100px;
-    
-    .obs_comments  {
+
+    .obs_comments {
         border-bottom: 1px solid #DDDDDD;
         line-height: 1.5em;
-        .obs_date  {
+
+        .obs_date {
             font-weight: 900;
             line-height: 1.9em;
             font-size: 0.8em;
@@ -192,8 +227,10 @@ footer {
         font-size: 9px;
         color: #999999;
     }
+
     .table-footer {
         margin-right: 10mm;
+
         .td-foot {
             height: 15mm;
             padding: 4mm;
@@ -205,6 +242,7 @@ footer {
         margin-top: 2mm;
         margin-bottom: 5mm;
         margin-right: 10mm;
+
         .addData {
             text-align: right;
             padding-right: 2mm;
@@ -212,18 +250,22 @@ footer {
             width: 50mm;
             color: #666666;
         }
+
         .addIcon {
             text-align: center;
             vertical-align: middle;
         }
+
         .addColor01 {
             background-color: #8dd8f8;
             width: 7mm;
         }
+
         .addColor02 {
             background-color: #16c1f3;
             width: 7mm;
         }
+
         .addColor03 {
             background-color: #00aeee;
             width: 7mm;
@@ -234,18 +276,23 @@ footer {
 .rline {
     border-right: 1px solid #cccccc;
 }
+
 .bline {
     border-bottom: 1px solid #cccccc;
 }
+
 .bline-d {
     border-bottom: 2px solid #000000;
 }
+
 .tline {
     border-top: 1px solid #cccccc;
 }
+
 .tline-d {
     border-top: 2px solid #cccccc;
 }
+
 .rtext {
     text-align: right;
 }

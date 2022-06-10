@@ -12,6 +12,12 @@ $totalBase = 0;
 $totalTrip = 0;
 $totalTest = 0;
 $totalInsr = 0;
+$totalMain = 0;
+
+$equipoBase = 0;
+$equipoExtra = 0;
+$equipoDias = 0;
+$equipoSubarrendo = 0;
 
 $conkey = decodificar($_GET['h']) ;
 
@@ -28,7 +34,7 @@ $qry = "SELECT *, ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) as ver_date_
         INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
         INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         INNER JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE bg.ver_id = $verId ;";
+        WHERE bg.ver_id = $verId  ORDER BY bdg_section;";
 
 $res = $conn->query($qry);
 $conn->close();
@@ -64,6 +70,13 @@ $header = '
         $totalTrip += $amountTrip ;
         $totalTest += $amountTest ;
         $totalInsr += $amountInsr ;
+
+
+        if ($items[$i]['bdg_section'] == '1') $equipoBase = '1';
+        if ($items[$i]['bdg_section'] == '2') $equipoExtra = '1';
+        if ($items[$i]['bdg_section'] == '3') $equipoDias = '1';
+        if ($items[$i]['bdg_section'] == '4') $equipoSubarrendo = '1';
+
     }
                 
 $html = '
@@ -138,55 +151,430 @@ $html = '
                     </td>
                 </tr>
             </table>
-            <!-- End Datos de identificación  -->';
+            <!-- End Datos de identificación  -->
+';
 
 
+/* Tabla de equipo base -------------------------  */
+    if ($equipoBase == '1'){
+        $html .= '
+
+
+                    <!-- Start Tabla de costo base  -->
+                    <h2>Equipo Base</h2>
+                    <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+                        <thead>
+                            <tr>
+                                <th class="tit-figure prod">Producto</th>
+                                <th class="tit-figure pric">Precio</th>
+                                <th class="tit-figure qnty">Cant.</th>
+                                <th class="tit-figure days">Días</th>
+                                <th class="tit-figure disc">Dcto.</th>
+                                <th class="tit-figure amou">Importe</th>
+                                <th class="tit-figure days">Dias<br>Viaje</th>
+                                <th class="tit-figure amou">Dscto.<br>Viaje</th>
+                                <th class="tit-figure amou">Importe x<br>Viaje</th>
+                                <th class="tit-figure amou">Importe<br>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+
+                        $discountBaseTotal  = 0;
+                        $amountBaseTotal    = 0;
+                        $discountTripTota   = 0;
+                        $amountTripTotal    = 0;
+                        $amountGralTotal    = 0;
+
+                        for ($i = 0; $i<count($items); $i++){
+                            $section        = $items[$i]['bdg_section'] ;
+
+                            if ($section == '1') {
+                                $product        = $items[$i]['bdg_prod_name'] ;
+                                $price          = $items[$i]['bdg_prod_price'] ;
+                                $quantity       = $items[$i]['bdg_quantity'] ;
+                                $daysBase       = $items[$i]['bdg_days_cost'] ;
+                                $discountBase   = $items[$i]['bdg_discount_base'] ;
+                                $subtotalBase   = $price * $quantity * $daysBase;
+                                $discountAmount = $subtotalBase * $discountBase;
+                                $amountBase     = $subtotalBase - $discountAmount;
+                                $daysTrip       = $items[$i]['bdg_days_trip'];
+                                $discountTrip   = $items[$i]['bdg_discount_trip'];
+                                $amountTrip     = $price * $daysTrip;
+                                $discAmountTrip = $amountTrip * $discountTrip; 
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;
+
+                                $discountBaseTotal  += $discountAmount;
+                                $amountBaseTotal    += $amountBase;
+                                $discountTripTotal  += $discAmountTrip;
+                                $amountTripTotal    += $amountTrip;
+                                $amountGralTotal    += $amountGral;
+                                $totalMain          += $amountGral;
+
+
+        $html .= '
+                            <tr>
+                                <td class="dat-figure prod">' . $product                                    . '</td>
+                                <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
+                                <td class="dat-figure qnty">' . $quantity                                   . '</td>
+                                <td class="dat-figure days">' . $daysBase                                   . '</td>
+                                <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
+                                <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
+                                <td class="dat-figure days">' . $daysTrip                                   . '</td>
+                                <td class="dat-figure amou">' . number_format($discAmountTrip , 2,'.',',')  . '</td>
+                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
+                            </tr>
+                            ';
+                            }
+
+                        }
+        $html .= '
+                        <tr>
+                            <td class="tot-figure totl" colspan="4">Total Equipo Base</td>
+                            <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
+                            <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
+                            <td class="tot-figure days"></td>
+                            <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
+                            <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td>
+                            <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- End Tabla de costo base  -->';
+
+    }
+/* Tabla de equipo base -------------------------  */
+
+
+/* Tabla de equipo extra -------------------------  */
+    if ($equipoExtra == '1'){
+        $html .= '
         
-$html .= '
+        
+                    <!-- Start Tabla de equipo extra  -->
+                    <h2>Equipo Extra</h2>
+                    <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+                        <thead>
+                            <tr>
+                                <th class="tit-figure prod">Producto</th>
+                                <th class="tit-figure pric">Precio</th>
+                                <th class="tit-figure qnty">Cant.</th>
+                                <th class="tit-figure days">Días</th>
+                                <th class="tit-figure disc">Dcto.</th>
+                                <th class="tit-figure amou">Importe</th>
+                                <th class="tit-figure days">Dias<br>Viaje</th>
+                                <th class="tit-figure amou">Dscto.<br>Viaje</th>
+                                <th class="tit-figure amou">Importe x<br>Viaje</th>
+                                <th class="tit-figure amou">Importe<br>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+        
+                        $discountBaseTotal  = 0;
+                        $amountBaseTotal    = 0;
+                        $discountTripTota   = 0;
+                        $amountTripTotal    = 0;
+                        $amountGralTotal    = 0;
+        
+                        for ($i = 0; $i<count($items); $i++){
+                            $section        = $items[$i]['bdg_section'] ;
+        
+                            if ($section == '2') {
+                                $product        = $items[$i]['bdg_prod_name'] ;
+                                $price          = $items[$i]['bdg_prod_price'] ;
+                                $quantity       = $items[$i]['bdg_quantity'] ;
+                                $daysBase       = $items[$i]['bdg_days_cost'] ;
+                                $discountBase   = $items[$i]['bdg_discount_base'] ;
+                                $subtotalBase   = $price * $quantity * $daysBase;
+                                $discountAmount = $subtotalBase * $discountBase;
+                                $amountBase     = $subtotalBase - $discountAmount;
+                                $daysTrip       = $items[$i]['bdg_days_trip'];
+                                $discountTrip   = $items[$i]['bdg_discount_trip'];
+                                $amountTrip     = $price * $daysTrip;
+                                $discAmountTrip = $amountTrip * $discountTrip; 
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;
+        
+                                $discountBaseTotal  += $discountAmount;
+                                $amountBaseTotal    += $amountBase;
+                                $discountTripTotal  += $discAmountTrip;
+                                $amountTripTotal    += $amountTrip;
+                                $amountGralTotal    += $amountGral;
+                                $totalMain          += $amountGral;
+        
+        
+        $html .= '
+                            <tr>
+                                <td class="dat-figure prod">' . $product                                    . '</td>
+                                <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
+                                <td class="dat-figure qnty">' . $quantity                                   . '</td>
+                                <td class="dat-figure days">' . $daysBase                                   . '</td>
+                                <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
+                                <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
+                                <td class="dat-figure days">' . $daysTrip                                   . '</td>
+                                <td class="dat-figure amou">' . number_format($discAmountTrip , 2,'.',',')  . '</td>
+                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
+                            </tr>
+                            ';
+                            }
+        
+                        }
+        $html .= '
+                            <tr>
+                                <td class="tot-figure totl" colspan="4">Total Equipo Extra</td>
+                                <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure days"></td>
+                                <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- End Tabla de costo equipo extra  -->';
+        
+    }
+/* Tabla de equipo extra -------------------------  */
 
 
-            <!-- Start Tabla de costo base  -->
-            <h2>Costo Base</h2>
-            <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
-                <thead>
-                    <tr>
-                        <th class="tit-figure prod">Producto</th>
-                        <th class="tit-figure pric">Precio</th>
-                        <th class="tit-figure qnty">Cant.</th>
-                        <th class="tit-figure days">Días</th>
-                        <th class="tit-figure disc">Dcto.</th>
-                        <th class="tit-figure amou">Importe</th>
-                    </tr>
-                </thead>
-                <tbody>';
+/* Tabla de equipo dias -------------------------  */
+    if ($equipoDias == '1'){
+        $html .= '
+        
+        
+                    <!-- Start Tabla de equipo dias  -->
+                    <h2>Equipo Dias</h2>
+                    <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+                        <thead>
+                            <tr>
+                                <th class="tit-figure prod">Producto</th>
+                                <th class="tit-figure pric">Precio</th>
+                                <th class="tit-figure qnty">Cant.</th>
+                                <th class="tit-figure days">Días</th>
+                                <th class="tit-figure disc">Dcto.</th>
+                                <th class="tit-figure amou">Importe</th>
+                                <th class="tit-figure days">Dias<br>Viaje</th>
+                                <th class="tit-figure amou">Dscto.<br>Viaje</th>
+                                <th class="tit-figure amou">Importe x<br>Viaje</th>
+                                <th class="tit-figure amou">Importe<br>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+        
+                        $discountBaseTotal  = 0;
+                        $amountBaseTotal    = 0;
+                        $discountTripTota   = 0;
+                        $amountTripTotal    = 0;
+                        $amountGralTotal    = 0;
+        
+                        for ($i = 0; $i<count($items); $i++){
+                            $section        = $items[$i]['bdg_section'] ;
+        
+                            if ($section == '3') {
+                                $product        = $items[$i]['bdg_prod_name'] ;
+                                $price          = $items[$i]['bdg_prod_price'] ;
+                                $quantity       = $items[$i]['bdg_quantity'] ;
+                                $daysBase       = $items[$i]['bdg_days_cost'] ;
+                                $discountBase   = $items[$i]['bdg_discount_base'] ;
+                                $subtotalBase   = $price * $quantity * $daysBase;
+                                $discountAmount = $subtotalBase * $discountBase;
+                                $amountBase     = $subtotalBase - $discountAmount;
+                                $daysTrip       = $items[$i]['bdg_days_trip'];
+                                $discountTrip   = $items[$i]['bdg_discount_trip'];
+                                $amountTrip     = $price * $daysTrip;
+                                $discAmountTrip = $amountTrip * $discountTrip; 
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;
+        
+                                $discountBaseTotal  += $discountAmount;
+                                $amountBaseTotal    += $amountBase;
+                                $discountTripTotal  += $discAmountTrip;
+                                $amountTripTotal    += $amountTrip;
+                                $amountGralTotal    += $amountGral;
+                                $totalMain          += $amountGral;
+        
+        
+        $html .= '
+                            <tr>
+                                <td class="dat-figure prod">' . $product                                    . '</td>
+                                <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
+                                <td class="dat-figure qnty">' . $quantity                                   . '</td>
+                                <td class="dat-figure days">' . $daysBase                                   . '</td>
+                                <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
+                                <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
+                                <td class="dat-figure days">' . $daysTrip                                   . '</td>
+                                <td class="dat-figure amou">' . number_format($discAmountTrip , 2,'.',',')  . '</td>
+                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
+                            </tr>
+                            ';
+                            }
+        
+                        }
+        $html .= '
+                            <tr>
+                                <td class="tot-figure totl" colspan="4">Total Equipo Dias</td>
+                                <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure days"></td>
+                                <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- End Tabla de costo equipo extra  -->';
+        
+    }
+/* Tabla de equipo dias -------------------------  */
 
-                for ($i = 0; $i<count($items); $i++){
-                    $price = $items[$i]['bdg_prod_price'] ;
-                    $sbtt1 = $price * $items[$i]['bdg_quantity'];
-                    $sbtt2 = $sbtt1 * $items[$i]['bdg_days_base'];
-                    $disco = $sbtt2 * ($items[$i]['bdg_discount_base']/100);
-                    $amount = $sbtt2 - $disco;
 
-$html .= '
-                    <tr>
-                        <td class="dat-figure prod">'. $items[$i]['bdg_prod_name'] .'</td>
-                        <td class="dat-figure pric">' . number_format($price , 2,'.',',') . '</td>
-                        <td class="dat-figure qnty">'. $items[$i]['bdg_quantity'] .'</td>
-                        <td class="dat-figure days">'. $items[$i]['bdg_days_base'] .'</td>
-                        <td class="dat-figure disc">' . number_format(($items[$i]['bdg_discount_base']/100) , 2,'.',',') . '</td>
-                        <td class="dat-figure amou">' . number_format($amount , 2,'.',',') . '</td>
-                    </tr>
-                    ';
+/* Tabla de equipo subarrendo -------------------------  */
+    if ($equipoSubarrendo == '1'){
+        $html .= '
+        
+        
+                    <!-- Start Tabla de equipo subarrendo  -->
+                    <h2>Equipo Subarrendo</h2>
+                    <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+                        <thead>
+                            <tr>
+                                <th class="tit-figure prod">Producto</th>
+                                <th class="tit-figure pric">Precio</th>
+                                <th class="tit-figure qnty">Cant.</th>
+                                <th class="tit-figure days">Días</th>
+                                <th class="tit-figure disc">Dcto.</th>
+                                <th class="tit-figure amou">Importe</th>
+                                <th class="tit-figure days">Dias<br>Viaje</th>
+                                <th class="tit-figure amou">Dscto.<br>Viaje</th>
+                                <th class="tit-figure amou">Importe x<br>Viaje</th>
+                                <th class="tit-figure amou">Importe<br>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>';
+        
+                        $discountBaseTotal  = 0;
+                        $amountBaseTotal    = 0;
+                        $discountTripTota   = 0;
+                        $amountTripTotal    = 0;
+                        $amountGralTotal    = 0;
+        
+                        for ($i = 0; $i<count($items); $i++){
+                            $section        = $items[$i]['bdg_section'] ;
+        
+                            if ($section == '4') {
+                                $product        = $items[$i]['bdg_prod_name'] ;
+                                $price          = $items[$i]['bdg_prod_price'] ;
+                                $quantity       = $items[$i]['bdg_quantity'] ;
+                                $daysBase       = $items[$i]['bdg_days_cost'] ;
+                                $discountBase   = $items[$i]['bdg_discount_base'] ;
+                                $subtotalBase   = $price * $quantity * $daysBase;
+                                $discountAmount = $subtotalBase * $discountBase;
+                                $amountBase     = $subtotalBase - $discountAmount;
+                                $daysTrip       = $items[$i]['bdg_days_trip'];
+                                $discountTrip   = $items[$i]['bdg_discount_trip'];
+                                $amountTrip     = $price * $daysTrip;
+                                $discAmountTrip = $amountTrip * $discountTrip; 
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;
+        
+                                $discountBaseTotal  += $discountAmount;
+                                $amountBaseTotal    += $amountBase;
+                                $discountTripTotal  += $discAmountTrip;
+                                $amountTripTotal    += $amountTrip;
+                                $amountGralTotal    += $amountGral;
+                                $totalMain          += $amountGral;
+        
+        
+        $html .= '
+                            <tr>
+                                <td class="dat-figure prod">' . $product                                    . '</td>
+                                <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
+                                <td class="dat-figure qnty">' . $quantity                                   . '</td>
+                                <td class="dat-figure days">' . $daysBase                                   . '</td>
+                                <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
+                                <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
+                                <td class="dat-figure days">' . $daysTrip                                   . '</td>
+                                <td class="dat-figure amou">' . number_format($discAmountTrip , 2,'.',',')  . '</td>
+                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
+                            </tr>
+                            ';
+                            }
+        
+                        }
+        $html .= '
+                            <tr>
+                                <td class="tot-figure totl" colspan="4">Total Equipo Subarrendo</td>
+                                <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure days"></td>
+                                <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- End Tabla de costo equipo subarrendo  -->';
+        
+    }
+/* Tabla de equipo subarrendo -------------------------  */
 
-                }
-$html .= '
-                    <tr>
-                        <td class="tot-figure totl" colspan="5">Total Base</td>
-                        <td class="tot-figure amou">' . number_format($totalBase, 2,'.',',') . '</td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- End Tabla de costo base  -->';
+
+
+/* Tabla totales -------------------------  */
+    $html .= '
+    
+    
+                <!-- Start Tabla de totales  -->
+                <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+                    <thead>
+                        <tr>
+                            <th class="tit-figure" colspan="9">&nbsp;</th>
+                            <th class="tit-figure amou" >&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+    
+                    $iva  = .16;
+                    $amountiva    = $totalMain * $iva;
+                    $totalFull   = $totalMain + $amountiva;
+    
+    // Subtotal
+    $html .= '
+                        <tr>
+                            <td class="tot-main totl" colspan ="9">Subtotal</td>
+                            <td class="tot-main amou">' . number_format($totalMain , 2,'.',',')       . '</td>
+                        </tr>
+                        ';
+                        
+    // IVA
+    $html .= '
+                        <tr>
+                            <td class="tot-main totl" colspan="9">I.V.A. 16%</td>
+                            <td class="tot-main amou">' . number_format($amountiva , 2,'.',',')       . '</td>
+                        </tr>
+                        ';
+                        
+    // Total
+    $html .= '
+                        <tr>
+                            <td class="tot-main totl" colspan="9">Total</td>
+                            <td class="tot-main amou">' . number_format($totalFull , 2,'.',',')       . '</td>
+                        </tr>
+                        ';
+                        
+    
+                    
+    $html .= '
+                    </tbody>
+                </table>
+                <!-- End Tabla de costo equipo subarrendo  -->';
+    
+
+/* Tabla totales -------------------------  */
+
+
+
+
 
 
 // Pie de pagina
@@ -200,7 +588,7 @@ $foot = '
                         <tr>
                             <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
                             <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
-                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $name . '</td>
+                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
                             <td class="td-foot foot-rept" width="25%" style="text-align: right">Versión '. $items[0]['ver_code'].'</td>
                         </tr>
                     </table>
@@ -248,7 +636,7 @@ $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 $mpdf->Output(
     "Cotizacion.pdf",
-    "I"
+    \Mpdf\Output\Destination::INLINE
 );
 
 

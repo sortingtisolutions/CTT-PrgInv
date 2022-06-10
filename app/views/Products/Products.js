@@ -16,7 +16,6 @@ $(document).ready(function () {
 function inicial() {
     btn = 'solo productos';
     if (altr == 1) {
-        
         deep_loading('O');
         settingTable('0');
         getCategories();
@@ -125,7 +124,7 @@ function getSelectSerie(serId) {
 /** +++++  coloca las categorias */
 function putCategories(dt) {
     cats = dt;
-    
+
     if (dt[0].cat_id != '0') {
         let catId = dt[0].cat_id;
         $.each(dt, function (v, u) {
@@ -146,7 +145,7 @@ function putCategories(dt) {
                 flt = 0;
                 btn = 'solo productos';
                 // getProducts(catId);
-               
+
                 settingTable(catId);
             });
         });
@@ -259,7 +258,6 @@ function fillProducts(ft) {
 
 /** +++++  configura la table de productos */
 function settingTable(catId) {
-    
     let title = 'Lista de productos';
     // $('#tblProducts').DataTable().destroy();
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
@@ -349,14 +347,14 @@ function settingTable(catId) {
             {data: 'prdcomme', class: 'prdcomme catalog'},
         ],
     });
-    
+
     $('.tblProdMaster')
         .delay(2000)
         .slideDown('fast', function () {
             // tabla.reload();
-            
+
             //$('.produsku').trigger('click');
-            
+
             activeIcons();
             deep_loading('C');
         });
@@ -371,25 +369,22 @@ function getModalSeries(id) {
 
 /** +++++  Activa los iconos */
 function activeIcons() {
-    
-     $('span.toLink')
-         .unbind('click')
-         .on('click', function () {
-            
-             let id = $(this).parents('tr');
-             let prd = id.attr('id');
-             let qty = $(this).text();
-             let pkt = id.children('td.prodtype').text();
-             let pkn = id.children('td.prodname').text();
-             console.log('CLick --', prd);
-             // let qty = $(this).parent().attr('data-content').split('|')[2];
-             // let pkt = $(this).parent().attr('data-content').split('|')[3];
-             // let pkn = $(this).parent().attr('data-content').split('|')[1];
-             if (qty > 0) {
-        
-                 getSeries(prd);
-             }
-         });
+    $('span.toLink')
+        .unbind('click')
+        .on('click', function () {
+            let id = $(this).parents('tr');
+            let prd = id.attr('id');
+            let qty = $(this).text();
+            let pkt = id.children('td.prodtype').text();
+            let pkn = id.children('td.prodname').text();
+            console.log('CLick --', prd);
+            // let qty = $(this).parent().attr('data-content').split('|')[2];
+            // let pkt = $(this).parent().attr('data-content').split('|')[3];
+            // let pkn = $(this).parent().attr('data-content').split('|')[1];
+            if (qty > 0) {
+                getSeries(prd);
+            }
+        });
 
     $('.invoiceView')
         .unbind('click')
@@ -408,7 +403,7 @@ function activeIcons() {
             let sltor = $(this);
             let prdId = sltor.parents('tr').attr('id');
             let prdNm = 'Modifica producto';
-            
+
             $('#ProductModal').removeClass('overlay_hide');
             $('.overlay_closer .title').html(prdNm);
             getSelectProduct(prdId);

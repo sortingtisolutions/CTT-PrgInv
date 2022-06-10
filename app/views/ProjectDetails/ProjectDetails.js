@@ -1494,7 +1494,7 @@ function printBudget(verId) {
     let n = user[2];
     let h = localStorage.getItem('host');
 
-    window.open(`${url}app/views/ProjectDetails/ProjectPlansReport.php?v=${v}&u=${u}&n=${n}&h=${h}`, '_blank');
+    window.open(`${url}app/views/ProjectDetails/ProjectDetailsReport.php?v=${v}&u=${u}&n=${n}&h=${h}`, '_blank');
 }
 
 function saveBudget(dt) {
