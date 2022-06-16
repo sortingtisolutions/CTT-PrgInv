@@ -42,7 +42,7 @@ class ProveedoresModel extends Model
 
     public function GetProveedor($params)
 	{
-		$idSup 		= $this->db->real_escape_string($param['id']);
+		$idSup 		= $this->db->real_escape_string($params['id']);
 
 		$qry = "SELECT sup_id, sup_business_name, sup_contact, sup_rfc, sup_email, sup_phone, sut_id FROM ctt_suppliers
         WHERE sup_id = $idSup ;";

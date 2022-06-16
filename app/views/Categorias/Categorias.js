@@ -277,7 +277,7 @@ function deleteCategory(catId) {
 
     if (cn != 0) {
         $('#confirmModal').modal('show');
-        $('#confirmModalLevel').html('No se puede borrar este registro ya que contiene existencias asociadas a el.');
+        $('#confirmModalLevel').html('No se puede borrar el registro, porque contiene existencias.');
         $('#N').html('Cancelar');
         $('#confirmButton').html('').css({display: 'none'});
         $('#Id').val(0);

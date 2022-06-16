@@ -151,8 +151,10 @@ function activeActions() {
         .on('click', function () {
             if (ValidForm() == 1) {
                 if ($('#txtIdSubcategory').val() == '') {
+                    //console.log('Save');
                     saveSubcategory();
                 } else {
+                    //console.log('Update');
                     updateSubcategory();
                 }
             }
@@ -257,6 +259,7 @@ function updateSubcategory() {
             "sbcCode"  : "${sbcCode}",
             "catId"    : "${catId}"
         }]`;
+    //console.log('Datos : ', par);
     subs = null;
     var pagina = 'Subcategories/UpdateSubcategory';
     var tipo = 'html';
@@ -289,7 +292,7 @@ function deleteSubcategory(sbcId) {
 
     if (cn != 0) {
         $('#confirmModal').modal('show');
-        $('#confirmModalLevel').html('No se puede borrar este registro ya que contiene excistencias asociadas a el.');
+        $('#confirmModalLevel').html('No se puede borrar el registro, porque contiene existencias.');
         $('#N').html('Cancelar');
         $('#confirmButton').html('').css({display: 'none'});
         $('#Id').val(0);

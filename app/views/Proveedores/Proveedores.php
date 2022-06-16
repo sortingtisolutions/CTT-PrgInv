@@ -80,7 +80,7 @@
 
 				<!-- Start área de listado -->
 				<div class="mvst_table">
-					<h1>Proveedores</h1>
+					<h1>Lista de Proveedores</h1>
 
 					<div class="row">
 						<div class="col-12 col-md-12">		

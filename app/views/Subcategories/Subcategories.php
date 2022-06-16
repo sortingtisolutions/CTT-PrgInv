@@ -74,7 +74,7 @@
 
         <!-- Start Tabla de contenido -->
             <div class="mvst_table">
-                <h1>Subcategorias</h1>
+                <h1>Lista de Subcategorias</h1>
                 <table class="display compact nowrap"  id="tblSubcategory" style="width:650px; ">
                     <thead>
                         <tr>

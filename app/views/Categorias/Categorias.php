@@ -47,7 +47,7 @@
 
                 <!-- Start área de listado -->
                 <div class="mvst_table">
-                    <h1>Catálogos</h1>
+                    <h1>Lista de Catálogos</h1>
 
                     <div class="row">
                         <div class="col-12 col-md-12">		

@@ -286,7 +286,7 @@ function deleteStore(strId) {
     if (cn != 0) {
         // $('#NoBorrarModal').modal('show');
         $('#confirmModal').modal('show');
-        $('#confirmModalLevel').html('No se puede borrar este registro ya que contiene excistencias asociadas a el.');
+        $('#confirmModalLevel').html('No se puede borrar el registro, porque que contiene existencias.');
         $('#N').html('Cancelar');
         $('#confirmButton').html('').css({display: 'none'});
         $('#Id').val(0);
@@ -312,6 +312,7 @@ function deleteStore(strId) {
         });
     }
 }
+
 function putDeleteStore(dt) {
     getStores();
     let tabla = $('#AlmacenesTable').DataTable();
