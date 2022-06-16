@@ -332,7 +332,6 @@ function settingTable(catId) {
         columnDefs: [{targets: -1, data: null, defaultContent: '<butotn>click</button>'}],
         columns: [
             {data: 'editable', class: 'editable edit', orderable: false},
-            //{data: 'producid', class: 'producid id hide'},
             {data: 'produsku', class: 'produsku sku'},
             {data: 'prodname', class: 'prodname product-name'},
             {data: 'prodpric', class: 'prodpric price'},
@@ -419,27 +418,37 @@ function activeIcons() {
         .on('click', function () {
             let sltor = $(this);
             let prdId = sltor.parents('tr').attr('id');
-            console.log('Kill ' + prdId);
+            let cn = $(`#${prdId}`).children('td.quantity').children('.toLink').html();
 
-            $('#delProdModal').modal('show');
-            $('#txtIdProduct').val(prdId);
-            //borra paquete +
-            $('#btnDelProduct').on('click', function () {
-                let Id = $('#txtIdProduct').val();
-                console.log(Id);
-                let tabla = $('#tblProducts').DataTable();
-                $('#delProdModal').modal('hide');
+            if (cn != 0) {
+                $('#delProdModal').modal('show');
+                $('#btnDelProduct').hide();
+                $('#delProdModal .modal-header').html('El producto no puede ser borrado debido a que registra existencias en el almacen');
+                $('#BorrarPerfilLabel').html('Borrado invalidado');
+            } else {
+                $('#delProdModal').modal('show');
+                $('#btnDelProduct').show();
+                $('#delProdModal .modal-header').html('');
+                $('#BorrarPerfilLabel').html('¿Seguro que desea borrarlo?');
+                $('#txtIdProduct').val(prdId);
+                //borra paquete +
+                $('#btnDelProduct').on('click', function () {
+                    let Id = $('#txtIdProduct').val();
+                    console.log(Id);
+                    let tabla = $('#tblProducts').DataTable();
+                    $('#delProdModal').modal('hide');
 
-                let prdRow = $(`#${Id}`);
+                    let prdRow = $(`#${Id}`);
 
-                tabla.row(prdRow).remove().draw();
+                    tabla.row(prdRow).remove().draw();
 
-                var pagina = 'Products/deleteProduct';
-                var par = `[{"prdId":"${Id}"}]`;
-                var tipo = 'html';
-                var selector = putDelProducts;
-                fillField(pagina, par, tipo, selector);
-            });
+                    var pagina = 'Products/deleteProduct';
+                    var par = `[{"prdId":"${Id}"}]`;
+                    var tipo = 'html';
+                    var selector = putDelProducts;
+                    fillField(pagina, par, tipo, selector);
+                });
+            }
         });
 }
 

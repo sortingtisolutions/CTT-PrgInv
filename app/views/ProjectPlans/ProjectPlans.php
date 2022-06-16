@@ -35,6 +35,7 @@
             <span class="invoice_button addSection"><i class="fas fa-plus"></i>Agrega Sección</span>
             <span class="invoice_button toPrint"><i class="fas fa-print"></i> Imprimir</span>
             <span class="invoice_button toSave"><i class="fas fa-save"></i> Generar proyecto</span>
+            <span class="invoice_button toImport"><i class="fas fa-save"></i> Importar</span>
             <div class="menu-sections">
                 <ul>
                     <li class="equipoBase"          data-option="1">Equipo Base</li>
@@ -42,6 +43,9 @@
                     <li class="equipoPorDia"        data-option="3">Equipo por Días</li>
                     <li class="equipoSubarrendo"    data-option="4">Equipo por subarrendo</li>
                 </ul>
+            </div>
+            <div class="import-sections">
+                <ul></ul>
             </div>
         </div>
         <div class="invoice__box-table" id="invoiceTable">

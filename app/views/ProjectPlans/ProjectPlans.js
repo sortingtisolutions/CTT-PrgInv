@@ -97,6 +97,21 @@ function eventsAction() {
             $(`#SC${item}`).show();
         });
 
+    // Despliega y contrae el listado de projectos
+    $('.invoice_controlPanel .toImport')
+        .unbind('click')
+        .on('click', function () {
+            let pos = $(this).offset();
+            $('.import-sections')
+                .slideDown('slow')
+                .css({top: '30px', left: pos.left + 'px'})
+                .on('mouseleave', function () {
+                    $(this).slideUp('slow');
+                });
+
+            fillProjectsAttached();
+        });
+
     // Despliega la lista de productos para agregar a la cotización
     $('.invoice__box-table .invoice_button')
         .unbind('click')
@@ -477,6 +492,42 @@ function updateMasterVersion(verId) {
     caret.html('<i class="fas fa-check-circle"></i>');
 }
 
+function fillProjectsAttached() {
+    let idd = $('.version_current').attr('data-project');
+    let indx = findIndex(idd, proj);
+    let parent = proj[indx].pjt_parent;
+    $('.import-sections ul li').remove();
+    $.each(proj, function (v, u) {
+        if (parent == u.pjt_parent && idd != u.pjt_id) {
+            let H = ` <li class="import_project"    data-option="${u.pjt_id}">${u.pjt_name}</li>`;
+            $('.import-sections ul').append(H);
+        }
+    });
+
+    $('.import-sections ul li')
+        .unbind('click')
+        .on('click', function () {
+            let ido = $(this).attr('data-option');
+            console.log(ido);
+            modalLoading('S');
+            let verCurr = lastVersionFinder();
+
+            let vr = parseInt(verCurr.substring(1, 10));
+
+            let verNext = 'R' + refil(vr + 1, 4);
+
+            var par = `[{
+                "pjtId"      :   "${idd}",
+                "pjtIdo"     :   "${ido}",
+                "verCode"    :   "${verNext}"
+                }]`;
+            var pagina = 'ProjectPlans/importProject';
+            var tipo = 'html';
+            var selector = putSaveBudgetAs;
+            fillField(pagina, par, tipo, selector);
+        });
+}
+
 /** Llena el listado de los tipos de proyecto */
 function putProjectsType(dt) {
     tpprd = dt;
@@ -502,6 +553,8 @@ function actionSelProject(obj) {
         let idSel = obj.parents('.dato');
         let indx = obj.attr('data-content').split('|')[0];
         let pj = proj[indx];
+
+        pj.pjt_parent > 0 ? showButtonToImport('S') : showButtonToImport('H');
 
         $('.panel__name').css({visibility: 'visible'}).children('span').html(pj.pjt_name).attr('data-id', pj.pjt_id).attr('title', pj.pjt_name);
         $('#projectNumber').html(pj.pjt_number);
@@ -776,6 +829,7 @@ function registeredProduct(id) {
 }
 
 function putBudgets(dt) {
+    console.log(dt);
     budg = dt;
     let days = getDaysPeriod();
 
@@ -1632,6 +1686,10 @@ function showButtonToSave(acc) {
 }
 function showLedPending(acc) {
     elm = $('.col_quantity-pending');
+    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+}
+function showButtonToImport(acc) {
+    elm = $('.invoice_controlPanel .toImport');
     acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
 }
 

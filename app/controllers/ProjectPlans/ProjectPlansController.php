@@ -25,7 +25,7 @@ class ProjectPlansController extends Controller
     }
 
 
-    // Lista los proyectos
+/** ==== Lista los proyectos   */
     public function listProjects($request_params)
     {
         $params =  $this->session->get('user');
@@ -44,26 +44,26 @@ class ProjectPlansController extends Controller
     } 
 
     
-// Lista los proyectos padre
-public function listProjectsParents($request_params)
-{
-    $params =  $this->session->get('user');
-    $result = $this->model->listProjectsParents($request_params);
-    $i = 0;
-    while($row = $result->fetch_assoc()){
-        $rowdata[$i] = $row;
-        $i++;
-    }
-    if ($i>0){
-        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-    } else {
-        $res =  '[{"pjt_id":"0"}]';	
-    }
-    echo $res;
-} 
+/** ==== Lista los proyectos padre ===========================================================  */
+    public function listProjectsParents($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProjectsParents($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
+        }
+        echo $res;
+    } 
 
     
-// Lista los versiones
+/** ==== Lista los versiones =================================================================  */
     public function listVersion($request_params)
     {
         $params =  $this->session->get('user');
@@ -81,7 +81,7 @@ public function listProjectsParents($request_params)
         echo $res;
     } 
 
-// Lista el contendio del proyecto
+/** ==== Lista el contendio del proyecto =====================================================  */
     public function listBudgets($request_params)
     {
         $params =  $this->session->get('user');
@@ -99,7 +99,7 @@ public function listProjectsParents($request_params)
         echo $res;
     } 
 
-// Lista de clientes
+/** ==== Lista de clientes ===================================================================  */
     public function listCustomers($request_params)
     {
         $params =  $this->session->get('user');
@@ -117,7 +117,7 @@ public function listProjectsParents($request_params)
         echo $res;
     } 
 
-// Lista de productores
+/** ==== Lista de productores ================================================================  */
     public function listCustomersOwn($request_params)
     {
         $params =  $this->session->get('user');
@@ -136,7 +136,7 @@ public function listProjectsParents($request_params)
     } 
 
 
-// Lista los descuentos
+/** ==== Lista los descuentos ================================================================  */
     public function listDiscounts($request_params)
     {
         $params =  $this->session->get('user');
@@ -155,7 +155,7 @@ public function listProjectsParents($request_params)
     } 
 
     
-// Lista los tipos de proyectos
+/** ==== Lista los tipos de proyectos ========================================================  */
     public function listProjectsType($request_params)
     {
         $params =  $this->session->get('user');
@@ -173,8 +173,10 @@ public function listProjectsParents($request_params)
         echo $res;
 
     } 
+
     
-// Lista los productos
+
+/** ==== Lista los productos =================================================================  */
     public function listProducts($request_params)
     {
         $params =  $this->session->get('user');
@@ -192,7 +194,7 @@ public function listProjectsParents($request_params)
         echo $res;
     } 
 
-// Lista los comentarios del proyecto
+/** ==== Lista los comentarios del proyecto ==================================================  */
     public function listComments($request_params)
     {
         $params =  $this->session->get('user');
@@ -210,13 +212,52 @@ public function listProjectsParents($request_params)
         echo $res;
     } 
 
+/** ==== Lista los relacionados al producto ==================================================  */
+    public function listProductsRelated($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProductsRelated($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
+
+
+
+/** ==== Lista los proyectos en donde se encuentra un producto ===============================  */
+    public function stockProducts($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->stockProducts($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_name":"0"}]';	
+        }
+        echo $res;
+    } 
+
 
 
 
 
 
     
-// Guarda el comentario
+
+/** ==== Guarda el comentario ================================================================  */
     public function InsertComment($request_params)
     {
         $params =  $this->session->get('user');
@@ -237,70 +278,33 @@ public function listProjectsParents($request_params)
     } 
 
     
-// Actualiza datos del proyecto
+/** ==== Actualiza datos del proyecto ========================================================  */
     public function UpdateProject($request_params)
     {
         $params =  $this->session->get('user');
         $result = $this->model->UpdateProject($request_params);
         echo $result;
     } 
-//
 
-// Guarda nueva version
+
+/** ==== Guarda nueva version ================================================================  */
     public function SaveVersion($request_params)
     {
         $params =  $this->session->get('user');
         $result = $this->model->SaveVersion($request_params);
         echo $result;
     } 
-//
 
-// Promueve proyecto
+
+/** ==== Promueve proyecto ===================================================================  */
     public function PromoteProject($request_params)
     {
         $params =  $this->session->get('user');
         $result = $this->model->PromoteProject($request_params);
         echo $result;
     } 
-//
 
-// Lista los relacionados al producto
-    public function listProductsRelated($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listProductsRelated($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"prd_id":"0"}]';	
-        }
-        echo $res;
-    } 
-//
 
-// Lista los proyectos en donde se encuentra un producto
-    public function stockProducts($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->stockProducts($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"prd_name":"0"}]';	
-        }
-        echo $res;
-    } 
-//
 
 
 /** ==== Promueve el presupuesto a proyecto ==================================================  */
@@ -615,38 +619,37 @@ public function listProjectsParents($request_params)
                     break;
                 default:
             }
-        
-            // if ($action == 'U'){
-                
-            //     if ($qtyAct > $qtyAnt){
-            //         $dif = $qtyAct - $qtyAnt;
-            //         for ($i=1; $i <= $dif; $i++){
-            //             echo 'Update ';
-            //             $updQty = $this-> AddQuantityDetail($param);
-            //         }
-            //     } else if ($qtyAct < $qtyAnt){
-            //         $dif = $qtyAnt - $qtyAct;
-            //         for ($i=1; $i <= $dif; $i++){
-            //             $updQty = $this-> KillQuantityDetail($param);
-            //         }
-            //     }
-            // }
-            // if ($action == 'D'){
-            //     echo 'Borra ';
-            //     for ($i=1; $i <= $qtyAct; $i++){
-            //         $updQty = $this-> KillQuantityDetail($param);
-            //     }
-            // }
-            // if ($action == 'A'){
-            //     for ($i=1; $i <= $qtyAct; $i++){
-            //         $updQty = $this-> AddQuantityDetail($param);
-            //     }
-            // }
-            
-            
         }
         return 1;
     }
+
+/** ==== Importa proyecto ====================================================================  */
+    public function importProject($request_params)
+    {
+        $params =  $this->session->get('user');
+        $par            = $this->model->SaveVersion($request_params);
+
+        
+        $pack           = explode('|', $par);
+        $verId          = $pack[0];
+        $pjtId          = $pack[1];
+        $pjtIdo         = $request_params['pjtIdo'];
+
+        $mice = $this->model->importProject($pjtIdo, $pjtId, $verId);
+        $periods        = $this->model->cleanPeriods($pjtId);
+        $series         = $this->model->restoreSeries($pjtId);
+        $detail         = $this->model->cleanDetail($pjtId);
+        $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
+        $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
+        $result         = $this->model->getProjectVersion($pjtId);
+        $response       = $this->setSeries($result);
+
+        echo $verId . '|'. $pjtId;
+
+
+    } 
+
+
 
 /*
     public function old_SaveBudget($request_params)
