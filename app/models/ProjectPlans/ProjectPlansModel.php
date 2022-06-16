@@ -108,7 +108,7 @@ class ProjectPlansModel extends Model
 
     } 
 
-    
+
 /** ====== Listado clientes ==================================================================  */
     public function listCustomers($params)
     {
@@ -731,6 +731,29 @@ class ProjectPlansModel extends Model
         return $this->db->query($qry);
 
     }
+
+/** ====== Importa proyecto ==================================================================  */
+    public function importProject($pjtIdo, $pjtId, $verId)
+    {
+
+        $qry3 = "DELETE FROM ctt_projects_mice WHERE pjt_id = $pjtId;";
+        $this->db->query($qry3);
+
+        $qry4 = "INSERT INTO ctt_projects_mice (
+                    pjtvr_action, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_quantity_ant, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
+                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id
+                )
+                SELECT 'N' AS pjtcn_action, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_quantity AS pjtcn_quantity_ant, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, 
+                    pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, pjtcn_status, '$verId' as ver_id, prd_id, '$pjtId' as pjt_id 
+                FROM ctt_projects_content 
+                WHERE pjt_id = $pjtIdo;
+                ";
+        return $this->db->query($qry4);
+
+
+    } 
+
+
 
 
 /** ==========================================================================================  */

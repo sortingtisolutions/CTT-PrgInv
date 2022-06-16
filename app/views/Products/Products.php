@@ -23,25 +23,24 @@
                         
                     </div>
                     <div id="dvProducts"></div>
-                    <table class="display compact nowrap order-column"  id="tblProducts" style="min-width:1885px; width:100%";>
+                    <table class="display compact nowrap order-column"  id="tblProducts" style="min-width:2000px;";>
                         <thead>
                             <tr>
-                                <th style="width:  30px"></th>
-                                <th style="width:  80px">SKU</th>
+                                <th style="width:  40px">&nbsp;</th>
+                                <th style="width: 100px">SKU</th>
                                 <th style="width: 300px">Nombre</th>
                                 <th style="width:  70px">Precio</th>
                                 <th style="width:  40px">Existencias</th>
-                                <th style="width:  30px">Tipo</th>
+                                <th style="width:  40px">Tipo</th>
                                 <th style="width:  70px">Servicio</th>
                                 <th style="width:  50px">Moneda</th>
                                 <th style="width:  40px">Ficha<br>Técnica</th>
                                 <th style="width: 220px">Subcategoría</th>
                                 <th style="width: 220px">Catálogo</th>
                                 <th style="width: 300px">Nombre ingles</th>
-                                <th style="width:  auto">Descripción según proveedor</th>
+                                <th style="width: 510px">Descripción según proveedor</th>
                             </tr>
                         </thead>
-                        
                     </table>
 
                 </div>
@@ -60,7 +59,7 @@
                 <thead>
                     <tr>
                         <th style="width:  30px"></th>
-                        <th style="width: 100px">SKU</th>
+                        <th style="width: 150px">SKU</th>
                         <th style="width:  80px">Núm. serie</th>
                         <th style="width: 120px">Fecha de alta</th>
                         <th style="width:  50px">Clave status</th>
@@ -248,7 +247,7 @@
 
 
 <!-- Start Ventana modal AGREGA O MODIFICA SERIES -->
-<div class="overlay_background overlay_hide"id="ModifySerieModal">
+    <div class="overlay_background overlay_hide"id="ModifySerieModal">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <div class="formButtons">
@@ -363,10 +362,8 @@
     </div>
 <!-- End Ventana modal ELIMINA PRODUCTO -->
 
-
-
 <!-- Start Ventana modal ELIMINA SERIE -->
-<div class="modal fade" id="delSerieModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+    <div class="modal fade" id="delSerieModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content">
                 <div class="modal-header ">
