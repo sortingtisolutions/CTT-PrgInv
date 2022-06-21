@@ -107,12 +107,11 @@ class SubcategoriesModel extends Model
         $sbcCode    = $this->db->real_escape_string($params['sbcCode']);
         $catId      = $this->db->real_escape_string($params['catId']);
 
-
         $qry = "UPDATE ctt_subcategories
                 SET 
                       sbc_name  = UPPER('$sbcName'),
-                      sbc_code  = '$sbcCode' ,
-                      cat_id    = '$catId' ,
+                      sbc_code  = '$sbcCode',
+                      cat_id    = '$catId'
                 WHERE sbc_id    = '$sbcId';";
 
         $this->db->query($qry);	

@@ -69,7 +69,7 @@
 
                 <!-- Start área de listado -->
                 <div class="mvst_table">
-                    <h1>Almacenes</h1>
+                    <h1>Lista de Almacenes</h1>
                     
                     <div class="row">
                         <div class="col-12 col-md-12">		

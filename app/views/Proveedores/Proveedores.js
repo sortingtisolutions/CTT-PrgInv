@@ -137,15 +137,16 @@ function DeleteProveedor() {
 function SaveProveedores() {
    var location = 'Proveedores/SaveProveedores';
    var IdProveedor = $('#IdProveedor').val();
-   var NomProveedor = $('#NomProveedor').val();
-   var ContactoProveedor = $('#ContactoProveedor').val();
-   var RfcProveedor = $('#RfcProveedor').val();
+   var NomProveedor = $('#NomProveedor').val().toUpperCase();
+   var ContactoProveedor = $('#ContactoProveedor').val().toUpperCase();
+   var RfcProveedor = $('#RfcProveedor').val().toUpperCase();
    var EmailProveedor = $('#EmailProveedor').val();
    var PhoneProveedor = $('#PhoneProveedor').val();
 
-
    var tipoProveedorId = $('#selectRowTipoProveedor option:selected').attr('id');
    var tipoProveedorName = $('#selectRowTipoProveedor option:selected').text();
+
+   console.log(RfcProveedor);
 
    $.ajax({
       type: 'POST',
