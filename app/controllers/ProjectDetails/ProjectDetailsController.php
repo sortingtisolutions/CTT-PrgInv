@@ -213,7 +213,6 @@ class ProjectDetailsController extends Controller
 
 
 
-
     
 // Guarda el comentario
     public function InsertComment($request_params)
@@ -992,5 +991,30 @@ class ProjectDetailsController extends Controller
 
 
 
+/** ==== Importa proyecto ====================================================================  */
+    public function importProject($request_params)
+    {
+        $params =  $this->session->get('user');
+        $par            = $this->model->SaveVersion($request_params);
+
+        
+        $pack           = explode('|', $par);
+        $verId          = $pack[0];
+        $pjtId          = $pack[1];
+        $pjtIdo         = $request_params['pjtIdo'];
+
+        $mice = $this->model->importProject($pjtIdo, $pjtId, $verId);
+        $periods        = $this->model->cleanPeriods($pjtId);
+        $series         = $this->model->restoreSeries($pjtId);
+        $detail         = $this->model->cleanDetail($pjtId);
+        $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
+        $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
+        $result         = $this->model->getProjectVersion($pjtId);
+        $response       = $this->setSeries($result);
+
+        echo $verId . '|'. $pjtId;
+    }
+
 /** ==========================================================================================  */
 }
+
