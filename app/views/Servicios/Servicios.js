@@ -21,7 +21,7 @@ function inicial() {
    });
    //borra almacen +
    $('#BorrarServicio').on('click', function () {
-      DeletServicio();
+      DeleteServicio();
    });
 
    $('#LimpiarFormulario').on('click', function () {
@@ -81,7 +81,7 @@ function EditServicios(id) {
    }).done(function () {});
 }
 //confirm para borrar **
-function ConfirmDeletServicio(id) {
+function ConfirmDeleteServicio(id) {
    //UnSelectRowTable();
    $('#BorrarServiciosModal').modal('show');
    $('#IdServicioBorrar').val(id);
@@ -94,7 +94,7 @@ function UnSelectRowTable() {
 }
 
 //BORRAR  * *
-function DeletServicio() {
+function DeleteServicio() {
    var location = 'Servicios/DeleteServicio';
    IdServicio = $('#IdServicioBorrar').val();
    $.ajax({
@@ -120,8 +120,8 @@ function DeletServicio() {
 function SaveServicios() {
    var location = 'Servicios/SaveServicios';
    var IdServicio = $('#IdServicio').val();
-   var NomServicio = $('#NomServicio').val();
-   var DesServicio = $('#DesServicio').val();
+   var NomServicio = $('#NomServicio').val().toUpperCase();
+   var DesServicio = $('#DesServicio').val().toUpperCase();
 
    $.ajax({
       type: 'POST',
@@ -142,7 +142,7 @@ function SaveServicios() {
                   [0]:
                      '<button onclick="EditServicios(' +
                      respuesta +
-                     ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button><button onclick="ConfirmDeletServicio(' +
+                     ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button><button onclick="ConfirmDeleteServicio(' +
                      respuesta +
                      ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>',
                   [1]: respuesta,
@@ -190,7 +190,7 @@ function getServiciosTable() {
                '<button onclick="EditServicios(' +
                row.srv_id +
                ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
-               '<button onclick="ConfirmDeletServicio(' +
+               '<button onclick="ConfirmDeleteServicio(' +
                row.srv_id +
                ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
                '</td>' +
@@ -260,7 +260,7 @@ function getServiciosTable() {
                      });
                      idSelected = idSelected.slice(0, -1);
                      if (idSelected != '') {
-                        ConfirmDeletServicio(idSelected);
+                        ConfirmDeleteServicio(idSelected);
                      }
                   },
                },

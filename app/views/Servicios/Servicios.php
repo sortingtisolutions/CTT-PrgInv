@@ -37,10 +37,10 @@
 
 							<div class="row">
 								<div class="col-6">
-									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 1rem !important;" id="GuardarServicio">Guardar</button>
+									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: .8rem !important;" id="GuardarServicio">Guardar</button>
 								</div>
 								<div class="col-6">
-									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
+									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: .8rem !important;" id="LimpiarFormulario">Limpiar</button>
 								</div>
 							</div>
 						</form>
@@ -50,7 +50,7 @@
 
 				<!-- Start área de listado -->
 				<div class="mvst_table">
-					<h1>Servicios</h1>
+					<h1>Servicios Disponibles</h1>
 
 					<div class="row">
 						<div class="col-12 col-md-12">		

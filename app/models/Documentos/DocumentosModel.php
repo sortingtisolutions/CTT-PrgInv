@@ -16,7 +16,7 @@ public function SaveDocumento($request_params)
 	try {
 		$conn = new mysqli(HOST, USER, PASSWORD);
 		$Code = $request_params['CodDocumento'];
-		$nomebreDocumento = $request_params["NomDocumento"];
+		$nombreDocumento = $request_params["NomDocumento"];
 		$tipoDocumento = $request_params["tipoDocumento"];
 		$fechaadmision = $request_params["fechaadmision"];
 
@@ -29,26 +29,27 @@ public function SaveDocumento($request_params)
 
 		$newFileName = $fileName;
 
-		$sql = "INSERT INTO ctt_documents(
-				doc_code, doc_name, doc_size, doc_document, doc_content_type, doc_type, dot_id, doc_admission_date)
-				VALUES (
-					UPPER('$Code'), UPPER('$newFileName'), $fileSize, '$file', '$fileType', '$fileExtension', '$tipoDocumento','$fechaadmision');";
+		$sql = "INSERT INTO ctt_documents(doc_name, doc_type, doc_size, doc_content_type, doc_document,  dot_id, doc_admission_date,doc_code)
+				VALUES ('$newFileName','$fileExtension',$fileSize,'$fileType','','$tipoDocumento','$fechaadmision','$Code');";
+
+		/* $sql = "INSERT INTO ctt_documents(doc_name, doc_type, doc_size, doc_content_type, doc_document,  dot_id, doc_admission_date,doc_code)
+		VALUES ('$newFileName','$fileExtension',$fileSize,'$fileType','$file','$tipoDocumento','$fechaadmision','$Code');"; */
 
 		$this->db->query($sql);
-		$lastid = $this->db->insert_id;
-		//return $lastid;
+		/* $lastid = $this->db->insert_id;
+		//return $lastid; */
 		
-		/*$qry = "SELECT MAX(doc_id) AS id FROM ctt_documents;";
+		$qry = "SELECT MAX(doc_id) AS id FROM ctt_documents;";
 		$result = $this->db->query($qry);
 		if ($row = $result->fetch_row()) {
 			$lastid = trim($row[0]);
 		}
-
-		$estatus = $lastid; */
+		$estatus = $lastid;
 	} catch (Exception $e) {
-		$lastid = $e;
+		/* $lastid = $e; */
+		$estatus = 0;
 	}
-	return $lastid;
+	return $estatus;
 }
 
 // Optiene los Documentos existentes

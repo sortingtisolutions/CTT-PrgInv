@@ -23,7 +23,6 @@ class ServiciosModel extends Model
 				if ($row = $result->fetch_row()) {
 				    $lastid = trim($row[0]);
 				}
-
 				$estatus = $lastid;
 			} catch (Exception $e) {
 				$estatus = 0;
@@ -33,8 +32,6 @@ class ServiciosModel extends Model
 // Optiene los Usuaios existentes
 	public function GetServicios($request)
 	{
-
-
 		$qry = "SELECT srv_id, srv_name, srv_description FROM ctt_services WHERE srv_status = 1 ;";
 		$result = $this->db->query($qry);
 		$lista = array();
