@@ -654,7 +654,9 @@ function fillBudget(pr, vr, ix) {
 
 function loadBudget(inx, bdgId) {
     let insurance = prod[inx].prd_insured == 0 ? 0 : 0.1;
-    let produ = prod[inx].prd_name.replace(/\"/g, '°');
+    // let produ = prod[inx].prd_name.replace(/\"/g, '°');
+    let produ = prod[inx].prd_name.replace(/\"/g, '°').replace(/\,/g, '^');
+    let subct = prod[inx].sbc_name.replace(/\"/g, '°').replace(/\,/g, '^');
     let days = getDaysPeriod();
     let section = $('.productos__box-table').attr('data_section').substring(2, 5);
 
@@ -675,7 +677,7 @@ function loadBudget(inx, bdgId) {
         "bdg_prod_level"    : "${prod[inx].prd_level}",
         "prd_id"            : "${prod[inx].prd_id}",
         "bdg_stock"         : "${prod[inx].stock}",
-        "sbc_name"          : "${prod[inx].sbc_name}",
+        "sbc_name"          : "${subct}",
         "bdg_section"       : "${section}"
     }
     `;
@@ -727,7 +729,7 @@ function putBudgets(dt) {
 // *************************************************
 function fillBudgetProds(jsn, days) {
     let pds = JSON.parse(jsn);
-    let prdName = pds.bdg_prod_name.replace(/°/g, '"');
+    let prdName = pds.bdg_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
     let H = `
     <tr id="bdg${pds.prd_id}" data_sku="${pds.bdg_prod_sku}" data_insured="${pds.bdg_insured}" data_level="${pds.bdg_prod_level}" class="budgetRow">
         <th class="wclprod col_product product"><div class="elipsis" title="${prdName}">${prdName}</div><i class="fas fa-bars menu_product" id="mnu${pds.prd_id}"></i></th>

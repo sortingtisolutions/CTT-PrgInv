@@ -32,8 +32,8 @@ $qry = "SELECT *, ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) as ver_date_
         INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
         INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
         INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
-        INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-        INNER JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+        LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+        LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
         WHERE bg.ver_id = $verId  ORDER BY bdg_section;";
 
 $res = $conn->query($qry);
@@ -535,9 +535,18 @@ $html = '
                     <tbody>';
     
                     $iva  = .16;
+                    $totalMain  = $totalMain + $totalInsr;
                     $amountiva    = $totalMain * $iva;
                     $totalFull   = $totalMain + $amountiva;
     
+    // Seguro
+    $html .= '
+                        <tr>
+                            <td class="tot-main totl" colspan ="9">Seguro</td>
+                            <td class="tot-main amou">' . number_format($totalInsr , 2,'.',',')       . '</td>
+                        </tr>
+                        ';
+
     // Subtotal
     $html .= '
                         <tr>
