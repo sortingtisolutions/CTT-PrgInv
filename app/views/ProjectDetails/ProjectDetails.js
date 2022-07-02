@@ -357,9 +357,9 @@ function getComments(pjtId) {
     fillField(pagina, par, tipo, selector);
 }
 /** Obtiene el conteo productos para subarrendo */
-function getCounterPending(pjtcnId, prdId) {
+function getCounterPending(pjtvrId, prdId) {
     var pagina = 'ProjectDetails/countPending';
-    var par = `[{"pjtcnId":"${pjtcnId}","prdId":"${prdId}"}]`;
+    var par = `[{"pjtvrId":"${pjtvrId}","prdId":"${prdId}"}]`;
     var tipo = 'json';
     var selector = putCounterPending;
     fillField(pagina, par, tipo, selector);
@@ -585,7 +585,9 @@ function actionSelProject(obj) {
 }
 
 function getCalendarPeriods(pj) {
+    console.log(pj);
     let fecha = moment(Date()).format('DD/MM/YYYY');
+    console.log(fecha);
     $('#projectPeriod').daterangepicker(
         {
             showDropdowns: true,

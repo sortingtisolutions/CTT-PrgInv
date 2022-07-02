@@ -1130,16 +1130,17 @@ function fillData(inx) {
                     "cusParent"     : "${cusCteRel}"
                 }]`;
 
-                // console.log(par);
+                console.log(par);
                 var pagina = 'Budget/UpdateProject';
                 var tipo = 'html';
                 var selector = loadProject;
-                //   fillField(pagina, par, tipo, selector);
+                fillField(pagina, par, tipo, selector);
             }
         });
 }
 
 function loadProject(dt) {
+    // console.log(dt);
     $('.finder_list-projects ul').html('');
     getProjects(dt);
     waitShowProject(dt);

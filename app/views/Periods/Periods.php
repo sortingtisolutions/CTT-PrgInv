@@ -23,7 +23,7 @@
         <div class="contador"></div>
         
         <script src="<?=  PATH_ASSETS . 'lib/sticky.js' ?>"></script>
-        <script src="<?=  PATH_VIEWS . 'periods/periods.js' ?>"></script>
+        <script src="<?=  PATH_VIEWS . 'Periods/Periods.js' ?>"></script>
 
 
     

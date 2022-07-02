@@ -222,7 +222,7 @@ class ProjectPlansModel extends Model
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
                 LEFT JOIN ctt_accesories AS ac ON ac.prd_id = pr.prd_id
-                INNER JOIN ctt_projects_content AS cn ON cn.pjtcn_id = pj.pjtcn_id
+                INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = pj.pjtvr_id
                 WHERE  cn.prd_id  = $prdId ORDER BY reng, pr.prd_level DESC;";
         return $this->db->query($qry);
 
@@ -243,7 +243,7 @@ class ProjectPlansModel extends Model
                         ifnull(ped.pjtpd_day_end,'') AS pjtpd_day_end
                 FROM  ctt_series AS ser     
                 LEFT JOIN ctt_projects_detail AS pdt ON pdt.ser_id = ser.ser_id 
-                LEFT JOIN ctt_projects_content AS pcn ON pcn.pjtcn_id = pdt.pjtcn_id
+                LEFT JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
                 LEFT JOIN ctt_projects AS pjt ON pjt.pjt_id = pcn.pjt_id
                 LEFT JOIN ctt_projects_periods AS ped ON ped.pjtdt_id = pdt.pjtdt_id
                 WHERE ser.prd_id = $prdId;";
@@ -255,12 +255,12 @@ class ProjectPlansModel extends Model
     public function countPending($params)
     {
 
-        $pjtcnId    = $this->db->real_escape_string($params['pjtcnId']);
+        $pjtvrId    = $this->db->real_escape_string($params['pjtvrId']);
         $prdId      = $this->db->real_escape_string($params['prdId']);
 
-        $qry = "SELECT '$prdId' AS prd_id, '$pjtcnId' AS pjtcn_id, count(*) as counter
+        $qry = "SELECT '$prdId' AS prd_id, '$pjtvrId' AS pjtvr_id, count(*) as counter
                   FROM  ctt_projects_detail 
-                 WHERE  pjtcn_id = $pjtcnId
+                 WHERE  pjtvr_id = $pjtvrId
                    AND  pjtdt_prod_sku = 'Pendiente'; ";
 
         return $this->db->query($qry);
@@ -511,8 +511,15 @@ class ProjectPlansModel extends Model
         $qry1 = "DELETE FROM ctt_projects_content WHERE pjt_id = $pjtId;";
         $this->db->query($qry1);
         
-        $qry2 = "INSERT INTO ctt_projects_content
-                 SELECT * FROM ctt_projects_version WHERE ver_id = $verId;";
+        $qry2 = "INSERT INTO ctt_projects_content (
+                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, 
+                    pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
+                    pjtcn_status, ver_id, prd_id, pjt_id, pjtvr_id)
+                SELECT 
+                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
+                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, 
+                    pjtvr_status, ver_id, prd_id, pjt_id, pjtvr_id 
+                FROM ctt_projects_version WHERE ver_id = $verId;";
         return $this->db->query($qry2);
 
      }
@@ -563,7 +570,7 @@ class ProjectPlansModel extends Model
         $pjtId = $this->db->real_escape_string($params);
         $qry = "DELETE FROM ctt_projects_periods WHERE pjtdt_id IN (
                     SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
-                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtcn_id = pdt.pjtcn_id
+                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
                     WHERE pcn.pjt_id = $pjtId
                 );";
         return $this->db->query($qry);
@@ -577,7 +584,7 @@ class ProjectPlansModel extends Model
                 SET ser_situation = 'D', ser_stage ='D', pjtdt_id = 0 
                 WHERE pjtdt_id IN (
                     SELECT DISTINCT pjtdt_id FROM ctt_projects_detail AS pdt 
-                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtcn_id = pdt.pjtcn_id
+                    INNER JOIN ctt_projects_content AS pcn ON pcn.pjtvr_id = pdt.pjtvr_id
                     WHERE pcn.pjt_id = $pjtId
                 );";
         return $this->db->query($qry);
@@ -587,8 +594,8 @@ class ProjectPlansModel extends Model
     public function cleanDetail($params)
     {
         $pjtId = $this->db->real_escape_string($params);
-        $qry = "DELETE FROM ctt_projects_detail WHERE pjtcn_id IN  (
-                    SELECT pjtcn_id FROM ctt_projects_content WHERE pjt_id = $pjtId
+        $qry = "DELETE FROM ctt_projects_detail WHERE pjtvr_id IN  (
+                    SELECT pjtvr_id FROM ctt_projects_content WHERE pjt_id = $pjtId
                 );";
         return $this->db->query($qry);
     }
@@ -606,8 +613,15 @@ class ProjectPlansModel extends Model
     public function restoreContent($params)
     {
         $verId = $this->db->real_escape_string($params);
-        $qry1 = "INSERT INTO ctt_projects_content
-                    SELECT * FROM ctt_projects_version WHERE ver_id = $verId;";
+        $qry1 = "INSERT INTO ctt_projects_content (
+                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, 
+                    pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
+                    pjtcn_status, ver_id, prd_id, pjt_id, pjtvr_id)
+                SELECT 
+                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
+                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, 
+                    pjtvr_status, ver_id, prd_id, pjt_id, pjtvr_id 
+                FROM ctt_projects_version WHERE ver_id = $verId;";
         $this->db->query($qry1);
 
         $qry2 = "SELECT * 
@@ -622,11 +636,11 @@ class ProjectPlansModel extends Model
 /** ====== Elimina los registros de detalle y series  ========================================  */
     public function KillQuantityDetail($params)
     {
-        $pjtcnId = $this->db->real_escape_string($params['pjetId']);
+        $pjtvrId = $this->db->real_escape_string($params['pjetId']);
         $qry1 = "WITH elements AS (
                         SELECT *,
                             ROW_NUMBER() OVER (partition by prd_id ORDER BY pjtdt_prod_sku DESC) AS reng
-                        FROM ctt_projects_detail WHERE pjtcn_id = $pjtcnId ORDER BY pjtdt_prod_sku)
+                        FROM ctt_projects_detail WHERE pjtvr_id = $pjtvrId ORDER BY pjtdt_prod_sku)
                 SELECT pjtdt_id FROM elements WHERE reng =1;";
         $result =  $this->db->query($qry1);
  
@@ -685,7 +699,7 @@ class ProjectPlansModel extends Model
         
         // Agrega el registro en el detalle con los datos de la serie
         $qry3 = "INSERT INTO ctt_projects_detail (
-                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtcn_id
+                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id
                 ) VALUES (
                     '$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
                 );        ";

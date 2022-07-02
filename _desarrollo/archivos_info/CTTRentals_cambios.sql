@@ -492,3 +492,17 @@ WHERE sc.prd_id = prd_id;
 ALTER TABLE ctt_projects ADD COLUMN `pjt_parent` INT NULL DEFAULT 0 COMMENT 'Proyecto padre' AFTER `pjt_id`;
 
 ALTER TABLE ctt_projects ADD COLUMN `pjt_time` VARCHAR(200) NULL  COMMENT 'Tiempo de duración del proyecto' AFTER `pjt_date_end`;
+
+
+
+
+
+-- Actualizacion del 30 de JUNIO 2022
+ALTER TABLE `cttapp_cire`.`ctt_projects_version` 
+CHANGE COLUMN `pjtvr_id` `pjtvr_id` INT(11) NOT NULL COMMENT 'Id del contenido del projecto' ;
+
+ALTER TABLE `cttapp_cire`.`ctt_projects_content` ADD COLUMN `pjtvr_id` INT NULL AFTER `pjt_id`;
+
+ALTER TABLE `cttapp_cire`.`ctt_projects_detail` 
+CHANGE COLUMN `pjtcn_id` `pjtvr_id` INT(11) NOT NULL COMMENT 'FK Id del proyecto relación ctt_projects_content' ;
+

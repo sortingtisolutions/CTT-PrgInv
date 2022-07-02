@@ -93,7 +93,7 @@ class ProjectDetailsController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
-            $res =  '[{"pjtcn_id":"0"}]';	
+            $res =  '[{"pjtvr_id":"0"}]';	
         }
         echo $res;
     } 
@@ -386,7 +386,7 @@ class ProjectDetailsController extends Controller
             $dytest = $row["pjtcn_days_test"];
             $quanty = $row["pjtcn_quantity"];
             $prodId = $row["prd_id"];
-            $pjetId = $row["pjtcn_id"];
+            $pjetId = $row["pjtvr_id"];
             $dyinic = $dytrip + $dytest;
             $dyfinl = $dytrip + $dybase;
             $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));
@@ -687,7 +687,7 @@ class ProjectDetailsController extends Controller
                 $dytest = $row["pjtcn_days_test"];
                 $quanty = $row["pjtcn_quantity"];
                 $prodId = $row["prd_id"];
-                $pjetId = $row["pjtcn_id"];
+                $pjetId = $row["pjtvr_id"];
                 $dyinic = $dytrip + $dytest;
                 $dyfinl = $dytrip + $dybase;
                 $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));

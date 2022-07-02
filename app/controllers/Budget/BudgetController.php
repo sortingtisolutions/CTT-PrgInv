@@ -426,9 +426,8 @@ public function ProcessProjectProduct($request_params)
         $params =  $this->session->get('user');
         $pjtcnt = $this->model->SaveProjectContent($request_params);
         $result = $this->model->GetProjectContent($request_params);
-        
        
-      
+        
         while($row = $result->fetch_assoc()){
             $dtstar = $row["pjt_date_start"];
             $dybase = $row["pjtcn_days_base"];
@@ -437,7 +436,7 @@ public function ProcessProjectProduct($request_params)
             $dytest = $row["pjtcn_days_test"];
             $quanty = $row["pjtcn_quantity"];
             $prodId = $row["prd_id"];
-            $pjetId = $row["pjtcn_id"];
+            $pjetId = $row["pjtvr_id"];
             $dyinic = $dytrip + $dytest;
             $dyfinl = $dytrip + $dybase;
             $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));
