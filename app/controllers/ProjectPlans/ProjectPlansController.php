@@ -395,7 +395,7 @@ class ProjectPlansController extends Controller
             $dytest = $row["pjtcn_days_test"];
             $quanty = $row["pjtcn_quantity"];
             $prodId = $row["prd_id"];
-            $pjetId = $row["pjtcn_id"];
+            $pjetId = $row["pjtvr_id"];
             $dyinic = $dytrip + $dytest;
             $dyfinl = $dytrip + $dybase;
             $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));
@@ -724,7 +724,7 @@ class ProjectPlansController extends Controller
                 $dytest = $row["pjtcn_days_test"];
                 $quanty = $row["pjtcn_quantity"];
                 $prodId = $row["prd_id"];
-                $pjetId = $row["pjtcn_id"];
+                $pjetId = $row["pjtvr_id"];
                 $dyinic = $dytrip + $dytest;
                 $dyfinl = $dytrip + $dybase;
                 $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));

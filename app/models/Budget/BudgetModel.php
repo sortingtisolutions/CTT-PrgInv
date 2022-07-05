@@ -264,11 +264,11 @@ public function stockProdcuts($params)
                 sr.ser_situation, ifnull(pe.pjtpd_day_start,'') as pjtpd_day_start, 
                 ifnull(pe.pjtpd_day_end,'') as pjtpd_day_end, pr.prd_id 
             FROM ctt_series                 AS sr
-            INNER JOIN ctt_products         AS pr ON pr.prd_id = sr.prd_id
-            LEFT JOIN ctt_projects_detail   AS pd ON pd.pjtdt_id = sr.pjtdt_id
-            LEFT JOIN ctt_projects_content  AS pc ON pc.pjtcn_id = pd.pjtcn_id
-            LEFT JOIN ctt_projects          AS pj ON pj.pjt_id = pc.pjt_id
-            LEFT JOIN ctt_projects_periods  AS pe ON pe.pjtdt_id = sr.pjtdt_id
+            INNER JOIN ctt_products         AS pr ON pr.prd_id      = sr.prd_id
+            LEFT JOIN ctt_projects_detail   AS pd ON pd.pjtdt_id    = sr.pjtdt_id
+            LEFT JOIN ctt_projects_content  AS pc ON pc.pjtvr_id    = pd.pjtvr_id
+            LEFT JOIN ctt_projects          AS pj ON pj.pjt_id      = pc.pjt_id
+            LEFT JOIN ctt_projects_periods  AS pe ON pe.pjtdt_id    = sr.pjtdt_id
             WHERE sr.prd_id = $prdId;";
     return $this->db->query($qry);
 } 
@@ -468,7 +468,7 @@ public function UpdateProject($params)
                         pjt_location    = '$pjt_location', 
                         pjttp_id        = '$pjt_type',  
                         cuo_id          = '$cuo_id',
-                        loc_id          = '$loc_id',
+                        loc_id          = '$loc_id'
                 WHERE   pjt_id          =  $pjt_id;
                 ";
     $this->db->query($qry02);
@@ -560,19 +560,23 @@ public function saveBudgetList($params)
                 WHERE bg.ver_id = $verId;";
         $this->db->query($qry1);
 
-        $qry2 = "INSERT INTO ctt_projects_version (
-                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_prod_level, pjtvr_section, pjtvr_quantity, 
+        $qry2 = "UPDATE ctt_projects_content set pjtvr_id = pjtcn_id WHERE pjtvr_id IS NULL";
+        $this->db->query($qry2);
+
+
+        $qry3 = "INSERT INTO ctt_projects_version (
+                    pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_prod_level, pjtvr_section, pjtvr_quantity, 
                     pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, 
                     pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,  ver_id, prd_id, pjt_id
                 )
                 SELECT 
-                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_prod_level, pjtcn_section, pjtcn_quantity, 
+                    pjtvr_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_prod_level, pjtcn_section, pjtcn_quantity, 
                     pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_days_trip, pjtcn_discount_trip, 
                     pjtcn_days_test, pjtcn_discount_test, pjtcn_insured,  ver_id, prd_id, pjt_id 
                 FROM ctt_projects_content
                 WHERE ver_id = $verId;";
 
-        return $this->db->query($qry2);
+        return $this->db->query($qry3);
 
     }
 
@@ -626,7 +630,7 @@ public function saveBudgetList($params)
 
         
         $qry2 = "INSERT INTO ctt_projects_detail (
-                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtcn_id
+                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id
                 ) VALUES (
                     '$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
                 );        ";
@@ -645,7 +649,7 @@ public function saveBudgetList($params)
         $qry4 = "INSERT INTO ctt_projects_periods 
                     (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
                 VALUES 
-                    ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId')";
+                    ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId');";
 
 
         $this->db->query($qry4);

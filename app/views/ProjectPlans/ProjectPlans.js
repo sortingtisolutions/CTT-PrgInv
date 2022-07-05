@@ -357,9 +357,9 @@ function getComments(pjtId) {
     fillField(pagina, par, tipo, selector);
 }
 /** Obtiene el conteo productos para subarrendo */
-function getCounterPending(pjtcnId, prdId) {
+function getCounterPending(pjtvrId, prdId) {
     var pagina = 'ProjectPlans/countPending';
-    var par = `[{"pjtcnId":"${pjtcnId}","prdId":"${prdId}"}]`;
+    var par = `[{"pjtvrId":"${pjtvrId}","prdId":"${prdId}"}]`;
     var tipo = 'json';
     var selector = putCounterPending;
     fillField(pagina, par, tipo, selector);
