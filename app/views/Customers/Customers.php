@@ -68,6 +68,17 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de Cliente:</td>
+                        <td class="data">
+                            <select id="txtTypeProd" name="txtTypeProd" class="textbox required" style="width:200px">
+                                <option value="0">Selecciona Tipo</option>
+                            </select>
+                            <!-- <input type="hidden" id="txtTypeProdId" name="txtTypeProdId"> -->
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Tipo de cliente, segun su responsabilidad 1-Casa Productora / 2-Productor</span>
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="concept"><span class="reqsign">*</span> Nombre de Contacto: </td>
                         <td class="data">
                             <input type="text" id="txtCusCont" name="txtCusCont" class="textbox" style="width:250px; text-transform:uppercase">
@@ -78,7 +89,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Direccion: </td>
                         <td class="data">
-                            <input type="text" id="txtCusAdrr" name="txtCusAdrr" class="textbox  required" style="width:300px; text-transform:uppercase">
+                            <input type="text" id="txtCusAdrr" name="txtCusAdrr" class="textbox" style="width:300px; text-transform:uppercase">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Domicilio fiscal del cliente</span>
                         </td>
@@ -86,7 +97,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> E-mail: </td>
                         <td class="data">
-                            <input type="text" id="txtCusEmail" name="txtCusEmail" class="textbox  required" style="width:250px">
+                            <input type="text" id="txtCusEmail" name="txtCusEmail" class="textbox" style="width:250px">
                             <span class="fail_note hide"></span>
                             <span class="intructions">correo electronico</span>
                         </td>
@@ -94,7 +105,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> RFC: </td>
                         <td class="data">
-                            <input type="text" id="txtCusRFC" name="txtCusRFC" class="textbox  required" style="width:150px; text-transform:uppercase">
+                            <input type="text" id="txtCusRFC" name="txtCusRFC" class="textbox" style="width:150px; text-transform:uppercase">
                             <span class="fail_note hide"></span>
                             <span class="intructions">RFC del cliente</span>
                         </td>
@@ -103,7 +114,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Telefono Principal: </td>
                         <td class="data">
-                            <input type="text" id="txtCusPhone" name="txtCusPhone" class="textbox  required" style="width:150px">
+                            <input type="text" id="txtCusPhone" name="txtCusPhone" class="textbox" style="width:150px">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Telefono principal de contacto</span>
                         </td>
@@ -135,19 +146,11 @@
                             <span class="intructions">Calificacion segun historial del cliente</span>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de Cliente: </td>
-                        <td class="data">
-                            <input type="text" id="txtcusProsp" name="txtcusProsp" class="textbox" style="width:200px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Tipo de cliente 0-Prospecto / 1-Cliente con Proyecto</span>
-                        </td>
-                    </tr>
-                    
+                   
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Status del Cliente: </td>
                         <td class="data">
-                            <div id="txtCusStat"  class="checkbox"><i class="far fa-square"></i> </div>
+                            <div id="txtCusStat"  class="checkbox" value="1"><i class="far fa-square"></i> </div>
                             <span class="fail_note hide"></span>
                             <span class="intructions">Indica si el cliente esta activo o inactivo</span>
                         </td>
@@ -160,18 +163,15 @@
                             <span class="intructions">Patrocinador</span>
                         </td>
                     </tr>
-
                     <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de Producción:</td>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de Cliente: </td>
                         <td class="data">
-                            <select id="txtTypeProd" name="txtTypeProd" class="textbox" style="width:200px">
-                                <option value="0">Selecciona Tipo</option>
-                            </select>
-                            <!-- <input type="hidden" id="txtTypeProdId" name="txtTypeProdId"> -->
+                            <input type="text" id="txtcusProsp" name="txtcusProsp" class="textbox" style="width:200px; text-transform:uppercase">
                             <span class="fail_note hide"></span>
-                            <span class="intructions">Tipo de cliente, segun su funcion 1-Casa Productora / 2-Productor</span>
+                            <span class="intructions">Tipo de cliente 0-Prospecto / 1-Cliente con Proyecto</span>
                         </td>
                     </tr>
+                   
                     
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Representante Legal: </td>

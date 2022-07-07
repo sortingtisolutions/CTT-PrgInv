@@ -15,7 +15,7 @@ class CustomersModel extends Model
     {
         $qry = "SELECT * FROM ctt_customers as cus
                 INNER JOIN ctt_customers_type as ct ON cus.cut_id = ct.cut_id
-                ORDER BY cus_id desc LIMIT 10;";
+                ORDER BY cus_id desc limit 30;";
         return $this->db->query($qry);
     }
 
@@ -176,7 +176,7 @@ public function listScores()
 
 
 // Guarda los cambios de una serie
-public function saveEdtSeries($params)
+/* public function saveEdtSeries($params)
 {
     $serId = $this->db->real_escape_string($params['serId']);
     $serSr = $this->db->real_escape_string($params['serSr']);
@@ -218,13 +218,14 @@ public function saveEdtSeries($params)
         
     return $serId .'|'. $serDc;
 }
-
+ */
 
 // Guarda nuevo producto
     public function saveNewCustomer($params)
     {
         $cusId = $this->db->real_escape_string($params['cusId']);
         $cusName = $this->db->real_escape_string($params['cusName']);
+        $typeProd = $this->db->real_escape_string($params['typeProd']);
         $cusCont = $this->db->real_escape_string($params['cusCont']);
         $cusAdrr = $this->db->real_escape_string($params['cusAdrr']);
         $cusEmail = $this->db->real_escape_string($params['cusEmail']);
@@ -245,7 +246,7 @@ public function saveEdtSeries($params)
                 cus_legal_representative, cus_legal_act, cus_contract, cut_id, cus_status) 
                 VALUES ('', UPPER('$cusName'),UPPER('$cusCont'),UPPER('$cusAdrr'),'$cusEmail',UPPER('$cusRFC'),
                 '$cusPhone','$cusPhone2',UPPER('$cusICod'),'$cusQualy','$cusProsp','$cusSpon',
-                '$cusLegalR','$cusLegalA','$cusContr',0,'$cusStat') ;";
+                '$cusLegalR','$cusLegalA','$cusContr','$typeProd','$cusStat') ;";
 
         $this->db->query($qry);
         $prdId = $this->db->insert_id;

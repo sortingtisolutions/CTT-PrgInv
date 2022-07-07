@@ -17,10 +17,7 @@ function inicial() {
         getCustomers();
         getScores();
         getCustType();
-        /* getSubcategories();
-        getServices();
         
-        getInvoice(); */
     }, 100);
 }
 
@@ -66,40 +63,6 @@ function putCustomers(dt) {
     prds = dt;
     fillCustomers('0');
 
-    /* if (dt[0].cat_id != '0') {
-        let catId = dt[0].cat_id;
-        $.each(dt, function (v, u) {
-            var H = `<option value="${u.cat_id}">${u.cat_name}</option>`;
-            $('#txtCategoryList').append(H);
-            $('#txtCatId').append(H);
-        });
-
-        getProducts(0);
-
-        $('#txtCategoryList').on('change', function () {
-            let id = $(this).val();
-            let catId = $(`#txtCategoryList option[value="${id}"]`).val();
-            deep_loading('O');
-            $('.tblProdMaster').css({display: 'none'});
-            $('#tblCustomers').DataTable().destroy();
-            flt = 0;
-            getProducts(catId);
-        });
-
-        $('#txtCatId').on('change', function () {
-            $(`#txtSbcId option`).addClass('hide');
-            let id = $(this).val();
-            let catId = $(`#txtCatId option[value="${id}"]`).val();
-            $(`#txtSbcId option[data_category="${catId}"]`).removeClass('hide');
-            $(`#txtSbcId`).val(0);
-            sku1 = refil(catId, 2);
-            sku2 = '';
-            sku3 = '';
-            sku4 = '';
-
-            fillFieldSkuBox();
-        });
-    } */
 }
 
 function fillCustomers(ft) {
@@ -193,14 +156,6 @@ function settingTable() {
                     createNewCustomer();
                 },
             },
-           /*  {
-                // Boton filtar producto
-                text: 'Filtrar productos',
-                className: 'btn-apply btn_filter',
-                action: function (e, dt, node, config) {
-                    filterProduct();
-                },
-            }, */
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -255,37 +210,6 @@ function putCustType(dt) {
 }
 
 
-/** +++++  coloca las subcategorias */
-/* function putSubcategories(dt) {
-    subs = dt;
-    if (dt[0].sbc_id != '0') {
-        let sbcId = dt[0].sbc_id;
-        $.each(dt, function (v, u) {
-            var H = `<option class="hide" data_category="${u.cat_id}" value="${u.sbc_id}">${u.sbc_name}</option>`;
-            $('#txtSbcId').append(H);
-        });
-    }
-} */
-/** +++++  coloca los tipos de servicio */
-/* function putServices(dt) {
-    if (dt[0].srv_id != '0') {
-        let srvId = dt[0].srv_id;
-        $.each(dt, function (v, u) {
-            var H = `<option value="${u.srv_id}">${u.srv_name}-${u.srv_description}</option>`;
-            $('#txtSrvId').append(H);
-        });
-    }
-} */
-
-
-/** +++++  coloca los productos en la tabla */
-/* function putProducts(dt) {
-    prds = dt;
-    fillProducts('0');
-} */
-
-/** +++++  coloca los productos en la tabla y filtra */
-
 /** +++++  Activa los iconos */
 function activeIcons() {
    /*  $('.toLink')
@@ -298,17 +222,6 @@ function activeIcons() {
             if (qty > 0) {
                 getSeries(prd);
             }
-        });
-
-    $('.invoiceView')
-        .unbind('click')
-        .on('click', function () {
-            var id = $(this).attr('id').slice(1, 10);
-            var pagina = 'Documentos/VerDocumento';
-            var par = `[{"id":"${id}"}]`;
-            var tipo = 'json';
-            var selector = putDocument;
-            fillField(pagina, par, tipo, selector);
         });
  */
     $('.modif')
@@ -380,16 +293,6 @@ function filterProduct() {
     }
 }
 
-/* function putDocument(dt) {
-    var a = document.createElement('a');
-    a.href = 'data:application/octet-stream;base64,' + dt.doc_document;
-    a.target = '_blank';
-    // a.download = respuesta.doc_name;
-
-    a.download = dt.doc_name + '.' + dt.doc_type.trim();
-    a.click();
-}
- */
 function putSelectCustomer(dt) {
     cleanProductsFields();
     //console.log(dt);
@@ -447,14 +350,6 @@ function putSelectCustomer(dt) {
             }
         });
 
-   /*  $('#txtSbcId')
-        .unbind('change')
-        .on('change', function () {
-            let catId = $(`#txtCatId option[value="${id}"]`).val();
-            let sbcId = $(`#txtSbcId option[value="${id}"]`).val();
-            console.log(cat_id, sbcId);
-        });
- */
     $('#btn_save')
         .unbind('click')
         .on('click', function () {
@@ -515,37 +410,6 @@ function saveEditCustomer() {
 
 function resEdtProduct(dt) {
     console.log(dt);
-    /* let prdId = dt.split('|')[0];
-    let prdNm = $('#txtCusName').val().replace(/\"/g, '°');
-    let prdSk = $('#txtCusCont').val();
-    let prdPr = formato_numero($('#txtCusEmail').val(), 2, '.', ',');
-    let prdEn = $('#txtPrdEnglishName').val();
-    let prdCm = $('#txtPrdComments').val();
-    // let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
-    let prdLv = $('#txtPrdLevel').text().substring(1, 2);
-    let prdCt = $(`#txtCatId option:selected`).text();
-    let prdSb = $(`#txtSbcId option:selected`).text();
-    let prdCn = $(`#txtQualy option:selected`).val() == 0 ? '' : $(`#txtQualy option:selected`).text().split('-')[0];
-    let prdSv = $(`#txtSrvId option:selected`).val() == 0 ? '' : $(`#txtSrvId option:selected`).text().split('-')[0];
-    let prdDi = $(`#txtDocId option:selected`).val() == 0 ? '' : $(`#txtDocId option:selected`).val();
-
-    let docInvo = `<span class="invoiceView" id="F${prdDi}"><i class="fas fa-file-alt"></i></span>`;
-    let prdDc = prdDi == 0 ? '' : docInvo;
-    prdLv = prdLv == 'A' ? 'A' : 'P';
-
-    let el = $(`#tblCustomers tr[id="${prdId}"]`);
-    $(el.find('td')[1]).text(prdSk);
-    $(el.find('td')[2]).text(prdNm);
-    $(el.find('td')[3]).text(prdPr);
-    $(el.find('td')[5]).text(prdLv);
-    $(el.find('td')[6]).text(prdSv);
-    $(el.find('td')[7]).text(prdCn);
-    $(el.find('td')[8]).html(prdDc);
-    $(el.find('td')[9]).text(prdSb);
-    $(el.find('td')[10]).text(prdCt);
-    $(el.find('td')[11]).text(prdEn);
-    $(el.find('td')[12]).text(prdCm);
- */
     $('#CustomerModal .btn_close').trigger('click');
     activeIcons();
 }
@@ -575,41 +439,6 @@ function createNewCustomer() {
                 itm.attr('data_val', '0');
             }
         });
- /*           let accr = $(this).attr('data_val');
-                        
-            // AGREGA VALORES AL ACCESORIO 
-            if (itmId == 'txtPrdLevel') {
-                if(accr == 1){
-                $(`#txtCatId`).val(20);
-                $(`#txtSbcId`).val(152);
-                $(`#txtCatId`).attr('disabled', true);
-                $(`#txtSbcId`).attr('disabled', true);
-                console.log('Valores del Accesorio, Cat=20, SubCat=152');
-            } else {
-                $(`#txtCatId`).val(0);
-                $(`#txtSbcId`).val(0);
-                $(`#txtCatId`).attr('disabled', false);
-                $(`#txtSbcId`).attr('disabled', false);
-            }
-        }
-        });
-
-    $('#txtSbcId')
-        .unbind('change')
-        .on('change', function () {
-            let catId = $(`#txtCatId`).val();
-            let sbcId = $(this).val();
-            console.log(catId, sbcId);
-            sbcCode = subcategoriesGetCode(sbcId);
-
-            sku2 = refil(sbcCode, 2);
-            sku3 = '';
-            sku4 = '';
-
-            fillFieldSkuBox();
-        } 
-    ); */
- 
         
     $('#CustomerModal .btn_close')
         .unbind('click')
@@ -645,6 +474,7 @@ function saveNewCustomer() {
     if (ky == 0) {
         let cusId = '0';
         let cusName = $('#txtCusName').val().replace(/\"/g, '°');
+        let typeProd = $(`#txtTypeProd option:selected`).val() == 0 ? '' : $(`#txtTypeProd option:selected`).text().split('-')[0];
         let cusCont = $('#txtCusCont').val();
         let cusAdrr = $('#txtCusAdrr').val();
         let cusEmail = $('#txtCusEmail').val();
@@ -652,23 +482,23 @@ function saveNewCustomer() {
         let cusPhone = $('#txtCusPhone').val();
         let cusPhone2 = $('#txtCusPhone2').val();
         let cusICod = $('#txtCusCodI').val();
-        let cusQualy = $(`#txtQualy option:selected`).text().split('-')[0];
+        let cusQualy = $(`#txtQualy option:selected`).val() == 0 ? '' : $(`#txtQualy option:selected`).text().split('-')[0];
+        //let cusQualy = $(`#txtQualy option:selected`).text().split('-')[0];
         let cusProsp = $('#txtcusProsp').val();
-        let cusStat = $('#txtCusStat').children('i').attr('data_val');
-        /* let prdLv = prdLl == '1' ? 'A' : 'P';
-        let prdLn = $('#txtPrdLonely').children('i').attr('data_val'); 
-        let cusProsp = $('#txtPrdInsured').children('i').attr('data_val');
-        /* let cusSpon = $(`#txtPrdPrice`).val(); */
+               
         let cusSpon = $(`#txtCusSpon`).val();
         let cusLegalR = $(`#txtcusLegalR`).val();
         let cusLegalA = $(`#txtcusLegalA`).val();
         let cusContr = $(`#txtcusContr`).val();
-        /* let cusStat = $(`#txtDcpId`).val(); */
-
+        let cusStat = $('#txtCusStat').children('i').attr('data_val');
+        if (cusStat == undefined) {
+            cusStat=1;
+        }        
         var par = `
                 [{
                     "cusId" : "${cusId}",
                     "cusName" : "${cusName}",
+                    "typeProd" : "${typeProd}",
                     "cusCont" : "${cusCont}",
                     "cusAdrr" : "${cusAdrr}",
                     "cusEmail" : "${cusEmail}",
@@ -696,6 +526,7 @@ function resNewProduct(dt) {
     console.log(dt);
     //$('#txtCategoryList').val(dt).trigger('change');
     $('#CustomerModal .btn_close').trigger('click');
+    
 }
 
 function cleanProductsFields() {
