@@ -1442,16 +1442,17 @@ function updateTotals() {
 
         let qtybs = parseInt($(this).children('td.quantityBase').children('.input_invoice').val());
         let prcbs = parseFloat(pure_num($(this).children('td.priceBase').text()));
+        let dayre = parseInt($(this).children('td.daysBase').children('.input_invoice').val());
         let daybs = parseInt($(this).children('td.daysCost').children('.input_invoice').val());
         let desbs = parseFloat($(this).children('td.discountBase').text());
         let assur = $(this).attr('data_insured');
 
         stt01 = qtybs * prcbs; // Importe de cantidad x precio
-        stt02 = stt01 * daybs; // Costo de Importe x días base
-        stt03 = desbs / 100; // Porcentaje de descuento base
+        stt02 = stt01 * daybs; // Costo de Importe x días cobro
+        stt03 = desbs / 100; //   Porcentaje de descuento base
         stt04 = stt02 * stt03; // Costo de Importe x porcentaje descuento base
         cstbs = stt02 - stt04; // Costo base
-        costbase += cstbs; // Total de Costo Base
+        costbase += cstbs; //     Total de Costo Base
 
         $(this).children('.costBase').html(mkn(cstbs, 'n'));
 
@@ -1459,10 +1460,10 @@ function updateTotals() {
         let destr = parseFloat($(this).children('td.discountTrip').text());
 
         stt05 = stt01 * daytr; // Costo de Importe x dias viaje
-        stt06 = destr / 100; // Porcentaje de descuento viaje
+        stt06 = destr / 100; //   Porcentaje de descuento viaje
         stt07 = stt05 * stt06; // Costo de Importe x porcentaje descuento viaje
         csttr = stt05 - stt07; // Costo viaje
-        costtrip += csttr; // Total de Costo Viaje
+        costtrip += csttr; //     Total de Costo Viaje
 
         $(this).children('.costTrip').html(mkn(csttr, 'n'));
 
@@ -1470,15 +1471,16 @@ function updateTotals() {
         let dests = parseFloat($(this).children('td.discountTest').text());
 
         stt08 = stt01 * dayts; // Costo de Importe x dias prueba
-        stt09 = dests / 100; // Porcentaje de descuento prueba
+        stt09 = dests / 100; //   Porcentaje de descuento prueba
         stt10 = stt08 * stt09; // Costo de Importe x porcentaje prueba
         cstts = stt08 - stt10; // Costo prueba
-        costtest += cstts; // Total de Costo Prueba
+        costtest += cstts; //     Total de Costo Prueba
 
         $(this).children('.costTest').html(mkn(cstts, 'n'));
 
-        assre = stt01 * assur;
-        costassu += assre; // Total de Seguro
+        assre = stt01 * dayre * assur;
+        console.log(assre);
+        costassu += assre; //     Total de Seguro
     });
 
     $('#costBase').html(mkn(costbase, 'n'));
