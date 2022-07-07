@@ -34,11 +34,11 @@ class PeriodsModel extends Model
                     , pd.ser_id
                     , concat(pd.pjtdt_id,'-', ifnull(sr.ser_serial_number,'0')) as serie
                     , pd.prd_id
-                    , pd.pjtcn_id
+                    , pd.pjtvr_id
                     , pp.pjtpd_sequence
                 FROM ctt_projects_periods AS pp
                 INNER JOIN ctt_projects_detail AS pd ON pd.pjtdt_id = pp.pjtdt_id
-                INNER JOIN ctt_projects_content AS cn ON cn.pjtcn_id = pd.pjtcn_id
+                INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = pd.pjtvr_id
                 LEFT JOIN ctt_series As sr ON sr.ser_id = pd.ser_id
                 WHERE cn.pjt_id = '$pjtId' AND pd.prd_id = '$prdId'
                 ORDER BY pd.pjtdt_prod_sku, pp.pjtpd_day_start, pp.pjtpd_sequence;";

@@ -1479,7 +1479,6 @@ function updateTotals() {
         $(this).children('.costTest').html(mkn(cstts, 'n'));
 
         assre = stt01 * dayre * assur;
-        console.log(assre);
         costassu += assre; //     Total de Seguro
     });
 
@@ -1608,37 +1607,11 @@ function validatorFields(frm) {
 }
 
 /* ************************************************************************ */
-/* PROMUEVE COTIZACION A PRESUPUESTO                                       */
+/* PROMUEVE COTIZACION A PRESUPUESTO                                        */
 /* ************************************************************************ */
 function promoteProject(pjtId) {
     modalLoading('S');
-
-    var pagina = 'Budget/PromoteProject';
-    var par = `[{"pjtId":"${pjtId}"}]`;
-    var tipo = 'html';
-    var selector = showPromoteProject;
-    fillField(pagina, par, tipo, selector);
-}
-function showPromoteProject(dt) {
     let verId = $('.invoice_controlPanel .version_current').attr('data_version');
-    var pagina = 'Budget/PromoteVersion';
-    var par = `[{"verId":"${verId}","pjtId":"${dt}"}]`;
-    var tipo = 'html';
-    var selector = showPromoteVersion;
-    fillField(pagina, par, tipo, selector);
-}
-
-function showPromoteVersion(dt) {
-    console.log(dt);
-    let pjtId = dt.split('|')[0];
-    $('#P' + pjtId).remove();
-
-    showPromoteBudget(dt);
-}
-
-function showPromoteBudget(dt) {
-    let pjtId = dt.split('|')[0];
-    let verId = dt.split('|')[1];
 
     var pagina = 'Budget/ProcessProjectProduct';
     var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
@@ -1649,9 +1622,13 @@ function showPromoteBudget(dt) {
 
 function showResult(dt) {
     console.log(dt);
+    let pjtId = dt.split('|')[0];
+    $('#P' + pjtId).remove();
     modalLoading('H');
     cleanFormat();
 }
+
+/* ************************************************************************ */
 
 function cleanFormat() {
     showButtonVersion('H');

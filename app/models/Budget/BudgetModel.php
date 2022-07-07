@@ -497,7 +497,8 @@ public function saveBudgetList($params)
 }
 
 
-// Promueve proyecto
+/** ==== Promueve la cotizacion a presupuesto ==========================================================  */
+/** ==== Proyecto ======================================================================================  */
     public function PromoteProject($params)
     {
         /* Actualiza el estado en 2 convirtiendolo en presupuesto  */
@@ -509,47 +510,27 @@ public function saveBudgetList($params)
 
     }
 
-// Actualiza las fechas del proyecto
-    public function UpdatePeriodProject($params)
-    {
-        $pjtId                  = $this->db->real_escape_string($params['pjtId']);
-        $pjtDateStart           = $this->db->real_escape_string($params['pjtDateStart']);
-        $pjtDateEnd             = $this->db->real_escape_string($params['pjtDateEnd']);
-        $qry = "UPDATE ctt_projects 
-                   SET pjt_date_start   = '$pjtDateStart', 
-                       pjt_date_end     = '$pjtDateEnd' 
-                 WHERE pjt_id = $pjtId;";
-        $this->db->query($qry);
-
-        return $pjtId;
-
-    }
-
-
-
-
-
-// Promueve la version de proyecto
+/** ==== Numero de version =============================================================================  */
     public function PromoteVersion($params)
     {
         $pjtId         = $this->db->real_escape_string($params['pjtId']);
         $verId         = $this->db->real_escape_string($params['verId']);
 
         $qry = "UPDATE ctt_version SET ver_status = 'R', ver_active = '1', ver_master = '1', ver_code = 'R0001' WHERE ver_id = $verId;";
-        $this->db->query($qry);
+        return $this->db->query($qry);
 
-        return $pjtId.'|'. $verId;
     }
 
-// Promueve la version de proyecto
+
+/** ==== Traslada cotización a nueva version del proyecto ==============================================  */
     public function SaveProjectContent($params){
 
         $verId        = $this->db->real_escape_string($params['verId']);
 
-        $qry1 = "INSERT INTO ctt_projects_content (
-                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_prod_level, pjtcn_section, pjtcn_quantity, 
-                    pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_days_trip, pjtcn_discount_trip, 
-                    pjtcn_days_test, pjtcn_discount_test, pjtcn_insured,  ver_id, prd_id, pjt_id
+        $qry1 = "INSERT INTO ctt_projects_version (
+                    pjtvr_prod_sku,  pjtvr_prod_name,  pjtvr_prod_price, pjtvr_prod_level,   pjtvr_section,  pjtvr_quantity, 
+                    pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, 
+                    pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,    ver_id,    prd_id,    pjt_id
                 )
                 SELECT 
                     bg.bdg_prod_sku, bg.bdg_prod_name, bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_section, bg.bdg_quantity,  
@@ -560,28 +541,23 @@ public function saveBudgetList($params)
                 WHERE bg.ver_id = $verId;";
         $this->db->query($qry1);
 
-        $qry2 = "UPDATE ctt_projects_content set pjtvr_id = pjtcn_id WHERE pjtvr_id IS NULL";
-        $this->db->query($qry2);
-
-
-        $qry3 = "INSERT INTO ctt_projects_version (
-                    pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_prod_level, pjtvr_section, pjtvr_quantity, 
-                    pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, 
-                    pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,  ver_id, prd_id, pjt_id
+        $qry2 = "INSERT INTO ctt_projects_content (
+                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, 
+                    pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
+                    pjtcn_status, ver_id, prd_id, pjt_id, pjtvr_id
                 )
                 SELECT 
-                    pjtvr_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_prod_level, pjtcn_section, pjtcn_quantity, 
-                    pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_days_trip, pjtcn_discount_trip, 
-                    pjtcn_days_test, pjtcn_discount_test, pjtcn_insured,  ver_id, prd_id, pjt_id 
-                FROM ctt_projects_content
-                WHERE ver_id = $verId;";
+                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
+                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, 
+                    pjtvr_status, ver_id, prd_id, pjt_id, pjtvr_id
+                FROM ctt_projects_version WHERE ver_id = $verId;";
 
-        return $this->db->query($qry3);
+        return $this->db->query($qry2);
 
     }
 
     
-// Obtiene la version de proyecto
+/** ==== Obtiene el contenido del proyecto =============================================================  */
     public function GetProjectContent($params)
     {
         $pjtId        = $this->db->real_escape_string($params['pjtId']);
@@ -596,6 +572,7 @@ public function saveBudgetList($params)
         return $this->db->query($qry);
     }
 
+/** ==== Realiza los ajustes a las series, periodos y detalle del proyecto  ============================  */
     public function SettingSeries($params)
     {
         $prodId   = $this->db->real_escape_string($params['prodId']);
@@ -677,5 +654,26 @@ public function saveBudgetList($params)
         return $this->db->query($qry);
 
     }
+
+
+
+
+// Actualiza las fechas del proyecto
+public function UpdatePeriodProject($params)
+{
+    $pjtId                  = $this->db->real_escape_string($params['pjtId']);
+    $pjtDateStart           = $this->db->real_escape_string($params['pjtDateStart']);
+    $pjtDateEnd             = $this->db->real_escape_string($params['pjtDateEnd']);
+    $qry = "UPDATE ctt_projects 
+               SET pjt_date_start   = '$pjtDateStart', 
+                   pjt_date_end     = '$pjtDateEnd' 
+             WHERE pjt_id = $pjtId;";
+    $this->db->query($qry);
+
+    return $pjtId;
+
+}
+
+
 
 }

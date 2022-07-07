@@ -152,6 +152,7 @@ function eventsAction() {
                 var tipo = 'html';
                 var selector = saveBudget;
                 fillField(pagina, par, tipo, selector);
+                //console.log(par);
             }
         });
 
@@ -829,7 +830,6 @@ function registeredProduct(id) {
 }
 
 function putBudgets(dt) {
-    console.log(dt);
     budg = dt;
     let days = getDaysPeriod();
 
@@ -1813,35 +1813,7 @@ function showPromoteProject(dt) {
         }, 1000);
     }, 3000);
 }
-function showPromoteVersion(dt) {
-    let pjtId = dt.split('|')[0];
-    $('#P' + pjtId).remove();
 
-    showPromoteBudget(dt);
-}
-function showPromoteBudget(dt) {
-    let pjtId = dt.split('|')[0];
-    let verId = dt.split('|')[1];
-
-    var pagina = 'ProjectPlans/ProcessProjectProduct';
-    var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
-    var tipo = 'html';
-    var selector = showResult;
-    fillField(pagina, par, tipo, selector);
-}
-function showResult(dt) {
-    modalLoading('H');
-    cleanFormat();
-}
-function cleanFormat() {
-    showButtonVersion('H');
-    showButtonToPrint('H');
-    showButtonToSave('H');
-    showButtonComments('H');
-    cleanQuoteTable();
-    cleanVersionList();
-    cleanTotalsArea();
-}
 function getDataMice() {
     let pjtId = $('.version_current').attr('data-project');
     $('.budgetRow').each(function (v) {
@@ -1906,13 +1878,16 @@ function getDataMice() {
         }
     });
 }
+/**
+ *
+ * @param {*} pj Id del proyecto
+ * @param {*} pd Id del producto
+ * @param {*} fl Campo afectado
+ * @param {*} dt Valor del campo
+ * @param {*} sc Numero de la sección
+ * @param {*} ac Accion a realizar
+ */
 function updateMice(pj, pd, fl, dt, sc, ac) {
-    // pj --- Id del proyecto
-    // pd --- Id del producto
-    // fl --- Campo afectado
-    // dt --- Valor del campo
-    // sc --- numero de la seccion
-    // ac --- Accion a realizar
     // console.log(pj, pd, fl, dt, sc, ac);
 
     var par = `[{
@@ -1970,7 +1945,6 @@ function purgeInterfase() {
             showLedPending('S');
             break;
         case 'ACT':
-            // showButtonToPrint('H');
             showButtonToSave('H');
             showMenuProduct('H');
             showLedPending('H');

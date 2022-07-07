@@ -196,11 +196,9 @@ class ProjectPlansModel extends Model
         $qry1 = "UPDATE ctt_projects SET pjt_status = '3' WHERE pjt_id = $pjtId;";
         $this->db->query($qry1);
 
-
         $qry2 = "UPDATE ctt_version SET ver_status = 'P', ver_active = '1', ver_master = '1', ver_code = 'P0001' WHERE ver_id = $verId;";
         $this->db->query($qry2);
        
-
         return $pjtId.'|'. $verId;
     }  
     
@@ -491,9 +489,11 @@ class ProjectPlansModel extends Model
     }
     public function settingProjectVersion($pjtId, $verId)
     {
+        //  Borra el contenido de la version anterior
         $qry1 = "DELETE FROM ctt_projects_version WHERE ver_id = $verId;";
         $this->db->query($qry1);
         
+        //  Agrega el contenido en la version desde la tabla mice
         $qry2 = "INSERT INTO ctt_projects_version (
                     pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, 

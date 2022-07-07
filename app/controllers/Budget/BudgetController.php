@@ -363,12 +363,13 @@ public function stockProdcuts($request_params)
     } 
 
 
-// Promueve proyecto
+/** ==== Promueve la cotizacion a presupuesto ================================================  */
     public function PromoteProject($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->PromoteProject($request_params);
-        echo $result;
+        $pjt_id = $this->model->PromoteProject($request_params);
+        $ver_id = $this->model->PromoteVersion($request_params);
+
     } 
 
 
@@ -423,7 +424,9 @@ public function saveBudgetList($request_params)
 
 public function ProcessProjectProduct($request_params)
     {  
-        $params =  $this->session->get('user');
+        $params = $this->session->get('user');
+        $pjtId  = $this->model->PromoteProject($request_params);
+        $versin = $this->model->PromoteVersion($request_params);
         $pjtcnt = $this->model->SaveProjectContent($request_params);
         $result = $this->model->GetProjectContent($request_params);
        
@@ -609,7 +612,7 @@ public function ProcessProjectProduct($request_params)
             }
         }
 
-        echo $dtinic . '|' . $dtfinl;
+        echo $pjtId . '|' . $dtinic . '|' . $dtfinl;
         
         
     } 

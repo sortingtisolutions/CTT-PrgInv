@@ -506,3 +506,9 @@ ALTER TABLE `cttapp_cire`.`ctt_projects_content` ADD COLUMN `pjtvr_id` INT NULL 
 ALTER TABLE `cttapp_cire`.`ctt_projects_detail` 
 CHANGE COLUMN `pjtcn_id` `pjtvr_id` INT(11) NOT NULL COMMENT 'FK Id del proyecto relación ctt_projects_content' ;
 
+
+
+
+-- Actualizacion del 7 de JULIO 2022
+ALTER TABLE `cttapp_cire`.`ctt_projects_version` 
+CHANGE COLUMN `pjtvr_id` `pjtvr_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id del contenido del projecto' ;

@@ -1899,13 +1899,16 @@ function getDataMice() {
         }
     });
 }
+/**
+ *
+ * @param {*} pj Id del proyecto
+ * @param {*} pd Id del producto
+ * @param {*} fl Campo afectado
+ * @param {*} dt Valor del campo
+ * @param {*} sc Numero de la sección
+ * @param {*} ac Accion a realizar
+ */
 function updateMice(pj, pd, fl, dt, sc, ac) {
-    // pj --- Id del proyecto
-    // pd --- Id del producto
-    // fl --- Campo afectado
-    // dt --- Valor del campo
-    // sc --- numero de la seccion
-    // ac --- Accion a realizar
     // console.log(pj, pd, fl, dt, sc, ac);
 
     var par = `[{
