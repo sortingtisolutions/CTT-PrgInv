@@ -220,7 +220,7 @@ public function listProductsRelated($params)
                 INNER JOIN ctt_products AS pr ON pr.prd_id = ac.prd_id
                 INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
-                WHERE ac.acr_parent = $prdId AND pr.prd_status = 1 AND sc.sbc_status = 1 AND ct.cat_status = 1;";
+                WHERE ac.prd_parent = $prdId AND pr.prd_status = 1 AND sc.sbc_status = 1 AND ct.cat_status = 1;";
         return $this->db->query($qry);
 
     } else {
@@ -464,7 +464,7 @@ public function saveBudgetList($params)
         $prodId        = $this->db->real_escape_string($params);
         $qry = "SELECT pd.* FROM ctt_products AS pd
                 INNER JOIN ctt_accesories AS ac ON ac.prd_id = pd.prd_id 
-                WHERE ac.acr_parent = $prodId;";
+                WHERE ac.prd_parent = $prodId;";
         return $this->db->query($qry);
 
     }

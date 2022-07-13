@@ -214,7 +214,7 @@ class ProjectDetailsModel extends Model
         $qry = "SELECT pr.prd_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name
                     , pr.prd_level
                     , ct.cat_name
-                    , ac.acr_parent
+                    , ac.prd_parent
                     , ROW_NUMBER() OVER (PARTITION BY pr.prd_sku ORDER BY sr.ser_sku DESC) AS reng
                 FROM ctt_projects_detail AS pj
                 INNER JOIN ctt_products AS pr ON pr.prd_id = pj.prd_id
@@ -734,7 +734,7 @@ public function cancelProject($params)
         $prodId        = $this->db->real_escape_string($params);
         $qry = "SELECT pd.* FROM ctt_products AS pd
                 INNER JOIN ctt_accesories AS ac ON ac.prd_id = pd.prd_id 
-                WHERE ac.acr_parent = $prodId;";
+                WHERE ac.prd_parent = $prodId;";
         return $this->db->query($qry);
 
     }

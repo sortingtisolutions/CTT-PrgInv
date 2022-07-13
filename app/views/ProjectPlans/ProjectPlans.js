@@ -1162,7 +1162,7 @@ function putProductsRelated(dt) {
                 <td>${u.prd_name}</td>
                 <td>${u.cat_name}</td>
             </tr>
-            ${putProductsRelatedSons(dt, u.prd_id)}
+            ${putProductsRelatedSons(dt, u.ser_id)}
         `;
             $('.invoice__modal-general table tbody').append(H);
         }
@@ -1174,7 +1174,7 @@ function putProductsRelated(dt) {
 function putProductsRelatedSons(dt, pr) {
     let H = '';
     $.each(dt, function (v, u) {
-        if (u.acr_parent == pr) {
+        if (u.prd_parent == pr) {
             let levelProduct = u.prd_level == 'A' ? 'class="levelAccesory"' : '';
             let prodSku = u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
             let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';

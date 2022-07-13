@@ -1175,7 +1175,7 @@ function putProductsRelated(dt) {
 function putProductsRelatedSons(dt, pr) {
     let H = '';
     $.each(dt, function (v, u) {
-        if (u.acr_parent == pr) {
+        if (u.prd_parent == pr) {
             let levelProduct = u.prd_level == 'A' ? 'class="levelAccesory"' : '';
             let prodSku = u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
             let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';

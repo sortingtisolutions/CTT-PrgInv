@@ -5,9 +5,9 @@
 DROP TABLE IF EXISTS `ctt_accesories`;
 CREATE TABLE IF NOT EXISTS `ctt_accesories` (
     `acr_id`                    int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'ID del accesorio',
-    `acr_parent`                int(11) DEFAULT NULL                            COMMENT 'ID del producto padre',
     `acr_status`                varchar(1) DEFAULT NULL                         COMMENT 'Estatus del accesorio D-Disponible, N-No disponible',
     `prd_id`                    int(11) NOT NULL                                COMMENT 'Id del producto relaciòn ctt_products',
+    `prd_parent`                int(11) DEFAULT NULL                            COMMENT 'ID del producto padre',
   PRIMARY KEY (`acr_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Productos o accesorios dependientes de otros productos';
 

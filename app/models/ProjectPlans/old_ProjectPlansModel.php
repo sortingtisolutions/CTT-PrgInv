@@ -540,7 +540,7 @@ public function listProjectsType($params)
 
         $qry = "SELECT pd.* FROM ctt_products AS pd
                 INNER JOIN ctt_accesories AS ac ON ac.prd_id = pd.prd_id 
-                WHERE ac.acr_parent = $prodId;";
+                WHERE ac.prd_parent = $prodId;";
         return $this->db->query($qry);
 
     }

@@ -78,7 +78,7 @@ public function getAccesoriesById($params)
     $prdId = $this->db->real_escape_string($params['prdId']);
     $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name FROM ctt_accesories as acc
             INNER JOIN ctt_products AS prd on prd.prd_id = acc.prd_id
-            WHERE acc.acr_parent = $prdId and acc.acr_status = 1 order by prd.prd_sku;";
+            WHERE acc.prd_parent = $prdId and acc.acr_status = 1 order by prd.prd_sku;";
     return $this->db->query($qry);
 }
 
@@ -102,7 +102,7 @@ public function saveAccesorioByProducto($param)
     $countId = 1;
 
     //validamos que no exista previamente
-    $qry = "SELECT COUNT(*) FROM ctt_accesories WHERE prd_id = ".$prd_id ." AND acr_parent = ". $prd_parent_id."";
+    $qry = "SELECT COUNT(*) FROM ctt_accesories WHERE prd_id = ".$prd_id ." AND prd_parent = ". $prd_parent_id."";
     $result = $this->db->query($qry);
     if ($row = $result->fetch_row()) {
         $countId = trim($row[0]);
@@ -111,7 +111,7 @@ public function saveAccesorioByProducto($param)
     if($countId == 0){
 
         //GENERAMOS EL NUMERO SUCESIVO DEL ACCESORIO
-        $qry = "SELECT count(*)+1 FROM ctt_accesories WHERE acr_parent =".$prd_parent_id."";
+        $qry = "SELECT count(*)+1 FROM ctt_accesories WHERE prd_parent =".$prd_parent_id."";
         $result = $this->db->query($qry);
         if ($row = $result->fetch_row()) {
             $acConsecutivo = trim($row[0]);
@@ -126,7 +126,7 @@ public function saveAccesorioByProducto($param)
 /*         print_r($qry);
         exit(); */
 
-        $qry = "INSERT INTO ctt_accesories(acr_parent,acr_status,prd_id)
+        $qry = "INSERT INTO ctt_accesories(prd_parent,acr_status,prd_id)
         VALUES ($prd_parent_id,1,$prd_id)";
         $this->db->query($qry);
 
@@ -183,7 +183,7 @@ public function saveAccesorioByProducto($param)
         $prd_id            = $this->db->real_escape_string($param['prdId']);
         $prd_parent        = $this->db->real_escape_string($param['prdParent']);
 
-        $qry =  "DELETE FROM ctt_accesories WHERE acr_parent = $prd_parent AND prd_id = $prd_id;" ;
+        $qry =  "DELETE FROM ctt_accesories WHERE prd_parent = $prd_parent AND prd_id = $prd_id;" ;
 /*         print_r($qry );
         exit(); */
         $this->db->query($qry);

@@ -288,6 +288,8 @@ SET
   )
 WHERE
   sp.prd_id = prd_id;
+
+
 -- Actualizacion del 7 de ABRIL 2022
   DROP VIEW ctt_vw_projects;
 CREATE VIEW ctt_vw_projects AS
@@ -512,3 +514,14 @@ CHANGE COLUMN `pjtcn_id` `pjtvr_id` INT(11) NOT NULL COMMENT 'FK Id del proyecto
 -- Actualizacion del 7 de JULIO 2022
 ALTER TABLE `cttapp_cire`.`ctt_projects_version` 
 CHANGE COLUMN `pjtvr_id` `pjtvr_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id del contenido del projecto' ;
+
+
+ALTER TABLE `cttapp_cire`.`ctt_accesories` 
+CHANGE COLUMN `prd_id` `ser_id` INT(11) NOT NULL COMMENT 'Id de la serie relaciòn ctt_series' AFTER `acr_id`,
+CHANGE COLUMN `prd_parent` `ser_parent` INT(11) NULL DEFAULT NULL COMMENT 'ID de la serie padre' ;
+
+
+
+ALTER TABLE `cttapp_cire`.`ctt_accesories` 
+ADD COLUMN `prd_id` INT NULL COMMENT 'Id del producto' AFTER `ser_parent`,
+CHANGE COLUMN `acr_status` `acr_status` VARCHAR(1) NULL DEFAULT NULL COMMENT 'Estatus del accesorio D-Disponible, N-No disponible' AFTER `acr_id`;
