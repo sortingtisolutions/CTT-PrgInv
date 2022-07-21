@@ -1621,7 +1621,6 @@ function promoteProject(pjtId) {
 }
 
 function showResult(dt) {
-    console.log(dt);
     let pjtId = dt.split('|')[0];
     $('#P' + pjtId).remove();
     modalLoading('H');

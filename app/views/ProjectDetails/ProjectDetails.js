@@ -148,6 +148,7 @@ function eventsAction() {
                     "verId"  : "${verId}",
                     "action" : "${interfase}"
                 }]`;
+                console.log(par);
                 var pagina = 'ProjectDetails/SaveBudget';
                 var tipo = 'html';
                 var selector = saveBudget;
@@ -176,7 +177,6 @@ function eventsAction() {
                     "pjtId"           : "${pjtId}",
                     "verCode"         : "${verNext}"
                 }]`;
-
                 var pagina = 'ProjectDetails/SaveBudgetAs';
                 var tipo = 'html';
                 var selector = putSaveBudgetAs;
@@ -521,6 +521,7 @@ function fillProjectsAttached() {
                 "pjtIdo"     :   "${ido}",
                 "verCode"    :   "${verNext}"
                 }]`;
+
             var pagina = 'ProjectDetails/importProject';
             var tipo = 'html';
             var selector = putSaveBudgetAs;
@@ -1555,7 +1556,6 @@ function printBudget(verId) {
 function saveBudget(dt) {
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-    console.log(pjtId, verId);
     getBudgets(pjtId, verId);
     interfase = 'MST';
     purgeInterfase();

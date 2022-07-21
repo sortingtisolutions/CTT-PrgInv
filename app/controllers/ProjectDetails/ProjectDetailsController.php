@@ -348,6 +348,11 @@ class ProjectDetailsController extends Controller
 /** ==== Actualiza contenido de la version actual ============================================  */
     public function SaveBudget($request_params)
     {
+        $params =  $this->session->get('user');
+        $group = explode('|',$params);
+
+        $user = $group[0];
+        $name = $group[2];
         $verId     = $request_params['verId'];
         $pjtId     = $request_params['pjtId'];
         $action    = $request_params['action'];
@@ -360,6 +365,7 @@ class ProjectDetailsController extends Controller
             $series         = $this->model->restoreSeries($pjtId);
             $detail         = $this->model->cleanDetail($pjtId);
             $projectContent = $this->model->settingProjectContent($pjtId, $verId);
+            $projectMovemen = $this->model->settingProjectMovemen($pjtId, $user);
             $result         = $this->model->getProjectVersion($pjtId);
             $response       = $this->setSeries($result);
 
@@ -367,6 +373,7 @@ class ProjectDetailsController extends Controller
             //MST actualiza los datos de una version maestra 
             $projectVersion = $this->model->settingProjectVersion($pjtId, $verId);
             $projectContent = $this->model->settingProjectContent($pjtId, $verId);
+            $projectMovemen = $this->model->settingProjectMovemen($pjtId, $user);
             $result         = $this->model->getVersionMice($pjtId, $verId);
             $response       = $this->updateSeries($result);
         }
@@ -587,7 +594,6 @@ class ProjectDetailsController extends Controller
                 if ($qtyAct > $qtyAnt){
                     $dif = $qtyAct - $qtyAnt;
                     for ($i=1; $i <= $dif; $i++){
-                        echo 'Update ';
                         $updQty = $this-> AddQuantityDetail($param);
                     }
                 } else if ($qtyAct < $qtyAnt){
@@ -598,7 +604,6 @@ class ProjectDetailsController extends Controller
                 }
             }
             if ($action == 'D'){
-                echo 'Borra ';
                 for ($i=1; $i <= $qtyAct; $i++){
                     $updQty = $this-> KillQuantityDetail($param);
                 }
@@ -628,9 +633,15 @@ class ProjectDetailsController extends Controller
         $verId          = $pack[0];
         $pjtId          = $pack[1];
 
+        $group = explode('|',$params);
+
+        $user = $group[0];
+        $name = $group[2];
+
         $periods        = $this->model->cleanPeriods($pjtId);
         $series         = $this->model->restoreSeries($pjtId);
         $detail         = $this->model->cleanDetail($pjtId);
+        $projectMovemen = $this->model->settingProjectMovemen($pjtId, $user);
         $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
         $result         = $this->model->getProjectVersion($pjtId);

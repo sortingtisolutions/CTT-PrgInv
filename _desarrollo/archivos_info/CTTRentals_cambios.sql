@@ -511,17 +511,29 @@ CHANGE COLUMN `pjtcn_id` `pjtvr_id` INT(11) NOT NULL COMMENT 'FK Id del proyecto
 
 
 
--- Actualizacion del 7 de JULIO 2022
-ALTER TABLE `cttapp_cire`.`ctt_projects_version` 
-CHANGE COLUMN `pjtvr_id` `pjtvr_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id del contenido del projecto' ;
-
-
-ALTER TABLE `cttapp_cire`.`ctt_accesories` 
-CHANGE COLUMN `prd_id` `ser_id` INT(11) NOT NULL COMMENT 'Id de la serie relaciòn ctt_series' AFTER `acr_id`,
-CHANGE COLUMN `prd_parent` `ser_parent` INT(11) NULL DEFAULT NULL COMMENT 'ID de la serie padre' ;
+-- Actualizacion del 20 de JULIO 2022
 
 
 
-ALTER TABLE `cttapp_cire`.`ctt_accesories` 
-ADD COLUMN `prd_id` INT NULL COMMENT 'Id del producto' AFTER `ser_parent`,
-CHANGE COLUMN `acr_status` `acr_status` VARCHAR(1) NULL DEFAULT NULL COMMENT 'Estatus del accesorio D-Disponible, N-No disponible' AFTER `acr_id`;
+CREATE TABLE `cttapp_cire`.`ctt_movements` (
+  `mov_id`          INT NOT NULL AUTO_INCREMENT   COMMENT 'Id del movimiento',
+  `mov_quantity`    INT NULL                      COMMENT 'Cantidad modificada',
+  `mov_type`        VARCHAR(45) NULL              COMMENT 'Tipo de movimiento',
+  `mov_status`      VARCHAR(1) NULL DEFAULT '1'   COMMENT 'Status del movimiento 1= sin revision, 0 = Revisado',
+  `mov_date`        TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha y hora del movimiento',
+  `prd_id`          INT NULL                      COMMENT 'Id del producto relación ctt_products',
+  `pjt_id`          INT NULL                      COMMENT 'Id del proyecto relación ctt_projects',
+  `usr_id`          INT NULL                      COMMENT 'Id del usuario relación ctt_users',
+  PRIMARY KEY (`mov_id`))
+COMMENT = 'Registra los movimientos de proyectos';
+
+
+CREATE TABLE `ctt_sidebar` (
+  `sdb_id`          int NOT NULL AUTO_INCREMENT   COMMENT 'ID del sidebar',
+  `sdb_parent`      int DEFAULT   NULL            COMMENT 'ID del sidebar padre',
+  `sdb_item`        varchar(100)  NOT NULL        COMMENT 'Elementos del sidebar',
+  `sdb_description` varchar(300)  NULL            COMMENT 'Descripción del elemento del sidebar',
+  `sdb_order`       int DEFAULT   NULL            COMMENT 'Ordenamiento de los elementos del sidebar para su presentación',
+  `mod_id`          int DEFAULT   NULL            COMMENT 'ID del modulo relación ctt_module',
+  PRIMARY KEY (`sdb_id`)) 
+COMMENT='Tabla de los elementos que componene el sidebar';

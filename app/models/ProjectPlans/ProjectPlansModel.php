@@ -729,8 +729,8 @@ class ProjectPlansModel extends Model
     public function GetAccesories($params)
     {
         $prodId        = $this->db->real_escape_string($params);
-        $qry = "SELECT pd.* FROM ctt_products AS pd
-                INNER JOIN ctt_accesories AS ac ON ac.prd_id = pd.prd_id 
+        $qry = "SELECT pr.* FROM ctt_products AS pr
+                INNER JOIN ctt_accesories AS ac ON ac.prd_id = pr.prd_id 
                 WHERE ac.prd_parent = $prodId;";
         return $this->db->query($qry);
 

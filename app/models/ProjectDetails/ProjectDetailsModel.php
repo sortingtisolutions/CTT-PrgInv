@@ -545,6 +545,26 @@ public function cancelProject($params)
             return $this->db->query($qry1);
      }
 
+
+     public function settingProjectMovemen($pjtId, $user){
+
+        $qry1 = "INSERT INTO ctt_movements (mov_quantity, mov_type, prd_id, pjt_id, usr_id)
+                 SELECT 
+                    (pjtvr_quantity - pjtvr_quantity_ant)   as mov_quantity
+                    , case 
+                            when pjtvr_action = 'U' then 'Modifica Cantidad'
+                            when pjtvr_action = 'A' then 'Agrego producto'
+                            when pjtvr_action = 'D' then 'Eliminó producto'
+                            else '' end                     as mov_type
+                    , prd_id                                as prd_id
+                    , pjt_id                                as pjt_id
+                    , $user	                                as usr_id
+                 FROM ctt_projects_mice WHERE pjt_id = $pjtId AND pjtvr_action != 'N';";
+        return $this->db->query($qry1);
+
+     }
+
+
 /** ====== Agrega contenido de la nueva version ==============================================  */
     public function settinProjectVersion($pjtId, $verId )
     {
