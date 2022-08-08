@@ -456,6 +456,70 @@
                             </td>
                         </tr>
 
+                        <tr>
+                            <td>¿Quien solicitó</td>
+                            <td>
+                                <input type="text" id="txtHowRequired" name="txtHowRequired" class="textbox wtf" autocomplete="off"><br>
+                                <span class="textAlert"></span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Viaje de ida</td>
+                            <td>
+                                <input type="text" id="txtTripGo" name="txtTripGo" class="textbox wt2" autocomplete="off"><br>
+                                <span class="textAlert"></span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Viaje de regreso</td>
+                            <td>
+                                <input type="text" id="txtTripBack" name="txtTripBack" class="textbox wt2" autocomplete="off"><br>
+                                <span class="textAlert"></span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Carga</td>
+                            <td>
+                                <input type="text" id="txtCarryOn" name="txtCarryOn" class="textbox wt2" autocomplete="off"><br>
+                                <span class="textAlert"></span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Descarga</td>
+                            <td>
+                                <input type="text" id="txtCarryOut" name="txtCarryOut" class="textbox wt2" autocomplete="off"><br>
+                                <span class="textAlert"></span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Pruebas técnicas</td>
+                            <td>
+                                <input type="text" id="txtTestTecnic" name="txtTestTecnic" class="textbox wt2" autocomplete="off"><br>
+                                <span class="textAlert"></span>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Pruebas look</td>
+                            <td>
+                                <input type="text" id="txtTestLook" name="txtTestLook" class="textbox wt2" autocomplete="off"><br>
+                                <span class="textAlert"></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Tipo de llamado</td>
+                            <td>
+                                <select id="txtTypeCalled" name="txtTypeCalled" class="textbox" ></select>
+                                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de llamado</span>
+                            </td>
+                        </tr>
+
 
                         <tr>
                             <td>Tipo de dependencia</td>

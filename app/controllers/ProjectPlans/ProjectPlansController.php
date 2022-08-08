@@ -174,6 +174,29 @@ class ProjectPlansController extends Controller
 
     } 
 
+
+    
+/** ==== Lista los tipos de llamados =========================================================  */
+    public function listProjectsTypeCalled($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProjectsTypeCalled($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjttc_id":"0"}]';	
+        }
+        echo $res;
+
+    } 
+
+        
+
     
 
 /** ==== Lista los productos =================================================================  */
@@ -287,6 +310,15 @@ class ProjectPlansController extends Controller
     } 
 
 
+
+/** ==== Actualiza las fechas del proyecto ===================================================  */
+    public function UpdatePeriodProject($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->UpdatePeriodProject($request_params);
+        echo $result;
+    }    
+
 /** ==== Guarda nueva version ================================================================  */
     public function SaveVersion($request_params)
     {
@@ -376,7 +408,7 @@ class ProjectPlansController extends Controller
             //MST actualiza los datos de una version maestra 
             $projectVersion = $this->model->settingProjectVersion($pjtId, $verId);
             $projectContent = $this->model->settingProjectContent($pjtId, $verId);
-            $result         = $this->model->getVersionMice($pjtId, $verId);
+            $result         = $this->model->getVersionMice($pjtId);
             $response       = $this->updateSeries($result);
         }
 

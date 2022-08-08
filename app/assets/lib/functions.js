@@ -54,7 +54,8 @@ function show_error(xhr, textStatus, error, selector) {
     Status: ${xhr.textStatus} <br>
     textStatus: ${textStatus} <br>
     Error: ${error} <br>
-    ResponseText: ${xhr.responseText} <br>`;
+    ResponseText: ${xhr.responseText} <br>
+    final<br>`;
     $('#msgError').html(H).removeClass('reposo');
 }
 

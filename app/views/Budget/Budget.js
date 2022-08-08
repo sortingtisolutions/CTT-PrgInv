@@ -1,4 +1,4 @@
-let cust, proj, prod, vers, budg, tpprd, relc, proPar;
+let cust, proj, prod, vers, budg, tpprd, relc, proPar, tpcall;
 var swpjt = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 
@@ -17,6 +17,7 @@ function inicial() {
     getCustomersOwner();
     getDiscounts();
     getProjectType();
+    getProjectTypeCalled();
 }
 
 function stickyTable() {
@@ -304,7 +305,7 @@ function getProductsRelated(id, tp) {
 }
 /**  Obtiene el listado de projectos del producto  */
 function getStockProjects(prdId) {
-    var pagina = 'ProjectPlans/stockProdcuts';
+    var pagina = 'Budget/stockProdcuts';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
     var selector = putStockProjects;
@@ -316,6 +317,15 @@ function getProjectType() {
     var par = `[{"pjt":""}]`;
     var tipo = 'json';
     var selector = putProjectsType;
+    fillField(pagina, par, tipo, selector);
+}
+
+/** Obtiene el listado de los tipos de proyecto */
+function getProjectTypeCalled() {
+    var pagina = 'Budget/listProjectsTypeCalled';
+    var par = `[{"pjt":""}]`;
+    var tipo = 'json';
+    var selector = putProjectsTypeCalled;
     fillField(pagina, par, tipo, selector);
 }
 /** Obtiene el listado de los comentarios del proyecto */
@@ -423,6 +433,11 @@ function putVersion(dt) {
 /** Llena el listado de los tipos de proyecto */
 function putProjectsType(dt) {
     tpprd = dt;
+}
+
+/** Llena el listado de los tipos de proyecto */
+function putProjectsTypeCalled(dt) {
+    tpcall = dt;
 }
 
 function selectorProjects(pjId) {
@@ -962,7 +977,6 @@ function stockProduct(bdgId, type) {
 }
 
 function putStockProjects(dt) {
-    console.log(dt);
     $.each(dt, function (v, u) {
         let situation = u.ser_situation != 'D' ? 'class="levelSituation"' : '';
         let H = `
@@ -1034,6 +1048,11 @@ function fillContent() {
         let H = `<option value="${u.pjttp_id}"> ${u.pjttp_name}</option>`;
         $('#txtTypeProjectEdt').append(H);
     });
+    // Llena el selector de tipo de llamados
+    $.each(tpcall, function (v, u) {
+        let H = `<option value="${u.pjttc_id}"> ${u.pjttc_name}</option>`;
+        $('#txtTypeCalled').append(H);
+    });
     // Llena el selector de clientes
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
@@ -1062,6 +1081,7 @@ function fillData(inx) {
     $('.project__selection').hide();
 
     let pj = proj;
+
     $('#txtProjectIdEdt').val(pj[inx].pjt_id);
     $('#txtProjectEdt').val(pj[inx].pjt_name);
     $('#txtPeriodProjectEdt').val(pj[inx].pjt_date_start + ' - ' + pj[inx].pjt_date_end);
@@ -1072,6 +1092,14 @@ function fillData(inx) {
     $(`#txtTypeLocationEdt option[value = "${pj[inx].loc_id}"]`).attr('selected', 'selected');
     $(`#txtCustomerEdt option[value = "${pj[inx].cus_id}"]`).attr('selected', 'selected');
     $(`#txtCustomerRelEdt option[value = "${pj[inx].cus_parent}"]`).attr('selected', 'selected');
+    $(`#txtTypeCalled option[value = "${pj[inx].pjttc_id}"]`).attr('selected', 'selected');
+    $('#txtHowRequired').val(pj[inx].pjt_how_required);
+    $('#txtTripGo').val(pj[inx].pjt_trip_go);
+    $('#txtTripBack').val(pj[inx].pjt_trip_back);
+    $('#txtCarryOn').val(pj[inx].pjt_to_carry_on);
+    $('#txtCarryOut').val(pj[inx].pjt_to_carry_out);
+    $('#txtTestTecnic').val(pj[inx].pjt_test_tecnic);
+    $('#txtTestLook').val(pj[inx].pjt_test_look);
 
     let depend = pj[inx].pjt_parent;
     let boxDepend = depend != '0' ? 'PROYECTO ADJUNTO' : 'PROYECTO UNICO';
@@ -1109,25 +1137,41 @@ function fillData(inx) {
                 let projPeriod = $('#txtPeriodProjectEdt').val();
                 let projTime = $('#txtTimeProject').val();
                 let projType = $('#txtTypeProjectEdt option:selected').val();
+                let projTypeCalled = $('#txtTypeCalled option:selected').val();
                 let cusCte = $('#txtCustomerEdt option:selected').val();
                 let cusCteRel = $('#txtCustomerRelEdt option:selected').val();
+                let howRequired = $('#txtHowRequired').val();
+                let tripGo = $('#txtTripGo').val();
+                let tripBack = $('#txtTripBack').val();
+                let toCarryOn = $('#txtCarryOn').val();
+                let toCarryOut = $('#txtCarryOut').val();
+                let testTecnic = $('#txtTestTecnic').val();
+                let testLook = $('#txtTestLook').val();
 
                 let projDateStart = moment(projPeriod.split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
                 let projDateEnd = moment(projPeriod.split(' - ')[1], 'DD/MM/YYYY').format('YYYYMMDD');
 
                 let par = `
                 [{
-                    "projId"        : "${projId}",
-                    "pjtName"       : "${projName.toUpperCase()}",
-                    "pjtLocation"   : "${projLocation.toUpperCase()}",
-                    "pjtDateStart"  : "${projDateStart}",
-                    "pjtDateEnd"    : "${projDateEnd}",
-                    "pjtTime"       : "${projTime}",
-                    "pjtType"       : "${projType}",
-                    "locId"         : "${projLocationTypeValue}",
-                    "cuoId"         : "${cuoId}",
-                    "cusId"         : "${cusCte}",
-                    "cusParent"     : "${cusCteRel}"
+                    "projId"         : "${projId}",
+                    "pjtName"        : "${projName.toUpperCase()}",
+                    "pjtLocation"    : "${projLocation.toUpperCase()}",
+                    "pjtDateStart"   : "${projDateStart}",
+                    "pjtDateEnd"     : "${projDateEnd}",
+                    "pjtTime"        : "${projTime}",
+                    "pjtType"        : "${projType}",
+                    "locId"          : "${projLocationTypeValue}",
+                    "cuoId"          : "${cuoId}",
+                    "cusId"          : "${cusCte}",
+                    "cusParent"      : "${cusCteRel}",
+                    "pjttcId"        : "${projTypeCalled}",
+                    "pjtHowRequired" : "${howRequired.toUpperCase()}",
+                    "pjtTripGo"      : "${tripGo}",
+                    "pjtTripBack"    : "${tripBack}",
+                    "pjtToCarryOn"   : "${toCarryOn}",
+                    "pjtToCarryOut"  : "${toCarryOut}",
+                    "pjtTestTecnic"  : "${testTecnic}",
+                    "pjtTestLook"    : "${testLook}"
                 }]`;
 
                 console.log(par);
@@ -1197,9 +1241,17 @@ function actionNewProject() {
                 let projPeriod = $('#txtPeriodProjectEdt').val();
                 let projTime = $('#txtTimeProject').val();
                 let projType = $('#txtTypeProjectEdt option:selected').val();
+                let projTypeCall = $('#txtTypeCalled option:selected').val();
                 let cusCte = $('#txtCustomerEdt option:selected').val();
                 let cusCteRel = $('#txtCustomerRelEdt option:selected').val();
                 let proDepend = $('#txtProjectDepend option:selected').val();
+                let howRequired = $('#txtHowRequired').val();
+                let tripGo = $('#txtTripGo').val();
+                let tripBack = $('#txtTripBack').val();
+                let toCarryOn = $('#txtCarryOn').val();
+                let toCarryOut = $('#txtCarryOut').val();
+                let testTecnic = $('#txtTestTecnic').val();
+                let testLook = $('#txtTestLook').val();
 
                 let projDateStart = moment(projPeriod.split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
                 let projDateEnd = moment(projPeriod.split(' - ')[1], 'DD/MM/YYYY').format('YYYYMMDD');
@@ -1232,19 +1284,27 @@ function actionNewProject() {
 
                 let par = `
             [{
-                "projId"        : "${projId}",
-                "pjtName"       : "${projName.toUpperCase()}",
-                "pjtLocation"   : "${projLocation.toUpperCase()}",
-                "pjtDateStart"  : "${projDateStart}",
-                "pjtDateEnd"    : "${projDateEnd}",
-                "pjtTime"       : "${projTime}",
-                "pjtType"       : "${projType}",
-                "locId"         : "${projLocationTypeValue}",
-                "cuoId"         : "${cuoId}",
-                "cusId"         : "${cusCte}",
-                "cusParent"     : "${cusCteRel}",
-                "pjtParent"     : "${proParent}",
-                "pjtStatus"     : "${proStatus}"
+                "projId"         : "${projId}",
+                "pjtName"        : "${projName.toUpperCase()}",
+                "pjtLocation"    : "${projLocation.toUpperCase()}",
+                "pjtDateStart"   : "${projDateStart}",
+                "pjtDateEnd"     : "${projDateEnd}",
+                "pjtTime"        : "${projTime}",
+                "pjtType"        : "${projType}",
+                "locId"          : "${projLocationTypeValue}",
+                "cuoId"          : "${cuoId}",
+                "cusId"          : "${cusCte}",
+                "pjttcId"        : "${projTypeCall}",
+                "cusParent"      : "${cusCteRel}",
+                "pjtParent"      : "${proParent}",
+                "pjtStatus"      : "${proStatus}",
+                "pjtHowRequired" : "${howRequired.toUpperCase()}",
+                "pjtTripGo"      : "${tripGo}",
+                "pjtTripBack"    : "${tripBack}",
+                "pjtToCarryOn"   : "${toCarryOn}",
+                "pjtToCarryOut"  : "${toCarryOut}",
+                "pjtTestTecnic"  : "${testTecnic}",
+                "pjtTestLook"    : "${testLook}"
             }]
             `;
 
@@ -1555,6 +1615,7 @@ function closeModals(table) {
 }
 
 function automaticCloseModal() {
+    subaccion();
     $('.invoice__modal-general').slideUp(400, function () {
         $('.invoice__modalBackgound').fadeOut(400);
         $('.invoice__modal-general .modal__body').html('');
@@ -1648,4 +1709,8 @@ function findIndex(id, dt) {
     });
 
     return inx;
+}
+
+function subaccion() {
+    console.log('');
 }

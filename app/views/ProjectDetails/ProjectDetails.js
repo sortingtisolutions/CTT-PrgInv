@@ -1,4 +1,4 @@
-let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase;
+let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall;
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
@@ -18,6 +18,8 @@ function inicial() {
     getCustomersOwner();
     getDiscounts();
     getProjectType();
+    getProjectTypeCalled();
+    getCalendarPeriods();
 }
 
 function stickyTable() {
@@ -348,6 +350,14 @@ function getProjectType() {
     var selector = putProjectsType;
     fillField(pagina, par, tipo, selector);
 }
+/** Obtiene el listado de los tipos de proyecto */
+function getProjectTypeCalled() {
+    var pagina = 'ProjectDetails/listProjectsTypeCalled';
+    var par = `[{"pjt":""}]`;
+    var tipo = 'json';
+    var selector = putProjectsTypeCalled;
+    fillField(pagina, par, tipo, selector);
+}
 /** Obtiene el listado de los comentarios del proyecto */
 function getComments(pjtId) {
     var pagina = 'ProjectDetails/listComments';
@@ -534,6 +544,10 @@ function putProjectsType(dt) {
     tpprd = dt;
 }
 
+/** Llena el listado de los tipos de proyecto */
+function putProjectsTypeCalled(dt) {
+    tpcall = dt;
+}
 function selectorProjects(pjId) {
     $('.finder_list-projects ul li')
         .unbind('click')
@@ -547,13 +561,14 @@ function selectorProjects(pjId) {
         });
 }
 
+var pj = '';
 function actionSelProject(obj) {
     let status = obj.attr('class');
 
     if (status == 'alive') {
         let idSel = obj.parents('.dato');
         let indx = obj.attr('data-content').split('|')[0];
-        let pj = proj[indx];
+        pj = proj[indx];
 
         pj.pjt_parent > 0 ? showButtonToImport('S') : showButtonToImport('H');
 
@@ -565,7 +580,7 @@ function actionSelProject(obj) {
         $('#projectType').html(pj.pjttp_name);
         fillProducer(pj.cus_parent);
         getVersion(pj.pjt_id);
-        getCalendarPeriods(pj);
+        // getCalendarPeriods(pj);
 
         $('.version_current').attr('data-project', pj.pjt_id);
         $('.projectInformation').attr('data-project', pj.pjt_id);
@@ -585,10 +600,9 @@ function actionSelProject(obj) {
     }
 }
 
-function getCalendarPeriods(pj) {
-    console.log(pj);
+function getCalendarPeriods() {
     let fecha = moment(Date()).format('DD/MM/YYYY');
-    console.log(fecha);
+
     $('#projectPeriod').daterangepicker(
         {
             showDropdowns: true,
@@ -793,7 +807,8 @@ function loadBudget(inx, bdgId) {
         "ver_id"              : "${verId}",
         "pjtvr_stock"         : "${prod[inx].stock}",
         "sbc_name"            : "${subct}",
-        "pjtvr_section"       : "${section}"
+        "pjtvr_section"       : "${section}",
+        "daybasereal"         : "${days}"
     }
     `;
 
@@ -854,7 +869,6 @@ function putBudgets(dt) {
 // *************************************************
 function fillBudgetProds(jsn, days, stus) {
     let pds = JSON.parse(jsn);
-
     let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
     let H = `
     <tr id="bdg${pds.prd_id}" 
@@ -886,8 +900,8 @@ function fillBudgetProds(jsn, days, stus) {
     <!-- Dias Base -->
         <td class="wcldays col_days colbase daysBase">
             <input type="text" class="input_invoice" 
-                value="${pds.pjtvr_days_base}" 
-                data-real="${pds.pjtvr_days_base}" 
+                value="${pds.daybasereal}" 
+                data-real="${pds.daybasereal}" 
                 tabindex=2>
         </td>
 
@@ -1281,6 +1295,11 @@ function fillContent() {
         let H = `<option value="${u.pjttp_id}"> ${u.pjttp_name}</option>`;
         $('#txtTypeProjectEdt').append(H);
     });
+    // Llena el selector de tipo de llamados
+    $.each(tpcall, function (v, u) {
+        let H = `<option value="${u.pjttc_id}"> ${u.pjttc_name}</option>`;
+        $('#txtTypeCalled').append(H);
+    });
     // Llena el selector de clientes
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
@@ -1319,6 +1338,14 @@ function fillData(inx) {
     $(`#txtTypeLocationEdt option[value = "${pj[inx].loc_id}"]`).attr('selected', 'selected');
     $(`#txtCustomerEdt option[value = "${pj[inx].cus_id}"]`).attr('selected', 'selected');
     $(`#txtCustomerRelEdt option[value = "${pj[inx].cus_parent}"]`).attr('selected', 'selected');
+    $(`#txtTypeCalled option[value = "${pj[inx].pjttc_id}"]`).attr('selected', 'selected');
+    $('#txtHowRequired').val(pj[inx].pjt_how_required);
+    $('#txtTripGo').val(pj[inx].pjt_trip_go);
+    $('#txtTripBack').val(pj[inx].pjt_trip_back);
+    $('#txtCarryOn').val(pj[inx].pjt_to_carry_on);
+    $('#txtCarryOut').val(pj[inx].pjt_to_carry_out);
+    $('#txtTestTecnic').val(pj[inx].pjt_test_tecnic);
+    $('#txtTestLook').val(pj[inx].pjt_test_look);
 
     $('#saveProject').html('Guardar cambios').removeAttr('class').addClass('bn btn-ok update');
 
@@ -1356,25 +1383,41 @@ function fillData(inx) {
                 let projPeriod = $('#txtPeriodProjectEdt').val();
                 let projTime = $('#txtTimeProject').val();
                 let projType = $('#txtTypeProjectEdt option:selected').val();
+                let projTypeCalled = $('#txtTypeCalled option:selected').val();
                 let cusCte = $('#txtCustomerEdt option:selected').val();
                 let cusCteRel = $('#txtCustomerRelEdt option:selected').val();
+                let howRequired = $('#txtHowRequired').val();
+                let tripGo = $('#txtTripGo').val();
+                let tripBack = $('#txtTripBack').val();
+                let toCarryOn = $('#txtCarryOn').val();
+                let toCarryOut = $('#txtCarryOut').val();
+                let testTecnic = $('#txtTestTecnic').val();
+                let testLook = $('#txtTestLook').val();
 
                 let projDateStart = moment(projPeriod.split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
                 let projDateEnd = moment(projPeriod.split(' - ')[1], 'DD/MM/YYYY').format('YYYYMMDD');
 
                 let par = `
                 [{
-                    "projId"        : "${projId}",
-                    "pjtName"       : "${projName.toUpperCase()}",
-                    "pjtLocation"   : "${projLocation.toUpperCase()}",
-                    "pjtDateStart"  : "${projDateStart}",
-                    "pjtDateEnd"    : "${projDateEnd}",
-                    "pjtTime"       : "${projTime}",
-                    "pjtType"       : "${projType}",
-                    "locId"         : "${projLocationTypeValue}",
-                    "cuoId"         : "${cuoId}",
-                    "cusId"         : "${cusCte}",
-                    "cusParent"     : "${cusCteRel}"
+                    "projId"         : "${projId}",
+                    "pjtName"        : "${projName.toUpperCase()}",
+                    "pjtLocation"    : "${projLocation.toUpperCase()}",
+                    "pjtDateStart"   : "${projDateStart}",
+                    "pjtDateEnd"     : "${projDateEnd}",
+                    "pjtTime"        : "${projTime}",
+                    "pjtType"        : "${projType}",
+                    "locId"          : "${projLocationTypeValue}",
+                    "cuoId"          : "${cuoId}",
+                    "cusId"          : "${cusCte}",
+                    "cusParent"      : "${cusCteRel}",
+                    "pjttcId"        : "${projTypeCalled}",
+                    "pjtHowRequired" : "${howRequired.toUpperCase()}",
+                    "pjtTripGo"      : "${tripGo}",
+                    "pjtTripBack"    : "${tripBack}",
+                    "pjtToCarryOn"   : "${toCarryOn}",
+                    "pjtToCarryOut"  : "${toCarryOut}",
+                    "pjtTestTecnic"  : "${testTecnic}",
+                    "pjtTestLook"    : "${testLook}"
                 }]
                 `;
 
@@ -1740,6 +1783,7 @@ function closeModals(table) {
 }
 
 function automaticCloseModal() {
+    subaccion();
     $('.invoice__modal-general').slideUp(400, function () {
         $('.invoice__modal-general .modal__body').html('');
         $('.invoice__modalBackgound').fadeOut(400);
@@ -1984,4 +2028,11 @@ function findIndex(id, dt) {
     });
 
     return inx;
+}
+
+function subaccion() {
+    let pjtId = $('.version_current').data('project');
+    let verId = $('.version_current').data('version');
+
+    getBudgets(pjtId, verId);
 }

@@ -35,7 +35,15 @@ class ProjectPlansModel extends Model
                     , lo.loc_type_location 
                     , pt.pjttp_name 
                     , pt.pjttp_id
+                    , pj.pjttc_id
                     , '$pjId' as pjId
+                    , pj.pjt_how_required
+                    , pjt_trip_go
+                    , pjt_trip_back
+                    , pjt_to_carry_on
+                    , pjt_to_carry_out
+                    , pjt_test_tecnic
+                    , pjt_test_look
                 FROM ctt_projects AS pj
                 INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
@@ -98,7 +106,15 @@ class ProjectPlansModel extends Model
                             (SELECT prd_stock FROM ctt_products WHERE prd_id = pc.prd_id)
                         ELSE 
                             (SELECT prd_stock FROM ctt_products WHERE prd_id = pc.prd_id)
-                        END AS bdg_stock
+                        END AS bdg_stock,
+                    CASE 
+                        WHEN pjtvr_section != 1 then (
+                            SELECT ifnull(sum(datediff(pg.pjtpd_day_end, pg.pjtpd_day_start) +1), pc.pjtvr_days_base) AS dias 
+                            FROM ctt_projects_detail AS pf
+                            INNER JOIN ctt_projects_periods AS pg ON pg.pjtdt_id = pf.pjtdt_id
+                            WHERE pf.pjtvr_id =  pc.pjtvr_id and pf.prd_id = pd.prd_id
+                        )
+                    else pc.pjtvr_days_base end  as daybasereal
                 FROM ctt_projects_version AS pc
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
@@ -144,7 +160,14 @@ class ProjectPlansModel extends Model
         return $this->db->query($qry);
     }    
 
+    
+/** ====== Listado de tipos de llamados ======================================================  */
+    public function listProjectsTypeCalled($params)
+    {
 
+        $qry = "SELECT * FROM ctt_projects_type_called ORDER BY pjttc_id";
+        return $this->db->query($qry);
+    }    
 
 /** ====== Listado de productos ==============================================================  */
     public function listProducts($params)
@@ -345,23 +368,56 @@ class ProjectPlansModel extends Model
         $pjt_time               = $this->db->real_escape_string($params['pjtTime']); 
         $pjt_location           = $this->db->real_escape_string($params['pjtLocation']);
         $pjt_type               = $this->db->real_escape_string($params['pjtType']);
+        $pjttc_id               = $this->db->real_escape_string($params['pjttcId']);
         $loc_id                 = $this->db->real_escape_string($params['locId']);
+        $pjt_how_required       = $this->db->real_escape_string($params['pjtHowRequired']);
+        $pjt_trip_go            = $this->db->real_escape_string($params['pjtTripGo']);
+        $pjt_trip_back          = $this->db->real_escape_string($params['pjtTripBack']);
+        $pjt_to_carry_on        = $this->db->real_escape_string($params['pjtToCarryOn']);
+        $pjt_to_carry_out       = $this->db->real_escape_string($params['pjtToCarryOut']);
+        $pjt_test_tecnic        = $this->db->real_escape_string($params['pjtTestTecnic']);
+        $pjt_test_look          = $this->db->real_escape_string($params['pjtTestLook']);
+
 
 
         $qry02 = "UPDATE    ctt_projects
-                    SET     pjt_name        = '$pjt_name', 
-                            pjt_date_start  = '$pjt_date_start', 
-                            pjt_date_end    = '$pjt_date_end',
-                            pjt_time        = '$pjt_time',
-                            pjt_location    = '$pjt_location', 
-                            pjttp_id        = '$pjt_type',  
-                            cuo_id          = '$cuo_id',
-                            loc_id          = '$loc_id'
-                    WHERE   pjt_id          =  $pjt_id;
+                    SET     pjt_name            = '$pjt_name', 
+                            pjt_date_start      = '$pjt_date_start', 
+                            pjt_date_end        = '$pjt_date_end',
+                            pjt_time            = '$pjt_time',
+                            pjt_location        = '$pjt_location', 
+                            pjt_how_required    = '$pjt_how_required',
+                            pjt_trip_go         = '$pjt_trip_go',
+                            pjt_trip_back       = '$pjt_trip_back',
+                            pjt_to_carry_on     = '$pjt_to_carry_on',
+                            pjt_to_carry_out    = '$pjt_to_carry_out',
+                            pjt_test_tecnic     = '$pjt_test_tecnic',
+                            pjt_test_look       = '$pjt_test_look',
+                            pjttp_id            = '$pjt_type',  
+                            cuo_id              = '$cuo_id',
+                            loc_id              = '$loc_id',
+                            pjttc_id            = '$pjttc_id'
+                    WHERE   pjt_id              =  $pjt_id;
                     ";
         $this->db->query($qry02);
 
         return $pjt_id;
+
+    }
+
+/** ==== Actualiza las fechas del proyecto ===================================================  */
+    public function UpdatePeriodProject($params)
+    {
+        $pjtId                  = $this->db->real_escape_string($params['pjtId']);
+        $pjtDateStart           = $this->db->real_escape_string($params['pjtDateStart']);
+        $pjtDateEnd             = $this->db->real_escape_string($params['pjtDateEnd']);
+        $qry = "UPDATE ctt_projects 
+                SET pjt_date_start   = '$pjtDateStart', 
+                    pjt_date_end     = '$pjtDateEnd' 
+                WHERE pjt_id = $pjtId;";
+        $this->db->query($qry);
+
+        return $pjtId;
 
     }
 
@@ -534,14 +590,14 @@ class ProjectPlansModel extends Model
        
      }
   
-    public function getVersionMice($verId)
+    public function getVersionMice($pjtId)
     {
             $qry1 = "SELECT * 
                      FROM ctt_projects_mice AS pc
                      INNER JOIN ctt_version AS vr ON vr.ver_id = pc.ver_id
                      INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
                      INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-                     WHERE pc.ver_id = $verId;";
+                     WHERE pc.pjt_id = $pjtId;";
             return $this->db->query($qry1);
      }
 

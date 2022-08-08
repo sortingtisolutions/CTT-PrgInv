@@ -537,3 +537,29 @@ CREATE TABLE `ctt_sidebar` (
   `mod_id`          int DEFAULT   NULL            COMMENT 'ID del modulo relación ctt_module',
   PRIMARY KEY (`sdb_id`)) 
 COMMENT='Tabla de los elementos que componene el sidebar';
+
+
+
+
+
+-- Actualizacion del 8 de agosto 2022
+ALTER TABLE `cttapp_cire`.`ctt_projects` 
+ADD COLUMN `pjt_how_required` VARCHAR(100) NULL COMMENT 'Quien solicitó'    AFTER `pjt_status`,
+ADD COLUMN `pjt_trip_go`      VARCHAR(45)  NULL COMMENT 'Viaje de Ida'      AFTER `pjt_how_required`,
+ADD COLUMN `pjt_trip_back`    VARCHAR(45)  NULL COMMENT 'Viaje de vuelta'   AFTER `pjt_trip_go`,
+ADD COLUMN `pjt_to_carry_on`  VARCHAR(45)  NULL COMMENT 'Carga'             AFTER `pjt_trip_back`,
+ADD COLUMN `pjt_to_carry_out` VARCHAR(45)  NULL COMMENT 'Descarga'          AFTER `pjt_to_carry_on`,
+ADD COLUMN `pjt_test_tecnic`  VARCHAR(45)  NULL COMMENT 'Pruebas técnicas'  AFTER `pjt_to_carry_out`,
+ADD COLUMN `pjt_test_look`    VARCHAR(45)  NULL COMMENT 'Pruebas Look'      AFTER `pjt_test_tecnic`;
+
+
+CREATE TABLE ctt_projects_type_called (
+  pjttc_id      int(11) NOT NULL AUTO_INCREMENT   COMMENT 'Id del tipo de llamado',
+  pjttc_name    varchar(100) DEFAULT NULL         COMMENT 'Nombre del tipo de llamado',
+  PRIMARY KEY (`pjttc_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Tipos de llamado';
+
+
+ALTER TABLE `cttapp_cire`.`ctt_projects` 
+ADD COLUMN `pjttc_id` INT NOT NULL COMMENT 'Fk Id del Tipo de llamado relacion ctt_projects_type_called' AFTER `pjttp_id`;
+
