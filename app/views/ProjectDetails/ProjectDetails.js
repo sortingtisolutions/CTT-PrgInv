@@ -380,9 +380,15 @@ function getCounterPending(pjtvrId, prdId) {
 function putProjects(dt) {
     if (dt[0].pjt_id > 0) {
         proj = dt;
+
         $.each(proj, function (v, u) {
-            let H = ` <li id="P${u.pjt_id}" class="alive" data-content="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}">${u.pjt_name}</li>`;
-            $('.finder_list-projects ul').append(H);
+            if (u.pjt_status == '3' || u.pjt_status == '4') {
+                let H = ` <li id="P${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|M${u.pjt_parent}|${u.pjt_name}">${u.pjt_name}</li>`;
+                $('.finder_list-projects ul').append(H);
+            } else {
+                let M = ` <li id="M${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}">${u.pjt_name}</li>`;
+                $('.finder_list-projectsParent ul').append(M);
+            }
         });
 
         selectorProjects(proj[0].pjId);
@@ -407,7 +413,7 @@ function putCustomers(dt) {
     cust = dt;
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
-            let H = ` <li id="C${u.cus_id}" class="alive" data-content="${v}|${u.cut_name}">${u.cus_name}</li>`;
+            let H = ` <li id="C${u.cus_id}" class="alive" data-element="${v}|${u.cut_name}|${u.cus_name}">${u.cus_name}</li>`;
             $('.finder_list-customer ul').append(H);
         }
     });
@@ -559,6 +565,19 @@ function selectorProjects(pjId) {
             actionSelProject($(this));
             $('.projectfinder').trigger('click');
         });
+
+    $('.finder_list-projectsParent ul li')
+        .unbind('click')
+        .on('click', function () {
+            let pjtParent = $(this).attr('id').substring(1, 10);
+            $('.finder_list-projects ul li').removeClass('alive');
+            $.each(proj, function (v, u) {
+                if (pjtParent == u.pjt_parent) {
+                    let pjtId = u.pjt_id;
+                    $(`#P${pjtId}`).addClass('alive');
+                }
+            });
+        });
 }
 
 var pj = '';
@@ -567,7 +586,7 @@ function actionSelProject(obj) {
 
     if (status == 'alive') {
         let idSel = obj.parents('.dato');
-        let indx = obj.attr('data-content').split('|')[0];
+        let indx = obj.data('element').split('|')[0];
         pj = proj[indx];
 
         pj.pjt_parent > 0 ? showButtonToImport('S') : showButtonToImport('H');
@@ -666,16 +685,18 @@ function selectCustomer() {
         .unbind('click')
         .on('click', function () {
             let idSel = $(this).parents('.dato');
-            let indx = $(this).attr('data-content').split('|')[0];
-            let type = $(this).attr('data-content').split('|')[1];
+            let indx = $(this).data('element').split('|')[0];
+            let type = $(this).data('element').split('|')[1];
             let cs = cust[indx];
 
             $('#CustomerName').html(cs.cus_name);
             $('.finder_list-projects ul li').removeClass('alive');
+            $('.finder_list-projectsParent ul li').removeClass('alive');
             $.each(proj, function (v, u) {
                 if (cs.cus_id == u.cus_id) {
                     let pjtId = u.pjt_id;
                     $(`#P${pjtId}`).addClass('alive');
+                    $(`#M${pjtId}`).addClass('alive');
                 }
             });
         });
@@ -726,7 +747,7 @@ function selProduct(res) {
         } else {
             rowCurr.css({display: 'none'});
             rowCurr.each(function (index) {
-                var cm = $(this).attr('data-content').toUpperCase().replace(/|/g, '');
+                var cm = $(this).data('element').toUpperCase().replace(/|/g, '');
 
                 cm = omitirAcentos(cm);
                 var cr = cm.indexOf(res);
@@ -756,7 +777,7 @@ function putProducts(dt) {
     prod = dt;
     $.each(dt, function (v, u) {
         let H = `
-            <tr data-indx ="${v}" data-content="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
+            <tr data_indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
                 <th class="col_product" title="${u.prd_name}"><div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_type">${u.prd_level}</td>
@@ -1810,7 +1831,7 @@ function sel_items(txt, obj) {
     }
 
     $(`#${obj} .finder_list ul li`).each(function (index) {
-        var cm = $(this).text().toUpperCase();
+        var cm = $(this).data('element').toUpperCase();
 
         cm = omitirAcentos(cm);
         var cr = cm.indexOf(txt);

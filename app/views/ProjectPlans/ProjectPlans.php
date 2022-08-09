@@ -275,6 +275,19 @@
                 <ul> </ul>
             </div>
         </div>
+
+
+        
+        <div class="finder__box" id="groupProjectParent">
+        <input type="text" name="txtProjectParents" id="txtProjectParents" placeholder="Proyecto Padre" class="invoiceInput inputSearch wtf">
+            <i class="fas fa-times cleanInput"></i>
+            <div class="finder_list finder_list-projectsParent">
+                <ul></ul>
+            </div>
+
+        </div>
+
+
         <div class="finder__box" id="groupProject">
         <input type="text" name="txtProject" id="txtProject" placeholder="Proyecto" class="invoiceInput inputSearch wtf">
             <i class="fas fa-times cleanInput"></i>
@@ -284,6 +297,8 @@
 
         </div>
 
+        <div class="finder__box"></div>
+        <div class="finder__box"></div>
         <div class="finder__box"></div>
         <!-- <div class="finder__box-buttons">
             <span class="invoice_button" id="btnNewProject"><i class="fas fa-plus"></i>nuevo proyecto</span>

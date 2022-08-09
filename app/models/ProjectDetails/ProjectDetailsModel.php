@@ -44,11 +44,12 @@ class ProjectDetailsModel extends Model
                     , pjt_to_carry_out
                     , pjt_test_tecnic
                     , pjt_test_look
+                    , pj.pjt_status
                 FROM ctt_projects AS pj
                 INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-                WHERE pj.pjt_status in ('3','4') ORDER BY pj.pjt_id DESC;
+                WHERE pj.pjt_status in ('3','4', '40') ORDER BY pj.pjt_id DESC;
                 ";
         return $this->db->query($qry);
 
@@ -58,7 +59,7 @@ class ProjectDetailsModel extends Model
     public function listProjectsParents($params)
     {
         // Debe leer todos los proyectos que se encuentren en estaus 40 - Cotización
-        $qry = "SELECT pjt_id, pjt_name  
+        $qry = "SELECT pjt_id, pjt_name, pjt_number 
                 FROM ctt_projects 
                 WHERE pjt_status = '40' ORDER BY pjt_name ASC;
                 ";
