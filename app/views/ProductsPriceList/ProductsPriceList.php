@@ -119,6 +119,7 @@
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'ProductsPriceList/ProductsPriceList.js' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

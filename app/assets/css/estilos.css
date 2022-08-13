@@ -3386,6 +3386,14 @@ div.tooltip-gantt {
 .invoice__container .invoice__section-grid .invoice__box-table table tbody .col_product {
   overflow: hidden;
 }
+.invoice__container .invoice__section-grid .invoice__box-table table tbody .col_product .move_item {
+  position: absolute;
+  top: 0.45rem;
+  left: 0.3rem;
+  width: 1rem;
+  text-align: center;
+  cursor: row-resize;
+}
 .invoice__container .invoice__section-grid .invoice__box-table table tbody .col_product .menu_product {
   position: absolute;
   top: 0.45rem;
@@ -3401,6 +3409,7 @@ div.tooltip-gantt {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-left: 1rem;
 }
 .invoice__container .invoice__section-grid .invoice__box-table table tbody .col_product.botton_prod {
   height: 40px;
@@ -3509,6 +3518,11 @@ div.tooltip-gantt {
 }
 .invoice__container .invoice__section-grid .invoice__box-table table .wclexpn {
   width: 20px;
+}
+.invoice__container .invoice__section-grid .invoice__box-table table tr.selected td,
+.invoice__container .invoice__section-grid .invoice__box-table table tr.selected th {
+  background-color: rgba(60, 87, 119, 0.4) !important;
+  color: #FFFFFF !important;
 }
 .invoice__container .invoice__section-details {
   position: absolute;

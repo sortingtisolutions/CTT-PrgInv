@@ -65,16 +65,17 @@
                     </tr>
                 </thead>
 
-                
+
+                             
 
                 
             <!-- EQUIPO BASE -->
                 <tbody  class="sections_products" id="SC1">
-                    <tr|>
+                    <tr class="blocked"|>
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Base</th>
                         <td colspan="13" class="col_section"></td>
-                    </tr|>
-                    <tr class="sections_products lastrow">
+                    </tr>
+                    <tr class="sections_products lastrow blocked">
                         <th class="col_product botton_prod">
                             <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
                         </th>
@@ -83,11 +84,11 @@
                 </tbody>
             <!-- EQUIPO EXTRA -->
                 <tbody class="sections_products" id="SC2">
-                    <tr>
+                    <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Extra</th>
                         <td colspan="13" class="col_section"></td>
                     </tr>
-                    <tr class="sections_products lastrow">
+                    <tr class="sections_products lastrow blocked">
                         <th class="col_product botton_prod">
                             <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
                         </th>
@@ -96,11 +97,11 @@
                 </tbody>
             <!-- EQUIPO POR DIA -->
                 <tbody class="sections_products" id="SC3">
-                    <tr>
+                    <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por Día</th>
                         <td colspan="13" class="col_section"></td>
                     </tr>
-                    <tr class="sections_products lastrow">
+                    <tr class="sections_products lastrow blocked">
                         <th class="col_product botton_prod">
                             <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
                         </th>
@@ -109,11 +110,11 @@
                 </tbody>
             <!-- EQUIPO POR SUBARRENDO -->
                 <tbody class="sections_products" id="SC4">
-                    <tr>
+                    <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por subarrendo</th>
                         <td colspan="13" class="col_section"></td>
                     </tr>
-                    <tr class="sections_products lastrow">
+                    <tr class="sections_products lastrow blocked">
                         <th class="col_product botton_prod">
                             <span class="invoice_button"><i class="fas fa-plus"></i>Agrega producto</span>
                         </th>

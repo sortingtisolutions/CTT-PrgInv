@@ -667,7 +667,7 @@ function putProducts(dt) {
     prod = dt;
     $.each(dt, function (v, u) {
         let H = `
-            <tr data_indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
+            <tr data-indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
                 <th class="col_product" title="${u.prd_name}"><div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_type">${u.prd_level}</td>
@@ -718,7 +718,7 @@ function loadBudget(inx, bdgId) {
     `;
 
     let ky = registeredProduct('bdg' + prod[inx].prd_id);
-    console.log(ky);
+    // console.log(ky);
     if (ky == 0) {
         fillBudgetProds(par, days);
     }
@@ -727,6 +727,7 @@ function loadBudget(inx, bdgId) {
     showButtonVersion('S');
     showButtonToPrint('H');
     showButtonToSave('H');
+    reOrdering();
 }
 
 function registeredProduct(id) {
@@ -757,6 +758,41 @@ function putBudgets(dt) {
     expandCollapseSection();
     updateTotals();
     sectionShowHide();
+
+    $('tbody.sections_products').sortable({
+        items: 'tr:not(tr.blocked)',
+        cursor: 'pointer',
+        axis: 'y',
+        dropOnEmpty: false,
+        start: function (e, ui) {
+            ui.item.addClass('selected');
+        },
+        stop: function (e, ui) {
+            ui.item.removeClass('selected');
+            $(this)
+                .find('tr')
+                .each(function (index) {
+                    if (index > 0) {
+                        $(this).find('i.move_item').attr('data-order', index);
+                    }
+                });
+            showButtonVersion('S');
+        },
+    });
+
+    reOrdering();
+}
+
+function reOrdering() {
+    $('tbody.sections_products')
+        .find('tr.budgetRow')
+        .each(function (index) {
+            if (index >= 0) {
+                $(this)
+                    .find('i.move_item')
+                    .attr('data-order', index + 1);
+            }
+        });
 }
 
 // *************************************************
@@ -764,10 +800,13 @@ function putBudgets(dt) {
 // *************************************************
 function fillBudgetProds(jsn, days) {
     let pds = JSON.parse(jsn);
+    // console.log(pds.bdg_prod_name);
     let prdName = pds.bdg_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
     let H = `
     <tr id="bdg${pds.prd_id}" data_sku="${pds.bdg_prod_sku}" data_insured="${pds.bdg_insured}" data_level="${pds.bdg_prod_level}" class="budgetRow">
-        <th class="wclprod col_product product"><div class="elipsis" title="${prdName}">${prdName}</div><i class="fas fa-bars menu_product" id="mnu${pds.prd_id}"></i></th>
+        <th class="wclprod col_product product"><i class="fas fa-ellipsis-v move_item" data-order="0"></i><div class="elipsis" title="${prdName}">${prdName}</div><i class="fas fa-bars menu_product" id="mnu${
+        pds.prd_id
+    }"></i></th>
         <td class="wcldays col_quantity colbase quantityBase"><input type="text" class="input_invoice" value="${pds.bdg_quantity}" tabindex=1></td>
         <td class="wclnumb col_price colbase priceBase">${mkn(pds.bdg_prod_price, 'n')}</td>
         <td class="wcldays col_days colbase daysBase"><input type="text" class="input_invoice" value="${pds.bdg_days_base}" tabindex=2></td>
@@ -1450,6 +1489,8 @@ function saveBudget(dt) {
         let bdgDescTest = parseFloat(tr.children('td.discountTest').text()) / 100;
         let bdgInsured = tr.attr('data_insured');
         let bdgSection = tr.parents('tbody').attr('id').substring(2, 5);
+        let bdgOrder = tr.children('th.col_product').children('i.move_item').data('order');
+        console.log(bdgOrder);
 
         if (bdgSku != undefined) {
             let par = `
@@ -1468,6 +1509,7 @@ function saveBudget(dt) {
                 "bdgDaysTr"       : "${bdgDaysTest}",
                 "bdgDescTr"       : "${bdgDescTest}",
                 "bdgInsured"      : "${bdgInsured}",
+                "bdgOrder"        : "${bdgOrder}",
                 "verId"           : "${verId}",
                 "prdId"           : "${prdId}",
                 "pjtId"           : "${pjtId}"

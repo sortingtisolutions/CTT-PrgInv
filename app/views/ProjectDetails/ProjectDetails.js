@@ -777,7 +777,7 @@ function putProducts(dt) {
     prod = dt;
     $.each(dt, function (v, u) {
         let H = `
-            <tr data_indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
+            <tr data-indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
                 <th class="col_product" title="${u.prd_name}"><div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_type">${u.prd_level}</td>
@@ -848,6 +848,7 @@ function loadBudget(inx, bdgId) {
     showButtonVersion('S');
     // showButtonToPrint('H');
     // showButtonToSave('H');
+    reOrdering();
 }
 
 function putAddProductMice(dt) {
@@ -883,6 +884,44 @@ function putBudgets(dt) {
     expandCollapseSection();
     updateTotals();
     sectionShowHide();
+
+    $('tbody.sections_products').sortable({
+        items: 'tr:not(tr.blocked)',
+        cursor: 'pointer',
+        axis: 'y',
+        dropOnEmpty: false,
+        start: function (e, ui) {
+            ui.item.addClass('selected');
+        },
+        stop: function (e, ui) {
+            ui.item.removeClass('selected');
+            $(this)
+                .find('tr')
+                .each(function (index) {
+                    if (index > 0) {
+                        $(this).find('i.move_item').attr('data-order', index);
+                    }
+                });
+            showButtonVersion('S');
+            getDataMice();
+        },
+    });
+
+    reOrdering();
+}
+
+function reOrdering() {
+    $('tbody.sections_products')
+        .find('tr.budgetRow')
+        .each(function (index) {
+            if (index >= 0) {
+                $(this)
+                    .find('i.move_item')
+                    .attr('data-order', index + 1);
+            }
+        });
+
+    getDataMice();
 }
 
 // *************************************************
@@ -902,6 +941,7 @@ function fillBudgetProds(jsn, days, stus) {
 
     <!-- Nombre del Producto -->
         <th class="wclprod col_product product">
+            <i class="fas fa-ellipsis-v move_item" data-order="0"></i>
             <div class="elipsis" title="${prdName}">${prdName}</div>
             <i class = "fas fa-bars menu_product" id="mnu${pds.prd_id}"></i>
         </th>
@@ -1961,6 +2001,12 @@ function getDataMice() {
         $(this).children('td.discountTest').attr('data-real', discountTest_act);
         if (discountTest_act != discountTest_ant) {
             updateMice(pjtId, pid, 'pjtvr_discount_test', discountTest_act / 100, section, 'U');
+        }
+
+        let order = $(this).children('th').children('.move_item').attr('data-order');
+        if (order > 0) {
+            // console.log(pjtId, pid, 'pjtvr_order', order, section, 'N');
+            updateMice(pjtId, pid, 'pjtvr_order', order, section, 'N');
         }
     });
 }

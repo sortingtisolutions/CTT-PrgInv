@@ -87,10 +87,10 @@ class ProjectDetailsModel extends Model
 
         $qry4 = "INSERT INTO ctt_projects_mice (
                     pjtvr_id, pjtvr_action, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_quantity_ant, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
-                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id
+                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id
                 )
                 SELECT pjtvr_id, 'N' AS pjtvr_action, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_quantity AS pjtvr_quantity_ant, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
-                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id 
+                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id 
                 FROM ctt_projects_version 
                 WHERE ver_id = $verId;
                 ";
@@ -119,7 +119,7 @@ class ProjectDetailsModel extends Model
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                WHERE pc.ver_id = $verId ;";
+                WHERE pc.ver_id = $verId ORDER BY pc.pjtvr_order asc;";
         return $this->db->query($qry5);
 
     } 
@@ -479,6 +479,7 @@ public function cancelProject($params)
         $pjtvr_prod_level       = $params['pjtvr_prod_level'];
         $pjtvr_section          = $params['pjtvr_section'];
         $pjtvr_status           = '1';
+        $pjtvr_order            = $params['pjtvr_order'];
         $ver_id                 = $params['ver_id'];
         $prd_id                 = $params['prd_id'];
         $pjt_id                 = $params['pjt_id'];
@@ -502,6 +503,7 @@ public function cancelProject($params)
             pjtvr_prod_level, 
             pjtvr_section, 
             pjtvr_status, 
+            pjtvr_order, 
             ver_id, 
             prd_id, 
             pjt_id 
@@ -523,6 +525,7 @@ public function cancelProject($params)
             '$pjtvr_prod_level',
             '$pjtvr_section',
             '$pjtvr_status',
+            '$pjtvr_order',
             '$ver_id',
             '$prd_id',
             '$pjt_id'
@@ -551,11 +554,11 @@ public function cancelProject($params)
         $qry2 = "INSERT INTO ctt_projects_version (
                     pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, 
-                    pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id)  
+                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id)  
                 SELECT 
                     pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, 
-                    pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id 
+                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id 
                 FROM ctt_projects_mice WHERE pjtvr_action != 'D' AND pjt_id = $pjtId;";
         return $this->db->query($qry2);
 
@@ -568,11 +571,11 @@ public function cancelProject($params)
         $qry2 = "INSERT INTO ctt_projects_content (
                     pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, 
                     pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
-                    pjtcn_status, ver_id, prd_id, pjt_id, pjtvr_id)
+                    pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id)
                 SELECT 
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
                     pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, 
-                    pjtvr_status, ver_id, prd_id, pjt_id, pjtvr_id 
+                    pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id, pjtvr_id 
                 FROM ctt_projects_version WHERE ver_id = $verId;";
         return $this->db->query($qry2);
 
@@ -626,12 +629,12 @@ public function cancelProject($params)
         $qry = "INSERT INTO ctt_projects_version (
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost,
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,
-                    pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id
+                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id
                 )
                 SELECT 
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost,
                     pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,
-                    pjtvr_prod_level, pjtvr_section, pjtvr_status, '$verId' as ver_id, prd_id, pjt_id
+                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, '$verId' as ver_id, prd_id, pjt_id
                 FROM ctt_projects_mice WHERE pjt_id = $pjtId;";
 
         return $this->db->query($qry);
@@ -688,18 +691,15 @@ public function cancelProject($params)
     {
         $verId = $this->db->real_escape_string($params);
         $qry1 = "INSERT INTO ctt_projects_content (
-                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_prod_level, pjtcn_section, pjtcn_quantity, 
-                    pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_days_trip, pjtcn_discount_trip, 
-                    pjtcn_days_test, pjtcn_discount_test, pjtcn_insured,  ver_id, prd_id, pjt_id
-                )
+                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, 
+                    pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
+                    pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id)
                 SELECT 
-                    bg.bdg_prod_sku, bg.bdg_prod_name, bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_section, bg.bdg_quantity,  
-                    bg.bdg_days_base, bg.bdg_days_cost, bg.bdg_discount_base, bg.bdg_days_trip, bg.bdg_discount_trip,
-                    bg.bdg_days_test, bg.bdg_discount_test, bg.bdg_insured, bg.ver_id, bg.prd_id, vr.pjt_id 
-                FROM ctt_budget AS bg
-                INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
-                WHERE bg.ver_id = $verId;";
-        $this->db->query($qry1);
+                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
+                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, 
+                    pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id, pjtvr_id 
+                FROM ctt_projects_version WHERE ver_id = $verId;";
+                $this->db->query($qry1);
 
         $qry2 = "SELECT * 
                 FROM ctt_projects_content AS pc
@@ -834,16 +834,15 @@ public function cancelProject($params)
         $this->db->query($qry3);
 
         $qry4 = "INSERT INTO ctt_projects_mice (
-                    pjtvr_action, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_quantity_ant, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
-                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, ver_id, prd_id, pjt_id
-                )
-                SELECT 'N' AS pjtcn_action, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_quantity AS pjtcn_quantity_ant, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, 
-                    pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, pjtcn_status, '$verId' as ver_id, prd_id, '$pjtId' as pjt_id 
-                FROM ctt_projects_content 
-                WHERE pjt_id = $pjtIdo;
+                                pjtvr_action, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_quantity_ant, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
+                                pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id
+                            )
+                            SELECT 'N' AS pjtcn_action, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_quantity AS pjtcn_quantity_ant, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, 
+                                pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, pjtcn_status, pjtcn_order, '$verId' as ver_id, prd_id, '$pjtId' as pjt_id 
+                            FROM ctt_projects_content 
+                            WHERE pjt_id = $pjtIdo;
                 ";
         return $this->db->query($qry4);
-
 
     } 
     

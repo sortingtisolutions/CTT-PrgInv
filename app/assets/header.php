@@ -29,20 +29,17 @@
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/periods.css' ?>">
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/estilos.css' ?>" />
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/reports.css' ?>" />
+        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/jquery-ui.css' ?>" />
         
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css" />
-
 
         <script src="<?=  PATH_ASSETS . 'lib/jquery.js' ?>"></script>
-        
 
-        
+        <script src="<?=  PATH_ASSETS . 'lib/jquery-ui.js' ?>"></script>
+
+
         <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 
         <script src="<?=  PATH_ASSETS . 'lib/tables/tables.js' ?>"></script>
-        <script src="<?=  PATH_ASSETS . 'lib/jquery-ui.js' ?>"></script>
-      
-
 
 
     </head>

@@ -1,5 +1,4 @@
-
-	<footer>
+<footer>
 		<div class="copy"></div>
 		<div class="logo"></div>
 	</footer>
@@ -15,10 +14,8 @@
 	
 	
 	
-	<script src="<?= PATH_ASSETS . 'lib/dataTable/datatables.min.js' ?>"></script>
 	<script src="<?= PATH_ASSETS . 'lib/daterangepicker/daterangepicker.js' ?>"></script>
 	<script src="<?= PATH_ASSETS . 'lib/forms/forms.js' ?>"></script>
-	<script src="<?= PATH_ASSETS . 'lib/easy-gantt.js' ?>"></script>
 	<script src="<?= PATH_ASSETS . 'lib/sticky.js' ?>"></script>
 	
 	

@@ -1,4 +1,4 @@
-/*! jQuery UI - v1.13.2 - 2022-08-08
+/*! jQuery UI - v1.13.1 - 2022-05-10
  * http://jqueryui.com
  * Includes: widget.js, position.js, data.js, disable-selection.js, focusable.js, form-reset-mixin.js, jquery-patch.js, keycode.js, labels.js, scroll-parent.js, tabbable.js, unique-id.js, widgets/draggable.js, widgets/droppable.js, widgets/resizable.js, widgets/selectable.js, widgets/sortable.js, widgets/accordion.js, widgets/autocomplete.js, widgets/button.js, widgets/checkboxradio.js, widgets/controlgroup.js, widgets/datepicker.js, widgets/dialog.js, widgets/menu.js, widgets/mouse.js, widgets/progressbar.js, widgets/selectmenu.js, widgets/slider.js, widgets/spinner.js, widgets/tabs.js, widgets/tooltip.js, effect.js, effects/effect-blind.js, effects/effect-bounce.js, effects/effect-clip.js, effects/effect-drop.js, effects/effect-explode.js, effects/effect-fade.js, effects/effect-fold.js, effects/effect-highlight.js, effects/effect-puff.js, effects/effect-pulsate.js, effects/effect-scale.js, effects/effect-shake.js, effects/effect-size.js, effects/effect-slide.js, effects/effect-transfer.js
  * Copyright jQuery Foundation and other contributors; Licensed MIT */
@@ -18,10 +18,10 @@
 
     $.ui = $.ui || {};
 
-    var version = ($.ui.version = '1.13.2');
+    var version = ($.ui.version = '1.13.1');
 
     /*!
-     * jQuery UI Widget 1.13.2
+     * jQuery UI Widget 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -730,7 +730,7 @@
     var widget = $.widget;
 
     /*!
-     * jQuery UI Position 1.13.2
+     * jQuery UI Position 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1180,7 +1180,7 @@
     var position = $.ui.position;
 
     /*!
-     * jQuery UI :data 1.13.2
+     * jQuery UI :data 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1207,7 +1207,7 @@
     });
 
     /*!
-     * jQuery UI Disable Selection 1.13.2
+     * jQuery UI Disable Selection 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1239,7 +1239,7 @@
     });
 
     /*!
-     * jQuery UI Focusable 1.13.2
+     * jQuery UI Focusable 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1320,7 +1320,7 @@
     });
 
     /*!
-     * jQuery UI Form Reset Mixin 1.13.2
+     * jQuery UI Form Reset Mixin 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1377,7 +1377,7 @@
     });
 
     /*!
-     * jQuery UI Support for jQuery core 1.8.x and newer 1.13.2
+     * jQuery UI Support for jQuery core 1.8.x and newer 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1448,7 +1448,7 @@
     }
 
     /*!
-     * jQuery UI Keycode 1.13.2
+     * jQuery UI Keycode 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1481,7 +1481,7 @@
     });
 
     /*!
-     * jQuery UI Labels 1.13.2
+     * jQuery UI Labels 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1532,7 +1532,7 @@
     });
 
     /*!
-     * jQuery UI Scroll Parent 1.13.2
+     * jQuery UI Scroll Parent 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1563,7 +1563,7 @@
     });
 
     /*!
-     * jQuery UI Tabbable 1.13.2
+     * jQuery UI Tabbable 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1585,7 +1585,7 @@
     });
 
     /*!
-     * jQuery UI Unique ID 1.13.2
+     * jQuery UI Unique ID 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1624,7 +1624,7 @@
     var ie = ($.ui.ie = !!/msie [\w.]+/.exec(navigator.userAgent.toLowerCase()));
 
     /*!
-     * jQuery UI Mouse 1.13.2
+     * jQuery UI Mouse 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1643,7 +1643,7 @@
     });
 
     var widgetsMouse = $.widget('ui.mouse', {
-        version: '1.13.2',
+        version: '1.13.1',
         options: {
             cancel: 'input, textarea, button, select, option',
             distance: 1,
@@ -1887,7 +1887,7 @@
     });
 
     /*!
-     * jQuery UI Draggable 1.13.2
+     * jQuery UI Draggable 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -1903,7 +1903,7 @@
     //>>css.structure: ../../themes/base/draggable.css
 
     $.widget('ui.draggable', $.ui.mouse, {
-        version: '1.13.2',
+        version: '1.13.1',
         widgetEventPrefix: 'drag',
         options: {
             addClasses: true,
@@ -3023,7 +3023,7 @@
     var widgetsDraggable = $.ui.draggable;
 
     /*!
-     * jQuery UI Droppable 1.13.2
+     * jQuery UI Droppable 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -3038,7 +3038,7 @@
     //>>demos: http://jqueryui.com/droppable/
 
     $.widget('ui.droppable', {
-        version: '1.13.2',
+        version: '1.13.1',
         widgetEventPrefix: 'drop',
         options: {
             accept: '*',
@@ -3467,7 +3467,7 @@
     var widgetsDroppable = $.ui.droppable;
 
     /*!
-     * jQuery UI Resizable 1.13.2
+     * jQuery UI Resizable 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -3485,7 +3485,7 @@
     //>>css.theme: ../../themes/base/theme.css
 
     $.widget('ui.resizable', $.ui.mouse, {
-        version: '1.13.2',
+        version: '1.13.1',
         widgetEventPrefix: 'resize',
         options: {
             alsoResize: false,
@@ -4620,7 +4620,7 @@
     var widgetsResizable = $.ui.resizable;
 
     /*!
-     * jQuery UI Selectable 1.13.2
+     * jQuery UI Selectable 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -4636,7 +4636,7 @@
     //>>css.structure: ../../themes/base/selectable.css
 
     var widgetsSelectable = $.widget('ui.selectable', $.ui.mouse, {
-        version: '1.13.2',
+        version: '1.13.1',
         options: {
             appendTo: 'body',
             autoRefresh: true,
@@ -4913,7 +4913,7 @@
     });
 
     /*!
-     * jQuery UI Sortable 1.13.2
+     * jQuery UI Sortable 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -4929,7 +4929,7 @@
     //>>css.structure: ../../themes/base/sortable.css
 
     var widgetsSortable = $.widget('ui.sortable', $.ui.mouse, {
-        version: '1.13.2',
+        version: '1.13.1',
         widgetEventPrefix: 'sort',
         ready: false,
         options: {
@@ -6351,7 +6351,7 @@
     });
 
     /*!
-     * jQuery UI Accordion 1.13.2
+     * jQuery UI Accordion 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -6371,7 +6371,7 @@
     //>>css.theme: ../../themes/base/theme.css
 
     var widgetsAccordion = $.widget('ui.accordion', {
-        version: '1.13.2',
+        version: '1.13.1',
         options: {
             active: 0,
             animate: {},
@@ -6933,7 +6933,7 @@
     });
 
     /*!
-     * jQuery UI Menu 1.13.2
+     * jQuery UI Menu 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -6951,7 +6951,7 @@
     //>>css.theme: ../../themes/base/theme.css
 
     var widgetsMenu = $.widget('ui.menu', {
-        version: '1.13.2',
+        version: '1.13.1',
         defaultElement: '<ul>',
         delay: 300,
         options: {
@@ -7586,7 +7586,7 @@
     });
 
     /*!
-     * jQuery UI Autocomplete 1.13.2
+     * jQuery UI Autocomplete 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -7604,7 +7604,7 @@
     //>>css.theme: ../../themes/base/theme.css
 
     $.widget('ui.autocomplete', {
-        version: '1.13.2',
+        version: '1.13.1',
         defaultElement: '<input>',
         options: {
             appendTo: null,
@@ -8229,7 +8229,7 @@
     var widgetsAutocomplete = $.ui.autocomplete;
 
     /*!
-     * jQuery UI Controlgroup 1.13.2
+     * jQuery UI Controlgroup 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -8249,7 +8249,7 @@
     var controlgroupCornerRegex = /ui-corner-([a-z]){2,6}/g;
 
     var widgetsControlgroup = $.widget('ui.controlgroup', {
-        version: '1.13.2',
+        version: '1.13.1',
         defaultElement: '<div>',
         options: {
             direction: 'horizontal',
@@ -8501,7 +8501,7 @@
     });
 
     /*!
-     * jQuery UI Checkboxradio 1.13.2
+     * jQuery UI Checkboxradio 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -8522,7 +8522,7 @@
     $.widget('ui.checkboxradio', [
         $.ui.formResetMixin,
         {
-            version: '1.13.2',
+            version: '1.13.1',
             options: {
                 disabled: null,
                 label: null,
@@ -8534,7 +8534,8 @@
             },
 
             _getCreateOptions: function () {
-                var disabled, labels, labelContents;
+                var disabled, labels;
+                var that = this;
                 var options = this._super() || {};
 
                 // We read the type here, because it makes more sense to throw a element type error first,
@@ -8554,14 +8555,14 @@
 
                 // We need to get the label text but this may also need to make sure it does not contain the
                 // input itself.
-                // The label contents could be text, html, or a mix. We wrap all elements
-                // and read the wrapper's `innerHTML` to get a string representation of
-                // the label, without the input as part of it.
-                labelContents = this.label.contents().not(this.element[0]);
-
-                if (labelContents.length) {
-                    this.originalLabel += labelContents.clone().wrapAll('<div></div>').parent().html();
-                }
+                this.label
+                    .contents()
+                    .not(this.element[0])
+                    .each(function () {
+                        // The label contents could be text, html, or a mix. We concat each element to get a
+                        // string representation of the label, without the input as part of it.
+                        that.originalLabel += this.nodeType === 3 ? $(this).text() : this.outerHTML;
+                    });
 
                 // Set the label option if we found label text
                 if (this.originalLabel) {
@@ -8761,7 +8762,7 @@
     var widgetsCheckboxradio = $.ui.checkboxradio;
 
     /*!
-     * jQuery UI Button 1.13.2
+     * jQuery UI Button 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -8779,7 +8780,7 @@
     //>>css.theme: ../../themes/base/theme.css
 
     $.widget('ui.button', {
-        version: '1.13.2',
+        version: '1.13.1',
         defaultElement: '<button>',
         options: {
             classes: {
@@ -9164,7 +9165,7 @@
 
     /* eslint-disable max-len, camelcase */
     /*!
-     * jQuery UI Datepicker 1.13.2
+     * jQuery UI Datepicker 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -9181,7 +9182,7 @@
     //>>css.structure: ../../themes/base/datepicker.css
     //>>css.theme: ../../themes/base/theme.css
 
-    $.extend($.ui, {datepicker: {version: '1.13.2'}});
+    $.extend($.ui, {datepicker: {version: '1.13.1'}});
 
     var datepicker_instActive;
 
@@ -11456,12 +11457,12 @@
     $.datepicker = new Datepicker(); // singleton instance
     $.datepicker.initialized = false;
     $.datepicker.uuid = new Date().getTime();
-    $.datepicker.version = '1.13.2';
+    $.datepicker.version = '1.13.1';
 
     var widgetsDatepicker = $.datepicker;
 
     /*!
-     * jQuery UI Dialog 1.13.2
+     * jQuery UI Dialog 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -11479,7 +11480,7 @@
     //>>css.theme: ../../themes/base/theme.css
 
     $.widget('ui.dialog', {
-        version: '1.13.2',
+        version: '1.13.1',
         options: {
             appendTo: 'body',
             autoOpen: true,
@@ -12361,7 +12362,7 @@
     var widgetsDialog = $.ui.dialog;
 
     /*!
-     * jQuery UI Progressbar 1.13.2
+     * jQuery UI Progressbar 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -12381,7 +12382,7 @@
     //>>css.theme: ../../themes/base/theme.css
 
     var widgetsProgressbar = $.widget('ui.progressbar', {
-        version: '1.13.2',
+        version: '1.13.1',
         options: {
             classes: {
                 'ui-progressbar': 'ui-corner-all',
@@ -12510,7 +12511,7 @@
     });
 
     /*!
-     * jQuery UI Selectmenu 1.13.2
+     * jQuery UI Selectmenu 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -12532,7 +12533,7 @@
     var widgetsSelectmenu = $.widget('ui.selectmenu', [
         $.ui.formResetMixin,
         {
-            version: '1.13.2',
+            version: '1.13.1',
             defaultElement: '<select>',
             options: {
                 appendTo: null,
@@ -12891,7 +12892,7 @@
                 // Support: IE
                 // Setting the text selection kills the button focus in IE, but
                 // restoring the focus doesn't kill the selection.
-                this.button.trigger('focus');
+                this.button.focus();
             },
 
             _documentClick: {
@@ -13161,7 +13162,7 @@
     ]);
 
     /*!
-     * jQuery UI Slider 1.13.2
+     * jQuery UI Slider 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -13179,7 +13180,7 @@
     //>>css.theme: ../../themes/base/theme.css
 
     var widgetsSlider = $.widget('ui.slider', $.ui.mouse, {
-        version: '1.13.2',
+        version: '1.13.1',
         widgetEventPrefix: 'slide',
 
         options: {
@@ -13912,7 +13913,7 @@
     });
 
     /*!
-     * jQuery UI Spinner 1.13.2
+     * jQuery UI Spinner 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -13941,7 +13942,7 @@
     }
 
     $.widget('ui.spinner', {
-        version: '1.13.2',
+        version: '1.13.1',
         defaultElement: '<input>',
         widgetEventPrefix: 'spin',
         options: {
@@ -14456,7 +14457,7 @@
     var widgetsSpinner = $.ui.spinner;
 
     /*!
-     * jQuery UI Tabs 1.13.2
+     * jQuery UI Tabs 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -14474,7 +14475,7 @@
     //>>css.theme: ../../themes/base/theme.css
 
     $.widget('ui.tabs', {
-        version: '1.13.2',
+        version: '1.13.1',
         delay: 300,
         options: {
             active: null,
@@ -15333,7 +15334,7 @@
     var widgetsTabs = $.ui.tabs;
 
     /*!
-     * jQuery UI Tooltip 1.13.2
+     * jQuery UI Tooltip 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -15351,7 +15352,7 @@
     //>>css.theme: ../../themes/base/theme.css
 
     $.widget('ui.tooltip', {
-        version: '1.13.2',
+        version: '1.13.1',
         options: {
             classes: {
                 'ui-tooltip': 'ui-corner-all ui-widget-shadow',
@@ -16504,7 +16505,7 @@
     };
 
     /*!
-     * jQuery UI Effects 1.13.2
+     * jQuery UI Effects 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -16871,7 +16872,7 @@
         }
 
         $.extend($.effects, {
-            version: '1.13.2',
+            version: '1.13.1',
 
             define: function (name, mode, effect) {
                 if (!effect) {
@@ -17418,7 +17419,7 @@
     var effect = $.effects;
 
     /*!
-     * jQuery UI Effects Blind 1.13.2
+     * jQuery UI Effects Blind 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -17471,7 +17472,7 @@
     });
 
     /*!
-     * jQuery UI Effects Bounce 1.13.2
+     * jQuery UI Effects Bounce 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -17560,7 +17561,7 @@
     });
 
     /*!
-     * jQuery UI Effects Clip 1.13.2
+     * jQuery UI Effects Clip 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -17607,7 +17608,7 @@
     });
 
     /*!
-     * jQuery UI Effects Drop 1.13.2
+     * jQuery UI Effects Drop 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -17657,7 +17658,7 @@
     });
 
     /*!
-     * jQuery UI Effects Explode 1.13.2
+     * jQuery UI Effects Explode 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -17760,7 +17761,7 @@
     });
 
     /*!
-     * jQuery UI Effects Fade 1.13.2
+     * jQuery UI Effects Fade 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -17793,7 +17794,7 @@
     });
 
     /*!
-     * jQuery UI Effects Fold 1.13.2
+     * jQuery UI Effects Fold 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -17858,7 +17859,7 @@
     });
 
     /*!
-     * jQuery UI Effects Highlight 1.13.2
+     * jQuery UI Effects Highlight 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -17898,7 +17899,7 @@
     });
 
     /*!
-     * jQuery UI Effects Size 1.13.2
+     * jQuery UI Effects Size 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -18065,7 +18066,7 @@
     });
 
     /*!
-     * jQuery UI Effects Scale 1.13.2
+     * jQuery UI Effects Scale 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -18104,7 +18105,7 @@
     });
 
     /*!
-     * jQuery UI Effects Puff 1.13.2
+     * jQuery UI Effects Puff 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -18128,7 +18129,7 @@
     });
 
     /*!
-     * jQuery UI Effects Pulsate 1.13.2
+     * jQuery UI Effects Pulsate 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -18174,7 +18175,7 @@
     });
 
     /*!
-     * jQuery UI Effects Shake 1.13.2
+     * jQuery UI Effects Shake 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -18227,7 +18228,7 @@
     });
 
     /*!
-     * jQuery UI Effects Slide 1.13.2
+     * jQuery UI Effects Slide 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors
@@ -18286,7 +18287,7 @@
     });
 
     /*!
-     * jQuery UI Effects Transfer 1.13.2
+     * jQuery UI Effects Transfer 1.13.1
      * http://jqueryui.com
      *
      * Copyright jQuery Foundation and other contributors

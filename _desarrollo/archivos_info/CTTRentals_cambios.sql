@@ -563,3 +563,23 @@ CREATE TABLE ctt_projects_type_called (
 ALTER TABLE `cttapp_cire`.`ctt_projects` 
 ADD COLUMN `pjttc_id` INT NOT NULL COMMENT 'Fk Id del Tipo de llamado relacion ctt_projects_type_called' AFTER `pjttp_id`;
 
+
+
+
+
+
+-- Actualizacion del 11 de agosto 2022
+ALTER TABLE `cttapp_cire`.`ctt_budget` 
+ADD COLUMN `bdg_order` INT NULL DEFAULT 0 COMMENT 'Posición en la lista de secciones' AFTER `bdg_insured`;
+
+ALTER TABLE `cttapp_cire`.`ctt_projects_content` 
+ADD COLUMN `pjtcn_order` INT NULL DEFAULT 0 COMMENT 'Posición en la lista de secciones' AFTER `pjtcn_status`;
+
+ALTER TABLE `cttapp_cire`.`ctt_projects_mice` 
+ADD COLUMN `pjtvr_order` INT NULL DEFAULT 0 COMMENT 'Posición en la lista de secciones' AFTER `pjtvr_status`;
+
+
+ALTER TABLE `cttapp_cire`.`ctt_projects_version` 
+ADD COLUMN `pjtvr_order` INT NULL DEFAULT 0 COMMENT 'Posición en la lista de secciones' AFTER `pjtvr_status`;
+
+
