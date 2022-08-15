@@ -312,6 +312,22 @@ class ProjectDetailsModel extends Model
 
     }
 
+
+
+/** ====== Actualiza cifras e la tabla temporal ==============================================  */
+    public function updateOrder($params)
+    {
+        $pjtId      = $this->db->real_escape_string($params['pjtId']);
+        $prdId      = $this->db->real_escape_string($params['prdId']);
+        $order      = $this->db->real_escape_string($params['order']);
+        $section    = $this->db->real_escape_string($params['section']);
+        
+        $qry1 = "UPDATE ctt_projects_mice 
+                SET pjtvr_order = $order
+                WHERE pjt_id = $pjtId AND prd_id = $prdId AND pjtvr_section = $section;";
+        return $this->db->query($qry1);
+    }    
+
 /** ====== Agrega un nuevo comentario ========================================================  */
     public function InsertComment($params, $userParam)
     {
@@ -425,16 +441,22 @@ public function UpdatePeriodProject($params)
 
 
 /** ====== Cancela proyecto ===============================================================  */
-public function cancelProject($params)
-{
-    $pjtId         = $this->db->real_escape_string($params['pjtId']);
-    $verId         = $this->db->real_escape_string($params['verId']);
+    public function cancelProject($params, $user)
+    {
+        $pjtId         = $this->db->real_escape_string($params['pjtId']);
+        $verId         = $this->db->real_escape_string($params['verId']);
+        $usrId         = $user;
 
-    $qry = "UPDATE ctt_projects SET pjt_status = '5' WHERE pjt_id = $pjtId;";
-    $this->db->query($qry);  
+        $qry1 = "INSERT INTO ctt_movements (mov_quantity, mov_type, mov_status, mov_date, prd_id, pjt_id, usr_id)
+                SELECT pjtvr_quantity AS mov_quantity, 'Cancela Proyecto' as mov_type, '2' as mov_status, now() as mov_date, prd_id, pjt_id, '$usrId' as usr_id 
+                FROM ctt_projects_mice WHERE pjt_id = $pjtId;";
+        $this->db->query($qry1);  
 
-    return $pjtId.'|'. $verId;
-}  
+        $qry2 = "UPDATE ctt_projects SET pjt_status = '5' WHERE pjt_id = $pjtId;";
+        $this->db->query($qry2);  
+
+        return $pjtId.'|'. $verId;
+    }  
 
     
 

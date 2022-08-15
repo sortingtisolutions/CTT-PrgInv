@@ -330,10 +330,14 @@ public function UpdatePeriodProject($request_params)
         $verId      = $request_params['verId'];
         $pjtId      = $request_params['pjtId'];
         $params     = $this->session->get('user');
+        $group = explode('|',$params);
+
+        $user = $group[0];
+        $name = $group[2];
         // $periods    = $this->model->cleanPeriods($pjtId);
         // $series     = $this->model->restoreSeries($pjtId);
         // $detail     = $this->model->cleanDetail($pjtId);
-        $project    = $this->model->cancelProject($request_params);
+        $project    = $this->model->cancelProject($request_params, $user);
         echo $verId . '|'. $pjtId;
     } 
 
@@ -365,6 +369,16 @@ public function UpdatePeriodProject($request_params)
         $result = $this->model->updateMice($request_params);
         echo $result;
     }
+
+
+
+/** ==== Actualiza el ordenamiento de productos del proyecto ================================  */
+public function updateOrder($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->updateOrder($request_params);
+    echo $result;
+}
 
 
 /** ==== Agrega producto a la tabla concentradora ============================================  */

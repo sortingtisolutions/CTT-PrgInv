@@ -903,7 +903,7 @@ function putBudgets(dt) {
                     }
                 });
             showButtonVersion('S');
-            getDataMice();
+            OrderMice();
         },
     });
 
@@ -921,7 +921,7 @@ function reOrdering() {
             }
         });
 
-    getDataMice();
+    OrderMice();
 }
 
 // *************************************************
@@ -2003,11 +2003,11 @@ function getDataMice() {
             updateMice(pjtId, pid, 'pjtvr_discount_test', discountTest_act / 100, section, 'U');
         }
 
-        let order = $(this).children('th').children('.move_item').attr('data-order');
-        if (order > 0) {
-            // console.log(pjtId, pid, 'pjtvr_order', order, section, 'N');
-            updateMice(pjtId, pid, 'pjtvr_order', order, section, 'N');
-        }
+        // let order = $(this).children('th').children('.move_item').attr('data-order');
+        // if (order > 0) {
+        //     // console.log(pjtId, pid, 'pjtvr_order', order, section, 'N');
+        //     updateMice(pjtId, pid, 'pjtvr_order', order, section, 'N');
+        // }
     });
 }
 /**
@@ -2037,6 +2037,26 @@ function updateMice(pj, pd, fl, dt, sc, ac) {
 }
 function receiveResponseMice(dt) {
     // console.log(dt);
+}
+
+function OrderMice() {
+    let pjtId = $('.version_current').attr('data-project');
+    $('.budgetRow').each(function (v) {
+        let pid = parseInt($(this).attr('id').substring(3, 10));
+        let section = $(this).parents('tbody').attr('id').substring(2, 5);
+        let order = $(this).children('th').children('.move_item').attr('data-order');
+
+        var par = `[{
+            "pjtId"      :   "${pjtId}",
+            "prdId"      :   "${pid}",
+            "order"      :   "${order}",
+            "section"    :   "${section}"
+            }]`;
+        var pagina = 'ProjectDetails/updateOrder';
+        var tipo = 'html';
+        var selector = receiveResponseMice;
+        fillField(pagina, par, tipo, selector);
+    });
 }
 
 /* ************************************************************************ */
