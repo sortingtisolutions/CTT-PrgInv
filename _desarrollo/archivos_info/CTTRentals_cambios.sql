@@ -583,3 +583,28 @@ ALTER TABLE `cttapp_cire`.`ctt_projects_version`
 ADD COLUMN `pjtvr_order` INT NULL DEFAULT 0 COMMENT 'Posición en la lista de secciones' AFTER `pjtvr_status`;
 
 
+
+
+
+-- Actualizacion del 15 de agosto 2022
+ALTER TABLE `cttapp_cire`.`ctt_budget` 
+ADD COLUMN `bdg_discount_insured` DECIMAL(10,2) NULL DEFAULT 0.00 COMMENT 'Descuento sobre el seguro' AFTER `bdg_discount_base`;
+
+
+ALTER TABLE `cttapp_cire`.`ctt_projects_version` 
+ADD COLUMN `pjtvr_discount_insured` DECIMAL(10,2) NULL DEFAULT 0.00 COMMENT 'Descuento sobre el seguro' AFTER `pjtvr_discount_base`;
+
+
+ALTER TABLE `cttapp_cire`.`ctt_projects_content` 
+ADD COLUMN `pjtcn_discount_insured` DECIMAL(10,2) NULL DEFAULT 0.00 COMMENT 'Descuento sobre el seguro' AFTER `pjtcn_discount_base`;
+
+
+ALTER TABLE `cttapp_cire`.`ctt_projects_mice` 
+ADD COLUMN `pjtvr_discount_insured` DECIMAL(10,2) NULL DEFAULT 0.00 COMMENT 'Descuento sobre el seguro' AFTER `pjtvr_discount_base`;
+
+ALTER TABLE `cttapp_cire`.`ctt_version` 
+ADD COLUMN `ver_discount_insured` DECIMAL(10,2) NULL DEFAULT 0.00 COMMENT 'Descuento sobre el seguro' AFTER `ver_master`;
+
+
+
+

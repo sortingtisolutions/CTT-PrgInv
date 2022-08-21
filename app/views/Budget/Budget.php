@@ -12,7 +12,7 @@
     <div class="invoice__section invoice__section-panel invoice-border">
         <div class="panel__name">
             <i class="fas fa-caret-square-down projectInformation"></i>
-            <span id="projectName" data_id="" title=""></span>
+            <span id="projectName" data-id="" title=""></span>
         </div>
         <div class="panel__title">COTIZACIÓN</div>
         <div class="panel__finder">
@@ -36,10 +36,10 @@
             <span class="invoice_button toSave"><i class="fas fa-save"></i> Generar presupuesto</span>
             <div class="menu-sections">
                 <ul>
-                    <li class="equipoBase"          data_option="1">Equipo Base</li>
-                    <li class="equipoExtra"         data_option="2">Equipo Extra</li>
-                    <li class="equipoPorDia"        data_option="3">Equipo por Días</li>
-                    <li class="equipoSubarrendo"    data_option="4">Equipo por subarrendo</li>
+                    <li class="equipoBase"          data-option="1">Equipo Base</li>
+                    <li class="equipoExtra"         data-option="2">Equipo Extra</li>
+                    <li class="equipoPorDia"        data-option="3">Equipo por Días</li>
+                    <li class="equipoSubarrendo"    data-option="4">Equipo por subarrendo</li>
                 </ul>
             </div>
         </div>
@@ -54,6 +54,7 @@
                         <th class="wcldays colbase"><i class="fas fa-caret-down selectionInput daysBase inpt"></i>Días<br>Renta</th>
                         <th class="wclnumb colbase"><i class="fas fa-caret-down selectionInput daysCost inpt"></i>Dias<br>Cobro</th>
                         <th class="wcldisc colbase"><i class="fas fa-caret-down selectionInput discountBase selt"></i>Desc.</th>
+                        <th class="wcldisc colbase"><i class="fas fa-caret-down selectionInput discountInsu selt"></i>Desc.<br>Seguro</th>
                         <th class="wclnumb colbase"><div class="invoice_col_header costBase">COSTO BASE</div>Costo</th>
                         <th class="wcldays coltrip"><i class="fas fa-caret-down selectionInput daysTrip inpt"></i>Días</th>
                         <th class="wcldisc coltrip"><i class="fas fa-caret-down selectionInput discountTrip selt"></i>Desc</th>
@@ -150,6 +151,10 @@
                     <tr>
                         <td class="totals-concept">SEGURO</td>
                         <td class="totals-numbers" id="insuTotal">0.00</td>
+                    </tr>
+                    <tr>
+                        <td class="totals-concept"><span class="discData" id ="insuDesctoPrc">0<small>%</small></span> DESTO. AL SEGURO <i class="fas fa-caret-left selectioninsured"></i></td>
+                        <td class="totals-numbers" id="insuDescto">0.00</td>
                     </tr>
                     <tr>
                         <td class="totals-concept">TOTAL</td>
@@ -350,6 +355,9 @@
     </div>
     <div class="invoiceMainSelect withShadow">
         <select name="selDiscount" id="selDiscount" class="input_invoice" size="6"></select>
+    </div>
+    <div class="invoiceDiscSelect withShadow">
+        <select name="selDiscInsr" id="selDiscInsr" class="input_invoice" size="6"></select>
     </div>
 
 <!-- Fondo obscuro -->

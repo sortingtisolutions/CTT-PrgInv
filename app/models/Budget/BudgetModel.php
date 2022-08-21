@@ -297,7 +297,8 @@ public function stockProdcuts($params)
     {
         $pjtId                  = $this->db->real_escape_string($params['pjtId']);
         $verCode                = $this->db->real_escape_string($params['verCode']);
-        $qry = "INSERT INTO ctt_version (ver_code, pjt_id) VALUES ('$verCode', $pjtId);";
+        $discount                = $this->db->real_escape_string($params['discount']);
+        $qry = "INSERT INTO ctt_version (ver_code, pjt_id, ver_discount_insured) VALUES ('$verCode', $pjtId, $discount);";
         $this->db->query($qry);
         $result = $this->db->insert_id;
         return $result . '|' . $pjtId;
@@ -353,6 +354,7 @@ public function stockProdcuts($params)
         $bdg_days_base          = $params['bdgDaysBs'];
         $bdg_days_cost          = $params['bdgDaysCs'];
         $bdg_discount_base      = $params['bdgDescBs'];
+        $bdg_discount_insured   = $params['bdgDescIn'];
         $bdg_days_trip          = $params['bdgDaysTp'];
         $bdg_discount_trip      = $params['bdgDescTp'];
         $bdg_days_test          = $params['bdgDaysTr'];
@@ -366,7 +368,7 @@ public function stockProdcuts($params)
 
         $qry = "INSERT INTO ctt_budget (
                     bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_prod_level, bdg_section, 
-                    bdg_quantity, bdg_days_base, bdg_days_cost, bdg_discount_base, bdg_days_trip, 
+                    bdg_quantity, bdg_days_base, bdg_days_cost, bdg_discount_base, bdg_discount_insured, bdg_days_trip, 
                     bdg_discount_trip, bdg_days_test, bdg_discount_test,bdg_insured, bdg_order,
                     ver_id, prd_id 
                 ) VALUES (
@@ -379,6 +381,7 @@ public function stockProdcuts($params)
                     '$bdg_days_base',           
                     '$bdg_days_cost',           
                     '$bdg_discount_base',   
+                    '$bdg_discount_insured',   
                     '$bdg_days_trip', 
                     '$bdg_discount_trip', 
                     '$bdg_days_test', 
@@ -581,12 +584,12 @@ public function saveBudgetList($params)
 
         $qry1 = "INSERT INTO ctt_projects_version (
                     pjtvr_prod_sku,  pjtvr_prod_name,  pjtvr_prod_price, pjtvr_prod_level,   pjtvr_section,  pjtvr_quantity, 
-                    pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_days_trip, pjtvr_discount_trip, 
+                    pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, pjtvr_days_trip, pjtvr_discount_trip, 
                     pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,    ver_id,    prd_id,    pjt_id
                 )
                 SELECT 
                     bg.bdg_prod_sku, bg.bdg_prod_name, bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_section, bg.bdg_quantity,  
-                    bg.bdg_days_base, bg.bdg_days_cost, bg.bdg_discount_base, bg.bdg_days_trip, bg.bdg_discount_trip,
+                    bg.bdg_days_base, bg.bdg_days_cost, bg.bdg_discount_base, bg.bdg_discount_insured, bg.bdg_days_trip, bg.bdg_discount_trip,
                     bg.bdg_days_test, bg.bdg_discount_test, bg.bdg_insured, bg.ver_id, bg.prd_id, vr.pjt_id 
                 FROM ctt_budget AS bg
                 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
@@ -594,12 +597,12 @@ public function saveBudgetList($params)
         $this->db->query($qry1);
 
         $qry2 = "INSERT INTO ctt_projects_content (
-                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, 
+                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, 
                     pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
                     pjtcn_status, ver_id, prd_id, pjt_id, pjtvr_id
                 )
                 SELECT 
-                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, 
+                    pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, 
                     pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, 
                     pjtvr_status, ver_id, prd_id, pjt_id, pjtvr_id
                 FROM ctt_projects_version WHERE ver_id = $verId;";

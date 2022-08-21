@@ -1,4 +1,14 @@
-let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall;
+let cust,
+    proj,
+    prod,
+    vers,
+    budg,
+    tpprd,
+    relc,
+    proPar,
+    interfase,
+    tpcall,
+    dstgral;
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
@@ -20,6 +30,7 @@ function inicial() {
     getProjectType();
     getProjectTypeCalled();
     getCalendarPeriods();
+    discountInsuredEvent();
 }
 
 function stickyTable() {
@@ -33,20 +44,60 @@ function stickyTable() {
     });
 }
 
+function discountInsuredEvent() {
+    $('.selectioninsured')
+        .unbind('click')
+        .on('click', function () {
+            let elm = $(this);
+
+            let posLeft = elm.offset().left - 90;
+            let posTop = elm.offset().top - 80;
+
+            $('.invoiceDiscSelect')
+                .unbind('mouseleave')
+                .css({ top: posTop + 'px', left: posLeft + 'px' })
+                .fadeIn(400)
+                .on('mouseleave', function () {
+                    $('.invoiceDiscSelect').fadeOut(400);
+                })
+                .unbind('change')
+                .on('change', function (e) {
+                    let insured = parseFloat(
+                        $('#insuTotal').text().replace(/\,/g, '')
+                    );
+                    if (insured > 0) {
+                        let data = parseFloat(e.target.value);
+                        data = data * 100 + '<small>%</small>';
+                        $('#insuDesctoPrc').html(data);
+
+                        updateTotals();
+                        $('.invoiceDiscSelect').fadeOut(400);
+                        // console.log(e.target.value, data, insured, dsctoInsured);
+                    }
+                });
+        });
+}
+
 function eventsAction() {
     // Despliega la seccion de detalle de información del proyecto
     $('.projectInformation')
         .unbind('click')
         .on('click', function () {
-            $('.invoice__section-finder').css({top: '-100%'});
+            $('.invoice__section-finder').css({ top: '-100%' });
             $('.projectfinder').removeClass('open');
 
             let rotate = $(this).attr('class').indexOf('rotate180');
             if (rotate >= 0) {
-                $('.invoice__section-details').css({top: '-100%', bottom: '100%'});
+                $('.invoice__section-details').css({
+                    top: '-100%',
+                    bottom: '100%',
+                });
                 $(this).removeClass('rotate180');
             } else {
-                $('.invoice__section-details').css({top: '32px', bottom: '0px'});
+                $('.invoice__section-details').css({
+                    top: '32px',
+                    bottom: '0px',
+                });
                 $(this).addClass('rotate180');
             }
         });
@@ -55,15 +106,18 @@ function eventsAction() {
     $('.projectfinder')
         .unbind('click')
         .on('click', function () {
-            $('.invoice__section-details').css({top: '-100%', bottom: '100%'});
+            $('.invoice__section-details').css({
+                top: '-100%',
+                bottom: '100%',
+            });
             $('.projectInformation').removeClass('rotate180');
 
             let open = $(this).attr('class').indexOf('open');
             if (open >= 0) {
-                $('.invoice__section-finder').css({top: '-100%'});
+                $('.invoice__section-finder').css({ top: '-100%' });
                 $(this).removeClass('open');
             } else {
-                $('.invoice__section-finder').css({top: '32px'});
+                $('.invoice__section-finder').css({ top: '32px' });
                 $(this).addClass('open');
             }
         });
@@ -106,7 +160,7 @@ function eventsAction() {
             let pos = $(this).offset();
             $('.import-sections')
                 .slideDown('slow')
-                .css({top: '30px', left: pos.left + 'px'})
+                .css({ top: '30px', left: pos.left + 'px' })
                 .on('mouseleave', function () {
                     $(this).slideUp('slow');
                 });
@@ -138,7 +192,9 @@ function eventsAction() {
         .unbind('click')
         .on('click', function () {
             let boton = $(this).html();
-            let nRows = $('.invoice__box-table table tbody tr.budgetRow').length;
+            let nRows = $(
+                '.invoice__box-table table tbody tr.budgetRow'
+            ).length;
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data-project');
                 let verId = $('.version_current').attr('data-version');
@@ -163,7 +219,9 @@ function eventsAction() {
         .unbind('click')
         .on('click', function () {
             let boton = $(this).html();
-            let nRows = $('.invoice__box-table table tbody tr.budgetRow').length;
+            let nRows = $(
+                '.invoice__box-table table tbody tr.budgetRow'
+            ).length;
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data-project');
                 // let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data-code');
@@ -177,7 +235,8 @@ function eventsAction() {
                 let par = `
                 [{
                     "pjtId"           : "${pjtId}",
-                    "verCode"         : "${verNext}"
+                    "verCode"         : "${verNext}",
+                    "discount"        : "${discount}"
                 }]`;
                 var pagina = 'ProjectDetails/SaveBudgetAs';
                 var tipo = 'html';
@@ -250,12 +309,24 @@ function expandCollapseSection() {
         $('.showColumns').addClass('rotate180');
         $('.coltrip').hide().children('.input_invoice').attr('disable', 'true');
         $('.coltest').hide().children('.input_invoice').attr('disable', 'true');
-        $('.showColumns').parents('table').removeAttr('class').addClass('collapsed');
+        $('.showColumns')
+            .parents('table')
+            .removeAttr('class')
+            .addClass('collapsed');
     } else {
         $('.showColumns').removeClass('rotate180');
-        $('.coltrip').show().children('.input_invoice').attr('disable', 'false');
-        $('.coltest').show().children('.input_invoice').attr('disable', 'false');
-        $('.showColumns').parents('table').removeAttr('class').addClass('expanded');
+        $('.coltrip')
+            .show()
+            .children('.input_invoice')
+            .attr('disable', 'false');
+        $('.coltest')
+            .show()
+            .children('.input_invoice')
+            .attr('disable', 'false');
+        $('.showColumns')
+            .parents('table')
+            .removeAttr('class')
+            .addClass('expanded');
     }
 }
 
@@ -427,8 +498,11 @@ function putCustomersOwner(dt) {
 /**  Llena el listado de descuentos */
 function putDiscounts(dt) {
     $.each(dt, function (v, u) {
-        let H = `<option value="${u.dis_discount}">${u.dis_discount * 100}%</option>`;
+        let H = `<option value="${u.dis_discount}">${
+            u.dis_discount * 100
+        }%</option>`;
         $('#selDiscount').append(H);
+        $('#selDiscInsr').append(H);
     });
 }
 
@@ -440,18 +514,27 @@ function putVersion(dt) {
         let firstVersion = '';
         let caret = '';
         $.each(dt, function (v, u) {
-            let master = u.ver_master == 1 ? '<i class="fas fa-check-circle"></i>' : '';
+            let master =
+                u.ver_master == 1 ? '<i class="fas fa-check-circle"></i>' : '';
             if (u.ver_active == 1) {
                 firstVersion = u.ver_id;
                 caret = '<i class="fas fa-caret-right"></i>';
             } else {
                 caret = '';
             }
-            let H = `<li id="V${u.ver_id}" data-code="${u.ver_code}" data-master="${u.ver_master}" data-active="${u.ver_active}" data-project="${u.pjt_id}">
+            let H = `<li id="V${u.ver_id}" data-code="${
+                u.ver_code
+            }" data-master="${u.ver_master}" data-active="${
+                u.ver_active
+            }" data-project="${u.pjt_id}" data-discount="${
+                u.ver_discount_insured
+            }">
                         <span class="element_caret element_caret-master">${master}</span>
                         <span class="element_caret element_caret-active">${caret}</span>
                         <span class="element_code">${u.ver_code}</span>
-                        <span class="element_date"> ${moment(u.ver_date).format('DD-MMM-yyyy')}</span>
+                        <span class="element_date"> ${moment(u.ver_date).format(
+                            'DD-MMM-yyyy'
+                        )}</span>
                     </li> `;
 
             $('.version__list ul').append(H);
@@ -469,6 +552,7 @@ function putVersion(dt) {
                 let versionId = $(this).attr('id').substring(1, 100);
                 let versionMaster = $(this).data('master');
                 let versionActive = $(this).data('active');
+                let discount = $(this).data('discount');
 
                 $('.version_current')
                     .html('Version: ' + versionCode)
@@ -476,6 +560,8 @@ function putVersion(dt) {
                     .attr('data-code', versionCode)
                     .attr('data-master', versionMaster)
                     .attr('data-active', versionActive);
+
+                $('#insuDesctoPrc').html(discount * 100 + '<small>%</small>');
 
                 getBudgets(pjtId, versionId);
                 showButtonVersion('H');
@@ -591,12 +677,20 @@ function actionSelProject(obj) {
 
         pj.pjt_parent > 0 ? showButtonToImport('S') : showButtonToImport('H');
 
-        $('.panel__name').css({visibility: 'visible'}).children('span').html(pj.pjt_name).attr('data-id', pj.pjt_id).attr('title', pj.pjt_name);
+        $('.panel__name')
+            .css({ visibility: 'visible' })
+            .children('span')
+            .html(pj.pjt_name)
+            .attr('data-id', pj.pjt_id)
+            .attr('title', pj.pjt_name);
         $('#projectNumber').html(pj.pjt_number);
         $('#projectLocation').html(pj.pjt_location);
-        $('#projectPeriod').html(`<span>${pj.pjt_date_start} - ${pj.pjt_date_end}</span><i class="fas fa-calendar-alt id="periodcalendar"></i>`);
+        $('#projectPeriod').html(
+            `<span>${pj.pjt_date_start} - ${pj.pjt_date_end}</span><i class="fas fa-calendar-alt id="periodcalendar"></i>`
+        );
         $('#projectLocationType').html(pj.loc_type_location);
         $('#projectType').html(pj.pjttp_name);
+
         fillProducer(pj.cus_parent);
         getVersion(pj.pjt_id);
         // getCalendarPeriods(pj);
@@ -615,7 +709,7 @@ function actionSelProject(obj) {
             }
         });
 
-        $('.invoice_controlPanel .addSection').css({visibility: 'visible'});
+        $('.invoice_controlPanel .addSection').css({ visibility: 'visible' });
     }
 }
 
@@ -636,7 +730,20 @@ function getCalendarPeriods() {
                 customRangeLabel: 'Custom',
                 weekLabel: 'W',
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNames: [
+                    'Enero',
+                    'Febrero',
+                    'Marzo',
+                    'Abril',
+                    'Mayo',
+                    'Junio',
+                    'Julio',
+                    'Agosto',
+                    'Septiembre',
+                    'Octubre',
+                    'Noviembre',
+                    'Diciembre',
+                ],
                 firstDay: 1,
             },
             showCustomRangeLabel: false,
@@ -647,7 +754,9 @@ function getCalendarPeriods() {
             opens: 'left',
         },
         function (start, end, label) {
-            $('#projectPeriod span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+            $('#projectPeriod span').html(
+                start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY')
+            );
             let projDateStart = start.format('YYYYMMDD');
             let projDateEnd = end.format('YYYYMMDD');
 
@@ -670,7 +779,10 @@ function SetUpdatePeriodProject(dt) {
     let topDays = getDaysPeriod();
     $('.invoice__box-table table tbody tr.budgetRow').each(function (v) {
         let tr = $(this);
-        let bdgDaysBase = tr.children('td.daysBase').children('.input_invoice').val();
+        let bdgDaysBase = tr
+            .children('td.daysBase')
+            .children('.input_invoice')
+            .val();
         if (bdgDaysBase > topDays) {
             tr.children('td.daysBase').children('.input_invoice').val(topDays);
         }
@@ -745,9 +857,12 @@ function selProduct(res) {
         if (res.length == 3) {
             getProducts(res.toUpperCase(), dstr, dend);
         } else {
-            rowCurr.css({display: 'none'});
+            rowCurr.css({ display: 'none' });
             rowCurr.each(function (index) {
-                var cm = $(this).data('element').toUpperCase().replace(/|/g, '');
+                var cm = $(this)
+                    .data('element')
+                    .toUpperCase()
+                    .replace(/|/g, '');
 
                 cm = omitirAcentos(cm);
                 var cr = cm.indexOf(res);
@@ -775,10 +890,15 @@ function omitirAcentos(text) {
 
 function putProducts(dt) {
     prod = dt;
+    $('#listProductsTable table tbody').html('');
     $.each(dt, function (v, u) {
         let H = `
-            <tr data-indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
-                <th class="col_product" title="${u.prd_name}"><div class="elipsis">${u.prd_name}</div></th>
+            <tr data-indx ="${v}" data-element="${
+            u.prd_sku
+        }|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
+                <th class="col_product" title="${
+                    u.prd_name
+                }"><div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_type">${u.prd_level}</td>
                 <td class="col_category">${u.sbc_name}</td>
@@ -804,32 +924,35 @@ function loadBudget(inx, bdgId) {
     let produ = prod[inx].prd_name.replace(/\"/g, '°').replace(/\,/g, '^');
     let subct = prod[inx].sbc_name.replace(/\"/g, '°').replace(/\,/g, '^');
     let days = getDaysPeriod();
-    let section = $('.productos__box-table').attr('data-section').substring(2, 5);
+    let section = $('.productos__box-table')
+        .attr('data-section')
+        .substring(2, 5);
     let pjtId = $('.version_current').attr('data-project');
     let verId = $('.version_current').attr('data-version');
 
     let par = `{
-        "pjtvr_id"            : "0",
-        "pjtvr_prod_sku"      : "${prod[inx].prd_sku}",
-        "pjtvr_prod_name"     : "${produ}",
-        "pjtvr_prod_price"    : "${prod[inx].prd_price}",
-        "pjtvr_quantity"      : "1",
-        "pjtvr_days_base"     : "${days}",
-        "pjtvr_days_cost"     : "${days}",
-        "pjtvr_discount_base" : "0",
-        "pjtvr_days_trip"     : "0",
-        "pjtvr_discount_trip" : "0",
-        "pjtvr_days_test"     : "0",
-        "pjtvr_discount_test" : "0",
-        "pjtvr_insured"       : "${insurance}",
-        "pjtvr_prod_level"    : "${prod[inx].prd_level}",
-        "prd_id"              : "${prod[inx].prd_id}",
-        "pjt_id"              : "${pjtId}",
-        "ver_id"              : "${verId}",
-        "pjtvr_stock"         : "${prod[inx].stock}",
-        "sbc_name"            : "${subct}",
-        "pjtvr_section"       : "${section}",
-        "daybasereal"         : "${days}"
+        "pjtvr_id"                  : "0",
+        "pjtvr_prod_sku"            : "${prod[inx].prd_sku}",
+        "pjtvr_prod_name"           : "${produ}",
+        "pjtvr_prod_price"          : "${prod[inx].prd_price}",
+        "pjtvr_quantity"            : "1",
+        "pjtvr_days_base"           : "${days}",
+        "pjtvr_days_cost"           : "${days}",
+        "pjtvr_discount_base"       : "0",
+        "pjtvr_discount_insured"    : "0",
+        "pjtvr_days_trip"           : "0",
+        "pjtvr_discount_trip"       : "0",
+        "pjtvr_days_test"           : "0",
+        "pjtvr_discount_test"       : "0",
+        "pjtvr_insured"             : "${insurance}",
+        "pjtvr_prod_level"          : "${prod[inx].prd_level}",
+        "prd_id"                    : "${prod[inx].prd_id}",
+        "pjt_id"                    : "${pjtId}",
+        "ver_id"                    : "${verId}",
+        "pjtvr_stock"               : "${prod[inx].stock}",
+        "sbc_name"                  : "${subct}",
+        "pjtvr_section"             : "${section}",
+        "daybasereal"               : "${days}"
     }
     `;
 
@@ -860,8 +983,17 @@ function registeredProduct(id) {
     $('#invoiceTable table tbody tr').each(function () {
         let idp = $(this).attr('id');
         if (id == idp) {
-            let qty = parseInt($(this).children('td.col_quantity').children('.input_invoice').val()) + 1;
-            $(this).children('td.col_quantity').children('.input_invoice').val(qty);
+            let qty =
+                parseInt(
+                    $(this)
+                        .children('td.col_quantity')
+                        .children('.input_invoice')
+                        .val()
+                ) + 1;
+            $(this)
+                .children('td.col_quantity')
+                .children('.input_invoice')
+                .val(qty);
             ky = 1;
         }
     });
@@ -929,6 +1061,7 @@ function reOrdering() {
 // *************************************************
 function fillBudgetProds(jsn, days, stus) {
     let pds = JSON.parse(jsn);
+
     let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
     let H = `
     <tr id="bdg${pds.prd_id}" 
@@ -956,7 +1089,8 @@ function fillBudgetProds(jsn, days, stus) {
         </td>
         
     <!-- Precio -->
-        <td class="wclnumb col_price colbase priceBase">${mkn(pds.pjtvr_prod_price, 'n')}</td>
+        <td class="wclnumb col_price colbase priceBase">
+            ${mkn(pds.pjtvr_prod_price, 'n')}</td>
         
     <!-- Dias Base -->
         <td class="wcldays col_days colbase daysBase">
@@ -975,10 +1109,27 @@ function fillBudgetProds(jsn, days, stus) {
         </td>
 
     <!-- Descuento base -->
-        <td class="wcldisc col_discount colbase discountBase" data-real="${parseFloat(pds.pjtvr_discount_base) * 100}">
+        <td class="wcldisc col_discount colbase discountBase" 
+            data-key="1" 
+            data-real="${parseFloat(pds.pjtvr_discount_base) * 100}"
+        >
             <i class="fas fa-caret-left selectioncell"></i>
-            <span class="discData">${parseFloat(pds.pjtvr_discount_base) * 100}<small>%</small></span>
+            <span class="discData">
+                ${parseFloat(pds.pjtvr_discount_base) * 100}<small>%</small>
+            </span>
         </td>
+
+    <!-- Descuento al seguro -->
+        <td class="wcldisc col_discount colbase discountInsu" 
+            data-key="${pds.pjtvr_insured}" 
+            data-real="${parseFloat(pds.pjtvr_insured) * 100}"
+        >
+            <i class="fas fa-caret-left selectioncell"></i>
+            <span class="discData">
+                ${parseFloat(pds.pjtvr_discount_insured) * 100}<small>%</small>
+            </span>
+        </td>
+
 
     <!-- Costo base -->
         <td class="wclnumb col_cost colbase costBase">0.00</td>
@@ -992,9 +1143,14 @@ function fillBudgetProds(jsn, days, stus) {
         </td>
 
     <!-- Descuento viaje -->
-        <td class="wcldisc col_discount coltrip discountTrip" data-real="${parseFloat(pds.pjtvr_discount_trip) * 100}">
+        <td class="wcldisc col_discount coltrip discountTrip" 
+            data-key="1"     
+            data-real="${parseFloat(pds.pjtvr_discount_trip) * 100}"
+        >
             <i class="fas fa-caret-left selectioncell"></i>
-            <span class="discData">${parseFloat(pds.pjtvr_discount_trip) * 100}<small>%</small></span>
+            <span class="discData">${
+                parseFloat(pds.pjtvr_discount_trip) * 100
+            }<small>%</small></span>
         </td>
         
     <!-- Costo viaje -->
@@ -1009,9 +1165,14 @@ function fillBudgetProds(jsn, days, stus) {
         </td>
 
     <!-- Descuento prueba -->
-        <td class="wcldisc col_discount coltest discountTest" data-real="${parseFloat(pds.pjtvr_discount_test) * 100}">
+        <td class="wcldisc col_discount coltest discountTest" 
+            data-key="1" 
+            data-real="${parseFloat(pds.pjtvr_discount_test) * 100}"
+        >
             <i class="fas fa-caret-left selectioncell"></i>
-            <span class="discData">${parseFloat(pds.pjtvr_discount_test) * 100}<small>%</small></span>
+            <span class="discData">
+                ${parseFloat(pds.pjtvr_discount_test) * 100}<small>%</small>
+            </span>
         </td>
         
     <!-- Costo prueba -->
@@ -1034,8 +1195,11 @@ function fillBudgetProds(jsn, days, stus) {
 
 function putCounterPending(dt) {
     if (dt[0].counter > 0) {
-        let word = dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
-        $(`#bdg${dt[0].prd_id} .col_quantity`).append(`<div class="col_quantity-pending" title="${word} en pendiente"></div>`);
+        let word =
+            dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
+        $(`#bdg${dt[0].prd_id} .col_quantity`).append(
+            `<div class="col_quantity-pending" title="${word} en pendiente"></div>`
+        );
     }
     purgeInterfase();
 }
@@ -1066,12 +1230,14 @@ function activeInputSelector() {
             let posLeft = id.offset().left;
             let posTop = id.offset().top - 20;
             let selector = section;
-            let nRows = $('.invoice__box-table table tbody tr.budgetRow').length;
+            let nRows = $(
+                '.invoice__box-table table tbody tr.budgetRow'
+            ).length;
             if (nRows > 0) {
                 if (typeSet == 'inpt') {
                     $('.invoiceMainInput')
                         .unbind('mouseleave')
-                        .css({top: posTop + 'px', left: posLeft + 'px'})
+                        .css({ top: posTop + 'px', left: posLeft + 'px' })
                         .fadeIn(400)
                         .on('mouseleave', function () {
                             $('.invoiceMainInput').fadeOut(400);
@@ -1087,7 +1253,7 @@ function activeInputSelector() {
                 if (typeSet == 'selt') {
                     $('.invoiceMainSelect')
                         .unbind('mouseleave')
-                        .css({top: posTop + 'px', left: posLeft + 'px'})
+                        .css({ top: posTop + 'px', left: posLeft + 'px' })
                         .fadeIn(400)
                         .on('mouseleave', function () {
                             $('.invoiceMainSelect').fadeOut(400);
@@ -1100,6 +1266,14 @@ function activeInputSelector() {
                             data = data * 100 + '<small>%</small>';
                             $(`td.${selector} .discData`).html(data);
                             $('.invoiceMainSelect').fadeOut(400);
+
+                            $('td.discountInsu').each(function () {
+                                let key = parseFloat($(this).data('key'));
+                                if (key == 0)
+                                    $(this)
+                                        .children('.discData')
+                                        .html('0<small>%</small>');
+                            });
                         });
                 }
             }
@@ -1118,7 +1292,7 @@ function activeInputSelector() {
 
             $('.invoiceMainSelect')
                 .unbind('mouseleave')
-                .css({top: posTop + 'px', left: posLeft + 'px'})
+                .css({ top: posTop + 'px', left: posLeft + 'px' })
                 .fadeIn(400)
                 .on('mouseleave', function () {
                     $('.invoiceMainSelect').fadeOut(400);
@@ -1127,9 +1301,14 @@ function activeInputSelector() {
                 .val('')
                 .unbind('change')
                 .on('change', function (e) {
+                    let key = parseFloat(id.parent().data('key'));
                     let data = e.target.value;
-                    data = data * 100 + '<small>%</small>';
-                    id.parent().children('.discData').html(data);
+
+                    if (key > 0) {
+                        data = data * 100 + '<small>%</small>';
+                        id.parent().children('.discData').html(data);
+                    }
+
                     $('.invoiceMainSelect').fadeOut(400);
                 });
         });
@@ -1142,7 +1321,7 @@ function activeInputSelector() {
             let posLeft = id.offset().left - 20;
             let posTop = id.offset().top - 100;
             $('.invoice__menu-products')
-                .css({top: posTop + 'px', left: posLeft + 'px'})
+                .css({ top: posTop + 'px', left: posLeft + 'px' })
                 .fadeIn(400);
         });
 
@@ -1196,13 +1375,23 @@ function killProduct(bdgId) {
             if (resp == 'killYes') {
                 $('#' + bdgId).fadeOut(500, function () {
                     let pjtId = $('.version_current').attr('data-project');
-                    let section = $(this).parents('tbody').attr('id').substring(2, 5);
+                    let section = $(this)
+                        .parents('tbody')
+                        .attr('id')
+                        .substring(2, 5);
                     let pid = bdgId.substring(3, 10);
                     updateTotals();
                     showButtonVersion('S');
                     // showButtonToPrint('H');
                     // showButtonToSave('H');
-                    updateMice(pjtId, pid, 'pjtvr_quantity_ant', 0, section, 'D');
+                    updateMice(
+                        pjtId,
+                        pid,
+                        'pjtvr_quantity_ant',
+                        0,
+                        section,
+                        'D'
+                    );
                     $('#' + bdgId).remove();
                 });
             }
@@ -1213,11 +1402,13 @@ function killProduct(bdgId) {
 // Muestra la información del producto seleccionado
 function infoProduct(bdgId, type) {
     $('.invoice__modalBackgound').fadeIn('slow');
-    $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#infoProductTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
     // template.show();
-    $('.invoice__modal-general .modal__header-concept').html('Productos Relacionados');
+    $('.invoice__modal-general .modal__header-concept').html(
+        'Productos Relacionados'
+    );
     closeModals();
     setTimeout(() => {
         getProductsRelated(bdgId.substring(3, 20), type);
@@ -1228,7 +1419,8 @@ function putProductsRelated(dt) {
     $('.invoice__modal-general table tbody').html('');
     $.each(dt, function (v, u) {
         let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
-        let prodSku = u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
+        let prodSku =
+            u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
         let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
         if (u.prd_level != 'K') {
             let H = `
@@ -1252,8 +1444,10 @@ function putProductsRelatedSons(dt, pr) {
     let H = '';
     $.each(dt, function (v, u) {
         if (u.prd_parent == pr) {
-            let levelProduct = u.prd_level == 'A' ? 'class="levelAccesory"' : '';
-            let prodSku = u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
+            let levelProduct =
+                u.prd_level == 'A' ? 'class="levelAccesory"' : '';
+            let prodSku =
+                u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
             let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
             H += `
             <tr >
@@ -1274,19 +1468,28 @@ function stockProduct(bdgId, type) {
     getStockProjects(bdgId.substring(3, 20));
 
     $('.invoice__modalBackgound').fadeIn('slow');
-    $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#stockProductTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
-    $('.invoice__modal-general .modal__header-concept').html('inventarios del producto');
+    $('.invoice__modal-general .modal__header-concept').html(
+        'inventarios del producto'
+    );
     closeModals();
 }
 function putStockProjects(dt) {
     $('.invoice__modal-general table tbody').html('');
     if (dt[0].prd_name != 0) {
         $.each(dt, function (v, u) {
-            let empty = u.pjtdt_prod_sku.toUpperCase() == 'PENDIENTE' ? u.pjtdt_prod_sku.toUpperCase() : '';
-            let pending = u.pjtdt_prod_sku.toUpperCase() == 'PENDIENTE' ? 'pending' : '';
-            let situation = u.ser_situation != 'D' ? 'class="levelSituation rw' + pending + '"' : 'class="rw' + pending + '"';
+            let empty =
+                u.pjtdt_prod_sku.toUpperCase() == 'PENDIENTE'
+                    ? u.pjtdt_prod_sku.toUpperCase()
+                    : '';
+            let pending =
+                u.pjtdt_prod_sku.toUpperCase() == 'PENDIENTE' ? 'pending' : '';
+            let situation =
+                u.ser_situation != 'D'
+                    ? 'class="levelSituation rw' + pending + '"'
+                    : 'class="rw' + pending + '"';
             let H = `
             <tr ${situation}>
                 <td><span class="${pending}">${empty}</span></td>
@@ -1311,10 +1514,12 @@ function putStockProjects(dt) {
 function editProject(pjtId) {
     let inx = findIndex(pjtId, proj);
     $('.invoice__modalBackgound').fadeIn('slow');
-    $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#dataProjectTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
-    $('.invoice__modal-general .modal__header-concept').html('Edición de datos del proyecto');
+    $('.invoice__modal-general .modal__header-concept').html(
+        'Edición de datos del proyecto'
+    );
     closeModals();
     fillContent();
     fillData(inx);
@@ -1337,7 +1542,20 @@ function fillContent() {
                 customRangeLabel: 'Custom',
                 weekLabel: 'W',
                 daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNames: [
+                    'Enero',
+                    'Febrero',
+                    'Marzo',
+                    'Abril',
+                    'Mayo',
+                    'Junio',
+                    'Julio',
+                    'Agosto',
+                    'Septiembre',
+                    'Octubre',
+                    'Noviembre',
+                    'Diciembre',
+                ],
                 firstDay: 1,
             },
             showCustomRangeLabel: false,
@@ -1347,7 +1565,9 @@ function fillContent() {
             minDate: fecha,
         },
         function (start, end, label) {
-            $('#txtPeriodProjectEdt').val(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
+            $('#txtPeriodProjectEdt').val(
+                start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY')
+            );
             looseAlert($('#txtPeriodProjectEdt').parent());
         }
     );
@@ -1391,15 +1611,32 @@ function fillData(inx) {
     let pj = proj;
     $('#txtProjectIdEdt').val(pj[inx].pjt_id);
     $('#txtProjectEdt').val(pj[inx].pjt_name);
-    $('#txtPeriodProjectEdt').val(pj[inx].pjt_date_start + ' - ' + pj[inx].pjt_date_end);
+    $('#txtPeriodProjectEdt').val(
+        pj[inx].pjt_date_start + ' - ' + pj[inx].pjt_date_end
+    );
     $('#txtTimeProject').val(pj[inx].pjt_time);
     $('#txtLocationEdt').val(pj[inx].pjt_location);
     $('#txtCustomerOwnerEdt').val(pj[inx].cuo_id);
-    $(`#txtTypeProjectEdt option[value = "${pj[inx].pjttp_id}"]`).attr('selected', 'selected');
-    $(`#txtTypeLocationEdt option[value = "${pj[inx].loc_id}"]`).attr('selected', 'selected');
-    $(`#txtCustomerEdt option[value = "${pj[inx].cus_id}"]`).attr('selected', 'selected');
-    $(`#txtCustomerRelEdt option[value = "${pj[inx].cus_parent}"]`).attr('selected', 'selected');
-    $(`#txtTypeCalled option[value = "${pj[inx].pjttc_id}"]`).attr('selected', 'selected');
+    $(`#txtTypeProjectEdt option[value = "${pj[inx].pjttp_id}"]`).attr(
+        'selected',
+        'selected'
+    );
+    $(`#txtTypeLocationEdt option[value = "${pj[inx].loc_id}"]`).attr(
+        'selected',
+        'selected'
+    );
+    $(`#txtCustomerEdt option[value = "${pj[inx].cus_id}"]`).attr(
+        'selected',
+        'selected'
+    );
+    $(`#txtCustomerRelEdt option[value = "${pj[inx].cus_parent}"]`).attr(
+        'selected',
+        'selected'
+    );
+    $(`#txtTypeCalled option[value = "${pj[inx].pjttc_id}"]`).attr(
+        'selected',
+        'selected'
+    );
     $('#txtHowRequired').val(pj[inx].pjt_how_required);
     $('#txtTripGo').val(pj[inx].pjt_trip_go);
     $('#txtTripBack').val(pj[inx].pjt_trip_back);
@@ -1408,7 +1645,10 @@ function fillData(inx) {
     $('#txtTestTecnic').val(pj[inx].pjt_test_tecnic);
     $('#txtTestLook').val(pj[inx].pjt_test_look);
 
-    $('#saveProject').html('Guardar cambios').removeAttr('class').addClass('bn btn-ok update');
+    $('#saveProject')
+        .html('Guardar cambios')
+        .removeAttr('class')
+        .addClass('bn btn-ok update');
 
     let depend = pj[inx].pjt_parent;
     let boxDepend = depend != '0' ? 'PROYECTO ADJUNTO' : 'PROYECTO UNICO';
@@ -1418,7 +1658,10 @@ function fillData(inx) {
     let selection = pj[inx].pjt_parent;
     if (selection == 1) {
         $('#txtProjectParent').parents('tr').removeAttr('class');
-        $(`#txtProjectParent option[value = "${selection}"]`).attr('selected', 'selected');
+        $(`#txtProjectParent option[value = "${selection}"]`).attr(
+            'selected',
+            'selected'
+        );
         let parent = '';
         $.each(proPar, function (v, u) {
             if (pj[inx].pjt_parent == u.pjt_id) {
@@ -1440,7 +1683,9 @@ function fillData(inx) {
                 let projName = $('#txtProjectEdt').val();
                 let projLocation = $('#txtLocationEdt').val();
                 let cuoId = $('#txtCustomerOwnerEdt').val();
-                let projLocationTypeValue = $('#txtTypeLocationEdt option:selected').val();
+                let projLocationTypeValue = $(
+                    '#txtTypeLocationEdt option:selected'
+                ).val();
                 let projPeriod = $('#txtPeriodProjectEdt').val();
                 let projTime = $('#txtTimeProject').val();
                 let projType = $('#txtTypeProjectEdt option:selected').val();
@@ -1455,8 +1700,14 @@ function fillData(inx) {
                 let testTecnic = $('#txtTestTecnic').val();
                 let testLook = $('#txtTestLook').val();
 
-                let projDateStart = moment(projPeriod.split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
-                let projDateEnd = moment(projPeriod.split(' - ')[1], 'DD/MM/YYYY').format('YYYYMMDD');
+                let projDateStart = moment(
+                    projPeriod.split(' - ')[0],
+                    'DD/MM/YYYY'
+                ).format('YYYYMMDD');
+                let projDateEnd = moment(
+                    projPeriod.split(' - ')[1],
+                    'DD/MM/YYYY'
+                ).format('YYYYMMDD');
 
                 let par = `
                 [{
@@ -1510,11 +1761,14 @@ function waitShowProject(pjtId) {
 
 function newProject() {
     $('.invoice__modalBackgound').fadeIn('slow');
-    $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#dataProjectTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept').html('Nuevo proyecto');
-    $('#saveProject').html('Guardar proyecto').removeAttr('class').addClass('bn btn-ok insert');
+    $('#saveProject')
+        .html('Guardar proyecto')
+        .removeAttr('class')
+        .addClass('bn btn-ok insert');
     closeModals();
     fillContent();
     actionNewProject();
@@ -1529,14 +1783,22 @@ function actionNewProject() {
                 let projName = $('#txtProjectEdt').val();
                 let projLocation = $('#txtLocationEdt').val();
                 // let cuoId = $('#txtCustomerOwnerEdt').val();
-                let projLocationTypeValue = $('#txtTypeLocationEdt option:selected').val();
+                let projLocationTypeValue = $(
+                    '#txtTypeLocationEdt option:selected'
+                ).val();
                 let projPeriod = $('#txtPeriodProjectEdt').val();
                 let projType = $('#txtTypeProjectEdt option:selected').val();
                 let cusCte = $('#txtCustomerEdt option:selected').val();
                 let cusCteRel = $('#txtCustomerRelEdt option:selected').val();
 
-                let projDateStart = moment(projPeriod.split(' - ')[0], 'DD/MM/YYYY').format('YYYYMMDD');
-                let projDateEnd = moment(projPeriod.split(' - ')[1], 'DD/MM/YYYY').format('YYYYMMDD');
+                let projDateStart = moment(
+                    projPeriod.split(' - ')[0],
+                    'DD/MM/YYYY'
+                ).format('YYYYMMDD');
+                let projDateEnd = moment(
+                    projPeriod.split(' - ')[1],
+                    'DD/MM/YYYY'
+                ).format('YYYYMMDD');
 
                 let cuoId = 0;
                 $.each(relc, function (v, u) {
@@ -1575,7 +1837,7 @@ function showModalComments() {
     let pjtId = $('.version_current').attr('data-project');
 
     $('.invoice__modalBackgound').fadeIn('slow');
-    $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept').html('Comentarios');
     closeModals();
@@ -1654,7 +1916,10 @@ function printBudget(verId) {
     let n = user[2];
     let h = localStorage.getItem('host');
 
-    window.open(`${url}app/views/ProjectDetails/ProjectDetailsReport.php?v=${v}&u=${u}&n=${n}&h=${h}`, '_blank');
+    window.open(
+        `${url}app/views/ProjectDetails/ProjectDetailsReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        '_blank'
+    );
 }
 
 function saveBudget(dt) {
@@ -1716,11 +1981,26 @@ function updateTotals() {
     $('.budgetRow').each(function (v) {
         let pid = $(this).attr('id');
 
-        let qtybs = parseInt($(this).children('td.quantityBase').children('.input_invoice').val());
-        let qtyan = parseInt($(this).children('td.quantityBase').children('.input_invoice').attr('data-quantity'));
-        let prcbs = parseFloat(pure_num($(this).children('td.priceBase').text()));
-        let daybs = parseInt($(this).children('td.daysCost').children('.input_invoice').val());
+        let qtybs = parseInt(
+            $(this).children('td.quantityBase').children('.input_invoice').val()
+        );
+        let qtyan = parseInt(
+            $(this)
+                .children('td.quantityBase')
+                .children('.input_invoice')
+                .attr('data-quantity')
+        );
+        let prcbs = parseFloat(
+            pure_num($(this).children('td.priceBase').text())
+        );
+        let dayre = parseInt(
+            $(this).children('td.daysBase').children('.input_invoice').val()
+        );
+        let daybs = parseInt(
+            $(this).children('td.daysCost').children('.input_invoice').val()
+        );
         let desbs = parseFloat($(this).children('td.discountBase').text());
+        let desIn = parseFloat($(this).children('td.discountInsu').text());
         let assur = $(this).attr('data-insured');
 
         stt01 = qtybs * prcbs; // Importe de cantidad x precio
@@ -1732,7 +2012,9 @@ function updateTotals() {
 
         $(this).children('.costBase').html(mkn(cstbs, 'n'));
 
-        let daytr = parseInt($(this).children('td.daysTrip').children('.input_invoice').val());
+        let daytr = parseInt(
+            $(this).children('td.daysTrip').children('.input_invoice').val()
+        );
         let destr = parseFloat($(this).children('td.discountTrip').text());
 
         stt05 = stt01 * daytr; // Costo de Importe x dias viaje
@@ -1743,7 +2025,9 @@ function updateTotals() {
 
         $(this).children('.costTrip').html(mkn(csttr, 'n'));
 
-        let dayts = parseInt($(this).children('td.daysTest').children('.input_invoice').val());
+        let dayts = parseInt(
+            $(this).children('td.daysTest').children('.input_invoice').val()
+        );
         let dests = parseFloat($(this).children('td.discountTest').text());
 
         stt08 = stt01 * dayts; // Costo de Importe x dias prueba
@@ -1754,8 +2038,13 @@ function updateTotals() {
 
         $(this).children('.costTest').html(mkn(cstts, 'n'));
 
-        assre = stt01 * assur;
-        costassu += assre; // Total de Seguro
+        assre = stt01 * dayre * assur;
+        assin = assre * (desIn / 100);
+
+        costassu += assre - assin; //     Total de Seguro
+
+        let prcdscins = parseFloat($('#insuDesctoPrc').html()) / 100;
+        desctins = costassu * prcdscins;
         totlPrds++;
     });
 
@@ -1763,9 +2052,10 @@ function updateTotals() {
     $('#costTrip').html(mkn(costtrip, 'n'));
     $('#costTest').html(mkn(costtest, 'n'));
     $('#insuTotal').html(mkn(costassu, 'n'));
+    $('#insuDescto').html(mkn(desctins, 'n'));
     $('#prodTotal').html(mkn(totlPrds, 's'));
 
-    totlCost = costbase + costtrip + costtest + costassu;
+    totlCost = costbase + costtrip + costtest + costassu - desctins;
 
     $('#costTotal').html(mkn(totlCost, 'n'));
 
@@ -1775,31 +2065,46 @@ function updateTotals() {
 /** ***** MUESTRA Y OCULTA BOTONES ******* */
 function showButtonVersion(acc) {
     elm = $('.version__button .invoice_button');
-    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+    acc == 'S'
+        ? elm.css({ visibility: 'visible' })
+        : elm.css({ visibility: 'hidden' });
 }
 function showButtonToPrint(acc) {
     elm = $('.invoice_controlPanel .toPrint');
-    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+    acc == 'S'
+        ? elm.css({ visibility: 'visible' })
+        : elm.css({ visibility: 'hidden' });
 }
 function showMenuProduct(acc) {
     elm = $('#invoiceTable tbody tr.budgetRow .menu_product');
-    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+    acc == 'S'
+        ? elm.css({ visibility: 'visible' })
+        : elm.css({ visibility: 'hidden' });
 }
 function showButtonToSave(acc) {
     elm = $('.invoice_controlPanel .toSave');
-    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+    acc == 'S'
+        ? elm.css({ visibility: 'visible' })
+        : elm.css({ visibility: 'hidden' });
 }
 function showLedPending(acc) {
     elm = $('.col_quantity-pending');
-    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+    acc == 'S'
+        ? elm.css({ visibility: 'visible' })
+        : elm.css({ visibility: 'hidden' });
 }
 function showButtonToImport(acc) {
     elm = $('.invoice_controlPanel .toImport');
-    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+    acc == 'S'
+        ? elm.css({ visibility: 'visible' })
+        : elm.css({ visibility: 'hidden' });
 }
+
 function showButtonComments(acc) {
     elm = $('.sidebar__comments .toComment');
-    acc == 'S' ? elm.css({visibility: 'visible'}) : elm.css({visibility: 'hidden'});
+    acc == 'S'
+        ? elm.css({ visibility: 'visible' })
+        : elm.css({ visibility: 'hidden' });
 }
 function cleanQuoteTable() {
     $('#invoiceTable table tbody.sections_products').each(function () {
@@ -1817,7 +2122,11 @@ function cleanVersionList() {
 function cleanTotalsArea() {
     $('.sidebar__totals .totals-numbers').html('0.00');
     $('.sidebar__totals .totals-numbers.simple').html('0');
-    $('.version_current').html('').attr('data-version', null).attr('data-project', null).attr('data-code', null);
+    $('.version_current')
+        .html('')
+        .attr('data-version', null)
+        .attr('data-project', null)
+        .attr('data-code', null);
 }
 /** *************************************************************** */
 
@@ -1827,9 +2136,13 @@ function sectionShowHide() {
         let status = $(this).css('display');
         let id = $(this).attr('id').substring(2, 5);
         if (status == 'table-row-group') {
-            $(`.invoice__section .menu-sections li[data-option="${id}"] `).css({display: 'none'});
+            $(`.invoice__section .menu-sections li[data-option="${id}"] `).css({
+                display: 'none',
+            });
         } else {
-            $(`.invoice__section .menu-sections li[data-option="${id}"] `).css({display: 'block'});
+            $(`.invoice__section .menu-sections li[data-option="${id}"] `).css({
+                display: 'block',
+            });
         }
     });
 }
@@ -1854,7 +2167,9 @@ function automaticCloseModal() {
 function modalLoading(acc) {
     if (acc == 'S') {
         $('.invoice__modalBackgound').fadeIn('slow');
-        $('.invoice__loading').slideDown('slow').css({'z-index': 401, display: 'flex'});
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
     } else {
         $('.invoice__loading').slideUp('slow', function () {
             $('.invoice__modalBackgound').fadeOut('slow');
@@ -1865,9 +2180,9 @@ function modalLoading(acc) {
 /**  +++ Oculta los elementos del listado que no cumplen con la cadena  */
 function sel_items(txt, obj) {
     if (txt.length < 1) {
-        $(`#${obj} .finder_list ul li`).css({display: 'block'});
+        $(`#${obj} .finder_list ul li`).css({ display: 'block' });
     } else {
-        $(`#${obj} .finder_list ul li`).css({display: 'none'});
+        $(`#${obj} .finder_list ul li`).css({ display: 'none' });
     }
 
     $(`#${obj} .finder_list ul li`).each(function (index) {
@@ -1877,7 +2192,7 @@ function sel_items(txt, obj) {
         var cr = cm.indexOf(txt);
         if (cr > -1) {
             //            alert($(this).children().html())
-            $(this).css({display: 'block'});
+            $(this).css({ display: 'block' });
         }
     });
 }
@@ -1888,7 +2203,10 @@ function validatorFields(frm) {
     frm.find('.required').each(function () {
         if ($(this).val() == '' || $(this).val() == 0) {
             $(this).addClass('textbox-alert');
-            $(this).parent().children('.textAlert').css({visibility: 'visible'});
+            $(this)
+                .parent()
+                .children('.textAlert')
+                .css({ visibility: 'visible' });
 
             ky = 1;
         }
@@ -1947,67 +2265,205 @@ function getDataMice() {
         let section = $(this).parents('tbody').attr('id').substring(2, 5);
 
         /** == Valida la cantidad ======== */
-        let quantity_act = parseInt($(this).children('td.quantityBase').children('.input_invoice').val());
-        let quantity_ant = parseInt($(this).children('td.quantityBase').children('.input_invoice').attr('data-real'));
-        $(this).children('td.quantityBase').children('.input_invoice').attr('data-real', quantity_act);
+        let quantity_act = parseInt(
+            $(this).children('td.quantityBase').children('.input_invoice').val()
+        );
+        let quantity_ant = parseInt(
+            $(this)
+                .children('td.quantityBase')
+                .children('.input_invoice')
+                .attr('data-real')
+        );
+        $(this)
+            .children('td.quantityBase')
+            .children('.input_invoice')
+            .attr('data-real', quantity_act);
         if (quantity_act != quantity_ant) {
-            updateMice(pjtId, pid, 'pjtvr_quantity', quantity_act, section, 'U');
+            updateMice(
+                pjtId,
+                pid,
+                'pjtvr_quantity',
+                quantity_act,
+                section,
+                'U'
+            );
         }
 
-        let daysBase_act = parseInt($(this).children('td.daysBase').children('.input_invoice').val());
-        let daysBase_ant = parseInt($(this).children('td.daysBase').children('.input_invoice').attr('data-real'));
-        $(this).children('td.daysBase').children('.input_invoice').attr('data-real', daysBase_act);
+        let daysBase_act = parseInt(
+            $(this).children('td.daysBase').children('.input_invoice').val()
+        );
+        let daysBase_ant = parseInt(
+            $(this)
+                .children('td.daysBase')
+                .children('.input_invoice')
+                .attr('data-real')
+        );
+        $(this)
+            .children('td.daysBase')
+            .children('.input_invoice')
+            .attr('data-real', daysBase_act);
         if (daysBase_act != daysBase_ant) {
-            updateMice(pjtId, pid, 'pjtvr_days_base', daysBase_act, section, 'U');
+            updateMice(
+                pjtId,
+                pid,
+                'pjtvr_days_base',
+                daysBase_act,
+                section,
+                'U'
+            );
         }
 
-        let daysCost_act = parseInt($(this).children('td.daysCost').children('.input_invoice').val());
-        let daysCost_ant = parseInt($(this).children('td.daysCost').children('.input_invoice').attr('data-real'));
-        $(this).children('td.daysCost').children('.input_invoice').attr('data-real', daysCost_act);
+        let daysCost_act = parseInt(
+            $(this).children('td.daysCost').children('.input_invoice').val()
+        );
+        let daysCost_ant = parseInt(
+            $(this)
+                .children('td.daysCost')
+                .children('.input_invoice')
+                .attr('data-real')
+        );
+        $(this)
+            .children('td.daysCost')
+            .children('.input_invoice')
+            .attr('data-real', daysCost_act);
         if (daysCost_act != daysCost_ant) {
-            updateMice(pjtId, pid, 'pjtvr_days_cost', daysCost_act, section, 'U');
+            updateMice(
+                pjtId,
+                pid,
+                'pjtvr_days_cost',
+                daysCost_act,
+                section,
+                'U'
+            );
         }
 
-        let discountBase_act = parseFloat($(this).children('td.discountBase').text());
-        let discountBase_ant = parseFloat($(this).children('td.discountBase').attr('data-real'));
+        let discountBase_act = parseFloat(
+            $(this).children('td.discountBase').text()
+        );
+        let discountBase_ant = parseFloat(
+            $(this).children('td.discountBase').attr('data-real')
+        );
         $(this).children('td.discountBase').attr('data-real', discountBase_act);
         if (discountBase_act != discountBase_ant) {
-            updateMice(pjtId, pid, 'pjtvr_discount_base', discountBase_act / 100, section, 'U');
+            updateMice(
+                pjtId,
+                pid,
+                'pjtvr_discount_base',
+                discountBase_act / 100,
+                section,
+                'U'
+            );
+        }
+        let discountInsu_act = parseFloat(
+            $(this).children('td.discountInsu').text()
+        );
+        let discountInsu_ant = parseFloat(
+            $(this).children('td.discountInsu').attr('data-real')
+        );
+        $(this).children('td.discountInsu').attr('data-real', discountInsu_act);
+        if (discountInsu_act != discountInsu_ant) {
+            updateMice(
+                pjtId,
+                pid,
+                'pjtvr_discount_insured',
+                discountInsu_act / 100,
+                section,
+                'U'
+            );
         }
 
-        let daysTrip_act = parseInt($(this).children('td.daysTrip').children('.input_invoice').val());
-        let daysTrip_ant = parseInt($(this).children('td.daysTrip').children('.input_invoice').attr('data-real'));
-        $(this).children('td.daysTrip').children('.input_invoice').attr('data-real', daysTrip_act);
+        let daysTrip_act = parseInt(
+            $(this).children('td.daysTrip').children('.input_invoice').val()
+        );
+        let daysTrip_ant = parseInt(
+            $(this)
+                .children('td.daysTrip')
+                .children('.input_invoice')
+                .attr('data-real')
+        );
+        $(this)
+            .children('td.daysTrip')
+            .children('.input_invoice')
+            .attr('data-real', daysTrip_act);
         if (daysTrip_act != daysTrip_ant) {
-            updateMice(pjtId, pid, 'pjtvr_days_trip', daysTrip_act, section, 'U');
+            updateMice(
+                pjtId,
+                pid,
+                'pjtvr_days_trip',
+                daysTrip_act,
+                section,
+                'U'
+            );
         }
 
-        let discountTrip_act = parseFloat($(this).children('td.discountTrip').text());
-        let discountTrip_ant = parseFloat($(this).children('td.discountTrip').attr('data-real'));
+        let discountTrip_act = parseFloat(
+            $(this).children('td.discountTrip').text()
+        );
+        let discountTrip_ant = parseFloat(
+            $(this).children('td.discountTrip').attr('data-real')
+        );
         $(this).children('td.discountTrip').attr('data-real', discountTrip_act);
         if (discountTrip_act != discountTrip_ant) {
-            updateMice(pjtId, pid, 'pjtvr_discount_trip', discountTrip_act / 100, section, 'U');
+            updateMice(
+                pjtId,
+                pid,
+                'pjtvr_discount_trip',
+                discountTrip_act / 100,
+                section,
+                'U'
+            );
         }
 
-        let daysTest_act = parseInt($(this).children('td.daysTest').children('.input_invoice').val());
-        let daysTest_ant = parseInt($(this).children('td.daysTest').children('.input_invoice').attr('data-real'));
-        $(this).children('td.daysTest').children('.input_invoice').attr('data-real', daysTest_act);
+        let daysTest_act = parseInt(
+            $(this).children('td.daysTest').children('.input_invoice').val()
+        );
+        let daysTest_ant = parseInt(
+            $(this)
+                .children('td.daysTest')
+                .children('.input_invoice')
+                .attr('data-real')
+        );
+        $(this)
+            .children('td.daysTest')
+            .children('.input_invoice')
+            .attr('data-real', daysTest_act);
         if (daysTest_act != daysTest_ant) {
-            updateMice(pjtId, pid, 'pjtvr_days_test', daysTest_act, section, 'U');
+            updateMice(
+                pjtId,
+                pid,
+                'pjtvr_days_test',
+                daysTest_act,
+                section,
+                'U'
+            );
         }
 
-        let discountTest_act = parseFloat($(this).children('td.discountTest').text());
-        let discountTest_ant = parseFloat($(this).children('td.discountTest').attr('data-real'));
+        let discountTest_act = parseFloat(
+            $(this).children('td.discountTest').text()
+        );
+        let discountTest_ant = parseFloat(
+            $(this).children('td.discountTest').attr('data-real')
+        );
         $(this).children('td.discountTest').attr('data-real', discountTest_act);
         if (discountTest_act != discountTest_ant) {
-            updateMice(pjtId, pid, 'pjtvr_discount_test', discountTest_act / 100, section, 'U');
+            updateMice(
+                pjtId,
+                pid,
+                'pjtvr_discount_test',
+                discountTest_act / 100,
+                section,
+                'U'
+            );
         }
 
-        // let order = $(this).children('th').children('.move_item').attr('data-order');
-        // if (order > 0) {
-        //     // console.log(pjtId, pid, 'pjtvr_order', order, section, 'N');
-        //     updateMice(pjtId, pid, 'pjtvr_order', order, section, 'N');
-        // }
+        let order = $(this)
+            .children('th')
+            .children('.move_item')
+            .attr('data-order');
+        if (order > 0) {
+            // console.log(pjtId, pid, 'pjtvr_order', order, section, 'N');
+            updateMice(pjtId, pid, 'pjtvr_order', order, section, 'N');
+        }
     });
 }
 /**
@@ -2044,7 +2500,10 @@ function OrderMice() {
     $('.budgetRow').each(function (v) {
         let pid = parseInt($(this).attr('id').substring(3, 10));
         let section = $(this).parents('tbody').attr('id').substring(2, 5);
-        let order = $(this).children('th').children('.move_item').attr('data-order');
+        let order = $(this)
+            .children('th')
+            .children('.move_item')
+            .attr('data-order');
 
         var par = `[{
             "pjtId"      :   "${pjtId}",
@@ -2069,7 +2528,7 @@ function periodProduct(prd) {
     let pjtId = $('.version_current').attr('data-project');
 
     $('.invoice__modalBackgound').fadeIn('slow');
-    $('.invoice__modal-general').slideDown('slow').css({'z-index': 401});
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#PeriodsTemplates');
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept').html('Periodos ');

@@ -136,6 +136,14 @@
                     }
                 }
 
+                .totals-concept {
+                    .discData {
+                        display: inline-block;
+                        // width: 2.3rem;
+                        text-align: right;
+                    }
+                }
+
                 .totals-numbers {
                     text-align: right;
                 }
@@ -1086,6 +1094,7 @@
     }
 }
 
+.invoiceDiscSelect,
 .invoiceMainSelect {
     position: absolute;
     width: 80px;

@@ -9,7 +9,7 @@
 </header>
 
 <div class="invoice__container">
-    <!-- Nombre del proyecto y tablero de control -->
+<!-- TABLERO DE CONTROL START -->
     <div class="invoice__section invoice__section-panel invoice-border">
         <div class="panel__name">
             <i class="fas fa-caret-square-down projectInformation"></i>
@@ -20,15 +20,15 @@
             <i class="fas fa-search projectfinder"></i>
         </div>
      </div>
+<!-- TABLERO DE CONTROL END -->
 
-
-    <!-- Botones de reseteo -->
+<!-- BOTON DE RESETEO DE PANTALLA START -->
     <div class="invoice__section invoice__section-button invoice-border">
         <span class="invoice_button" id="newQuote"><i class="fas fa-tablet-alt"></i> Limpiar pantalla</span>
      </div>
+<!-- BOTON DE RESETEO DE PANTALLA END -->
 
-
-    <!-- Parilla de productos seleccionado -->
+<!-- PARRILLA DE PRODUCTOS SELECCIONADOS EN LA COTIZACION START -->
     <div class="invoice__section invoice__section-grid invoice-border">
         <div class="invoice_controlPanel">
             <span class="version_current"></span>
@@ -36,6 +36,8 @@
             <span class="invoice_button toPrint"><i class="fas fa-print"></i> Imprimir</span>
             <span class="invoice_button toSave"><i class="fas fa-ban"></i> Cancelar proyecto</span>
             <span class="invoice_button toImport"><i class="fas fa-save"></i> Importar</span>
+
+        <!-- MENU SELECTOR DE SECCIONES START -->
             <div class="menu-sections">
                 <ul>
                     <li class="equipoBase"          data-option="1">Equipo Base</li>
@@ -44,12 +46,15 @@
                     <li class="equipoSubarrendo"    data-option="4">Equipo por subarrendo</li>
                 </ul>
             </div>
+        <!-- MENU SELECTOR DE SECCIONES END -->
+
             <div class="import-sections">
                 <ul></ul>
             </div>
         </div>
         <div class="invoice__box-table" id="invoiceTable">
             <table >
+            <!-- HEADERS DE LA TABLA DE COTIZACIONES START -->
                 <thead>
                     <tr>
                         
@@ -59,6 +64,7 @@
                         <th class="wcldays colbase"><i class="fas fa-caret-down selectionInput daysBase inpt"></i>Días<br>Renta</th>
                         <th class="wclnumb colbase"><i class="fas fa-caret-down selectionInput daysCost inpt"></i>Dias<br>Cobro</th>
                         <th class="wcldisc colbase"><i class="fas fa-caret-down selectionInput discountBase selt"></i>Desc.</th>
+                        <th class="wcldisc colbase"><i class="fas fa-caret-down selectionInput discountInsu selt"></i>Desc.<br>Seguro</th>
                         <th class="wclnumb colbase"><div class="invoice_col_header costBase">COSTO BASE</div>Costo</th>
                         <th class="wcldays coltrip"><i class="fas fa-caret-down selectionInput daysTrip inpt"></i>Días</th>
                         <th class="wcldisc coltrip"><i class="fas fa-caret-down selectionInput discountTrip selt"></i>Desc</th>
@@ -69,11 +75,9 @@
                         <th class="wclexpn colcontrol"><i class="fas fa-caret-left showColumns rotate180" title="Muestra y oculta columnas de viaje y pruebas"></i></th>
                     </tr>
                  </thead>
-
-                
-
-                
-                <!-- EQUIPO BASE -->
+            <!-- HEADERS DE LA TABLA DE COTIZACIONES END -->
+                                
+            <!-- EQUIPO BASE START -->
                 <tbody  class="sections_products" id="SC1">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Base</th>
@@ -86,7 +90,10 @@
                         <td colspan=14></td>
                     </tr> 
                  </tbody>
-                <!-- EQUIPO EXTRA -->
+
+            <!-- EQUIPO BASE END -->
+
+            <!-- EQUIPO EXTRA START -->
                 <tbody class="sections_products" id="SC2">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Extra</th>
@@ -99,7 +106,9 @@
                         <td colspan=14></td>
                     </tr> 
                  </tbody>
-                <!-- EQUIPO POR DIA -->
+            <!-- EQUIPO EXTRA END -->
+
+            <!-- EQUIPO POR DIA START -->
                 <tbody class="sections_products" id="SC3">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por Día</th>
@@ -112,7 +121,9 @@
                         <td colspan=14></td>
                     </tr> 
                  </tbody>
-                <!-- EQUIPO POR SUBARRENDO -->
+            <!-- EQUIPO POR DIA END -->
+
+            <!-- EQUIPO POR SUBARRENDO START -->
                 <tbody class="sections_products" id="SC4">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por subarrendo</th>
@@ -124,19 +135,20 @@
                         </th>
                         <td colspan=14></td>
                     </tr> 
-
                     
-                 </tbody>
+                </tbody>
+            <!-- EQUIPO POR SUBARRENDO END -->
                 
              </table>
         </div>
      </div>
+<!-- PARRILLA DE PRODUCTOS SELECCIONADOS EN LA COTIZACION END -->
 
 
-    <!-- Totales y versiones -->
+<!-- Totales y versiones -->
     <div class="invoice__section invoice__section-sidebar">
 
-        <!-- Totales -->
+    <!-- Totales -->
         <div class="sidebar__totals invoice-border">
             <table>
                 <tr>
@@ -156,6 +168,10 @@
                         <td class="totals-numbers" id="insuTotal">0.00</td>
                     </tr>
                     <tr>
+                        <td class="totals-concept"><span class="discData" id ="insuDesctoPrc">0<small>%</small></span> DESTO. AL SEGURO <i class="fas fa-caret-left selectioninsured"></i></td>
+                        <td class="totals-numbers" id="insuDescto">0.00</td>
+                    </tr>
+                    <tr>
                         <td class="totals-concept">TOTAL</td>
                         <td class="totals-numbers" id="costTotal">0.00</td>
                     </tr>
@@ -169,8 +185,11 @@
                     </tr>
                 </table>
         </div>
+    <!-- Totales -->
 
-        <!-- Versiones de documentos guardados -->
+
+
+    <!-- Versiones de documentos guardados -->
         <div class="sidebar__versions invoice-border">
             <div class="version__button">
                 <span class="invoice_button toSaveBudget">
@@ -188,22 +207,25 @@
                 </ul>
             </div>
         </div>
+    <!-- Versiones de documentos guardados -->
 
-        <!-- Boton de comentarios -->
+    <!-- Boton de comentarios -->
         <div class="sidebar__comments invoice-border"> 
             <span class="invoice_button toComment">
                 <i class="far fa-comment-alt"></i> Comentarios
             </span> 
         </div>
+    <!-- Boton de comentarios -->
     </div>
+<!-- Totales y versiones -->
     
-    
-    <!-- Informacion del proyecto y cliente seleccionado -->
+<!-- Informacion del proyecto y cliente seleccionado -->
     <div class="invoice__section-details invoice-border">
         <div class="detail__box detail__box-project ">
             <div class="detail__box-fullRow">
                 <span class="invoice_button" id="btnEditProject"><i class="fas fa-plus"></i>Editar proyecto</span>
             </div>
+        <!-- Datos del proyecto -->
             <table>
                 <tr>
                     <td class="concept">Numero:</td>
@@ -226,9 +248,10 @@
                     <td class="data" id="projectType"></td>
                 </tr>
             </table>
+        <!-- Datos del proyecto -->
 
             <hr>
-
+    <!-- Datos del cliente -->
             <table>
                 <tr>
                     <td class="concept">Cliente:</td>
@@ -259,15 +282,16 @@
                     <td class="data" id="CustomerQualification"></td>
                 </tr>
             </table>
-
+    <!-- Datos del cliente -->
 
         </div>
         
     </div>
+<!-- Informacion del proyecto y cliente seleccionado -->
 
-
-    <!-- Buscador de clientes y proyectos -->
+<!-- Buscador de clientes y proyectos -->
     <div class="invoice__section-finder invoice-border">
+    <!-- Seleccionador de clientes -->
         <div class="finder__box" id="groupCustomer">
             <input type="text" name="txtCustomer" id="txtCustomer" placeholder="Cliente" class="invoiceInput inputSearch wtf">
             <i class="fas fa-times cleanInput"></i>
@@ -275,37 +299,37 @@
                 <ul> </ul>
             </div>
         </div>
-
-        
+    <!-- Seleccionador de clientes -->
+     
+    <!-- Seleccionador de proyectos padre -->
         <div class="finder__box" id="groupProjectParent">
-        <input type="text" name="txtProjectParents" id="txtProjectParents" placeholder="Proyecto Padre" class="invoiceInput inputSearch wtf">
+            <input type="text" name="txtProjectParents" id="txtProjectParents" placeholder="Proyecto Padre" class="invoiceInput inputSearch wtf">
             <i class="fas fa-times cleanInput"></i>
             <div class="finder_list finder_list-projectsParent">
                 <ul></ul>
             </div>
-
         </div>
+    <!-- Seleccionador de proyectos padre -->
 
-
+    <!-- Seleccionador de proyectos -->
         <div class="finder__box" id="groupProject">
         <input type="text" name="txtProject" id="txtProject" placeholder="Proyecto" class="invoiceInput inputSearch wtf">
             <i class="fas fa-times cleanInput"></i>
             <div class="finder_list finder_list-projects">
                 <ul></ul>
             </div>
-
         </div>
+    <!-- Seleccionador de proyectos -->
 
+    
         <div class="finder__box"></div>
         <div class="finder__box"></div>
         <div class="finder__box"></div>
-        <!-- <div class="finder__box-buttons">
-            <span class="invoice_button" id="btnNewProject"><i class="fas fa-plus"></i>nuevo proyecto</span>
-        </div> -->
+       
     </div>
+<!-- Buscador de clientes y proyectos -->
 
-
-        <!-- Listado de productos -->
+<!-- Listado de productos -->
     <div class="invoice__section-products invoice-border modalTable">
         <div class="modal__header  invoice-border">
             <div class="modal__header-concept">&nbsp;Listados de productos</div>
@@ -332,9 +356,9 @@
         </div>
         
     </div>
+<!-- Listado de productos -->
 
-
-    <!-- Mini menu de opciones de producto -->
+<!-- Mini menu de opciones de producto -->
     <div class="invoice__menu-products invoice-border withShadow">
         <ul>
             <li class="event_killProduct"><i class="fas fa-trash"></i> Elimina Producto</li>
@@ -343,8 +367,9 @@
             <li class="event_StokProduct"><i class="fas fa-layer-group"></i> Inventario</li>
         </ul>
     </div>
+<!-- Mini menu de opciones de producto -->
 
-    <!-- Modal General  -->
+<!-- Modal General  -->
     <div class="invoice__modal-general invoice-border modalTable">
         <div class="modal__header invoice-border">
             <div class="modal__header-concept"></div>
@@ -352,21 +377,25 @@
         </div>
         <div class="modal__body"></div>
     </div>
+<!-- Modal General  -->
 
-
-    <!-- input de cantidad y descuentos -->
+<!-- input de cantidad y descuentos -->
     <div class="invoiceMainInput withShadow">
         <input type="text" name="txtMainInput"  id="txtMainInput" class="input_invoice">
     </div>
     <div class="invoiceMainSelect withShadow">
         <select name="selDiscount" id="selDiscount" class="input_invoice" size="6"></select>
     </div>
+    <div class="invoiceDiscSelect withShadow">
+        <select name="selDiscInsr" id="selDiscInsr" class="input_invoice" size="6"></select>
+    </div>
+<!-- input de cantidad y descuentos -->
 
-    <!-- Fondo obscuro -->
+<!-- Fondo obscuro -->
     <div class="invoice__modalBackgound"></div>
+<!-- Fondo obscuro -->
 
-
-    <!-- Plantilla de tablas modales -->
+<!-- Plantilla de tablas modales -->
     <div id="infoProductTemplate" class="table_hidden box_template">
         <table class="table_template" style = "min-width: 600px; width:100%;" >
             <thead>
@@ -593,7 +622,9 @@
 
 
 
-    <!-- loading -->
+
+
+     <!-- loading -->
     <div class="invoice__loading modalLoading">
         <div class="box_loading">
             <p class="text_loading">
@@ -603,7 +634,7 @@
             <p>Este proceso puede tradar varios minutos, le recomendamos no salir de la página ni cerrar el navegador.</p>
         </div>
      </div>
-    
+<!-- Plantilla de tablas modales -->
 </div>
 
 <!-- <div class="cuadroMovible"></div> -->
