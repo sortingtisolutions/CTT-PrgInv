@@ -629,6 +629,9 @@ function clean_selectors() {
         //$('#txtSerie').attr('disabled', false);
         alert('VALIDA');
     } */
+
+    // ** HOLA ****
+    
     $('#txtCost').val('');
     $('#txtQuantityStored').html('&nbsp;');
     $('#txtComments').val('');
