@@ -198,13 +198,15 @@ function eventsAction() {
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data-project');
                 let verId = $('.version_current').attr('data-version');
+                let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
 
                 modalLoading('S');
                 let par = `
                 [{
-                    "pjtId"  : "${pjtId}",
-                    "verId"  : "${verId}",
-                    "action" : "${interfase}"
+                    "pjtId"     : "${pjtId}",
+                    "verId"     : "${verId}",
+                    "discount"  : "${discount}",
+                    "action"    : "${interfase}"
                 }]`;
                 console.log(par);
                 var pagina = 'ProjectDetails/SaveBudget';
@@ -230,6 +232,7 @@ function eventsAction() {
                 let vr = parseInt(verCurr.substring(1, 10));
 
                 let verNext = 'P' + refil(vr + 1, 4);
+                let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
 
                 modalLoading('S');
                 let par = `
@@ -559,7 +562,8 @@ function putVersion(dt) {
                     .attr('data-version', version)
                     .attr('data-code', versionCode)
                     .attr('data-master', versionMaster)
-                    .attr('data-active', versionActive);
+                    .attr('data-active', versionActive)
+                    .attr('data-insured', discount);
 
                 $('#insuDesctoPrc').html(discount * 100 + '<small>%</small>');
 
@@ -1035,7 +1039,7 @@ function putBudgets(dt) {
                     }
                 });
             showButtonVersion('S');
-            OrderMice();
+            OrderMice(1);
         },
     });
 
@@ -1052,8 +1056,7 @@ function reOrdering() {
                     .attr('data-order', index + 1);
             }
         });
-
-    OrderMice();
+    OrderMice(0);
 }
 
 // *************************************************
@@ -1122,7 +1125,7 @@ function fillBudgetProds(jsn, days, stus) {
     <!-- Descuento al seguro -->
         <td class="wcldisc col_discount colbase discountInsu" 
             data-key="${pds.pjtvr_insured}" 
-            data-real="${parseFloat(pds.pjtvr_insured) * 100}"
+            data-real="${parseFloat(pds.pjtvr_discount_insured) * 100}"
         >
             <i class="fas fa-caret-left selectioncell"></i>
             <span class="discData">
@@ -1925,6 +1928,8 @@ function printBudget(verId) {
 function saveBudget(dt) {
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
+
+    console.log(dt);
     getBudgets(pjtId, verId);
     interfase = 'MST';
     purgeInterfase();
@@ -2264,7 +2269,7 @@ function getDataMice() {
         let pid = parseInt($(this).attr('id').substring(3, 10));
         let section = $(this).parents('tbody').attr('id').substring(2, 5);
 
-        /** == Valida la cantidad ======== */
+        /** == Valida la cantidad ================================= */
         let quantity_act = parseInt(
             $(this).children('td.quantityBase').children('.input_invoice').val()
         );
@@ -2289,6 +2294,7 @@ function getDataMice() {
             );
         }
 
+        /** == Valida los días base =============================== */
         let daysBase_act = parseInt(
             $(this).children('td.daysBase').children('.input_invoice').val()
         );
@@ -2313,6 +2319,7 @@ function getDataMice() {
             );
         }
 
+        /** == Valida los días costo ============================== */
         let daysCost_act = parseInt(
             $(this).children('td.daysCost').children('.input_invoice').val()
         );
@@ -2337,6 +2344,7 @@ function getDataMice() {
             );
         }
 
+        /** == Valida los descuentos base ========================= */
         let discountBase_act = parseFloat(
             $(this).children('td.discountBase').text()
         );
@@ -2354,12 +2362,15 @@ function getDataMice() {
                 'U'
             );
         }
+
+        /** == Valida los descuentos as seguro ==================== */
         let discountInsu_act = parseFloat(
             $(this).children('td.discountInsu').text()
         );
         let discountInsu_ant = parseFloat(
             $(this).children('td.discountInsu').attr('data-real')
         );
+
         $(this).children('td.discountInsu').attr('data-real', discountInsu_act);
         if (discountInsu_act != discountInsu_ant) {
             updateMice(
@@ -2456,11 +2467,12 @@ function getDataMice() {
             );
         }
 
+        let ordering = parseInt($(`#SC${section}`).data('switch'));
         let order = $(this)
             .children('th')
             .children('.move_item')
             .attr('data-order');
-        if (order > 0) {
+        if (ordering > 0) {
             // console.log(pjtId, pid, 'pjtvr_order', order, section, 'N');
             updateMice(pjtId, pid, 'pjtvr_order', order, section, 'N');
         }
@@ -2476,8 +2488,9 @@ function getDataMice() {
  * @param {*} ac Accion a realizar
  */
 function updateMice(pj, pd, fl, dt, sc, ac) {
-    // console.log(pj, pd, fl, dt, sc, ac);
+    console.log(pj, pd, fl, dt, sc, ac);
 
+    $(`#SC${sc}`).attr('data-switch', '0');
     var par = `[{
         "pjtId"      :   "${pj}",
         "prdId"      :   "${pd}",
@@ -2492,10 +2505,10 @@ function updateMice(pj, pd, fl, dt, sc, ac) {
     fillField(pagina, par, tipo, selector);
 }
 function receiveResponseMice(dt) {
-    // console.log(dt);
+    console.log(dt);
 }
 
-function OrderMice() {
+function OrderMice(m) {
     let pjtId = $('.version_current').attr('data-project');
     $('.budgetRow').each(function (v) {
         let pid = parseInt($(this).attr('id').substring(3, 10));
@@ -2504,17 +2517,22 @@ function OrderMice() {
             .children('th')
             .children('.move_item')
             .attr('data-order');
+        if (m == 1) {
+            $(`#SC${section}`).attr('data-switch', '1');
 
-        var par = `[{
+            var par = `[{
             "pjtId"      :   "${pjtId}",
             "prdId"      :   "${pid}",
             "order"      :   "${order}",
             "section"    :   "${section}"
             }]`;
-        var pagina = 'ProjectDetails/updateOrder';
-        var tipo = 'html';
-        var selector = receiveResponseMice;
-        fillField(pagina, par, tipo, selector);
+            var pagina = 'ProjectDetails/updateOrder';
+            var tipo = 'html';
+            var selector = receiveResponseMice;
+            fillField(pagina, par, tipo, selector);
+        } else {
+            $(`#SC${section}`).attr('data-switch', '0');
+        }
     });
 }
 

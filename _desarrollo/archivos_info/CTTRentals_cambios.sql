@@ -605,6 +605,6 @@ ADD COLUMN `pjtvr_discount_insured` DECIMAL(10,2) NULL DEFAULT 0.00 COMMENT 'Des
 ALTER TABLE `cttapp_cire`.`ctt_version` 
 ADD COLUMN `ver_discount_insured` DECIMAL(10,2) NULL DEFAULT 0.00 COMMENT 'Descuento sobre el seguro' AFTER `ver_master`;
 
-
-
+ALTER TABLE `ctt_accesories`
+CHANGE COLUMN `acr_parent` `prd_parent` INT(11) NULL DEFAULT NULL COMMENT 'ID del producto padre' AFTER `prd_id`;
 

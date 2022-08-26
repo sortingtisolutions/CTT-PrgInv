@@ -78,7 +78,7 @@
             <!-- HEADERS DE LA TABLA DE COTIZACIONES END -->
                                 
             <!-- EQUIPO BASE START -->
-                <tbody  class="sections_products" id="SC1">
+                <tbody  class="sections_products" data-switch="0" id="SC1">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Base</th>
                         <td colspan="13" class="col_section"></td>
@@ -94,7 +94,7 @@
             <!-- EQUIPO BASE END -->
 
             <!-- EQUIPO EXTRA START -->
-                <tbody class="sections_products" id="SC2">
+                <tbody class="sections_products" data-switch="0" id="SC2">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Extra</th>
                         <td colspan="13" class="col_section"></td>
@@ -109,7 +109,7 @@
             <!-- EQUIPO EXTRA END -->
 
             <!-- EQUIPO POR DIA START -->
-                <tbody class="sections_products" id="SC3">
+                <tbody class="sections_products" data-switch="0" id="SC3">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por Día</th>
                         <td colspan="13" class="col_section"></td>
@@ -124,7 +124,7 @@
             <!-- EQUIPO POR DIA END -->
 
             <!-- EQUIPO POR SUBARRENDO START -->
-                <tbody class="sections_products" id="SC4">
+                <tbody class="sections_products" data-switch="0" id="SC4">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por subarrendo</th>
                         <td colspan="13" class="col_section"></td>

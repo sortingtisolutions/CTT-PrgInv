@@ -325,7 +325,7 @@ class ProjectDetailsModel extends Model
         $qry1 = "UPDATE ctt_projects_mice 
                 SET pjtvr_order = $order
                 WHERE pjt_id = $pjtId AND prd_id = $prdId AND pjtvr_section = $section;";
-        return $this->db->query($qry1);
+       return $this->db->query($qry1);
     }    
 
 /** ====== Agrega un nuevo comentario ========================================================  */
@@ -465,6 +465,7 @@ class ProjectDetailsModel extends Model
     {
         $pjtId      = $this->db->real_escape_string($params['pjtId']);
         $verCode    = $this->db->real_escape_string($params['verCode']);
+        $discount   = $this->db->real_escape_string($params['discount']);
         $verActive  = '1';
         $verMaster  = '1';
         $verStatus  = 'P';
@@ -473,8 +474,8 @@ class ProjectDetailsModel extends Model
         $this->db->query($qry1);
 
         $qry2 = "INSERT INTO ctt_version 
-                        (ver_code,   pjt_id, ver_active, ver_master,  ver_status) 
-                 VALUES ('$verCode', $pjtId, $verActive, $verMaster, '$verStatus');";
+                        (ver_code,   pjt_id, ver_active, ver_master,  ver_status, ver_discount_insured) 
+                 VALUES ('$verCode', $pjtId, $verActive, $verMaster, '$verStatus', $discount);";
         $this->db->query($qry2);
         $result = $this->db->insert_id;
         return $result . '|' . $pjtId;
@@ -562,14 +563,19 @@ class ProjectDetailsModel extends Model
     }
 
 /** ====== Actualiza contenido de la version =================================================  */
-    public function settingMasterVersion($pjtId, $verId)
+    public function settingMasterVersion($pjtId, $verId, $discount)
     {
-        $qry1 = "UPDATE ctt_version SET ver_master = 0, ver_active = 0 WHERE pjt_id = $pjtId;";
+        $qry1 = "UPDATE ctt_version SET ver_master = 0, ver_active = 0, ver_discount_insured = $discount WHERE pjt_id = $pjtId;";
         $this->db->query($qry1);
         
-        $qry2 = "UPDATE ctt_version SET ver_master = 1, ver_active = 1 WHERE ver_id = $verId;";
+        $qry2 = "UPDATE ctt_version SET ver_master = 1, ver_active = 1, ver_discount_insured = $discount WHERE ver_id = $verId;";
         return $this->db->query($qry2);
 
+    }
+    public function settingDiscountVersion($pjtId, $verId, $discount)
+    {
+        $qry1 = "UPDATE ctt_version SET ver_discount_insured = $discount WHERE ver_id = $verId;";
+        $this->db->query($qry1);
     }
     public function settingProjectVersion($pjtId, $verId)
     {
@@ -643,6 +649,7 @@ class ProjectDetailsModel extends Model
                     , $user	                                as usr_id
                  FROM ctt_projects_mice WHERE pjt_id = $pjtId AND pjtvr_action != 'N';";
         return $this->db->query($qry1);
+       
 
      }
 

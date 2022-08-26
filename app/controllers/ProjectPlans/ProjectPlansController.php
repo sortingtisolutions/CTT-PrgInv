@@ -392,24 +392,26 @@ class ProjectPlansController extends Controller
         $verId     = $request_params['verId'];
         $pjtId     = $request_params['pjtId'];
         $action    = $request_params['action'];
+        $discount  = $request_params['discount'];
 
         if ($action == 'ACT'){
             //ACT convierte una version activa a una version master
-            $version        = $this->model->settingMasterVersion($pjtId, $verId);
-            $projectVersion = $this->model->settingProjectVersion($pjtId, $verId);
-            $periods        = $this->model->cleanPeriods($pjtId);
-            $series         = $this->model->restoreSeries($pjtId);
-            $detail         = $this->model->cleanDetail($pjtId);
-            $projectContent = $this->model->settingProjectContent($pjtId, $verId);
-            $result         = $this->model->getProjectVersion($pjtId);
-            $response       = $this->setSeries($result);
+            $version            = $this->model->settingMasterVersion($pjtId, $verId, $discount);
+            $projectVersion     = $this->model->settingProjectVersion($pjtId, $verId);
+            $periods            = $this->model->cleanPeriods($pjtId);
+            $series             = $this->model->restoreSeries($pjtId);
+            $detail             = $this->model->cleanDetail($pjtId);
+            $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
+            $result             = $this->model->getProjectVersion($pjtId);
+            $response           = $this->setSeries($result);
 
         } else {
             //MST actualiza los datos de una version maestra 
-            $projectVersion = $this->model->settingProjectVersion($pjtId, $verId);
-            $projectContent = $this->model->settingProjectContent($pjtId, $verId);
-            $result         = $this->model->getVersionMice($pjtId);
-            $response       = $this->updateSeries($result);
+            $projectDiscount    = $this->model->settingDiscountVersion($pjtId, $verId, $discount);
+            $projectVersion     = $this->model->settingProjectVersion($pjtId, $verId);
+            $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
+            $result             = $this->model->getVersionMice($pjtId);
+            $response           = $this->updateSeries($result);
         }
 
         echo $verId . '|'. $pjtId;

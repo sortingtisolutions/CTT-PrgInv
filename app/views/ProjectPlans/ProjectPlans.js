@@ -198,13 +198,15 @@ function eventsAction() {
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data-project');
                 let verId = $('.version_current').attr('data-version');
+                let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
 
                 modalLoading('S');
                 let par = `
                 [{
-                    "pjtId"  : "${pjtId}",
-                    "verId"  : "${verId}",
-                    "action" : "${interfase}"
+                    "pjtId"     : "${pjtId}",
+                    "verId"     : "${verId}",
+                    "discount"  : "${discount}",
+                    "action"    : "${interfase}"
                 }]`;
                 var pagina = 'ProjectPlans/SaveBudget';
                 var tipo = 'html';
