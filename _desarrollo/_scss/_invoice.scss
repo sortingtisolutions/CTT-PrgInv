@@ -4,6 +4,7 @@
     --in-gray: hsl(236, 65%, 98.5%);
     --in-oxford: hsl(236, 3%, 75%);
     --in-green: hsl(129, 88%, 43%);
+    --in-blue: hsl(200, 88%, 40%);
 
     --br-gray-soft: hsl(236, 3%, 94%);
     --br-gray-medium: hsl(236, 3%, 80%);
@@ -20,18 +21,17 @@
     // Modales
     --md-shadow-color: hsla(0, 0%, 0%, 0.5);
 
-    --rw-bg-color_warning: hsla(0, 87%, 40%, .1);
+    --rw-bg-color_warning: hsla(0, 87%, 40%, 0.1);
     --rw-fg-color_warning: hsla(0, 87%, 40%, 1);
 
-    --rw-bg-color_busy: hsla(219, 87%, 40%, .1);
+    --rw-bg-color_busy: hsla(219, 87%, 40%, 0.1);
     --rw-fg-color_busy: hsla(219, 87%, 40%, 1);
-
 }
 
 .cuadroMovible {
     width: 200px;
     height: 200px;
-    background-color: #FFFF00;
+    background-color: #ffff00;
     z-index: 10000;
 }
 
@@ -40,7 +40,7 @@
     width: 300px;
     height: 150px;
     background-color: var(--in-white);
-    border-radius: .6rem;
+    border-radius: 0.6rem;
     box-shadow: 0 0 20px var(--md-shadow-color);
     top: 30%;
     left: 30%;
@@ -55,7 +55,6 @@
     }
 }
 
-
 .invoice__container {
     color: var(--in-black);
     position: absolute;
@@ -67,8 +66,6 @@
     grid-template-columns: 1fr 14rem;
     grid-template-rows: 2rem auto;
     font-size: 1.1em;
-
-
 
     .invoice__section-panel,
     .invoice__section-button {
@@ -91,19 +88,17 @@
             overflow: hidden;
             text-overflow: ellipsis;
 
-
             i {
                 margin-left: 10px;
                 margin-right: 10px;
                 cursor: pointer;
-
             }
         }
     }
 
     .invoice__section-button {
-        padding-top: .25rem;
-        padding-left: .6rem;
+        padding-top: 0.25rem;
+        padding-left: 0.6rem;
     }
 
     // panel sidebar: Muestra totales, lista de versiones y boton de comentarios
@@ -121,7 +116,7 @@
                 font-size: 1.1em;
                 border-collapse: collapse;
                 width: 100%;
-                margin-top: .5rem;
+                margin-top: 0.5rem;
 
                 tr {
                     // border-top: 1px dotted var(--in-oxford);
@@ -151,11 +146,10 @@
         }
 
         .sidebar__versions {
-            padding: .5rem 0;
-
+            padding: 0.5rem 0;
 
             .version__button {
-                padding: .5rem;
+                padding: 0.5rem;
             }
 
             .version__list-title {
@@ -164,7 +158,6 @@
                 text-align: center;
                 width: 100%;
                 display: inline-block;
-
             }
 
             .version__list {
@@ -172,7 +165,6 @@
                 height: 95%;
 
                 ul {
-
                     position: absolute;
                     width: 100%;
                     bottom: 0;
@@ -182,7 +174,7 @@
                     overflow: scroll;
 
                     li {
-                        padding: .1rem .8rem;
+                        padding: 0.1rem 0.8rem;
                         cursor: pointer;
 
                         &:hover {
@@ -198,7 +190,6 @@
                         .element_code {
                             text-align: left;
                             padding-left: 0.2rem;
-
                         }
 
                         .element_date {
@@ -221,21 +212,18 @@
         }
 
         .sidebar__comments {
-            padding: .6rem .4rem;
+            padding: 0.6rem 0.4rem;
         }
 
         .invoice_button {
             visibility: hidden;
         }
-
-
     }
 
     .invoice__section-panel,
     .invoice__section-button {
         z-index: 50;
     }
-
 
     // Parrilla de productos seleccionados
     .invoice__section-grid {
@@ -244,28 +232,27 @@
 
         // Panel de control
         .invoice_controlPanel {
-            padding: .4rem .8rem;
+            padding: 0.4rem 0.8rem;
             position: relative;
-
 
             .import-sections {
                 position: absolute;
-                top: 2.0rem;
-                left: 5.0rem;
+                top: 2rem;
+                left: 5rem;
                 z-index: 300;
                 max-height: 300px;
                 overflow-y: scroll;
                 background-color: var(--in-white);
-                padding: .4rem;
-                border-radius: .3rem;
+                padding: 0.4rem;
+                border-radius: 0.3rem;
                 box-shadow: 2px 2px 10px var(--md-shadow-color);
                 display: none;
 
                 ul li {
-                    font-size: 1.0em;
+                    font-size: 1em;
                     font-weight: 300;
                     line-height: 1.6em;
-                    padding: .1rem .6rem;
+                    padding: 0.1rem 0.6rem;
                     cursor: pointer;
 
                     &:hover {
@@ -275,21 +262,20 @@
                 }
             }
 
-
             .menu-sections {
                 position: absolute;
-                top: 2.0rem;
-                left: 1.0rem;
+                top: 2rem;
+                left: 1rem;
                 width: auto;
                 min-height: 50px;
-                padding: .4rem;
+                padding: 0.4rem;
                 background-color: $setColor;
-                border-radius: .3rem;
+                border-radius: 0.3rem;
                 z-index: 300;
                 display: none;
 
                 ul li {
-                    padding: .1rem .8rem .1rem .2rem;
+                    padding: 0.1rem 0.8rem 0.1rem 0.2rem;
                     color: #ffffff;
                     text-shadow: 1px 1px 1px #000000;
                     font-size: 1.1em;
@@ -302,10 +288,9 @@
 
                     i {
                         font-size: 1.1em;
-                        padding: .2rem;
+                        padding: 0.2rem;
                     }
                 }
-
             }
 
             .invoice_button {
@@ -339,7 +324,6 @@
                     width: 100%;
                 }
 
-
                 .coltrip,
                 .coltest {
                     content: '';
@@ -351,7 +335,7 @@
                     background-color: var(--in-gray);
                     text-align: center;
                     vertical-align: bottom;
-                    padding: 1.1rem 0.2rem 0.0rem 0.2rem;
+                    padding: 1.1rem 0.2rem 0rem 0.2rem;
                     overflow: none;
 
                     .invoice_col_header {
@@ -370,22 +354,16 @@
                             width: 198px;
                             background-color: rgba(0, 0, 0, 0.05);
                         }
-
-
                     }
-
-
-
-
 
                     .selectionInput {
                         position: absolute;
                         bottom: -0.2rem;
-                        left: .5rem;
-                        font-size: 1.0em;
-                        padding: .1rem .3rem;
+                        left: 0.5rem;
+                        font-size: 1em;
+                        padding: 0.1rem 0.3rem;
                         background-color: #ffffff;
-                        border-radius: .3rem;
+                        border-radius: 0.3rem;
                         box-shadow: 0 0 4px var(--br-gray-medium);
                         cursor: pointer;
                         display: none;
@@ -394,10 +372,9 @@
                         &:hover {
                             transform: scale(1.5);
                         }
-
                     }
 
-                    &:hover>.selectionInput {
+                    &:hover > .selectionInput {
                         display: block;
                         transition: all 0.4s;
                     }
@@ -406,9 +383,9 @@
                         padding: 0;
 
                         i {
-                            padding: .2rem .4rem;
+                            padding: 0.2rem 0.4rem;
                             border: 1px solid $setColor;
-                            border-radius: .3rem;
+                            border-radius: 0.3rem;
                             font-size: 1.2em;
                             cursor: pointer;
 
@@ -418,15 +395,12 @@
                             }
                         }
                     }
-
                 }
 
                 tbody {
-
                     &.sections_products {
                         display: none;
                     }
-
 
                     th,
                     td {
@@ -434,7 +408,6 @@
                         border-bottom: 1px dashed var(--br-gray-soft);
                         border-right: 1px dotted var(--br-gray-soft);
                         padding: 0.6em 0.8em 0.25rem 0.8rem;
-
 
                         &:last-child {
                             border-right: none;
@@ -446,23 +419,22 @@
 
                         .move_item {
                             position: absolute;
-                            top: .45rem;
+                            top: 0.45rem;
                             left: 0.3rem;
-                            width: 1.0rem;
+                            width: 1rem;
                             text-align: center;
                             cursor: row-resize;
                         }
 
                         .menu_product {
                             position: absolute;
-                            top: .45rem;
-                            right: .45rem;
+                            top: 0.45rem;
+                            right: 0.45rem;
                             cursor: pointer;
                             display: none;
-
                         }
 
-                        &:hover>.menu_product {
+                        &:hover > .menu_product {
                             display: block;
                         }
 
@@ -476,7 +448,6 @@
 
                         &.botton_prod {
                             height: 40px;
-
                         }
                     }
 
@@ -485,18 +456,24 @@
                         text-align: center;
                         position: relative;
 
-                        .col_quantity-pending {
+                        .col_quantity-led {
                             width: 7px;
                             height: 7px;
-                            background-color: var(--rw-fg-color_warning);
                             border-radius: 50%;
                             position: absolute;
-                            top: .7rem;
-                            left: .5rem;
+                            top: 0.6rem;
+                            left: 0.4rem;
 
                             &:hover {
                                 transform: scale(1.7);
                             }
+                        }
+
+                        .col_quantity-pending {
+                            background-color: var(--rw-fg-color_warning);
+                        }
+                        .col_quantity-comment {
+                            background-color: var(--in-blue);
                         }
                     }
 
@@ -517,12 +494,12 @@
 
                         .selectioncell {
                             position: absolute;
-                            top: .2rem;
+                            top: 0.2rem;
                             left: -5px;
-                            font-size: 1.0em;
-                            padding: .1rem .3rem;
+                            font-size: 1em;
+                            padding: 0.1rem 0.3rem;
                             background-color: #ffffff;
-                            border-radius: .3rem;
+                            border-radius: 0.3rem;
                             box-shadow: 0 0 4px var(--br-gray-medium);
                             cursor: pointer;
                             display: none;
@@ -531,25 +508,22 @@
                             &:hover {
                                 transform: scale(1.5);
                             }
-
                         }
 
-                        &:hover>.selectioncell {
+                        &:hover > .selectioncell {
                             display: block;
                             transition: all 0.4s;
                         }
                     }
 
                     .col_section {
-                        height: 2.0rem;
+                        height: 2rem;
                         padding-bottom: 0.1rem;
                         vertical-align: bottom;
                         font-family: $font-primary;
                         font-size: 1.1em;
                         // border-top: 1px solid var(--in-oxford);
                         border-bottom: 2px solid var(--br-gray-soft);
-
-
                     }
 
                     .input_invoice {
@@ -566,16 +540,13 @@
                     }
 
                     &.col_caret {
-
                         padding: 0;
 
                         i {
                             display: block;
                         }
                     }
-
                 }
-
 
                 th.costBase,
                 th.colbase {
@@ -615,18 +586,12 @@
 
                 tr.selected td,
                 tr.selected th {
-                    background-color: $color_btn_default_top  !important;
-                    color: #FFFFFF !important;
+                    background-color: $color_btn_default_top !important;
+                    color: #ffffff !important;
                 }
             }
         }
-
-
-
     }
-
-
-
 
     // MODALES EMERGENTES
     // Emergente: Información del proyecto y cliente seleccionado
@@ -637,13 +602,13 @@
         left: 0;
         bottom: 100%;
         width: 450px;
-        background-color: var(--in-white);
+        background-color: var(--in-gray);
+        box-shadow: 6px 0px 12px var(--md-shadow-color);
         transition: all 1s ease;
         z-index: 40;
 
-
         .detail__box {
-            padding: .5rem;
+            padding: 0.5rem;
 
             table {
                 width: 100%;
@@ -653,7 +618,7 @@
                     font-size: 0.9em;
                     width: 150px;
                     text-align: end;
-                    padding-right: .3rem;
+                    padding-right: 0.3rem;
                     color: #777777;
                 }
 
@@ -661,18 +626,15 @@
                     font-weight: 700;
                     width: auto;
 
-
                     &.flash {
                         padding-bottom: 1rem;
                         padding-top: 0;
 
-
-
-                        &>span {
+                        & > span {
                             border: 1px solid $setColor;
-                            padding: .1rem .5rem;
-                            font-size: .8em;
-                            border-radius: .6rem;
+                            padding: 0.1rem 0.5rem;
+                            font-size: 0.8em;
+                            border-radius: 0.6rem;
                             background-color: hsl(230, 50%, 95%);
                             font-weight: 600;
                             text-transform: uppercase;
@@ -688,7 +650,6 @@
                             font-size: 1.4em;
                         }
                     }
-
                 }
             }
 
@@ -697,15 +658,8 @@
                 display: flex;
                 justify-content: flex-end;
             }
-
-
-
         }
-
-
-
     }
-
 
     // Emergente: Seleccionados de clientes y proyectos
     .invoice__section-finder {
@@ -714,7 +668,8 @@
         left: 0;
         right: 14rem;
         height: 18rem;
-        background-color: var(--in-white);
+        background-color: var(--in-gray);
+        box-shadow: 0px 6px 12px var(--md-shadow-color);
         transition: all 1s ease;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
@@ -722,7 +677,7 @@
 
         .finder__box-buttons {
             text-align: end;
-            padding: .5rem;
+            padding: 0.5rem;
         }
 
         .finder__box {
@@ -738,7 +693,7 @@
             }
 
             .finder_list {
-                margin-top: .5rem;
+                margin-top: 0.5rem;
                 height: 180px;
                 overflow: scroll;
 
@@ -751,7 +706,6 @@
                         background-color: var(--br-gray-medium);
                         color: var(--in-white);
                     }
-
 
                     &.alive {
                         color: var(--in-black);
@@ -779,8 +733,6 @@
             height: 88%;
             font-size: 0.9em;
 
-
-
             table {
                 color: #666666;
                 font-weight: 100;
@@ -792,17 +744,16 @@
                     border-right: 1px dotted var(--br-gray-medium);
                     text-align: center;
                     vertical-align: bottom;
-                    padding: .5rem 0.2rem;
+                    padding: 0.5rem 0.2rem;
                     overflow: none;
                 }
 
                 tbody {
-
                     tr {
                         cursor: copy;
 
-                        &:hover>th,
-                        &:hover>td {
+                        &:hover > th,
+                        &:hover > td {
                             background-color: var(--br-gray-hard-alfa);
                         }
 
@@ -817,14 +768,11 @@
                         border-bottom: 1px dotted var(--br-gray-medium);
                         border-right: 1px dotted var(--br-gray-medium);
                         padding: 0.2rem 0.8rem;
-
                     }
-
 
                     .col_product {
                         width: 400px;
                         overflow: hidden;
-
 
                         .elipsis {
                             width: 360px;
@@ -832,9 +780,6 @@
                             overflow: hidden;
                             text-overflow: ellipsis;
                         }
-
-
-
                     }
 
                     .col_quantity,
@@ -842,8 +787,6 @@
                         width: 70px;
                         text-align: center;
                         position: relative;
-
-
                     }
 
                     .col_category {
@@ -861,14 +804,14 @@
         left: 35%;
         width: auto;
         min-height: 50px;
-        padding: .4rem;
+        padding: 0.4rem;
         background-color: $setColor;
-        border-radius: .3rem;
+        border-radius: 0.3rem;
         z-index: 300;
         display: none;
 
         ul li {
-            padding: .2rem .8rem .2rem .2rem;
+            padding: 0.2rem 0.8rem 0.2rem 0.2rem;
             color: #ffffff;
             text-shadow: 1px 1px 1px #000000;
             font-size: 1.1em;
@@ -881,7 +824,7 @@
 
             i {
                 font-size: 1.1em;
-                padding: .2rem;
+                padding: 0.2rem;
             }
         }
     }
@@ -896,15 +839,15 @@
 
         .comments__list {
             border: 1px solid var(--br-gray-soft);
-            border-radius: .5rem;
-            margin-bottom: .5rem;
-            padding: .5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
             overflow-y: scroll;
 
             .comment__group {
                 border-bottom: 1px solid var(--br-gray-soft);
                 // margin-bottom: 1rem;
-                padding: .2rem;
+                padding: 0.2rem;
                 width: 100%;
 
                 &:hover {
@@ -917,26 +860,25 @@
 
                 .comment__box-date {
                     text-align: right;
-                    font-size: .9em;
+                    font-size: 0.9em;
                     color: var(--in-oxford);
 
                     i {
-                        padding: 0 .5rem;
+                        padding: 0 0.5rem;
                     }
                 }
 
                 .comment__box-user {
                     text-align: left;
-                    font-size: .9em;
+                    font-size: 0.9em;
                     color: var(--in-oxford);
                 }
-
             }
         }
 
         .comments__addNew {
             background-color: var(--br-gray-soft);
-            padding: .5rem;
+            padding: 0.5rem;
 
             .invoice_button {
                 background-color: var(--in-white) !important;
@@ -958,25 +900,22 @@
         background-color: var(--in-gray);
         border-right: 1px dotted var(--br-gray-medium);
         text-align: center;
-        padding: .5rem 0.2rem;
+        padding: 0.5rem 0.2rem;
         overflow: none;
     }
 
     tbody {
-
         tr {
             cursor: copy;
 
-            &:hover>th,
-            &:hover>td {
+            &:hover > th,
+            &:hover > td {
                 background-color: var(--br-gray-hard-alfa);
             }
 
             &.oculto {
                 display: none;
             }
-
-
         }
 
         th,
@@ -986,9 +925,8 @@
             border-right: 1px dotted var(--br-gray-medium);
             padding: 0.2rem 0.8rem;
 
-
             .pending {
-                font-size: .55rem;
+                font-size: 0.55rem;
                 font-weight: 700;
                 letter-spacing: 0.05rem;
             }
@@ -996,7 +934,6 @@
             &.levelAccesory {
                 padding-left: 2rem;
             }
-
         }
 
         .levelProd {
@@ -1006,8 +943,6 @@
             font-weight: 700;
             font-size: 1.1em;
         }
-
-
 
         .levelSituation {
             background-color: var(--rw-bg-color_busy);
@@ -1019,7 +954,6 @@
             color: var(--rw-fg-color_warning);
             background-color: var(--rw-bg-color_warning);
         }
-
     }
 }
 
@@ -1038,13 +972,14 @@
 .invoice-border {
     border-width: 1px;
     border-style: solid;
-    border-color: var(--br-gray-soft) var(--br-gray-medium) var(--br-gray-medium) var(--br-gray-soft);
+    border-color: var(--br-gray-soft) var(--br-gray-medium)
+        var(--br-gray-medium) var(--br-gray-soft);
 }
 
 .invoiceInput {
     border: 1px solid var(--in-oxford);
-    border-radius: .25rem;
-    padding: .3rem;
+    border-radius: 0.25rem;
+    padding: 0.3rem;
     font-weight: 700;
     outline: none;
     text-transform: uppercase;
@@ -1055,11 +990,11 @@
 }
 
 .invoice_button {
-    padding: .2rem .3rem;
+    padding: 0.2rem 0.3rem;
     font-size: 0.9em;
     font-weight: 100;
     border: 1px solid var(--br-invoice-button);
-    border-radius: .3rem;
+    border-radius: 0.3rem;
     text-transform: lowercase;
     cursor: pointer;
 
@@ -1069,8 +1004,7 @@
     }
 
     i {
-        padding: 0 .3rem;
-
+        padding: 0 0.3rem;
     }
 }
 
@@ -1079,10 +1013,10 @@
     width: 70px;
     height: 40px;
     background-color: #ffffff;
-    border-radius: .3rem;
+    border-radius: 0.3rem;
     display: flex;
     overflow: hidden;
-    padding: .5rem;
+    padding: 0.5rem;
     display: none;
 
     .input_invoice {
@@ -1100,12 +1034,12 @@
     width: 80px;
     height: 130px;
     background-color: #ffffff;
-    border-radius: .3rem;
+    border-radius: 0.3rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     overflow: hidden;
-    padding: .3rem;
+    padding: 0.3rem;
     z-index: 100;
     display: none;
 
@@ -1122,11 +1056,10 @@
 .finderInput {
     background-color: transparent;
     border: 1px solid var(--in-oxford);
-    border-radius: .3rem;
-    padding: 0 .2rem;
+    border-radius: 0.3rem;
+    padding: 0 0.2rem;
     outline: none;
 }
-
 
 .modalTable {
     position: fixed;
@@ -1137,16 +1070,16 @@
     .modal__header {
         background-color: var(--in-gray);
         width: 100%;
-        padding: .4rem .4rem;
+        padding: 0.4rem 0.4rem;
         display: flex;
         justify-content: space-between;
         font-size: 1.3em;
 
         i {
             font-size: 1.3em;
-            margin-right: .5rem;
-            padding: .3rem;
-            border-radius: .3rem;
+            margin-right: 0.5rem;
+            padding: 0.3rem;
+            border-radius: 0.3rem;
             cursor: pointer;
 
             &:hover {
@@ -1154,7 +1087,6 @@
                 color: var(--in-white);
             }
         }
-
     }
 
     .modal__body {
@@ -1199,7 +1131,7 @@
         height: 180px;
         background-color: var(--in-white);
         box-shadow: 0px 0px 50px var(--md-shadow-color);
-        border-radius: .3rem;
+        border-radius: 0.3rem;
         padding: 1rem;
         text-align: center;
 
@@ -1218,7 +1150,6 @@
 }
 
 .project_data-box {
-
     display: grid;
     grid-template-columns: 1fr 20%;
     grid-template-rows: 100%;
@@ -1237,7 +1168,6 @@
                 vertical-align: top;
                 // border: 1px solid #CC0000;
 
-
                 &:first-child {
                     text-align: right;
                     vertical-align: top;
@@ -1245,11 +1175,9 @@
                     width: 12rem;
                     color: #777777;
                 }
-
             }
 
             .textbox {
-
                 border: 1px solid #dddddd;
                 border-radius: 3px;
                 padding: 3px 30px 3px 5px;
@@ -1268,7 +1196,7 @@
             .textAlert {
                 position: absolute;
                 top: 0.25rem;
-                left: .6rem;
+                left: 0.6rem;
                 height: 1rem;
                 overflow: hidden;
                 color: $alert;
@@ -1287,7 +1215,7 @@
 
     .image_random {
         background-color: var(--in-oxford);
-        background-image: url("../img/programer/21.png");
+        background-image: url('../img/programer/21.png');
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -1305,10 +1233,9 @@
     overflow: hidden;
 }
 
-
 .rotate180 {
     transform: rotate(180deg);
-    transform: all .5s;
+    transform: all 0.5s;
 }
 
 @keyframes rotar {
@@ -1322,7 +1249,6 @@
 }
 
 @media screen and (max-width: 800px) {
-
     .invoice__section-products {
         left: 80px;
     }

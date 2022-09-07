@@ -4,13 +4,12 @@
 ?>
 
 
-
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 
 <div class="invoice__container">
-    <!-- Nombre del proyecto y tablero de control -->
+<!-- TABLERO DE CONTROL START -->
     <div class="invoice__section invoice__section-panel invoice-border">
         <div class="panel__name">
             <i class="fas fa-caret-square-down projectInformation"></i>
@@ -21,15 +20,15 @@
             <i class="fas fa-search projectfinder"></i>
         </div>
      </div>
+<!-- TABLERO DE CONTROL END -->
 
-
-    <!-- Botones de reseteo -->
+<!-- BOTON DE RESETEO DE PANTALLA START -->
     <div class="invoice__section invoice__section-button invoice-border">
         <!-- <span class="invoice_button" id="newQuote"><i class="fas fa-plus"></i>nueva cotización</span> -->
      </div>
+<!-- BOTON DE RESETEO DE PANTALLA END -->
 
-
-    <!-- Parilla de productos seleccionado -->
+<!-- PARRILLA DE PRODUCTOS SELECCIONADOS EN LA COTIZACION START -->
     <div class="invoice__section invoice__section-grid invoice-border">
         <div class="invoice_controlPanel">
             <span class="version_current"></span>
@@ -37,6 +36,8 @@
             <span class="invoice_button toPrint"><i class="fas fa-print"></i> Imprimir</span>
             <span class="invoice_button toSave"><i class="fas fa-save"></i> Generar proyecto</span>
             <span class="invoice_button toImport"><i class="fas fa-save"></i> Importar</span>
+
+        <!-- MENU SELECTOR DE SECCIONES START -->
             <div class="menu-sections">
                 <ul>
                     <li class="equipoBase"          data-option="1">Equipo Base</li>
@@ -45,12 +46,15 @@
                     <li class="equipoSubarrendo"    data-option="4">Equipo por subarrendo</li>
                 </ul>
             </div>
+        <!-- MENU SELECTOR DE SECCIONES END -->
+
             <div class="import-sections">
                 <ul></ul>
             </div>
         </div>
         <div class="invoice__box-table" id="invoiceTable">
             <table >
+            <!-- HEADERS DE LA TABLA DE COTIZACIONES START -->
                 <thead>
                     <tr>
                         
@@ -71,12 +75,12 @@
                         <th class="wclexpn colcontrol"><i class="fas fa-caret-left showColumns rotate180" title="Muestra y oculta columnas de viaje y pruebas"></i></th>
                     </tr>
                  </thead>
-
+            <!-- HEADERS DE LA TABLA DE COTIZACIONES END -->
                 
 
                 
                 <!-- EQUIPO BASE -->
-                <tbody  class="sections_products" id="SC1">
+                <tbody  class="sections_products" data-switch="0"  id="SC1">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Base</th>
                         <td colspan="13" class="col_section"></td>
@@ -89,7 +93,7 @@
                     </tr> 
                  </tbody>
                 <!-- EQUIPO EXTRA -->
-                <tbody class="sections_products" id="SC2">
+                <tbody class="sections_products" data-switch="0"  id="SC2">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo Extra</th>
                         <td colspan="13" class="col_section"></td>
@@ -102,7 +106,7 @@
                     </tr> 
                  </tbody>
                 <!-- EQUIPO POR DIA -->
-                <tbody class="sections_products" id="SC3">
+                <tbody class="sections_products" data-switch="0"  id="SC3">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por Día</th>
                         <td colspan="13" class="col_section"></td>
@@ -115,7 +119,7 @@
                     </tr> 
                  </tbody>
                 <!-- EQUIPO POR SUBARRENDO -->
-                <tbody class="sections_products" id="SC4">
+                <tbody class="sections_products" data-switch="0"  id="SC4">
                     <tr class="blocked">
                         <th class="col_section"><i class="fas fa-minus-circle removeSection"></i> Equipo por subarrendo</th>
                         <td colspan="13" class="col_section"></td>
@@ -378,13 +382,14 @@
 
     <!-- Plantilla de tablas modales -->
     <div id="infoProductTemplate" class="table_hidden box_template">
-        <table class="table_template" style = "min-width: 600px; width:100%;" >
+        <table class="table_template" style = "width:1590px;" >
             <thead>
                 <tr>
                     <th style = "width: 150px">SKU</th>
                     <th style = "width:  90px"></th>
                     <th style = "width:  50px">Tipo</th>
-                    <th style = "min-width: 300px; width: auto;">Nombre del producto</th>
+                    <th style = "width: 400px;">Nombre del producto</th>
+                    <th style = "width: 600px;">Comentarios</th>
                     <th style = "width: 300px">Catálogo</th>
                 </tr>
             </thead>

@@ -27,7 +27,7 @@
 
 		<title>CTT Exp & Rentals</title>
 
-		<link rel="stylesheet" href="<?= FOLDER_PATH . '/app/assets/css/estilos.css' ?>">
+		<link rel="stylesheet" href="<?= FOLDER_PATH . '/app/assets/css/estilos.min.css' ?>">
 
 	</head>
 	<body class="bg-dark">

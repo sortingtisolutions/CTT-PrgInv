@@ -401,10 +401,11 @@ function getDiscounts() {
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de relacionados al prducto*/
-function getProductsRelated(id, tp) {
+function getProductsRelated(id, tp, vr) {
     var pagina = 'ProjectDetails/listProductsRelated';
-    var par = `[{"prdId":"${id}","type":"${tp}"}]`;
+    var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}"}]`;
     var tipo = 'json';
+    console.log(par);
     var selector = putProductsRelated;
     fillField(pagina, par, tipo, selector);
 }
@@ -1088,7 +1089,7 @@ function fillBudgetProds(jsn, days, stus) {
                 value="${pds.pjtvr_quantity}" 
                 data-real="${pds.pjtvr_quantity}" 
                 tabindex=1>
-           
+                <div class="col_quantity-led" title=""></div>
         </td>
         
     <!-- Precio -->
@@ -1193,6 +1194,13 @@ function fillBudgetProds(jsn, days, stus) {
     expandCollapseSection();
     activeInputSelector();
 
+    if (pds.comments > 0) {
+        $(`#bdg${pds.prd_id} .col_quantity-led`)
+            .removeAttr('class')
+            .addClass('col_quantity-led col_quantity-comment')
+            .attr('title', 'Comentarios al producto');
+    }
+
     getCounterPending(pds.pjtvr_id, pds.prd_id);
 }
 
@@ -1200,9 +1208,10 @@ function putCounterPending(dt) {
     if (dt[0].counter > 0) {
         let word =
             dt[0].counter > 1 ? dt[0].counter + ' productos' : 'Un producto';
-        $(`#bdg${dt[0].prd_id} .col_quantity`).append(
-            `<div class="col_quantity-pending" title="${word} en pendiente"></div>`
-        );
+        $(`#bdg${dt[0].prd_id} .col_quantity-led`)
+            .removeAttr('class')
+            .addClass('col_quantity-led col_quantity-pending')
+            .attr('title', `${word} en pendiente`);
     }
     purgeInterfase();
 }
@@ -1414,7 +1423,8 @@ function infoProduct(bdgId, type) {
     );
     closeModals();
     setTimeout(() => {
-        getProductsRelated(bdgId.substring(3, 20), type);
+        let verId = $('.version_current').data('version');
+        getProductsRelated(bdgId.substring(3, 20), type, verId);
     }, 500);
 }
 // Muestra la información de productos relacionados
@@ -1432,9 +1442,10 @@ function putProductsRelated(dt) {
                 <td><span class="${pending}">${u.pjtdt_prod_sku.toUpperCase()}</span></td>
                 <td>${u.prd_level}</td>
                 <td>${u.prd_name}</td>
+                <td>${u.ser_comments}</td>
                 <td>${u.cat_name}</td>
             </tr>
-            ${putProductsRelatedSons(dt, u.prd_id)}
+           
         `;
             $('.invoice__modal-general table tbody').append(H);
         }
