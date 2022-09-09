@@ -53,23 +53,25 @@ CREATE TABLE IF NOT EXISTS `ctt_areas` (
 /* COTIZACIONES  */
 DROP TABLE IF EXISTS `ctt_budget`;
 CREATE TABLE IF NOT EXISTS `ctt_budget` (
-    `bdg_id`                    int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'Id de la cotización',
-    `bdg_prod_sku`              varchar(15) DEFAULT NULL                        COMMENT 'SKU identificador del producto',
-    `bdg_prod_name`             varchar(100) DEFAULT NULL                       COMMENT 'Nombre del producto',
-    `bdg_prod_price`            decimal(10,2) DEFAULT NULL                      COMMENT 'Precio unitario del producto',
-    `bdg_prod_level`            varchar(1) DEFAULT 'P'                          COMMENT 'Nivel del producto  K=Kit, P=Producto',
-    `bdg_section`               smallint(1) DEFAULT 1                           COMMENT 'Segmentación de la cotización',
-    `bdg_quantity`              int(11) DEFAULT NULL                            COMMENT 'Cantidad de productos',
-    `bdg_days_base`             int(11) DEFAULT 1                               COMMENT 'Días solicitados en renta',
-    `bdg_days_cost`             int(11) DEFAULT 1                               COMMENT 'Días en cotización en renta',
-    `bdg_discount_base`         decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento aplicado a la renta',
-    `bdg_days_trip`             int(11) DEFAULT 0                               COMMENT 'Días solicitados en viaje',
-    `bdg_discount_trip`         decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento aplicado al viaje',
-    `bdg_days_test`             int(11) DEFAULT 0                               COMMENT 'Días solicitados en prueba',
-    `bdg_discount_test`         decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento aplicado en prueba',
-    `bdg_insured`               decimal(10,2) DEFAULT 0.10                      COMMENT 'Porcentaje de seguro',
-    `ver_id`                    int(11) NOT NULL                                COMMENT 'FK Id de la version relación ctt_version',
-    `prd_id`                    int(11) NOT NULL                                COMMENT 'FK Id del producto relación ctt_products',
+    `bdg_id`                      int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'Id de la cotización',
+    `bdg_prod_sku`                varchar(15) DEFAULT NULL                        COMMENT 'SKU identificador del producto',
+    `bdg_prod_name`               varchar(100) DEFAULT NULL                       COMMENT 'Nombre del producto',
+    `bdg_prod_price`              decimal(10,2) DEFAULT NULL                      COMMENT 'Precio unitario del producto',
+    `bdg_prod_level`              varchar(1) DEFAULT 'P'                          COMMENT 'Nivel del producto  K=Kit, P=Producto',
+    `bdg_section`                 smallint(1) DEFAULT 1                           COMMENT 'Sección en la que se agrupan los productos',
+    `bdg_quantity`                int(11) DEFAULT NULL                            COMMENT 'Cantidad de productos',
+    `bdg_days_base`               int(11) DEFAULT 1                               COMMENT 'Días solicitados en renta',
+    `bdg_days_cost`               int(11) DEFAULT 1                               COMMENT 'Días en cotización en renta',
+    `bdg_discount_base`           decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento aplicado a la renta',
+    `bdg_discount_insured`        decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento sobre el seguro',
+    `bdg_days_trip`               int(11) DEFAULT 0                               COMMENT 'Días solicitados en viaje',
+    `bdg_discount_trip`           decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento aplicado al viaje',
+    `bdg_days_test`               int(11) DEFAULT 0                               COMMENT 'Días solicitados en prueba',
+    `bdg_discount_test`           decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento aplicado en prueba',
+    `bdg_insured`                 decimal(10,2) DEFAULT 0.10                      COMMENT 'Porcentaje de seguro',
+    `bdg_order`                   int(11) DEFAULT 0                               COMMENT 'Posición en la lista de secciones',
+    `ver_id`                      int(11) NOT NULL                                COMMENT 'FK Id de la version relación ctt_version',
+    `prd_id`                      int(11) NOT NULL                                COMMENT 'FK Id del producto relación ctt_products',
   PRIMARY KEY (`bdg_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Cotizaciones generadas';
 
@@ -268,6 +270,23 @@ CREATE TABLE IF NOT EXISTS `ctt_modules` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla de Módulos que componen el sistema';
 
 
+/* MOVIMIENTOS  */
+DROP TABLE IF EXISTS `ctt_movements`;
+CREATE TABLE IF NOT EXISTS `ctt_movements` (
+    `mov_id`                    int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'Id del movimiento',
+    `mov_quantity`              int(11) DEFAULT NULL                            COMMENT 'Cantidad modificada',
+    `mov_type`                  varchar(45) DEFAULT NULL                        COMMENT 'Tipo de movimiento',
+    `mov_status`                varchar(1) DEFAULT '1'                          COMMENT 'Status del movimiento 1= sin revision, 0 = Revisado',
+    `mov_date`                  timestamp NULL DEFAULT current_timestamp()      COMMENT 'Fecha y hora del movimiento',
+    `prd_id`                    int(11) DEFAULT NULL                            COMMENT 'Id del producto relación ctt_products',
+    `pjt_id`                    int(11) DEFAULT NULL                            COMMENT 'Id del proyecto relación ctt_projects',
+    `usr_id`                    int(11) DEFAULT NULL                            COMMENT 'Id del usuario relación ctt_users',
+  PRIMARY KEY (`mov_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Registra los movimientos de proyectos';
+
+
+
+
 
 /* PUESTOS  */
 DROP TABLE IF EXISTS `ctt_position`;
@@ -330,6 +349,7 @@ CREATE TABLE IF NOT EXISTS `ctt_products_packages` (
     `prd_parent`                int(11) DEFAULT NULL                            COMMENT 'ID del producto padre',
     `prd_id`                    int(11) DEFAULT NULL                            COMMENT 'Id del producto hijo relaciòn ctt_products',
     `pck_quantity`              int(11) DEFAULT 1                               COMMENT 'Cantidad de productos',
+    `pck_reserved`              int(11) DEFAULT 0                               COMMENT 'Cantidad reservado',
   PRIMARY KEY (`pck_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla pivote que relaiona los productos a un paquete';
 
@@ -387,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `ctt_profiles_modules` (
 DROP TABLE IF EXISTS `ctt_projects`;
 CREATE TABLE IF NOT EXISTS `ctt_projects` (
     `pjt_id`                    int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'Id del proyecto',
-    `pjt_parent`                int(11) NOT NULL                                COMMENT 'Proyecto padre',
+    `pjt_parent`                int(11) DEFAULT 0                               COMMENT 'Proyecto padre',
     `pjt_number`                varchar(50) DEFAULT NULL                        COMMENT 'Numero del proyecto',
     `pjt_name`                  varchar(100) DEFAULT NULL                       COMMENT 'Nombre del proyecto',
     `pjt_date_project`          datetime DEFAULT current_timestamp()            COMMENT 'Fecha de generación del proyecto',
@@ -395,10 +415,18 @@ CREATE TABLE IF NOT EXISTS `ctt_projects` (
     `pjt_date_end`              datetime DEFAULT NULL                           COMMENT 'Fecha de fin del proyecto',
     `pjt_time`                  varchar(200) DEFAULT NULL                       COMMENT 'Tiempo de duración del proyecto',
     `pjt_location`              varchar(200) DEFAULT NULL                       COMMENT 'Ubicación del desarrollo del proyecto',
-    `pjt_status`                varchar(2) DEFAULT '1'                          COMMENT 'Estatus del proyecto',
+    `pjt_status`                varchar(2) DEFAULT '1'                          COMMENT 'Estatus del proyecto 1-Activo, 0-Inactivo',
+    `pjt_how_required`          varchar(100) DEFAULT NULL                       COMMENT 'Quien solicitó',
+    `pjt_trip_go`               varchar(45) DEFAULT NULL                        COMMENT 'Viaje de Ida',
+    `pjt_trip_back`             varchar(45) DEFAULT NULL                        COMMENT 'Viaje de vuelta',
+    `pjt_to_carry_on`           varchar(45) DEFAULT NULL                        COMMENT 'Carga',
+    `pjt_to_carry_out`          varchar(45) DEFAULT NULL                        COMMENT 'Descarga',
+    `pjt_test_tecnic`           varchar(45) DEFAULT NULL                        COMMENT 'Pruebas técnicas',
+    `pjt_test_look`             varchar(45) DEFAULT NULL                        COMMENT 'Pruebas Look',
     `cuo_id`                    int(11) NOT NULL                                COMMENT 'FK Id de propietario relacion con ctt_costumer_owner',
     `loc_id`                    int(11) NOT NULL                                COMMENT 'FK Id de la locación relación ctt_location',
     `pjttp_id`                  int(11) NOT NULL                                COMMENT 'Fk Id del Tipo de projecto relacion ctt_projects_type',
+    `pjttc_id`                  int(11) NOT NULL                                COMMENT 'Fk Id del Tipo de llamado relacion ctt_projects_type_called',
   PRIMARY KEY (`pjt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='proyectos registrados';
 
@@ -407,7 +435,7 @@ CREATE TABLE IF NOT EXISTS `ctt_projects` (
 /* CONTENIDO DEL PROYECTO  */
 DROP TABLE IF EXISTS `ctt_projects_content`;
 CREATE TABLE IF NOT EXISTS `ctt_projects_content` (
-    `pjtcn_id`                  int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'Id del contenido del projecto',
+    `pjtcn_id`                  int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'Id del contenido del proyecto',
     `pjtcn_prod_sku`            varchar(15) DEFAULT NULL                        COMMENT 'SKU identificador del producto',
     `pjtcn_prod_name`           varchar(100) DEFAULT NULL                       COMMENT 'Nombre del producto',
     `pjtcn_prod_price`          decimal(10,2) DEFAULT NULL                      COMMENT 'Precio unitario del producto',
@@ -415,19 +443,23 @@ CREATE TABLE IF NOT EXISTS `ctt_projects_content` (
     `pjtcn_days_base`           int(11) DEFAULT NULL                            COMMENT 'Días solicitados en renta',
     `pjtcn_days_cost`           int(11) DEFAULT NULL                            COMMENT 'Días en cotización en renta',
     `pjtcn_discount_base`       decimal(10,2) DEFAULT NULL                      COMMENT 'Descuento aplicado a la renta',
+    `pjtcn_discount_insured`    decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento sobre el seguro',
     `pjtcn_days_trip`           int(11) DEFAULT NULL                            COMMENT 'Días solicitados en viaje',
     `pjtcn_discount_trip`       decimal(10,2) DEFAULT NULL                      COMMENT 'Descuento aplicado al viaje',
     `pjtcn_days_test`           int(11) DEFAULT NULL                            COMMENT 'Días solicitados en prueba',
     `pjtcn_discount_test`       decimal(10,2) DEFAULT NULL                      COMMENT 'Descuento aplicado en prueba',
     `pjtcn_insured`             decimal(10,2) DEFAULT 0.10                      COMMENT 'Porcentaje de seguro',
-    `pjtcn_prod_level`          varchar(1) DEFAULT 'P'                          COMMENT 'Nivel del producto K=Kit, P=Producto',
+    `pjtcn_prod_level`          varchar(1) DEFAULT 'P'                          COMMENT 'Nivel del producto  K=Kit, P=Producto',
     `pjtcn_section`             int(11) DEFAULT NULL                            COMMENT 'Numero de seccion',
     `pjtcn_status`              varchar(1) DEFAULT '1'                          COMMENT 'Status del contendo del proyecto 1-activo 0-inactivo',
+    `pjtcn_order`               int(11) DEFAULT 0                               COMMENT 'Posición en la lista de secciones',
     `ver_id`                    int(11) NOT NULL                                COMMENT 'FK Id de la version relación ctt_version',
     `prd_id`                    int(11) NOT NULL                                COMMENT 'FK Id del producto relación ctt_products',
     `pjt_id`                    int(11) NOT NULL                                COMMENT 'FK Id del proyecto relación ctt_proyect',
+    `pjtvr_id`                  int(11) DEFAULT NULL                            COMMENT 'FK Id de la version del proyecto relación ctt_proyect_version',
   PRIMARY KEY (`pjtcn_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Contenido del proyecto cotización promovida';
+
 
 
 
@@ -439,7 +471,7 @@ CREATE TABLE IF NOT EXISTS `ctt_projects_detail` (
     `pjtdt_prod_sku`            varchar(15) DEFAULT NULL                        COMMENT 'SKU identificador del producto',
     `ser_id`                    int(11) NOT NULL                                COMMENT 'FK Id de la serie relación ctt_series',
     `prd_id`                    int(11) DEFAULT NULL                            COMMENT 'Id del producto relación con ctt_products',
-    `pjtcn_id`                  int(11) NOT NULL                                COMMENT 'FK Id del proyecto relación ctt_projects_content',
+    `pjtvr_id`                  int(11) NOT NULL                                COMMENT 'FK Id del proyecto relación ctt_projects_version',
   PRIMARY KEY (`pjtdt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Detalle del proyecto, cotización promovida';
 
@@ -458,14 +490,16 @@ CREATE TABLE IF NOT EXISTS `ctt_projects_mice` (
     `pjtvr_days_base`           int(11) DEFAULT NULL                            COMMENT 'Días solicitados en renta',
     `pjtvr_days_cost`           int(11) DEFAULT NULL                            COMMENT 'Días en cotización en renta',
     `pjtvr_discount_base`       decimal(10,2) DEFAULT NULL                      COMMENT 'Descuento aplicado a la renta',
+    `pjtvr_discount_insured`    decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento sobre el seguro',
     `pjtvr_days_trip`           int(11) DEFAULT NULL                            COMMENT 'Días solicitados en viaje',
     `pjtvr_discount_trip`       decimal(10,2) DEFAULT NULL                      COMMENT 'Descuento aplicado al viaje',
     `pjtvr_days_test`           int(11) DEFAULT NULL                            COMMENT 'Días solicitados en prueba',
     `pjtvr_discount_test`       decimal(10,2) DEFAULT NULL                      COMMENT 'Descuento aplicado en prueba',
     `pjtvr_insured`             decimal(10,2) DEFAULT 0.10                      COMMENT 'Porcentaje de seguro',
-    `pjtvr_prod_level`          varchar(1) DEFAULT 'P'                          COMMENT 'Nivel del producto K=Kit, P=Producto',
+    `pjtvr_prod_level`          varchar(1) DEFAULT 'P'                          COMMENT 'Nivel del producto  K=Kit, P=Producto',
     `pjtvr_section`             int(11) DEFAULT NULL                            COMMENT 'Numero de seccion',
     `pjtvr_status`              varchar(1) DEFAULT '1'                          COMMENT 'Status del contendo del proyecto 1-activo 0-inactivo',
+    `pjtvr_order`               int(11) DEFAULT 0                               COMMENT 'Posición en la lista de secciones',
     `ver_id`                    int(11) NOT NULL                                COMMENT 'FK Id de la version relación ctt_version',
     `prd_id`                    int(11) NOT NULL                                COMMENT 'FK Id del producto relación ctt_products',
     `pjt_id`                    int(11) NOT NULL                                COMMENT 'FK Id del proyecto relación ctt_proyect',
@@ -508,29 +542,39 @@ CREATE TABLE IF NOT EXISTS `ctt_projects_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tipos de proyectos o eventos que se ofrecen y siministran';
 
 
+/* CATALGO DE TIPOS DE LLAMADOS DE PROYECTO  */
+DROP TABLE IF EXISTS `ctt_projects_type_called`;
+CREATE TABLE IF NOT EXISTS `ctt_projects_type_called` (
+    `pjttc_id`                  int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'Id del tipo de llamado',
+    `pjttc_name`                varchar(100) DEFAULT NULL                       COMMENT 'Nombre del tipo de llamado',
+  PRIMARY KEY (`pjttc_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tipos de llamado';
+
 
 /* VERSIONES DEL PROYECTO  */
 DROP TABLE IF EXISTS `ctt_projects_version`;
 CREATE TABLE IF NOT EXISTS `ctt_projects_version` (
-    `pjtvr_id`                  int(11) NOT NULL AUTO_INCREMENT                COMMENT 'Id del contenido del projecto',
-    `pjtvr_prod_sku`            varchar(15) DEFAULT NULL                       COMMENT 'SKU identificador del producto',
-    `pjtvr_prod_name`           varchar(100) DEFAULT NULL                      COMMENT 'Nombre del producto',
-    `pjtvr_prod_price`          decimal(10,2) DEFAULT NULL                     COMMENT 'Precio unitario del producto',
-    `pjtvr_quantity`            int(11) DEFAULT NULL                           COMMENT 'Cantidad de productos',
-    `pjtvr_days_base`           int(11) DEFAULT NULL                           COMMENT 'Días solicitados en renta',
-    `pjtvr_days_cost`           int(11) DEFAULT NULL                           COMMENT 'Días en cotización en renta',
-    `pjtvr_discount_base`       decimal(10,2) DEFAULT NULL                     COMMENT 'Descuento aplicado a la renta',
-    `pjtvr_days_trip`           int(11) DEFAULT NULL                           COMMENT 'Días solicitados en viaje',
-    `pjtvr_discount_trip`       decimal(10,2) DEFAULT NULL                     COMMENT 'Descuento aplicado al viaje',
-    `pjtvr_days_test`           int(11) DEFAULT NULL                           COMMENT 'Días solicitados en prueba',
-    `pjtvr_discount_test`       decimal(10,2) DEFAULT NULL                     COMMENT 'Descuento aplicado en prueba',
-    `pjtvr_insured`             decimal(10,2) DEFAULT 0.10                     COMMENT 'Porcentaje de seguro',
-    `pjtvr_prod_level`          varchar(1) DEFAULT 'P'                         COMMENT 'Nivel del producto K=Kit, P=Producto',
-    `pjtvr_section`             int(11) DEFAULT NULL                           COMMENT 'Numero de seccion',
-    `pjtvr_status`              varchar(1) DEFAULT '1'                         COMMENT 'Status del contendo del proyecto 1-activo 0-inactivo',
-    `ver_id`                    int(11) NOT NULL                               COMMENT 'FK Id de la version relación ctt_version',
-    `prd_id`                    int(11) NOT NULL                               COMMENT 'FK Id del producto relación ctt_products',
-    `pjt_id`                    int(11) NOT NULL                               COMMENT 'FK Id del proyecto relación ctt_proyect',
+    `pjtvr_id`                  int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'Id del contenido del projecto',
+    `pjtvr_prod_sku`            varchar(15) DEFAULT NULL                        COMMENT 'SKU identificador del producto',
+    `pjtvr_prod_name`           varchar(100) DEFAULT NULL                       COMMENT 'Nombre del producto',
+    `pjtvr_prod_price`          decimal(10,2) DEFAULT NULL                      COMMENT 'Precio unitario del producto',
+    `pjtvr_quantity`            int(11) DEFAULT NULL                            COMMENT 'Cantidad de productos',
+    `pjtvr_days_base`           int(11) DEFAULT NULL                            COMMENT 'Días solicitados en renta',
+    `pjtvr_days_cost`           int(11) DEFAULT NULL                            COMMENT 'Días en cotización en renta',
+    `pjtvr_discount_base`       decimal(10,2) DEFAULT NULL                      COMMENT 'Descuento aplicado a la renta',
+    `pjtvr_discount_insured`    decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento sobre el seguro',
+    `pjtvr_days_trip`           int(11) DEFAULT NULL                            COMMENT 'Días solicitados en viaje',
+    `pjtvr_discount_trip`       decimal(10,2) DEFAULT NULL                      COMMENT 'Descuento aplicado al viaje',
+    `pjtvr_days_test`           int(11) DEFAULT NULL                            COMMENT 'Días solicitados en prueba',
+    `pjtvr_discount_test`       decimal(10,2) DEFAULT NULL                      COMMENT 'Descuento aplicado en prueba',
+    `pjtvr_insured`             decimal(10,2) DEFAULT 0.10                      COMMENT 'Porcentaje de seguro',
+    `pjtvr_prod_level`          varchar(1) DEFAULT 'P'                          COMMENT 'Nivel del producto  K=Kit, P=Producto',
+    `pjtvr_section`             int(11) DEFAULT NULL                            COMMENT 'Numero de seccion',
+    `pjtvr_status`              varchar(1) DEFAULT '1'                          COMMENT 'Status del contendo del proyecto 1-activo 0-inactivo',
+    `pjtvr_order`               int(11) DEFAULT 0                               COMMENT 'Posición en la lista de secciones',
+    `ver_id`                    int(11) NOT NULL                                COMMENT 'FK Id de la version relación ctt_version',
+    `prd_id`                    int(11) NOT NULL                                COMMENT 'FK Id del producto relación ctt_products',
+    `pjt_id`                    int(11) NOT NULL                                COMMENT 'FK Id del proyecto relación ctt_proyect',
   PRIMARY KEY (`pjtvr_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Contenido de la version del proyecto';
 
@@ -587,16 +631,28 @@ CREATE TABLE IF NOT EXISTS `ctt_series` (
     `ser_date_down`             datetime DEFAULT NULL                           COMMENT 'Fecha de baja del producto',
     `ser_reserve_count`         int(11) DEFAULT NULL                            COMMENT 'Contador de rentas',
     `ser_behaviour`             varchar(1) NOT NULL                             COMMENT 'Comportamiento del producto C-Compra, R-Renta',
+    `ser_brand`                 varchar(100) DEFAULT NULL                       COMMENT 'Marca de la series',
+    `ser_cost_import`           int(11) DEFAULT NULL                            COMMENT 'Costo de importación',
+    `ser_import_petition`       varchar(200) DEFAULT NULL                       COMMENT 'Pedimento de importación',
     `ser_comments`              varchar(500) DEFAULT NULL                       COMMENT 'Comentarios sobre la serie del producto',
     `prd_id`                    int(11) DEFAULT NULL                            COMMENT 'ID del producto relacion ctt_productos',
     `sup_id`                    int(11) DEFAULT NULL                            COMMENT 'ID de la proveedor relacion ctt_suppliers',
     `cin_id`                    int(11) DEFAULT NULL                            COMMENT 'Id del tipo de moneda relacion ctt_coins',
     `pjtdt_id`                  int(11) DEFAULT 0                               COMMENT 'Id del detalle de proyecto relacion ctt_projects_detail',
-  PRIMARY KEY (`ser_id`)
+  PRIMARY KEY (`ser_id`),
+  KEY `indx_prd_id` (`prd_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Numero serie de productos correspondientes a un modelo.';
 
- ALTER TABLE `ctt_series` ADD INDEX indx_prd_id (`prd_id` ASC) ;
 
+ DROP TRIGGER IF EXISTS `update_products_reserve`;
+DELIMITER $$
+CREATE TRIGGER `update_products_reserve` AFTER UPDATE ON `ctt_series` FOR EACH ROW UPDATE ctt_products as sc
+SET prd_reserved = (
+	select  count(*) from ctt_series where pjtdt_id > 0  and  prd_id = sc.prd_id
+)
+WHERE sc.prd_id = prd_id
+$$
+DELIMITER ;
 
 
 /* TIPO DE SERVICIO  */
@@ -611,6 +667,19 @@ CREATE TABLE IF NOT EXISTS `ctt_services` (
 
 
 
+
+DROP TABLE IF EXISTS `ctt_sidebar`;
+CREATE TABLE IF NOT EXISTS `ctt_sidebar` (
+    `sdb_id`                    int(11) NOT NULL AUTO_INCREMENT                 COMMENT 'ID del sidebar',
+    `sdb_parent`                int(11) DEFAULT NULL                            COMMENT 'ID del sidebar padre',
+    `sdb_item`                  varchar(100) NOT NULL                           COMMENT 'Elementos del sidebar',
+    `sdb_description`           varchar(300) DEFAULT NULL                       COMMENT 'Descripción del elemento del sidebar',
+    `sdb_order`                 int(11) DEFAULT NULL                            COMMENT 'Ordenamiento de los elementos del sidebar para su presentación',
+    `mod_id`                    int(11) DEFAULT NULL                            COMMENT 'ID del modulo relación ctt_module',
+  PRIMARY KEY (`sdb_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla de los elementos que componene el sidebar';
+
+
 /* ALMACENES  */
 DROP TABLE IF EXISTS `ctt_stores`;
 CREATE TABLE IF NOT EXISTS `ctt_stores` (
@@ -618,8 +687,8 @@ CREATE TABLE IF NOT EXISTS `ctt_stores` (
     `str_name`                  varchar(100) DEFAULT NULL                       COMMENT 'Nombre del almacén',
     `str_status`                varchar(1) DEFAULT NULL                         COMMENT 'Estatus del almacen 1-Activo, 0-Inactivo',
     `str_type`                  varchar(100) DEFAULT NULL                       COMMENT 'Tipo de almacén',
-    `emp_id`                    int(11) DEFAULT NULL,
-    `emp_fullname` varchar(45) DEFAULT NULL,
+    `emp_id`                    int(11) DEFAULT NULL                            COMMENT 'Id del empleado relacion ctt_employes',
+    `emp_fullname`              varchar(45) DEFAULT NULL                        COMMENT 'Nombre del empleado responsable',
   PRIMARY KEY (`str_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Listado de almacenes.';
 
@@ -670,12 +739,12 @@ CREATE TRIGGER update_categories AFTER UPDATE ON ctt_stores_products FOR EACH RO
 UPDATE ctt_subcategories as sc
 SET sbc_quantity = (
         SELECT ifnull(sum(sp.stp_quantity), 0)
-        FROM ctt_stores_products AS sp
-        INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
-        INNER JOIN ctt_products AS pr ON pr.prd_id = sr.prd_id
+        FROM ctt_stores_products        AS sp
+        INNER JOIN ctt_series           AS sr ON sr.ser_id = sp.ser_id
+        INNER JOIN ctt_products         AS pr ON pr.prd_id = sr.prd_id
         WHERE sr.ser_status = 1
         AND pr.prd_level IN ('P', 'K')
-        and pr.sbc_id = sc.sbc_id
+        AND pr.sbc_id = sc.sbc_id
   );
 
 /** Actualiza el stock de productos en almacen en la tabla de productos  */
@@ -683,7 +752,7 @@ DROP TRIGGER update_products;
 CREATE TRIGGER update_products AFTER UPDATE ON ctt_stores_products FOR EACH ROW
 UPDATE ctt_products as sc
 SET prd_stock = (
-	select  count(*) from ctt_series where prd_id = sc.prd_id
+	SELECT  count(*) FROM ctt_series WHERE prd_id = sc.prd_id
 )
 WHERE sc.prd_id = prd_id ;
 
@@ -807,6 +876,7 @@ CREATE TABLE IF NOT EXISTS `ctt_version` (
     `ver_status`                varchar(1) DEFAULT 'C'                          COMMENT 'Tipo de version C= Cotización P=Proyecto',
     `ver_active`                smallint(1) DEFAULT 0                           COMMENT 'Version activa en pantalla',
     `ver_master`                smallint(1) DEFAULT 0                           COMMENT 'Version Maestra en Base de datos',
+    `ver_discount_insured`      decimal(10,2) DEFAULT 0.00                      COMMENT 'Descuento sobre el seguro',
     `pjt_id`                    int(11) NOT NULL                                COMMENT 'FK Id del projeto relación ctt_projects',
   PRIMARY KEY (`ver_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Version de docuemntos de cotización';

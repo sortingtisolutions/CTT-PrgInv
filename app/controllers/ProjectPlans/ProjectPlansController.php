@@ -94,7 +94,7 @@ class ProjectPlansController extends Controller
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
-            $res =  '[{"pjtcn_id":"0"}]';	
+            $res =  '[{"pjtvr_id":"0"}]';	
         }
         echo $res;
     } 
@@ -373,6 +373,17 @@ class ProjectPlansController extends Controller
     {
         $params =  $this->session->get('user');
         $result = $this->model->updateMice($request_params);
+        echo $result;
+    }
+
+
+
+
+/** ==== Actualiza el ordenamiento de productos del proyecto ================================  */
+    public function updateOrder($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->updateOrder($request_params);
         echo $result;
     }
 

@@ -115,7 +115,8 @@ class ProjectPlansModel extends Model
                             INNER JOIN ctt_projects_periods AS pg ON pg.pjtdt_id = pf.pjtdt_id
                             WHERE pf.pjtvr_id =  pc.pjtvr_id and pf.prd_id = pd.prd_id
                         )
-                    else pc.pjtvr_days_base end  as daybasereal
+                    else pc.pjtvr_days_base end  as daybasereal,
+                    (select count(ser_comments)  from ctt_series where prd_id = pc.prd_id group by prd_id) as comments
                 FROM ctt_projects_version AS pc
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
@@ -232,11 +233,13 @@ class ProjectPlansModel extends Model
 
         $type = $this->db->real_escape_string($params['type']);
         $prdId = $this->db->real_escape_string($params['prdId']);
+        $verId = $this->db->real_escape_string($params['verId']);
 
         $qry = "SELECT pr.prd_id, sr.ser_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name
                     , pr.prd_level
                     , ct.cat_name
                     , ac.prd_parent
+                    , ifnull(sr.ser_comments,'') as ser_comments
                     , ROW_NUMBER() OVER (PARTITION BY pr.prd_sku ORDER BY sr.ser_sku DESC) AS reng
                 FROM ctt_projects_detail AS pj
                 INNER JOIN ctt_products AS pr ON pr.prd_id = pj.prd_id
@@ -244,8 +247,8 @@ class ProjectPlansModel extends Model
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
                 LEFT JOIN ctt_accesories AS ac ON ac.prd_id = sr.ser_id
-                INNER JOIN ctt_projects_content AS cn ON cn.pjtvr_id = pj.pjtvr_id
-                WHERE  cn.prd_id  = $prdId ORDER BY reng, pr.prd_level DESC;";
+                INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
+                WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId ORDER BY reng, pr.prd_level DESC;";
         return $this->db->query($qry);
 
     }
@@ -283,7 +286,8 @@ class ProjectPlansModel extends Model
         $qry = "SELECT '$prdId' AS prd_id, '$pjtvrId' AS pjtvr_id, count(*) as counter
                   FROM  ctt_projects_detail 
                  WHERE  pjtvr_id = $pjtvrId
-                   AND  pjtdt_prod_sku = 'Pendiente'; ";
+                   AND  pjtdt_prod_sku = 'Pendiente'
+                   AND  pjtdt_belongs = 0; ";
 
         return $this->db->query($qry);
     } 
@@ -310,6 +314,24 @@ class ProjectPlansModel extends Model
         return $this->db->query($qry2);
 
     }
+
+
+
+/** ====== Actualiza el orden delos productos en la cotizacion ===============================  */
+    public function updateOrder($params)
+    {
+        $pjtId      = $this->db->real_escape_string($params['pjtId']);
+        $prdId      = $this->db->real_escape_string($params['prdId']);
+        $order      = $this->db->real_escape_string($params['order']);
+        $section    = $this->db->real_escape_string($params['section']);
+        
+        $qry1 = "UPDATE ctt_projects_mice 
+                SET pjtvr_order = $order
+                WHERE pjt_id = $pjtId AND prd_id = $prdId AND pjtvr_section = $section;";
+       return $this->db->query($qry1);
+    }    
+
+
 
 /** ====== Agrega un nuevo comentario ========================================================  */
     public function InsertComment($params, $userParam)
@@ -423,7 +445,7 @@ class ProjectPlansModel extends Model
     }
 
 
-
+/** ====== Promueve proyecto ==================================================================  */
     public function PromoteProject($params)
     {
         /* Actualiza el estado en 2 convirtiendolo en presupuesto  */
@@ -436,6 +458,10 @@ class ProjectPlansModel extends Model
     }
 
     
+
+
+
+
 
 
     
@@ -614,6 +640,28 @@ class ProjectPlansModel extends Model
             return $this->db->query($qry1);
      }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /** ====== Agrega contenido de la nueva version ==============================================  */
     public function settinProjectVersion($pjtId, $verId )
     {
@@ -741,7 +789,7 @@ class ProjectPlansModel extends Model
         $pjetId   = $this->db->real_escape_string($params['pjetId']);
         $detlId   = $this->db->real_escape_string($params['detlId']);
 
-        // Busca serie quese encuentre disponible y obtiene el id
+        // Busca serie que se encuentre disponible y obtiene el id
         $qry1 = "SELECT ser_id, ser_sku FROM ctt_series WHERE prd_id = $prodId 
                  AND pjtdt_id = 0
                  ORDER BY ser_reserve_count asc LIMIT 1;";
@@ -761,7 +809,7 @@ class ProjectPlansModel extends Model
                     WHERE   ser_id = $serie;";
             $this->db->query($qry2);
 
-        }else {
+        } else {
             $serie  = null; 
             $sersku  = 'Pendiente' ;
         }
@@ -815,6 +863,9 @@ class ProjectPlansModel extends Model
 
     }
 
+
+
+
 /** ====== Importa proyecto ==================================================================  */
     public function importProject($pjtIdo, $pjtId, $verId)
     {
@@ -836,12 +887,6 @@ class ProjectPlansModel extends Model
 
     } 
 
-
-
-
 /** ==========================================================================================  */
-
-
-
 
 }

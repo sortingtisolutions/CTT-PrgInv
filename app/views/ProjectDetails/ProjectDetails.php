@@ -397,13 +397,14 @@
 
 <!-- Plantilla de tablas modales -->
     <div id="infoProductTemplate" class="table_hidden box_template">
-        <table class="table_template" style = "min-width: 600px; width:100%;" >
+    <table class="table_template" style = "width:1590px;" >
             <thead>
                 <tr>
                     <th style = "width: 150px">SKU</th>
                     <th style = "width:  90px"></th>
                     <th style = "width:  50px">Tipo</th>
-                    <th style = "min-width: 300px; width: auto;">Nombre del producto</th>
+                    <th style = "width: 400px;">Nombre del producto</th>
+                    <th style = "width: 600px;">Comentarios</th>
                     <th style = "width: 300px">Catálogo</th>
                 </tr>
             </thead>

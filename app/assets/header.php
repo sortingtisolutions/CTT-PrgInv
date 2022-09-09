@@ -27,7 +27,7 @@
         
         
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/periods.css' ?>">
-        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/estilos.css' ?>" />
+        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/estilos.min.css' ?>" />
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/reports.css' ?>" />
         <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/jquery-ui.css' ?>" />
         
