@@ -455,7 +455,8 @@ function getCounterPending(pjtvrId, prdId) {
 function putProjects(dt) {
     if (dt[0].pjt_id > 0) {
         proj = dt;
-
+        $('.finder_list-projects ul').html('');
+        $('.finder_list-projectsParent ul').html('');
         $.each(proj, function (v, u) {
             if (u.pjt_status == '3' || u.pjt_status == '4') {
                 let H = ` <li id="P${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|M${u.pjt_parent}|${u.pjt_name}">${u.pjt_name}</li>`;
@@ -470,11 +471,13 @@ function putProjects(dt) {
         swpjt = 1;
     } else {
         $('.finder_list-projects ul').html('');
+        $('.finder_list-projectsParent ul').html('');
     }
 }
 /**  Llena el listado de proyectos padre */
 function putProjectsParents(dt) {
     proPar = dt;
+    $('#txtProjectParent').html('');
     if (dt[0].pjt_id > 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.pjt_id}">${u.pjt_name}</option>`;
@@ -486,6 +489,7 @@ function putProjectsParents(dt) {
 /**  Llena el listado de prductores */
 function putCustomers(dt) {
     cust = dt;
+    $('.finder_list-customer ul').html('');
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
             let H = ` <li id="C${u.cus_id}" class="alive" data-element="${v}|${u.cut_name}|${u.cus_name}">${u.cus_name}</li>`;
@@ -501,6 +505,8 @@ function putCustomersOwner(dt) {
 
 /**  Llena el listado de descuentos */
 function putDiscounts(dt) {
+    $('#selDiscount').html('');
+    $('#selDiscInsr').html('');
     $.each(dt, function (v, u) {
         let H = `<option value="${u.dis_discount}">${
             u.dis_discount * 100
@@ -2054,7 +2060,7 @@ function updateTotals() {
 
         $(this).children('.costTest').html(mkn(cstts, 'n'));
 
-        assre = stt01 * dayre * assur;
+        assre = stt01 * daybs * assur;
         assin = assre * (desIn / 100);
 
         costassu += assre - assin; //     Total de Seguro
@@ -2071,7 +2077,9 @@ function updateTotals() {
     $('#insuDescto').html(mkn(desctins, 'n'));
     $('#prodTotal').html(mkn(totlPrds, 's'));
 
-    totlCost = costbase + costtrip + costtest + costassu - desctins;
+    let desctot = costassu - desctins;
+
+    totlCost = costbase + costtrip + costtest + desctot;
 
     $('#costTotal').html(mkn(totlCost, 'n'));
 

@@ -11,8 +11,9 @@ $uname = $_GET['n'];
 $totalBase = 0;
 $totalTrip = 0;
 $totalTest = 0;
-$totalInsr = 0;
+$totalInsr = 0;         //      Total del seguro
 $totalMain = 0;
+$totalInsrGral = 0;
 
 $equipoBase = 0;
 $equipoExtra = 0;
@@ -26,6 +27,7 @@ $h = explode("|",$conkey);
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 $qry = "SELECT * , ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) AS ver_date_real,
             CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) AS period
+            , vr.ver_discount_insured
         FROM ctt_projects_version AS bg
         INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
         INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
@@ -34,7 +36,7 @@ $qry = "SELECT * , ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) AS ver_date
         INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
         LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE bg.ver_id = $verId order by bg.pjtvr_section;";
+        WHERE bg.ver_id = $verId order by  bg.pjtvr_section, bg.pjtvr_order;";
 
 $res = $conn->query($qry);
 $conn->close();
@@ -60,17 +62,19 @@ $header = '
     </header>';
 
     $costBase = 0;
+    $subtotalAmount = 0;
+    
     for ($i = 0; $i<count($items); $i++){
-        $amount = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'];
-        $amountBase = ($amount * $items[$i]['pjtvr_days_base'])-($amount * ($items[$i]['pjtvr_discount_base']/100));
-        $amountTrip = ($amount * $items[$i]['pjtvr_days_trip'])-($amount * ($items[$i]['pjtvr_discount_trip']/100));
-        $amountTest = ($amount * $items[$i]['pjtvr_days_test'])-($amount * ($items[$i]['pjtvr_discount_test']/100));
-        $amountInsr = ($amount * $items[$i]['pjtvr_insured']);
-        $totalBase += $amountBase ;
-        $totalTrip += $amountTrip ;
-        $totalTest += $amountTest ;
-        $totalInsr += $amountInsr ;
+        $amountBase = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'] * $items[$i]['pjtvr_days_base'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de cobro 
+        $amountTrip = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'] * $items[$i]['pjtvr_days_trip'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de viaje
+        $amountTest = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'] * $items[$i]['pjtvr_days_test'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de prueba
+        
+        $totalBase = $amountBase - ($amountBase * $items[$i]['pjtvr_discount_base']);
+        $totalTrip = $amountTrip - ($amountTrip * $items[$i]['pjtvr_discount_trip']);
+        $totalTest = $amountTest - ($amountTest * $items[$i]['pjtvr_discount_test']);
 
+        $totalInsrGral = $items[$i]['ver_discount_insured'];
+        $subtotalAmount += $totalBase + $totalTrip + $totalTest;
 
         if ($items[$i]['pjtvr_section'] == '1') $equipoBase = '1';
         if ($items[$i]['pjtvr_section'] == '2') $equipoExtra = '1';
@@ -189,27 +193,35 @@ $html = '
                             $section        = $items[$i]['pjtvr_section'] ;
 
                             if ($section == '1') {
-                                $product        = $items[$i]['pjtvr_prod_name'] ;
-                                $price          = $items[$i]['pjtvr_prod_price'] ;
-                                $quantity       = $items[$i]['pjtvr_quantity'] ;
-                                $daysBase       = $items[$i]['pjtvr_days_cost'] ;
-                                $discountBase   = $items[$i]['pjtvr_discount_base'] ;
-                                $subtotalBase   = $price * $quantity * $daysBase;
-                                $discountAmount = $subtotalBase * $discountBase;
-                                $amountBase     = $subtotalBase - $discountAmount;
-                                $daysTrip       = $items[$i]['pjtvr_days_trip'];
-                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];
-                                $amountTrip     = $price * $daysTrip;
-                                $discAmountTrip = $amountTrip * $discountTrip; 
-                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;
+                                $product        = $items[$i]['pjtvr_prod_name'] ; //  --------------------------- Nombre del producto
+                                $price          = $items[$i]['pjtvr_prod_price'] ;    //  ----------------------- Precio del producto
+                                $quantity       = $items[$i]['pjtvr_quantity'] ;  //  --------------------------- Cantidad solicitada
+                                $daysBase       = $items[$i]['pjtvr_days_cost'] ; //  --------------------------- Dias de costo 
+                                $discountBase   = $items[$i]['pjtvr_discount_base'] ; //  ----------------------- Porcentaje de descuento base
+                                $subtotalBase   = $price * $quantity * $daysBase;     //  ----------------------- Importe base = (precio x cantidad) dias de costo
+                                $discountAmount = $subtotalBase * $discountBase;      //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
+                                $amountBase     = $subtotalBase - $discountAmount;    //  ----------------------- Costo base = importe base - importe de desucuento base
 
-                                $discountBaseTotal  += $discountAmount;
-                                $amountBaseTotal    += $amountBase;
-                                $discountTripTotal  += $discAmountTrip;
-                                $amountTripTotal    += $amountTrip;
-                                $amountGralTotal    += $amountGral;
-                                $totalMain          += $amountGral;
+                                $daysTrip       = $items[$i]['pjtvr_days_trip'];  //  --------------------------- Dias de viaje
+                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
+                                $amountTrip     = $price * $quantity * $daysTrip;     //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
+                                $discAmountTrip = $amountTrip * $discountTrip;    //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;    //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
 
+                                $discountBaseTotal  += $discountAmount;         //  ----------------------------- Descuento total base
+                                $amountBaseTotal    += $amountBase;             //  ----------------------------- Importe total base
+                                $discountTripTotal  += $discAmountTrip;         //  ----------------------------- Importe de descuento viaje
+                                $amountTripTotal    += $amountTrip;             //  ----------------------------- Importe por viaje
+                                $amountGralTotal    += $amountGral;             //  ----------------------------- Importe total
+                                $totalMain          += $amountGral;             //  ----------------------------- Total general
+
+                                $Insured            = $items[$i]['pjtvr_insured'];        //  ------------------  Porcentaje de seguro
+                                $discoInsured       = $items[$i]['pjtvr_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
+                                $amountinsured      = $subtotalBase * $Insured;      //  -----------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
+                                
+                                $amountDescInsured  = $amountinsured * $discoInsured;   //  --------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
+                                $totalInsured       = $amountinsured - $amountDescInsured ; //  ----------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
+                                $totalInsr         += $totalInsured;
 
         $html .= '
                             <tr>
@@ -280,26 +292,35 @@ $html = '
                             $section        = $items[$i]['pjtvr_section'] ;
         
                             if ($section == '2') {
-                                $product        = $items[$i]['pjtvr_prod_name'] ;
-                                $price          = $items[$i]['pjtvr_prod_price'] ;
-                                $quantity       = $items[$i]['pjtvr_quantity'] ;
-                                $daysBase       = $items[$i]['pjtvr_days_cost'] ;
-                                $discountBase   = $items[$i]['pjtvr_discount_base'] ;
-                                $subtotalBase   = $price * $quantity * $daysBase;
-                                $discountAmount = $subtotalBase * $discountBase;
-                                $amountBase     = $subtotalBase - $discountAmount;
-                                $daysTrip       = $items[$i]['pjtvr_days_trip'];
-                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];
-                                $amountTrip     = $price * $daysTrip;
-                                $discAmountTrip = $amountTrip * $discountTrip; 
-                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;
-        
-                                $discountBaseTotal  += $discountAmount;
-                                $amountBaseTotal    += $amountBase;
-                                $discountTripTotal  += $discAmountTrip;
-                                $amountTripTotal    += $amountTrip;
-                                $amountGralTotal    += $amountGral;
-                                $totalMain          += $amountGral;
+                                $product        = $items[$i]['pjtvr_prod_name'] ; //  --------------------------- Nombre del producto
+                                $price          = $items[$i]['pjtvr_prod_price'] ;    //  ----------------------- Precio del producto
+                                $quantity       = $items[$i]['pjtvr_quantity'] ;  //  --------------------------- Cantidad solicitada
+                                $daysBase       = $items[$i]['pjtvr_days_cost'] ; //  --------------------------- Dias de costo 
+                                $discountBase   = $items[$i]['pjtvr_discount_base'] ; //  ----------------------- Porcentaje de descuento base
+                                $subtotalBase   = $price * $quantity * $daysBase;     //  ----------------------- Importe base = (precio x cantidad) dias de costo
+                                $discountAmount = $subtotalBase * $discountBase;      //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
+                                $amountBase     = $subtotalBase - $discountAmount;    //  ----------------------- Costo base = importe base - importe de desucuento base
+
+                                $daysTrip       = $items[$i]['pjtvr_days_trip'];  //  --------------------------- Dias de viaje
+                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
+                                $amountTrip     = $price * $quantity * $daysTrip;     //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
+                                $discAmountTrip = $amountTrip * $discountTrip;    //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;    //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
+
+                                $discountBaseTotal  += $discountAmount;         //  ----------------------------- Descuento total base
+                                $amountBaseTotal    += $amountBase;             //  ----------------------------- Importe total base
+                                $discountTripTotal  += $discAmountTrip;         //  ----------------------------- Importe de descuento viaje
+                                $amountTripTotal    += $amountTrip;             //  ----------------------------- Importe por viaje
+                                $amountGralTotal    += $amountGral;             //  ----------------------------- Importe total
+                                $totalMain          += $amountGral;             //  ----------------------------- Total general
+
+                                $Insured            = $items[$i]['pjtvr_insured'];        //  ------------------  Porcentaje de seguro
+                                $discoInsured       = $items[$i]['pjtvr_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
+                                $amountinsured      = $subtotalBase * $Insured;      //  -----------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
+                                
+                                $amountDescInsured  = $amountinsured * $discoInsured;   //  --------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
+                                $totalInsured       = $amountinsured - $amountDescInsured ; //  ----------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
+                                $totalInsr         += $totalInsured;
         
         
         $html .= '
@@ -371,26 +392,35 @@ $html = '
                             $section        = $items[$i]['pjtvr_section'] ;
         
                             if ($section == '3') {
-                                $product        = $items[$i]['pjtvr_prod_name'] ;
-                                $price          = $items[$i]['pjtvr_prod_price'] ;
-                                $quantity       = $items[$i]['pjtvr_quantity'] ;
-                                $daysBase       = $items[$i]['pjtvr_days_cost'] ;
-                                $discountBase   = $items[$i]['pjtvr_discount_base'] ;
-                                $subtotalBase   = $price * $quantity * $daysBase;
-                                $discountAmount = $subtotalBase * $discountBase;
-                                $amountBase     = $subtotalBase - $discountAmount;
-                                $daysTrip       = $items[$i]['pjtvr_days_trip'];
-                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];
-                                $amountTrip     = $price * $daysTrip;
-                                $discAmountTrip = $amountTrip * $discountTrip; 
-                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;
-        
-                                $discountBaseTotal  += $discountAmount;
-                                $amountBaseTotal    += $amountBase;
-                                $discountTripTotal  += $discAmountTrip;
-                                $amountTripTotal    += $amountTrip;
-                                $amountGralTotal    += $amountGral;
-                                $totalMain          += $amountGral;
+                                $product        = $items[$i]['pjtvr_prod_name'] ; //  --------------------------- Nombre del producto
+                                $price          = $items[$i]['pjtvr_prod_price'] ;    //  ----------------------- Precio del producto
+                                $quantity       = $items[$i]['pjtvr_quantity'] ;  //  --------------------------- Cantidad solicitada
+                                $daysBase       = $items[$i]['pjtvr_days_cost'] ; //  --------------------------- Dias de costo 
+                                $discountBase   = $items[$i]['pjtvr_discount_base'] ; //  ----------------------- Porcentaje de descuento base
+                                $subtotalBase   = $price * $quantity * $daysBase;     //  ----------------------- Importe base = (precio x cantidad) dias de costo
+                                $discountAmount = $subtotalBase * $discountBase;      //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
+                                $amountBase     = $subtotalBase - $discountAmount;    //  ----------------------- Costo base = importe base - importe de desucuento base
+
+                                $daysTrip       = $items[$i]['pjtvr_days_trip'];  //  --------------------------- Dias de viaje
+                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
+                                $amountTrip     = $price * $quantity * $daysTrip;     //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
+                                $discAmountTrip = $amountTrip * $discountTrip;    //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;    //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
+
+                                $discountBaseTotal  += $discountAmount;         //  ----------------------------- Descuento total base
+                                $amountBaseTotal    += $amountBase;             //  ----------------------------- Importe total base
+                                $discountTripTotal  += $discAmountTrip;         //  ----------------------------- Importe de descuento viaje
+                                $amountTripTotal    += $amountTrip;             //  ----------------------------- Importe por viaje
+                                $amountGralTotal    += $amountGral;             //  ----------------------------- Importe total
+                                $totalMain          += $amountGral;             //  ----------------------------- Total general
+
+                                $Insured            = $items[$i]['pjtvr_insured'];        //  ------------------  Porcentaje de seguro
+                                $discoInsured       = $items[$i]['pjtvr_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
+                                $amountinsured      = $subtotalBase * $Insured;      //  -----------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
+                                
+                                $amountDescInsured  = $amountinsured * $discoInsured;   //  --------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
+                                $totalInsured       = $amountinsured - $amountDescInsured ; //  ----------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
+                                $totalInsr         += $totalInsured;
         
         
         $html .= '
@@ -462,26 +492,35 @@ $html = '
                             $section        = $items[$i]['pjtvr_section'] ;
         
                             if ($section == '4') {
-                                $product        = $items[$i]['pjtvr_prod_name'] ;
-                                $price          = $items[$i]['pjtvr_prod_price'] ;
-                                $quantity       = $items[$i]['pjtvr_quantity'] ;
-                                $daysBase       = $items[$i]['pjtvr_days_cost'] ;
-                                $discountBase   = $items[$i]['pjtvr_discount_base'] ;
-                                $subtotalBase   = $price * $quantity * $daysBase;
-                                $discountAmount = $subtotalBase * $discountBase;
-                                $amountBase     = $subtotalBase - $discountAmount;
-                                $daysTrip       = $items[$i]['pjtvr_days_trip'];
-                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];
-                                $amountTrip     = $price * $daysTrip;
-                                $discAmountTrip = $amountTrip * $discountTrip; 
-                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;
-        
-                                $discountBaseTotal  += $discountAmount;
-                                $amountBaseTotal    += $amountBase;
-                                $discountTripTotal  += $discAmountTrip;
-                                $amountTripTotal    += $amountTrip;
-                                $amountGralTotal    += $amountGral;
-                                $totalMain          += $amountGral;
+                                $product        = $items[$i]['pjtvr_prod_name'] ; //  --------------------------- Nombre del producto
+                                $price          = $items[$i]['pjtvr_prod_price'] ;    //  ----------------------- Precio del producto
+                                $quantity       = $items[$i]['pjtvr_quantity'] ;  //  --------------------------- Cantidad solicitada
+                                $daysBase       = $items[$i]['pjtvr_days_cost'] ; //  --------------------------- Dias de costo 
+                                $discountBase   = $items[$i]['pjtvr_discount_base'] ; //  ----------------------- Porcentaje de descuento base
+                                $subtotalBase   = $price * $quantity * $daysBase;     //  ----------------------- Importe base = (precio x cantidad) dias de costo
+                                $discountAmount = $subtotalBase * $discountBase;      //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
+                                $amountBase     = $subtotalBase - $discountAmount;    //  ----------------------- Costo base = importe base - importe de desucuento base
+
+                                $daysTrip       = $items[$i]['pjtvr_days_trip'];  //  --------------------------- Dias de viaje
+                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
+                                $amountTrip     = $price * $quantity * $daysTrip;     //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
+                                $discAmountTrip = $amountTrip * $discountTrip;    //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;    //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
+
+                                $discountBaseTotal  += $discountAmount;         //  ----------------------------- Descuento total base
+                                $amountBaseTotal    += $amountBase;             //  ----------------------------- Importe total base
+                                $discountTripTotal  += $discAmountTrip;         //  ----------------------------- Importe de descuento viaje
+                                $amountTripTotal    += $amountTrip;             //  ----------------------------- Importe por viaje
+                                $amountGralTotal    += $amountGral;             //  ----------------------------- Importe total
+                                $totalMain          += $amountGral;             //  ----------------------------- Total general
+
+                                $Insured            = $items[$i]['pjtvr_insured'];        //  ------------------  Porcentaje de seguro
+                                $discoInsured       = $items[$i]['pjtvr_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
+                                $amountinsured      = $subtotalBase * $Insured;      //  -----------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
+                                
+                                $amountDescInsured  = $amountinsured * $discoInsured;   //  --------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
+                                $totalInsured       = $amountinsured - $amountDescInsured ; //  ----------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
+                                $totalInsr         += $totalInsured;
         
         
         $html .= '
@@ -534,10 +573,12 @@ $html = '
                     </thead>
                     <tbody>';
     
+                    $totalInsr = $totalInsr - ($totalInsr * $totalInsrGral);
                     $iva  = .16;
-                    $totalMain  = $totalMain + $totalInsr;
-                    $amountiva    = $totalMain * $iva;
-                    $totalFull   = $totalMain + $amountiva;
+
+                    $subtotalAmount = $subtotalAmount + $totalInsr;
+                    $amountiva    = $subtotalAmount * $iva;
+                    $totalFull   = $subtotalAmount + $amountiva;
     
     // Seguro
     $html .= '
@@ -552,7 +593,7 @@ $html = '
     $html .= '
                         <tr>
                             <td class="tot-main totl" colspan ="9">Subtotal</td>
-                            <td class="tot-main amou">' . number_format($totalMain , 2,'.',',')       . '</td>
+                            <td class="tot-main amou">' . number_format($subtotalAmount , 2,'.',',')       . '</td>
                         </tr>
                         ';
                         
