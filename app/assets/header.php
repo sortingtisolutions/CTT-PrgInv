@@ -23,23 +23,23 @@
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Titillium+Web:wght@400;600&display=swap"
         rel="stylesheet"
         />
-        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/sticky-table.css' ?>">
+        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/sticky-table.css?v=1.0.0.0' ?>">
         
         
-        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/periods.css' ?>">
-        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/estilos.min.css' ?>" />
-        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/reports.css' ?>" />
-        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/jquery-ui.css' ?>" />
+        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/periods.css?v=1.0.0.0' ?>">
+        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/estilos.min.css?v=1.0.0.0' ?>" />
+        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/reports.css?v=1.0.0.0' ?>" />
+        <link rel="stylesheet" href="<?= PATH_ASSETS .	'css/jquery-ui.css?v=1.0.0.0' ?>" />
         
 
-        <script src="<?=  PATH_ASSETS . 'lib/jquery.js' ?>"></script>
+        <script src="<?=  PATH_ASSETS . 'lib/jquery.js?v=1.0.0.0' ?>"></script>
 
-        <script src="<?=  PATH_ASSETS . 'lib/jquery-ui.js' ?>"></script>
+        <script src="<?=  PATH_ASSETS . 'lib/jquery-ui.js?v=1.0.0.0' ?>"></script>
 
 
         <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 
-        <script src="<?=  PATH_ASSETS . 'lib/tables/tables.js' ?>"></script>
+        <script src="<?=  PATH_ASSETS . 'lib/tables/tables.js?v=1.0.0.0' ?>"></script>
 
 
     </head>

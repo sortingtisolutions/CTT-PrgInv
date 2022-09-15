@@ -349,30 +349,30 @@
 
 
 
-     <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/bootstrap.bundle.min.js' ?>"></script>
+     <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/bootstrap.bundle.min.js?v=1.0.0.0' ?>"></script>
 
     <!--  librerias para boostrap-->	
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/jquery-3.5.1.js' ?>"></script>
-    <!-- <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/jquery.dataTables.min.js' ?>"></script> -->
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/dataTables.bootstrap4.min.js' ?>"></script>
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/dataTables.responsive.min.js' ?>"></script>
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/responsive.bootstrap4.min.js' ?>"></script>
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/dataTables.select.min.js' ?>"></script>
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/jquery-3.5.1.js?v=1.0.0.0' ?>"></script>
+    <!-- <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/jquery.dataTables.min.js?v=1.0.0.0' ?>"></script> -->
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/dataTables.bootstrap4.min.js?v=1.0.0.0' ?>"></script>
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/dataTables.responsive.min.js?v=1.0.0.0' ?>"></script>
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/responsive.bootstrap4.min.js?v=1.0.0.0' ?>"></script>
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/dataTables.select.min.js?v=1.0.0.0' ?>"></script>
 
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/dataTables.buttons.min.js' ?>"></script>
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/jszip.min.js' ?>"></script>
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/pdfmake.min.js' ?>"></script>
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/vfs_fonts.js' ?>"></script>
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/buttons.html5.min.js' ?>"></script>
-    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/buttons.print.min.js' ?>"></script>
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/dataTables.buttons.min.js?v=1.0.0.0' ?>"></script>
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/jszip.min.js?v=1.0.0.0' ?>"></script>
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/pdfmake.min.js?v=1.0.0.0' ?>"></script>
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/vfs_fonts.js?v=1.0.0.0' ?>"></script>
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/buttons.html5.min.js?v=1.0.0.0' ?>"></script>
+    <script src="<?=  PATH_ASSETS . 'lib/Datatable_J/Js/buttons.print.min.js?v=1.0.0.0' ?>"></script>
 </div>
 
 
 
-<script src="<?=  PATH_ASSETS . 'lib/select2.min.js' ?>"></script>
- <script src="<?=  PATH_ASSETS . 'lib/popper.min.js' ?>"></script>
-<script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
-<script src="<?=  PATH_VIEWS . 'Productos/Productos.js' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/select2.min.js?v=1.0.0.0' ?>"></script>
+ <script src="<?=  PATH_ASSETS . 'lib/popper.min.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_VIEWS . 'Productos/Productos.js?v=1.0.0.0' ?>"></script>
 
 
 

@@ -14,4 +14,4 @@
 	</nav>
 		
 
-	<script src="<?= PATH_VIEWS .	'Menu/Menu.js' ?>"></script>
+	<script src="<?= PATH_VIEWS .	'Menu/Menu.js?v=1.0.0.0' ?>"></script>

@@ -12,9 +12,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css" />
-        <link rel="stylesheet" href="../css/periods.css" />
-        <link rel="stylesheet" href="../css/estilos.css"/>
-        <link rel="stylesheet" href="../css/sticky-table.css" />
+        <link rel="stylesheet" href="../css/periods.css?v=1.0.0.0" />
+        <link rel="stylesheet" href="../css/estilos.css?v=1.0.0.0"/>
+        <link rel="stylesheet" href="../css/sticky-table.css?v=1.0.0.0" />
 
         <title>Document</title>
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -37,9 +37,9 @@
         </div>
 
         <div class="contador"></div>
-        <script src="../lib/functions.js"></script>
-        <script src="../lib/sticky.js"></script>
-        <script src="../lib/resizer.js"></script>
+        <script src="../lib/functions.js?v=1.0.0.0"></script>
+        <script src="../lib/sticky.js?v=1.0.0.0"></script>
+        <script src="../lib/resizer.js?v=1.0.0.0"></script>
 
 
     </body>

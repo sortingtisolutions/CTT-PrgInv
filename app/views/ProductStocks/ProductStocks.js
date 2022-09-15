@@ -8,7 +8,7 @@ var isConcepto = 0;
 
 $(document).ready(function () {
     url = getAbsolutePath();
-    importarScript(url + 'app/assets/lib/kendo.js');
+    importarScript(url + 'app/assets/lib/kendo.js?v=1.0.0.0');
 
     folio = getFolio();
     if (verifica_usuario()) {
@@ -17,7 +17,7 @@ $(document).ready(function () {
 });
 
 function inicial() {
-    $('.deep_loading').css({display: 'flex'});
+    $('.deep_loading').css({ display: 'flex' });
     getStores(); // optiene los almacenes.
     getCategorias(); // Carga las categorias
     // funcion para la carga de subcategorias
@@ -36,7 +36,7 @@ function inicial() {
         console.log('CLick Boton');
         getProducts();
     });
-    $('.deep_loading').css({display: 'none'});
+    $('.deep_loading').css({ display: 'none' });
 }
 
 //conceptos
@@ -78,10 +78,10 @@ function setting_table() {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            {data: 'skuColum', class: 'edit'},
-            {data: 'nameColum', class: 'product-name'},
-            {data: 'priceColum', class: 'product-name'},
-            {data: 'subCategoriaColum', class: 'product-name'},
+            { data: 'skuColum', class: 'edit' },
+            { data: 'nameColum', class: 'product-name' },
+            { data: 'priceColum', class: 'product-name' },
+            { data: 'subCategoriaColum', class: 'product-name' },
         ],
     });
 }
@@ -125,13 +125,13 @@ function setting_table_pro() {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            {data: 'skuColum', class: 'edit'},
-            {data: 'nameColum', class: 'product-name'},
-            {data: 'costoColum', class: 'product-name'},
-            {data: 'SerieColum', class: 'serie-product'},
-            {data: 'FechaAltaColum', class: 'serie-product'},
-            {data: 'ProveedorColum', class: ''},
-            {data: 'SubCategoriaColum', class: ''},
+            { data: 'skuColum', class: 'edit' },
+            { data: 'nameColum', class: 'product-name' },
+            { data: 'costoColum', class: 'product-name' },
+            { data: 'SerieColum', class: 'serie-product' },
+            { data: 'FechaAltaColum', class: 'serie-product' },
+            { data: 'ProveedorColum', class: '' },
+            { data: 'SubCategoriaColum', class: '' },
         ],
     });
     setTimeout(() => {
@@ -148,7 +148,20 @@ function setting_datepicket(selector) {
         locale: {
             format: 'DD/MM/YYYY',
             daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNames: [
+                'Enero',
+                'Febrero',
+                'Marzo',
+                'Abril',
+                'Mayo',
+                'Junio',
+                'Julio',
+                'Agosto',
+                'Septiembre',
+                'Octubre',
+                'Noviembre',
+                'Diciembre',
+            ],
             firstDay: 1,
         },
         minDate: fecha,
@@ -186,11 +199,21 @@ function getCategorias(id) {
         success: function (respuesta) {
             var renglon = "<option id='0'  value='0'>Seleccione...</option> ";
             respuesta.forEach(function (row, index) {
-                renglon += '<option id=' + row.cat_id + '  value="' + row.cat_id + '">' + row.cat_name + '</option> ';
+                renglon +=
+                    '<option id=' +
+                    row.cat_id +
+                    '  value="' +
+                    row.cat_id +
+                    '">' +
+                    row.cat_name +
+                    '</option> ';
             });
             $('#selectRowCategorias').append(renglon);
             if (id != '') {
-                $("#selectRowCategorias option[id='" + id + "']").attr('selected', 'selected');
+                $("#selectRowCategorias option[id='" + id + "']").attr(
+                    'selected',
+                    'selected'
+                );
             }
         },
         error: function () {},
@@ -204,20 +227,30 @@ function getSubCategorias(id, idCategoria) {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
-        data: {id: id, idCategoria: idCategoria},
+        data: { id: id, idCategoria: idCategoria },
         url: location,
         success: function (respuesta) {
             //console.log(respuesta);
             var renglon = "<option id='0'  value='0'>Seleccione...</option> ";
             if (respuesta[0].sbc_id != 0) {
                 respuesta.forEach(function (row, index) {
-                    renglon += '<option id=' + row.sbc_id + '  value="' + row.sbc_id + '">' + row.sbc_name + '</option> ';
+                    renglon +=
+                        '<option id=' +
+                        row.sbc_id +
+                        '  value="' +
+                        row.sbc_id +
+                        '">' +
+                        row.sbc_name +
+                        '</option> ';
                 });
             }
 
             $('#selectRowSubCategorias').append(renglon);
             if (idCategoria != '') {
-                $("#selectRowSubCategorias option[id='" + id + "']").attr('selected', 'selected');
+                $("#selectRowSubCategorias option[id='" + id + "']").attr(
+                    'selected',
+                    'selected'
+                );
             }
         },
         error: function () {},
@@ -251,7 +284,15 @@ function getProducts() {
         isAccesorio = 1;
     }
 
-    console.log(idAlmacen + idCategoria + idSubCategoria + isConcepto + isPaquete + isProducto + isAccesorio);
+    console.log(
+        idAlmacen +
+            idCategoria +
+            idSubCategoria +
+            isConcepto +
+            isPaquete +
+            isProducto +
+            isAccesorio
+    );
 
     var pagina = 'ProductStocks/listProducts';
     var par = `[{"idAlmacen":"${idAlmacen}","idCategoria":"${idCategoria}","idSubCategoria":"${idSubCategoria}","isConcepto":"${isConcepto}","isPaquete":"${isPaquete}","isProducto":"${isProducto}","isAccesorio":"${isAccesorio}"}]`;
@@ -306,9 +347,9 @@ function putStores(dt) {
 /**  +++ Ocultalos productos del listado que no cumplen con la cadena  */
 function sel_products(res) {
     if (res.length < 1) {
-        $('#listProducts div.list-item').css({display: 'block'});
+        $('#listProducts div.list-item').css({ display: 'block' });
     } else {
-        $('#listProducts div.list-item').css({display: 'none'});
+        $('#listProducts div.list-item').css({ display: 'none' });
     }
 
     $('#listProducts div.list-item').each(function (index) {
@@ -316,7 +357,7 @@ function sel_products(res) {
         cm = omitirAcentos(cm);
         var cr = cm.indexOf(res);
         if (cr > -1) {
-            $(this).css({display: 'block'});
+            $(this).css({ display: 'block' });
         }
     });
 }
@@ -347,7 +388,9 @@ function validator() {
 // Llena la tabla de movimientos
 function fill_table(par, tipoDato) {
     let largo = $('#tblExchanges tbody tr td').html();
-    largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
+    largo == 'Ningún dato disponible en esta tabla'
+        ? $('#tblExchanges tbody tr').remove()
+        : '';
     // par = JSON.parse(par);
     //console.log(par);
     let tabla = $('#tblExchanges').DataTable();
@@ -365,7 +408,9 @@ function fill_table(par, tipoDato) {
 // Llena la tabla de movimientos
 function fill_table_Productos(par, tipoDato) {
     let largo = $('#tblExchangesProductos tbody tr td').html();
-    largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
+    largo == 'Ningún dato disponible en esta tabla'
+        ? $('#tblExchanges tbody tr').remove()
+        : '';
     let tabla = $('#tblExchangesProductos').DataTable();
     var rowNode = tabla.row
         .add({
@@ -396,7 +441,9 @@ function btn_apply_appears() {
 // Limpia los campos para uns nueva seleccion
 function clean_selectors() {
     $('#txtStoreSource').val(0);
-    $('#txtProducts').html('<option value="0" selected>Selecciona producto</option>');
+    $('#txtProducts').html(
+        '<option value="0" selected>Selecciona producto</option>'
+    );
     $('#txtQuantity').val('');
     $('#txtQuantityStored').html('&nbsp;');
     //$('#txtComments').val('');
@@ -422,7 +469,10 @@ function read_exchange_table() {
             let pos5 = $($(u).find('td')[5]).text();
             let pos6 = $($(u).find('td')[6]).text();
 
-            prodsku = prodsku.substring(0, 7) + '-' + prodsku.substring(7, prodsku.length);
+            prodsku =
+                prodsku.substring(0, 7) +
+                '-' +
+                prodsku.substring(7, prodsku.length);
 
             chain += `${stornam}|${projnum}|${projnam}|${datestr}|${version}|${freelnc}|${prodsku}|${prodnam}|${prodPrice}|${serinum}|${dateRegis}|${pos5}|${pos6}|${isConcepto}@`;
         });
@@ -437,7 +487,10 @@ function read_exchange_table() {
             let pos5 = $($(u).find('td')[5]).text();
             let pos6 = $($(u).find('td')[6]).text();
 
-            prodsku = prodsku.substring(0, 7) + '-' + prodsku.substring(7, prodsku.length);
+            prodsku =
+                prodsku.substring(0, 7) +
+                '-' +
+                prodsku.substring(7, prodsku.length);
 
             chain += `${stornam}|${projnum}|${projnam}|${datestr}|${version}|${freelnc}|${prodsku}|${prodnam}|${prodPrice}|${serinum}|${dateRegis}|${pos5}|${pos6}|${isConcepto}@`;
         });
@@ -457,7 +510,10 @@ function build_data_structure(pr) {
 }
 
 function putSaveList(dt) {
-    window.open(url + 'app/views/ProductStocks/ProductStocksReport.php', '_blank');
+    window.open(
+        url + 'app/views/ProductStocks/ProductStocksReport.php',
+        '_blank'
+    );
 }
 
 /**  ++++ Omite acentos para su facil consulta */

@@ -63,9 +63,9 @@
 
 
 
-<script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
-<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js' ?>"></script>
-<script src="<?=  PATH_VIEWS . 'ProductsSalablesList/ProductsSalablesList.js' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_VIEWS . 'ProductsSalablesList/ProductsSalablesList.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
 <script src="https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js"></script>

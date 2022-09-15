@@ -117,8 +117,8 @@
 <!-- End Ventana modal SERIES -->
 
 
-<script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
-<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js' ?>"></script>
-<script src="<?=  PATH_VIEWS . 'Almacenes/Almacenes.js' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_VIEWS . 'Almacenes/Almacenes.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

@@ -227,8 +227,8 @@
 
 
 
-<script src="<?=  PATH_ASSETS . 'lib/functions.js' ?>"></script>
-<script src="<?=  PATH_VIEWS . 'ProjectDetails/ProjectDetails.js' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_VIEWS . 'ProjectDetails/ProjectDetails.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
 

@@ -87,7 +87,12 @@ function formato_numero(numero, decimales, separador_decimal, separador_miles) {
     }
 
     // Convertimos el punto en separador_decimal
-    numero = numero.toString().replace(',', separador_decimal !== undefined ? separador_decimal : '.');
+    numero = numero
+        .toString()
+        .replace(
+            ',',
+            separador_decimal !== undefined ? separador_decimal : '.'
+        );
 
     if (separador_miles) {
         // Añadimos los separadores de miles
@@ -131,7 +136,7 @@ function limpia_campos() {
 function verifica_usuario() {
     altr = '0';
     url = getAbsolutePath();
-    importarScript(url + 'app/assets/lib/alerts.js');
+    importarScript(url + 'app/assets/lib/alerts.js?v=1.0.0.0');
 
     var galleta = Cookies.get('user');
     if (galleta == undefined) {
@@ -163,7 +168,11 @@ function set_menu_on_page(dt) {
 function build_menu(dt) {
     $.each(dt, function (v, u) {
         if (u.mnu_parent == 0) {
-            let H = `<li><a href="${u.mod_item}">${u.mnu_item}</a>${sublevel(u.mnu_id, u.sons, dt)}</li>`;
+            let H = `<li><a href="${u.mod_item}">${u.mnu_item}</a>${sublevel(
+                u.mnu_id,
+                u.sons,
+                dt
+            )}</li>`;
             $('ul.menu').append(H);
         }
     });
@@ -175,8 +184,11 @@ function sublevel(id, sn, dt) {
         H += `<ul>`;
         $.each(dt, function (v, u) {
             if (u.mnu_parent == id) {
-                let sons = u.sons > 0 ? '<i class="fas fa-angle-right"></i>' : '';
-                H += `<li><a href="${u.mod_item}">${u.mnu_item}${sons}</a>${sublevel(u.mnu_id, u.sons, dt)}</li>`;
+                let sons =
+                    u.sons > 0 ? '<i class="fas fa-angle-right"></i>' : '';
+                H += `<li><a href="${u.mod_item}">${
+                    u.mnu_item
+                }${sons}</a>${sublevel(u.mnu_id, u.sons, dt)}</li>`;
             }
         });
         H += `</ul>`;
@@ -187,7 +199,11 @@ function sublevel(id, sn, dt) {
 function getAbsolutePath() {
     var loc = window.location;
     var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
-    return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
+    return loc.href.substring(
+        0,
+        loc.href.length -
+            ((loc.pathname + loc.search + loc.hash).length - pathName.length)
+    );
 }
 
 function addComments(scc, mid) {
@@ -239,7 +255,7 @@ function showComments(mid) {
 function looseAlert(grp) {
     grp.children('.textbox').removeClass('textbox-alert');
 
-    grp.children('.textAlert').css({visibility: 'hidden'});
+    grp.children('.textAlert').css({ visibility: 'hidden' });
 
     // console.log(grp.attr('class'));
 }
