@@ -96,8 +96,8 @@ function settingTable() {
     });
 }
 
+// Solicita los productos de un almacen seleccionado
 function getStores() {
-    // Solicita los productos de un almacen seleccionado
     var pagina = 'Almacenes/GetAlmacenes';
     var par = `[{"str_id":""}]`;
     var tipo = 'json';
