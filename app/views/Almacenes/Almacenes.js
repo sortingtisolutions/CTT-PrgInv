@@ -43,7 +43,7 @@ function settingTable() {
                 text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
             },
             {
-                //Botón para PDF
+                //Botón para descargar PDF
                 extend: 'pdf',
                 footer: true,
                 title: title,
