@@ -137,12 +137,11 @@ function verifica_usuario() {
     altr = '0';
     url = getAbsolutePath();
     importarScript(url + 'app/assets/lib/alerts.js?v=1.0.0.0');
-
     var galleta = Cookies.get('user');
     if (galleta == undefined) {
         window.location = 'Login';
     } else {
-        var pagina = 'Menu/menu';
+        var pagina = 'Menu/Menu';
         var par = `[{"userid":"${galleta[0]}"}]`;
         var tipo = 'json';
         var selector = set_menu_on_page;

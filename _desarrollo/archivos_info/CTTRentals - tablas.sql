@@ -968,7 +968,7 @@ SELECT
   sp.sup_phone, sp.sup_phone_extension, sp.sup_rfc, sp.sup_status, sp.sup_trade_name, sp.sut_id, pc.ver_id,
   ROW_NUMBER() OVER ( partition by pr.prd_sku ORDER BY pr.prd_name asc ) AS num
 FROM ctt_projects_content AS pc
-    INNER JOIN ctt_projects_detail AS pd ON pd.pjtcn_id = pc.pjtcn_id
+    INNER JOIN ctt_projects_detail AS pd ON pd.pjtvr_id = pc.pjtvr_id
     INNER JOIN ctt_products AS pr ON pr.prd_id = pd.prd_id
     LEFT JOIN ctt_subletting AS sb ON sb.ser_id = pd.ser_id
     LEFT JOIN ctt_suppliers AS sp ON sp.sup_id = sb.sup_id

@@ -33,7 +33,20 @@ function setting_datepicket(sl, di, df) {
             locale: {
                 format: 'DD/MM/YYYY',
                 daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNames: [
+                    'Enero',
+                    'Febrero',
+                    'Marzo',
+                    'Abril',
+                    'Mayo',
+                    'Junio',
+                    'Julio',
+                    'Agosto',
+                    'Septiembre',
+                    'Octubre',
+                    'Noviembre',
+                    'Diciembre',
+                ],
                 firstDay: 1,
             },
             minDate: fc,
@@ -56,7 +69,8 @@ function setting_datepicket(sl, di, df) {
 /** ++++  Setea la tabla ++++++ */
 function setting_table() {
     let title = 'Productos en subarrendo';
-    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    let filename =
+        title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
     $('#tblProductForSubletting').DataTable({
         order: [[1, 'desc']],
@@ -118,15 +132,15 @@ function setting_table() {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            {data: 'editable', class: 'edit'},
-            {data: 'prodname', class: 'product-name'},
-            {data: 'prod_sku', class: 'sku'},
-            {data: 'prodpric', class: 'price'},
-            {data: 'supplier', class: 'supply'},
-            {data: 'storesrc', class: 'stores'},
-            {data: 'datestar', class: 'date'},
-            {data: 'date_end', class: 'date'},
-            {data: 'comments', class: 'comments'},
+            { data: 'editable', class: 'edit' },
+            { data: 'prodname', class: 'product-name' },
+            { data: 'prod_sku', class: 'sku' },
+            { data: 'prodpric', class: 'price' },
+            { data: 'supplier', class: 'supply' },
+            { data: 'storesrc', class: 'stores' },
+            { data: 'datestar', class: 'date' },
+            { data: 'date_end', class: 'date' },
+            { data: 'comments', class: 'comments' },
         ],
     });
 }
@@ -141,6 +155,7 @@ function get_Proyectos() {
 }
 /**  +++++ Obtiene los datos de los productos activos +++++  */
 function get_products(pj) {
+    console.log(pj);
     var pagina = 'ProductsForSubletting/listProducts';
     var par = `[{"pjtId":"${pj}"}]`;
     var tipo = 'json';
@@ -196,7 +211,9 @@ function put_Products(dt) {
     // console.log(dt);
     pd = dt;
     let largo = $('#tblProductForSubletting tbody tr td').html();
-    largo == 'Ningún dato disponible en esta tabla' ? $('#tblProductForSubletting tbody tr').remove() : '';
+    largo == 'Ningún dato disponible en esta tabla'
+        ? $('#tblProductForSubletting tbody tr').remove()
+        : '';
     let tabla = $('#tblProductForSubletting').DataTable();
     tabla.rows().remove().draw();
     let cn = 0;
@@ -205,10 +222,22 @@ function put_Products(dt) {
         let dateend = u.sub_date_end;
 
         if (datestart == null) {
-            datestart = define_days('i', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
+            datestart = define_days(
+                'i',
+                pj[px].pjt_date_start,
+                u.pjtcn_days_base,
+                u.pjtcn_days_trip,
+                u.pjtcn_days_test
+            );
         }
         if (dateend == null) {
-            dateend = define_days('f', pj[px].pjt_date_start, u.pjtcn_days_base, u.pjtcn_days_trip, u.pjtcn_days_test);
+            dateend = define_days(
+                'f',
+                pj[px].pjt_date_start,
+                u.pjtcn_days_base,
+                u.pjtcn_days_trip,
+                u.pjtcn_days_test
+            );
         }
         let sku = u.pjtdt_prod_sku;
         if (sku == 'Pendiente') {
@@ -327,8 +356,14 @@ function updating_serie(acc) {
     let producId = $('#txtIdProduct').val();
     let produSku = $('#txtSkuProduct').val();
     let seriCost = $('#txtPrice').val();
-    let dtResIni = moment($('#txtPeriod').val().split(' - ')[0], 'DD/MM/YYYY').format('YYYY-MM-DD');
-    let dtResFin = moment($('#txtPeriod').val().split(' - ')[1], 'DD/MM/YYYY').format('YYYY-MM-DD');
+    let dtResIni = moment(
+        $('#txtPeriod').val().split(' - ')[0],
+        'DD/MM/YYYY'
+    ).format('YYYY-MM-DD');
+    let dtResFin = moment(
+        $('#txtPeriod').val().split(' - ')[1],
+        'DD/MM/YYYY'
+    ).format('YYYY-MM-DD');
     let comments = $('#txtComments').val();
     let supplier = $('#txtSupplier option:selected').val();
     let storesId = $('#txtStoreSource option:selected').val();

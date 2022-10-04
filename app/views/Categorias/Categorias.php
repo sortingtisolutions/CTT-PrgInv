@@ -1,9 +1,10 @@
 <?php 
-      defined('BASEPATH') or exit('No se permite acceso directo'); 
-      require ROOT . FOLDER_PATH . "/app/assets/header.php";	  
+	defined('BASEPATH') or exit('No se permite acceso directo'); 
+	require ROOT . FOLDER_PATH . "/app/assets/header.php";
 ?>
+
 <header>
-    <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
+	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 <div class="container-fluid">
     <div class="contenido">
@@ -95,7 +96,7 @@
 <!-- End Ventana modal SERIES -->
 
 
-<script src="<?=  PATH_ASSETS . 'lib/functions?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'Categorias/Categorias.js?v=1.0.0.0' ?>"></script>
 
