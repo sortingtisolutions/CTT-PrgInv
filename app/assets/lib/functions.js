@@ -71,6 +71,10 @@ function pure_num(nm) {
     return num;
 }
 
+function fnm(c, d, sd, sm) {
+    return formato_numero(c, d, sd, sm);
+}
+
 // DA FORMATO A LOS NUMEROS
 function formato_numero(numero, decimales, separador_decimal, separador_miles) {
     // v2007-08-06

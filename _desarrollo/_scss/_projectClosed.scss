@@ -1,0 +1,95 @@
+:root {
+    --color-intenso: hsla(213, 33%, 35%, 1);
+    --color-suave: hsla(213, 33%, 35%, 0.1);
+    --color-texto-fobscuro: #ffffff;
+}
+
+// Seccion de totales
+.totales {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 1.1em;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-intenso);
+
+    .totales__grupo {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        gap: 0.3rem;
+
+        .totales__grupo-label {
+            text-align: right;
+        }
+        .totales__grupo-dato {
+            border: 2px solid var(--color-intenso);
+            border-radius: 1rem;
+            padding: 0.2rem 0.7rem;
+            transition: all 0.3s ease;
+            min-height: 1.7rem;
+            min-width: 3rem;
+            font-weight: 700;
+
+            &:hover {
+                background-color: var(--color-intenso);
+                color: var(--color-texto-fobscuro);
+            }
+        }
+    }
+}
+@media screen and (max-width: 780px) {
+    .totales {
+        justify-content: space-between;
+        .totales__grupo {
+            flex-direction: column;
+        }
+    }
+}
+
+// Tabla de productos
+.projectClosed {
+    display: grid;
+    grid-template-columns: 98%;
+    grid-template-rows: 50px 100px 1fr;
+    overflow: hidden;
+
+    .tabla__contenedor {
+        height: 98%;
+
+        table {
+            border-collapse: collapse;
+
+            thead {
+                th {
+                    padding: 0.3rem;
+                    border-bottom: 2px solid var(--color-intenso);
+                }
+            }
+
+            tbody {
+                tr {
+                    &:hover {
+                        background-color: var(--color-suave);
+                    }
+                }
+                td {
+                    padding: 0.3rem;
+                    border-bottom: 1px solid var(--color-suave);
+                }
+            }
+
+            .cn {
+                text-align: center;
+            }
+            .lf {
+                text-align: left;
+            }
+            .rg {
+                text-align: right;
+            }
+        }
+    }
+}
