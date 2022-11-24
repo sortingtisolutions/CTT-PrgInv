@@ -17,6 +17,7 @@ function inicial() {
         getCustomers();
         getScores();
         getCustType();
+        getOptionYesNo();
         
     }, 100);
 }
@@ -63,46 +64,6 @@ function putCustomers(dt) {
     prds = dt;
     fillCustomers('0');
 
-}
-
-function fillCustomers(ft) {
-    $('#tblCustomers tbody').html('');
-
-    var cod = ft == '1' ? 'A' : '';
-
-    if (prds[0].cus_id != '0') {
-        var catId = prds[0].cat_id;
-        $.each(prds, function (v, u) {
-            if (u.prd_level != cod) {
-               /*  pack = u.prd_level == 'K' ? 'fas' : 'far';
-                let docInvo = `<span class="invoiceView" id="F${u.cus_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
-                let invoice = u.cus_id == 0 ? '' : docInvo;
-                let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11); */
-/// agregar boton de elimniar
-                var H = `
-                <tr id="${u.cus_id}">
-                    <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
-                    <td class="product-name" data-content="${u.cus_name}">${u.cus_name}</td>
-                    <td class="product-name">${u.cus_contact}</td>
-                    <td class="product-name">${u.cus_address}</td>
-                    <td class="product-name">${u.cus_email}</td>
-                    <td class="product-name">${u.cus_rfc}</td>
-                    <td class="product-name">${u.cus_phone}</td>
-                    <td class="product-name">${u.cus_phone_2}</td>
-                    <td class="product-name">${u.cus_internal_code}</td>
-                    <td class="sku">${u.cus_qualification}</td>
-                    <td class="sku">${u.cus_legal_representative}</td>
-                    <td class="product-name">${u.cut_name}</td>
-                    <td class="sku">${u.cus_status}</td>
-                </tr>`;
-                $('#tblCustomers tbody').append(H);
-            }
-        });
-        settingTable();
-        activeIcons();
-    } else {
-        settingTable();
-    }
 }
 
 /** +++++  configura la table de productos */
@@ -172,6 +133,8 @@ function settingTable() {
             {data: 'prodtype', class: 'product-name'},
             {data: 'typeserv', class: 'product-name'},
             {data: 'prodcoin', class: 'product-name'},
+            {data: 'prodcoin', class: 'product-name'},
+            {data: 'prodcoin', class: 'product-name'},
             {data: 'prddocum', class: 'product-name'},
             {data: 'subcateg', class: 'sku'},
             {data: 'categori', class: 'sku'},
@@ -187,6 +150,50 @@ function settingTable() {
             $('#tblCustomers').DataTable().draw();
         });
 }
+
+
+function fillCustomers(ft) {
+    $('#tblCustomers tbody').html('');
+
+    var cod = ft == '1' ? 'A' : '';
+
+    if (prds[0].cus_id != '0') {
+        var catId = prds[0].cat_id;
+        $.each(prds, function (v, u) {
+            if (u.prd_level != cod) {
+               /*  pack = u.prd_level == 'K' ? 'fas' : 'far';
+                let docInvo = `<span class="invoiceView" id="F${u.cus_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
+                let invoice = u.cus_id == 0 ? '' : docInvo;
+                let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11); */
+/// agregar boton de elimniar
+                var H = `
+                <tr id="${u.cus_id}">
+                    <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
+                    <td class="product-name" data-content="${u.cus_name}">${u.cus_name}</td>
+                    <td class="product-name">${u.cus_contact}</td>
+                    <td class="product-name">${u.cus_address}</td>
+                    <td class="product-name">${u.cus_email}</td>
+                    <td class="product-name">${u.cus_rfc}</td>
+                    <td class="product-name">${u.cus_phone}</td>
+                    <td class="product-name">${u.cus_phone_2}</td>
+                    <td class="product-name">${u.cus_internal_code}</td>
+                    <td class="product-name">${u.cus_internal_code}</td>
+                    <td class="product-name">${u.cus_internal_code}</td>
+                    <td class="sku">${u.cus_qualification}</td>
+                    <td class="sku">${u.cus_legal_representative}</td>
+                    <td class="product-name">${u.cut_name}</td>
+                    <td class="sku">${u.cus_status}</td>
+                </tr>`;
+                $('#tblCustomers tbody').append(H);
+            }
+        });
+        settingTable();
+        activeIcons();
+    } else {
+        settingTable();
+    }
+}
+
 
 /** +++++  coloca los tipos de calificacion */
 function putScores(dt) {
@@ -636,3 +643,37 @@ function sel_invoice(res) {
         }
     });
 }
+
+function getOptionYesNo() {
+    $('#txtCusSpon').html("");
+    renglon = "<option id='0'  value='Selecciona...'></option> ";
+    $('#txtCusSpon').append(renglon);
+    renglon = "<option id='1' value='C'>Cliente</option> ";
+    $('#txtCusSpon').append(renglon);
+    renglon = "<option id='2' value='P'>Patrocinio</option> ";
+    $('#txtCusSpon').append(renglon);
+ 
+    /* $('#selectAnticipo').html("");
+    renglon = "<option id='2'  value=''></option> ";
+    $('#selectAnticipo').append(renglon);
+    renglon = "<option id='1'  value='Si'>Si</option> ";
+    $('#selectAnticipo').append(renglon);
+    renglon = "<option id='0'  value='No'>No</option> ";
+    $('#selectAnticipo').append(renglon);
+ 
+    $('#selectCredito').html("");
+    renglon = "<option id='2'  value=''></option> ";
+    $('#selectCredito').append(renglon);
+    renglon = "<option id='1'  value='Si'>Si</option> ";
+    $('#selectCredito').append(renglon);
+    renglon = "<option id='0'  value='No'>No</option> ";
+    $('#selectCredito').append(renglon);
+ 
+    $('#selectFormaPago').html("");
+    renglon = "<option id='2'  value=''></option> ";
+    $('#selectFormaPago').append(renglon);
+    renglon = "<option id='1'  value='Si'>Si</option> ";
+    $('#selectFormaPago').append(renglon);
+    renglon = "<option id='0'  value='No'>No</option> ";
+    $('#selectFormaPago').append(renglon); */
+ }

@@ -37,14 +37,14 @@ class CategoriasModel extends Model
 
     public function GetCategoria($params)
 	{
-		$qry = "SELECT cat_id, cat_name, str_id FROM ctt_categories WHERE cat_id = ".
+		/* $qry = "SELECT cat_id, cat_name, str_id FROM ctt_categories WHERE cat_id = ".
 		$result = $this->db->query($qry);
 		if($row = $result->fetch_row()){
 			$item = array("cat_id" =>$row[0],
 			"cat_name" =>$row[1],
 			"str_id" =>$row[2]);
 		}
-		return $item;
+		return $item; */
 	}
 
 
@@ -69,8 +69,7 @@ class CategoriasModel extends Model
 		$qry = "UPDATE ctt_categories
                     SET cat_status = 0
                     WHERE cat_id = '$cat_id';";
-		return $this->db->query($qry);
-            
+		return $this->db->query($qry);   
 	}
 
 	public function listSeries($params)

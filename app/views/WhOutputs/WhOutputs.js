@@ -13,6 +13,7 @@ $(document).ready(function () {
 function inicial() {
     setTimeout(() => {
         deep_loading('O');
+        //console.log('UNO');
         $('.tblProdMaster').css({display: 'none'});
         // setting_table();
         getProjects(0);
@@ -22,7 +23,7 @@ function inicial() {
 /** +++++  Obtiene los proyectos de la base */
 function getProjects(catId) {
     var pagina = 'WhOutputs/listProjects';
-    var par = `[{"catId":"${catId}","grp":"${grp}","num":"${num}"}]`;
+    var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
@@ -34,15 +35,15 @@ function getProjects(catId) {
     var tipo = 'json';
     var selector = putSelectProject;
     fillField(pagina, par, tipo, selector);
-    //ALGO
 } */
 
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
-    //console.log(dt);
+    //console.log('DOS',dt);
     $('#tblProyects tbody').html('');
     if (dt[0].pjt_id != '0') {
         var catId = dt[0].cat_id;
+        //console.log('444',dt);
         $.each(dt, function (v, u) {
             var H = `
                 <tr id="${u.pjt_id}">
@@ -68,7 +69,7 @@ function putProducts(dt) {
 function settingTable() {
     let title = 'Control salida de proyectos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-  //console.log('1111');
+    //console.log('555');
     $('#tblProyects').DataTable({
         order: [[2, 'desc']],
         dom: 'Blfrtip',
@@ -117,22 +118,22 @@ function settingTable() {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            {data: 'editable', class: 'edit', orderable: false},
-            {data: 'pjt_name', class: 'product-name'},
-            {data: 'pjt_number', class: 'product-name'},
+            {data: 'editable',      class: 'edit', orderable: false},
+            {data: 'pjt_name',      class: 'product-name'},
+            {data: 'pjt_number',    class: 'product-name'},
             {data: 'pjt_date_start', class: 'product-name'},
-            {data: 'pjt_date_end', class: 'sku'},
-            {data: 'pjt_date_end', class: 'sku'},
+            {data: 'pjt_date_end',  class: 'sku'},
+            {data: 'pjt_date_end',  class: 'sku'},
             {data: 'pjt_date_project', class: 'sku'},
-            {data: 'pjt_location', class: 'product-name'},
+            {data: 'pjt_location',  class: 'product-name'},
         ],
     });
-    console.log('SETTI');
+
       $('.tblProdMaster')
         .delay(500)
         .slideDown('fast', function () {
             //$('.deep_loading').css({display: 'none'});
-            $('#tblProyects').DataTable().draw();
+            //$('#tblProyects').DataTable().draw();
             deep_loading('C');
         });
 

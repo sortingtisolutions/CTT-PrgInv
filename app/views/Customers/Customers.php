@@ -23,7 +23,7 @@
                         
                     </div>
                     <div id="dvProducts"></div>
-                    <table class="display compact nowrap"  id="tblCustomers" style="min-width: 1880px">
+                    <table class="display compact nowrap"  id="tblCustomers" style="min-width: 1800px">
                         <thead>
                             <tr>
                                 <th style="width:  5px"></th>
@@ -34,6 +34,8 @@
                                 <th style="width:  50px">RFC</th>
                                 <th style="width:  50px">Telefono</th>
                                 <th style="width:  50px">Tel Contacto</th>
+                                <th style="width:  40px">Codigo <br>SAT</th>
+                                <th style="width:  40px">Codigo <br>ASPEL</th>
                                 <th style="width:  40px">Codigo <br>Interno</th>
                                 <th style="width: 50px">Calificación</th>
                                 <th style="width: 80px">Representante <br>Legal</th>
@@ -79,7 +81,41 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="concept"><span class="reqsign">*</span> Nombre de Contacto: </td>
+                        <td class="concept"><span class="reqsign"></span> Clave SAT asignada: </td>
+                        <td class="data">
+                            <input type="hidden" id="txtPrdId" name="txtPrdId" >
+                            <input type="text" id="txtCusName" name="txtCusName" class="textbox required" style="width:250px; text-transform:uppercase">
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                            <span class="intructions">Nombre Principal del cliente</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign"></span> Clave ASPEL asignada: </td>
+                        <td class="data">
+                            <input type="hidden" id="txtPrdId" name="txtPrdId" >
+                            <input type="text" id="txtCusName" name="txtCusName" class="textbox required" style="width:250px; text-transform:uppercase">
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                            <span class="intructions">Nombre Principal del cliente</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Codigo Interno: </td>
+                        <td class="data">
+                            <input type="text" id="txtCusCodI" name="txtCusCodI" class="textbox" style="width:100px; text-transform:uppercase">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Codigo interno asignado por la empresa</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Cliente o Prospecto: </td>
+                        <td class="data">
+                            <input type="text" id="txtcusProsp" name="txtcusProsp" class="textbox" style="width:50px; text-transform:uppercase">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">P - Prospecto / C - Cliente con Proyecto</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign"></span> Nombre de Contacto: </td>
                         <td class="data">
                             <input type="text" id="txtCusCont" name="txtCusCont" class="textbox" style="width:250px; text-transform:uppercase">
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
@@ -127,15 +163,7 @@
                             <span class="intructions">Otro telefono para contactar</span>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Codigo Interno: </td>
-                        <td class="data">
-                            <input type="text" id="txtCusCodI" name="txtCusCodI" class="textbox" style="width:100px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Codigo interno asignado por la empresa</span>
-                        </td>
-                    </tr>
-
+                    
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Calificación del Cliente: </td>
                         <td class="data">
@@ -150,28 +178,31 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Status del Cliente: </td>
                         <td class="data">
-                            <div id="txtCusStat"  class="checkbox" value="1"><i class="far fa-square"></i> </div>
+                            <div id="txtCusStat"  class="checkbox" value="1"><i class="far fa-square"></i></div>
                             <span class="fail_note hide"></span>
                             <span class="intructions">Indica si el cliente esta activo o inactivo</span>
                         </td>
                     </tr>
+
                     <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Patrocinador:</td>
+                        <td class="data">
+                            <select id="txtCusSpon" name="txtCusSpon" class="textbox" style="width:200px">
+                                <!-- <option value="0">Selecciona...</option> -->
+                            </select>
+                            <span class="fail_note hide"><!-- <i class="fas fa-arrow-left"></i> --> Campo requerido</span>
+                            <span class="intructions">Patrocinador</span>
+                        </td>
+                    </tr>
+
+                    <!-- <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Patrocinador: </td>
                         <td class="data">
                             <input type="text" id="txtCusSpon" name="txtCusSpon" class="textbox" style="width:200px; text-transform:uppercase">
                             <span class="fail_note hide"></span>
                             <span class="intructions">Patrocinador</span>
                         </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de Cliente: </td>
-                        <td class="data">
-                            <input type="text" id="txtcusProsp" name="txtcusProsp" class="textbox" style="width:200px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Tipo de cliente 0-Prospecto / 1-Cliente con Proyecto</span>
-                        </td>
-                    </tr>
-                   
+                    </tr>         -->        
                     
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Representante Legal: </td>

@@ -29,7 +29,8 @@ class WhOutputContentModel extends Model
     public function listDetailProds($params)
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
-        $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, pjtcn_prod_level, pjt_id
+        $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
+                pjtcn_prod_level, pjt_id, pjtcn_status
         FROM ctt_projects_content WHERE pjt_id=$pjt_id order by 2;";
         return $this->db->query($qry);
     }
@@ -68,7 +69,6 @@ class WhOutputContentModel extends Model
         //echo "<script type='text/javascript'>console.log('Consulta')</script>";
          $this->db->query($updt);
         //var_dump("Estado UPDATE".$update);
-
 
         /*$qry = "SELECT pd.pjtdt_id, pd.pjtdt_prod_sku, pr.prd_name, pr.prd_level,
        pr.prd_status,pd.ser_id,pd.pjtcn_id

@@ -19,9 +19,9 @@ class ProjectCancelModel extends Model
                     DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS date_end,
                     cl.cus_name
                 FROM ctt_projects AS pj
-                INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-                INNER JOIN ctt_customers AS cl ON cl.cus_id = co.cus_id
-                WHERE pj.pjt_status in (5)";
+                LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+                LEFT JOIN ctt_customers AS cl ON cl.cus_id = co.cus_id
+                WHERE pj.pjt_status in (1,2,4,40)";
         return $this->db->query($qry);
 
     }

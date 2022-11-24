@@ -9,8 +9,6 @@ class WhOutputsModel extends Model
         parent::__construct();
     }
 
-
-
 // Obtiene el siguiente SKU
     public function getNextSku($sbcId)
     {
@@ -19,13 +17,12 @@ class WhOutputsModel extends Model
         return $this->db->query($qry);
     }
 
-
 // Listado de Productos
     public function listProjects($params)
     {
         $catId = $this->db->real_escape_string($params['catId']);
-        $grp = $this->db->real_escape_string($params['grp']);
-        $num = $this->db->real_escape_string($params['num']);
+        /* $grp = $this->db->real_escape_string($params['grp']);
+        $num = $this->db->real_escape_string($params['num']); */
 
         $qry = "SELECT pt.pjttp_name, pj.pjt_name, pj.pjt_number,
          DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start, 
@@ -48,4 +45,3 @@ class WhOutputsModel extends Model
     }
 
 }
-

@@ -77,7 +77,7 @@ public function listProducts($params)
                 INNER JOIN ctt_products AS pd ON pd.prd_id = se.prd_id 
                 LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
                 LEFT JOIN ctt_stores As st ON st.str_id = sp.str_id 
-                WHERE se.prd_id IN ($prodId) AND sp.stp_quantity > 0
+                WHERE se.prd_id IN ($prodId) AND se.ser_situation='D' AND sp.stp_quantity > 0
                 ORDER BY se.prd_id, se.ser_sku;";
         return $this->db->query($qry);
     }
@@ -125,7 +125,7 @@ public function listProducts($params)
                     INNER JOIN ctt_products AS pd ON pd.prd_id = pk.prd_id
                     INNER JOIN ctt_series AS sr ON sr.prd_id = pk.prd_id
                     LEFT JOIN ctt_projects_detail AS dt ON dt.pjtdt_id = sr.pjtdt_id
-                    LEFT JOIN ctt_projects_content AS ct ON ct.pjtcn_id = dt.pjtcn_id
+                    LEFT JOIN ctt_projects_content AS ct ON ct.pjtcn_id = dt.pjtvr_id
                     LEFT JOIN ctt_projects AS pj ON pj.pjt_id = ct.pjt_id
                     WHERE pk.prd_parent = $prdId  ORDER BY pd.prd_name,  pj.pjt_name DESC;
                     ";
@@ -136,9 +136,9 @@ public function listProducts($params)
                     FROM ctt_products as pd 
                     INNER JOIN ctt_series AS sr ON sr.prd_id = pd.prd_id
                     LEFT JOIN ctt_projects_detail AS dt ON dt.pjtdt_id = sr.pjtdt_id
-                    LEFT JOIN ctt_projects_content AS ct ON ct.pjtcn_id = dt.pjtcn_id
+                    LEFT JOIN ctt_projects_content AS ct ON ct.pjtcn_id = dt.pjtvr_id
                     LEFT JOIN ctt_projects AS pj ON pj.pjt_id = ct.pjt_id
-                    WHERE pd.prd_id = $prdId  ORDER BY pd.prd_name,  pj.pjt_name DESC;
+                    WHERE pd.prd_id = $prdId AND sr.ser_situation<>'D' ORDER BY pd.prd_name,  pj.pjt_name DESC;
                 ";
         }
         return $this->db->query($qry);

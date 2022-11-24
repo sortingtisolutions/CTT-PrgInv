@@ -7,29 +7,39 @@
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 <div class="container-fluid">
-    <div class="contenido">
-            
+    <div class="contenido">  
         <div class="row mvst_group">
-
-
-            <div class="mvst_panel">
-                <div class="form-group">
-
-
+            <div class="mvst_panel" style="width:250px;">
+                <div class="form-group" >
+                    
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtTypeExchange" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona tipo de movimiento</option></select>
-                            <label for="txtTypeExchange">Tipo de movimiento</label>
+                            <select id="txtTypeExchange" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona el Proyecto</option></select>
+                            <label for="txtTypeExchange">Lista de Proyectos</label>
                         </div>
                     </div>
 
                     <!-- Almacen posición 1 -->
-                    <div class="row pos1 hide-items">
+                    <!-- <div class="row pos1 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtStoreSource" class="form-select form-select-sm required"><option value="0" selected>Selecciona almacen</option></select>
-                            <label for="txtStoreSource" class="form-label">Almacen</label>
+                            <select id="txtStoreSource" class="form-select form-select-sm required"><option value="0" selected>Selecciona Expendable</option></select>
+                            <label for="txtStoreSource" class="form-label">Expendable</label>
                         </div>
+                    </div> -->
+
+                    <div class="row list-finder pos3 hide-items">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                    <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
+                                    <label for="txtInvoice">Monto Expendables</label>
+                                    <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
+                    
+                            </div>
+                            <div id="listInvoice" class="list-group list-hide">
+                                <div class="list-items" ></div>
+                            </div>
+                            <!-- <input type="text" id="txtIdInvoices" name="txtIdInvoices"> -->
                     </div>
+
 
                     <!-- Proveedores posición 2 
                     <div class="row pos2 hide-items">
@@ -40,16 +50,16 @@
                     </div> -->
 
                     <!-- Proveedores posición 2 -->
-                    <div class="row list-finder pos2 hide-items">
+                    <!-- <div class="row list-finder pos2 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtSuppliers" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" autocomplete="off">
-                                    <label for="txtSuppliers">Proveedores</label>
+                                    <label for="txtSuppliers">Horas Diesel</label>
                                     <input type="hidden" id="txtIdSuppliers" name="txtIdSuppliers">
                             </div>
                             <div id="listSupplier" class="list-group list-hide">
                                 <div class="list-items" ></div>
                             </div>
-                    </div>
+                    </div> -->
 
 
                     <!-- Factura posición 3 
@@ -59,12 +69,23 @@
                             <label for="txtInvoice">Factura</label>
                         </div>
                     </div> -->
-
+                    <div class="row list-finder pos3 hide-items">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                    <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
+                                    <label for="txtInvoice">Monto Mantenimiento</label>
+                                    <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
+                    
+                            </div>
+                            <div id="listInvoice" class="list-group list-hide">
+                                <div class="list-items" ></div>
+                            </div>
+                            <!-- <input type="text" id="txtIdInvoices" name="txtIdInvoices"> -->
+                    </div>
                     <!-- Factura posición 3 -->
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
-                                    <label for="txtInvoice">Factura</label>
+                                    <label for="txtInvoice">Descuento PosProyecto</label>
                                     <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
                     
                             </div>
@@ -75,15 +96,15 @@
                     </div>
 
                     <!-- Categoria posición 4 -->
-                    <div class="row pos1 hide-items">
+                    <!-- <div class="row pos1 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtCategory" class="form-select form-select-sm"><option value="0" selected>Catálogo</option></select>
                             <label for="txtCategory">Catálogo</label>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Productos posición 4 -->
-                    <div class="row list-finder pos1 hide-items">
+                    <!-- <div class="row list-finder pos1 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un producto" autocomplete="off">
                                     <label for="txtProducts">Productos</label>
@@ -93,18 +114,18 @@
                             <div id="listProducts" class="list-group list-hide">
                                 <div class="list-items"></div>
                             </div>
-                    </div>
+                    </div> -->
 
                      <!-- Moneda posición 5 -->
-                     <div class="row pos5 hide-items">
+                     <!-- <div class="row pos5 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtCoin" class="form-select form-select-sm"><option value="0" selected>Selecciona moneda</option></select>
                             <label for="txtCoin">Moneda</label>
                         </div>
                     </div>
-
+ -->
                     <!-- Costo,Cantidad,Serie posición 5,4 y 6 -->
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos5 hide-items">
                         <input id="txtCost" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
                             <label for="txtCost">Costo Total</label>
@@ -117,24 +138,24 @@
                             <input id="txtSerie" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" style="text-transform:uppercase" autocomplete="off">
                             <label for="txtSerie">Serie</label>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- Marca 6 -->
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 hide-items">
                             <input id="txtMarca" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la marca de productos" style="text-transform:uppercase" autocomplete="off">
                             <label for="txtMarca">Marca</label>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- Costo Importacion,Pedimento 5,4  -->
                     <div class="row pos3 hide-items">
-                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos5 hide-items">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos5 hide-items">
                         <input id="txtCostImp" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
-                            <label for="txtCostImp">Costo Importación</label>
+                            <label for="txtCostImp">Extras Diesel</label>
                         </div>
-                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos5 form-floating hide-items">
+                        <!-- <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos5 form-floating hide-items">
                             <input id="txtPedimento" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar el numero del pedimento" style="text-transform:uppercase">
-                            <label for="txtPedimento">No. Pedimento</label>
-                        </div>
+                            <label for="txtPedimento">Extras Freelance</label>
+                        </div> -->
                     </div>
                    
                     <!-- Comentarios posición 4 -->
@@ -151,37 +172,86 @@
                             </div>
                         </div>
                 </div>
-            </div>
+                </div>
 
 
-            <div class="mvst_table">
-                <h1>Entradas de almacenes</h1>
-                <table class="display compact nowrap"  id="tblExchanges">
-                    <thead>
-                        <tr>
-                            <th style="width:  20px"></th>
-                            <th style="width:  80px">SKU</th>
-                            <th style="width: 350px">Producto</th>
-                            <th style="width:  60px">Cantidad</th>
-                            <th style="width:  60px">Costo Total</th>
-                            <th style="width: 90px">No. Serie</th>
-                            <th style="width: 90px">No. Pedimento</th>
-                            <th style="width: 80px">C. Importacion</th>
-                            <th style="width:  50px">Cve. movimiento</th>
-                            <th style="width: 140px">Almacen</th>
-                            <th style="width: 180px">Proveedor</th>
-                            <th style="width: 180px">Factura</th>
-                            <th style="width: 100px">Marca</th>
-                            <th style="width: 200px">Nota</th>
-                        </tr>
-                    </thead>
+                <div class="mvst_table">
+                <h1>Detalles del Proyecto</h1>
+                <tr>
+                    <td>
+                    <label >Totales del proyecto</label>
+                    <button class="bn btn-ok" id="">$1,245,350</button>
+                    </td>
+                        <td>
+                        <input type="text" style="border: 0px solid #000000; width:15px;">
+                        </td>
+                    <td>
+                    <label>Totales Mantenimiento</label>
+                    <button class="bn btn-ok" id="">$45,350</button>
+                    </td>
+                        <td>
+                        <input type="text" style="border: 0px solid #000000; width:15px;">
+                        </td>
+                    <td>
+                    <label >Totales Expendables</label>
+                    <button class="bn btn-ok" id="">$25,350</button>
+                    </td>
+                        <td>
+                        <input type="text" style="border: 0px solid #000000; width:15px;">
+                        </td>
+                    <td>
+                    <label >Diesel Extra</label>
+                    <button class="bn btn-ok" id="">$25,350</button>
+                    </td>
+                        <td>
+                        <input type="text" style="border: 0px solid #000000; width:15px;">
+                        </td>
+                    <td>
+                    <label >Descuento a aplicar</label>
+                    <button class="bn btn-ok" id="">$125,350</button>
+                    </td>
+                        <td>
+                        <input type="text" style="border: 0px solid #000000; width:15px;">
+                        </td>
+                    <td>
+                    <label>Totales </label>
+                    <button class="bn btn-ok" id="">$1,945,350</button>
+                    </td>
+
+
+                </tr> 
+                <td>
+                    <h1></h1>
+                    <table class="display compact nowrap"  id="tblExchanges">
+                        <thead>
+                            <tr>
+                                <th style="width:  20px"></th>
+                                <th style="width:  90px">SKU</th>
+                                <th style="width: 250px">Producto</th>
+                                <th style="width:  60px">Cantidad</th>
+                                <th style="width:  60px">Status</th>
+                                <th style="width: 350px">Comentarios</th>
+                                <!-- <th style="width: 90px">Otro</th>
+                                <th style="width: 80px">Otro</th>
+                                <th style="width:  50px">Otro</th>
+                                <th style="width: 40px">Otro</th> 
+                                <th style="width: 180px">Otro</th>
+                                <th style="width: 180px">Otro</th>
+                                <th style="width: 100px">Otro</th>
+                                <th style="width: 100px">Otro</th> -->
+                            </tr>
+                        </thead>
                     <tbody>	
                     </tbody>
-                </table>
+                    </table>
+                </td>
+                
             </div>        
+      
         </div>
 
     </div>
+    
 </div>
 
 <!-- Modal Borrar -->
@@ -210,6 +280,6 @@
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
-<script src="<?=  PATH_VIEWS . 'MoveStoresIn/MoveStoresIn.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_VIEWS . 'CloseProyect/CloseProyect.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

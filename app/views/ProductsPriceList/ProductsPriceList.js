@@ -205,7 +205,7 @@ function active_icons() {
             let qty = $(this).attr('data-content').split('|')[2];
             let pkt = $(this).attr('data-content').split('|')[3];
             let pkn = $(this).attr('data-content').split('|')[1];
-
+            console.log ('Existencias ', prd, qty, pkt, pkn );
             if (qty > 0) {
                 if (pkt == 'K') {
                     getProduct(prd, pkn);
@@ -221,7 +221,7 @@ function active_icons() {
             let prd = $(this).data('content');
             let pkt = $(this).data('level');
             let pnm = $(this).data('name');
-            console.log('Vista de reservados' + prd);
+            console.log('Vista de reservados ' + prd, pkt, pnm);
             getProductReserve(prd, pkt, pnm);
         });
 

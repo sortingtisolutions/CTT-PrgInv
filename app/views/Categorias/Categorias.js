@@ -9,6 +9,7 @@ $(document).ready(function () {
 
 function inicial() {
     if (altr == 1) {
+        console.log('PASO 1');
         deep_loading('O');
         settingTable();
         getCategories();
@@ -25,6 +26,7 @@ function inicial() {
 function settingTable() {
     let title = 'Lista de Catálogos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    console.log('PASO 1');
     $('#CategoriasTable').DataTable({
         order: [[1, 'asc']],
         dom: 'Blfrtip',
@@ -177,6 +179,7 @@ function actionButtons() {
 }
 
 function fillTableCategories(ix) {
+    console.log('PASO 2');  
     let tabla = $('#CategoriasTable').DataTable();
     tabla.row
         .add({

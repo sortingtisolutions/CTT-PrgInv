@@ -1,15 +1,12 @@
 <?php
     defined('BASEPATH') or exit('No se permite acceso directo');
     require ROOT . FOLDER_PATH . "/app/assets/header.php";
-
-
 ?>
 
 <header>
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 
 </header>
-
 
 <div class="container-fluid">
     <div class="contenido">
@@ -25,23 +22,19 @@
                                 <input id="txtTipoProject" type="text" class="form-control form-control-sm"  >
                                 <label for="txtTipoProject">Tipo de Proyecto</label>
                             </div>
-
                         </div>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProjectName" type="text" class="form-control form-control-sm" >
                                 <label for="txtProjectName">Nombre del Proyecto</label>
                             </div>
-
                         </div>
-
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProjectNum" type="text" class="form-control form-control-sm" >
                                 <label for="txtProjectNum">Numero Proyecto</label>
                             </div>
                         </div>
-
 						<div class="row">
 							<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
 								<input id="txtStartDate" type="text" class="form-control form-control-sm">
@@ -76,7 +69,6 @@
                                 <label for="txtFreelance">Freelance Asignado</label>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="form_secundary">
@@ -116,6 +108,7 @@
                                     <th style="width:  auto">Descripcion</th>
 									<th style="width:  70px">Cantidad</th>
                                     <th style="width:  70px">Tipo Producto</th>
+                                    <th style="width:  70px">Status</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -164,7 +157,8 @@
                         <th style="width: 100px">SKU</th>
                         <th style="width: 350px">Descripcion Producto</th>
                         <th style="width:  70px">Num Serie</th>
-                        <th style="width:  50px">Tipo de <br> Producto</th>
+                        <th style="width:  50px">Tipo de <br>Producto</th>
+                        <th style="width:  50px">Status</th>
                     </tr>
                 </thead>
             </table>
@@ -197,6 +191,7 @@
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'WhOutputContent/WhOutputContent.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

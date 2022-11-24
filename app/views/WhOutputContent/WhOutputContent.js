@@ -18,6 +18,7 @@ function inicial() {
 
 // Solicita los paquetes  OK
 function getProjects(pjtid) {
+    console.log(prjid)
     var pagina = 'WhOutputContent/listProjects';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
@@ -53,11 +54,9 @@ function getSerieDetail(serid, serorg) {
     fillField(pagina, par, tipo, selector);
 }
 
-
-
-
 // Configura la tabla de productos del proyecto
 function setting_table_AsignedProd() {
+    console.log('setting');
     let tabla = $('#tblAsignedProd').DataTable({
         order: [[1, 'asc']],
         pageLength: 1000,
@@ -86,6 +85,7 @@ function setting_table_AsignedProd() {
             {data: 'packname', class: 'sel product-name'},
             {data: 'packcount', class: 'sel sku'},
             {data: 'packlevel', class: 'sel sku'},
+            {data: 'packstatus', class: 'sel sku'},
         ],
     });
 }
@@ -105,7 +105,8 @@ function putDetailsProds(dt) {
                     pack_sku: skufull,
                     packname: u.pjtcn_prod_name,
                     packcount: u.pjtcn_quantity,
-                    packlevel: u.pjtcn_prod_level
+                    packlevel: u.pjtcn_prod_level,
+                    packstatus: u.pjtcn_status
                 })
                 .draw();
 /*<i class="fas fa-times-circle choice pack kill" id="D-${u.pjtpd_id}"></i>`, */
