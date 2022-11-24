@@ -608,3 +608,47 @@ ADD COLUMN `ver_discount_insured` DECIMAL(10,2) NULL DEFAULT 0.00 COMMENT 'Descu
 ALTER TABLE `ctt_accesories`
 CHANGE COLUMN `acr_parent` `prd_parent` INT(11) NULL DEFAULT NULL COMMENT 'ID del producto padre' AFTER `prd_id`;
 
+
+
+
+
+
+
+
+
+
+
+-- Actualizacion del 22 de Septiembre 2022
+ALTER TABLE `cttapp_cire`.`ctt_version` 
+ADD COLUMN `ver_contain` JSON NULL COMMENT 'Contiene el detalle general de la cotización' AFTER `pjt_id`;
+
+
+
+
+
+
+
+
+
+-- Actualizacion del 04 de Octubre 2022
+DROP VIEW ctt_vw_subletting;
+CREATE VIEW ctt_vw_subletting AS
+SELECT
+  pr.cin_id, pr.doc_id, sr.emp_id, pc.pjt_id, pc.pjtcn_days_base, pc.pjtcn_days_test, pc.pjtcn_days_trip, pc.pjtcn_discount_base, pc.pjtcn_discount_test,
+  pc.pjtcn_discount_trip, pc.pjtcn_id, pc.pjtcn_insured, pc.pjtcn_prod_level, pc.pjtcn_prod_name, pc.pjtcn_prod_price, pc.pjtcn_prod_sku, pc.pjtcn_quantity, 
+  pc.pjtcn_status, pd.pjtdt_id, pd.pjtdt_prod_sku, pr.prd_code_provider, pr.prd_coin_type, pr.prd_comments, pr.prd_english_name, pr.prd_id, pr.prd_insured, 
+  pr.prd_level, pr.prd_lonely, pr.prd_model, pr.prd_name, pr.prd_name_provider, pr.prd_price, pr.prd_sku, pr.prd_status, pr.prd_visibility, sb.prj_id, pr.sbc_id, 
+  pd.ser_id, pr.srv_id, sr.str_id, sr.str_name, sr.str_status, sr.str_type, sb.sub_comments, sb.sub_date_end, sb.sub_date_start, sb.sub_id, sb.sub_price, 
+  sb.sub_quantity, sp.sup_business_name, sp.sup_comments, sp.sup_contact, sp.sup_credit, sp.sup_credit_days, sp.sup_email, sp.sup_id, sp.sup_money_advance, 
+  sp.sup_phone, sp.sup_phone_extension, sp.sup_rfc, sp.sup_status, sp.sup_trade_name, sp.sut_id, pc.ver_id,
+  ROW_NUMBER() OVER ( partition by pr.prd_sku ORDER BY pr.prd_name asc ) AS num
+FROM ctt_projects_content AS pc
+    INNER JOIN ctt_projects_detail AS pd ON pd.pjtvr_id = pc.pjtvr_id
+    INNER JOIN ctt_products AS pr ON pr.prd_id = pd.prd_id
+    LEFT JOIN ctt_subletting AS sb ON sb.ser_id = pd.ser_id
+    LEFT JOIN ctt_suppliers AS sp ON sp.sup_id = sb.sup_id
+    LEFT JOIN ctt_stores_products AS st ON st.ser_id = pd.ser_id
+    LEFT JOIN ctt_stores AS sr ON sr.str_id = st.str_id
+WHERE ( pd.pjtdt_prod_sku = 'Pendiente' OR LEFT(RIGHT(pd.pjtdt_prod_sku, 4), 1) = 'R');
+
+

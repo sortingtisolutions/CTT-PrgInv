@@ -74,11 +74,11 @@ function settingTable() {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            {data: 'editable', class: 'edit', orderable: false},
-            {data: 'category', class: 'sku'},
-            {data: 'catname', class: 'category-name'},
-            {data: 'storename', class: 'store-name'},
-            {data: 'quantity', class: 'quantity'},
+            { data: 'editable', class: 'edit', orderable: false },
+            { data: 'category', class: 'sku' },
+            { data: 'catname', class: 'category-name' },
+            { data: 'storename', class: 'store-name' },
+            { data: 'quantity', class: 'quantity' },
         ],
     });
 }
@@ -142,7 +142,10 @@ function actionButtons() {
         .on('click', function () {
             let catId = $(this).parents('tr').attr('id');
             let quant = $(this).html();
-            let ctnme = $(this).parents('tr').children('td.category-name').html();
+            let ctnme = $(this)
+                .parents('tr')
+                .children('td.category-name')
+                .html();
             catnme = ctnme;
             console.log(catId, quant, ctnme);
             if (quant > 0) {
@@ -257,8 +260,12 @@ function putUpdateCategory(dt) {
         let ix = goThroughCategory(dt);
         console.log(cats[ix].cat_id);
 
-        $(`#${cats[ix].cat_id}`).children('td.category-name').html(cats[ix].cat_name);
-        $(`#${cats[ix].cat_id}`).children('td.store-name').html(cats[ix].str_name);
+        $(`#${cats[ix].cat_id}`)
+            .children('td.category-name')
+            .html(cats[ix].cat_name);
+        $(`#${cats[ix].cat_id}`)
+            .children('td.store-name')
+            .html(cats[ix].str_name);
         putQuantity(cats[ix].cat_id);
         $('#LimpiarFormulario').trigger('click');
     } else {
@@ -280,16 +287,18 @@ function deleteCategory(catId) {
 
     if (cn != 0) {
         $('#confirmModal').modal('show');
-        $('#confirmModalLevel').html('No se puede borrar el registro, porque contiene existencias.');
+        $('#confirmModalLevel').html(
+            'No se puede borrar el registro, porque contiene existencias.'
+        );
         $('#N').html('Cancelar');
-        $('#confirmButton').html('').css({display: 'none'});
+        $('#confirmButton').html('').css({ display: 'none' });
         $('#Id').val(0);
     } else {
         $('#confirmModal').modal('show');
 
         $('#confirmModalLevel').html('¿Seguro que desea borrar el catálogo?');
         $('#N').html('Cancelar');
-        $('#confirmButton').html('Borrar catálogo').css({display: 'inline'});
+        $('#confirmButton').html('Borrar catálogo').css({ display: 'inline' });
         $('#Id').val(catId);
 
         $('#confirmButton').on('click', function () {
@@ -330,15 +339,15 @@ function putSeries(dt) {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            {data: 'sermodif', class: 'edit'},
-            {data: 'produsku', class: 'sku'},
-            {data: 'prodname', class: 'product-name'},
-            {data: 'serlnumb', class: 'product-name'},
-            {data: 'dateregs', class: 'sku'},
-            {data: 'servcost', class: 'quantity'},
-            {data: 'cvstatus', class: 'code-type_s'},
-            {data: 'cvestage', class: 'code-type_s'},
-            {data: 'comments', class: 'comments'},
+            { data: 'sermodif', class: 'edit' },
+            { data: 'produsku', class: 'sku' },
+            { data: 'prodname', class: 'product-name' },
+            { data: 'serlnumb', class: 'product-name' },
+            { data: 'dateregs', class: 'sku' },
+            { data: 'servcost', class: 'quantity' },
+            { data: 'cvstatus', class: 'code-type_s' },
+            { data: 'cvestage', class: 'code-type_s' },
+            { data: 'comments', class: 'comments' },
         ],
     });
 
