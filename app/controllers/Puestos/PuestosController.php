@@ -23,6 +23,7 @@
 		  $this->render(__CLASS__, $params);
 		}
 
+		//OBTIENE LA LISTA DE PUESTOS
 		public function GetPuesto($request_params)
 		{
 	      $result = $this->model->GetPuesto($request_params);

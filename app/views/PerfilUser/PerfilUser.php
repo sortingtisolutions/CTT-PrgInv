@@ -5,6 +5,7 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+<!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
 	<div class="contenido">
 		<div class="row mvst_group">
@@ -50,7 +51,7 @@
                               <div class="col-12 text-center colorSecundario" style="font-weight: 600 !important;">
                                  Disponibles
                               </div>
-                              <div class="card listContainer" style="">
+                              <div class="card listContainer">
                                  <div class="card-body card-body-add" style="height: 13rem !important;">
                                     <div class="list-group" id="listDisponible">
                                     </div>
@@ -61,7 +62,7 @@
                               <div class="col-12 text-center colorSecundario" style="font-weight: 600 !important;">
                                  Asignados
                               </div>
-                              <div class="card listContainer" style="">
+                              <div class="card listContainer">
                                  <div class="card-body card-body-add" style="height: 13rem !important;">
                                     <div class="list-group" id="listAsignado">                     
                                     </div>

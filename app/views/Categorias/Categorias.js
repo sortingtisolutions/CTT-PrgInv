@@ -23,6 +23,7 @@ function inicial() {
     }
 }
 
+//CONFIGURACION DE DATATABLE
 function settingTable() {
     let title = 'Lista de Catálogos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');

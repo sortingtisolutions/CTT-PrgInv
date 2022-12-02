@@ -22,7 +22,7 @@ function inicial() {
         exchange_apply();
     });
 }
-
+//CONFIGURACION DE DATATABLE
 function setting_table() {
     let title = 'Movimiento de Almacenes';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');

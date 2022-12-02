@@ -14,7 +14,7 @@ $(document).ready(function () {
         inicial();
     }
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     getStores();
     setting_table();

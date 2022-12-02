@@ -1,4 +1,4 @@
-<h2>Add client form</h2>
+<h2>Add client form</h2> <!-- CUERPO DE LA PAGINA -->
 <div class="row">
   <div class="col-md-6">
     <form method="POST" action="<?= FOLDER_PATH . '/main/addClient' ?>">

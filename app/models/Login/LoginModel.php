@@ -10,7 +10,7 @@ public function __construct()
 	parent::__construct();
 }
 
-/*  ---- Obtiene los datos del usuarios logueado ---- */
+/**** Obtiene los datos del usuarios logueado ******/
 	public function signIn($employee)
 	{
 		$employee = $this->db->real_escape_string($employee);

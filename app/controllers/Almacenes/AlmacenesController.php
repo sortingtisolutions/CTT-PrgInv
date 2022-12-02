@@ -93,7 +93,7 @@
 			echo $res;
 		}
 
-		
+		//CONTABILIZA REGISTROS
         public function countQuantity($request_params)
         {
             $params =  $this->session->get('user');

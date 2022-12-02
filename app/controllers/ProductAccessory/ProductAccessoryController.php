@@ -190,15 +190,15 @@ public function getAccesoriesById($request_params)
     echo $res;
 }
 
-// Guarda el paquete
-    public function savePack($request_params)
+    // Guarda el paquete
+    /* public function savePack($request_params)
     {
         $params =  $this->session->get('user');
         $result = $this->model->savePack($request_params);
         $res = $result;
         echo $res;
     }	
-
+ */
     public function saveAccesorioByProducto($request_params)
     {
         $params =  $this->session->get('user');

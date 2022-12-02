@@ -21,6 +21,7 @@ function inicial() {
     }
 }
 
+//CONFIGURACION DE DATATABLE
 function settingTable() {
     let title = 'Lista de Almacenes';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');

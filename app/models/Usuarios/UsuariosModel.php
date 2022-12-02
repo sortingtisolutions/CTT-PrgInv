@@ -10,7 +10,7 @@ class UsuariosModel extends Model
 	}
 
 
-// Optiene los Usuaios existentes
+// Optiene los Usuaios existentes *****
 	public function GetUsuarios()
 	{
 		$qry = "SELECT u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, p.prf_name, u.usr_dt_registry, u.usr_dt_last_access ,p.prf_id FROM ctt_users as u

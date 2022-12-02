@@ -10,7 +10,7 @@ class MenuModel extends Model
 	}
 
 
-// Lista el Menu
+// Lista el Menu  *****
 	public function listaMenu($userId)
 	{
 		$userId = $this->db->real_escape_string($userId);

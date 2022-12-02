@@ -1,5 +1,5 @@
 $(document).ready(main);
-
+//INICIO DE PROCESOS
 let cont = 1;
 
 function main() {

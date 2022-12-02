@@ -5,7 +5,7 @@ $(document).ready(function () {
         inicial();
     }
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     folio = getFolio();
     setting_table();
@@ -191,7 +191,7 @@ function get_stores() {
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
     pj = dt;
-    console.log(pj);
+    //console.log(pj);
     $.each(dt, function (v, u) {
         let H = `<option data_indx="${v}" value="${u.pjt_id}">${u.pjt_name}</option>`;
         $('#txtProject').append(H);

@@ -30,7 +30,7 @@ class ProjectsListModel extends Model
 
     public function getProject($params)
 	{
-		$idSup 		= $this->db->real_escape_string($param['id']);
+		$idSup 		= $this->db->real_escape_string($params['id']);
 
 		$qry = "SELECT pjt_id,pjt_name,pjt_location, prt.pjttp_name,cu.cus_name,prs.pjs_name	 
 				FROM ctt_projects AS pr

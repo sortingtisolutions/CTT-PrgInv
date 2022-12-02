@@ -39,6 +39,7 @@
 			echo $res;
 		}
 
+		// GUARDA LOS PROVEEDORES
 		public function SaveProveedores($request_params)
 		{
 		  if($request_params['IdProveedor'] == ""){

@@ -28,6 +28,5 @@
         ?>
       </tbody>
     </table>
-
   </div>
 </div>

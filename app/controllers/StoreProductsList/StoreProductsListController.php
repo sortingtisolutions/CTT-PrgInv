@@ -24,11 +24,11 @@ class StoreProductsListController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-// Lista los tipos de movimiento
+    // Lista los tipos de movimiento ******
     public function listExchange()
     {
         $params =  $this->session->get('user'); 
-        $result = $this->model->listExchange(); //todas las respuestas del modelo
+        $result = $this->model->listExchange();     //todas las respuestas del modelo
           $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;

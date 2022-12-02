@@ -24,8 +24,7 @@ class ProjectCancelController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-
-
+    //OBTIENE LOS PROYECTOS DISPONIBLES PARA CANCELAR
     public function listProjects($request_params)
     {
       $result = $this->model->listProjects($request_params);	  

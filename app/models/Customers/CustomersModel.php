@@ -10,7 +10,7 @@ class CustomersModel extends Model
     }
 
 
-// Listado de categorias
+// Listado de categorias   ****
     public function listCustomers()
     {
         $qry = "SELECT * FROM ctt_customers as cus

@@ -7,7 +7,7 @@ $(document).ready(function () {
         inicial();
     }
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     folio = getFolio();
     setting_datepicket($('#txtStartDate'));

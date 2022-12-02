@@ -12,6 +12,7 @@ $(document).ready(function () {
     }
 });
 
+//INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
         getCustomers();

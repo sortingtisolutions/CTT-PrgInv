@@ -19,7 +19,7 @@ var series = [];
 $(document).ready(function () {
     getFullProjectRangePeriod();
 });
-
+//INICIO DE PROCESOS
 function iniciador() {
     $('#periodsTable tbody').html('');
     moment.locale('es');

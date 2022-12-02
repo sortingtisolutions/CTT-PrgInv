@@ -26,7 +26,7 @@
         }
 
         
-// Obtiene la lista de categorias activas
+    // Obtiene la lista de categorias activas  ******
         public function listCategories($request_params)
         {
             $result = $this->model->listCategories($request_params);

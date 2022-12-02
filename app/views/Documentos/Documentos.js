@@ -7,6 +7,7 @@ $(document).ready(function () {
    inicial();
 });
 
+//INICIO DE PROCESOS
 function inicial() {
     getDocumentosTable(); 
     bsCustomFileInput.init();

@@ -24,8 +24,8 @@ class StoreProductsListInController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-// Lista los tipos de movimiento
-    public function listExchange()
+    // Lista los tipos de movimiento   ******
+   /*  public function listExchange()
     {
         $params =  $this->session->get('user'); 
         $result = $this->model->listExchange(); //todas las respuestas del modelo
@@ -41,10 +41,9 @@ class StoreProductsListInController extends Controller
             }
             echo $res;
 
-              
           // $params = array('unidad' => $res);
           // $this->render(__CLASS__, $params);
-    }
+    } */
 
 // Lista los almacenes 
     public function listStores($request_params)

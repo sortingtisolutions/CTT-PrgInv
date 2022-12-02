@@ -9,7 +9,7 @@ class WhOutputsModel extends Model
         parent::__construct();
     }
 
-// Obtiene el siguiente SKU
+// Obtiene el siguiente SKU   ******
     public function getNextSku($sbcId)
     {
         $qry = "SELECT ifnull(max(convert(substring(prd_sku,5,3), signed integer)),0) + 1 AS next

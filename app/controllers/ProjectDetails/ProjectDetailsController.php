@@ -25,7 +25,7 @@ class ProjectDetailsController extends Controller
     }
 
 
-    // Lista los proyectos
+    // LISTA LOS PROYECTOS
     public function listProjects($request_params)
     {
         $params =  $this->session->get('user');

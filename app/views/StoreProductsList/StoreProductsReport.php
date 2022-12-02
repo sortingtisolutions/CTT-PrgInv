@@ -2,7 +2,7 @@
     ini_set('display_errors', 'On');
 
     require_once '../../../vendor/autoload.php';
-    
+    //INICIO DE PROCESOS
     $dir = 'StoreProductsFile.txt';
     $file = fopen($dir, "r") or die ('problema al abrir archivo');
 
@@ -10,7 +10,6 @@
         $getFile = fgets($file);  
     }
 
-    
     $numProject = '';
     $nameProject = '';
     $version = '';

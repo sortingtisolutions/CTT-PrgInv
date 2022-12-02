@@ -23,7 +23,7 @@
           $params = array('user' => $this->session->get('user'));
           $this->render(__CLASS__, $params);
         }
-
+        //OBTIENE LAS CATEGORIAS PARA DESPLEGAR
         public function GetCategoria($request_params)
         {
           $result = $this->model->GetCategoria($request_params);
@@ -59,8 +59,6 @@
                 $res =  '[{"cat_id":"0"}]';	
             }
             echo $res;
-
-
         }
 
         public function DeleteCategoria($request_params)

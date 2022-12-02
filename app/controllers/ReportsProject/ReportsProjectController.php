@@ -24,7 +24,7 @@ class ReportsProjectController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-// Lista los tipos de movimiento
+    // Lista los tipos de movimiento ****
     public function listExchange()
     {
         $params =  $this->session->get('user'); 

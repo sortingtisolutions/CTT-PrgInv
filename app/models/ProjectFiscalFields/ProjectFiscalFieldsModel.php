@@ -12,7 +12,7 @@ class ProjectFiscalFieldsModel extends Model
 
 
 
-// Obtiene la lista de productos
+// Obtiene la lista de productos   *****
     public function tableProjects($params)
     {
 

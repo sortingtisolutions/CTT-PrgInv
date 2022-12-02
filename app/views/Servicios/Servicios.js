@@ -5,7 +5,7 @@ $(document).ready(function () {
    verifica_usuario();
    inicial();
 });
-
+//INICIO DE PROCESOS
 function inicial() {
    getServiciosTable(0);
    //Open modal *

@@ -4,10 +4,10 @@
 
 	$host = codificar(HOST.'|'.USER.'|'.PASSWORD.'|'.DB_NAME);
 ?>
-
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+<!-- CUERPO DE LA PAGINA -->
 <div class="container">
 	<div class="contenido"></div>
 	<div id="host" style="display:block"><?= $host; ?></div>

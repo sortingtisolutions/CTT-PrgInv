@@ -25,7 +25,7 @@ class ProductsPriceListController extends Controller
 	}
 
 
-// Lista las categorias
+// LISTA LAS CATEGORIAS
 public function listCategories($request_params)
 {
     $params =  $this->session->get('user');

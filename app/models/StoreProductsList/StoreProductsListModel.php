@@ -9,7 +9,7 @@ class StoreProductsListModel extends Model
       parent::__construct();
     }
 
-// Listado de Tipos de mivimiento
+// Listado de Tipos de mivimiento  ******
     public function listExchange()
     {
         $qry = "SELECT ex1.ext_id, ex1.ext_code, ex1.ext_type, ex1.ext_description, ex1.ext_link,

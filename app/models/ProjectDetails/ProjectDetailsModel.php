@@ -10,7 +10,7 @@ class ProjectDetailsModel extends Model
     }
 
     
-/** ====== Listado de proyectos ==============================================================  */
+/** ====== Listado de proyectos =========================================  */
 
     public function listProjects($params)
     {

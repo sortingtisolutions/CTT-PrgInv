@@ -9,7 +9,7 @@ class WhOutputContentModel extends Model
       parent::__construct();
     }
 
-    // Listado de proyectos
+    // Listado de proyectos    ******
     public function listProjects($params)
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);

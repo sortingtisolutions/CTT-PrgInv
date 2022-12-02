@@ -3,7 +3,7 @@
 ini_set('display_errors', 'On');
 
 require_once '../../../vendor/autoload.php';
-
+//INICIO DE PROCESOS
 $verId = $_GET['v'];
 $usrId = $_GET['u'];
 $uname = $_GET['n'];

@@ -12,7 +12,7 @@ class ProductsSalablesListModel extends Model
 
 
 
-// Obtiene las ventas
+// Obtiene las ventas *****
     public function Sales()
     {
         $qry = "SELECT *, (

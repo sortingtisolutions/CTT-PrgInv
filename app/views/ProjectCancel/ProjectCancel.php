@@ -6,9 +6,7 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
-
-
-
+<!-- CUERPO DE LA PAGINA -->
 <!-- Start Contenedor Listado de PROYECTOS  -->
 <div class="container-fluid">
         <div class="contenido">
@@ -23,8 +21,9 @@
                         <thead>
                             <tr>
                                 <th style="width:  40px"></th>
-                                <th style="width:  50px">Número</th>
+                                <th style="width:  50px">Número de<br>proyecto</th>
                                 <th style="width: 200px">Nombre del proyecto</th>
+                                <th style="width: 100px">Tipo de proyecto</th>
                                 <th style="width:  70px">Fecha de<br>registro</th>
                                 <th style="width:  70px">Fecha de<br>inicio</th>
                                 <th style="width:  70px">Fecha de<br>término</th>
@@ -38,9 +37,6 @@
         </div>
     </div>
 <!-- End Contenedor Listado de PRODUCTOS  -->
-
-
-
 
 
     <!-- Fondo obscuro -->
@@ -58,9 +54,6 @@
             <p>Este proceso puede tradar varios minutos, le recomendamos no salir de la página ni cerrar el navegador.</p>
         </div>
      </div>
-
-
-
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

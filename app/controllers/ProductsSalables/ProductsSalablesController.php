@@ -24,7 +24,7 @@ class ProductsSalablesController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-// Lista los almacenes
+    // LISTA LOS ALMACENES
         public function listStores($request_params)
         {
             $params =  $this->session->get('user');

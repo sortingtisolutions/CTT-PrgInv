@@ -10,7 +10,7 @@ class ProjectClosedModel extends Model
     }
 
 
-/* -- Listado de proyectos  ------------------------------------------------------------------ */    
+/* -- Listado de proyectos  ------------------------------------- */    
     public function listProjects($params)
     {
         $qry = "SELECT pjt_id, pjt_name FROM ctt_projects WHERE pjt_status IN (3,4) AND pjt_date_start < curdate();";
@@ -19,7 +19,7 @@ class ProjectClosedModel extends Model
     }
 
 
-/* -- Listado de contenido de proyecto seleccionado  ----------------------------------------- */
+/* -- Listado de contenido de proyecto seleccionado  -------------- */
     public function projectContent($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);

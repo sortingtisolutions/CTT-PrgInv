@@ -9,7 +9,7 @@ class ProveedoresModel extends Model
 		parent::__construct();
 	}
 
-// Obtiene los proveedores existentes
+// Obtiene los proveedores existentes  ****
 	public function GetProveedores()
 	{
 		/* $qry = "SELECT sp.sup_id, sp.sup_business_name, sp.sup_contact, sp.sup_rfc, sp.sup_email, sp.sup_phone , 

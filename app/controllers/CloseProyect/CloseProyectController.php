@@ -25,7 +25,7 @@ class CloseProyectController extends Controller
     }
 
 
-// Lista los tipos de movimiento
+// LISTA LOS TIPOS DE MOVIMIENTOS
     public function listExchange()
     {
         $params =  $this->session->get('user');
@@ -97,7 +97,6 @@ class CloseProyectController extends Controller
         echo $res;
     } 
 
-
 // Lista los proveedores
     public function listSuppliers($request_params)
     {
@@ -168,6 +167,5 @@ class CloseProyectController extends Controller
         $res = $result;
         echo $res;
     } 
-
 
 }

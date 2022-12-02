@@ -25,7 +25,7 @@ class WhOutputsController extends Controller
 	}
 
 
-// Lista los proyectos
+	// Lista los proyectos
 	public function listProjects($request_params)
 	{
 		$params =  $this->session->get('user');
@@ -43,22 +43,22 @@ class WhOutputsController extends Controller
 		echo $res;
     }
 
-// Obtiene datos del proyecto seleccionado
-public function getSelectProject($request_params)
-{
-	$params =  $this->session->get('user');
-	$result = $this->model->getSelectProject($request_params);
-	$i = 0;
-	while($row = $result->fetch_assoc()){
-		$rowdata[$i] = $row;
-		$i++;
+	// Obtiene datos del proyecto seleccionado
+	public function getSelectProject($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->getSelectProject($request_params);
+		$i = 0;
+		while($row = $result->fetch_assoc()){
+			$rowdata[$i] = $row;
+			$i++;
+		}
+		if ($i>0){
+			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+		} else {
+			$res =  '[{"pjt_id":"0"}]';	
+		}
+		echo $res;
 	}
-	if ($i>0){
-		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-	} else {
-		$res =  '[{"pjt_id":"0"}]';	
-	}
-	echo $res;
-}
 
 }

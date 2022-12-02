@@ -25,7 +25,7 @@ class ProductsForSublettingController extends Controller
     }
 
     
-// Lista los proyectos activos
+    // LISTA LOS PROYECTOS ACTIVOS
     public function listProyects($request_params)
     {
         $params =  $this->session->get('user');
@@ -142,7 +142,6 @@ class ProductsForSublettingController extends Controller
             echo 'update';
             // actualiza la cantidad en el almacen destino
             $result3 = $this->model->UpdateProducts($request_params);
-            
         } else {
             echo 'insert';
             //agrega la relación almacen - producto

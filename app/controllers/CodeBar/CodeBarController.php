@@ -110,7 +110,6 @@ class CodeBarController extends Controller
         echo $res;
 	} 
 
-
 // Actualiza la situacion del almacen
 	public function UpdateStores($request_params)
 	{
@@ -135,7 +134,6 @@ class CodeBarController extends Controller
 				echo 'insert';
 				//agrega la relación almacen - producto
 				$result = $this->model->InsertProducts($request_params);
-				
 			}
 			$res = $result;
 			echo $res;

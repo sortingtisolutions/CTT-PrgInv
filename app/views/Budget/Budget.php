@@ -7,6 +7,8 @@
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 
+<!-- CUERPO DE LA PAGINA -->
+
 <div class="invoice__container">
 <!-- Nombre del proyecto y tablero de control -->
     <div class="invoice__section invoice__section-panel invoice-border">
@@ -445,6 +447,7 @@
                             <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox required" >
                                 <option value = "1" selected> LOCAL</option>
                                 <option value = "2"> FORANEO</option>
+                                <option value = "3"> FORO</option>
                             </select>
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de locación</span>
                         </td>

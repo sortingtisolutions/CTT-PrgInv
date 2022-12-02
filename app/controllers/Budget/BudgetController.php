@@ -118,7 +118,6 @@ class BudgetController extends Controller
 
     } 
 
-    
 // Lista las casas productoras
     public function listCustomersDef($request_params)
     {
@@ -137,7 +136,6 @@ class BudgetController extends Controller
         echo $res;
     } 
 
- 
 // Lista las casas productoras
     public function listCustomersOwn($request_params)
     {
@@ -174,9 +172,6 @@ class BudgetController extends Controller
     } 
 
 
-    
-
-
 // Lista los proyectos relacionados
     public function listProjectsDef($request_params)
     {
@@ -195,7 +190,6 @@ class BudgetController extends Controller
         echo $res;
     } 
     
-
     
 // Lista los versiones
     public function listVersion($request_params)
@@ -271,8 +265,7 @@ class BudgetController extends Controller
         echo $res;
     } 
 
-
-    
+   
 // Lista los relacionados al producto
 public function listProductsRelated($request_params)
 {
@@ -311,8 +304,6 @@ public function stockProdcuts($request_params)
 } 
 
 
-
-
 // Guarda la cotización
     public function SaveBudget($request_params)
     {
@@ -342,8 +333,6 @@ public function stockProdcuts($request_params)
         
     } 
 
-
-    
     
 // Guarda nuevo proyecto
     public function SaveProject($request_params)
@@ -361,8 +350,6 @@ public function stockProdcuts($request_params)
         echo $result;
     } 
 
-
-
 // Actualiza las fechas del proyecto
     public function UpdatePeriodProject($request_params)
     {
@@ -371,8 +358,7 @@ public function stockProdcuts($request_params)
         echo $result;
     }
 
-
-        
+      
 // Guarda nueva version
     public function SaveVersion($request_params)
     {
@@ -431,7 +417,6 @@ public function saveBudgetList($request_params)
 
     echo $user . '|' . $name;
 } 
-
 
 /** +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   */
 

@@ -3,7 +3,7 @@
 	//   require ROOT . FOLDER_PATH . "/app/assets/header.php";
 	  
 ?>
-
+<!-- CUERPO DE LA PAGINA -->
 <!DOCTYPE html>
 <html lang="es">
 	<head>

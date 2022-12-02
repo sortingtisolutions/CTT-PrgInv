@@ -9,7 +9,7 @@ $('document').ready(function () {
         inicial();
     }
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
         get_stores();

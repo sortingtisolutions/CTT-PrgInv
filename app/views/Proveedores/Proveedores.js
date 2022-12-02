@@ -5,7 +5,7 @@ $(document).ready(function () {
    verifica_usuario();
    inicial();
 });
-
+//INICIO DE PROCESOS
 function inicial() {
    getProveedoresTable();
    getTipoProveedor();
@@ -366,8 +366,8 @@ function SaveProveedores() {
 }
 
 function putSaveProveedor(){
-   console.log('Put SaveNew');
-   //LimpiaModal();
+   //console.log('Put SaveNew');
+   LimpiaModal();
    getProveedoresTable();
    getTipoProveedor();
    getOptionYesNo();
@@ -489,6 +489,7 @@ function SaveProveedores_old() {
 
 //Limpia datos en modal  **
 function LimpiaModal() {
+   console.log('LIMPIANDO');
    $('#NomProveedor').val('');
    $('#NomComercial').val('');
    $('#ContactoProveedor').val('');
@@ -511,6 +512,7 @@ function LimpiaModal() {
    /* $('#PhoneProveedor').val(''); */
    $('#titulo').text('Nuevo Proveedor');
    $('#formProveedor').removeClass('was-validated');
+   console.log('TERMINANDO');
 }
 
 

@@ -25,7 +25,7 @@ class MoveStoresInController extends Controller
     }
 
 
-// Lista los tipos de movimiento
+// LISTA LOS TIPOS DE MOVIMIENTOS
     public function listExchange()
     {
         $params =  $this->session->get('user');

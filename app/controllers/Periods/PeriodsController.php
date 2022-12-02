@@ -25,7 +25,7 @@ class PeriodsController extends Controller
     }
 
 
-/** ====== Obtiene el periodo total del proyecto  ============================================  */
+/** ====== OBTIENE EL PERIODO TOTAL DEL PROYECTO   =============================  */
     public function getPeriodProject($request_params)
     {
         $params =  $this->session->get('user');

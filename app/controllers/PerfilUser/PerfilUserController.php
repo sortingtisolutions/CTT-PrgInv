@@ -23,6 +23,7 @@
 		  $this->render(__CLASS__, $params);
 		}
 
+		//OBTIENE LOS MODULOS
 		public function GetModules($request_params)
 		{
 	      $result = $this->model->GetModules($request_params);

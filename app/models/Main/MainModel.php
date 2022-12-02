@@ -4,7 +4,6 @@
 */
 class MainModel extends Model
 {
-  
   	public function __construct()
   	{
     	parent::__construct();
@@ -15,7 +14,7 @@ class MainModel extends Model
    	 	return $this->db->affected_rows;
   	}
 
-// Agrega nuevo cliente
+// Agrega nuevo cliente   *****
   	public function addClient($params)
   	{
     	$name = $this->db->real_escape_string($params['name']);

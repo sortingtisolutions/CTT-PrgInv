@@ -9,7 +9,7 @@ class PackagesModel extends Model
       parent::__construct();
     }
 
-// Listado de categorias
+// Listado de categorias  *****
     public function listCategories()
     {
         

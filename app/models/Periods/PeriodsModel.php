@@ -10,7 +10,7 @@ class PeriodsModel extends Model
     }
 
     
-/** ====== Obtiene el periodo total del proyecto  ============================================  */
+/** ====== Obtiene el periodo total del proyecto  ==========================  */
     public function getPeriodProject($params){
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $qry = "SELECT 
@@ -21,7 +21,7 @@ class PeriodsModel extends Model
         return $this->db->query($qry);
     }
 
-/** ====== Obtiene los periodos de las series  ===============================================  */
+/** ====== Obtiene los periodos de las series  ===============================  */
     public function getPeriodSeries($params){
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $prdId = $this->db->real_escape_string($params['prdId']);

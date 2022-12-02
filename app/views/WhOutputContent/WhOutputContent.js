@@ -9,7 +9,7 @@ $(document).ready(function () {
         inicial();
     }
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     setting_table_AsignedProd();
     getProjects();

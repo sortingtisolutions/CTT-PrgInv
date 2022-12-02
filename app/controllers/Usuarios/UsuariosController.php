@@ -27,6 +27,7 @@
 		  $this->render(__CLASS__, $params);
 		}
 
+		//OBTIENE LOS USUARIOS
 		public function GetUsuarios()
 		{
 	      $result = $this->model->GetUsuarios();

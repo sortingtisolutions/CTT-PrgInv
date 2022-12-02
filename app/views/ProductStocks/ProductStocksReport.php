@@ -3,6 +3,7 @@
 
     require_once '../../../vendor/autoload.php';
     
+    //INICIO DE PROCESOS
     $dir = 'ProductStocksFile.txt';
     $file = fopen($dir, "r") or die ('problema al abrir archivo');
 

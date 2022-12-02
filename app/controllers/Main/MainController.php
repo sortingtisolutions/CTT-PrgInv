@@ -5,7 +5,7 @@ require_once ROOT . FOLDER_PATH .'/app/models/Main/MainModel.php';
 require_once LIBS_ROUTE .'Session.php';
 
 /**
-* Main controller
+* Main controller *
 */
 class MainController extends Controller
 {

@@ -24,7 +24,7 @@ class MoveStoresOutController extends Controller
 		$this->render(__CLASS__, $params);
 	}
 
-// Lista los tipos de movimiento
+// LISTA LOS TIPOS DE MOVIMIENTOS
 	public function listExchange()
 	{
 		$params =  $this->session->get('user');

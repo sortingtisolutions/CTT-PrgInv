@@ -6,7 +6,7 @@ $(document).ready(function () {
         inicial();
     }
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     setting_table_products();
     setting_table_packages();

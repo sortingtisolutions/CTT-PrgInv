@@ -15,7 +15,7 @@ $(document).ready(function () {
         inicial();
     }
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     $('.deep_loading').css({display: 'flex'});
     getStores(); // optiene los almacenes.

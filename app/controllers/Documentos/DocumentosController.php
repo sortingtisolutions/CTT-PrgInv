@@ -23,7 +23,7 @@
 		  $params = array('user' => $this->session->get('user'));
 		  $this->render(__CLASS__, $params);
 		}
-
+		//REALIZA LISTA DE DOCUMENTOS DISPONIBLES
 		public function GetDocumento($request_params)
 		{
 	      $result = $this->model->GetDocumento($request_params);

@@ -24,7 +24,7 @@ class PackagesController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-// Lista las categorias
+    // LISTAS LAS CATEGORIAS
     public function listCategories()
     {
         $params =  $this->session->get('user');

@@ -7,7 +7,7 @@
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 
-
+<!-- CUERPO DE LA PAGINA -->
 <!-- Start Contenedor Listado de PRODUCTOS  -->
     <div class="container-fluid">
         <div class="contenido">

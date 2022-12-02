@@ -12,7 +12,7 @@
 }
 </style>
 
-
+<!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">
         <div class="row mvst_group">

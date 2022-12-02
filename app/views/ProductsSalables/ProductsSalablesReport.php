@@ -4,7 +4,7 @@ ini_set('display_errors', 'On');
 
 require_once '../../../vendor/autoload.php';
 
-
+//INICIO DE PROCESOS
 $SalId = $_GET['i'];
 $usrId = $_GET['u'];
 $name = $_GET['n'];

@@ -9,8 +9,7 @@
     while (!feof($file)){
         $getFile = fgets($file);  
     }
-
-    
+    //INICIO DE PROCESOS
     $numProject = '';
     $nameProject = '';
     $version = '';
@@ -31,7 +30,6 @@
               $date = $el[3];
   
           }
-
 
     $html = '
     <header>
@@ -87,8 +85,6 @@
         </div>
     </header>
     <section>
-        
-
         <div class="listing">
             <table class="tabla-content">
                 <thead>
@@ -101,9 +97,7 @@
                     </tr>
                 </thead>
                 <tbody>
-
             ';
-
             foreach ($dato as $dt){
                 $el = explode('|', $dt);
                     $html .= '
@@ -122,7 +116,6 @@
         </div>
     </section>
     ';
-
 
  $foot = '
     <footer>

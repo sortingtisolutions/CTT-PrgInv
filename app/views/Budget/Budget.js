@@ -8,6 +8,7 @@ $('document').ready(function () {
     inicial();
 });
 
+//INICIO DE PROCESOS
 function inicial() {
     stickyTable();
     eventsAction();

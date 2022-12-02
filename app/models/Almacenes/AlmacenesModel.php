@@ -8,7 +8,8 @@ class AlmacenesModel extends Model
 	{
 		parent::__construct();
 	}
-//Guarda proveedor
+
+//Guarda proveedor  ***
 	public function SaveAlmacen($params)
 	{
 		$str_name 	= $this->db->real_escape_string($params['str_name']);

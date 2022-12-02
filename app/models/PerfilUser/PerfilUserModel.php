@@ -8,7 +8,7 @@ class PerfilUserModel extends Model
 		parent::__construct();
 	}
 
-// Optiene los modulos existentes - TODOS
+// Optiene los modulos existentes - TODOS   ****
 	public function GetModules($params)
 	{
 		if ($params['ModUser'] == '') {

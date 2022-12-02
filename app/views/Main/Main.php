@@ -7,8 +7,7 @@
   <title>Main</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
-<body>
-
+<body> <!-- CUERPO DE LA PAGINA -->
   <nav class="navbar navbar-default">
     <div class="container">
       <div class="navbar-header">
@@ -25,7 +24,6 @@
           </ul>
         </li>
       </ul>
-
     </div>
   </nav>
 
@@ -34,7 +32,6 @@
     <?php !empty($show_edit_form) ? require 'app/views/Main/edit_form.php' : '' ?>
     <?php !empty($show_clients_list) ? require 'app/views/Main/clients_list.php' : '' ?>
   </div>
-
   <!-- Jquery  -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 

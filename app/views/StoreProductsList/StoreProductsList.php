@@ -2,12 +2,10 @@
 	defined('BASEPATH') or exit('No se permite acceso directo'); 
 	require ROOT . FOLDER_PATH . "/app/assets/header.php";
 ?>
-
 <header>
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
-
-
+<!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">
             

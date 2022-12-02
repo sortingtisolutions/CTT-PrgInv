@@ -14,7 +14,7 @@ class SubcategoriesModel extends Model
 
 
 
-// Obtiene el listado de las subcategorias activas
+// Obtiene el listado de las subcategorias activas   *****
     public function listCategories($params)
     {
         $qry = "SELECT ct.cat_id, ct.cat_name, ct.str_id

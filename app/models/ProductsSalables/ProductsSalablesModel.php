@@ -10,7 +10,7 @@ class ProductsSalablesModel extends Model
     }
 
 
-// Listado de almacenes
+// Listado de almacenes  ****
         public function listStores($params)
         {
             $qry = "SELECT str_id, str_name FROM ctt_stores WHERE str_id = 5 OR str_type = 'MOVILES' AND str_status = 1;";

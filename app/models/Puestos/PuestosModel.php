@@ -29,10 +29,38 @@ class PuestosModel extends Model
 			}
 		return $estatus;
 	}
+
+	//Ejecuta columna
+	public function SavePuesto_old($params)
+	{
+		$varcolumna ='Columna_';
+		$indvar = 3;
+		$contavar = 2;
+
+		$tmpcolumna = $varcolumna.$contavar;
+
+		$qry = "SELECT $tmpcolumna from tmp_carga_proyectos where columna_5='CLAVE' limit 1;";
+        $result = $this->db->query($qry);
+		$lista = array();
+		while ($row = $result->fetch_row()){
+			$item = array("campo" =>$row[0]);
+			array_push($lista, $item);
+		}
+		$qry2 = "INSERT INTO tmp_carga_cat14(nueva,anterior) VALUES ('$tmpcolumna', '$item');";
+
+		$this->db->query($qry2);
+        $result2 = $this->db->insert_id;
+        
+	/* 	$contavar = $contavar + 1; */
+
+		/* return $result . '|' . $result2; */
+		return $lista;
+	}
+	
 // Optiene los Usuaios existentes
 	public function GetPuestos()
 	{
-		$qry = "SELECT pos_id, pos_name, pos_description FROM ctt_position WHERE pos_status = 1;";
+		$qry = " ";
 		$result = $this->db->query($qry);
 		$lista = array();
 		while ($row = $result->fetch_row()){

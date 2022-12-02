@@ -60,7 +60,7 @@ class ProjectClosedController extends Controller
         echo $res;
 
     }
-/* -- Listado ventas de expendables  --------------------------------------------------------- */
+    /* -- Listado ventas de expendables    ---------------------- */
     public function saleExpendab($request_params)
     {
 

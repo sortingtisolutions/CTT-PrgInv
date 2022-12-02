@@ -1,4 +1,4 @@
-<h2>Edit client form</h2>
+<h2>Edit client form</h2> <!-- CUERPO DE LA PAGINA -->
 <?php !$info_client ? exit('Hubo un error al cargar la información del cliente') : '' ?>
 <div class="row">
   <div class="col-md-6">

@@ -25,65 +25,48 @@ class WhOutputContentController extends Controller
     }
 
 
-// Lista los proyectos
-public function listProjects($request_params)
-{
-    $params =  $this->session->get('user');
-    $result = $this->model->listProjects($request_params);
-    $i = 0;
-    while($row = $result->fetch_assoc()){
-        $rowdata[$i] = $row;
-        $i++;
-    }
-    if ($i>0){
-        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-    } else {
-        $res =  '[{"pjt_id":"0"}]';
-    }
-   echo $res;
-}
-
-// Lista los productos
-     public function listDetailProds($request_params)
-     {
-         $params =  $this->session->get('user');
-         $result = $this->model->listDetailProds($request_params);
-         $i = 0;
-         while($row = $result->fetch_assoc()){
-             $rowdata[$i] = $row;
-             $i++;
-         }
-         if ($i>0){
-             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-         } else {
-             $res =  '[{"pjt_id":"0"}]';
-         }
-         echo $res;
-     }
-
-     // Lista las series
-public function listSeries($request_params)
-{
-    $params =  $this->session->get('user');
-    $result = $this->model->listSeries($request_params);
-    $i = 0;
-    while($row = $result->fetch_assoc()){
-        $rowdata[$i] = $row;
-        $i++;
-    }
-    if ($i>0){
-        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-    } else {
-        $res =  '[{"ser_id":"0"}]';
-    }
-    echo $res;
-}
-
-    public function checkSeries($request_params)
+    // Lista los proyectos
+    public function listProjects($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->checkSeries($request_params);
-        /*$i = 0;
+        $result = $this->model->listProjects($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"pjt_id":"0"}]';
+        }
+    echo $res;
+    }
+
+    // Lista los productos
+        public function listDetailProds($request_params)
+        {
+            $params =  $this->session->get('user');
+            $result = $this->model->listDetailProds($request_params);
+            $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+            } else {
+                $res =  '[{"pjt_id":"0"}]';
+            }
+            echo $res;
+        }
+
+        // Lista las series
+    public function listSeries($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listSeries($request_params);
+        $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
             $i++;
@@ -92,45 +75,62 @@ public function listSeries($request_params)
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
             $res =  '[{"ser_id":"0"}]';
-        }*/
-        echo $result;
+        }
+        echo $res;
     }
 
+        public function checkSeries($request_params)
+        {
+            $params =  $this->session->get('user');
+            $result = $this->model->checkSeries($request_params);
+            /*$i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+            } else {
+                $res =  '[{"ser_id":"0"}]';
+            }*/
+            echo $result;
+        }
 
-public function listSeriesFree($request_params)
-{
-    $params =  $this->session->get('user');
-    $result = $this->model->listSeriesFree($request_params);
-    $i = 0;
-    while($row = $result->fetch_assoc()){
-        $rowdata[$i] = $row;
-        $i++;
-    }
-    if ($i>0){
-        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-    } else {
-        $res =  '[{"ser_id":"0"}]';
-    }
-    echo $res;
-}
 
-// Obtiene datos del producto seleccionado
-public function getSelectSerie($request_params)
-{
-	$params =  $this->session->get('user');
-	$result = $this->model->getSelectSerie($request_params);
-	$i = 0;
-	while($row = $result->fetch_assoc()){
-		$rowdata[$i] = $row;
-		$i++;
-	}
-	if ($i>0){
-		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-	} else {
-		$res =  '[{"ser_id":"0"}]';
-	}
-	echo $res;
-}
+    public function listSeriesFree($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listSeriesFree($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"ser_id":"0"}]';
+        }
+        echo $res;
+    }
+
+    // Obtiene datos del producto seleccionado
+   /*  public function getSelectSerie($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->getSelectSerie($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"ser_id":"0"}]';
+        }
+        echo $res;
+    } */
 
 
 }

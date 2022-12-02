@@ -9,7 +9,7 @@ class StoreProductsListInModel extends Model
       parent::__construct();
     }
 
-// Listado de Tipos de mivimiento
+// Listado de Tipos de movimientos
 /* 	public function listExchange()
 	{
 		$qry = "SELECT ex1.ext_id, ex1.ext_code, ex1.ext_type, ex1.ext_description, ex1.ext_link,
@@ -20,7 +20,7 @@ class StoreProductsListInModel extends Model
 		return $this->db->query($qry);
 	} */
 
-// Listado de Almacecnes
+// Listado de Almacenes ****
     public function listStores()
     {
 		$qry = "  SELECT * FROM ctt_stores";

@@ -7,7 +7,7 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
-
+<!-- CUERPO DE LA PAGINA -->
 <div class="invoice__container">
 <!-- TABLERO DE CONTROL START -->
     <div class="invoice__section invoice__section-panel invoice-border">

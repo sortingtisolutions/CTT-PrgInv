@@ -125,6 +125,26 @@ function DeletPuesto() {
 }
 
 //Guardar Almacen **
+/* function SavePuesto_tmp() {
+    // Solicita los productos de un almacen seleccionado
+
+    var IdPuesto = $('#IdPuesto').val();
+    var NomPuesto = $('#NomPuesto').val();
+    var DesPuesto = $('#DesPuesto').val();
+
+    var pagina = 'Puestos/SavePuesto';
+    var par = `[{"IdPuesto":"${IdPuesto}","NomPuesto":"${NomPuesto}","DesPuesto":"${DesPuesto}"}]`;
+    var par = `[{"IdPuesto":""}]`;
+    var tipo = 'json';
+    var selector = putSavePuesto;
+    fillField(pagina, par, tipo, selector);
+}
+
+function putSavePuesto(dt) {
+    console.log('RESP ',dt);
+    cats = dt;
+} */
+
 function SavePuesto() {
     var location = 'Puestos/SavePuesto';
     var IdPuesto = $('#IdPuesto').val();
@@ -137,6 +157,7 @@ function SavePuesto() {
         data: {IdPuesto: IdPuesto, NomPuesto: NomPuesto, DesPuesto: DesPuesto},
         url: location,
         success: function (respuesta) {
+            console.log('RESP ',respuesta);
             if (IdPuesto != '') {
                 table
                     .row(':eq(' + positionRow + ')')
@@ -144,6 +165,7 @@ function SavePuesto() {
                     .draw();
             }
             if (respuesta != 0) {
+                console.log('RESP ',respuesta);
                 //getAlmacenesTable();
                 var rowNode = table.row
                     .add({
@@ -168,6 +190,7 @@ function SavePuesto() {
             console.log(EX);
         },
     }).done(function () {});
+    console.log('PASO 11');
 }
 
 //Limpia datos en modal  **

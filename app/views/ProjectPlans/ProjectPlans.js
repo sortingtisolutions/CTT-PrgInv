@@ -18,7 +18,7 @@ $('document').ready(function () {
     verifica_usuario();
     inicial();
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     stickyTable();
     eventsAction();

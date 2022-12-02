@@ -1,25 +1,17 @@
 <?php
 
-
 require_once '../../../vendor/autoload.php';
-
-
-
-
 
    require_once '../../assets/reports/StoreProductsList.php';
    require_once '../../assets/reports/header-001.php';
    require_once '../../assets/reports/footer-001.php';
-
-
-    
+    //INICIO DE PROCESOS
     $dir = '../../assets/filesupport/listProducts.txt';
     $file = fopen($dir, "r") or die ('problema al abrir archivo');
 
     while (!feof($file)){
         $getFile = fgets($file);
     }
-
 
 
     $html = getTemplate($getFile); 

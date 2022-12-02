@@ -9,7 +9,7 @@ $(document).ready(function () {
         inicial();
     }
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
         deep_loading('O');

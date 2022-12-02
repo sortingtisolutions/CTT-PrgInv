@@ -8,7 +8,7 @@ class ActionsModel extends Model
 	{
 		parent::__construct();
 	}
-//Guarda proveedor
+//Guarda proveedor ***
 	public function SaveActions($params)
 	{
         $estatus = 0;

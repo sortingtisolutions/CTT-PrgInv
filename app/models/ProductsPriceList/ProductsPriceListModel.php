@@ -9,7 +9,7 @@ class ProductsPriceListModel extends Model
         parent::__construct();
     }
 
-// Listado de categorias
+// Listado de categorias   ****
 public function listCategories()
 {
     $qry = "SELECT cat_id, cat_name FROM ctt_categories WHERE cat_status = 1;";

@@ -4,7 +4,7 @@ require_once ROOT . FOLDER_PATH .'/app/models/Login/LoginModel.php';
 require_once LIBS_ROUTE .'Session.php';
 
 /**
-* Login controller
+* Login controller *
 */
 class LoginController extends Controller
 {

@@ -12,7 +12,7 @@ $(document).ready(function () {
         inicial();
     }
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     btn = 'solo productos';
     if (altr == 1) {

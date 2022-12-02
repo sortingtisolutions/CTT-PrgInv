@@ -9,7 +9,7 @@ class ProductAccessoryModel extends Model
       parent::__construct();
     }
 
-// Listado de categorias
+// Listado de categorias   *******
     public function listCategories()
     {
         $qry = "SELECT * FROM ctt_categories WHERE cat_status = 1;";
@@ -40,7 +40,7 @@ public function listPackages()
     }
 
     
-// Listado de productos
+// Listado de productos   ******
 public function listProducts()
 {
     $qry = "SELECT prd_id, prd_sku, prd_name, prd_price, sbc_id 

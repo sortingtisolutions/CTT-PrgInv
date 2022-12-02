@@ -9,11 +9,11 @@ class ProductsForSublettingModel extends Model
       parent::__construct();
     }
 
-// Listado de Proyectos
+// Listado de Proyectos  ****
 public function listProyects($store)
 {
     $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (2,3,4) ;";
+    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (1,2,4) ;";
     return $this->db->query($qry);
 }    
 
@@ -37,7 +37,8 @@ public function listProyects($store)
     public function listSuppliers($store)
     {
         $store = $this->db->real_escape_string($store);
-        $qry = "SELECT sup_id, sup_business_name FROM ctt_suppliers WHERE sup_status = 1 AND sut_id in (3) ORDER BY sup_business_name;";
+        $qry = "SELECT sup_id, sup_business_name FROM ctt_suppliers WHERE sup_status = 1 
+        AND sut_id in (3) ORDER BY sup_business_name;";
         return $this->db->query($qry);
     }   
 
@@ -53,7 +54,8 @@ public function listProyects($store)
 // Listado de Almacenes
     public function listStores()
     {
-        $qry = "SELECT str_id, str_name FROM ctt_stores WHERE str_type = 'ESTATICOS' AND str_status = 1;";
+        $qry = "SELECT str_id, str_name FROM ctt_stores WHERE str_type = 'ESTATICOS' AND str_status = 1
+        and str_name like 'SUBARRENDO%';";
         return $this->db->query($qry);
     }
 
@@ -155,8 +157,8 @@ public function listProyects($store)
     }
 
 // Agrega el registro de relación almacen producto
-    // public function InsertProducts($param)
-    // {
+    public function InsertProducts($param)
+     {
     //     $idPrd 			= $this->db->real_escape_string($param['ser']);
     //     $idStrSrc 		= $this->db->real_escape_string($param['sti']);
     //     $quantity 		= $this->db->real_escape_string($param['qty']);
@@ -166,7 +168,7 @@ public function listProyects($store)
     //             VALUES 
     //                 ($quantity, $idStrSrc, $idPrd);";
     //     return $this->db->query($qry);
-    // }
+    }
 
 // Proceso de subarrendo
     public function checkSerie($param)

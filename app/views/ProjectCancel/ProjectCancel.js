@@ -5,7 +5,7 @@ $('document').ready(function () {
         inicial();
     }
 });
-
+//INICIO DE PROCESOS
 function inicial() {
     if (altr == 1) {
         deep_loading('O');
@@ -20,6 +20,7 @@ function inicial() {
     }
 }
 
+//CONFIGURACION DE DATATABLE
 function settingTable() {
     let title = 'Lista de proyectos';
     // $('#tblProducts').DataTable().destroy();
@@ -73,6 +74,7 @@ function settingTable() {
             {data: 'editable', class: 'edit', orderable: false},
             {data: 'projnumb', class: 'project_number'},
             {data: 'projname', class: 'project_name'},
+            {data: 'projtype', class: 'project_type'},
             {data: 'dateregi', class: 'date_registry'},
             {data: 'datesini', class: 'date_initial'},
             {data: 'datesend', class: 'date_end'},
@@ -81,6 +83,7 @@ function settingTable() {
     });
 }
 
+//OBTIENE LISTA DE PROYECTOS POSIBLES PARA CANCELAR
 function getProjects() {
     var pagina = 'ProjectCancel/listProjects';
     var par = '[{"pjtId":""}]';
@@ -114,6 +117,7 @@ function fillProjectsTable(ix) {
             editable: `<i class="fas fa-upload active" title="Habilita el proyecto" data-element="${pjts[ix].pjt_id}"></i><i class="fas fa-download kill" title="Cancela el proyecto definitivamente" data-element="${pjts[ix].pjt_id}" id="md${pjts[ix].pjt_id}"></i>`,
             projnumb: pjts[ix].pjt_number,
             projname: pjts[ix].pjt_name,
+            projtype: pjts[ix].pjs_name,
             dateregi: pjts[ix].date_regs,
             datesini: pjts[ix].date_ini,
             datesend: pjts[ix].date_end,

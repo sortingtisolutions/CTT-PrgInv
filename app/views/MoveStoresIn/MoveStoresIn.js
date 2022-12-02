@@ -10,6 +10,7 @@ $(document).ready(function () {
     }
 });
 
+//INICIO DE PROCESOS
 function inicial() {
     getExchange();
     getStores();

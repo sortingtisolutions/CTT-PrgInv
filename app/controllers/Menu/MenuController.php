@@ -25,7 +25,7 @@
     $this->render(__CLASS__, $params);
   }
 
-// Listado de elementos del menu
+// LISTA LOS ELEMENTOS DEL MENU
   public function menu($request_params)
 	{
 	//$params =  $this->session->get('user');

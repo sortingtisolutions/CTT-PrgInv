@@ -25,7 +25,7 @@ class ProjectFiscalFieldsController extends Controller
     }
 
 
-// Obtiene la lista de productos
+    // OBTIENE LA LISTA DE PROYECTOS
     public function tableProjects($request_params)
     {
         $result = $this->model->tableProjects($request_params);

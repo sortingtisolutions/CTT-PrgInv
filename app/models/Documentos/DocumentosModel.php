@@ -8,8 +8,8 @@ class DocumentosModel extends Model
 	{
 		parent::__construct();
 	}
-//Guarda proveedor
 
+//Guarda proveedor    *****
 public function SaveDocumento($request_params)
 {
 	$estatus = 0;

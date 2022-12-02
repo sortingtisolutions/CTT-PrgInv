@@ -23,6 +23,7 @@
 		  $this->render(__CLASS__, $params);
 		}
 
+		//OBTIENEN LOS SERVICIOS
 		public function GetServicio($request_params)
 		{
 	      $result = $this->model->GetServicio($request_params);
