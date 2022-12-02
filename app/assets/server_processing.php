@@ -15,7 +15,7 @@
  */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Easy set variables
+ * Easy set variables **
  */
 
 // DB table to use
