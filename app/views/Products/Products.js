@@ -262,7 +262,7 @@ function settingTable(catId) {
     // $('#tblProducts').DataTable().destroy();
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     var tabla = $('#tblProducts').DataTable({
-        order: [[1, 'desc']],
+        order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
             [100, 200, 300, -1],

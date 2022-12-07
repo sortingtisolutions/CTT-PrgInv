@@ -509,9 +509,7 @@ function putDiscounts(dt) {
     $('#selDiscount').html('');
     $('#selDiscInsr').html('');
     $.each(dt, function (v, u) {
-        let H = `<option value="${u.dis_discount}">${
-            u.dis_discount * 100
-        }%</option>`;
+        let H = `<option value="${u.dis_discount}">${u.dis_discount * 100}%</option>`;
         $('#selDiscount').append(H);
         $('#selDiscInsr').append(H);
     });
@@ -936,7 +934,7 @@ function fillBudget(pr, vr, ix) {
 function loadBudget(inx, bdgId) {
     // console.log(prod[inx]);
     let insurance = prod[inx].prd_insured == 0 ? 0 : 0.1;
-    let produ = prod[inx].prd_name.replace(/\"/g, '°').replace(/\,/g, '^');
+    let produ = prod[inx].prd_name.replace(/\"/g, '°').replace(/\,/g, '^').replace(/\'/g, '¿');
     let subct = prod[inx].sbc_name.replace(/\"/g, '°').replace(/\,/g, '^');
     let days = getDaysPeriod();
     let section = $('.productos__box-table')
@@ -970,7 +968,7 @@ function loadBudget(inx, bdgId) {
         "daybasereal"               : "${days}"
     }
     `;
-
+    console.log(par);
     let ky = registeredProduct('bdg' + prod[inx].prd_id);
     let stus = 'A';
     if (ky == 0) {
@@ -1076,8 +1074,8 @@ function reOrdering() {
 // *************************************************
 function fillBudgetProds(jsn, days, stus) {
     let pds = JSON.parse(jsn);
-
-    let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
+    
+    let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',').replace(/\¿/g, '\'');
     let H = `
     <tr id="bdg${pds.prd_id}" 
         data-sku     = "${pds.pjtvr_prod_sku}" 

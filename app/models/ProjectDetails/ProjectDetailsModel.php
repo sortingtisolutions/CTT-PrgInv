@@ -540,7 +540,7 @@ class ProjectDetailsModel extends Model
         ) VALUES (
             '$pjtvr_prod_sku',
             '$pjtvr_action',
-            '$pjtvr_prod_name',
+            REPLACE('$pjtvr_prod_name','\¿','\''),
             '$pjtvr_prod_price',
             '$pjtvr_quantity',
             '$pjtvr_quantity_ant',

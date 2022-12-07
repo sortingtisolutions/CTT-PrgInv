@@ -878,6 +878,7 @@ function registeredProduct(id) {
 }
 
 function putBudgets(dt) {
+    //console.log('Recargando ',dt);
     budg = dt;
     let days = getDaysPeriod();
 
@@ -1724,7 +1725,7 @@ function saveBudget(dt) {
             .children('th.product')
             .children('.elipsis')
             .text()
-            .replace(/\"/g, '°');
+            .replace(/\"/g, '°').replace(/\'/g, '¿');
         let bdgQuantity = tr
             .children('td.quantityBase')
             .children('.input_invoice')
@@ -1762,6 +1763,7 @@ function saveBudget(dt) {
             .data('order');
 
         if (bdgSku != undefined) {
+            
             let par = `
             [{
                 "bdgSku"          : "${bdgSku}",
@@ -1784,7 +1786,7 @@ function saveBudget(dt) {
                 "prdId"           : "${prdId}",
                 "pjtId"           : "${pjtId}"
             }]`;
-
+            //console.log(par);
             var pagina = 'Budget/SaveBudget';
             var tipo = 'html';
             var selector = respBudget;
@@ -1794,6 +1796,7 @@ function saveBudget(dt) {
 }
 
 function respBudget(dt) {
+    //console.log('REGRESO', dt);
     getVersion(dt);
 }
 

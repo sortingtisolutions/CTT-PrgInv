@@ -209,7 +209,7 @@ function eventsAction() {
                     "discount"  : "${discount}",
                     "action"    : "${interfase}"
                 }]`;
-                console.log(par);
+                console.log('Salvando Solo',par);
                 var pagina = 'ProjectDetails/SaveBudget';
                 var tipo = 'html';
                 var selector = saveBudget;
@@ -933,7 +933,7 @@ function fillBudget(pr, vr, ix) {
 
 function loadBudget(inx, bdgId) {
     let insurance = prod[inx].prd_insured == 0 ? 0 : 0.1;
-    let produ = prod[inx].prd_name.replace(/\"/g, '°').replace(/\,/g, '^');
+    let produ = prod[inx].prd_name.replace(/\"/g, '°').replace(/\,/g, '^').replace(/\'/g, '¿');
     let subct = prod[inx].sbc_name.replace(/\"/g, '°').replace(/\,/g, '^');
     let days = getDaysPeriod();
     let section = $('.productos__box-table')
@@ -1073,7 +1073,7 @@ function reOrdering() {
 function fillBudgetProds(jsn, days, stus) {
     let pds = JSON.parse(jsn);
 
-    let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
+    let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',').replace(/\¿/g, '\'');
     let H = `
     <tr id="bdg${pds.prd_id}" 
         data-sku     = "${pds.pjtvr_prod_sku}" 
@@ -1946,8 +1946,7 @@ function printBudget(verId) {
 function saveBudget(dt) {
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-
-    console.log(dt);
+    console.log('11',dt);
     getBudgets(pjtId, verId);
     interfase = 'MST';
     purgeInterfase();

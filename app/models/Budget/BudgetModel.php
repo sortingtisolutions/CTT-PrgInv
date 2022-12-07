@@ -344,11 +344,13 @@ public function stockProdcuts($params)
 // Agrega Cotizaciones
     public function SaveBudget($params)
     {
-
+        /* $siglecomi=("'");
+        $doblecomi='"'; */
         $bdg_prod_sku           = $params['bdgSku'];
         $bdg_prod_level         = $params['bdgLevel'];
         $bdg_section            = $params['bdgSection'];
         $bdg_prod_name          = str_replace('°','"',$params['bdgProduc']);
+        /* $bdg_prod_name          = str_replace('¿','\'',$bdg_prod_name); */
         $bdg_prod_price         = $params['bdgPricBs'];
         $bdg_quantity           = $params['bdgQtysBs'];
         $bdg_days_base          = $params['bdgDaysBs'];
@@ -365,7 +367,6 @@ public function stockProdcuts($params)
         $prd_id                 = $params['prdId'];
         $pjt_id                 = $params['pjtId'];
 
-
         $qry = "INSERT INTO ctt_budget (
                     bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_prod_level, bdg_section, 
                     bdg_quantity, bdg_days_base, bdg_days_cost, bdg_discount_base, bdg_discount_insured, bdg_days_trip, 
@@ -373,7 +374,7 @@ public function stockProdcuts($params)
                     ver_id, prd_id 
                 ) VALUES (
                     '$bdg_prod_sku', 
-                    '$bdg_prod_name',    
+                    REPLACE('$bdg_prod_name','\¿','\''),    
                     '$bdg_prod_price',      
                     '$bdg_prod_level', 
                     '$bdg_section',  
@@ -396,7 +397,6 @@ public function stockProdcuts($params)
             $result = $this->db->insert_id;
             return $pjt_id;
     }
-
 
 
 // Agrega nuevo proyecto

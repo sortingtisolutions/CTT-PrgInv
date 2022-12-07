@@ -539,8 +539,8 @@ class ProjectPlansModel extends Model
             pjt_id 
         ) VALUES (
             '$pjtvr_prod_sku',
-            '$pjtvr_action',
-            '$pjtvr_prod_name',
+            '$pjtvr_action', 
+            REPLACE('$pjtvr_prod_name','\¿','\''),
             '$pjtvr_prod_price',
             '$pjtvr_quantity',
             '$pjtvr_quantity_ant',
