@@ -12,7 +12,7 @@
         <div class="row mvst_group">
 
         <!-- Sidebar -->
-            <div class="mvst_panel" style="width:250px;">
+            <div class="mvst_panel" style="width:250px; background-color: fffffff">
                 <div class="form-group" >
                     
                     <div class="row">
@@ -41,7 +41,7 @@
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtDiscount" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
-                                    <label for="txtDiscount">Descuento Posproyecto</label>                    
+                                    <label for="txtDiscount">Descuento despues de Entrada</label>                    
                             </div>
                             <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
@@ -67,7 +67,15 @@
                                 <button id="btn_exchange" type="button" class="btn btn-sm btn-primary" >Agregar</button>
                             </div>
                         </div>
-                </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.7rem !important;" id="GuardarClosure">Cerrar Proyecto</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.7rem !important;" id="PrintClosure">Imprimir Resumen</button>
+                        </div>
+					</div>
             </div>
         <!-- Sidebar -->
 

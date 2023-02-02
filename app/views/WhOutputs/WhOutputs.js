@@ -39,7 +39,7 @@ function getProjects(catId) {
 
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
-    //console.log('DOS',dt);
+    console.log('DOS',dt);
     $('#tblProyects tbody').html('');
     if (dt[0].pjt_id != '0') {
         var catId = dt[0].cat_id;
@@ -47,13 +47,13 @@ function putProducts(dt) {
         $.each(dt, function (v, u) {
             var H = `
                 <tr id="${u.pjt_id}">
-                    <td class="edit"><i class='fas fa-edit detail'></i></td>
-                    <td class="product-name editable">${u.pjt_name}</td>
-                    <td class="product-name editable">${u.pjt_name}</td>
-                    <td class="product-name editable">${u.pjt_number}</td>
-                    <td class="sku editable list">${u.pjt_date_start}</td>
-                    <td class="sku editable list">${u.pjt_date_end}</td>
-                    <td class="sku editable list">${u.pjt_date_project}</td>
+                    <td class="edit"><i class='fas fa-edit detail'></i><i class='fas fa-door-open toLink'></i></td>
+                    <td class="sku">${u.pjttp_name}</td>
+                    <td class="sku">${u.pjt_name}</td>
+                    <td class="sku">${u.pjt_number}</td>
+                    <td class="sku  list">${u.pjt_date_start}</td>
+                    <td class="sku  list">${u.pjt_date_end}</td>
+                    <td class="sku  list">${u.pjt_date_project}</td>
                     <td class="product-name editable">${u.pjt_location}</td>
                 </tr>`;
             $('#tblProyects tbody').append(H);
@@ -119,13 +119,13 @@ function settingTable() {
         fixedHeader: true,
         columns: [
             {data: 'editable',      class: 'edit', orderable: false},
-            {data: 'pjt_name',      class: 'product-name'},
-            {data: 'pjt_number',    class: 'product-name'},
-            {data: 'pjt_date_start', class: 'product-name'},
-            {data: 'pjt_date_end',  class: 'sku'},
+            {data: 'pjttp_name',    class: 'sku'},
+            {data: 'pjt_name',      class: 'sku'},
+            {data: 'pjt_number',    class: 'sku'},
+            {data: 'pjt_date_start', class: 'sku'},
             {data: 'pjt_date_end',  class: 'sku'},
             {data: 'pjt_date_project', class: 'sku'},
-            {data: 'pjt_location',  class: 'product-name'},
+            {data: 'pjt_location',  class: 'sku'},
         ],
     });
 
@@ -144,19 +144,17 @@ function activeIcons() {
     $('.toLink')
         .unbind('click')
         .on('click', function () {
-            let prd = $(this).parents('tr').attr('id');
-            let qty = $(this).parent().attr('data-content').split('|')[2];
-            console.log(pkt, prd, qty);
-
-            if (qty > 0) {
-                //getSeries(prd);
-            }
+            let prd = 4;
+            /* let prd = $(this).parents('tr').attr('id');
+            let qty = $(this).parent().attr('data-content').split('|')[2]; */
+            console.log('Paso link..');
+            confirm_delet_product(prd);
         });
 
     $('.detail')
         .unbind('click')
         .on('click', function () {
-            console.log('modif');
+            console.log('Pasando siguiente ventana...');
             let sltor = $(this);
             let pjtid = sltor.parents('tr').attr('id');
             let prdNm = 'Modifica proyecto';
@@ -166,7 +164,33 @@ function activeIcons() {
 
             window.location = 'WhOutputContent';
         });
+
 }
+
+function confirm_delet_product(id) {
+    $('#delProdModal').modal('show');
+    $('#txtIdProductPack').val(id);
+    //borra paquete +
+    $('#btnDelProduct').on('click', function () {
+        let Id = $('#txtIdProductPack').val();
+        var arrayID = Id.split('-');
+        let prdId = arrayID[0];
+        let prdParent = arrayID[1];
+
+        let tabla = $('#tblProducts').DataTable();
+        $('#delProdModal').modal('hide');
+
+        let prdRow = $(`#${Id}`).parents('tr');
+        tabla.row(prdRow).remove().draw();
+
+       /*  var pagina = 'ProductAccessory/deleteProduct';
+        var par = `[{"prdId":"${prdId}","prdParent":"${prdParent}"}]`;
+        var tipo = 'json';
+        var selector = putDelPackages;
+        fillField(pagina, par, tipo, selector); */
+    });
+}
+
 /*
 function putSelectProject(dt) {
     cleanProductsFields();

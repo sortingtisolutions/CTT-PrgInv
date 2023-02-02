@@ -913,6 +913,7 @@ function putProducts(dt) {
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_type">${u.prd_level}</td>
                 <td class="col_category">${u.sbc_name}</td>
+                <td class="col_category">${u.prd_price}</td>
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });

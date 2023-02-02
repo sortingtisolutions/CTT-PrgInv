@@ -34,6 +34,8 @@ public function listPackages($params)
     $qry = "SELECT pd.* FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
             WHERE prd_level ='K' AND prd_status = 1 " . $condition . ";";
+    /* $qry = "SELECT pd.* FROM ctt_products AS pd
+           WHERE prd_level ='K' AND prd_status = 1;"; */
     return $this->db->query($qry);
 }
 
@@ -82,17 +84,17 @@ public function listProductsPack($params)
         $srv_id             = $this->db->real_escape_string($param['srvId']);
         $cin_id             = $this->db->real_escape_string($param['exmId']);
         $prd_insured        =  1;
+        $prd_stock          =  1;
 
-        $qry = "INSERT INTO ctt_products (prd_sku, prd_name, prd_model, prd_price, 
-        prd_visibility, prd_comments, prd_status, prd_level, sbc_id, srv_id, cin_id, prd_insured) 
+        $qry = "INSERT INTO ctt_products (prd_sku, prd_name, prd_model, prd_price, prd_visibility, 
+        prd_comments, prd_status, prd_level, sbc_id, srv_id, cin_id, prd_insured, prd_stock) 
         VALUES ('$prd_sku', '$prd_name', '$prd_model', '$prd_price', '$prd_visibility', '$prd_comments',
-         '$prd_status', '$prd_level', '$sbc_id', '$srv_id', '$cin_id','$prd_insured');
+         '$prd_status', '$prd_level', '$sbc_id', '$srv_id', '$cin_id','$prd_insured','$prd_stock');
         ";
          $this->db->query($qry);
         $result = $this->db->insert_id;
         return $result . '|' . $prd_sku . '|' . $prd_name . '|' . $prd_price;
     }
-
 
 // Registra el producto al paquete
     public function SaveProduct($param)

@@ -27,20 +27,25 @@
                         <thead>
                             <tr>
                                 <th style="width:  5px"></th>
-                                <th style="width: 110px">Nombre Cliente</th>
-                                <th style="width: 110px">Persona Contacto</th>
+                                <th style="width: 150px">Nombre Cliente</th>
+                                <th style="width:  80px">Email</th>
+                                <th style="width:  50px">Tel Cliente</th>
                                 <th style="width: 140px">Direccion</th>
-                                <th style="width: 100px">Email</th>
                                 <th style="width:  50px">RFC</th>
-                                <th style="width:  50px">Telefono</th>
-                                <th style="width:  50px">Tel Contacto</th>
-                                <th style="width:  40px">Codigo <br>SAT</th>
-                                <th style="width:  40px">Codigo <br>ASPEL</th>
+                                <th style="width:  50px">Calificación</th>
+                                <th style="width:  80px">Tipo Cliente</th>
                                 <th style="width:  40px">Codigo <br>Interno</th>
-                                <th style="width: 50px">Calificación</th>
-                                <th style="width: 80px">Representante <br>Legal</th>
-                                <th style="width: 50px">Tipo Cliente</th>
+                                <th style="width:  40px">Codigo <br>SAT</th>
                                 <th style="width: 30px">Status <br>Cliente</th>
+                                <th style="width: 150px">Nombre Director</th>
+                                <th style="width: 150px">Nombre <br>Representante</th>
+                                <th style="width: 80px">Email <br>Representante</th>
+                                <th style="width:  50px">Tel <br>Representante</th>
+                                <th style="width: 150px">Persona <br>Contacto</th>
+                                <th style="width:  50px">Tel Contacto</th>
+                                <th style="width: 80px">Email Contacto</th> 
+                                <th style="width: 40px">Operaciones <br>con CTT</th>                               
+                                <th style="width: 40px">Ultima <br>Factura</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -70,6 +75,40 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Email Cliente: </td>
+                        <td class="data">
+                            <input type="text" id="txtCusEmail" name="txtCusEmail" class="textbox" style="width:200px">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Email del Cliente</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Telefono Cliente: </td>
+                        <td class="data">
+                            <input type="text" id="txtCusPhone" name="txtCusPhone" class="textbox" style="width:150px">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Telefono de Cliente</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Direccion: </td>
+                        <td class="data">
+                            <input type="text" id="txtCusAdrr" name="txtCusAdrr" class="textbox" style="width:300px; text-transform:uppercase">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Domicilio fiscal del cliente</span>
+                        </td>
+                    </tr>
+                   
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> RFC: </td>
+                        <td class="data">
+                            <input type="text" id="txtCusRFC" name="txtCusRFC" class="textbox" style="width:150px; text-transform:uppercase">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">RFC del cliente</span>
+                        </td>
+                    </tr>
+
+                    <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Tipo de Cliente:</td>
                         <td class="data">
                             <select id="txtTypeProd" name="txtTypeProd" class="textbox required" style="width:200px">
@@ -81,90 +120,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="concept"><span class="reqsign"></span> Clave SAT asignada: </td>
-                        <td class="data">
-                            <input type="hidden" id="txtPrdId" name="txtPrdId" >
-                            <input type="text" id="txtCusName" name="txtCusName" class="textbox required" style="width:250px; text-transform:uppercase">
-                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                            <span class="intructions">Nombre Principal del cliente</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign"></span> Clave ASPEL asignada: </td>
-                        <td class="data">
-                            <input type="hidden" id="txtPrdId" name="txtPrdId" >
-                            <input type="text" id="txtCusName" name="txtCusName" class="textbox required" style="width:250px; text-transform:uppercase">
-                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                            <span class="intructions">Nombre Principal del cliente</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Codigo Interno: </td>
-                        <td class="data">
-                            <input type="text" id="txtCusCodI" name="txtCusCodI" class="textbox" style="width:100px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Codigo interno asignado por la empresa</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Cliente o Prospecto: </td>
-                        <td class="data">
-                            <input type="text" id="txtcusProsp" name="txtcusProsp" class="textbox" style="width:50px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">P - Prospecto / C - Cliente con Proyecto</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign"></span> Nombre de Contacto: </td>
-                        <td class="data">
-                            <input type="text" id="txtCusCont" name="txtCusCont" class="textbox" style="width:250px; text-transform:uppercase">
-                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                            <span class="intructions">Nombre del contacto</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Direccion: </td>
-                        <td class="data">
-                            <input type="text" id="txtCusAdrr" name="txtCusAdrr" class="textbox" style="width:300px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Domicilio fiscal del cliente</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> E-mail: </td>
-                        <td class="data">
-                            <input type="text" id="txtCusEmail" name="txtCusEmail" class="textbox" style="width:250px">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">correo electronico</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> RFC: </td>
-                        <td class="data">
-                            <input type="text" id="txtCusRFC" name="txtCusRFC" class="textbox" style="width:150px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">RFC del cliente</span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Telefono Principal: </td>
-                        <td class="data">
-                            <input type="text" id="txtCusPhone" name="txtCusPhone" class="textbox" style="width:150px">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Telefono principal de contacto</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Telefono Secundario: </td>
-                        <td class="data">
-                            <input type="text" id="txtCusPhone2" name="txtCusPhone2" class="textbox" style="width:150px">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Otro telefono para contactar</span>
-                        </td>
-                    </tr>
-                    
-                    <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Calificación del Cliente: </td>
                         <td class="data">
                             <select id="txtQualy" name="txtQualy" class="textbox" style="width:200px">
@@ -174,7 +129,6 @@
                             <span class="intructions">Calificacion segun historial del cliente</span>
                         </td>
                     </tr>
-                   
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Status del Cliente: </td>
                         <td class="data">
@@ -183,28 +137,110 @@
                             <span class="intructions">Indica si el cliente esta activo o inactivo</span>
                         </td>
                     </tr>
-
                     <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Patrocinador:</td>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Clave/Codigo Interno: </td>
                         <td class="data">
-                            <select id="txtCusSpon" name="txtCusSpon" class="textbox" style="width:200px">
-                                <!-- <option value="0">Selecciona...</option> -->
-                            </select>
-                            <span class="fail_note hide"><!-- <i class="fas fa-arrow-left"></i> --> Campo requerido</span>
-                            <span class="intructions">Patrocinador</span>
+                            <input type="text" id="txtCusCodI" name="txtCusCodI" class="textbox" style="width:100px; text-transform:uppercase">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Codigo interno asignado por la empresa</span>
                         </td>
                     </tr>
-
-                    <!-- <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Patrocinador: </td>
+                    <tr>
+                        <td class="concept"><span class="reqsign"></span> Clave SAT asignada: </td>
                         <td class="data">
-                            <input type="text" id="txtCusSpon" name="txtCusSpon" class="textbox" style="width:200px; text-transform:uppercase">
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Patrocinador</span>
+                            <!-- <input type="hidden" id="txtCusSat" name="txtCusSat" > -->
+                            <input type="text" id="txtCusSat" name="txtCusSat" class="textbox" style="width:100px; text-transform:uppercase">
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                            <span class="intructions">Clave SAT para facturar</span>
                         </td>
-                    </tr>         -->        
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span>Nombre del Director: </td>
+                        <td class="data">
+                            <input type="text" id="txtDirector" name="txtDirector" class="textbox" style="width:250px; text-transform:uppercase">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Director de la empresa, si lo hay</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Representante Legal: </td>
+                        <td class="data">
+                            <input type="text" id="txtcusLegalR" name="txtcusLegalR" class="textbox" style="width:250px; text-transform:uppercase">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Representante Legal</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Telefono de Representante: </td>
+                        <td class="data">
+                            <input type="text" id="txtLegPhone" name="txtLegPhone" class="textbox" style="width:150px">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Telefono del Representante</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Email Representante: </td>
+                        <td class="data">
+                            <input type="text" id="txLegEmail" name="txLegEmail" class="textbox" style="width:200px">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Email del Representante</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign"></span> Nombre Contacto de pago: </td>
+                        <td class="data">
+                            <input type="text" id="txtCusCont" name="txtCusCont" class="textbox" style="width:250px; text-transform:uppercase">
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                            <span class="intructions">Contancto para pagos</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Telefono de contacto: </td>
+                        <td class="data">
+                            <input type="text" id="txtContPhone" name="txtContPhone" class="textbox" style="width:150px">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Telefono de contacto pasa pagos</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Email de contacto: </td>
+                        <td class="data">
+                            <input type="text" id="txtContEmail" name="txtContEmail" class="textbox" style="width:200px">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Email de Contacto</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Opera con CTT:</td>
+                        <td class="data">
+                            <select id="txtWorkC" name="txtWorkC" class="textbox" style="width:150px">
+                                <option value="0">Selecciona...</option>
+                            </select>
+                            <span class="fail_note hide"><!-- <i class="fas fa-arrow-left"></i> --> Campo requerido</span>
+                            <span class="intructions">Tiene Operacion con CTT</span>
+                        </td>
+                    </tr>
                     
                     <tr>
+                        <td class="concept"><span class="reqsign"></span> Dato de Ultima Factura: </td>
+                        <td class="data">
+                            <input type="text" id="txtInvoi" name="txtInvoi" class="textbox" style="width:200px; text-transform:uppercase">
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                            <span class="intructions">Datos de la ultima Factura</span>
+                        </td>
+                    </tr>
+                    
+                    <!-- <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Cliente o Prospecto: </td>
+                        <td class="data">
+                            <input type="text" id="txtcusProsp" name="txtcusProsp" class="textbox" style="width:50px; text-transform:uppercase">
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">P - Prospecto / C - Cliente con Proyecto</span>
+                        </td>
+                    </tr> -->
+                    
+                    
+                    <!-- <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Representante Legal: </td>
                         <td class="data">
                             <input type="text" id="txtcusLegalR" name="txtcusLegalR" class="textbox" style="width:200px; text-transform:uppercase">
@@ -227,7 +263,7 @@
                             <span class="fail_note hide"></span>
                             <span class="intructions">Numero de contrato</span>
                         </td>
-                    </tr>
+                    </tr> -->
                 </table>
             </div>
         </div>

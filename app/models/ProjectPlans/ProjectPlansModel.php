@@ -126,7 +126,6 @@ class ProjectPlansModel extends Model
 
     } 
 
-
 /** ====== Listado clientes ==================================================================  */
     public function listCustomers($params)
     {

@@ -208,6 +208,7 @@ function eventsAction() {
     $('#btnNewProject')
         .unbind('click')
         .on('click', function () {
+            getProjectsParents();
             newProject();
         });
 
@@ -794,6 +795,7 @@ function putProducts(dt) {
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_type">${u.prd_level}</td>
                 <td class="col_category">${u.sbc_name}</td>
+                <td class="col_category">${u.prd_price}</td>
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
@@ -1739,22 +1741,18 @@ function saveBudget(dt) {
             .children('td.daysCost')
             .children('.input_invoice')
             .val();
-        let bdgDesctBase =
-            parseFloat(tr.children('td.discountBase').text()) / 100;
-        let bdgDesctInsr =
-            parseFloat(tr.children('td.discountInsu').text()) / 100;
+        let bdgDesctBase = parseFloat(tr.children('td.discountBase').text()) / 100;
+        let bdgDesctInsr = parseFloat(tr.children('td.discountInsu').text()) / 100;
         let bdgDaysTrip = tr
             .children('td.daysTrip')
             .children('.input_invoice')
             .val();
-        let bdgDescTrip =
-            parseFloat(tr.children('td.discountTrip').text()) / 100;
+        let bdgDescTrip = parseFloat(tr.children('td.discountTrip').text()) / 100;
         let bdgDaysTest = tr
             .children('td.daysTest')
             .children('.input_invoice')
             .val();
-        let bdgDescTest =
-            parseFloat(tr.children('td.discountTest').text()) / 100;
+        let bdgDescTest = parseFloat(tr.children('td.discountTest').text()) / 100;
         let bdgInsured = tr.attr('data-insured');
         let bdgSection = tr.parents('tbody').attr('id').substring(2, 5);
         let bdgOrder = tr

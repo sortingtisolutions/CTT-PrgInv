@@ -176,15 +176,12 @@
     <!-- Versiones de documentos guardados -->
         <div class="sidebar__versions invoice-border">
             <div class="version__button">
-                <span class="invoice_button">
-                <i class="fas fa-save"></i> Guardar cotización
-               </span> 
+                <span class="invoice_button"><i class="fas fa-save"></i> Guardar cotización</span> 
             </div>
             <div class="version__list">
                 <span class="version__list-title"></span>
                 <ul>
                     <!-- <li><span>Version</span><span>Fecha</span></li> -->
-
                 </ul>
             </div>
         </div>
@@ -320,7 +317,8 @@
                     <th>Producto</th>
                     <th>Existencias</th>
                     <th>Tipo</th>
-                    <th>Catálogo</th>
+                    <th>Sub-Categoria</th>
+                    <th>Precio</th>
                 </tr>
             </thead>
             <tbody></tbody>

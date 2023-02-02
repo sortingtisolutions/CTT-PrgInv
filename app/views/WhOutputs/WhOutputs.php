@@ -119,6 +119,29 @@
         </div>
     </div>
 <!-- End Ventana modal AGREGA O MODIFICA PRODUCTO -->
+<div class="modal fade" id="delProdModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+            <div class="modal-header ">
+            </div>
+            <div class="modal-body" style="padding: 0px !important;">
+
+
+            <div class="row">
+                <input type="hidden" class="form-control" id="txtIdProductPack" aria-describedby="basic-addon3">
+                <div class="col-12 text-center">
+                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Registrar salida de productos?</span>
+                </div>
+            </div>
+
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" id="btnDelProduct">Registrar</button>
+                </div>
+            </div>
+    </div>
+</div>
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

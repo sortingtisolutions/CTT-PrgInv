@@ -15,13 +15,13 @@ class WhOutputContentModel extends Model
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
 
         $qry = "SELECT pt.pjttp_name, pj.pjt_name, pj.pjt_number,
-        DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start,
-        DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end,
-        DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y %H:%i ') AS pjt_date_project,
-        pj.pjt_location, pj.cuo_id, '1' as analyst, '33' as freelance, pj.pjt_id
-        FROM ctt_projects AS pj INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
-        LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
-        WHERE pj.pjt_id=$pjt_id ORDER BY pjt_date_start ASC;";
+                DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start,
+                DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end,
+                DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y %H:%i ') AS pjt_date_project,
+                pj.pjt_location, pj.cuo_id, '1' as analyst, '33' as freelance, pj.pjt_id
+                FROM ctt_projects AS pj INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
+                LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
+                WHERE pj.pjt_id=$pjt_id ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }
 
@@ -39,12 +39,20 @@ class WhOutputContentModel extends Model
    public function listSeries($params)
    {
        $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
-       $qry = "SELECT pd.pjtdt_id, pd.pjtdt_prod_sku, pr.prd_name, pr.prd_level,
-       pr.prd_status,pd.ser_id,pd.pjtcn_id, sr.ser_serial_number
-       FROM ctt_projects_detail pd INNER JOIN ctt_products pr
-        ON pd.pjtcn_id=$pjtcnid and pd.prd_id=pr.prd_id
-        LEFT JOIN ctt_series sr ON sr.ser_id = pd.ser_id
-        order by 2 desc;";
+       /* $qry = "SELECT pd.pjtdt_id, pd.pjtdt_prod_sku, pr.prd_name, pr.prd_level,
+                pr.prd_status,pd.ser_id,pd.pjtvr_id, sr.ser_serial_number
+                FROM ctt_projects_detail pd 
+                INNER JOIN ctt_products pr ON pd.pjtvr_id=$pjtcnid and pd.prd_id=pr.prd_id
+                LEFT JOIN ctt_series sr ON sr.ser_id = pd.ser_id
+                order by 2 desc;"; */
+        $qry = "SELECT pdt.pjtdt_id, pdt.pjtdt_prod_sku, prd.prd_name, prd.prd_level, prd.prd_status, 
+                pdt.ser_id,pdt.pjtvr_id, sr.ser_serial_number
+                FROM ctt_projects_content AS pcn
+                INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
+                INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
+                LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
+                WHERE pcn.pjtcn_id=$pjtcnid ORDER BY 2;";
+
        return $this->db->query($qry);
    }
 

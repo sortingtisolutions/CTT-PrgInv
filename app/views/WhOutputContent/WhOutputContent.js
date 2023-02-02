@@ -12,12 +12,12 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setting_table_AsignedProd();
-    getProjects();
+    getProjects(prjid);
     getDetailProds();
 }
 
 // Solicita los paquetes  OK
-function getProjects(pjtid) {
+function getProjects(prjid) {
     console.log(prjid)
     var pagina = 'WhOutputContent/listProjects';
     var par = `[{"pjt_id":"${prjid}"}]`;
@@ -145,8 +145,6 @@ function activeIcons() {
                     $('.overlay_background').addClass('overlay_hide');
                 }); */
         });
-
-
 }
 
 //AGREGA LOS DATOS GENERALES DEL PROYECTO
@@ -163,7 +161,7 @@ function putProjects(dt) {
 }
 // ### LISTO ### Llena prepara la table dentro del modal para series ### LISTO -- MODAL 1###
 function putSeries(dt) {
-
+    console.log(dt);
     $('#SerieModal').removeClass('overlay_hide');
     $('#tblSerie').DataTable({
         destroy: true,
@@ -193,7 +191,7 @@ function putSeries(dt) {
         .unbind('click')
         .on('click', function () {
            $('.overlay_background').addClass('overlay_hide');
-
+           $('#tblSerie').DataTable().remove().draw();
             activeIcons();
         });
     build_modal_serie(dt);
@@ -216,7 +214,6 @@ function build_modal_serie(dt) {
                         sername: u.prd_name,
                         sernumber: u.ser_serial_number,
                         sertype: u.prd_level,
-
                     })
                     .draw();
                 //$(`#E${u.pjtcn_id}`).parents('tr').attr('data-product', u.pjtcn_id);
@@ -331,6 +328,7 @@ function putSerieDetails(dt) {
 }
 
     function build_modal_seriefree(dt) {
+        console-log(dt);
              let tabla = $('#tblBoxSubmenu').DataTable();
             $('#boxSubmenu .title').html(`${dt[0].prd_name}`);
             tabla.rows().remove().draw();
@@ -395,8 +393,6 @@ function activeIconsSerieFree() {
                 .on('click', function () {
                     $('#ChangeSerieModal').addClass('overlay_hide');
                 });
-
-
                 getSeriesFree(serId);
         });
 */

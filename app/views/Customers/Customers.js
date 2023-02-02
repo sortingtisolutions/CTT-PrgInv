@@ -73,7 +73,7 @@ function settingTable() {
     let filename =
         title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     var tabla = $('#tblCustomers').DataTable({
-        order: [[0, 'desc']],
+        order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
             [100, 200, 300, -1],
@@ -127,20 +127,25 @@ function settingTable() {
         scrollX: true,
         columns: [
             {data: 'editable', class: 'edit', orderable: false},
-            {data: 'produsku', class: 'product-name'},
-            {data: 'prodname', class: 'product-name'},
-            {data: 'prodpric', class: 'product-name'},
-            {data: 'prodqtty', class: 'product-name'},
-            {data: 'prodtype', class: 'product-name'},
-            {data: 'typeserv', class: 'product-name'},
-            {data: 'prodcoin', class: 'product-name'},
-            {data: 'prodcoin', class: 'product-name'},
-            {data: 'prodcoin', class: 'product-name'},
-            {data: 'prddocum', class: 'product-name'},
-            {data: 'subcateg', class: 'sku'},
-            {data: 'categori', class: 'sku'},
-            {data: 'prodengl', class: 'product-name'},
-            {data: 'prdcomme', class: 'sku'},
+            {data: 'namecli', class: 'product-name'},
+            {data: 'emailcli', class: 'product-name'},
+            {data: 'phonecli', class: 'product-name'},
+            {data: 'adrescli', class: 'product-name'},
+            {data: 'rfccli',    class: 'product-name'},
+            {data: 'califcli', class: 'cn'}, 
+            {data: 'tipocli', class: 'cn'},
+            {data: 'codintcli', class: 'product-name'},
+            {data: 'codsatcli', class: 'product-name'},
+            {data: 'statuscli', class: 'product-name'},
+            {data: 'namedirec', class: 'product-name'},
+            {data: 'namelegal', class: 'product-name'},
+            {data: 'emaillegal', class: 'product-name'},
+            {data: 'phonelegal', class: 'product-name'},
+            {data: 'namecontac', class: 'product-name'},
+            {data: 'phonecontac', class: 'product-name'},
+            {data: 'emailcontac', class: 'product-name'},
+            {data: 'operatcli', class: 'product-name'},
+            {data: 'lastfact', class: 'product-name'},
         ],
     });
 
@@ -171,19 +176,24 @@ function fillCustomers(ft) {
                 <tr id="${u.cus_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
                     <td class="product-name" data-content="${u.cus_name}">${u.cus_name}</td>
-                    <td class="product-name">${u.cus_contact}</td>
-                    <td class="product-name">${u.cus_address}</td>
                     <td class="product-name">${u.cus_email}</td>
-                    <td class="product-name">${u.cus_rfc}</td>
                     <td class="product-name">${u.cus_phone}</td>
-                    <td class="product-name">${u.cus_phone_2}</td>
-                    <td class="product-name">${u.cus_internal_code}</td>
-                    <td class="product-name">${u.cus_internal_code}</td>
-                    <td class="product-name">${u.cus_internal_code}</td>
-                    <td class="sku">${u.cus_qualification}</td>
-                    <td class="sku">${u.cus_legal_representative}</td>
+                    <td class="product-name">${u.cus_address}</td>
+                    <td class="product-name">${u.cus_rfc}</td>
+                    <td class="product-name">${u.cus_qualification}</td>
                     <td class="product-name">${u.cut_name}</td>
-                    <td class="sku">${u.cus_status}</td>
+                    <td class="product-name">${u.cus_cve_cliente}</td>
+                    <td class="product-name">${u.cus_code_sat}</td>
+                    <td class="product-name">${u.cus_status}</td>
+                    <td class="product-name">${u.cus_legal_director}</td>
+                    <td class="product-name">${u.cus_legal_representative}</td>
+                    <td class="product-name">${u.cus_legal_email}</td>
+                    <td class="product-name">${u.cus_lega_phone}</td>
+                    <td class="product-name">${u.cus_contact_name}</td>
+                    <td class="product-name">${u.cus_contact_phone}</td>
+                    <td class="product-name">${u.cus_contact_email}</td>
+                    <td class="product-name">${u.cus_work_ctt}</td>
+                    <td class="product-name">${u.cus_last_invoice}</td>
                 </tr>`;
                 $('#tblCustomers tbody').append(H);
             }
@@ -201,7 +211,7 @@ function putScores(dt) {
     if (dt[0].scr_id != '0') {
         let cinId = dt[0].scr_id;
         $.each(dt, function (v, u) {
-            var H = `<option value="${u.scr_id}">${u.scr_id}-${u.scr_description}</option>`;
+            var H = `<option value="${u.scr_values}">${u.scr_values} - ${u.scr_description}</option>`;
             $('#txtQualy').append(H);
         });
     }
@@ -270,9 +280,7 @@ function activeIcons() {
                 $('#delProdModal').modal('hide');
 
                 let prdRow = $(`#${cusId}`);
-
                 tabla.row(prdRow).remove().draw();
-
                 var pagina = 'Customers/deleteCustomers';
                 var par = `[{"cusId":"${cusId}"}]`;
                 var tipo = 'html';
@@ -305,21 +313,26 @@ function putSelectCustomer(dt) {
     //console.log(dt);
     let cusId = dt[0].cus_id;
     let cusName = dt[0].cus_name;
-    let cusCont = dt[0].cus_contact;
-    let cusAdrr = dt[0].cus_address;
     let cusEmail = dt[0].cus_email;
-    let cusRFC = dt[0].cus_rfc;
     let cusPhone = dt[0].cus_phone;
-    let cusPhone2 = dt[0].cus_phone_2;
-    let cusICod = dt[0].cus_internal_code;
+    let cusAdrr = dt[0].cus_address;
+    let cusRFC = dt[0].cus_rfc;
     let cusQualy = dt[0].cus_qualification;
-    let cusProsp = dt[0].cus_prospect;
-    let cusSpon = dt[0].cus_sponsored;
-    let cusLegalR = dt[0].cus_legal_representative;
-    let cusLegalA = dt[0].cus_legal_act;
-    let cusContr = dt[0].cus_contract;
-    let TypeProd = dt[0].cut_id;
     let cusStat = dt[0].cus_status;
+    let cusICod = dt[0].cus_cve_cliente;
+    let cusSatC = dt[0].cus_code_sat;
+    let TypeProd = dt[0].cut_id;
+    let cusDirector = dt[0].cus_legal_director;
+    let cusLegRepre = dt[0].cus_legal_representative;
+    let cusLegEmail = dt[0].cus_legal_email;
+    let cusLegPhone = dt[0].cus_lega_phone;
+    let cusCont = dt[0].cus_contact_name;
+    let cusContEmail = dt[0].cus_contact_email;
+    let cusContPhone = dt[0].cus_contact_phone;
+    
+    let cusWorkC = dt[0].cus_work_ctt;
+    let cusInvoi = dt[0].cus_last_invoice;
+    
     let vsb =
         cusStat == '1'
             ? ' <i class="fas fa-check-square" data_val="1"></i>'
@@ -327,21 +340,28 @@ function putSelectCustomer(dt) {
 
     $('#txtPrdId').val(cusId);
     $('#txtCusName').val(cusName);
-    $('#txtCusCont').val(cusCont);
-    $('#txtCusAdrr').val(cusAdrr);
     $('#txtCusEmail').val(cusEmail);
-    $('#txtCusRFC').val(cusRFC);
     $('#txtCusPhone').val(cusPhone);
-    $('#txtCusPhone2').val(cusPhone2);
-    $('#txtCusCodI').val(cusICod);
-    $(`#txtQualy`).val(cusQualy);
-    $('#txtcusProsp').val(cusProsp);
-    $('#txtCusStat').html(vsb);
-    $(`#txtCusSpon`).val(cusSpon);
+    $('#txtCusAdrr').val(cusAdrr);
+    $('#txtCusRFC').val(cusRFC);
     $(`#txtTypeProd`).val(TypeProd);
-    $(`#txtcusLegalR`).val(cusLegalR);
-    $(`#txtcusLegalA`).val(cusLegalA);
-    $(`#txtcusContr`).val(cusContr);
+    $(`#txtQualy`).val(cusQualy);
+    $('#txtCusStat').html(vsb);
+    $('#txtCusCodI').val(cusICod);
+    $('#txtCusSat').val(cusSatC);
+
+    $(`#txtDirector`).val(cusDirector);
+    $(`#txtcusLegalR`).val(cusLegRepre);
+    $('#txtLegPhone').val(cusLegPhone);
+    $('#txLegEmail').val(cusLegEmail);
+    
+    $('#txtCusCont').val(cusCont);
+    $('#txtContEmail').val(cusContEmail);
+    $('#txtContPhone').val(cusContPhone);
+
+    $('#txtWorkC').val(cusWorkC);
+    $(`#txtInvoi`).val(cusInvoi);
+    
 
     $('#tblEditCust .checkbox i')
         .unbind('click')
@@ -371,47 +391,56 @@ function saveEditCustomer() {
     if (ky == 0) {
         let cusId = $('#txtPrdId').val();
         let cusName = $('#txtCusName').val().replace(/\"/g, '°');
-        let cusCont = $('#txtCusCont').val();
-        let cusAdrr = $('#txtCusAdrr').val();
         let cusEmail = $('#txtCusEmail').val();
-        let cusRFC = $('#txtCusRFC').val();
         let cusPhone = $('#txtCusPhone').val();
-        let cusPhone2 = $('#txtCusPhone2').val();
-        let cusICod = $('#txtCusCodI').val();
+        let cusAdrr = $('#txtCusAdrr').val();
+        let cusRFC = $('#txtCusRFC').val();
+        let TypeProd = $(`#txtTypeProd`).val();
         let cusQualy =
             $(`#txtQualy option:selected`).val() == 0
                 ? ''
                 : $(`#txtQualy option:selected`).text().split('-')[0];
-        let cusProsp = $(`#txtcusProsp`).val();
+        
         let cusStat = $('#txtCusStat').children('i').attr('data_val');
-        let cusSpon = $(`#txtCusSpon`).val();
-        let TypeProd = $(`#txtTypeProd`).val();
-        let cusLegalR = $(`#txtcusLegalR`).val();
-        let cusLegalA = $(`#txtcusLegalA`).val();
-        let cusContr = $(`#txtcusContr`).val();
+        let cusICod = $('#txtCusCodI').val();
+        let cusSatC = $('#txtCusSat').val();
+
+        let cusDirector = $('#txtDirector').val();
+        let cusLegRepre = $(`#txtcusLegalR`).val();
+        let cusLegPhone = $(`#txtLegPhone`).val();
+        let cusLegEmail = $(`#txLegEmail`).val();
+        
+        let cusCont = $(`#txtCusCont`).val();
+        let cusContEmail = $('#txtContEmail').val();
+        let cusContPhone = $(`#txtContPhone`).val();
+        let cusWorkC = $(`#txtWorkC`).val();
+        let cusInvoi = $(`#txtInvoi`).val();
 
         var par = `
                 [{
-                    "cusId" : "${cusId}",
+                    "cusId" :   "${cusId}",
                     "cusName" : "${cusName}",
-                    "cusCont" : "${cusCont}",
-                    "cusAdrr" : "${cusAdrr}",
                     "cusEmail" : "${cusEmail}",
-                    "cusRFC" : "${cusRFC}",
                     "cusPhone" : "${cusPhone}",
-                    "cusPhone2" : "${cusPhone2}",
-                    "cusICod" : "${cusICod}",
-                    "cusQualy" : "${cusQualy}",
-                    "cusProsp" : "${cusProsp}",
-                    "cusStat" : "${cusStat}",
-                    "cusSpon" : "${cusSpon}",
+                    "cusAdrr" : "${cusAdrr}",
+                    "cusRFC" : "${cusRFC}",
                     "TypeProd" : "${TypeProd}",
-                    "cusLegalR" : "${cusLegalR}",
-                    "cusLegalA" : "${cusLegalA}",
-                    "cusContr" : "${cusContr}"
+                    "cusQualy" : "${cusQualy}",
+                    "cusStat" : "${cusStat}",
+                    "cusICod" : "${cusICod}",
+                    "cusSatC" : "${cusSatC}",
+                    "cusDirector" : "${cusDirector}",
+                    "cusLegRepre" : "${cusLegRepre}",
+                    "cusLegPhone" : "${cusLegPhone}",
+                    "cusLegEmail" : "${cusLegEmail}",
+                    "cusCont" : "${cusCont}",
+                    "cusContEmail" : "${cusContEmail}",
+                    "cusContPhone" : "${cusContPhone}",
+                    "cusWorkC" : "${cusWorkC}",
+                    "cusInvoi" : "${cusInvoi}"
                 }]
             `;
-        //console.log('EDITA ',par);
+        console.log('EDITA ',par);
         var pagina = 'Customers/saveEditCustomer';
         var tipo = 'html';
         var selector = resEdtProduct;
@@ -465,13 +494,13 @@ function createNewCustomer() {
 }
 
 function subcategoriesGetCode(sbcId) {
-    let sbcCode = '';
+    /* let sbcCode = '';
     $.each(subs, function (v, u) {
         if (u.sbc_id == sbcId) {
             sbcCode = u.sbc_code;
         }
     });
-    return sbcCode;
+    return sbcCode; */
 }
 
 function fillFieldSkuBox() {
@@ -483,55 +512,63 @@ function fillFieldSkuBox() {
 function saveNewCustomer() {
     let ky = validatorProductsFields();
     if (ky == 0) {
-        let cusId = '0';
+        let cusId = '';
         let cusName = $('#txtCusName').val().replace(/\"/g, '°');
+        let cusEmail = $('#txtCusEmail').val();
+        let cusPhone = $('#txtCusPhone').val();
+        let cusAdrr = $('#txtCusAdrr').val();
+        let cusRFC = $('#txtCusRFC').val();
         let typeProd =
             $(`#txtTypeProd option:selected`).val() == 0
                 ? ''
                 : $(`#txtTypeProd option:selected`).text().split('-')[0];
-        let cusCont = $('#txtCusCont').val();
-        let cusAdrr = $('#txtCusAdrr').val();
-        let cusEmail = $('#txtCusEmail').val();
-        let cusRFC = $('#txtCusRFC').val();
-        let cusPhone = $('#txtCusPhone').val();
-        let cusPhone2 = $('#txtCusPhone2').val();
-        let cusICod = $('#txtCusCodI').val();
         let cusQualy =
             $(`#txtQualy option:selected`).val() == 0
                 ? ''
                 : $(`#txtQualy option:selected`).text().split('-')[0];
         //let cusQualy = $(`#txtQualy option:selected`).text().split('-')[0];
-        let cusProsp = $('#txtcusProsp').val();
-
-        let cusSpon = $(`#txtCusSpon`).val();
-        let cusLegalR = $(`#txtcusLegalR`).val();
-        let cusLegalA = $(`#txtcusLegalA`).val();
-        let cusContr = $(`#txtcusContr`).val();
         let cusStat = $('#txtCusStat').children('i').attr('data_val');
+        let cusICod = $('#txtCusCodI').val();
+        let cusSatC = $('#txtCusSat').val();
+
+        let cusDirector = $('#txtDirector').val();
+        let cusLegRepre = $(`#txtcusLegalR`).val();
+        let cusLegPhone = $(`#txtLegPhone`).val();
+        let cusLegEmail = $(`#txLegEmail`).val();
+
+        let cusCont = $(`#txtCusCont`).val();
+        let cusContEmail = $('#txtContEmail').val();
+        let cusContPhone = $(`#txtContPhone`).val();
+        let cusWorkC = $(`#txtWorkC`).val();
+        let cusInvoi = $(`#txtInvoi`).val();
+
+        
         if (cusStat == undefined) {
             cusStat = 1;
         }
         var par = `
-                [{
-                    "cusId" : "${cusId}",
-                    "cusName" : "${cusName}",
-                    "typeProd" : "${typeProd}",
-                    "cusCont" : "${cusCont}",
-                    "cusAdrr" : "${cusAdrr}",
-                    "cusEmail" : "${cusEmail}",
-                    "cusRFC" : "${cusRFC}",
-                    "cusPhone" : "${cusPhone}",
-                    "cusPhone2" : "${cusPhone2}",
-                    "cusICod" : "${cusICod}",
-                    "cusQualy" : "${cusQualy}",
-                    "cusProsp" : "${cusProsp}",
-                    "cusSpon" : "${cusSpon}",
-                    "cusLegalR" : "${cusLegalR}",
-                    "cusLegalA" : "${cusLegalA}",
-                    "cusContr" : "${cusContr}",
-                    "cusStat" : "${cusStat}"
-                }]
-            `;
+            [{
+                "cusId" :   "${cusId}",
+                "cusName" : "${cusName}",
+                "cusEmail" : "${cusEmail}",
+                "cusPhone" : "${cusPhone}",
+                "cusAdrr" : "${cusAdrr}",
+                "cusRFC" : "${cusRFC}",
+                "typeProd" : "${typeProd}",
+                "cusQualy" : "${cusQualy}",
+                "cusStat" : "${cusStat}",
+                "cusICod" : "${cusICod}",
+                "cusSatC" : "${cusSatC}",
+                "cusDirector" : "${cusDirector}",
+                "cusLegRepre" : "${cusLegRepre}",
+                "cusLegPhone" : "${cusLegPhone}",
+                "cusLegEmail" : "${cusLegEmail}",
+                "cusCont" : "${cusCont}",
+                "cusContEmail" : "${cusContEmail}",
+                "cusContPhone" : "${cusContPhone}",
+                "cusWorkC" : "${cusWorkC}",
+                "cusInvoi" : "${cusInvoi}"
+            }] `;
         console.log('NUEVO ', par);
         var pagina = 'Customers/saveNewCustomer';
         var tipo = 'html';
@@ -595,7 +632,7 @@ function putInvoice(dt) {
 }
 
 function putInvoiceList(dt) {
-    //console.log(dt);
+    /* //console.log(dt);
     var fc = $('#txtDocIdSerie').offset();
     $('#listInvoice .list-items').html('');
     $('#listInvoice').slideUp('100', function () {
@@ -633,7 +670,7 @@ function putInvoiceList(dt) {
         $('#txtIdInvoices').val(prdId);
         $('#listInvoice').slideUp(100);
         //validator();
-    });
+    }); */
 }
 function omitirAcentos(text) {
     var acentos = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç';
@@ -668,13 +705,13 @@ function sel_invoice(res) {
 }
 
 function getOptionYesNo() {
-    $('#txtCusSpon').html("");
-    renglon = "<option id='0'  value='Selecciona...'></option> ";
-    $('#txtCusSpon').append(renglon);
-    renglon = "<option id='1' value='C'>Cliente</option> ";
-    $('#txtCusSpon').append(renglon);
-    renglon = "<option id='2' value='P'>Patrocinio</option> ";
-    $('#txtCusSpon').append(renglon);
+    $('#txtWorkC').html("");
+    renglon = "<option id='0'  value='0'>Selecciona...</option> ";
+    $('#txtWorkC').append(renglon);
+    renglon = "<option id='1' value='1'>Si</option> ";
+    $('#txtWorkC').append(renglon);
+    renglon = "<option id='2' value='2'>No</option> ";
+    $('#txtWorkC').append(renglon);
  
     /* $('#selectAnticipo').html("");
     renglon = "<option id='2'  value=''></option> ";

@@ -22,6 +22,7 @@
 <?php
 
 function codificar($dato) {
+	//echo "<script>console.log('Console: " . $dato . "' );</script>";
 	$resultado = $dato;
 	$arrayLetras = array('M', 'A', 'R', 'C', 'O', 'S');
 	$limite = count($arrayLetras) - 1;
@@ -31,6 +32,7 @@ function codificar($dato) {
 	}
 	$resultado = $resultado . '+' . $arrayLetras[$num];
 	$resultado = base64_encode($resultado);
+	//echo "<script>console.log('Resultado: " . $resultado . "' );</script>";
 	return $resultado;
 }
 ?>

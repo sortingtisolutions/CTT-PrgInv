@@ -15,6 +15,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     btn = 'solo productos';
+    console.log('AQUI ENPIEZA');
     if (altr == 1) {
         deep_loading('O');
         settingTable('0');

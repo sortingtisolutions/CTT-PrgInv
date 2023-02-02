@@ -562,11 +562,13 @@ function select_products(prdId) {
     var pagina = 'Packages/listProductsPack';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
+    console.log(par);
     var selector = putProductsPack;
     fillField(pagina, par, tipo, selector);
 }
 
 function putProductsPack(dt) {
+    console.log(dt);
     let tabla = $('#tblProducts').DataTable();
     tabla.rows().remove().draw();
     if (dt[0].prd_id != '') {

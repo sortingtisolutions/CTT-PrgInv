@@ -181,7 +181,7 @@ class BudgetModel extends Model
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
                 LEFT JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                WHERE bg.ver_id = $verId ORDER BY bdg_id ASC;";
+                WHERE bg.ver_id = $verId ORDER BY bdg_order ASC;";
 
         return $this->db->query($qry);
     }    
@@ -210,9 +210,9 @@ public function listDiscounts($params)
                     WHEN prd_level ='K' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
                     WHEN prd_level ='P' THEN 
-                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
-                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     END AS stock
             FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
@@ -585,12 +585,12 @@ public function saveBudgetList($params)
         $qry1 = "INSERT INTO ctt_projects_version (
                     pjtvr_prod_sku,  pjtvr_prod_name,  pjtvr_prod_price, pjtvr_prod_level,   pjtvr_section,  pjtvr_quantity, 
                     pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, pjtvr_days_trip, pjtvr_discount_trip, 
-                    pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,    ver_id,    prd_id,    pjt_id
+                    pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_order, ver_id, prd_id,  pjt_id
                 )
                 SELECT 
                     bg.bdg_prod_sku, bg.bdg_prod_name, bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_section, bg.bdg_quantity,  
                     bg.bdg_days_base, bg.bdg_days_cost, bg.bdg_discount_base, bg.bdg_discount_insured, bg.bdg_days_trip, bg.bdg_discount_trip,
-                    bg.bdg_days_test, bg.bdg_discount_test, bg.bdg_insured, bg.ver_id, bg.prd_id, vr.pjt_id 
+                    bg.bdg_days_test, bg.bdg_discount_test, bg.bdg_insured, bg.bdg_order, bg.ver_id, bg.prd_id, vr.pjt_id 
                 FROM ctt_budget AS bg
                 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
                 WHERE bg.ver_id = $verId;";

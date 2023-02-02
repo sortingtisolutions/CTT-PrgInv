@@ -1,9 +1,9 @@
 <?php
     defined('BASEPATH') or exit('No se permite acceso directo');
-    require_once ROOT . FOLDER_PATH . '/app/models/ProjectClosed/ProjectClosedModel.php';
+    require_once ROOT . FOLDER_PATH . '/app/models/ProjectReports/ProjectReportsModel.php';
     require_once LIBS_ROUTE .'Session.php';
 
-class ProjectClosedController extends Controller
+class ProjectReportsController extends Controller
 {
     private $session;
     public $model;
@@ -11,7 +11,7 @@ class ProjectClosedController extends Controller
 
     public function __construct()
     {
-        $this->model = new ProjectClosedModel();
+        $this->model = new ProjectReportsModel();
         $this->session = new Session();
         $this->session->init();
         if($this->session->getStatus() === 1 || empty($this->session->get('user')))
@@ -23,15 +23,12 @@ class ProjectClosedController extends Controller
         $params = array('user' => $this->session->get('user'));
         $this->render(__CLASS__, $params);
     }
-
-
-
     
 /* -- Listado de proyectos  ------------------------------------------------------------------ */
-    public function listProjects($request_params)
+    public function listAnalysts($request_params)
     {
 
-        $result = $this->model->listProjects($request_params);
+        $result = $this->model->listAnalysts($request_params);
         $i = 0;
         while ($row = $result->fetCh_assoc())
         {
@@ -43,7 +40,20 @@ class ProjectClosedController extends Controller
 
     }
 
-    
+    public function listCustomers($request_params)
+    {
+
+        $result = $this->model->listCustomers($request_params);
+        $i = 0;
+        while ($row = $result->fetCh_assoc())
+        {
+            $rowdata[$i] = $row;
+            $i++;
+        } 
+        $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"pjt_id":"0"}]';	
+        echo $res;
+
+    }    
     
 /* -- Listado de contenido de proyecto seleccionado  ----------------------------------------- */
     public function projectContent($request_params)
@@ -76,20 +86,6 @@ class ProjectClosedController extends Controller
 
     }
 
-    public function saveDocumentClosure($request_params)
-    {
-
-        $result = $this->model->saveDocumentClosure($request_params);
-        $i = 0;
-        while ($row = $result->fetCh_assoc())
-        {
-            $rowdata[$i] = $row;
-            $i++;
-        } 
-        $res = $i > 0 ? json_encode($rowdata,JSON_UNESCAPED_UNICODE) :  '[{"clo_id":"0"}]';	
-        echo $res;
-
-    }
 
 
 }
