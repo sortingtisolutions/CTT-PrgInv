@@ -41,35 +41,6 @@
                             <!-- <input type="text" id="txtIdInvoices" name="txtIdInvoices"> -->
                     </div>
 
-
-                    <!-- Proveedores posición 2 
-                    <div class="row pos2 hide-items">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtSuppliers" class="form-select form-select-sm"><option value="0" selected>Selecciona proveedor</option></select>
-                            <label for="txtSuppliers">Proveedores</label>
-                        </div>
-                    </div> -->
-
-                    <!-- Proveedores posición 2 -->
-                    <!-- <div class="row list-finder pos2 hide-items">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtSuppliers" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" autocomplete="off">
-                                    <label for="txtSuppliers">Horas Diesel</label>
-                                    <input type="hidden" id="txtIdSuppliers" name="txtIdSuppliers">
-                            </div>
-                            <div id="listSupplier" class="list-group list-hide">
-                                <div class="list-items" ></div>
-                            </div>
-                    </div> -->
-
-
-                    <!-- Factura posición 3 
-                    <div class="row pos3 hide-items">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtInvoice" class="form-select form-select-sm"><option value="0" selected>Selecciona factura</option></select>
-                            <label for="txtInvoice">Factura</label>
-                        </div>
-                    </div> -->
                     <div class="row list-finder pos3 hide-items">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
@@ -96,58 +67,6 @@
                             <!-- <input type="text" id="txtIdInvoices" name="txtIdInvoices"> -->
                     </div>
 
-                    <!-- Categoria posición 4 -->
-                    <!-- <div class="row pos1 hide-items">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtCategory" class="form-select form-select-sm"><option value="0" selected>Catálogo</option></select>
-                            <label for="txtCategory">Catálogo</label>
-                        </div>
-                    </div> -->
-
-                    <!-- Productos posición 4 -->
-                    <!-- <div class="row list-finder pos1 hide-items">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un producto" autocomplete="off">
-                                    <label for="txtProducts">Productos</label>
-                                    <input type="hidden" id="txtIdProducts" name="txtIdProducts">
-                                    <input type="hidden" id="txtNextSerie" name="txtNextSerie">
-                            </div>
-                            <div id="listProducts" class="list-group list-hide">
-                                <div class="list-items"></div>
-                            </div>
-                    </div> -->
-
-                     <!-- Moneda posición 5 -->
-                     <!-- <div class="row pos5 hide-items">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtCoin" class="form-select form-select-sm"><option value="0" selected>Selecciona moneda</option></select>
-                            <label for="txtCoin">Moneda</label>
-                        </div>
-                    </div>
- -->
-                    <!-- Costo,Cantidad,Serie posición 5,4 y 6 -->
-                    <!-- <div class="row">
-                        <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos5 hide-items">
-                        <input id="txtCost" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
-                            <label for="txtCost">Costo Total</label>
-                        </div>
-                        <div class="col-md-4 col-lg-4 col-xl-4 mb-2 pos4 form-floating hide-items">
-                            <input id="txtQuantity" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos" value=1>
-                            <label for="txtQuantity">Cantidad</label>
-                        </div>
-                        <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos6 hide-items">
-                            <input id="txtSerie" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" style="text-transform:uppercase" autocomplete="off">
-                            <label for="txtSerie">Serie</label>
-                        </div>
-                    </div> -->
-                    <!-- Marca 6 -->
-                    <!-- <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 hide-items">
-                            <input id="txtMarca" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la marca de productos" style="text-transform:uppercase" autocomplete="off">
-                            <label for="txtMarca">Marca</label>
-                        </div>
-                    </div> -->
-                    <!-- Costo Importacion,Pedimento 5,4  -->
                     <div class="row pos3 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos5 hide-items">
                         <input id="txtCostImp" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
