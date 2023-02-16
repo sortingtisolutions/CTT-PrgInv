@@ -39,7 +39,7 @@ function getProjects(catId) {
 
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
-    //console.log('DOS',dt);
+    console.log('DOS',dt);
     $('#tblProyects tbody').html('');
     if (dt[0].pjt_id != '0') {
         var catId = dt[0].cat_id;
@@ -48,7 +48,7 @@ function putProducts(dt) {
             var H = `
                 <tr id="${u.pjt_id}">
                     <td class="edit"><i class='fas fa-edit detail'></i></td>
-                    <td class="product-name editable">${u.pjt_name}</td>
+                    <td class="product-name editable">${u.pjttp_name}</td>
                     <td class="product-name editable">${u.pjt_name}</td>
                     <td class="product-name editable">${u.pjt_number}</td>
                     <td class="sku editable list">${u.pjt_date_start}</td>
@@ -119,10 +119,10 @@ function settingTable() {
         fixedHeader: true,
         columns: [
             {data: 'editable',      class: 'edit', orderable: false},
+            {data: 'pjttp_name',    class: 'product-name'},
             {data: 'pjt_name',      class: 'product-name'},
             {data: 'pjt_number',    class: 'product-name'},
-            {data: 'pjt_date_start', class: 'product-name'},
-            {data: 'pjt_date_end',  class: 'sku'},
+            {data: 'pjt_date_start', class: 'sku'},
             {data: 'pjt_date_end',  class: 'sku'},
             {data: 'pjt_date_project', class: 'sku'},
             {data: 'pjt_location',  class: 'product-name'},

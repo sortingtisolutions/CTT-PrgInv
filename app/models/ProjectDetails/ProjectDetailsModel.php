@@ -213,20 +213,6 @@ class ProjectDetailsModel extends Model
     }    
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /** ====== Listado de productos relacionados como accesosrios ================================  */
     public function listProductsRelated($params)
     {
