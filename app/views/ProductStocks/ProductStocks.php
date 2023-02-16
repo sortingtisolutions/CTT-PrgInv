@@ -108,7 +108,7 @@
 
             <div class="mvst_table" style="text-align:left">
 
-                <h1>Productos en Existencia</h1>
+                <h1>Resultado de Consulta</h1>
 
                    <div class="row">
                         <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2  mb-2 form-floating" hidden>

@@ -146,7 +146,7 @@ function verifica_usuario() {
         window.location = 'Login';
     } else {
         var pagina = 'Menu/Menu';
-        var par = `[{"userid":"${galleta[0]}"}]`;
+        var par = `[{"userid":"${galleta.split('|')[0]}"}]`;
         var tipo = 'json';
         var selector = set_menu_on_page;
         fillField(pagina, par, tipo, selector);

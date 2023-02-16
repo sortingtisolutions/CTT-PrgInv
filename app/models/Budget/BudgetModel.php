@@ -210,9 +210,9 @@ public function listDiscounts($params)
                     WHEN prd_level ='K' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
                     WHEN prd_level ='P' THEN 
-                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
-                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     END AS stock
             FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
@@ -593,19 +593,19 @@ public function saveBudgetList($params)
                     bg.bdg_days_test, bg.bdg_discount_test, bg.bdg_insured, bg.bdg_order, bg.ver_id, bg.prd_id, vr.pjt_id 
                 FROM ctt_budget AS bg
                 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
-                WHERE bg.ver_id = $verId;";
+                WHERE bg.ver_id = $verId ORDER BY bg.bdg_order asc;";
         $this->db->query($qry1);
 
         $qry2 = "INSERT INTO ctt_projects_content (
                     pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, 
                     pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
-                    pjtcn_status, ver_id, prd_id, pjt_id, pjtvr_id
+                    pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id
                 )
                 SELECT 
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, 
                     pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, 
-                    pjtvr_status, ver_id, prd_id, pjt_id, pjtvr_id
-                FROM ctt_projects_version WHERE ver_id = $verId;";
+                    pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id, pjtvr_id
+                FROM ctt_projects_version WHERE ver_id = $verId ORDER BY pjtvr_order;";
 
         return $this->db->query($qry2);
 

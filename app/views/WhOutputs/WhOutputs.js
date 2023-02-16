@@ -12,7 +12,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     setTimeout(() => {
-        deep_loading('O');
+        //deep_loading('O');
         //console.log('UNO');
         $('.tblProdMaster').css({display: 'none'});
         // setting_table();
@@ -29,41 +29,6 @@ function getProjects(catId) {
     fillField(pagina, par, tipo, selector);
 }
 
-/* function getSelectProject(pjtid) {
-    var pagina = 'WhOutputs/getSelectProject';
-    var par = `[{"prdId":"${pjtid}"}]`;
-    var tipo = 'json';
-    var selector = putSelectProject;
-    fillField(pagina, par, tipo, selector);
-} */
-
-/** +++++  coloca los productos en la tabla */
-function putProducts(dt) {
-    console.log('DOS',dt);
-    $('#tblProyects tbody').html('');
-    if (dt[0].pjt_id != '0') {
-        var catId = dt[0].cat_id;
-        //console.log('444',dt);
-        $.each(dt, function (v, u) {
-            var H = `
-                <tr id="${u.pjt_id}">
-                    <td class="edit"><i class='fas fa-edit detail'></i></td>
-                    <td class="product-name editable">${u.pjttp_name}</td>
-                    <td class="product-name editable">${u.pjt_name}</td>
-                    <td class="product-name editable">${u.pjt_number}</td>
-                    <td class="sku editable list">${u.pjt_date_start}</td>
-                    <td class="sku editable list">${u.pjt_date_end}</td>
-                    <td class="sku editable list">${u.pjt_date_project}</td>
-                    <td class="product-name editable">${u.pjt_location}</td>
-                </tr>`;
-            $('#tblProyects tbody').append(H);
-        });
-        settingTable();
-        activeIcons();
-    } else {
-        settingTable();
-    }
-}
 
 /** +++++  configura la table de productos */
 function settingTable() {
@@ -118,14 +83,14 @@ function settingTable() {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            {data: 'editable',      class: 'edit', orderable: false},
-            {data: 'pjttp_name',    class: 'product-name'},
-            {data: 'pjt_name',      class: 'product-name'},
-            {data: 'pjt_number',    class: 'product-name'},
+            {data: 'editable',      class: 'edit', orderable: false},      
+            {data: 'pjt_name',      class: 'supply'},
+            {data: 'pjt_number',    class: 'sku'},
+            {data: 'pjttp_name',    class: 'supply'},
             {data: 'pjt_date_start', class: 'sku'},
             {data: 'pjt_date_end',  class: 'sku'},
-            {data: 'pjt_date_project', class: 'sku'},
-            {data: 'pjt_location',  class: 'product-name'},
+            {data: 'pjt_date_project', class: 'date'},
+            {data: 'pjt_location',  class: 'sku'},
         ],
     });
 
@@ -139,24 +104,51 @@ function settingTable() {
 
 }
 
+/** +++++  coloca los productos en la tabla */
+function putProducts(dt) {
+    //console.log('DOS',dt);
+    $('#tblProyects tbody').html('');
+    if (dt[0].pjt_id != '0') {
+        var catId = dt[0].cat_id;
+        //console.log('444',dt);
+        $.each(dt, function (v, u) {
+            var H = `
+                <tr id="${u.pjt_id}">
+                    <td class="sku"><i class='fas fa-edit detail'></i><i class='fas fa-door-open toWork'></i></td>
+                    <td class="supply">${u.pjt_name}</td>
+                    <td class="sku">${u.pjt_number}</td>
+                    <td class="supply">${u.pjttp_name}</td>
+                    <td class="sku  list">${u.pjt_date_start}</td>
+                    <td class="sku  list">${u.pjt_date_end}</td>
+                    <td class="date  list">${u.pjt_date_project}</td>
+                    <td class="supply editable">${u.pjt_location}</td>
+                </tr>`;
+            $('#tblProyects tbody').append(H);
+        });
+        settingTable();
+        activeIcons();
+    } else {
+        settingTable();
+    }
+}
+
+
 /** +++++  Activa los iconos */
 function activeIcons() {
-    $('.toLink')
+    $('.toWork')
         .unbind('click')
         .on('click', function () {
-            let prd = $(this).parents('tr').attr('id');
-            let qty = $(this).parent().attr('data-content').split('|')[2];
-            console.log(pkt, prd, qty);
+            let locID = $(this);
+            let pjtid = locID.parents('tr').attr('id');
 
-            if (qty > 0) {
-                //getSeries(prd);
-            }
+            //console.log('Paso ToWork..', pjtid);
+            confirm_to_work(pjtid);
         });
 
     $('.detail')
         .unbind('click')
         .on('click', function () {
-            console.log('modif');
+            console.log('Pasando siguiente ventana...');
             let sltor = $(this);
             let pjtid = sltor.parents('tr').attr('id');
             let prdNm = 'Modifica proyecto';
@@ -166,6 +158,29 @@ function activeIcons() {
 
             window.location = 'WhOutputContent';
         });
+
+}
+
+function confirm_to_work(pjtid) {
+    $('#starToWork').modal('show');
+    $('#txtIdProductPack').val(pjtid);
+    //borra paquete +
+    $('#btnToWork').on('click', function () {
+        let Id = $('#txtIdProductPack').val();
+        let tabla = $('#tblProducts').DataTable();
+        $('#starToWork').modal('hide');
+
+        //console.log('Datos',pjtid,Id);
+        var pagina = 'WhOutputs/UpdateSeriesToWork';
+        var par = `[{"pjtid":"${pjtid}"}]`;
+        var tipo = 'json';
+        var selector = putToWork;
+        fillField(pagina, par, tipo, selector);
+    });
+}
+
+function putToWork(dt){
+    console.log(dt)
 }
 /*
 function putSelectProject(dt) {

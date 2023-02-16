@@ -154,7 +154,7 @@ function actionButtons() {
 
 function CancelProyect(pjtId) {
     let H = `<div class="emergent__warning">
-    <p>¿Realmente requieres de borrar este producto?</p>
+    <p>¿Realmente requieres cancelar este Proyecto?</p>
     <button id="killYes" class="btn btn-primary">Si</button>  
     <button id="killNo" class="btn btn-danger">No</button>  
     </div>`;
@@ -167,7 +167,7 @@ function CancelProyect(pjtId) {
             let obj = $(this);
             let resp = obj.attr('id');
             if (resp == 'killYes') {
-                modalLoading('S', 'Cancelando proyecto');
+                modalLoading('S', 'Cancelando proyecto y liberando productos');
                 var pagina = 'ProjectCancel/CancelProject';
                 var par = `[{"pjtId":"${pjtId}"}]`;
                 var tipo = 'html';

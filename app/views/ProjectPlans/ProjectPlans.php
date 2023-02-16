@@ -335,7 +335,8 @@
                     <th>Producto</th>
                     <th>Existencias</th>
                     <th>Tipo</th>
-                    <th>Catálogo</th>
+                    <th>Sub-Categoria</th>
+                    <th>Precio</th>
                 </tr>
             </thead>
             <tbody></tbody>

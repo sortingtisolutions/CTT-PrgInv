@@ -34,6 +34,18 @@ function inicial() {
     if (altr == 1) {
         getProjects();
         widthTable(tblprod);
+
+        $('#GuardarClosure').on('click', function () {
+            saveDocumentClosure();
+        
+         });
+      
+         $('#PrintClosure').on('click', function () {
+            /* LimpiaModal();
+            getTipoProveedor();
+            getOptionYesNo(); */
+         });
+
     } else {
         setTimeout(() => {
             inicial();
@@ -104,18 +116,18 @@ function getProjectContent(pjtId) {
         tblprod.find('tbody').html('');
         $.each(dt, function (v, u) {
             let H = `<tr>
-                            <td class="cn"></td>
-                            <td class="lf">${u.pjtdt_prod_sku}</td>
-                            <td class="lf">${u.pjtcn_prod_name}</td>
-                            <td class="cn">1</td>
-                            <td class="cn"></td>
-                            <td class="rg">${fnm(
-                                u.pjtcn_prod_price,
-                                2,
-                                '.',
-                                ','
-                            )}</td>
-                            <td class="lf">${u.ser_comments}</td>
+                        <td class="cn"></td>
+                        <td class="lf">${u.pjtdt_prod_sku}</td>
+                        <td class="lf">${u.pjtcn_prod_name}</td>
+                        <td class="cn">1</td>
+                        <td class="cn"></td>
+                        <td class="rg">${fnm(
+                            u.pjtcn_prod_price,
+                            2,
+                            '.',
+                            ','
+                        )}</td>
+                        <td class="lf">${u.ser_comments}</td>
                     </tr>`;
             tblprod.append(H);
         });
@@ -152,6 +164,47 @@ function findExpenda(pjtId) {
         });
     }
 }
+
+function saveDocumentClosure() {
+    
+        let cloTotProy = $('#totProject').val();
+        let cloTotMaint = $('#totMaintenance').val();
+        let cloTotExpen = $('#totExpendab').val();
+        let cloTotCombu = $('#totDiesel').val();
+        let cloTotDisco = $('#totDiscount').val();
+        let cloCommen = $(`#txtComments`).val();
+        let cusId = 1;
+        let pjtid = 1;
+        let usrid = 1;
+        let verid = 1;
+
+        var par = `
+            [{
+                "cloTotProy" : "${cloTotProy}",
+                "cloTotMaint" : "${cloTotMaint}",
+                "cloTotExpen" : "${cloTotExpen}",
+                "cloTotCombu" : "${cloTotCombu}",
+                "cloTotDisco" : "${cloTotDisco}",
+                "cloCommen" : " ${cloCommen}",
+                "cusId" :   "${cusId}",
+                "pjtid" : "${pjtid}",
+                "usrid" : "${usrid}",
+                "verid" : "${verid}"
+            }]
+        `;
+        console.log('EDITA ',par);
+        var pagina = 'ProjectClosed/saveDocumentClosure';
+        var tipo = 'html';
+        var selector = resSaveClosure;
+        fillField(pagina, par, tipo, selector);
+}
+
+function resSaveClosure(dt) {
+    console.log(dt);
+    /* $('#CustomerModal .btn_close').trigger('click');
+    activeIcons(); */
+}
+
 
 function findMaintenance(pjtId) {
     let cfr = 0;

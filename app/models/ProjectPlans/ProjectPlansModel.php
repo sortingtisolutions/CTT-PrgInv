@@ -126,7 +126,6 @@ class ProjectPlansModel extends Model
 
     } 
 
-
 /** ====== Listado clientes ==================================================================  */
     public function listCustomers($params)
     {
@@ -218,7 +217,7 @@ class ProjectPlansModel extends Model
         $pjtId         = $this->db->real_escape_string($params['pjtId']);
         $verId         = $this->db->real_escape_string($params['verId']);
 
-        $qry1 = "UPDATE ctt_projects SET pjt_status = '3' WHERE pjt_id = $pjtId;";
+        $qry1 = "UPDATE ctt_projects SET pjt_status = '4' WHERE pjt_id = $pjtId;";
         $this->db->query($qry1);
 
         $qry2 = "UPDATE ctt_version SET ver_status = 'P', ver_active = '1', ver_master = '1', ver_code = 'P0001' WHERE ver_id = $verId;";
@@ -458,10 +457,16 @@ class ProjectPlansModel extends Model
     }
 
     
+/** ====== Guarda una nueva version ==========================================================  */
+public function saveDateProject($params)
+{
+    $pjtId    = $this->db->real_escape_string($params['pjtId']);
 
+    $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = SYSDATE() WHERE pjt_id = $pjtId;";
+    $this->db->query($qry1);
 
-
-
+    return $pjtId;
+}
 
 
     
@@ -639,27 +644,6 @@ class ProjectPlansModel extends Model
                      WHERE pc.pjt_id = $pjtId;";
             return $this->db->query($qry1);
      }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /** ====== Agrega contenido de la nueva version ==============================================  */

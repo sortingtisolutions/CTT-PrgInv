@@ -61,4 +61,12 @@ class WhOutputsController extends Controller
 		echo $res;
 	}
 
+	// Lista los proyectos
+	public function UpdateSeriesToWork($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->UpdateSeriesToWork($request_params);
+		$res = $result;
+		echo $res;
+    }
 }

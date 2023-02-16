@@ -162,7 +162,6 @@ class ProjectDetailsModel extends Model
         return $this->db->query($qry);
     }    
 
-    
 /** ====== Listado de tipos de llamados ======================================================  */
     public function listProjectsTypeCalled($params)
     {
@@ -185,9 +184,9 @@ class ProjectDetailsModel extends Model
                     WHEN prd_level ='K' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
                     WHEN prd_level ='P' THEN 
-                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
-                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     END AS stock
             FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
@@ -196,8 +195,7 @@ class ProjectDetailsModel extends Model
             ORDER BY pd.prd_name ;";
         return $this->db->query($qry);
     } 
-
-    
+ 
 /** ====== Listado de comentarios registrados al proyecto ====================================  */
     public function listComments($params)
     {
@@ -211,7 +209,6 @@ class ProjectDetailsModel extends Model
                 ORDER BY com_date ASC;";
         return $this->db->query($qry);
     }    
-
 
 /** ====== Listado de productos relacionados como accesosrios ================================  */
     public function listProductsRelated($params)
@@ -449,7 +446,16 @@ class ProjectDetailsModel extends Model
         return $pjtId.'|'. $verId;
     }  
 
+ /** Actualiza la fecha del proyecto, en la que hubo un movimiento */   
+    public function saveDateProject($params)
+    {
+        $pjtId    = $this->db->real_escape_string($params['pjtId']);
     
+        $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = SYSDATE() WHERE pjt_id = $pjtId;";
+        $this->db->query($qry1);
+    
+        return $pjtId;
+    }  
 
 /** ====== Guarda una nueva version ==========================================================  */
     public function SaveVersion($params)

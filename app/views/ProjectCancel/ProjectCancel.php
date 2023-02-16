@@ -17,7 +17,7 @@
                         <h1>cancelacion de proyectos</h1>
                     </div>
                     <div id="dvProjects"></div>
-                    <table class="display compact nowrap"  id="tblProjects" style="min-width: 750px">
+                    <table class="display compact nowrap"  id="tblProjects" style="min-width: 950px">
                         <thead>
                             <tr>
                                 <th style="width:  40px"></th>

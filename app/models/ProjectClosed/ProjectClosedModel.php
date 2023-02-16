@@ -49,7 +49,30 @@ class ProjectClosedModel extends Model
 
     }
 
+    public function saveDocumentClosure($params)
+    {
+        $cusId =    $this->db->real_escape_string($params['cusId']);
+        $cloTotProy =  $this->db->real_escape_string($params['cloTotProy']);
+        $cloTotMaint = $this->db->real_escape_string($params['cloTotMaint']);
+        $cloTotExpen = $this->db->real_escape_string($params['cloTotExpen']);
+        $cloTotCombu =  $this->db->real_escape_string($params['cloTotCombu']);
+        $cloTotDisco =  $this->db->real_escape_string($params['cloTotDisco']);
+        $cloCommen = $this->db->real_escape_string($params['cloCommen']);
+        $pjtid = $this->db->real_escape_string($params['pjtid']);
+        $usrid = $this->db->real_escape_string($params['usrid']);
+        $verid = $this->db->real_escape_string($params['verid']);
+      
+            $qry="INSERT INTO ctt_documents_closure(clo_total_proyects, clo_total_maintenance, 
+            clo_total_expendables, clo_total_diesel, clo_total_discounts, clo_flag_send, 
+            clo_fecha_cierre, clo_comentarios, cus_id, pjt_id, usr_id, ver_id)
+            VALUES ($cloTotProy,$cloTotMaint,$cloTotExpen,$cloTotCombu,$cloTotDisco,
+                0,SYSDATE(),$cloCommen,$cusId,$pjtid,$usrid,$verid);";
 
+        $this->db->query($qry);
+        $prdId = $this->db->insert_id;
+
+        return  $prdId;
+    }
 
 
 }

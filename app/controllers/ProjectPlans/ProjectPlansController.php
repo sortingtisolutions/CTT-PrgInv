@@ -414,7 +414,9 @@ class ProjectPlansController extends Controller
             $detail             = $this->model->cleanDetail($pjtId);
             $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
             $result             = $this->model->getProjectVersion($pjtId);
+            $dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->setSeries($result);
+            
 
         } else {
             //MST actualiza los datos de una version maestra 
@@ -422,7 +424,9 @@ class ProjectPlansController extends Controller
             $projectVersion     = $this->model->settingProjectVersion($pjtId, $verId);
             $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
             $result             = $this->model->getVersionMice($pjtId);
+            $dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->updateSeries($result);
+            
         }
 
         echo $verId . '|'. $pjtId;
@@ -712,6 +716,7 @@ class ProjectPlansController extends Controller
         $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
         $result         = $this->model->getProjectVersion($pjtId);
+        $dateproject        = $this->model->saveDateProject($pjtId);
         $response       = $this->setSeries($result);
 
         echo $verId . '|'. $pjtId;
