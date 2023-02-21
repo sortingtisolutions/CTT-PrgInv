@@ -16,13 +16,6 @@
                 <div class="form-group">
                 <div class="form_primary">
                     <h4 class="mainTitle">Datos de los Proyectos</h4>
-
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtTipoProject" type="text" class="form-control form-control-sm"  >
-                                <label for="txtTipoProject">Tipo de Proyecto</label>
-                            </div>
-                        </div>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProjectName" type="text" class="form-control form-control-sm" >
@@ -33,6 +26,12 @@
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProjectNum" type="text" class="form-control form-control-sm" >
                                 <label for="txtProjectNum">Numero Proyecto</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <input id="txtTipoProject" type="text" class="form-control form-control-sm"  >
+                                <label for="txtTipoProject">Tipo de Proyecto</label>
                             </div>
                         </div>
 						<div class="row">
@@ -48,19 +47,19 @@
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtLocation" type="text" class="form-control form-control-sm" >
-                                <label for="txtLocation">Locacion</label>
+                                <label for="txtLocation">Dirección de Locación</label>
                             </div>
                         </div>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtCustomer" type="text" class="form-control form-control-sm" >
-                                <label for="txtCustomer">Cliente</label>
+                                <label for="txtCustomer">Nombre Cliente</label>
                             </div>
                         </div>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtAnalyst" type="text" class="form-control form-control-sm" >
-                                <label for="txtAnalyst">Analista</label>
+                                <label for="txtAnalyst">Analista de Programación</label>
                             </div>
                         </div>
 						<div class="row">
@@ -69,6 +68,15 @@
                                 <label for="txtFreelance">Freelance Asignado</label>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
+                            <div class="col">
+                                <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordOutPut">Registrar Salida</button>
+                            </div>
+                            <!-- <div class="col-6">
+                                <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
+                            </div> -->
                     </div>
 
                     <div class="form_secundary">
@@ -90,7 +98,7 @@
                                 <label for="txtSubcategoryProduct" class="form-label">Subcategoia</label>
                             </div>
                         </div>
-
+                        
                     </div>
                 </div>
             </div>
@@ -98,7 +106,6 @@
 
             <div class="mvst_table">
                 <div class="tblProdMaster">
-			<h1> </h1>
                         <h3>Asignacion de Productos</h3>
                         <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%">
                             <thead>
@@ -151,7 +158,6 @@
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <table class="display compact nowrap"  id="tblSerie" style="width: 100%">
                 <thead>
-
                     <tr>
                         <th style="width:  30px"></th>
                         <th style="width: 100px">SKU</th>
@@ -161,29 +167,34 @@
                         <th style="width:  50px">Status</th>
                     </tr>
                 </thead>
+                <tbody></tbody>
             </table>
         </div>
     </div>
 <!-- End Ventana modal SERIES -->
 
 <!-- Start Ventana modal CHANGESERIES -->
-<div class="overlay_background overlay_hide" id="ChangeSerieModal">
+<div class="overlay_background overlay_hide" id="ChangeSerieModal" style="width: 80%">
         <div class="overlay_modal">
-            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar 2</span></div>
-            <table class="display compact nowrap"  id="tblChangeSerie">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <div><h1></h1></div>
+            <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Cambio</button>
+           <!--  <div class="formButtons">
+                <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Cambio</button>
+            </div> -->
+            <table class="display compact nowrap"  id="tblChangeSerie" style="width: 100%">
                 <thead>
-                <tr>
-                    <th colspan="6"><span class="btn_back" align="left" >Atras</span></th>
-                </tr>
                     <tr>
-                        <th style="width:  30px"></th>
+                        <th style="width:  10px"></th>
                         <th style="width: 100px">SKU</th>
-                        <th style="width: 350px">Descripcion Producto</th>
-                        <th style="width:  70px">Num Serie</th>
-                        <th style="width:  50px">Status</th>
-                        <th style="width:  50px">Etapa</th>
+                        <th style="width: 200px">Descripcion Producto</th>
+                        <th style="width:  30px">Seleccionar</th>
+                        <th style="width:  80px">Num Serie</th>
+                        <th style="width:  40px">Status</th>
+                        <th style="width:  40px">Etapa</th>
                     </tr>
                 </thead>
+                <tbody></tbody>
             </table>
         </div>
     </div>

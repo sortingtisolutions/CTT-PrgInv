@@ -59,7 +59,7 @@
                     <div class="row list-finder pos1 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <textarea class="form-control form-control-sm" id="txtComments" style="height:5rem; text-transform:uppercase" autocomplete="off" rows="3"></textarea>
-                            <label for="txtComments">Comentarios</label>
+                            <label for="txtComments">Comentarios al documento</label>
                         </div>
                     </div>
                         <div class="row pos1 hide-items">
@@ -113,7 +113,7 @@
                     
                     <div class="totales__grupo">
                         <div class="totales__grupo-label">Totales</div>
-                        <div class="totales__grupo-dato"  id="totals" >0.00</div>
+                        <div class="totales__grupo-dato tope"  id="totals" >0.00</div>
                     </div>
                         
                 </div>
@@ -129,7 +129,7 @@
                                     <th class="cn">Cantidad</th>
                                     <th class="cn">Status</th>
                                     <th class="rg">Precio</th>
-                                    <th class="lf">Comentarios</th>
+                                    <th class="lf">Comentarios individuales</th>
                                 </tr>
                             </thead>
                             <tbody><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tbody>
@@ -147,7 +147,28 @@
     
 </div>
 
+<div class="modal fade" id="starClosure" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+            <div class="modal-header ">
+            </div>
+            <div class="modal-body" style="padding: 0px !important;">
 
+            <div class="row">
+                <input type="hidden" class="form-control" id="txtIdClosure" aria-describedby="basic-addon3">
+                <div class="col-12 text-center">
+                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Estas seguro de Cerrar el proyecto?</span>
+                </div>
+            </div>
+
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" id="btnClosure">Si</button>
+                </div>
+            </div>
+    </div>
+</div>
 
 
 

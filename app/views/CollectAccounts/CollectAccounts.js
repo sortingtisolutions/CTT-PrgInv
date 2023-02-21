@@ -152,7 +152,7 @@ function activeIcons() {
     $('.detail')
         .unbind('click')
         .on('click', function () {
-            console.log('Pasando siguiente ventana...');
+            /* console.log('Pasando siguiente ventana...');
             let sltor = $(this);
             let pjtid = sltor.parents('tr').attr('id');
             let prdNm = 'Modifica proyecto';
@@ -160,7 +160,7 @@ function activeIcons() {
             console.log(pjtid);
             Cookies.set('pjtid', pjtid, {expires:1});
 
-            window.location = 'WhOutputContent';
+            window.location = 'WhOutputContent'; */
         });
 
 }

@@ -17,9 +17,9 @@ const size = [
     { s: 20 },
     { s: 100 },
     { s: 400 },
-    { s: 80 },
-    { s: 80 },
-    { s: 100 },
+    { s: 70 },
+    { s: 70 },
+    { s: 90 },
     { s: 600 },
 ];
 
@@ -36,6 +36,11 @@ function inicial() {
         widthTable(tblprod);
 
         $('#GuardarClosure').on('click', function () {
+            let locID = $(this);
+            let pjtid = locID.parents('tr').attr('id');
+
+            //console.log('Paso ToWork..', pjtid);
+            confirm_to_Closure(pjtid);
             saveDocumentClosure();
         
          });
@@ -113,6 +118,7 @@ function getProjectContent(pjtId) {
     fillField(pagina, par, tipo, selector);
     function putProjectContent(dt) {
         console.log(dt);
+        /* <td class="lf">${u.ser_comments}</td> */
         tblprod.find('tbody').html('');
         $.each(dt, function (v, u) {
             let H = `<tr>
@@ -120,14 +126,9 @@ function getProjectContent(pjtId) {
                         <td class="lf">${u.pjtdt_prod_sku}</td>
                         <td class="lf">${u.pjtcn_prod_name}</td>
                         <td class="cn">1</td>
-                        <td class="cn"></td>
-                        <td class="rg">${fnm(
-                            u.pjtcn_prod_price,
-                            2,
-                            '.',
-                            ','
-                        )}</td>
-                        <td class="lf">${u.ser_comments}</td>
+                        <td class="cn">${u.ser_situation}</td>
+                        <td class="rg">${fnm(u.costo, 2, '.', ',')}</td>
+                        <td class="lf"><input class="serprod fieldIn" type="text" id="id-${u.ser_id}" value="">${u.ser_comments}</td>
                     </tr>`;
             tblprod.append(H);
         });
@@ -251,4 +252,26 @@ function widthTable(tbl) {
     let wdt = size.reduce((acc, sz) => acc + sz.s, 0);
     tbl.css({ width: wdt + 'px' });
     tbl.sticky({ top: 'thead tr:first-child' });
+}
+
+function confirm_to_Closure(pjtid) {
+    $('#starClosure').modal('show');
+    $('#txtIdClosure').val(pjtid);
+    //borra paquete +
+    $('#btnClosure').on('click', function () {
+        /* let Id = $('#txtIdClosure').val();
+        let tabla = $('#tblProducts').DataTable(); */
+        $('#starClosure').modal('hide');
+
+        //console.log('Datos',pjtid,Id);
+        /* var pagina = 'WhOutputs/UpdateSeriesToWork';
+        var par = `[{"pjtid":"${pjtid}"}]`;
+        var tipo = 'json';
+        var selector = putToWork;
+        fillField(pagina, par, tipo, selector); */
+    });
+}
+
+function putToWork(dt){
+    console.log(dt)
 }

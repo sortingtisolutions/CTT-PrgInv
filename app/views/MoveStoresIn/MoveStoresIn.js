@@ -683,6 +683,7 @@ function read_exchange_table() {
     }
 }
 
+/* Generación del folio  */
 function putNextExchangeNumber(dt) {
     //console.log(dt);
     folio = dt;
@@ -772,7 +773,7 @@ function updated_stores(dt) {
     });
 }
 
-/* Generación del folio  */
+
 
 /**  ++++ Omite acentos para su facil consulta */
 function omitirAcentos(text) {

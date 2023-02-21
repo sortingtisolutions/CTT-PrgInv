@@ -14,8 +14,8 @@ function inicial() {
     setTimeout(() => {
         //deep_loading('O');
         //console.log('UNO');
-        $('.tblProdMaster').css({display: 'none'});
-        // setting_table();
+        $('.tblProyects').css({display: 'none'});
+        settingTable();
         getProjects(0);
     }, 100);
 }
@@ -39,8 +39,8 @@ function settingTable() {
         order: [[2, 'desc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [100, 200, 300, -1],
-            [100, 200, 300, 'Todos'],
+            [50, 100, 200, -1],
+            [50, 100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -87,14 +87,14 @@ function settingTable() {
             {data: 'pjt_name',      class: 'supply'},
             {data: 'pjt_number',    class: 'sku'},
             {data: 'pjttp_name',    class: 'supply'},
-            {data: 'pjt_date_start', class: 'sku'},
-            {data: 'pjt_date_end',  class: 'sku'},
+            {data: 'pjt_date_start', class: 'date'},
+            {data: 'pjt_date_end',  class: 'date'},
             {data: 'pjt_date_project', class: 'date'},
-            {data: 'pjt_location',  class: 'sku'},
+            {data: 'pjt_location',  class: 'supply'},
         ],
     });
 
-      $('.tblProdMaster')
+      $('.tblProyects')
         .delay(500)
         .slideDown('fast', function () {
             //$('.deep_loading').css({display: 'none'});
@@ -109,7 +109,7 @@ function putProducts(dt) {
     //console.log('DOS',dt);
     $('#tblProyects tbody').html('');
     if (dt[0].pjt_id != '0') {
-        var catId = dt[0].cat_id;
+        // var catId = dt[0].cat_id;
         //console.log('444',dt);
         $.each(dt, function (v, u) {
             var H = `
@@ -118,14 +118,14 @@ function putProducts(dt) {
                     <td class="supply">${u.pjt_name}</td>
                     <td class="sku">${u.pjt_number}</td>
                     <td class="supply">${u.pjttp_name}</td>
-                    <td class="sku  list">${u.pjt_date_start}</td>
-                    <td class="sku  list">${u.pjt_date_end}</td>
-                    <td class="date  list">${u.pjt_date_project}</td>
+                    <td class="date">${u.pjt_date_start}</td>
+                    <td class="date">${u.pjt_date_end}</td>
+                    <td class="date">${u.pjt_date_project}</td>
                     <td class="supply editable">${u.pjt_location}</td>
                 </tr>`;
             $('#tblProyects tbody').append(H);
         });
-        settingTable();
+        // settingTable();
         activeIcons();
     } else {
         settingTable();

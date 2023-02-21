@@ -148,14 +148,14 @@
             <div class="row">
                 <input type="hidden" class="form-control" id="txtIdProductPack" aria-describedby="basic-addon3">
                 <div class="col-12 text-center">
-                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Inicias la preparacion del proyecto?</span>
+                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Vas a capturar un pago para este documento?</span>
                 </div>
             </div>
 
             </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-danger" id="btnToWork">Iniciar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" id="btnToWork">Si, correcto</button>
                 </div>
             </div>
     </div>

@@ -15,17 +15,17 @@
                     <div class="row rowTop">
                         <h1>Control Salida de Proyecto</h1>
                      </div>
-                    <table class="display compact nowrap"  id="tblProyects" style="min-width: 1400px">
+                    <table class="display compact nowrap"  id="tblProyects" style="min-width: 1200px">
                         <thead>
                             <tr>
                                 <th style="width:  30px">Acciones</th>
                                 <th style="width: 200px">Nombre Proyecto</th>
-                                <th style="width:  70px">No. Proyecto</th>
+                                <th style="width:  60px">No. Proyecto</th>
                                 <th style="width: 100px">Tipo Proyecto</th>
                                 <th style="width:  40px">Fecha Inicio</th>
                                 <th style="width:  40px">Fecha Final</th>
-                                <th style="width:  70px">Hora <br>ultimo cambio</th>
-                                <th style="width:  40px">Locacion</th>
+                                <th style="width:  60px">Hora <br>ultimo cambio</th>
+                                <th style="width: 150px">Locacion</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -41,7 +41,7 @@
 <!-- End Contenedor Listado de PRODUCTOS  -->
 
 <!-- Start Ventana modal AGREGA O MODIFICA PRODUCTO -->
-<div class="overlay_background overlay_hide"id="ProductModal">
+<!-- <div class="overlay_background overlay_hide"id="ProductModal">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <div class="formButtons">
@@ -118,7 +118,7 @@
             </div>
         </div>
     </div>
-<!-- End Ventana modal Iniciar Proceso de Atencion -->
+ --><!-- End Ventana modal Iniciar Proceso de Atencion -->
 <div class="modal fade" id="starToWork" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
