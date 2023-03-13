@@ -12,12 +12,20 @@ class PerfilUserModel extends Model
 	public function GetModules($params)
 	{
 		if ($params['ModUser'] == '') {
-			$qry = "select mod_id,mod_code,mod_name,mod_description from ctt_modules;";
+			$qry = "SELECT mdl.mod_id,mdl.mod_code,mdl.mod_name,mdl.mod_description 
+					FROM ctt_modules AS mdl
+					INNER JOIN ctt_menu AS mnu ON mdl.mod_id=mnu.mod_id 
+					ORDER BY mnu.mnu_parent,mdl.mod_id;";
 		}  else {
 			if($params['tipeModul'] == 'Asig'){
-				$qry = "select mod_id,mod_code,mod_name,mod_description from ctt_modules where mod_id in (".$params['ModUser'].");"; //Asignados
+				$qry = "SELECT mdl.mod_id,mdl.mod_code,mdl.mod_name,mdl.mod_description 
+					FROM ctt_modules AS mdl
+					INNER JOIN ctt_menu AS mnu ON mdl.mod_id=mnu.mod_id 
+					where mod_id in (".$params['ModUser'].") 
+					ORDER BY mnu.mnu_parent,mdl.mod_id;"; //Asignados
 			}else{
-				$qry = "select mod_id,mod_code,mod_name,mod_description from ctt_modules where mod_id not in (".$params['ModUser'].");"; // Disponibles
+				$qry = "SELECT mod_id,mod_code,mod_name,mod_description from ctt_modules 
+				where mod_id not in (".$params['ModUser'].") ORDER BY mod_item;"; // Disponibles
 			}
 		}	
 		$result = $this->db->query($qry);
@@ -36,7 +44,7 @@ class PerfilUserModel extends Model
 // Optiene los Perfiles existentes
 	public function GetPerfiles()
 	{
-		$qry = "select prf_id,prf_code, prf_name, prf_description from ctt_profiles where prf_status = 1;";
+		$qry = "SELECT prf_id,prf_code, prf_name, prf_description from ctt_profiles where prf_status = 1;";
 		$result = $this->db->query($qry);
 		$lista = array();
 		while ($row = $result->fetch_row()){
@@ -53,7 +61,7 @@ class PerfilUserModel extends Model
 	public function getIdModuluesPerfiles($params)
 	{
 		//Optenemos los reportes asociados al perfil
-		$qry = "SELECT mod_id FROM ctt_profile_module WHERE prf_id = '".$params['idPerfil']."'";
+		$qry = "SELECT mod_id FROM ctt_profiles_modules WHERE prf_id = '".$params['idPerfil']."'";
 		$result = $this->db->query($qry);
 		$modulesAsing = "";
 		while ($row = $result->fetch_row()){
@@ -64,15 +72,14 @@ class PerfilUserModel extends Model
 	}
 
 	
-
 //Guarda perfil
 	public function SavePerfil($params)
 	{
         $estatus = 0;
 			try {
 				//Inserta perfil
-				$qry = "insert into ctt_profiles ( prf_code, prf_name, prf_description, prf_mod_start,prf_status) 
-						values('".$params['CodPerfil']."','".$params['NomPerfil']."','".$params['DesPerfil']."', 'Start',1);";
+				$qry = "INSERT into ctt_profiles ( prf_code, prf_name, prf_description, prf_mod_start,prf_status) 
+						values ('".$params['CodPerfil']."','".$params['NomPerfil']."','".$params['DesPerfil']."', 'Start',1);";
 				$this->db->query($qry);
 
 				//optiene id de perfil insertado
@@ -85,7 +92,7 @@ class PerfilUserModel extends Model
 				//inserta relacion modulo perfil
 				$arrayModules = explode(",", $params['modulesAsig']);
 				foreach ($arrayModules as $id) {
-					$qry = "insert into ctt_profile_module (prf_id,mod_id) values (".$lastid.",".$id.");";
+					$qry = "INSERT into ctt_profile_module (prf_id,mod_id) values (".$lastid.",".$id.");";
 					$this->db->query($qry);
 				}
 
@@ -117,7 +124,7 @@ class PerfilUserModel extends Model
 				//inserta relacion modulo perfil
 				$arrayModules = explode(",", $params['modulesAsig']);
 				foreach ($arrayModules as $id) {
-					$qry = "insert into ctt_profile_module (prf_id,mod_id) values (".$params['IdPerfil'].",".$id.");";
+					$qry = "INSERT into ctt_profile_module (prf_id,mod_id) values (".$params['IdPerfil'].",".$id.");";
 					$this->db->query($qry);
 				}
 				$estatus = $params['IdPerfil'];

@@ -12,7 +12,7 @@
     <div class="contenido">
 
         <div class="row mvst_group">
-            <div class="mvst_panel">
+            <div class="mvst_panel" style="width:280px; background-color: #e2edf3">
                 <div class="form-group">
                 <div class="form_primary">
                     <h4 class="mainTitle">Datos de los Proyectos</h4>
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <div style="height:20px;"></div> <!-- Agregar un espacio -->
                     <div class="row">
                             <div class="col">
                                 <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordOutPut">Registrar Salida</button>
@@ -107,15 +107,15 @@
             <div class="mvst_table">
                 <div class="tblProdMaster">
                         <h3>Asignacion de Productos</h3>
-                        <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%">
+                        <table class="display nowrap"  id="tblAsignedProd" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th style="width:  40px"></th>
-                                    <th style="width:  70px">SKU</th>
+                                    <th style="width:  20px"></th>
+                                    <th style="width:  60px">SKU</th>
                                     <th style="width:  auto">Descripcion</th>
-									<th style="width:  70px">Cantidad</th>
+									<th style="width:  60px">Cantidad</th>
                                     <th style="width:  70px">Tipo Producto</th>
-                                    <th style="width:  70px">Status</th>
+                                    <th style="width:  40px">Status</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

@@ -86,7 +86,7 @@ function setting_table_AsignedProd() {
         columns: [
             {data: 'editable', class: 'edit'},
             {data: 'pack_sku', class: 'sel sku'},
-            {data: 'packname', class: 'sel product-name'},
+            {data: 'packname', class: 'sel supply'},
             {data: 'packcount', class: 'sel sku'},
             {data: 'packlevel', class: 'sel sku'},
             {data: 'packstatus', class: 'sel sku'},
@@ -195,7 +195,7 @@ function settingSeries(){
             columns: [
                 {data: 'sermodif', class: 'edit'},
                 {data: 'seriesku', class: 'sku left'},
-                {data: 'sername', class: 'product-name left'},
+                {data: 'sername', class: 'supply left'},
                 {data: 'sernumber', class: 'sernumber'},
                 {data: 'sertype', class: 'sertype'},
             ],
@@ -304,7 +304,7 @@ function settingChangeSerie(){
         columns: [
             {data: 'serchange', class: 'edit'},
             {data: 'serdetsku', class: 'sku left'},
-            {data: 'serdetname', class: 'product-name left'},
+            {data: 'serdetname', class: 'supply left'},
             {data: 'serchoose', class: 'sku'},
             {data: 'serdetnumber', class: 'sernumber'},
             {data: 'serdetsitu', class: 'sertype'},

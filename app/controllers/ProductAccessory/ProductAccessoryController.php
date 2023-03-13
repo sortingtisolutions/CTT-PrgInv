@@ -158,7 +158,7 @@ public function listProductsById($request_params)
 public function listAccesorios($request_params)
 {
     $params =  $this->session->get('user');
-    $result = $this->model->listAccesorios();
+    $result = $this->model->listAccesorios($request_params['prdId']);
     $i = 0;
     while($row = $result->fetch_assoc()){
         $rowdata[$i] = $row;

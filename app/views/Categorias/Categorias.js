@@ -105,6 +105,7 @@ function getStores() {
 function putCategories(dt) {
     cats = dt;
 }
+//lena los datos de las categorias
 function fillCategories() {
     if (cats != null) {
         let tabla = $('#CategoriasTable').DataTable();

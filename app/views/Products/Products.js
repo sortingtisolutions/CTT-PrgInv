@@ -15,7 +15,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     btn = 'solo productos';
-    console.log('AQUI ENPIEZA');
+    console.log('AQUI EMPIEZA');
     if (altr == 1) {
         deep_loading('O');
         settingTable('0');
@@ -260,7 +260,7 @@ function fillProducts(ft) {
 /** +++++  configura la table de productos */
 function settingTable(catId) {
     let title = 'Lista de productos';
-    // $('#tblProducts').DataTable().destroy();
+    $('#tblProducts').DataTable().destroy();
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     var tabla = $('#tblProducts').DataTable({
         order: [[1, 'asc']],
@@ -837,8 +837,8 @@ function putSeries(dt) {
         destroy: true,
         order: [[1, 'desc']],
         lengthMenu: [
-            [100, 150, 200, -1],
-            [100, 150, 200, 'Todos'],
+            [50, 100, 150, -1],
+            [50, 100, 150, 'Todos'],
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -882,7 +882,7 @@ function build_modal_serie(dt) {
             .add({
                 //sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i><i class="fas fa-times-circle serie kill" id="K${u.ser_id}"></i>`,
                 sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i>`,
-                produsku: `${u.ser_sku.slice(0, 7)}-${u.ser_sku.slice(7, 11)}`,
+                produsku: `${u.ser_sku.slice(0, 10)}-${u.ser_sku.slice(10, 15)}`,
                 serlnumb: u.ser_serial_number,
                 dateregs: u.ser_date_registry,
                 cvstatus: u.ser_situation,
@@ -977,7 +977,7 @@ function putSelectSerie(dt) {
     console.log(dt);
     getInvoice();
     $('#txtSerIdSerie').val(dt[0].ser_id);
-    $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 7) + '-' + dt[0].ser_sku.slice(7, 11));
+    $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 7) + '-' + dt[0].ser_sku.slice(7, 15));
     $('#txtSerSerialNumber').val(dt[0].ser_serial_number);
     $('#txtSerDateRegistry').val(dt[0].ser_date_registry);
     $('#txtSerSup').val(dt[0].sup_business_name);

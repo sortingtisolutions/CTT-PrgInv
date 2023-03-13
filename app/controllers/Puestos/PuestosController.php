@@ -26,8 +26,22 @@
 		//OBTIENE LA LISTA DE PUESTOS
 		public function GetPuesto($request_params)
 		{
-	      $result = $this->model->GetPuesto($request_params);
-		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
+	      /* $result = $this->model->GetPuesto($request_params);
+		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	 */
+
+			$params =  $this->session->get('user');
+			$result = $this->model->GetPuesto($request_params);
+			$i = 0;
+			while($row = $result->fetch_assoc()){
+				$rowdata[$i] = $row;
+				$i++;
+			}
+			if ($i>0){
+				$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+			} else {
+				$res =  '[{"pue_id":"0"}]';	
+			}
+			echo $res;
 		}
 
 		public function SavePuesto($request_params)

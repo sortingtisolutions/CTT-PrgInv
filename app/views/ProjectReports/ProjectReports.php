@@ -12,12 +12,11 @@
         <div class="row mvst_group">
 
         <!-- Sidebar -->
-            <div class="mvst_panel" style="width:250px; background-color: #5F9EAB">
+            <div class="mvst_panel" style="width:280px; background-color: #e2edf3">
                 <div class="form-group" >
                     <div class="row">
                         <h1>Condiciones del Reporte</h1>
                         <label for="txtProjects"></label>
-                        
                     </div>
                     
                     <!-- <div class="row">
@@ -57,7 +56,7 @@
                             <label for="txtComments">Comentarios al cierre</label>
                         </div>
                     </div>
-                    <div class="row"><h1></h1></div>
+                    <div style="height:20px;"></div>
 
                     <div class="row"><h1>Seleccionar nivel de detalles</h1></div>
 
@@ -96,10 +95,11 @@
                         
                         <div class="totales__grupo">
                             <div class="totales__grupo-label">Entradas</div>
-                            <div><input class="form-check-input" type="checkbox" value="0" id="checkBack" ></div>
+                            <div><input class="form-check-input" type="checkbox" value="0" id="checkBack"></div>
                             <!-- <div class="totales__grupo-dato"  id="totals" >0.00</div> -->
                         </div>
                     </div>
+                    <div style="height:20px;"></div>
                     </div>
                         <div class="row pos1">
                             <div class="col-md-12 mb-5">
@@ -116,7 +116,7 @@
                 <div class="row mvst_group">
                     <div class="mvst_list projectClosed">
                         <div class="row rowTop">
-                        <h1>Seleccionar nivel de detalles</h1>
+                        <h1>Resultado de la consulta</h1>
                         </div>
                         <table class="display compact nowrap"  id="tblProducts" style="min-width: 1480px">
                             <thead>

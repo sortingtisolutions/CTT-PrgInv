@@ -13,10 +13,12 @@ class UsuariosModel extends Model
 // Optiene los Usuaios existentes *****
 	public function GetUsuarios()
 	{
-		$qry = "SELECT u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, p.prf_name, u.usr_dt_registry, u.usr_dt_last_access ,p.prf_id FROM ctt_users as u
-		INNER JOIN ctt_employees as e on e.emp_id = u.emp_id
-		LEFT JOIN ctt_profiles as p on p.prf_id = u.prf_id
-		WHERE u.usr_status = '1'";
+		$qry = "SELECT u.usr_id, u.usr_username, e.emp_fullname, e.emp_number, 
+				p.prf_name, u.usr_dt_registry, u.usr_dt_last_access ,p.prf_id 
+				FROM ctt_users as u
+				INNER JOIN ctt_employees as e on e.emp_id = u.emp_id
+				LEFT JOIN ctt_profiles as p on p.prf_id = u.prf_id
+				WHERE u.usr_status = '1' and u.emp_id>1;";
 		return $this->db->query($qry);
 	}
 
@@ -60,9 +62,6 @@ class UsuariosModel extends Model
 	}
 
 	
-
-
-	
 	public function SaveUsuario($params)
 	{
         $estatus = 0;
@@ -72,8 +71,8 @@ class UsuariosModel extends Model
 
 
 				//Inserta Usuario-Empleado
-				$qry = "insert into ctt_employees(emp_number, emp_fullname, emp_area, emp_status, pos_id, emp_report_to) 
-				values(".$params['NumEmpUsuario'].",'".$params['NomUsuario']."', '".$params['AreaEmpUsuario']."',1,".$params['idPuesto'].",".$params['idUserReport'].");";
+				$qry = "INSERT into ctt_employees(emp_number, emp_fullname, emp_area, emp_status, pos_id, emp_report_to,are_id) 
+				values(".$params['NumEmpUsuario'].",'".$params['NomUsuario']."', '".$params['AreaEmpUsuario']."',1,".$params['idPuesto'].",".$params['idUserReport'].",'".$params['AreaEmpUsuario']."');";
 				$this->db->query($qry);
 
 				//optiene id de Usuario insertado
@@ -84,7 +83,7 @@ class UsuariosModel extends Model
 				}
 
 				//Inserta Usuario
-				$qry = "insert into ctt_users (usr_username, usr_password, usr_dt_registry, emp_id, prf_id,usr_status) 
+				$qry = "INSERT into ctt_users (usr_username, usr_password, usr_dt_registry, emp_id, prf_id,usr_status) 
 				      values('".$params['UserNameUsuario']."','".$pass."',NOW(),".$lastid.", ".$params['idPerfil'].",1 ) ;";
 				$this->db->query($qry);
 
@@ -98,7 +97,7 @@ class UsuariosModel extends Model
 				//inserta relacion modulo perfil
 				$arrayModules = explode(",", $params['modulesAsig']);
 				foreach ($arrayModules as $id) {
-					$qry = "insert into ctt_users_modules (usr_id,mod_id) values (".$lastid.",".$id.");";
+					$qry = "INSERT into ctt_users_modules (usr_id,mod_id) values (".$lastid.",".$id.");";
 					$this->db->query($qry);
 				}
 				$estatus = $lastid;
@@ -152,7 +151,7 @@ class UsuariosModel extends Model
 				//inserta relacion modulo perfil
 				$arrayModules = explode(",", $params['modulesAsig']);
 				foreach ($arrayModules as $id) {
-					$qry = "insert into ctt_users_modules (usr_id,mod_id) values (".$params['IdUsuario'].",".$id.");";
+					$qry = "INSERT into ctt_users_modules (usr_id,mod_id) values (".$params['IdUsuario'].",".$id.");";
 					$this->db->query($qry);
 				}
 				$estatus = $params['IdUsuario'];

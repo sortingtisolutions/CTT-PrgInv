@@ -111,6 +111,7 @@ function getPerfilesUsuario(idPerfil) {
                 renglon += '<option id=' + row.prf_id + '  value="">' + row.prf_name + '</option> ';
             });
             $('#selectPerfilUsuario').append(renglon);
+
             if (idPerfil != '') {
                 $("#selectPerfilUsuario option[id='" + idPerfil + "']").attr('selected', 'selected');
             }
@@ -231,16 +232,11 @@ function SaveUsuario() {
     var location = 'Usuarios/SaveUsuario';
     var today = new Date();
     var fechaAcceso =
-        today.getFullYear() +
-        '-' +
-        addZeroNumber(today.getMonth(), 2) +
-        '-' +
-        today.getDate() +
-        ' ' +
-        addZeroNumber(today.getHours(), 2) +
-        ':' +
-        addZeroNumber(today.getMinutes(), 2) +
-        ':' +
+        today.getFullYear() + '-' +
+        addZeroNumber(today.getMonth(), 2) + '-' +
+        today.getDate() + ' ' +
+        addZeroNumber(today.getHours(), 2) + ':' +
+        addZeroNumber(today.getMinutes(), 2) + ':' +
         addZeroNumber(today.getSeconds(), 2);
     var fechaRegistro = fechaAcceso;
 
@@ -254,8 +250,8 @@ function SaveUsuario() {
 
     var idPerfil = $('#selectPerfilUsuario option:selected').attr('id');
     var idUserReport = $('#selectRowUserReporta option:selected').attr('id');
-    var idPuesto = $('#selectRowPuestos option:selected').attr('id');
 
+    var idPuesto = $('#selectRowPuestos option:selected').attr('id');
     var NomPuesto = $('#selectRowPuestos option:selected').text();
 
     var modulesAsig = '';
@@ -284,6 +280,7 @@ function SaveUsuario() {
         },
         url: location,
         success: function (respuesta) {
+            console.log(respuesta);
             if (IdUsuario != '') {
                 table
                     .row(':eq(' + positionRow + ')')
@@ -326,6 +323,11 @@ function SaveUsuario() {
             console.log(EX);
         },
     }).done(function () {});
+
+    LimpiaModal();
+    getPerfilesUsuario();
+    getPuestos();
+    getUserReport();
 }
 
 //Limpia datos en modal perfil *
@@ -543,18 +545,13 @@ function getModulesList(ModUser, tipeModul) {
         url: location,
         success: function (respuesta) {
             var renglon = '';
-
+            // console.log(respuesta);
             if (tipeModul == 'Asig') {
                 respuesta.forEach(function (row, index) {
                     renglon =
                         '<a href="#" class="list-group-item list-group-item-action" id="' +
-                        row.mod_id +
-                        '">' +
-                        row.mod_code +
-                        ' - ' +
-                        row.mod_name +
-                        '<br><span style="font-size: 10px;">' +
-                        row.mod_description +
+                        row.mod_id + '">' + row.mod_code + ' - ' + row.mod_name +
+                        '<br><span class="list-group-item-Text" style="font-size: 10px;">' + row.mod_description +
                         '</span></a>';
                     $('#listAsignado').append(renglon);
                 });
@@ -562,13 +559,8 @@ function getModulesList(ModUser, tipeModul) {
                 respuesta.forEach(function (row, index) {
                     renglon =
                         '<a href="#" class="list-group-item list-group-item-action" id="' +
-                        row.mod_id +
-                        '">' +
-                        row.mod_code +
-                        ' - ' +
-                        row.mod_name +
-                        '<br><span style="font-size: 10px;">' +
-                        row.mod_description +
+                        row.mod_id + '">' + row.mod_code + ' - ' + row.mod_name +  
+                        '<br><span class="list-group-item-Text" style="font-size: 10px;">' + row.mod_description +
                         '</span></a>';
                     $('#listDisponible').append(renglon);
                 });

@@ -45,6 +45,15 @@ function inicial() {
             // getProjectContent(pjtId);
         });
 
+        $('#btn_print')
+        .unbind('click')
+        .on('click', function () {
+            let pjtId = '0';
+            console.log('Print');
+            printReport();
+            // getProjectContent(pjtId);
+        });
+
     } else {
         setTimeout(() => {
             inicial();
@@ -249,6 +258,21 @@ function findCampos(pjtId) {
     // console.log(projDateStart);
     getProjectContent(fechaIni,fechaFin,findAna,findCli,bandera);
     
+}
+
+function printReport() {
+    let user = Cookies.get('user').split('|');
+    // let v = verId;
+    let v=5;
+    let u = user[0];
+    let n = user[2];
+    let h = localStorage.getItem('host');
+
+    console.log('Id-User', u, 'Name', n);
+    window.open(
+        `${url}app/views/ProjectReports/ProjectReportsReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        '_blank'
+    );
 }
 
 function findMaintenance(pjtId) {

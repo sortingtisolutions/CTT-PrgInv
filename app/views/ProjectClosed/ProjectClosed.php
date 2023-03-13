@@ -68,6 +68,7 @@
                             </div>
                         </div>
                     </div>
+                    <div style="height:20px;"></div>
                     <div class="row">
                         <div class="col-6">
                             <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.7rem !important;" id="GuardarClosure">Cerrar Proyecto</button>
@@ -136,15 +137,10 @@
                         </table>
                     </div>
                 <!-- Tabla de productos del proyecto -->
-                
             </div>        
         <!-- contenido de operación -->
-      
         </div>
-
-
     </div>
-    
 </div>
 
 <div class="modal fade" id="starClosure" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">

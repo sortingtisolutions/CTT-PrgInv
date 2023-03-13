@@ -112,9 +112,10 @@ function putProducts(dt) {
         // var catId = dt[0].cat_id;
         //console.log('444',dt);
         $.each(dt, function (v, u) {
+            // <i class="fa-solid fa-dolly"></i>
             var H = `
                 <tr id="${u.pjt_id}">
-                    <td class="sku"><i class='fas fa-edit detail'></i><i class='fas fa-door-open toWork'></i></td>
+                    <td class="sku"><i class='fa fa-solid fa-dolly detail'></i><i class='fa fa-cog toWork'></i></td>
                     <td class="supply">${u.pjt_name}</td>
                     <td class="sku">${u.pjt_number}</td>
                     <td class="supply">${u.pjttp_name}</td>

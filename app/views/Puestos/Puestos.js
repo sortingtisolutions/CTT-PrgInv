@@ -216,21 +216,13 @@ function getPuestoTable() {
             respuesta.forEach(function (row, index) {
                 renglon =
                     '<tr>' +
-                    "<td class='dtr-control'>" +
-                    row.pos_id +
-                    '</td>' +
-                    '<td>' +
-                    row.pos_name +
-                    '</td>' +
-                    '<td>' +
-                    row.pos_description +
-                    '</td>' +
+                    "<td class='dtr-control'>" + row.pos_id + '</td>' +
+                    '<td>' + row.pos_name + '</td>' +
+                    '<td>' + row.pos_description + '</td>' +
                     '<td class="text-center"> ' +
-                    '<button onclick="EditPuesto(' +
-                    row.pos_id +
+                    '<button onclick="EditPuesto(' +  row.pos_id +
                     ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen"></i></button>' +
-                    '<button onclick="ConfirmDeletPuesto(' +
-                    row.pos_id +
+                    '<button onclick="ConfirmDeletPuesto(' + row.pos_id +
                     ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-trash"></i></button>' +
                     '</td>' +
                     '</tr>';
@@ -243,8 +235,8 @@ function getPuestoTable() {
                     info: false,
                 },
                 lengthMenu: [
-                    [10, 50, 100, -1],
-                    ['10 Filas', '25 Filas', '50 Filas', 'Mostrar todo'],
+                    [20, 50, 100, -1],
+                    [20, 50, 100, 'Todos'],
                 ],
                 dom: 'Bfrtip',
                 buttons: [
@@ -314,23 +306,15 @@ function getPuestoTable() {
             respuesta.forEach(function (row, index) {
                 renglon =
                     '<tr>' +
-                    '<td class="text-center edit"> ' +
-                    '<button onclick="EditPuesto(' +
-                    row.pos_id +
-                    ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
-                    '<button onclick="ConfirmDeletPuesto(' +
-                    row.pos_id +
-                    ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
-                    '</td>' +
-                    "<td class='dtr-control text-center'>" +
-                    row.pos_id +
-                    '</td>' +
-                    '<td>' +
-                    row.pos_name +
-                    '</td>' +
-                    '<td>' +
-                    row.pos_description +
-                    '</td>' +
+                        '<td class="text-center edit"> ' +
+                        '<button onclick="EditPuesto(' + row.pos_id +
+                        ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
+                        '<button onclick="ConfirmDeletPuesto(' + row.pos_id +
+                        ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
+                        '</td>' +
+                        "<td class='dtr-control text-center'>" + row.pos_id + '</td>' +
+                        '<td>' + row.pos_name + '</td>' +
+                        '<td>' + row.pos_description + '</td>' +
                     '</tr>';
                 $('#tablaPuestoRow').append(renglon);
             });
@@ -345,8 +329,8 @@ function getPuestoTable() {
                     info: false,
                 },
                 lengthMenu: [
-                    [10, 25, 50, 100, -1],
-                    ['10', '25', '50', 'Todo'],
+                    [25, 50, 100, -1],
+                    ['25', '50', '100', 'Todo'],
                 ],
                 dom: 'Blfrtip',
                 buttons: [

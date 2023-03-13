@@ -35,7 +35,8 @@ public function listPackages()
     public function lastIdSubcategory($params)
     {
         $sbcId = $this->db->real_escape_string($params);
-        $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,3), signed integer)),0) + 1 as nextId  FROM ctt_products where sbc_id = $sbcId;";
+        $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,3), signed integer)),0) + 1 as nextId  
+                FROM ctt_products where sbc_id = $sbcId;";
         return $this->db->query($qry);
     }
 
@@ -83,10 +84,11 @@ public function getAccesoriesById($params)
 }
 
 // Listado de accesorios
-public function listAccesorios()
+public function listAccesorios($param)
 {
-    //$prdId = $this->db->real_escape_string($params);
-    $qry = "SELECT prd_id, prd_name, prd_sku FROM ctt_products WHERE prd_level = 'A' AND substr(prd_sku,5,1) = '';";
+    //$prd_id                     = $this->db->real_escape_string($param['prdId']);
+    $qry = "SELECT prd_id, prd_name, prd_sku FROM ctt_products 
+            WHERE prd_level = 'A' AND substr(prd_sku,5,1) = '';";
     return $this->db->query($qry);
 }
 

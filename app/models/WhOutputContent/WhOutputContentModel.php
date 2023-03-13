@@ -45,16 +45,8 @@ class WhOutputContentModel extends Model
    {
         $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
        
-        /* $qry = "SELECT pdt.pjtdt_id, pdt.pjtdt_prod_sku, prd.prd_name, prd.prd_level, prd.prd_status, 
-                pdt.ser_id,pdt.pjtvr_id, sr.ser_serial_number
-                FROM ctt_projects_content AS pcn
-                INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
-                INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
-                LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
-                WHERE pcn.pjtcn_id=$pjtcnid ORDER BY 2;";
- */
         $qry = "SELECT pdt.pjtdt_id, pdt.pjtdt_prod_sku, prd.prd_name, prd.prd_level, prd.prd_status, pdt.ser_id, pdt.pjtvr_id, 
-                ser.ser_sku, sr.ser_serial_number, sr.ser_situation, sr.ser_stage
+                sr.ser_sku, sr.ser_serial_number, sr.ser_situation, sr.ser_stage
                 FROM ctt_projects_content AS pcn
                 INNER JOIN ctt_projects_version as pjv ON pcn.pjtvr_id=pjv.pjtvr_id
                 INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
@@ -69,12 +61,6 @@ class WhOutputContentModel extends Model
    {
        $ser_id = $this->db->real_escape_string($params['serid']);
        $serorg = $this->db->real_escape_string($params['serorg']);
-
-       /* $qry = "SELECT '$serorg' as id_orig, ser_id, ser_sku, ser_serial_number, ser_situation, 
-                ser_stage, pr.prd_name
-                FROM ctt_series AS sr
-                INNER JOIN ctt_products AS pr ON sr.prd_id = pr.prd_id
-                WHERE ser_sku like '$pjtser_id%' and ser_situation='D' and ser_status=1;"; */
 
         $qry = "SELECT '$serorg' as id_orig, ser_id, ser_sku, ser_serial_number, 
                 ser_situation, ser_stage, pr.prd_name, pr.prd_sku

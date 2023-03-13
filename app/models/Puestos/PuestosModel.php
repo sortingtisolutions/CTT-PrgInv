@@ -60,7 +60,7 @@ class PuestosModel extends Model
 // Optiene los Usuaios existentes
 	public function GetPuestos()
 	{
-		$qry = " ";
+		$qry = "SELECT pos_id, pos_name, pos_description FROM ctt_position; ";
 		$result = $this->db->query($qry);
 		$lista = array();
 		while ($row = $result->fetch_row()){
@@ -74,14 +74,11 @@ class PuestosModel extends Model
 
     public function GetPuesto($params)
 	{
-		$qry = "SELECT pos_id, pos_name, pos_description FROM ctt_position WHERE pos_id = ".$params['id'].";";
+		/* $qry = "SELECT pos_id, pos_name, pos_description FROM ctt_position WHERE pos_id = ".$params['id'].";"; */
+		
+		$qry = "SELECT pos_id, pos_name, pos_description FROM ctt_position;";
 		$result = $this->db->query($qry);
-		if($row = $result->fetch_row()){
-			$item = array("pos_id" =>$row[0],
-			"pos_name" =>$row[1],
-			"pos_description" =>$row[2]);
-		}
-		return $item;
+		return $result;
 	}
 
 

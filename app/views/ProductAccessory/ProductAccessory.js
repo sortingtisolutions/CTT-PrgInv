@@ -360,7 +360,7 @@ function load_Accesories(prdId) {
 
 //valido
 function putAccesoriostable(dt) {
-    //console.log('llego a carga de accesorios');
+    console.log('llego a carga de accesorios');
     let tabla = $('#tblProducts').DataTable();
     tabla.rows().remove().draw();
 

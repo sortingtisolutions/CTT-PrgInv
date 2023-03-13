@@ -15,7 +15,7 @@
 						<h4 id="titulo">Nuevo Usuario</h4>  
 						<form id="formUsuario" class="row g-3 needs-validation" novalidate>
 
-							<div class="row">
+							<div class="row hide">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<input id="EmpIdUsuario" name="EmpIdUsuario" type="text" class="form-control form-control-sm"  autocomplete="off">
 									<input id="lastDate"     name="lastDate"     type="text" class="form-control form-control-sm"  autocomplete="off">
@@ -127,22 +127,19 @@
 
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-									<select id="selectRowPuestos"  name="selectRowPuestos"  class="form-select form-select-sm" required>
+									<select id="selectRowPuestos"  name="selectRowPuestos"  class="form-select form-select-sm" >
 									</select>
 									<label for="selectRowPuestos" class="form-label">Puesto</label>
 								</div>
 							</div>
 
 
-
-
-
 							<div class="row">
 								<div class="col-6">
-									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 1rem !important;" id="GuardarUsuario">Guardar</button>
+									<button type="button" class="btn btn-primary btn-sm btn-block" style="font-size: 1rem !important;" id="GuardarUsuario">Guardar</button>
 								</div>
 								<div class="col-6">
-									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
+									<button type="button" class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
 								</div>
 							</div>
 						</form>
@@ -156,7 +153,7 @@
 
 					<div class="row">
 						<div class="col-12 col-md-12">		
-								<table id="usuariosTable" class="display compact nowrap" style="width:100%">         
+								<table id="usuariosTable" class="display nowrap" style="width:100%">         
 										<thead>
 											<tr>
 													<th style="width: 30px"></th>

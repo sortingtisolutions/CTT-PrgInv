@@ -350,24 +350,18 @@ function getModulesList(ModUser, tipeModul) {
             respuesta.forEach(function (row, index) {
                renglon =
                   '<a href="#" class="list-group-item list-group-item-action" id="' +
-                  row.mod_id +
-                  '">' +
-                  row.mod_name +
-                  '<br><span class="list-group-item-Text">' +
-                  row.mod_description +
-                  '</span></a>';
+                  row.mod_id + '">' +
+                  row.mod_name + '<br><span class="list-group-item-Text">' +
+                  row.mod_description + '</span></a>';
                $('#listAsignado').append(renglon);
             });
          } else {
             respuesta.forEach(function (row, index) {
                renglon =
                   '<a href="#" class="list-group-item list-group-item-action" id="' +
-                  row.mod_id +
-                  '">' +
-                  row.mod_name +
-                  '<br><span class="list-group-item-Text" >' +
-                  row.mod_description +
-                  '</span></a>';
+                  row.mod_id + '">' +
+                  row.mod_name + '<br><span class="list-group-item-Text" >' +
+                  row.mod_description + '</span></a>';
                $('#listDisponible').append(renglon);
             });
          }

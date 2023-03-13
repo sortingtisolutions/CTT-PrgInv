@@ -16,7 +16,6 @@
 			<div class="mvst_panel">
 				<div class="form-group">
 
-
 					<div class="row" hidden>
 						<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 							<select id="txtTypeExchange" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona tipo de movimiento</option></select>

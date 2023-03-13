@@ -53,15 +53,13 @@
 
 					<div class="row">
 						<div class="col-12 col-md-12">		
-								<table id="PuestoTable" class="display compact nowrap" style="width:100%">         
+								<table id="PuestoTable" class="display nowrap" style="width:90%">         
 										<thead>
 											<tr>
-													<th style="width: 30px"></th>
-													<th style="width: 30px">Id</th>
-													<th style="width: auto">Nombre</th>
-                                       <th style="width: auto">Descripcion</th>
-
-
+												<th style="width: 20px"></th>
+												<th style="width: 20px">Id</th>
+												<th style="width: 100px">Nombre</th>
+                                       			<th style="width: 200px">Descripcion</th>
 											</tr>
 										</thead>
 										<tbody id="tablaPuestoRow">
