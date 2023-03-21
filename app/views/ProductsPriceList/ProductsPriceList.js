@@ -124,7 +124,7 @@ function putPriceList(dt) {
                     <td class="edit"></td>
                     <td class="sku"><span class="hide-support">${u.prd_id}</span>${u.prd_sku}</td>
                     <td class="product-name"><i class="${pack} fa-box-open fa-sm"></i> ${u.prd_name}</td>
-                    <td class="quantity"><span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name}|${u.prd_stock}|${u.prd_level}">${u.prd_stock}</span></td>
+                    <td class="quantity"><span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.prd_stock}|${u.prd_level}">${u.prd_stock}</span></td>
                     <td class="reserved">${reserved}</td>
                     <td class="price">${u.prd_price}</td>
                     <td class="sku">${u.prd_coin_type}</td>

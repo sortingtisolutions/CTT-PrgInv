@@ -13,7 +13,9 @@ class BudgetModel extends Model
     public function listCustomers($params)
     {
         $prd = $this->db->real_escape_string($params['prm']);
-        $qry = "SELECT cs.*, ct.cut_name FROM ctt_customers AS cs
+        //  $qry = "SELECT cs.cus_id,cs.cus_name,cs.cus_address,cs.cus_email,cs.cus_phone,cs.cus_qualification, ct.cut_name,cs.cut_id 
+        $qry = "SELECT cs.cus_id,cs.cus_name,cs.cus_address,cs.cus_email,cs.cus_phone,cs.cus_qualification, ct.cut_name, cs.cut_id
+                FROM ctt_customers AS cs
                 INNER JOIN ctt_customers_type AS ct ON ct.cut_id = cs.cut_id
                 WHERE cs.cus_status = 1 ORDER BY cs.cus_name;";
         return $this->db->query($qry);
@@ -141,12 +143,13 @@ class BudgetModel extends Model
     {
         $cusId = $this->db->real_escape_string($params['cusId']);
 
-        $qry = "SELECT * FROM ctt_customers_owner WHERE cus_id = $cusId OR cus_parent = $cusId;";
+        $qry = "SELECT cuo_id,cus_id,cus_parent 
+                FROM ctt_customers_owner 
+                WHERE cus_id = $cusId OR cus_parent = $cusId;";
         return $this->db->query($qry);
     }    
 
 
-    
     
 // Listado de versiones
     public function listVersion($params)
@@ -158,7 +161,6 @@ class BudgetModel extends Model
     }    
 
 
-    
     
 // Listado de cotizaciones
     public function listBudgets($params)
@@ -199,7 +201,6 @@ public function listDiscounts($params)
 // Listado de productos
     public function listProducts($params)
     {
-
         $word = $this->db->real_escape_string($params['word']);
         $dstr = $this->db->real_escape_string($params['dstr']);
         $dend = $this->db->real_escape_string($params['dend']);
@@ -288,8 +289,6 @@ public function stockProdcuts($params)
             WHERE sr.prd_id = $prdId;";
     return $this->db->query($qry);
 } 
-
-
 
 
 // Agrega Version
@@ -571,7 +570,8 @@ public function saveBudgetList($params)
         $pjtId         = $this->db->real_escape_string($params['pjtId']);
         $verId         = $this->db->real_escape_string($params['verId']);
 
-        $qry = "UPDATE ctt_version SET ver_status = 'R', ver_active = '1', ver_master = '1', ver_code = 'R0001' WHERE ver_id = $verId;";
+        $qry = "UPDATE ctt_version SET ver_status = 'R', ver_active = '1', ver_master = '1', ver_code = 'R0001' 
+                WHERE ver_id = $verId;";
         return $this->db->query($qry);
 
     }
@@ -648,11 +648,10 @@ public function saveBudgetList($params)
             $sersku  = $series->ser_sku; 
 
             $qry1 = "UPDATE ctt_series 
-                        SET 
-                            ser_situation = 'EA',
-                            ser_stage = 'R',
-                            ser_reserve_count = ser_reserve_count + 1
-                            WHERE ser_id = $serie;";
+                    SET ser_situation = 'EA',
+                        ser_stage = 'R',
+                        ser_reserve_count = ser_reserve_count + 1
+                    WHERE ser_id = $serie;";
             $this->db->query($qry1);
 
         }else {
@@ -660,29 +659,24 @@ public function saveBudgetList($params)
             $sersku  = 'Pendiente' ;
         }
 
-        
         $qry2 = "INSERT INTO ctt_projects_detail (
-                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id
-                ) VALUES (
-                    '$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
-                );        ";
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
+                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
+                ); ";
 
         $this->db->query($qry2);
         $pjtdtId = $this->db->insert_id;
 
         if ( $serie != null){
             $qry3 = "UPDATE ctt_series 
-                        SET 
-                            pjtdt_id = '$pjtdtId'
-                        WHERE ser_id = $serie;";
+                    SET pjtdt_id = '$pjtdtId'
+                    WHERE ser_id = $serie;";
             $this->db->query($qry3);
         }
 
         $qry4 = "INSERT INTO ctt_projects_periods 
                     (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
-                VALUES 
-                    ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId');";
-
+                VALUES ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId');";
 
         $this->db->query($qry4);
 
@@ -690,28 +684,43 @@ public function saveBudgetList($params)
         
     }
 
+    
     public function GetAccesories($params)
     {
         $prodId        = $this->db->real_escape_string($params);
-        $qry = "SELECT pr.* FROM ctt_products AS pr
+        /* $qry = "SELECT pr.* 
+                FROM ctt_products AS pr
                 INNER JOIN ctt_accesories AS ac ON ac.prd_id = pr.prd_id 
-                WHERE ac.prd_parent = $prodId;";
+                WHERE ac.prd_parent = $prodId;"; */
+       /*  $qry = "SELECT ser_sku FROM ctt_series 
+                WHERE prd_id=$prodId AND ser_situation!='D';";
+        $result =  $this->db->query($qry);
+        
+        $sersku = $result->fetch_object();
+
+        $qry = "SELECT prd_id,prd_sku FROM ctt_products
+                WHERE prd_sku LIKE '$sersku%' AND prd_level='A';"; */
+        
+        $qry = "SELECT * 
+            FROM ctt_series AS pr
+            INNER JOIN ctt_accesories AS ac ON ac.prd_parent = pr.prd_id 
+            WHERE ac.prd_parent = $prodId;";
 
         return $this->db->query($qry);
 
     }
+
+
     public function GetProducts($params)
     {
         $prodId        = $this->db->real_escape_string($params);
-        $qry = "SELECT pd.* 
+        $qry = "SELECT pd.* , pk.pck_quantity
                 FROM ctt_products_packages AS pk 
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pk.prd_id
                 WHERE  pk.prd_parent = $prodId;";
         return $this->db->query($qry);
 
     }
-
-
 
 
 // Actualiza las fechas del proyecto

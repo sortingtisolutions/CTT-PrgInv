@@ -115,8 +115,17 @@ class SubcategoriesModel extends Model
                 WHERE sbc_id    = '$sbcId';";
 
         $this->db->query($qry);	
+
+        $qry2 = "UPDATE ctt_subcategories
+        SET   sbc_name  = REPLACE(sbc_name,'\°','\"')
+        WHERE sbc_id    = '$sbcId';";
+
+        $this->db->query($qry2);	
+
+
         return $sbcId;
     }
+//UPPER('$sbcName'),
 
 // Actualiza el status de la subcategorias a eliminar
     public function DeleteSubcategory($params)

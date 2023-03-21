@@ -249,7 +249,7 @@ function editSubcategory(sbcId) {
 /** ---- Actualiza la subcategoria seleccionada ---- */
 function updateSubcategory() {
     var sbcId = $('#txtIdSubcategory').val();
-    var sbcName = $('#txtSubcategory').val();
+    var sbcName = $('#txtSubcategory').val().replace(/\"/g, '°').replace(/\,/g, '^').replace(/\'/g, '¿');
     var sbcCode = $('#txtSubcategoryCode').val();
     var catId = $('#lstCategory').val();
     var par = `

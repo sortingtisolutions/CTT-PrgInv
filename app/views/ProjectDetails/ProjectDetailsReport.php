@@ -384,7 +384,7 @@ $html = '
         
                         $discountBaseTotal  = 0;
                         $amountBaseTotal    = 0;
-                        $discountTripTota   = 0;
+                        $discountTripTotal   = 0;
                         $amountTripTotal    = 0;
                         $amountGralTotal    = 0;
         

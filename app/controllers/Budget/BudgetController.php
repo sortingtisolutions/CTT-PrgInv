@@ -517,7 +517,7 @@ public function ProcessProjectProduct($request_params)
                     );
                     $detlId = $this->model->SettingSeries($params);
 
-                    $accesory = $this->model->GetAccesories($prodId);
+                    $accesory = $this->model->GetAccesories($prodId); //SE TRAE LOS ACCESORIOS DEL PRODUCTO
                     while($acc = $accesory->fetch_assoc()){
 
                         $acceId =  $acc["prd_id"];
@@ -547,9 +547,8 @@ public function ProcessProjectProduct($request_params)
                         );
                         $serie = $this->model->SettingSeries($accparams);
                     }
-
                 }
-            } else if ( $bdglvl == 'K' ){
+            } else if ( $bdglvl == 'K' ){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
                 for ($i = 1; $i<=$quanty; $i++){
                     $products = $this->model->GetProducts($prodId);
                     while($acc = $products->fetch_assoc()){
@@ -617,7 +616,16 @@ public function ProcessProjectProduct($request_params)
         }
 
         echo $pjtId . '|' . $dtinic . '|' . $dtfinl;
-        
-        
+    
     } 
+
+   /*  public function ProcessProjectProm($request_params)
+    {  
+        $params = $this->session->get('user');
+        $pjtId  = $this->model->PromoteProject($request_params);
+        $versin = $this->model->PromoteVersion($request_params);
+        $pjtcnt = $this->model->SaveProjectContent($request_params);
+
+        echo $pjtId ;
+    } */
 }

@@ -100,12 +100,14 @@ function getIdModuluesPerfiles(idPerfil) {
 
 // Optiene los perfiles disponibles *
 function getPerfilesUsuario(idPerfil) {
+    console.log('MOD-getPerfilesUsuario');
     var location = 'perfilUser/GetPerfiles';
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         dataType: 'JSON',
         url: location,
         success: function (respuesta) {
+            console.log('Perf-',respuesta);
             var renglon = "<option id='0'  value=''>Seleccione un perfil...</option> ";
             respuesta.forEach(function (row, index) {
                 renglon += '<option id=' + row.prf_id + '  value="">' + row.prf_name + '</option> ';
@@ -116,7 +118,7 @@ function getPerfilesUsuario(idPerfil) {
                 $("#selectPerfilUsuario option[id='" + idPerfil + "']").attr('selected', 'selected');
             }
         },
-        error: function () {},
+        error: function () {console.log('ERROR-AJAX');},
     }).done(function () {});
 }
 
@@ -407,7 +409,7 @@ function getUsuariosTable() {
 
             let title = 'Usuarios';
             let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-
+            
             table = $('#usuariosTable').DataTable({
                 order: [[1, 'asc']],
                 select: {

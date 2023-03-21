@@ -596,14 +596,12 @@
                 Promoviendo cotización<br>
                 <i class="fas fa-spinner spin"></i> 
                 </p>
-            <p>La cotización se encuentra en proceso de ser promovida a presupuesto, este proceso puede tradar varios minutos</p>
+            <p>La cotización se encuentra en proceso de ser promovida a presupuesto, este proceso puede tardar varios minutos</p>
         </div>
     </div>
 <!-- end -->
     
 </div>
-
-
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

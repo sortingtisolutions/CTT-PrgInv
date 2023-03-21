@@ -184,9 +184,9 @@ class ProjectPlansModel extends Model
                     WHEN prd_level ='K' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
                     WHEN prd_level ='P' THEN 
-                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
-                        (SELECT prd_stock FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     END AS stock
             FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
@@ -582,11 +582,13 @@ public function saveDateProject($params)
         return $this->db->query($qry2);
 
     }
+
     public function settingDiscountVersion($pjtId, $verId, $discount)
     {
         $qry1 = "UPDATE ctt_version SET ver_discount_insured = $discount WHERE ver_id = $verId;";
         $this->db->query($qry1);
     }
+
     public function settingProjectVersion($pjtId, $verId)
     {
         //  Borra el contenido de la version anterior
@@ -605,7 +607,8 @@ public function saveDateProject($params)
                 FROM ctt_projects_mice WHERE pjtvr_action != 'D' AND pjt_id = $pjtId;";
         return $this->db->query($qry2);
 
-     }
+    }
+    
     public function settingProjectContent($pjtId, $verId)
     {
         $qry1 = "DELETE FROM ctt_projects_content WHERE pjt_id = $pjtId;";

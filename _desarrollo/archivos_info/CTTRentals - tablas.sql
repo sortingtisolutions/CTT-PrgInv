@@ -931,17 +931,6 @@ WHERE pj.pjt_status IN (2, 3, 4);
 
 
 
-/* VISTA DE PROYETCOS EN SUBARRENDO  */
-DROP VIEW ctt_vw_project_subletting;
-CREATE VIEW ctt_vw_project_subletting AS
-SELECT num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id, DATE_FORMAT(sub_date_start, '%d/%m/%Y') AS sub_date_start, 
-    DATE_FORMAT(sub_date_end, '%d/%m/%Y') AS sub_date_end, sub_comments, pjtcn_days_base, pjtcn_days_trip, pjtcn_days_test, ifnull(prd_id, 0) AS prd_id, 
-    ifnull(sup_id, 0) AS sup_id, ifnull(str_id, 0) AS str_id, ifnull(sub_id, 0) AS sub_id, ifnull(sut_id, 0) AS sut_id, ifnull(pjtdt_id, 0) AS pjtdt_id, 
-    ifnull(pjtcn_id, 0) AS pjtcn_id, ifnull(cin_id, 0) AS cin_id
-FROM  ctt_vw_subletting;
-
-
-
 /* VISTA DE SUBCATEGORIA  */
 DROP VIEW ctt_vw_subcategories;
 CREATE VIEW ctt_vw_subcategories AS
@@ -976,6 +965,14 @@ FROM ctt_projects_content AS pc
     LEFT JOIN ctt_stores AS sr ON sr.str_id = st.str_id
 WHERE ( pd.pjtdt_prod_sku = 'Pendiente' OR LEFT(RIGHT(pd.pjtdt_prod_sku, 4), 1) = 'R');
 
+/* VISTA DE PROYETCOS EN SUBARRENDO  */
+DROP VIEW ctt_vw_project_subletting;
+CREATE VIEW ctt_vw_project_subletting AS
+SELECT num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id, DATE_FORMAT(sub_date_start, '%d/%m/%Y') AS sub_date_start, 
+    DATE_FORMAT(sub_date_end, '%d/%m/%Y') AS sub_date_end, sub_comments, pjtcn_days_base, pjtcn_days_trip, pjtcn_days_test, ifnull(prd_id, 0) AS prd_id, 
+    ifnull(sup_id, 0) AS sup_id, ifnull(str_id, 0) AS str_id, ifnull(sub_id, 0) AS sub_id, ifnull(sut_id, 0) AS sut_id, ifnull(pjtdt_id, 0) AS pjtdt_id, 
+    ifnull(pjtcn_id, 0) AS pjtcn_id, ifnull(cin_id, 0) AS cin_id
+FROM  ctt_vw_subletting;
 
 
 

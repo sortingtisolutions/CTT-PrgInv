@@ -969,7 +969,7 @@ function loadBudget(inx, bdgId) {
         "daybasereal"               : "${days}"
     }
     `;
-    console.log(par);
+    //console.log(par);
     let ky = registeredProduct('bdg' + prod[inx].prd_id);
     let stus = 'A';
     if (ky == 0) {
@@ -1376,6 +1376,24 @@ function activeInputSelector() {
                     default:
                 }
             }
+            else{  // agregado por JJR, que hace en caso de PAQUETE ???
+                switch (event) {
+                    case 'event_killProduct':
+                        killProduct(bdgId);
+                        break;
+                    case 'event_InfoProduct':
+                        /* infoProduct(bdgId, type);
+                        break; */
+                    case 'event_PerdProduct':
+                        /* periodProduct(bdgId);
+                        break; */
+                    case 'event_StokProduct':
+                        stockProduct(bdgId);
+                        break;
+                    default:
+                }
+            }
+            
         });
 }
 
@@ -1396,6 +1414,7 @@ function killProduct(bdgId) {
             let resp = obj.attr('id');
             if (resp == 'killYes') {
                 $('#' + bdgId).fadeOut(500, function () {
+                    
                     let pjtId = $('.version_current').attr('data-project');
                     let section = $(this)
                         .parents('tbody')
@@ -1406,13 +1425,9 @@ function killProduct(bdgId) {
                     showButtonVersion('S');
                     showButtonToPrint('H');
                     showButtonToSave('H');
-                    updateMice(
-                        pjtId,
-                        pid,
+                    updateMice(pjtId, pid,
                         'pjtvr_quantity_ant',
-                        0,
-                        section,
-                        'D'
+                        0, section, 'D'
                     );
                     $('#' + bdgId).remove();
                 });
@@ -1939,7 +1954,7 @@ function printBudget(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-
+    console.log('Print',v,u,n,h);
     window.open(
         `${url}app/views/ProjectPlans/ProjectPlansReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
         '_blank'
@@ -2004,6 +2019,7 @@ function updateTotals() {
         costassu = 0,
         totlCost = 0,
         totlPrds = 0;
+        desctins = 0;
     $('.budgetRow').each(function (v) {
         let pid = $(this).attr('id');
 
@@ -2071,7 +2087,7 @@ function updateTotals() {
 
         let prcdscins = parseFloat($('#insuDesctoPrc').html()) / 100;
         desctins = costassu * prcdscins;
-        totlPrds++;
+        /* totlPrds++; */
     });
 
     $('#costBase').html(mkn(costbase, 'n'));

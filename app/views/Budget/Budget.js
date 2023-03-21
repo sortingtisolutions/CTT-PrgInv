@@ -56,7 +56,7 @@ function discountInsuredEvent() {
                     let insured = parseFloat(
                         $('#insuTotal').text().replace(/\,/g, '')
                     );
-                    console.log(insured);
+                    //console.log(insured);
                     if (insured > 0) {
                         let data = parseFloat(e.target.value);
                         data = data * 100 + '<small>%</small>';
@@ -782,6 +782,7 @@ function omitirAcentos(text) {
 }
 
 function putProducts(dt) {
+    
     $('#listProductsTable table tbody').html('');
     prod = dt;
     $.each(dt, function (v, u) {
@@ -799,11 +800,12 @@ function putProducts(dt) {
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
-
+    
     $('#listProductsTable table tbody tr').on('click', function () {
         let inx = $(this).attr('data-indx');
         fillBudget(prod[inx], vers, inx);
     });
+
 }
 
 function fillBudget(pr, vr, ix) {
@@ -1830,7 +1832,7 @@ function updateTotals() {
         costtest = 0,
         costassu = 0,
         totlCost = 0;
-    desctins = 0;
+        desctins = 0;
     $('.budgetRow').each(function (v) {
         let pid = $(this).attr('id');
 
@@ -2050,6 +2052,7 @@ function validatorFields(frm) {
 /* PROMUEVE COTIZACION A PRESUPUESTO                                        */
 /* ************************************************************************ */
 function promoteProject(pjtId) {
+    // console.log('TERMINO PROMO-COTIZ-1');
     modalLoading('S');
     let verId = $('.invoice_controlPanel .version_current').attr(
         'data-version'
@@ -2066,8 +2069,52 @@ function showResult(dt) {
     let pjtId = dt.split('|')[0];
     $('#P' + pjtId).remove();
     modalLoading('H');
+    // console.log('TERMINO PROMO-COTIZ-2');
+    // promoteProject2(pjtId);
     cleanFormat();
 }
+
+/* PROMUEVE COTIZACION A PRESUPUESTO 2.0                                       */
+/* function promoteProject2(pjtId) {
+    modalLoading('S');
+    let verId = $('.invoice_controlPanel .version_current').attr(
+        'data-version'
+    );
+
+    var pagina = 'Budget/ProcessProjectProm';
+    var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
+    var tipo = 'html';
+    var selector = showResult2;
+    fillField(pagina, par, tipo, selector);
+} */
+
+/* function showResult2(dt) {
+    let pjtId = dt.split('|')[0];
+    $('#P' + pjtId).remove();
+    modalLoading('H');
+    cleanFormat();
+} */
+
+/* PROMUEVE COTIZACION A PRESUPUESTO 3.0                                       */
+/* function promoteProject3(pjtId) {
+    modalLoading('S');
+    let verId = $('.invoice_controlPanel .version_current').attr(
+        'data-version'
+    );
+
+    var pagina = 'Budget/ProcessProjectProduct';
+    var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
+    var tipo = 'html';
+    var selector = showResult3;
+    fillField(pagina, par, tipo, selector);
+}
+
+function showResult3(dt) {
+    let pjtId = dt.split('|')[0];
+    $('#P' + pjtId).remove();
+    modalLoading('H');
+    cleanFormat();
+} */
 
 /* ************************************************************************ */
 
