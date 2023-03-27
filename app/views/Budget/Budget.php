@@ -69,9 +69,6 @@
                 </thead>
 
 
-                             
-
-                
             <!-- EQUIPO BASE -->
                 <tbody  class="sections_products" id="SC1">
                     <tr class="blocked"|>
@@ -302,13 +299,14 @@
     <div class="invoice__section-products invoice-border modalTable">
         <div class="modal__header  invoice-border">
             <div class="modal__header-concept">&nbsp;Listados de productos</div>
+            <!-- <span class="invoice_button toCharge">Cargando....</span> -->
+            <div class="modal__header-concept">&nbsp;<span class="invoice_button toCharge hide">Cargando....</span></div>
             <i class="far fa-window-close close_listProducts"></i>
         </div>
         <div class="modal__header  invoice-border">
             <input type="text" name="txtProductFinder" id="txtProductFinder" autocomplete="off" placeholder="buscar producto" class="finderInput wt5">
             
         </div>
-
 
         <div class="productos__box-table" id="listProductsTable">
         <table>

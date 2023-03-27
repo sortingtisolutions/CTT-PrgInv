@@ -16,6 +16,16 @@ function inicial() {
     setting_table_AsignedProd();
     getProjects(prjid);
     getDetailProds();
+
+    $('#recordOutPut').on('click', function () {
+        // let locID = $(this);
+        // let pjtid = locID.parents('tr').attr('id');
+        // console.log('Paso A Guardar..', prjid);
+        confirm_to_GetOut(prjid);
+        /* saveDocumentClosure(); */
+    
+     });
+
 }
 
 // Solicita los paquetes  OK
@@ -458,7 +468,51 @@ function checkSerie(pjtcnid) {
         }
     }
     
+function confirm_to_GetOut(pjtid) {
+    $('#starClosure').modal('show');
+    $('#txtIdClosure').val(pjtid);
+    //borra paquete +
+    $('#btnClosure').on('click', function () {
+        $('#starClosure').modal('hide');
 
+        console.log('Datos CLICK',pjtid);
+        modalLoading('S');
+        var pagina = 'WhOutputContent/ProcessGetOutProject';
+        var par = `[{"pjtid":"${pjtid}"}]`;
+        var tipo = 'json';
+        var selector = putToWork;
+        fillField(pagina, par, tipo, selector);
+    });
+}
+
+function putToWork(dt){
+    console.log('TERMINO ACTUALIZAR');
+    console.log(dt);
+
+    $('.resFolio').text(refil(folio, 7));
+    $('#MoveFolioModal').modal('show');
+    $('#btnHideModal').on('click', function () {
+        window.location = 'WhOutputs';
+    });
+    $('#btnPrintReport').on('click', function () {
+        console.log(dt);
+        // $('.btn-print').trigger('click');
+    });
+    modalLoading('H');
+}
+
+function modalLoading(acc) {
+    if (acc == 'S') {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
+    } else {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+        });
+    }
+}
 /* function putSerieDetails_old(dt) {
   let H = '<div class="box_submenu" id="boxSubmenu" style="position: fixed; top: 0%; bottom: 0%; left: 0%; width: 100%; background-color: #ffffff;\n' +
     ' background-color: rgba(255, 255, 255, 0.6);'+

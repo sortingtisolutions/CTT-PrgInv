@@ -109,7 +109,6 @@ class BudgetModel extends Model
     }    
 
 
-    
 // Listado de relaciones
     public function listCustomersDef($params)
     {
@@ -127,8 +126,7 @@ class BudgetModel extends Model
         return $this->db->query($qry);
     }    
 
-
-    
+   
 // Listado de relaciones total
     public function listCustomersOwn($params)
     {
@@ -137,7 +135,6 @@ class BudgetModel extends Model
     }    
 
 
-    
 // Listado de claves de Relaciones
     public function listProjectsDef($params)
     {
@@ -150,7 +147,6 @@ class BudgetModel extends Model
     }    
 
 
-    
 // Listado de versiones
     public function listVersion($params)
     {
@@ -160,8 +156,7 @@ class BudgetModel extends Model
         return $this->db->query($qry);
     }    
 
-
-    
+ 
 // Listado de cotizaciones
     public function listBudgets($params)
     {
@@ -224,14 +219,11 @@ public function listDiscounts($params)
     } 
 
 
-    
 // Lista los relacionados al producto
 public function listProductsRelated($params)
 {
-
     $type = $this->db->real_escape_string($params['type']);
     $prdId = $this->db->real_escape_string($params['prdId']);
-
 
     if ($type == 'K'){
         $qry = "SELECT pr.*, sc.sbc_name, ct.cat_name 
@@ -247,7 +239,7 @@ public function listProductsRelated($params)
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 WHERE pk.prd_parent = $prdId AND pr.prd_status = 1 AND sc.sbc_status = 1 AND ct.cat_status = 1;";
         return $this->db->query($qry);
-
+        // cambio ac.prd_id por prd_parent
     } else if($type == 'P') {
         $qry = "SELECT pr.*, sc.sbc_name, ct.cat_name 
                 FROM ctt_products AS pr
@@ -257,7 +249,7 @@ public function listProductsRelated($params)
                     UNION
                 SELECT pr.*, sc.sbc_name, ct.cat_name 
                 FROM ctt_accesories AS ac
-                INNER JOIN ctt_products AS pr ON pr.prd_id = ac.prd_id
+                INNER JOIN ctt_products AS pr ON pr.prd_id = ac.prd_parent  
                 INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 WHERE ac.prd_parent = $prdId AND pr.prd_status = 1 AND sc.sbc_status = 1 AND ct.cat_status = 1;";
@@ -636,30 +628,47 @@ public function saveBudgetList($params)
         $pjetId   = $this->db->real_escape_string($params['pjetId']);
         $detlId   = $this->db->real_escape_string($params['detlId']);
 
-
-        $qry = "SELECT ser_id, ser_sku FROM ctt_series WHERE prd_id = $prodId 
+        $qry = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count  
+                FROM ctt_series WHERE prd_id = $prodId 
                 AND pjtdt_id = 0
-                ORDER BY ser_reserve_count asc LIMIT 1;";
+                ORDER BY ser_reserve_count asc LIMIT 1;";  // solo trae un registro
         $result =  $this->db->query($qry);
         
         $series = $result->fetch_object();
         if ($series != null){
             $serie  = $series->ser_id; 
-            $sersku  = $series->ser_sku; 
+            $sersku  = $series->ser_sku;
+            $ser_reserve_count  = $series->ser_reserve_count; 
+
+            $qry2 = "INSERT INTO ctt_projects_detail (
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
+                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
+                ); ";
+            $this->db->query($qry2);
+            $pjtdtId = $this->db->insert_id;
 
             $qry1 = "UPDATE ctt_series 
-                    SET ser_situation = 'EA',
-                        ser_stage = 'R',
-                        ser_reserve_count = ser_reserve_count + 1
+                    SET ser_situation = 'EA', ser_stage = 'R',
+                        ser_reserve_count = $ser_reserve_count,
+                        pjtdt_id = '$pjtdtId'
                     WHERE ser_id = $serie;";
             $this->db->query($qry1);
 
-        }else {
+        } else {
             $serie  = null; 
             $sersku  = 'Pendiente' ;
+            
+            $qry2 = "INSERT INTO ctt_projects_detail (
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
+                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
+                ); ";
+
+            $this->db->query($qry2);
+            $pjtdtId = $this->db->insert_id;
+
         }
 
-        $qry2 = "INSERT INTO ctt_projects_detail (
+        /* $qry2 = "INSERT INTO ctt_projects_detail (
                 pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
                 VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
                 ); ";
@@ -672,12 +681,11 @@ public function saveBudgetList($params)
                     SET pjtdt_id = '$pjtdtId'
                     WHERE ser_id = $serie;";
             $this->db->query($qry3);
-        }
+        } */
 
         $qry4 = "INSERT INTO ctt_projects_periods 
                     (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
                 VALUES ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId');";
-
         $this->db->query($qry4);
 
         return  $pjtdtId;
@@ -687,27 +695,34 @@ public function saveBudgetList($params)
     
     public function GetAccesories($params)
     {
-        $prodId        = $this->db->real_escape_string($params);
-        /* $qry = "SELECT pr.* 
+        $prodId   = $this->db->real_escape_string($params['prodId']);
+        $serId   = $this->db->real_escape_string($params['serId']);
+
+        /* $prodId        = $this->db->real_escape_string($params);
+        $serId        = $this->db->real_escape_string($localvar); */
+        
+      /*   $qry = "SELECT pr.* 
                 FROM ctt_products AS pr
-                INNER JOIN ctt_accesories AS ac ON ac.prd_id = pr.prd_id 
-                WHERE ac.prd_parent = $prodId;"; */
-       /*  $qry = "SELECT ser_sku FROM ctt_series 
-                WHERE prd_id=$prodId AND ser_situation!='D';";
+                INNER JOIN ctt_accesories AS ac ON ac.ser_parent = pr.prd_id 
+                WHERE ac.prd_parent = $prodId AND ac.prd_id=$serId;";
+            
+        return $this->db->query($qry); */
+
+        $qry = "SELECT ser_id FROM ctt_projects_detail 
+                WHERE pjtdt_id = $serId LIMIT 1;";
         $result =  $this->db->query($qry);
+
+        $locserid = $result->fetch_object();
+        if ($locserid != null){
+            $locser  = $locserid->ser_id; 
+            
+            $qry1 = "SELECT pr.* 
+            FROM ctt_products AS pr
+            INNER JOIN ctt_accesories AS ac ON ac.ser_parent = pr.prd_id 
+            WHERE ac.prd_parent = $prodId AND ac.prd_id=$locser;";
+        }
         
-        $sersku = $result->fetch_object();
-
-        $qry = "SELECT prd_id,prd_sku FROM ctt_products
-                WHERE prd_sku LIKE '$sersku%' AND prd_level='A';"; */
-        
-        $qry = "SELECT * 
-            FROM ctt_series AS pr
-            INNER JOIN ctt_accesories AS ac ON ac.prd_parent = pr.prd_id 
-            WHERE ac.prd_parent = $prodId;";
-
-        return $this->db->query($qry);
-
+        return $this->db->query($qry1);
     }
 
 

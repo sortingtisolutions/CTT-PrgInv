@@ -200,6 +200,65 @@
     </div>
 <!-- End Ventana modal SERIES -->
 
+<!-- Boton para confirmar salida de productos -->
+<div class="modal fade" id="starClosure" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+            <div class="modal-header ">
+            </div>
+            <div class="modal-body" style="padding: 0px !important;">
+            <div class="row">
+                <input type="hidden" class="form-control" id="txtIdClosure" aria-describedby="basic-addon3">
+                <div class="col-12 text-center">
+                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Estas seguro de dar salida a este proyecto?</span>
+                </div>
+            </div>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" id="btnClosure">Si</button>
+                </div>
+            </div>
+    </div>
+</div>
+
+<!-- Modal para imprimir folio de salida -->
+<div class="modal fade" id="MoveFolioModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+            <div class="modal-header ">
+            </div>
+            <div class="modal-body" style="padding: 0px !important;">
+
+            <div class="row">
+                <div class="col-12 text-center">
+                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">Folio: <h3 class="resFolio">000000000000</h3></span>
+                </div>
+            </div>
+
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button>
+                    <button type="button" class="btn btn-secondary" id="btnHideModal">Cerrar</button>
+                </div>
+            </div>
+    </div>
+</div>
+
+<!-- Fondo obscuro -->
+<div class="invoice__modalBackgound"></div>
+
+<!-- loading -->
+<div class="invoice__loading modalLoading">
+        <div class="box_loading">
+            <p class="text_loading">
+                Registrando Salida de Proyecto<br>
+                <i class="fas fa-spinner spin"></i> 
+                </p>
+            <p>Se estan actualizando los registros del proyecto, este proceso puede tardar varios minutos</p>
+        </div>
+    </div>
+<!-- end -->
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>

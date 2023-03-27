@@ -20,6 +20,7 @@ function inicial() {
     getProjectType();
     getProjectTypeCalled();
     discountInsuredEvent();
+    
 }
 
 function stickyTable() {
@@ -404,6 +405,19 @@ function getComments(pjtId) {
     fillField(pagina, par, tipo, selector);
 }
 
+function getRelPrdAcc(id, tp) {
+
+    var pagina = 'Budget/GetAccesories';
+    var par = `[{"prodId":"${id}","type":"${tp}"}]`;
+    var tipo = 'json';
+    var selector = putRelPrdAcc;
+    fillField(pagina, par, tipo, selector);
+}
+
+function putRelPrdAcc(dt){
+    console.log(dt);
+}
+
 /** LLENA DE DATOS */
 /**  Llena el listado de proyectos */
 function putProjects(dt) {
@@ -719,6 +733,7 @@ function fillProducer(cusId) {
 
 // Muestra el listado de productos disponibles para su seleccion en la cotización
 function showListProducts(item) {
+   
     $('.invoice__section-products').fadeIn('slow');
 
     $('.productos__box-table').attr('data-section', item);
@@ -734,12 +749,14 @@ function showListProducts(item) {
         $('.invoice__section-products').fadeOut(400, function () {
             $('#listProductsTable table tbody').html('');
             $('#txtProductFinder').val('');
+            // showButtonToCharge('S');
         });
     });
 }
 
 /** ++++++ Selecciona los productos del listado */
 function selProduct(res) {
+    
     res = res.toUpperCase();
     let rowCurr = $('#listProductsTable table tbody tr');
     let hearCnt = $('#listProductsTable table tbody tr th');
@@ -748,6 +765,7 @@ function selProduct(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 3) {
+            $('.invoice_button .toCharge').show();
             getProducts(res.toUpperCase(), dstr, dend);
         } else {
             rowCurr.css({ display: 'none' });
@@ -1932,6 +1950,7 @@ function showButtonToSave(acc) {
         ? elm.css({ visibility: 'visible' })
         : elm.css({ visibility: 'hidden' });
 }
+
 function showButtonComments(acc) {
     elm = $('.sidebar__comments .toComment');
     acc == 'S'
@@ -1960,6 +1979,12 @@ function cleanTotalsArea() {
         .attr('data-version', null)
         .attr('data-project', null)
         .attr('data-versionCode', null);
+}
+function showButtonToCharge(acc) {
+    elm = $('.invoice_button .toCharge');
+    acc == 'S'
+        ? elm.css({ visibility: 'visible' })
+        : elm.css({ visibility: 'hidden' });
 }
 /** *************************************************************** */
 
@@ -2054,6 +2079,12 @@ function validatorFields(frm) {
 function promoteProject(pjtId) {
     // console.log('TERMINO PROMO-COTIZ-1');
     modalLoading('S');
+
+    /* let locprdid=520;  // codigo para probar funcion
+    let locserid=1416;
+    getRelPrdAcc(locprdid,locserid);
+    modalLoading('H'); */
+
     let verId = $('.invoice_controlPanel .version_current').attr(
         'data-version'
     );
@@ -2066,6 +2097,7 @@ function promoteProject(pjtId) {
 }
 
 function showResult(dt) {
+    console.log(dt);
     let pjtId = dt.split('|')[0];
     $('#P' + pjtId).remove();
     modalLoading('H');

@@ -237,7 +237,7 @@ class ProjectPlansModel extends Model
         $qry = "SELECT pr.prd_id, sr.ser_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name
                     , pr.prd_level
                     , ct.cat_name
-                    , ac.prd_parent
+                    , ac.ser_parent
                     , ifnull(sr.ser_comments,'') as ser_comments
                     , ROW_NUMBER() OVER (PARTITION BY pr.prd_sku ORDER BY sr.ser_sku DESC) AS reng
                 FROM ctt_projects_detail AS pj
@@ -245,7 +245,7 @@ class ProjectPlansModel extends Model
                 INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
-                LEFT JOIN ctt_accesories AS ac ON ac.prd_id = sr.ser_id
+                LEFT JOIN ctt_accesories AS ac ON ac.ser_parent = sr.ser_id
                 INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
                 WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId ORDER BY reng, pr.prd_level DESC;";
         return $this->db->query($qry);

@@ -516,8 +516,13 @@ public function ProcessProjectProduct($request_params)
                         'detlId' => 0,
                     );
                     $detlId = $this->model->SettingSeries($params);
-
-                    $accesory = $this->model->GetAccesories($prodId); //SE TRAE LOS ACCESORIOS DEL PRODUCTO
+                    $serId=$detlId;
+                    $paramacc = array(
+                        'prodId' => $prodId, 
+                        'serId' => $serId,
+                    );
+                    //echo 'VAR_ '. $prodId . ' - ' . $serId . 'END ';
+                    $accesory = $this->model->GetAccesories($paramacc); //SE TRAE LOS ACCESORIOS DEL PRODUCTO
                     while($acc = $accesory->fetch_assoc()){
 
                         $acceId =  $acc["prd_id"];
@@ -579,8 +584,12 @@ public function ProcessProjectProduct($request_params)
                             'detlId' => 0,
                         );
                         $detlId = $this->model->SettingSeries($prodparams);
-
-                        $accesory = $this->model->GetAccesories($pkpdId);
+                        $serId=$detlId;
+                        $paramaccpk = array(
+                            'prodId' => $pkpdId, 
+                            'serId' => $serId,
+                        );
+                        $accesory = $this->model->GetAccesories($paramaccpk);
                         while($acc = $accesory->fetch_assoc()){
     
                             $acceId =  $acc["prd_id"];
@@ -628,4 +637,22 @@ public function ProcessProjectProduct($request_params)
 
         echo $pjtId ;
     } */
+
+    /* public function GetAccesories($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->GetAccesories($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    }  */
+    
 }
