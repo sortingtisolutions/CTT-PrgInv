@@ -234,13 +234,15 @@ function eventsAction() {
 
                 let verNext = 'P' + refil(vr + 1, 4);
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
-
+                let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  // agregado por jjr
+                console.log('FECHA- ', lastmov);
                 modalLoading('S');
                 let par = `
                 [{
                     "pjtId"           : "${pjtId}",
                     "verCode"         : "${verNext}",
-                    "discount"        : "${discount}"
+                    "discount"        : "${discount}",
+                    "lastmov"        : "${lastmov}"
                 }]`;
                 var pagina = 'ProjectDetails/SaveBudgetAs';
                 var tipo = 'html';
@@ -459,7 +461,7 @@ function putProjects(dt) {
         $('.finder_list-projects ul').html('');
         $('.finder_list-projectsParent ul').html('');
         $.each(proj, function (v, u) {
-            if (u.pjt_status == '3' || u.pjt_status == '4') {
+            if (u.pjt_status == '3' || u.pjt_status == '4' || u.pjt_status == '7' || u.pjt_status == '8') {
                 let H = ` <li id="P${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|M${u.pjt_parent}|${u.pjt_name}">${u.pjt_name}</li>`;
                 $('.finder_list-projects ul').append(H);
             } else {
@@ -867,6 +869,7 @@ function selProduct(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 3) {
+            $('.toCharge').removeClass('hide-items');  //jjr
             getProducts(res.toUpperCase(), dstr, dend);
         } else {
             rowCurr.css({ display: 'none' });
@@ -918,6 +921,7 @@ function putProducts(dt) {
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
+    $('.toCharge').addClass('hide-items');   //jjr
 
     $('#listProductsTable table tbody tr')
         .unbind('click')
@@ -1075,6 +1079,14 @@ function fillBudgetProds(jsn, days, stus) {
     let pds = JSON.parse(jsn);
 
     let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',').replace(/\¿/g, '\'');
+    if (u.pjt_status == 4)
+    { valstage='color:#008000'; }
+    else if (u.pjt_status == 7)
+     { valstage='color:#FFA500'; }
+    else
+    { valstage='color:#CC0000'; }
+    console.log(valstage);
+    
     let H = `
     <tr id="bdg${pds.prd_id}" 
         data-sku     = "${pds.pjtvr_prod_sku}" 
@@ -2283,6 +2295,8 @@ function cleanFormat() {
     cleanVersionList();
     cleanTotalsArea();
 }
+
+
 function getDataMice() {
     let pjtId = $('.version_current').attr('data-project');
     $('.budgetRow').each(function (v) {
@@ -2304,14 +2318,7 @@ function getDataMice() {
             .children('.input_invoice')
             .attr('data-real', quantity_act);
         if (quantity_act != quantity_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_quantity',
-                quantity_act,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid,'pjtvr_quantity', quantity_act,section,'U' );
         }
 
         /** == Valida los días base =============================== */
@@ -2329,14 +2336,7 @@ function getDataMice() {
             .children('.input_invoice')
             .attr('data-real', daysBase_act);
         if (daysBase_act != daysBase_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_days_base',
-                daysBase_act,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_days_base', daysBase_act, section, 'U' );
         }
 
         /** == Valida los días costo ============================== */
@@ -2354,14 +2354,7 @@ function getDataMice() {
             .children('.input_invoice')
             .attr('data-real', daysCost_act);
         if (daysCost_act != daysCost_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_days_cost',
-                daysCost_act,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_days_cost',daysCost_act, section, 'U'  );
         }
 
         /** == Valida los descuentos base ========================= */
@@ -2373,14 +2366,7 @@ function getDataMice() {
         );
         $(this).children('td.discountBase').attr('data-real', discountBase_act);
         if (discountBase_act != discountBase_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_discount_base',
-                discountBase_act / 100,
-                section,
-                'U'
-            );
+            updateMice(pjtId,pid, 'pjtvr_discount_base',discountBase_act / 100, section, 'U' );
         }
 
         /** == Valida los descuentos as seguro ==================== */
@@ -2393,14 +2379,7 @@ function getDataMice() {
 
         $(this).children('td.discountInsu').attr('data-real', discountInsu_act);
         if (discountInsu_act != discountInsu_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_discount_insured',
-                discountInsu_act / 100,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_discount_insured', discountInsu_act / 100, section,'U' );
         }
 
         let daysTrip_act = parseInt(
@@ -2417,14 +2396,7 @@ function getDataMice() {
             .children('.input_invoice')
             .attr('data-real', daysTrip_act);
         if (daysTrip_act != daysTrip_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_days_trip',
-                daysTrip_act,
-                section,
-                'U'
-            );
+            updateMice( pjtId,pid,'pjtvr_days_trip',daysTrip_act, section, 'U');
         }
 
         let discountTrip_act = parseFloat(
@@ -2433,16 +2405,10 @@ function getDataMice() {
         let discountTrip_ant = parseFloat(
             $(this).children('td.discountTrip').attr('data-real')
         );
+
         $(this).children('td.discountTrip').attr('data-real', discountTrip_act);
         if (discountTrip_act != discountTrip_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_discount_trip',
-                discountTrip_act / 100,
-                section,
-                'U'
-            );
+            updateMice( pjtId, pid,'pjtvr_discount_trip',discountTrip_act / 100, section,'U');
         }
 
         let daysTest_act = parseInt(
@@ -2459,32 +2425,20 @@ function getDataMice() {
             .children('.input_invoice')
             .attr('data-real', daysTest_act);
         if (daysTest_act != daysTest_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_days_test',
-                daysTest_act,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_days_test', daysTest_act, section, 'U' );
         }
 
         let discountTest_act = parseFloat(
             $(this).children('td.discountTest').text()
         );
+
         let discountTest_ant = parseFloat(
             $(this).children('td.discountTest').attr('data-real')
         );
+
         $(this).children('td.discountTest').attr('data-real', discountTest_act);
         if (discountTest_act != discountTest_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_discount_test',
-                discountTest_act / 100,
-                section,
-                'U'
-            );
+            updateMice(pjtId,pid,'pjtvr_discount_test',discountTest_act / 100,section,'U' );
         }
 
         let ordering = parseInt($(`#SC${section}`).data('switch'));
@@ -2493,7 +2447,7 @@ function getDataMice() {
             .children('.move_item')
             .attr('data-order');
         if (ordering > 0) {
-            // console.log(pjtId, pid, 'pjtvr_order', order, section, 'N');
+            console.log(pjtId, pid, 'pjtvr_order', order, section, 'N');
             updateMice(pjtId, pid, 'pjtvr_order', order, section, 'N');
         }
     });

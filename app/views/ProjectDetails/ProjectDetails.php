@@ -332,6 +332,7 @@
     <div class="invoice__section-products invoice-border modalTable">
         <div class="modal__header  invoice-border">
             <div class="modal__header-concept">&nbsp;Listados de productos</div>
+            <div class="modal__header-concept">&nbsp;<span class="invoice_button toCharge hide-items">Cargando....</span></div>
             <i class="far fa-window-close close_listProducts"></i>
         </div>
         <div class="modal__header  invoice-border">
@@ -617,12 +618,6 @@
     <div id="PeriodsTemplates" class="table_hidden box_template">
         <div class="periods__box" id="periodBox"></div>
      </div>
-
-
-
-
-
-
 
 
      <!-- loading -->

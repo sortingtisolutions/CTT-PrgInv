@@ -69,15 +69,15 @@ class WorkInputContentModel extends Model
     // check de Productos
     public function checkSeries($params)
     {
-        $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
-        /* $updt = "update ctt_series set ser_situation = 'TA', ser_stage = 'TA' 
-                where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
- */
+        /* $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
+        // $updt = "update ctt_series set ser_situation = 'TA', ser_stage = 'TA' 
+        //         where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
+
         $updt = "update ctt_series set ser_stage = 'TA' 
                 where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
 
          $this->db->query($updt);
-         return $pjtcnid;
+         return $pjtcnid; */
         
     }
 

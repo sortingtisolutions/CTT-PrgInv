@@ -742,6 +742,7 @@ function showListProducts(item) {
         .unbind('keyup')
         .on('keyup', function () {
             let text = $(this).val().toUpperCase();
+            //showButtonToCharge('S');
             selProduct(text);
         });
 
@@ -749,7 +750,7 @@ function showListProducts(item) {
         $('.invoice__section-products').fadeOut(400, function () {
             $('#listProductsTable table tbody').html('');
             $('#txtProductFinder').val('');
-            // showButtonToCharge('S');
+            showButtonToCharge('S');
         });
     });
 }
@@ -765,7 +766,8 @@ function selProduct(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 3) {
-            $('.invoice_button .toCharge').show();
+            // $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');  //jjr
             getProducts(res.toUpperCase(), dstr, dend);
         } else {
             rowCurr.css({ display: 'none' });
@@ -818,6 +820,7 @@ function putProducts(dt) {
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
+    $('.toCharge').addClass('hide-items');   //jjr
     
     $('#listProductsTable table tbody tr').on('click', function () {
         let inx = $(this).attr('data-indx');
@@ -1983,8 +1986,11 @@ function cleanTotalsArea() {
 function showButtonToCharge(acc) {
     elm = $('.invoice_button .toCharge');
     acc == 'S'
-        ? elm.css({ visibility: 'visible' })
-        : elm.css({ visibility: 'hidden' });
+        /* ? elm.css({ visibility: 'visible' })  
+        : elm.css({ visibility: 'hidden' }); */
+
+       ? elm.css.removeClass('hide-items')
+       : elm.css.addClass('hide-items')
 }
 /** *************************************************************** */
 

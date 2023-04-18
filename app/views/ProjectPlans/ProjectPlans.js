@@ -228,18 +228,19 @@ function eventsAction() {
                 let pjtId = $('.version_current').attr('data-project');
                 // let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data-code');
                 let verCurr = lastVersionFinder();
-
                 let vr = parseInt(verCurr.substring(1, 10));
 
                 let verNext = 'R' + refil(vr + 1, 4);
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
-
+                let lastmov = moment().format("DD/MM/YYYY HH:mm:ss A");  //agregado por jjr
+                console.log('FECHA- ', lastmov);
                 modalLoading('S');
                 let par = `
                 [{
                     "pjtId"           : "${pjtId}",
                     "verCode"         : "${verNext}",
-                    "discount"        : "${discount}"
+                    "discount"        : "${discount}",
+                    "lastmov"        : "${lastmov}"
                 }]`;
 
                 var pagina = 'ProjectPlans/SaveBudgetAs';
@@ -517,27 +518,24 @@ function putDiscounts(dt) {
 
 /**  Llena el listado de versiones */
 function putVersion(dt) {
+    console.log('putVersion', dt);
+    
     $('.version__list ul').html('');
     if (dt[0].ver_id != 0) {
-        $('.version__list-title').html('DOCUMENTOS');
+        $('.version__list-title').html('VERSIONES DE DOCUMENTOS');
         let firstVersion = '';
         let caret = '';
         $.each(dt, function (v, u) {
-            let master =
-                u.ver_master == 1 ? '<i class="fas fa-check-circle"></i>' : '';
+            let master = u.ver_master == 1 ? '<i class="fas fa-check-circle"></i>' : '';
             if (u.ver_active == 1) {
                 firstVersion = u.ver_id;
                 caret = '<i class="fas fa-caret-right"></i>';
             } else {
                 caret = '';
             }
-            let H = `<li id="V${u.ver_id}" data-code="${
-                u.ver_code
-            }" data-master="${u.ver_master}" data-active="${
-                u.ver_active
-            }" data-project="${u.pjt_id}" data-discount="${
-                u.ver_discount_insured
-            }">
+            let H = `<li id="V${u.ver_id}" data-code="${ u.ver_code }" 
+                data-master="${u.ver_master}" data-active="${ u.ver_active }" 
+                data-project="${u.pjt_id}" data-discount="${ u.ver_discount_insured }">
                         <span class="element_caret element_caret-master">${master}</span>
                         <span class="element_caret element_caret-active">${caret}</span>
                         <span class="element_code">${u.ver_code}</span>
@@ -622,7 +620,6 @@ function fillProjectsAttached() {
             console.log(ido);
             modalLoading('S');
             let verCurr = lastVersionFinder();
-
             let vr = parseInt(verCurr.substring(1, 10));
 
             let verNext = 'R' + refil(vr + 1, 4);
@@ -676,6 +673,7 @@ function selectorProjects(pjId) {
 }
 
 var pj = '';
+
 function actionSelProject(obj) {
     let status = obj.attr('class');
 
@@ -865,6 +863,7 @@ function selProduct(res) {
         let dstr = 0;
         let dend = 0;
         if (res.length == 3) {
+            $('.toCharge').removeClass('hide-items');  //jjr
             getProducts(res.toUpperCase(), dstr, dend);
         } else {
             rowCurr.css({ display: 'none' });
@@ -917,6 +916,7 @@ function putProducts(dt) {
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
+    $('.toCharge').addClass('hide-items');   //jjr
 
     $('#listProductsTable table tbody tr')
         .unbind('click')
@@ -1399,6 +1399,7 @@ function activeInputSelector() {
 
 // Elimina el registro de la cotizacion
 function killProduct(bdgId) {
+    console.log('INICIA KILL');
     let H = `<div class="emergent__warning">
     <p>¿Realmente requieres de borrar este producto?</p>
     <button id="killYes" class="btn btn-primary">Si</button>  
@@ -1425,10 +1426,7 @@ function killProduct(bdgId) {
                     showButtonVersion('S');
                     showButtonToPrint('H');
                     showButtonToSave('H');
-                    updateMice(pjtId, pid,
-                        'pjtvr_quantity_ant',
-                        0, section, 'D'
-                    );
+                    updateMice(pjtId, pid, 'pjtvr_quantity_ant', 0, section, 'D');
                     $('#' + bdgId).remove();
                 });
             }
@@ -1977,9 +1975,10 @@ function saveBudget(dt) {
 // Guarda la cotización seleccionada
 // *************************************************
 function putSaveBudgetAs(dt) {
+    console.log(dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-
+    
     interfase = 'MST';
     getVersion(pjtId);
     modalLoading('H');
@@ -2500,7 +2499,7 @@ function getDataMice() {
  * @param {*} ac Accion a realizar
  */
 function updateMice(pj, pd, fl, dt, sc, ac) {
-    console.log(pj, pd, fl, dt, sc, ac);
+     console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
 
     $(`#SC${sc}`).attr('data-switch', '0');
     var par = `[{

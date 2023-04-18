@@ -300,7 +300,7 @@
         <div class="modal__header  invoice-border">
             <div class="modal__header-concept">&nbsp;Listados de productos</div>
             <!-- <span class="invoice_button toCharge">Cargando....</span> -->
-            <div class="modal__header-concept">&nbsp;<span class="invoice_button toCharge hide">Cargando....</span></div>
+            <div class="modal__header-concept">&nbsp;<span class="invoice_button toCharge hide-items">Cargando....</span></div>
             <i class="far fa-window-close close_listProducts"></i>
         </div>
         <div class="modal__header  invoice-border">

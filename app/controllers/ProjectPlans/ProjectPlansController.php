@@ -24,7 +24,6 @@ class ProjectPlansController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-
     /** ==== Lista los proyectos  ***/
     public function listProjects($request_params)
     {
@@ -43,7 +42,6 @@ class ProjectPlansController extends Controller
         echo $res;
     } 
 
-    
 /** ==== Lista los proyectos padre ===========================================================  */
     public function listProjectsParents($request_params)
     {
@@ -61,8 +59,7 @@ class ProjectPlansController extends Controller
         }
         echo $res;
     } 
-
-    
+ 
 /** ==== Lista los versiones =================================================================  */
     public function listVersion($request_params)
     {
@@ -135,7 +132,6 @@ class ProjectPlansController extends Controller
         echo $res;
     } 
 
-
 /** ==== Lista los descuentos ================================================================  */
     public function listDiscounts($request_params)
     {
@@ -154,7 +150,6 @@ class ProjectPlansController extends Controller
         echo $res;
     } 
 
-    
 /** ==== Lista los tipos de proyectos ========================================================  */
     public function listProjectsType($request_params)
     {
@@ -173,9 +168,7 @@ class ProjectPlansController extends Controller
         echo $res;
 
     } 
-
-
-    
+ 
 /** ==== Lista los tipos de llamados =========================================================  */
     public function listProjectsTypeCalled($request_params)
     {
@@ -194,10 +187,6 @@ class ProjectPlansController extends Controller
         echo $res;
 
     } 
-
-        
-
-    
 
 /** ==== Lista los productos =================================================================  */
     public function listProducts($request_params)
@@ -253,8 +242,6 @@ class ProjectPlansController extends Controller
         echo $res;
     } 
 
-
-
 /** ==== Lista los proyectos en donde se encuentra un producto ===============================  */
     public function stockProducts($request_params)
     {
@@ -272,13 +259,6 @@ class ProjectPlansController extends Controller
         }
         echo $res;
     } 
-
-
-
-
-
-
-    
 
 /** ==== Guarda el comentario ================================================================  */
     public function InsertComment($request_params)
@@ -299,8 +279,7 @@ class ProjectPlansController extends Controller
         echo $res;
         
     } 
-
-    
+  
 /** ==== Actualiza datos del proyecto ========================================================  */
     public function UpdateProject($request_params)
     {
@@ -308,8 +287,6 @@ class ProjectPlansController extends Controller
         $result = $this->model->UpdateProject($request_params);
         echo $result;
     } 
-
-
 
 /** ==== Actualiza las fechas del proyecto ===================================================  */
     public function UpdatePeriodProject($request_params)
@@ -327,7 +304,6 @@ class ProjectPlansController extends Controller
         echo $result;
     } 
 
-
 /** ==== Promueve proyecto ===================================================================  */
     public function PromoteProject($request_params)
     {
@@ -336,9 +312,6 @@ class ProjectPlansController extends Controller
         echo $result;
     } 
 
-
-
-
 /** ==== Promueve el presupuesto a proyecto ==================================================  */
     public function promoteToProject($request_params)
     {   
@@ -346,8 +319,6 @@ class ProjectPlansController extends Controller
         $result = $this->model->promoteToProject($request_params);
         echo $result;
     } 
-
-
 
 /** ==== Cuenta el numero de productos que se encuentran en pendiente ========================  */
     public function countPending($request_params)
@@ -376,9 +347,6 @@ class ProjectPlansController extends Controller
         echo $result;
     }
 
-
-
-
 /** ==== Actualiza el ordenamiento de productos del proyecto ================================  */
     public function updateOrder($request_params)
     {
@@ -387,7 +355,6 @@ class ProjectPlansController extends Controller
         echo $result;
     }
 
-
 /** ==== Agrega producto a la tabla concentradora ============================================  */
     public function AddProductMice($request_params)
     {
@@ -395,7 +362,6 @@ class ProjectPlansController extends Controller
         $result = $this->model->AddProductMice($request_params);
         echo $result;
     }
-
 
 /** ==== Actualiza contenido de la version actual ============================================  */
     public function SaveBudget($request_params)
@@ -409,15 +375,16 @@ class ProjectPlansController extends Controller
             //ACT convierte una version activa a una version master
             $version            = $this->model->settingMasterVersion($pjtId, $verId, $discount);
             $projectVersion     = $this->model->settingProjectVersion($pjtId, $verId);
+
             $periods            = $this->model->cleanPeriods($pjtId);
             $series             = $this->model->restoreSeries($pjtId);
             $detail             = $this->model->cleanDetail($pjtId);
+
             $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
             $result             = $this->model->getProjectVersion($pjtId);
             $dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->setSeries($result);
             
-
         } else {
             //MST actualiza los datos de una version maestra 
             $projectDiscount    = $this->model->settingDiscountVersion($pjtId, $verId, $discount);
@@ -517,8 +484,13 @@ class ProjectPlansController extends Controller
                         'detlId' => 0,
                     );
                     $detlId = $this->model->SettingSeries($params);
-
-                    $accesory = $this->model->GetAccesories($prodId);
+                    $serId=$detlId;
+                    $paramacc = array(
+                        'prodId' => $prodId, 
+                        'serId' => $serId,
+                    );
+                     echo $serId . ' - Prod ' . $prodId ;
+                    $accesory = $this->model->GetAccesories($paramacc);
                     while($acc = $accesory->fetch_assoc()){
 
                         $acceId =  $acc["prd_id"];
@@ -547,6 +519,7 @@ class ProjectPlansController extends Controller
                             'detlId' => $detlId,
                         );
                         $serie = $this->model->SettingSeries($accparams);
+                        echo $serId . ' - SER-ACC ' . $prodId ;
                     }
 
                 }
@@ -581,8 +554,14 @@ class ProjectPlansController extends Controller
                             'detlId' => 0,
                         );
                         $detlId = $this->model->SettingSeries($prodparams);
-
-                        $accesory = $this->model->GetAccesories($pkpdId);
+                        echo 'Paso SettingSeries';
+                        $serId=$detlId;
+                        $paramaccpk = array(
+                            'prodId' => $pkpdId, 
+                            'serId' => $serId,
+                        );
+                        $accesory = $this->model->GetAccesories($paramaccpk);
+                        echo 'Paso GetAccesories';
                         while($acc = $accesory->fetch_assoc()){
     
                             $acceId =  $acc["prd_id"];
@@ -611,6 +590,7 @@ class ProjectPlansController extends Controller
                                 'detlId' => $detlId,
                             );
                             $serie = $this->model->SettingSeries($accparams);
+                            echo 'Paso SettingSeries de un ACCESORIO';
                         }
                     }
                 }
@@ -688,7 +668,7 @@ class ProjectPlansController extends Controller
         $periods        = $this->model->cleanPeriods($pjtId);
         $series         = $this->model->restoreSeries($pjtId);
         $detail         = $this->model->cleanDetail($pjtId);
-        $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
+        $projectVersion = $this->model->settingProjectVersion($pjtId, $verId);
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
         $result         = $this->model->getProjectVersion($pjtId);
         $response       = $this->setSeries($result);
@@ -710,16 +690,25 @@ class ProjectPlansController extends Controller
         $verId          = $pack[0];
         $pjtId          = $pack[1];
 
+        $group = explode('|',$params);
+
+        $user = $group[0];
+        $name = $group[2];
+        $otrov = $group[1];
+
         $periods        = $this->model->cleanPeriods($pjtId);
         $series         = $this->model->restoreSeries($pjtId);
         $detail         = $this->model->cleanDetail($pjtId);
+
         $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
         $result         = $this->model->getProjectVersion($pjtId);
-        $dateproject        = $this->model->saveDateProject($pjtId);
         $response       = $this->setSeries($result);
-
-        echo $verId . '|'. $pjtId;
+        $Locpaso=3;
+        //$dateproject    = $this->model->saveDateProject($pjtId);  // comentado por jjr
+        $Locpaso=4;
+       
+        echo $verId . '|'. $pjtId . '|'. $user . '|'. $name . '|'. $otrov . '|-Paso '. $Locpaso;
 
     } 
 

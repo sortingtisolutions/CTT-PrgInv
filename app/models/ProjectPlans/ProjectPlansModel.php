@@ -67,7 +67,6 @@ class ProjectPlansModel extends Model
         return $this->db->query($qry);
     }    
 
-
 /** ====== Listado de versiones ==============================================================  */
     public function listVersion($params)
     {
@@ -315,7 +314,6 @@ class ProjectPlansModel extends Model
     }
 
 
-
 /** ====== Actualiza el orden delos productos en la cotizacion ===============================  */
     public function updateOrder($params)
     {
@@ -460,16 +458,18 @@ class ProjectPlansModel extends Model
 /** ====== Guarda una nueva version ==========================================================  */
 public function saveDateProject($params)
 {
-    $pjtId    = $this->db->real_escape_string($params['pjtId']);
+    $pjtId = $this->db->real_escape_string($params['pjtId']);
 
-    $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = SYSDATE() WHERE pjt_id = $pjtId;";
+     $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = SYSDATE() WHERE pjt_id = $pjtId;";
+    /* $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = CURRENT_TIMESTAMP()  
+             WHERE pjt_id = $pjtId;"; */
+    
     $this->db->query($qry1);
 
     return $pjtId;
 }
 
 
-    
 /** ====== Guarda una nueva version ==========================================================  */
     public function SaveVersion($params)
     {
@@ -484,10 +484,11 @@ public function saveDateProject($params)
         $this->db->query($qry1);
 
         $qry2 = "INSERT INTO ctt_version 
-                        (ver_code,   pjt_id, ver_active, ver_master,  ver_status, ver_discount_insured) 
+                (ver_code,   pjt_id, ver_active, ver_master,  ver_status, ver_discount_insured) 
                  VALUES ('$verCode', $pjtId, $verActive, $verMaster, '$verStatus', $discount);";
         $this->db->query($qry2);
         $result = $this->db->insert_id;
+
         return $result . '|' . $pjtId;
     }
 
@@ -629,7 +630,8 @@ public function saveDateProject($params)
   
      public function getProjectVersion($pjtId)
      {
-        $qry1 = "SELECT * FROM ctt_projects_content as pc 
+        $pjtId   = $this->db->real_escape_string($pjtId);
+        $qry1 = "SELECT * FROM ctt_projects_content AS pc 
                  INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                  INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
                  WHERE pj.pjt_id = $pjtId;";
@@ -649,7 +651,7 @@ public function saveDateProject($params)
      }
 
 
-/** ====== Agrega contenido de la nueva version ==============================================  */
+/** ====== Agrega contenido de la nueva version ==============================================  */ // JJR agrego pjtvr_action != 'D' AND
     public function settinProjectVersion($pjtId, $verId )
     {
  
@@ -662,7 +664,7 @@ public function saveDateProject($params)
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost,
                     pjtvr_discount_base, pjtvr_discount_insured, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,
                     pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, '$verId' as ver_id, prd_id, pjt_id
-                FROM ctt_projects_mice WHERE pjt_id = $pjtId;";
+                FROM ctt_projects_mice WHERE pjtvr_action != 'D' AND pjt_id = $pjtId;";
 
         return $this->db->query($qry);
             
@@ -777,7 +779,8 @@ public function saveDateProject($params)
         $detlId   = $this->db->real_escape_string($params['detlId']);
 
         // Busca serie que se encuentre disponible y obtiene el id
-        $qry1 = "SELECT ser_id, ser_sku FROM ctt_series WHERE prd_id = $prodId 
+        $qry1 = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count 
+                 FROM ctt_series WHERE prd_id = $prodId 
                  AND pjtdt_id = 0
                  ORDER BY ser_reserve_count asc LIMIT 1;";
         $result =  $this->db->query($qry1);
@@ -786,39 +789,47 @@ public function saveDateProject($params)
         if ($series != null){
             $serie  = $series->ser_id; 
             $sersku  = $series->ser_sku; 
+            $ser_reserve_count  = $series->ser_reserve_count;
+
+            $qry3 = "INSERT INTO ctt_projects_detail (
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id) 
+                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
+                ); ";
+            $this->db->query($qry3);
+            $pjtdtId = $this->db->insert_id;
 
             // Si la encuentra coloca la etapa y el estatus a la serie
             $qry2 = "UPDATE ctt_series 
                         SET 
-                            ser_situation = 'EA',
-                            ser_stage = 'R',
-                            ser_reserve_count = ser_reserve_count + 1
-                    WHERE   ser_id = $serie;";
+                            ser_situation = 'EA', ser_stage = 'R',
+                            ser_reserve_count = $ser_reserve_count,
+                            pjtdt_id = '$pjtdtId'
+                    WHERE ser_id = $serie;";
             $this->db->query($qry2);
 
         } else {
             $serie  = null; 
             $sersku  = 'Pendiente' ;
+
+            $qry2 = "INSERT INTO ctt_projects_detail (
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
+                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
+                ); ";
+
+            $this->db->query($qry2);
+            $pjtdtId = $this->db->insert_id;
         }
         
         // Agrega el registro en el detalle con los datos de la serie
-        $qry3 = "INSERT INTO ctt_projects_detail (
-                    pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id
-                ) VALUES (
-                    '$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
-                );        ";
-        $this->db->query($qry3);
-        $pjtdtId = $this->db->insert_id;
-
-        if ( $serie != null){
+            /*     if ( $serie != null){
             // Asigna el id del detalle en la serie correspondiente
             $qry4 = "UPDATE ctt_series 
                         SET 
                             pjtdt_id = '$pjtdtId'
                         WHERE ser_id = $serie;";
             $this->db->query($qry4);
-        }
-
+            }
+ */
         // Agrega los periodos desiganados a la serie 
         $qry5 = "INSERT INTO ctt_projects_periods 
                     (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs) 
@@ -832,13 +843,29 @@ public function saveDateProject($params)
 
     public function GetAccesories($params)
     {
-        $prodId        = $this->db->real_escape_string($params);
-        $qry = "SELECT pr.* FROM ctt_products AS pr
-                INNER JOIN ctt_accesories AS ac ON ac.prd_id = pr.prd_id 
-                WHERE ac.prd_parent = $prodId;";
-        return $this->db->query($qry);
+        $prodId   = $this->db->real_escape_string($params['prodId']);
+        $serId   = $this->db->real_escape_string($params['serId']);
 
+        /* $qry = "SELECT pr.* FROM ctt_products AS pr
+                INNER JOIN ctt_accesories AS ac ON ac.prd_id = pr.prd_id 
+                WHERE ac.prd_parent = $prodId;"; */
+        $qry = "SELECT ser_id FROM ctt_projects_detail 
+                WHERE pjtdt_id = $serId LIMIT 1;";
+        $result =  $this->db->query($qry);
+
+        $locserid = $result->fetch_object();
+        if ($locserid != null){
+            $locser  = $locserid->ser_id; 
+            
+            $qry1 = "SELECT pr.* 
+            FROM ctt_products AS pr
+            INNER JOIN ctt_accesories AS ac ON ac.ser_parent = pr.prd_id 
+            WHERE ac.prd_parent = $prodId AND ac.prd_id=$locser;";
+        }
+        return $this->db->query($qry1);
     }
+
+
     public function GetProducts($params)
     {
         $prodId        = $this->db->real_escape_string($params);

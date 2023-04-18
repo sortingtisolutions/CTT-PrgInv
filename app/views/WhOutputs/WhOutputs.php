@@ -167,6 +167,22 @@
     </div>
 </div>
 
+<!-- Fondo obscuro -->
+<div class="invoice__modalBackgound"></div>
+
+<!-- loading -->
+<div class="invoice__loading modalLoading">
+        <div class="box_loading">
+            <p class="text_loading">
+                Identificando Productos<br>
+                <i class="fas fa-spinner spin"></i> 
+                </p>
+            <p>Se estan actualizando los registros del proyecto, este proceso puede tardar varios minutos</p>
+        </div>
+</div>
+<!-- end -->
+
+
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'WhOutputs/WhOutputs.js?v=1.0.0.0' ?>"></script>

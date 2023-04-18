@@ -78,8 +78,8 @@ class WhOutputContentModel extends Model
         /* $updt = "update ctt_series set ser_situation = 'TA', ser_stage = 'TA' 
                 where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
  */
-        $updt = "UPDATE ctt_series set ser_stage = 'TA' 
-                where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
+        $updt = "UPDATE ctt_series set ser_stage = 'TR' 
+                where ser_sku = '$pjtcnid' and ser_stage = 'TA'";
 
          $this->db->query($updt);
          return $pjtcnid;
@@ -115,8 +115,9 @@ class WhOutputContentModel extends Model
                 WHERE pj.pjt_id=$pjtid;"; */
 
         $qry = "UPDATE ctt_series SET ser_stage='UP'
-                WHERE ser_id=$serid;";
-        
+                WHERE ser_id=$serid ;";  
+        //AND ser_stage='TR';
+
         $folio = $this->db->query($qry);
         return $folio;
     }
@@ -179,12 +180,38 @@ public function SaveExchange($param, $user)
     {
         $pjtid = $this->db->real_escape_string($params['pjtid']);
         
-        $updt = "UPDATE ctt_projects SET pjt_status = '7' 
+        $updt = "UPDATE ctt_projects SET pjt_status = '8' 
                 WHERE pjt_id = '$pjtid' AND pjt_status = '4'";
 
          /* $this->db->query($updt); */
          return $this->db->query($updt);
         
     }
+
+    public function GetExistMovil($params)
+    {
+        $pjtid        = $this->db->real_escape_string($params['pjtid']);
+
+        $qry = "SELECT mov.str_id,mov.ser_id,mov.movstr_placas,pjc.pjt_id FROM ctt_mobile_store AS mov
+                INNER JOIN ctt_projects_detail AS pjd ON mov.ser_id=pjd.ser_id
+                INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id=pjd.pjtvr_id
+                WHERE pjc.pjt_id=$pjtid;";
+
+        return $this->db->query($qry);
+    }
+
+    public function GetDetailMovil($params)
+    {
+        $strid        = $this->db->real_escape_string($params['strid']);
+
+        $qry = "SELECT stp.stp_id,stp.stp_quantity,stp.str_id,stp.ser_id,stp.prd_id,prd.prd_sku,prd.prd_name,1 as quantity 
+                FROM ctt_stores_products AS stp
+                INNER JOIN ctt_series AS ser ON ser.ser_id=stp.ser_id
+                INNER JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
+                WHERE stp.str_id=$strid";
+
+        return $this->db->query($qry);
+    }
+
 
 }

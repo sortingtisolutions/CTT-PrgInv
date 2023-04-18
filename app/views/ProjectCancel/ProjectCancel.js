@@ -140,8 +140,8 @@ function actionButtons() {
 
             switch (acc) {
                 case 'active':
-                    enableProject(pjtId);
                     console.log('habilita proyecto');
+                    enableProject(pjtId);
                     break;
                 case 'kill':
                     console.log('Elimina proyecto');

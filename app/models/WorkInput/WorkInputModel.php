@@ -29,7 +29,7 @@ class WorkInputModel extends Model
                 pj.pjt_location, pj.pjt_status,pj.pjt_id
                 FROM ctt_projects AS pj INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id 
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id 
-                WHERE pj.pjt_status in ('4') ORDER BY pjt_date_start ASC;";
+                WHERE pj.pjt_status in ('8') ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }
 
@@ -52,8 +52,8 @@ class WorkInputModel extends Model
                 INNER JOIN ctt_projects_version AS pjv ON pjv.pjtvr_id=pjd.pjtvr_id
                 INNER JOIN ctt_version AS ver ON ver.ver_id=pjv.ver_id
                 INNER JOIN ctt_projects AS pjt ON pjt.pjt_id=pjv.pjt_id
-                SET ser.ser_stage='TA'
-                WHERE (ver.ver_active=1 AND pjt.pjt_id=$pjtid AND pjt.pjt_status=4);";
+                SET ser.ser_situation='VA' AND ser.ser_stage='V'
+                WHERE (ver.ver_active=1 AND pjt.pjt_id=$pjtid AND pjt.pjt_status=8);";
 
         return $this->db->query($qry);
     }

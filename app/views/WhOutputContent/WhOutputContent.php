@@ -69,7 +69,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="height:20px;"></div> <!-- Agregar un espacio -->
+                    <div style="height:10px;"></div> <!-- Agregar un espacio -->
                     <div class="row">
                             <div class="col">
                                 <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordOutPut">Registrar Salida</button>
@@ -77,6 +77,12 @@
                             <!-- <div class="col-6">
                                 <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
                             </div> -->
+                    </div>
+                    <div style="height:10px;"></div> <!-- Agregar un espacio -->
+                    <div class="row bprint hide-items">
+                            <div class="col">
+                                <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important; color:lightsalmon" id="printOutPut">Imprimir Salida</button>
+                            </div>
                     </div>
 
                     <div class="form_secundary">
@@ -103,11 +109,11 @@
                 </div>
             </div>
 
-
+<!-- Tabla para presentar los contenidos del proyecto -->
             <div class="mvst_table">
-                <div class="tblProdMaster">
+                <div class="mvst_list tblProdMaster">
                         <h3>Asignacion de Productos</h3>
-                        <table class="display nowrap"  id="tblAsignedProd" style="width:100%">
+                        <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%">
                             <thead>
                                 <tr>
                                     <th style="width:  20px"></th>
@@ -126,34 +132,8 @@
     </div>
 </div>
 
-
-<!-- Modal Borrar
-<div class="modal fade" id="delPackModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-            <div class="modal-header ">
-            </div>
-            <div class="modal-body" style="padding: 0px !important;">
-
-
-            <div class="row">
-                <input type="hidden" class="form-control" id="txtIdPackage" aria-describedby="basic-addon3">
-                <div class="col-12 text-center">
-                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Seguro que desea borrarlo?</span>
-                </div>
-            </div>
-
-            </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-danger" id="btnDelPackage">Borrar</button>
-                </div>
-            </div>
-    </div>
-</div>-->
-
 <!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
-<div class="overlay_background overlay_hide" id="SerieModal">
+<div class="overlay_background overlay_hide" id="SerieModal" style="width: 80%">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <table class="display compact nowrap"  id="tblSerie" style="width: 100%">
@@ -259,6 +239,7 @@
         </div>
     </div>
 <!-- end -->
+
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>

@@ -17,6 +17,7 @@ function inicial() {
     getProjects(prjid);
     getDetailProds();
 
+    // Boton para registrar la salida del proyecto y los productos
     $('#recordOutPut').on('click', function () {
         // let locID = $(this);
         // let pjtid = locID.parents('tr').attr('id');
@@ -30,7 +31,7 @@ function inicial() {
 
 // Solicita los paquetes  OK
 function getProjects(prjid) {
-    console.log(prjid)
+    //console.log(prjid)
     var pagina = 'WhOutputContent/listProjects';
     var par = `[{"pjt_id":"${prjid}"}]`;
     var tipo = 'json';
@@ -69,22 +70,58 @@ function getSerieDetail(serid, serorg) {
 //**************  NIVEL 1 DE DATOS *****************************************
 
 // Configura la tabla de productos del proyecto
+
 function setting_table_AsignedProd() {
-    
-    let tabla = $('#tblAsignedProd').DataTable({
+    let title = 'Contenido de proyectos';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    $('#tblAsignedProd').DataTable({
         order: [[1, 'asc']],
-        pageLength: 1000,
-        select: true,
-        dom: 'Brti',
+        dom: 'Blfrtip',
+        lengthMenu: [
+                [100, 200, -1],
+                [100, 200, 'Todos'],
+            ],
+        // pageLength: 1000,
+        // select: true,
+       
         buttons: [
-            {
-                // Boton aplicar cambios
+                {
+                    //Botón para Excel
+                    extend: 'excel',
+                    footer: true,
+                    title: title,
+                    filename: filename,
+    
+                    //Aquí es donde generas el botón personalizado
+                    text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+                },
+                 /* // Boton aplicar cambios
+                {
                 text: 'Generar paquete',
                 className: 'btn-apply hidden-field',
                 action: function (e, dt, node, config) {
-                    /*read_package_table();*/
+                    //read_package_table();
+                }, */
+                {
+                    //Botón para PDF
+                    extend: 'pdf',
+                    footer: true,
+                    title: title,
+                    filename: filename,
+    
+                    //Aquí es donde generas el botón personalizado
+                    text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
                 },
-            },
+                {
+                    //Botón para imprimir
+                    extend: 'print',
+                    footer: true,
+                    title: title,
+                    filename: filename,
+    
+                    //Aquí es donde generas el botón personalizado
+                    text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+                },
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -122,25 +159,46 @@ function putProjects(dt) {
 function putDetailsProds(dt) {
     if (dt[0].pjtpd_id != '0')
     {
-        let tabla = $('#tblAsignedProd').DataTable();
-        $.each(dt, function (v, u)
-        {
-        let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
-            tabla.row
-                .add({
-                    editable: `<i class="fas fa-edit toLink" id="${u.pjtcn_id}"></i>`,
- /*                   pack_sku: `<span class="hide-support" id="SKU-${u.pjtcn_prod_sku}">${u.pjtcn_id}</span>${u.pjtcn_prod_sku}`, */
-                    pack_sku: skufull,
-                    packname: u.pjtcn_prod_name,
-                    packcount: u.pjtcn_quantity,
-                    packlevel: u.pjtcn_prod_level,
-                    packstatus: u.pjtcn_status,
-                    /* '<input class="serprod fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">' */
-                })
-                .draw();
-/*<i class="fas fa-times-circle choice pack kill" id="D-${u.pjtpd_id}"></i>`, */
-            $(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
+        // let tabla = $('#tblAsignedProd').DataTable();
+        $('#tblAsignedProd tbody').html('');
+        $.each(dt, function (v, u){
+        if (u.pjt_status == 4)
+            { valstage='color:#008000'; }
+            else if (u.pjt_status == 7)
+             { valstage='color:#FFA500'; }
+            else
+            { valstage='color:#FFA500'; }
+            //console.log(valstage);
+            //let valstage = u.pjt_status == 4 ? 'color:#008000' : 'color:#CC0000';
+            let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
+            var H = `
+                <tr id="${u.pjt_id}">
+                    <td class="sku"><i class="fas fa-edit toLink" id="${u.pjtcn_id}"></i></td>
+                    <td class="sku">${skufull}</td>
+                    <td class="supply">${u.pjtcn_prod_name}</td>
+                    <td class="sku">${u.pjtcn_quantity}</td>
+                    <td class="supply">${u.pjtcn_prod_level}</td>
+                    <td class="supply">${u.pjtcn_status}</td>
+                </tr>`;
+            $('#tblAsignedProd tbody').append(H);
         });
+//         {
+//         let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
+//             tabla.row
+//                 .add({
+//                     editable: `<i class="fas fa-edit toLink" id="${u.pjtcn_id}"></i>`,
+//  /*                   pack_sku: `<span class="hide-support" id="SKU-${u.pjtcn_prod_sku}">${u.pjtcn_id}</span>${u.pjtcn_prod_sku}`, */
+//                     pack_sku: skufull,
+//                     packname: u.pjtcn_prod_name,
+//                     packcount: u.pjtcn_quantity,
+//                     packlevel: u.pjtcn_prod_level,
+//                     packstatus: u.pjtcn_status,
+//                     /* '<input class="serprod fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">' */
+//                 })
+//                 .draw();
+// /*<i class="fas fa-times-circle choice pack kill" id="D-${u.pjtpd_id}"></i>`, */
+//             $(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
+//         });
         activeIcons();
     }
 }
@@ -152,116 +210,124 @@ function activeIcons() {
         .on('click', function () {
             //let selected = $(this).parent().attr('id');
             let pjtcnid = $(this).attr('id');
-            console.log('Cont-Producto', pjtcnid);
+            //console.log('Cont-Producto', pjtcnid);
             if (pjtcnid > 0) {
                 getSeries(pjtcnid);
             }
         });
 
-    /* $('.modif')
-        .unbind('click')
-        .on('click', function () {
-            let sltor = $(this);
-            let prdId = sltor.parents('tr').attr('id');
-            let prdNm = 'Modifica producto'; 
-
-           // $('#ProductModal').removeClass('overlay_hide');
-           // $('.overlay_closer .title').html(prdNm);
-            // getSelectProduct(prdId);
-            $('#ProductModal .btn_close')
-                .unbind('click')
-                .on('click', function () {
-                    $('.overlay_background').addClass('overlay_hide');
-                });
-        }); */
 }
 
 //**************  NIVEL 2 DE DATOS  *****************************************
 
 // ### LISTO ### Llena prepara la table dentro del modal para series ### LISTO -- MODAL 1###
 function putSeries(dt) {
-    settingSeries();
-    build_modal_serie(dt);
-
+    settingSeries(dt);
+    build_modal_serie_new(dt);
+    activeIconsSerie();
 }
 
-function settingSeries(){
-        console.log('Setting-Series');
-        $('#SerieModal').removeClass('overlay_hide');
-        $('#tblSerie').DataTable({
-            destroy: true,
-            order: [[1, 'asc']],
-            lengthMenu: [
-                [100, 150, 200, -1],
-                [100, 150, 200, 'Todos'],
-            ],
-            pagingType: 'simple_numbers',
-            language: {
-                url: 'app/assets/lib/dataTable/spanish.json',
-            },
-            scrollY: 'calc(100vh - 290px)',
-            scrollX: true,
-            fixedHeader: true,
-            columns: [
-                {data: 'sermodif', class: 'edit'},
-                {data: 'seriesku', class: 'sku left'},
-                {data: 'sername', class: 'supply left'},
-                {data: 'sernumber', class: 'sernumber'},
-                {data: 'sertype', class: 'sertype'},
-            ],
-        } );
+function settingSeries(dt){
+        
+    $('#SerieModal').removeClass('overlay_hide');
+    $('#tblSerie').DataTable({
+        // destroy: true,
+        order: [[1, 'asc']],
+        dom: 'Blfrtip',
+        lengthMenu: [
+            [100, 200, -1],
+            [100, 200, 'Todos'],
+        ],
 
-        $('#SerieModal .btn_close')
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 290px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'sermodif', class: 'edit'},
+            {data: 'seriesku', class: 'sku left'},
+            {data: 'sername', class: 'supply left'},
+            {data: 'sernumber', class: 'sernumber'},
+            {data: 'sertype', class: 'sertype'},
+            {data: 'serstat', class: 'sku'},
+        ],
+    });
+
+    $('#SerieModal .btn_close')
         .unbind('click')
         .on('click', function () {
-            console.log('Cierra Series');
+            //console.log('Cierra Series');
             $('.overlay_background').addClass('overlay_hide');
             $('.overlay_closer .title').html('');
             let Dtable=$('#tblSerie').DataTable();
             Dtable.rows().remove().draw();
-            
-        });
-        activeIcons();
+            // Dtable.destroy();
+    });
+
+   
+    // activeIcons();
 }
+
 // ### LISTO ### Llena con datos de series la tabla del modal --- MODAL 1
-function build_modal_serie(dt) {
-        console.log('Nivel 2', dt);
-        let tabla = $('#tblSerie').DataTable();
-        $('.overlay_closer .title').html(`SERIE ASIGNADA: ${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`);
-        /* tabla.rows().remove().draw(); */
-        $.each(dt, function (v, u) {
-            let skufull = u.pjtdt_prod_sku.slice(7, 11) == '' ? u.pjtdt_prod_sku.slice(0, 7) : u.pjtdt_prod_sku.slice(0, 7) + u.pjtdt_prod_sku.slice(7, 11);
-            let sku = u.pjtdt_prod_sku.slice(0, 8);
-            let accesory = u.pjtdt_prod_sku.slice(7,8);
-            let acc = u.pjtdt_prod_sku.slice(7,8) == 'A' ? skufull : sku;
-            let valstage = u.ser_stage == 'TA' ? 'color:#CC0000' : 'color:#3c5777';
+function build_modal_serie_old(dt) {
+        console.log('Nivel 2');
+         let tabla = $('#tblSerie').DataTable();
+         $('.overlay_closer .title').html(`SERIE ASIGNADA: ${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`);
+         tabla.rows().remove().draw();
+         $.each(dt, function (v, u){
+             let skufull = u.pjtdt_prod_sku.slice(7, 11) == '' ? u.pjtdt_prod_sku.slice(0, 7) : u.pjtdt_prod_sku.slice(0, 7) + u.pjtdt_prod_sku.slice(7, 11);
+             let sku = u.pjtdt_prod_sku.slice(0, 8);
+             let accesory = u.pjtdt_prod_sku.slice(7,8);
+             let acc = u.pjtdt_prod_sku.slice(7,8) == 'A' ? skufull : sku;
+             let valstage = u.ser_stage == 'TA' ? 'color:#CC0000' : 'color:#3c5777';
+             //console.log(dt);
+             tabla.row
+                 .add({
+                     // sermodif: `<i class='fas fa-edit toLink2' id="${u.pjtdt_prod_sku.slice(0, 7)}"  sku_original = "${skufull}"></i> <i class='fas fa-check-circle toCheck' id="${u.pjtdt_prod_sku.slice(0,7)+u.pjtdt_prod_sku.slice(7,11)}"></i>`,
+                     sermodif: `<i class="fas fa-edit toChange" id="${acc}" sku_original="${skufull}"></i> 
+                                <i class="fas fa-check-circle toCheck" id="${skufull}" style="${valstage}"></i>`,
+                     seriesku: skufull,
+                     sername: u.prd_name,
+                     sernumber: u.ser_serial_number,
+                     sertype: u.prd_level,
+                     serstat: u.prd_level,
+                 });
+                 // .draw();
+             $(`#${u.pjt_id}`).parents('tr').attr('id',u.pjt_id);
+         });
 
-            /* var H = `
-                <tr id="${u.pjt_id}">
-                    <td class="sku"><i class='fas fa-edit toLink2' id="${acc}"  sku_original = "${skufull}"></i> <i class='fas fa-check-circle toCheck' id="${u.pjtdt_prod_sku.slice(0,7)+u.pjtdt_prod_sku.slice(7,11)}"></i></td>
-                    <td class="sku">${skufull}</td>
-                    <td class="supply">${u.prd_name}</td>
-                    <td class="supply">${u.ser_serial_number}</td>
-                    <td class="date">${u.prd_level}</td>
-                </tr>`;
-            $('#tblSerie tbody').append(H); */
-
-            tabla.row
-                .add({
-                    // sermodif: `<i class='fas fa-edit toLink2' id="${u.pjtdt_prod_sku.slice(0, 7)}"  sku_original = "${skufull}"></i> <i class='fas fa-check-circle toCheck' id="${u.pjtdt_prod_sku.slice(0,7)+u.pjtdt_prod_sku.slice(7,11)}"></i>`,
-                    sermodif: `<i class='fas fa-edit toChange' id="${acc}" sku_original="${skufull}"></i> <i class='fas fa-check-circle toCheck' id="${skufull}" style='${valstage}'></i>`,
-                    seriesku: skufull,
-                    sername: u.prd_name,
-                    sernumber: u.ser_serial_number,
-                    sertype: u.prd_level,
-                })
-                .draw();
-            //$(`#E${u.pjtcn_id}`).parents('tr').attr('data-product', u.pjtcn_id);
-        });
-        console.log('MODAL ESPECIAL SERIE-');
-        activeIconsSerie();
 }
 
+function build_modal_serie_new(dt) {
+    console.log('Nivel 2');
+    $('#tblSerie').DataTable();
+    $('.overlay_closer .title').html(`SERIE ASIGNADA: ${dt[0].pjtdt_prod_sku} - ${dt[0].prd_name}`);
+    $.each(dt, function (v, u){
+        let skufull = u.pjtdt_prod_sku.slice(7, 11) == '' ? u.pjtdt_prod_sku.slice(0, 7) : u.pjtdt_prod_sku.slice(0, 7) + u.pjtdt_prod_sku.slice(7, 11);
+        let sku = u.pjtdt_prod_sku.slice(0, 8);
+        let accesory = u.pjtdt_prod_sku.slice(7,8);
+        let acc = u.pjtdt_prod_sku.slice(7,8) == 'A' ? skufull : sku;
+        let valstage = u.ser_stage == 'TA' ? 'color:#CC0000' : 'color:#3c5777';
+        console.log(dt);
+        var H =`
+            <tr id="${u.pjt_id}">
+                <td class="sku"><i class='fas fa-edit toChange' id="${acc}" sku_original="${skufull}"></i> 
+                                <i class='fas fa-check-circle toCheck' id="${skufull}" style='${valstage}'></i></td>
+                <td class="sku">${skufull}</td>
+                <td class="supply">${u.prd_name}</td>
+                <td class="supply">${u.ser_serial_number}</td>
+                <td class="sku">${u.prd_level}</td>
+                <td class="sku">${u.prd_level}</td>
+            </tr>`;
+        
+        $('#tblSerie tbody').append(H);
+        
+    });
+    
+}
 
 /** ### LISTO ### +++++  Activa los iconos del modal de serie */
 function activeIconsSerie() {
@@ -272,69 +338,30 @@ function activeIconsSerie() {
             let serorg = $(this).attr('sku_original');
                 //let serprd = "28";
                 //let qty = $(this).parent('td').attr('data-content');
-                console.log('Click Modal Series', serprd);
-                if (serprd != "") {
-                    getSerieDetail(serprd, serorg);
+            console.log('Click Lista Series', serprd);
+            if (serprd != "") {
+                getSerieDetail(serprd, serorg);
             }
     });
-
+    
     $('.toCheck')
         .unbind('click')
         .on('click', function () {
         let serprd = $(this).attr('id');
-        //let serprd = "28";
-        // console.log("Para validar: "+serprd);
+        console.log("Para validar: "+serprd);
             checkSerie(serprd);
         // console.log('Check despues', serprd);
-        /*if (serprd != "") {
-            getSerieDetail(serprd);
-        }*/
+        // if (serprd != "") {
+        //     getSerieDetail(serprd);
+        // }
         });
+    
 }
 
 //**************  NIVEL 3 DE DATOS  *****************************************
 
-function settingChangeSerie(){
-    console.log('setting');
-    $('#ChangeSerieModal').removeClass('overlay_hide');
-    $('#tblChangeSerie').DataTable({
-        destroy: true,
-        order: [[1, 'asc']],
-        lengthMenu: [
-            [10, 30, 50, -1],
-            [10, 30, 50, 'Todos'],
-        ],
-        pagingType: 'simple_numbers',
-        language: {
-            url: 'app/assets/lib/dataTable/spanish.json',
-        },
-        scrollY: 'calc(100vh - 290px)',
-        scrollX: true,
-        fixedHeader: true,
-        columns: [
-            {data: 'serchange', class: 'edit'},
-            {data: 'serdetsku', class: 'sku left'},
-            {data: 'serdetname', class: 'supply left'},
-            {data: 'serchoose', class: 'sku'},
-            {data: 'serdetnumber', class: 'sernumber'},
-            {data: 'serdetsitu', class: 'sertype'},
-            {data: 'serdetstag', class: 'sertype'},
-        ],
-    });
-
-    $('#ChangeSerieModal .btn_close')
-        .unbind('click')
-        .on('click', function () {
-           $('.overlay_background').addClass('overlay_hide');
-           /* $('#tblChangeSerie').DataTable().remove().draw(); */
-            // activeIcons();
-        });
-    
-}
-
 // AGREGA LAS SERIES DISPONIBLES
 function putSerieDetails(dt){
-    
     console.log(dt);
     settingChangeSerie();
     console.log('Configuro SET');
@@ -362,6 +389,50 @@ function putSerieDetails(dt){
     // activeIconsSerie();
 
 }
+
+
+function settingChangeSerie(){
+    console.log('setting');
+    $('#ChangeSerieModal').removeClass('overlay_hide');
+    $('#tblChangeSerie').DataTable({
+        destroy: true,
+        order: [[1, 'asc']],
+        lengthMenu: [
+            [10, 30, 50, -1],
+            [10, 30, 50, 'Todos'],
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 290px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'serchange', class: 'edit'},
+            {data: 'serdetsku', class: 'sku left'},
+            {data: 'serdetname', class: 'supply left'},
+            {data: 'serchoose', class: 'sku'},
+            {data: 'serdetnumber', class: 'supply'},
+            {data: 'serdetsitu', class: 'sku'},
+            {data: 'serdetstag', class: 'sku'},
+        ],
+    });
+
+    $('#ChangeSerieModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+           $('.overlay_background').addClass('overlay_hide');
+           $('.overlay_closer .title').html('');
+            let Dtable=$('#tblChangeSerie').DataTable();
+            Dtable.rows().remove().draw();
+            Dtable.destroy();
+        //    $('#tblChangeSerie').DataTable().remove().draw();
+            // activeIcons();
+        });
+    
+}
+
 
 function build_modal_seriefree(dt) {
     console-log(dt);
@@ -410,13 +481,13 @@ function activeIconsSerieFree() {
 }
 
 function checkSerie(pjtcnid) {
-    console.log('ID-Producto-Check', pjtcnid);
-    var pagina = 'WhOutputContent/checkSeries';
-    var par = `[{"pjtcnid":"${pjtcnid}"}]`;
-    var tipo = 'html';
-    var selector = myCheck; 
-    fillField(pagina, par, tipo, selector);
-    }
+        console.log('ID-Producto-Check', pjtcnid);
+        var pagina = 'WhOutputContent/checkSeries';
+        var par = `[{"pjtcnid":"${pjtcnid}"}]`;
+        var tipo = 'html';
+        var selector = myCheck; 
+        fillField(pagina, par, tipo, selector);
+}
     
     function myCheck(dt){
     //$('#ChangeSerieModal').addClass('overlay_hide');
@@ -477,22 +548,30 @@ function confirm_to_GetOut(pjtid) {
 
         console.log('Datos CLICK',pjtid);
         modalLoading('S');
-        var pagina = 'WhOutputContent/ProcessGetOutProject';
+        
+        /* var pagina = 'WhOutputContent/ProcessGetOutProject';
         var par = `[{"pjtid":"${pjtid}"}]`;
         var tipo = 'json';
         var selector = putToWork;
-        fillField(pagina, par, tipo, selector);
+        fillField(pagina, par, tipo, selector); */
+        let Arg='23|56|PASO1,PASO2 ';
+        putToWork(Arg);
     });
 }
 
 function putToWork(dt){
-    console.log('TERMINO ACTUALIZAR');
-    console.log(dt);
+    console.log('TERMINO ACTUALIZAR', dt);
+   
+    let ver     =dt.split('|')[0];
+    let folio   =dt.split('|')[1];    
+    let paso    =dt.split('|')[2];
 
+    console.log('Regreso', ver,folio,paso);
+    $('.bprint').removeClass('hide-items');
     $('.resFolio').text(refil(folio, 7));
     $('#MoveFolioModal').modal('show');
     $('#btnHideModal').on('click', function () {
-        window.location = 'WhOutputs';
+        // window.location = 'WhOutputs';
     });
     $('#btnPrintReport').on('click', function () {
         console.log(dt);

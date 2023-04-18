@@ -131,7 +131,7 @@ class WhOutputContentController extends Controller
 public function ProcessGetOutProject($request_params)
     {  
         $params = $this->session->get('user');
-        $exchId  = $this->model->NextExchange($request_params);       
+        $folio  = $this->model->NextExchange($request_params);       
 
         $versin = 0;
         $result = $this->model->GetProjectDetail($request_params);
@@ -146,7 +146,7 @@ public function ProcessGetOutProject($request_params)
             $prdnam = $row["pjtcn_prod_name"];
             $cntqty = $row["pjtcn_quantity"];
             $prjId = $row["pjt_id"];
-            $folio  = $exchId;
+            $GlbprjId = $row["pjt_id"];
               
             $paramsdet = array(
                 'stpid' => $stpid,
@@ -162,20 +162,72 @@ public function ProcessGetOutProject($request_params)
             );
 
             $ActSeries = $this->model->ActualizaSeries($paramsdet);
-            $versin = 2;
+            //$versin = 2;
             $updetail = $this->model->UpdateProducts($paramsdet);
-            $versin = 3;
+            //$versin = 3;
             $saveExc = $this->model->SaveExchange($paramsdet, $params);
-            $versin = 4;
+            //$versin = 4;
             // echo $stpid . ' | ' . 'END ' ;
+            
+            $Paso= ' Seccion 1 -' ;
         }
+        
+        // VALIDA LA EXISTENCIA DE ALMACEN MOVIL Y REGISTRA SU SALIDA
+        $result2 = $this->model->GetExistMovil($request_params);
+        
+        while($row2 = $result2->fetch_assoc()){
+            $strid = $row2["str_id"];
+            $serid = $row2["ser_id"];
+            $movpla = $row2["movstr_placas"];
+            $prjId = $row2["pjt_id"];
+            $paramsstr = array(
+                'strid' => $strid, 
+                'serid' => $serid,
+                'movpla' => $movpla,
+                'prjId' => $prjId, 
+            );
+            
+            $result3 = $this->model->GetDetailMovil($paramsstr);
+
+            while($row3 = $result3->fetch_assoc()){
+                $stpid = $row3["stp_id"];
+                $stpqty = $row3["stp_quantity"];
+                $strid = $row3["str_id"];
+                $serid = $row3["ser_id"];
+                $prodId = $row3["prd_id"];
+                $prdsku = $row3["prd_sku"];
+                $prdnam = $row3["prd_name"];
+                $cntqty = $row3["quantity"];
+                $prjId = $GlbprjId;
+                
+                $paramsmov = array(
+                    'stpid' => $stpid,
+                    'stpqty' => $stpqty,
+                    'strid' => $strid, 
+                    'serid' => $serid,
+                    'prodId' => $prodId,
+                    'prdsku' => $prdsku,
+                    'prdnam' => $prdnam, 
+                    'cntqty' => $cntqty,
+                    'prjId' => $prjId,  
+                    'folio' => $folio, 
+                );
+
+                $ActSeries = $this->model->ActualizaSeries($paramsmov);
+                $versin = 2;
+                $updetail = $this->model->UpdateProducts($paramsmov);
+                $versin = 3;
+                $saveExc = $this->model->SaveExchange($paramsmov, $params);
+                $versin = 4;
+                // echo $stpid . ' | ' . 'END ' ;
+            }
+        }
+        $Paso= $Paso . ' Seccion 2 ' ;
 
         $resultprjt = $this->model->GetOutProject($request_params);        
-        echo $versin .' | ' . $exchId ;
+        echo $versin .' | ' . $folio . ' | ' . $Paso;
     
     } 
-
-
 
     // Obtiene datos del producto seleccionado
    /*  public function getSelectSerie($request_params)

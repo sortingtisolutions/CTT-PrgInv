@@ -191,9 +191,7 @@ public function listProjectsTypeCalled($request_params)
     echo $res;
 
 } 
-
-        
-    
+ 
 // Lista los productos
     public function listProducts($request_params)
     {
@@ -230,11 +228,7 @@ public function listProjectsTypeCalled($request_params)
         echo $res;
     } 
 
-
-
-
-
-    
+ 
 // Guarda el comentario
     public function InsertComment($request_params)
     {
@@ -490,7 +484,7 @@ public function updateOrder($request_params)
                         'detlId' => 0,
                     );
                     $serie = $this->model->SettingSeries($params);
-                    // echo $serie . ' - ' ;
+                    
                 }
             } else if ( $bdglvl == 'P' ){
                 for ($i = 1; $i<=$quanty; $i++){
@@ -517,8 +511,13 @@ public function updateOrder($request_params)
                         'detlId' => 0,
                     );
                     $detlId = $this->model->SettingSeries($params);
-
-                    $accesory = $this->model->GetAccesories($prodId);
+                    $serId=$detlId;
+                    $paramacc = array(
+                        'prodId' => $prodId, 
+                        'serId' => $serId,
+                    );
+                     echo $serId . ' - Prod ' . $prodId ;
+                    $accesory = $this->model->GetAccesories($paramacc);
                     while($acc = $accesory->fetch_assoc()){
 
                         $acceId =  $acc["prd_id"];
@@ -547,6 +546,7 @@ public function updateOrder($request_params)
                             'detlId' => $detlId,
                         );
                         $serie = $this->model->SettingSeries($accparams);
+                        echo $serId . ' - SER-ACC ' . $prodId ;
                     }
 
                 }
@@ -581,8 +581,12 @@ public function updateOrder($request_params)
                             'detlId' => 0,
                         );
                         $detlId = $this->model->SettingSeries($prodparams);
-
-                        $accesory = $this->model->GetAccesories($pkpdId);
+                        $serId=$detlId;
+                        $paramaccpk = array(
+                            'prodId' => $pkpdId, 
+                            'serId' => $serId,
+                        );
+                        $accesory = $this->model->GetAccesories($paramaccpk);
                         while($acc = $accesory->fetch_assoc()){
     
                             $acceId =  $acc["prd_id"];
@@ -671,35 +675,35 @@ public function updateOrder($request_params)
     }
 
 
-   
-
 /** ==== Guarda contenido de la nueva version ================================================  */
     public function SaveBudgetAs($request_params)
     {
-
         $params         = $this->session->get('user');
         $par            = $this->model->SaveVersion($request_params);
 
         $pack           = explode('|', $par);
         $verId          = $pack[0];
         $pjtId          = $pack[1];
+        $lastmov          = $pack[3];
 
         $group = explode('|',$params);
 
         $user = $group[0];
         $name = $group[2];
+        $otrov = $group[1];
 
         $periods        = $this->model->cleanPeriods($pjtId);
         $series         = $this->model->restoreSeries($pjtId);
         $detail         = $this->model->cleanDetail($pjtId);
-        $projectMovemen = $this->model->settingProjectMovemen($pjtId, $user);
+        //$projectMovemen = $this->model->settingProjectMovemen($pjtId, $user);
         $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
         $result         = $this->model->getProjectVersion($pjtId);
-        $dateproject        = $this->model->saveDateProject($pjtId);
         $response       = $this->setSeries($result);
 
-        echo $verId . '|'. $pjtId;
+        //$dateproject    = $this->model->saveDateProject($pjtId, $lastmov);  //modificado por jjr
+
+        echo $verId . ' | '. $pjtId . ' | '. $user . ' | '. $name . ' | '. $otrov ;
 
     } 
 

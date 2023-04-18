@@ -30,7 +30,7 @@ class WhOutputsModel extends Model
                 FROM ctt_projects AS pj 
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id 
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id 
-                WHERE pj.pjt_status in ('4') ORDER BY pjt_date_start ASC;";
+                WHERE pj.pjt_status in ('4','7','8') ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }
 
@@ -48,15 +48,20 @@ class WhOutputsModel extends Model
     {
         $pjtid = $this->db->real_escape_string($params['pjtid']);
 
+        $qry2 = "UPDATE ctt_projects SET pjt_status='7'
+                WHERE pjt_id=$pjtid AND pjt_status='4';";
+
+        $chprj = $this->db->query($qry2);
+
         $qry = "UPDATE ctt_series AS ser
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id=ser.ser_id
                 INNER JOIN ctt_projects_version AS pjv ON pjv.pjtvr_id=pjd.pjtvr_id
                 INNER JOIN ctt_version AS ver ON ver.ver_id=pjv.ver_id
                 INNER JOIN ctt_projects AS pjt ON pjt.pjt_id=pjv.pjt_id
                 SET ser.ser_stage='TA'
-                WHERE (ver.ver_active=1 AND pjt.pjt_id=$pjtid AND pjt.pjt_status=4);";
-
+                WHERE pjt.pjt_id=$pjtid AND pjt.pjt_status='4';";
         return $this->db->query($qry);
+
     }
 
 }
