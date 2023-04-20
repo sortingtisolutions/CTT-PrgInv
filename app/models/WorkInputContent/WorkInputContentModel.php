@@ -21,8 +21,8 @@ class WorkInputContentModel extends Model
                 pj.pjt_location, cus.cus_name, '1' as analyst, '33' as freelance, pj.pjt_id
                 FROM ctt_projects AS pj 
                 INNER JOIN ctt_customers_owner AS cuw ON cuw.cuo_id=pj.cuo_id
-                INNER JOIN ctt_customers AS cus ON cus.cus_id=cuw.cus_id
-                INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
+                LEFT JOIN ctt_customers AS cus ON cus.cus_id=cuw.cus_id
+                LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
                 WHERE pj.pjt_id=$pjt_id ORDER BY pjt_date_start ASC;";
 

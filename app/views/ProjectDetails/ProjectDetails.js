@@ -1077,15 +1077,15 @@ function reOrdering() {
 // *************************************************
 function fillBudgetProds(jsn, days, stus) {
     let pds = JSON.parse(jsn);
-
+    
     let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',').replace(/\¿/g, '\'');
-    if (u.pjt_status == 4)
+    /* if (u.pjt_status == 4)
     { valstage='color:#008000'; }
     else if (u.pjt_status == 7)
      { valstage='color:#FFA500'; }
     else
     { valstage='color:#CC0000'; }
-    console.log(valstage);
+    console.log(valstage); */
     
     let H = `
     <tr id="bdg${pds.prd_id}" 
@@ -1959,7 +1959,7 @@ function printBudget(verId) {
 function saveBudget(dt) {
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-    console.log('11',dt);
+    // console.log('11',dt);
     getBudgets(pjtId, verId);
     interfase = 'MST';
     purgeInterfase();
@@ -2462,7 +2462,7 @@ function getDataMice() {
  * @param {*} ac Accion a realizar
  */
 function updateMice(pj, pd, fl, dt, sc, ac) {
-    console.log(pj, pd, fl, dt, sc, ac);
+    // console.log(pj, pd, fl, dt, sc, ac);
 
     $(`#SC${sc}`).attr('data-switch', '0');
     var par = `[{

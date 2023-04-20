@@ -78,6 +78,7 @@ function discountInsuredEvent() {
         });
 }
 
+// Realizacion de eventos dentro del presupuesto ***********************
 function eventsAction() {
     // Despliega la seccion de detalle de información del proyecto
     $('.projectInformation')
@@ -216,7 +217,7 @@ function eventsAction() {
             }
         });
 
-    // Guarda nueva version
+    // Guarda nueva version del presupuesto
     $('.version__button .toSaveBudgetAs')
         .unbind('click')
         .on('click', function () {
@@ -233,7 +234,7 @@ function eventsAction() {
                 let verNext = 'R' + refil(vr + 1, 4);
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
                 let lastmov = moment().format("DD/MM/YYYY HH:mm:ss A");  //agregado por jjr
-                console.log('FECHA- ', lastmov);
+                //console.log('FECHA- ', lastmov);
                 modalLoading('S');
                 let par = `
                 [{
@@ -518,11 +519,11 @@ function putDiscounts(dt) {
 
 /**  Llena el listado de versiones */
 function putVersion(dt) {
-    console.log('putVersion', dt);
+    //console.log('putVersion', dt);
     
     $('.version__list ul').html('');
     if (dt[0].ver_id != 0) {
-        $('.version__list-title').html('VERSIONES DE DOCUMENTOS');
+        $('.version__list-title').html('VERSIONES DEL DOCUMENTO');
         let firstVersion = '';
         let caret = '';
         $.each(dt, function (v, u) {
@@ -933,7 +934,7 @@ function fillBudget(pr, vr, ix) {
 }
 
 function loadBudget(inx, bdgId) {
-    // console.log(prod[inx]);
+    // console.log('loadBudget',prod[inx], 'INX', inx);
     let insurance = prod[inx].prd_insured == 0 ? 0 : 0.1;
     let produ = prod[inx].prd_name.replace(/\"/g, '°').replace(/\,/g, '^').replace(/\'/g, '¿');
     let subct = prod[inx].sbc_name.replace(/\"/g, '°').replace(/\,/g, '^');
@@ -943,6 +944,7 @@ function loadBudget(inx, bdgId) {
         .substring(2, 5);
     let pjtId = $('.version_current').attr('data-project');
     let verId = $('.version_current').attr('data-version');
+    let order = 0;
 
     let par = `{
         "pjtvr_id"                  : "0",
@@ -964,6 +966,7 @@ function loadBudget(inx, bdgId) {
         "pjt_id"                    : "${pjtId}",
         "ver_id"                    : "${verId}",
         "pjtvr_stock"               : "${prod[inx].stock}",
+        "pjtvr_order"               : "${order}",
         "sbc_name"                  : "${subct}",
         "pjtvr_section"             : "${section}",
         "daybasereal"               : "${days}"
@@ -1060,6 +1063,7 @@ function reOrdering() {
     $('tbody.sections_products')
         .find('tr.budgetRow')
         .each(function (index) {
+            //console.log('reOrdering', index)
             if (index >= 0) {
                 $(this)
                     .find('i.move_item')
@@ -1962,7 +1966,7 @@ function printBudget(verId) {
 function saveBudget(dt) {
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-    console.log(pjtId, verId);
+    // console.log(pjtId, verId);
     getBudgets(pjtId, verId);
     interfase = 'MST';
     purgeInterfase();
@@ -1975,7 +1979,7 @@ function saveBudget(dt) {
 // Guarda la cotización seleccionada
 // *************************************************
 function putSaveBudgetAs(dt) {
-    console.log(dt);
+    // console.log(dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
     
@@ -2101,7 +2105,7 @@ function updateTotals() {
     totlCost = costbase + costtrip + costtest + desctot;
 
     $('#costTotal').html(mkn(totlCost, 'n'));
-
+    //console.log('UpdateMice');
     getDataMice();
 }
 
@@ -2466,6 +2470,7 @@ function getDataMice() {
         let discountTest_ant = parseFloat(
             $(this).children('td.discountTest').attr('data-real')
         );
+
         $(this).children('td.discountTest').attr('data-real', discountTest_act);
         if (discountTest_act != discountTest_ant) {
             updateMice(
@@ -2483,8 +2488,10 @@ function getDataMice() {
             .children('th')
             .children('.move_item')
             .attr('data-order');
+            // console.log('Ordering', ordering);
+            // console.log('Actualiza MICE', pjtId, pid, 'pjtvr_order', order, section, 'N');
         if (ordering > 0) {
-            // console.log(pjtId, pid, 'pjtvr_order', order, section, 'N');
+            // console.log('Actualiza MICE', pjtId, pid, 'pjtvr_order', order, section, 'N');
             updateMice(pjtId, pid, 'pjtvr_order', order, section, 'N');
         }
     });
@@ -2528,13 +2535,14 @@ function OrderMice(m) {
             .children('th')
             .children('.move_item')
             .attr('data-order');
+            
         if (m == 1) {
             $(`#SC${section}`).attr('data-switch', '1');
-
+            // console.log('IF OrderMice', order);
             var par = `[{
             "pjtId"      :   "${pjtId}",
             "prdId"      :   "${pid}",
-            "order"      :   "${order}",
+            "order"      :   "${order}",    
             "section"    :   "${section}"
             }]`;
             var pagina = 'ProjectDetails/updateOrder';
@@ -2543,6 +2551,7 @@ function OrderMice(m) {
             fillField(pagina, par, tipo, selector);
         } else {
             $(`#SC${section}`).attr('data-switch', '0');
+            // console.log('ELSE OrderMice', order);
         }
     });
 }

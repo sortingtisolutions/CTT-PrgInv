@@ -160,7 +160,7 @@
                 <thead>
                     <tr>
                         <th style="width:  30px"></th>
-                        <th style="width: 60px">Codigo <br>Corto</th>
+                        <th style="width: 50px">Codigo Corto</th>
                         <th style="width: 150px">Motivo de <br> Mantenimiento</th>
                     </tr>
                 </thead>

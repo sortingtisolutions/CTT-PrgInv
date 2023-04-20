@@ -57,7 +57,6 @@
             <!-- HEADERS DE LA TABLA DE COTIZACIONES START -->
                 <thead>
                     <tr>
-                        
                         <th class="wclprod">Producto</th>
                         <th class="wcldays colbase"><i class="fas fa-caret-down selectionInput quantityBase inpt"></i>Cant.</th>
                         <th class="wclnumb colbase">Precio</th>
@@ -76,8 +75,6 @@
                     </tr>
                  </thead>
             <!-- HEADERS DE LA TABLA DE COTIZACIONES END -->
-                
-
                 
                 <!-- EQUIPO BASE -->
                 <tbody  class="sections_products" data-switch="0"  id="SC1">
@@ -130,8 +127,6 @@
                         </th>
                         <td colspan=14></td>
                     </tr> 
-
-                    
                  </tbody>
                 
              </table>
@@ -194,7 +189,6 @@
                 <span class="version__list-title"></span>
                 <ul>
                     <!-- <li><span>Version</span><span>Fecha</span></li> -->
-
                 </ul>
             </div>
         </div>
@@ -270,7 +264,6 @@
                 </tr>
             </table>
 
-
         </div>
         
     </div>
@@ -286,8 +279,6 @@
             </div>
         </div>
 
-
-        
         <div class="finder__box" id="groupProjectParent">
         <input type="text" name="txtProjectParents" id="txtProjectParents" placeholder="Proyecto Padre" class="invoiceInput inputSearch wtf">
             <i class="fas fa-times cleanInput"></i>
@@ -296,7 +287,6 @@
             </div>
 
         </div>
-
 
         <div class="finder__box" id="groupProject">
         <input type="text" name="txtProject" id="txtProject" placeholder="Proyecto" class="invoiceInput inputSearch wtf">
@@ -314,7 +304,6 @@
             <span class="invoice_button" id="btnNewProject"><i class="fas fa-plus"></i>nuevo proyecto</span>
         </div> -->
     </div>
-
 
         <!-- Listado de productos -->
     <div class="invoice__section-products invoice-border modalTable">
@@ -345,7 +334,6 @@
         </div>
         
     </div>
-
 
     <!-- Mini menu de opciones de producto -->
     <div class="invoice__menu-products invoice-border withShadow">
@@ -564,7 +552,6 @@
                         </td>
                     </tr>
 
-                    
                     <tr class="hide">
                         <td>Proyecto padre</td>
                         <td>
@@ -577,7 +564,6 @@
                     </tr>
 
                     <tr>
-                        
                         <td colspan=2>
                             <button class="bn btn-ok" id="saveProject"></button>
                         </td>
@@ -605,10 +591,6 @@
      </div>
 
 
-
-
-
-
     <!-- loading -->
     <div class="invoice__loading modalLoading">
         <div class="box_loading">
@@ -623,8 +605,6 @@
 </div>
 
 <!-- <div class="cuadroMovible"></div> -->
-
-
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS  . 'ProjectPlans/ProjectPlans.js?v=1.0.0.0' ?>"></script>

@@ -1,7 +1,10 @@
 let products;
 //let prjid = window.location.pathname.split("/").pop();
 let prjid;
+let glbcnid;
+let motmanteince;
 //var prjid;
+
 
 $(document).ready(function () {
     if (verifica_usuario()) {
@@ -96,7 +99,7 @@ function setting_table_AsignedProd() {
 
 //AGREGA LOS DATOS GENERALES DEL PROYECTO
 function putProjects(dt) {
-       
+    // console.log('DATOS del PROYECTO', dt);
     $('#txtProjectName').val(dt[0].pjt_name);
     $('#txtProjectNum').val(dt[0].pjt_number);
     $('#txtTipoProject').val(dt[0].pjttp_name);
@@ -181,28 +184,12 @@ function activeIcons() {
         .on('click', function () {
             //let selected = $(this).parent().attr('id');
             let pjtcnid = $(this).attr('id');
+            glbcnid=pjtcnid;
             console.log('Cont-Producto', pjtcnid);
             if (pjtcnid > 0) {
                 getSeries(pjtcnid);
             }
         });
-
-    /* $('.modif')
-        .unbind('click')
-        .on('click', function () {
-            let sltor = $(this);
-            let prdId = sltor.parents('tr').attr('id');
-            let prdNm = 'Modifica producto'; 
-
-           // $('#ProductModal').removeClass('overlay_hide');
-           // $('.overlay_closer .title').html(prdNm);
-            // getSelectProduct(prdId);
-            $('#ProductModal .btn_close')
-                .unbind('click')
-                .on('click', function () {
-                    $('.overlay_background').addClass('overlay_hide');
-                });
-        }); */
 }
 
 //**************  NIVEL 2 DE DATOS  *****************************************
@@ -214,7 +201,7 @@ function putSeries(dt) {
 }
 
 function settingSeries(){
-        console.log('Setting-Series');
+        // console.log('Setting-Series');
         $('#ReasonMtModal').removeClass('overlay_hide');
         $('#tblMaintenance').DataTable({
             destroy: true,
@@ -232,7 +219,7 @@ function settingSeries(){
             fixedHeader: true,
             columns: [
                 {data: 'sermodif', class: 'edit'},
-                {data: 'seriesku', class: 'sku'},
+                {data: 'seriesku', class: 'supply'},
                 {data: 'sername', class: 'supply'},
             ],
         } );
@@ -240,7 +227,7 @@ function settingSeries(){
         $('#ReasonMtModal .btn_close')
         .unbind('click')
         .on('click', function () {
-            console.log('Cierra Series');
+            console.log('Cierra Motivos');
             $('.overlay_background').addClass('overlay_hide');
             $('.overlay_closer .title').html('');
             let Dtable=$('#tblMaintenance').DataTable();
@@ -256,25 +243,44 @@ function build_modal_serie(dt) {
         $('.overlay_closer .title').html('LISTADO DE MOTIVOS:');
         /* tabla.rows().remove().draw(); */
         $.each(dt, function (v, u) {
-            /* let valstage = u.ser_stage == 'TA' ? 'color:#CC0000' : 'color:#3c5777'; */
+            // let valstage = u.ser_stage == 'TA' ? 'color:#CC0000' : 'color:#3c5777';
             tabla.row
                 .add({
                     // <i class="fa-solid fa-wrench"></i>
                     // sermodif: `<i class='fas fa-wrenc toLink2' id="${u.pjtdt_prod_sku.slice(0, 7)}"  sku_original = "${skufull}"></i> <i class='fas fa-check-circle toCheck' id="${u.pjtdt_prod_sku.slice(0,7)+u.pjtdt_prod_sku.slice(7,11)}"></i>`,
-                    sermodif: `<i class='fas fa-edit toChange' id="${u.rmt_id}"></i></i> <i class='fas fa-check-circle toCheck' id=""></i>`,
+                    // sermodif: `<i class='fas fa-edit toChange' id="${u.rmt_id}"></i></i> <i class='fas fa-check-circle toCheck' id=""></i>`,
+                    sermodif: `<i class='fas fa-check-circle toCheck' id="${u.rmt_id}" data="${u.rmt_description}"></i>`,
                     seriesku: u.rmt_code,
                     sername: u.rmt_description,
                 })
                 .draw();
             //$(`#E${u.pjtcn_id}`).parents('tr').attr('data-product', u.pjtcn_id);
         });
-        console.log('MODAL MOTIVOS DE MANTENIMIENTO');
+        
+        activeIconsSerie();
 }
 
 
 /** ### LISTO ### +++++  Activa los iconos del modal de serie */
 function activeIconsSerie() {
-    $('.toChange')
+    console.log('ACTIVA MOTIVOS DE MANTENIMIENTO');
+    $('.toCheck')
+        .unbind('click')
+        .on('click', function () {
+        let serprd = $(this).attr('id');
+        let motdesc = $(this).attr('data');
+        console.log('Click Selecciona Motivo', serprd, motdesc);
+        motmanteince = motdesc;
+
+        console.log('Cierra Motivos seleccionado');
+        $('.overlay_background').addClass('overlay_hide');
+        $('.overlay_closer .title').html('');
+
+        $('#tblAsigInput').DataTable().row().val()=motmanteince;
+        // myCheck(serprd);
+    
+        });
+   /*  $('.toChange')
         .unbind('click')
         .on('click', function () {
             let serprd = $(this).attr('id');
@@ -285,20 +291,7 @@ function activeIconsSerie() {
                 if (serprd != "") {
                     getSerieDetail(serprd, serorg);
             }
-    });
-
-    $('.toCheck')
-        .unbind('click')
-        .on('click', function () {
-        let serprd = $(this).attr('id');
-        //let serprd = "28";
-        // console.log("Para validar: "+serprd);
-            checkSerie(serprd);
-        // console.log('Check despues', serprd);
-        /*if (serprd != "") {
-            getSerieDetail(serprd);
-        }*/
-        });
+    }); */
 }
 
 //**************  NIVEL 3 DE DATOS  *****************************************
@@ -429,8 +422,8 @@ function checkSerie(pjtcnid) {
     
     function myCheck(dt){
     //$('#ChangeReasonMtModal').addClass('overlay_hide');
-    $('#'+dt).css({"color":"#CC0000"});
-    $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
+    $('#'(this)).css({"color":"#CC0000"});
+    $('#'(this)).children(".claseElemento").css({"color":"#CC0000"});
     
     /* $('#'+dt).attr("id",NuevoSku).children("td.nombreclase").text(NuevoSku);
     $('#'+dt).attr("id",sernumber).children("td.nombreclase").text(sernumber);
@@ -477,6 +470,34 @@ function checkSerie(pjtcnid) {
         }
     }
     
+    function goThroughStore(strId) {
+        let inx = -1;
+        $.each(strs, function (v, u) {
+            if (strId == u.str_id) inx = v;
+        });
+        return inx;
+    }
+
+    function putUpdateStore(dt) {
+        getStores();
+        if (strs.length > 0) {
+            // console.log(dt);
+            let ix = goThroughStore(dt);
+            // console.log(strs[ix].str_id);
+            // console.log($(`#${strs[ix].str_id}`).children('td.store-name').html());
+    
+            $(`#${strs[ix].str_id}`).children('td.store-name').html(strs[ix].str_name);
+            $(`#${strs[ix].str_id}`).children('td.store-owner').html(strs[ix].emp_fullname);
+            $(`#${strs[ix].str_id}`).children('td.store-type').html(strs[ix].str_type);
+    
+            putQuantity(strs[ix].str_id);
+            $('#LimpiarFormulario').trigger('click');
+        } else {
+            setTimeout(() => {
+                putUpdateStore(dt);
+            }, 100);
+        }
+    }
 
 /* function putSerieDetails_old(dt) {
   let H = '<div class="box_submenu" id="boxSubmenu" style="position: fixed; top: 0%; bottom: 0%; left: 0%; width: 100%; background-color: #ffffff;\n' +

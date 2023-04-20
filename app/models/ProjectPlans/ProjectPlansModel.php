@@ -520,57 +520,64 @@ public function saveDateProject($params)
         $pjt_id                 = $params['pjt_id'];
         $pjtvr_action           = 'A';
 
-        $qry = "INSERT INTO ctt_projects_mice (
-            pjtvr_prod_sku, 
-            pjtvr_action, 
-            pjtvr_prod_name, 
-            pjtvr_prod_price, 
-            pjtvr_quantity, 
-            pjtvr_quantity_ant, 
-            pjtvr_days_base, 
-            pjtvr_days_cost, 
-            pjtvr_discount_base, 
-            pjtvr_discount_insured,
-            pjtvr_days_trip, 
-            pjtvr_discount_trip, 
-            pjtvr_days_test, 
-            pjtvr_discount_test, 
-            pjtvr_insured, 
-            pjtvr_prod_level, 
-            pjtvr_section, 
-            pjtvr_status, 
-            pjtvr_order, 
-            ver_id, 
-            prd_id, 
-            pjt_id 
-        ) VALUES (
-            '$pjtvr_prod_sku',
-            '$pjtvr_action', 
-            REPLACE('$pjtvr_prod_name','\¿','\''),
-            '$pjtvr_prod_price',
-            '$pjtvr_quantity',
-            '$pjtvr_quantity_ant',
-            '$pjtvr_days_base',
-            '$pjtvr_days_cost',
-            '$pjtvr_discount_base',
-            '$pjtvr_discount_insured',
-            '$pjtvr_days_trip',
-            '$pjtvr_discount_trip',
-            '$pjtvr_days_test',
-            '$pjtvr_discount_test',
-            '$pjtvr_insured',
-            '$pjtvr_prod_level',
-            '$pjtvr_section',
-            '$pjtvr_status',
-            '$pjtvr_order',
-            '$ver_id',
-            '$prd_id',
-            '$pjt_id'
-        );
-        ";
+        $qry1 = "SELECT MAX(pjtvr_order + 1) AS nextorder FROM ctt_projects_mice
+                WHERE pjtvr_section= $pjtvr_section AND ver_id=$ver_id AND pjt_id=$pjt_id";
+        $result =  $this->db->query($qry1);
+
+        while($row = $result->fetch_assoc()){
+            $nextorder = $row["nextorder"];
+        
+            $qry = "INSERT INTO ctt_projects_mice (
+                pjtvr_prod_sku, 
+                pjtvr_action, 
+                pjtvr_prod_name, 
+                pjtvr_prod_price, 
+                pjtvr_quantity, 
+                pjtvr_quantity_ant, 
+                pjtvr_days_base, 
+                pjtvr_days_cost, 
+                pjtvr_discount_base, 
+                pjtvr_discount_insured,
+                pjtvr_days_trip, 
+                pjtvr_discount_trip, 
+                pjtvr_days_test, 
+                pjtvr_discount_test, 
+                pjtvr_insured, 
+                pjtvr_prod_level, 
+                pjtvr_section, 
+                pjtvr_status, 
+                pjtvr_order, 
+                ver_id, 
+                prd_id, 
+                pjt_id 
+            ) VALUES (
+                '$pjtvr_prod_sku',
+                '$pjtvr_action', 
+                REPLACE('$pjtvr_prod_name','\¿','\''),
+                '$pjtvr_prod_price',
+                '$pjtvr_quantity',
+                '$pjtvr_quantity_ant',
+                '$pjtvr_days_base',
+                '$pjtvr_days_cost',
+                '$pjtvr_discount_base',
+                '$pjtvr_discount_insured',
+                '$pjtvr_days_trip',
+                '$pjtvr_discount_trip',
+                '$pjtvr_days_test',
+                '$pjtvr_discount_test',
+                '$pjtvr_insured',
+                '$pjtvr_prod_level',
+                '$pjtvr_section',
+                '$pjtvr_status',
+                '$nextorder',
+                '$ver_id',
+                '$prd_id',
+                '$pjt_id'
+            );
+            ";
         $this->db->query($qry);
         $result = $this->db->insert_id;
-
+        }
     }
 
 /** ====== Actualiza contenido de la version =================================================  */

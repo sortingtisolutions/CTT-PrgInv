@@ -382,7 +382,7 @@ class ProjectPlansController extends Controller
 
             $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
             $result             = $this->model->getProjectVersion($pjtId);
-            $dateproject        = $this->model->saveDateProject($pjtId);
+            //$dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->setSeries($result);
             
         } else {
@@ -391,7 +391,7 @@ class ProjectPlansController extends Controller
             $projectVersion     = $this->model->settingProjectVersion($pjtId, $verId);
             $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
             $result             = $this->model->getVersionMice($pjtId);
-            $dateproject        = $this->model->saveDateProject($pjtId);
+            //$dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->updateSeries($result);
             
         }

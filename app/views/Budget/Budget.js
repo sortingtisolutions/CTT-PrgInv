@@ -807,9 +807,7 @@ function putProducts(dt) {
     prod = dt;
     $.each(dt, function (v, u) {
         let H = `
-            <tr data-indx ="${v}" data-element="${
-            u.prd_sku
-        }|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
+            <tr data-indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
                 <th class="col_product" title="${
                     u.prd_name
                 }"><div class="elipsis">${u.prd_name}</div></th>
@@ -1986,11 +1984,11 @@ function cleanTotalsArea() {
 function showButtonToCharge(acc) {
     elm = $('.invoice_button .toCharge');
     acc == 'S'
-        /* ? elm.css({ visibility: 'visible' })  
-        : elm.css({ visibility: 'hidden' }); */
+        ? elm.css({ visibility: 'visible' })  
+        : elm.css({ visibility: 'hidden' });
 
-       ? elm.css.removeClass('hide-items')
-       : elm.css.addClass('hide-items')
+       /* ? elm.css.removeClass('hide-items')
+       : elm.css.addClass('hide-items') */
 }
 /** *************************************************************** */
 

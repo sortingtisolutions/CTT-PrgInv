@@ -177,6 +177,7 @@ function getProducts(catId) {
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
 function putTypeExchange(dt) {
+    console.log(dt);
     if (dt[0].ext_id != 0) {
         $.each(dt, function (v, u) {
             if (u.ext_elements.substring(0, 1) != '0') {
