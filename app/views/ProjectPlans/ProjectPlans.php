@@ -89,6 +89,7 @@
                         <td colspan=14></td>
                     </tr> 
                  </tbody>
+
                 <!-- EQUIPO EXTRA -->
                 <tbody class="sections_products" data-switch="0"  id="SC2">
                     <tr class="blocked">
@@ -102,6 +103,7 @@
                         <td colspan=14></td>
                     </tr> 
                  </tbody>
+
                 <!-- EQUIPO POR DIA -->
                 <tbody class="sections_products" data-switch="0"  id="SC3">
                     <tr class="blocked">
@@ -115,6 +117,7 @@
                         <td colspan=14></td>
                     </tr> 
                  </tbody>
+
                 <!-- EQUIPO POR SUBARRENDO -->
                 <tbody class="sections_products" data-switch="0"  id="SC4">
                     <tr class="blocked">
@@ -128,7 +131,6 @@
                         <td colspan=14></td>
                     </tr> 
                  </tbody>
-                
              </table>
         </div>
      </div>
@@ -201,7 +203,6 @@
         </div>
     </div>
     
-    
     <!-- Informacion del proyecto y cliente seleccionado -->
     <div class="invoice__section-details invoice-border">
         <div class="detail__box detail__box-project ">
@@ -263,9 +264,7 @@
                     <td class="data" id="CustomerQualification"></td>
                 </tr>
             </table>
-
         </div>
-        
     </div>
 
 
@@ -316,7 +315,6 @@
             <input type="text" name="txtProductFinder" id="txtProductFinder" autocomplete="off" placeholder="buscar producto" class="finderInput wt5">
             
         </div>
-
 
         <div class="productos__box-table" id="listProductsTable">
         <table>

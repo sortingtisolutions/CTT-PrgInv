@@ -9,9 +9,7 @@ class ProjectPlansModel extends Model
         parent::__construct();
     }
 
-    
 /** ====== Listado de proyectos ===========================================  */
-
     public function listProjects($params)
     {
         // Debe leer todos los proyectos que se encuentren en estaus 2 - Presupuesto
@@ -52,8 +50,6 @@ class ProjectPlansModel extends Model
                 WHERE pj.pjt_status in ('2','40') ORDER BY pj.pjt_id DESC;
                 ";
         return $this->db->query($qry);
-
-
     }   
     
 /** ====== Listado de proyectos padre ========================================================  */        
@@ -122,7 +118,6 @@ class ProjectPlansModel extends Model
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 WHERE pc.ver_id = $verId  ORDER BY pc.pjtvr_order asc;";
         return $this->db->query($qry5);
-
     } 
 
 /** ====== Listado clientes ==================================================================  */
@@ -150,8 +145,7 @@ class ProjectPlansModel extends Model
         $qry = "SELECT * FROM ctt_discounts WHERE dis_level = $level ORDER BY dis_discount;";
         return $this->db->query($qry);
     }    
-
-        
+     
 /** ====== Listado de los tipos de proyecto ==================================================  */
     public function listProjectsType($params)
     {
@@ -159,8 +153,7 @@ class ProjectPlansModel extends Model
         $qry = "SELECT * FROM ctt_projects_type ORDER BY pjttp_name;";
         return $this->db->query($qry);
     }    
-
-    
+   
 /** ====== Listado de tipos de llamados ======================================================  */
     public function listProjectsTypeCalled($params)
     {

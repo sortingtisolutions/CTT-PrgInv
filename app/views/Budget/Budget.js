@@ -802,15 +802,15 @@ function omitirAcentos(text) {
 }
 
 function putProducts(dt) {
-    
-    $('#listProductsTable table tbody').html('');
     prod = dt;
+    $('#listProductsTable table tbody').html('');
+    
+    if (dt[0].prd_id>0){  // agregado por jjr
     $.each(dt, function (v, u) {
         let H = `
             <tr data-indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
-                <th class="col_product" title="${
-                    u.prd_name
-                }"><div class="elipsis">${u.prd_name}</div></th>
+                <th class="col_product" title="${u.prd_name}">
+                <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_type">${u.prd_level}</td>
                 <td class="col_category">${u.sbc_name}</td>
@@ -818,6 +818,7 @@ function putProducts(dt) {
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
+    }
     $('.toCharge').addClass('hide-items');   //jjr
     
     $('#listProductsTable table tbody tr').on('click', function () {
@@ -865,7 +866,7 @@ function loadBudget(inx, bdgId) {
     }
     `;
 
-    let ky = registeredProduct('bdg' + prod[inx].prd_id);
+    let ky = registeredProduct('bdg' + prod[inx].prd_id, section);
     // console.log(ky);
     if (ky == 0) {
         fillBudgetProds(par, days);
@@ -878,11 +879,12 @@ function loadBudget(inx, bdgId) {
     reOrdering();
 }
 
-function registeredProduct(id) {
+function registeredProduct(id, section) {  // parametro de section agregado por jjr
     ky = 0;
     $('#invoiceTable table tbody tr').each(function () {
         let idp = $(this).attr('id');
-        if (id == idp) {
+        let isec = $(this).attr('data-sect');  // agregado por jjr
+        if (id == idp && section==isec) {  // modificado por jjr
             let qty =
                 parseInt(
                     $(this)
@@ -964,15 +966,18 @@ function fillBudgetProds(jsn, days) {
     let prdName = pds.bdg_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
 
     let H = `
-    <tr id="bdg${pds.prd_id}" data-sku="${pds.bdg_prod_sku}" data-insured="${
-        pds.bdg_insured
-    }" data-level="${pds.bdg_prod_level}" class="budgetRow">
+    <tr id="bdg${pds.prd_id}" 
+        data-sku="${pds.bdg_prod_sku}" 
+        data-insured="${pds.bdg_insured}" 
+        data-level="${pds.bdg_prod_level}" 
+        data-sect="${pds.bdg_section}" 
+        class="budgetRow">
+
+        <!-- Nombre del Producto -->
         <th class="wclprod col_product product"><i class="fas fa-ellipsis-v move_item" data-order="0"></i><div class="elipsis" title="${prdName}">${prdName}</div><i class="fas fa-bars menu_product" id="mnu${
-        pds.prd_id
-    }"></i></th>
+        pds.prd_id}"></i></th>
         <td class="wcldays col_quantity colbase quantityBase"><input type="text" class="input_invoice" value="${
-            pds.bdg_quantity
-        }" tabindex=1></td>
+            pds.bdg_quantity}" tabindex=1></td>
         <td class="wclnumb col_price colbase priceBase">${mkn(
             pds.bdg_prod_price,
             'n'
@@ -1724,7 +1729,12 @@ function printBudget(verId) {
     let n = user[2];
     let h = localStorage.getItem('host');
 
-    console.log(user);
+    /* let t = user[1];
+    console.log('User',user);
+    console.log('Host',h);
+    console.log('0 - ',u);
+    console.log('1 - ',t);
+    console.log('2 - ',n); */
 
     window.open(
         `${url}app/views/Budget/BudgetReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,

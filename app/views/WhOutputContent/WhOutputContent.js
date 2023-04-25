@@ -23,7 +23,12 @@ function inicial() {
         // let pjtid = locID.parents('tr').attr('id');
         // console.log('Paso A Guardar..', prjid);
         confirm_to_GetOut(prjid);
-        /* saveDocumentClosure(); */
+            
+     });
+
+     $('#printOutPut').on('click', function () {
+        printOutPutContent(prjid);
+        
     
      });
 
@@ -223,7 +228,7 @@ function activeIcons() {
 // ### LISTO ### Llena prepara la table dentro del modal para series ### LISTO -- MODAL 1###
 function putSeries(dt) {
     settingSeries(dt);
-    build_modal_serie_new(dt);
+    build_modal_serie_old(dt);
     activeIconsSerie();
 }
 
@@ -264,9 +269,8 @@ function settingSeries(dt){
             $('.overlay_closer .title').html('');
             let Dtable=$('#tblSerie').DataTable();
             Dtable.rows().remove().draw();
-            // Dtable.destroy();
+            Dtable.destroy();
     });
-
    
     // activeIcons();
 }
@@ -282,7 +286,7 @@ function build_modal_serie_old(dt) {
              let sku = u.pjtdt_prod_sku.slice(0, 8);
              let accesory = u.pjtdt_prod_sku.slice(7,8);
              let acc = u.pjtdt_prod_sku.slice(7,8) == 'A' ? skufull : sku;
-             let valstage = u.ser_stage == 'TA' ? 'color:#CC0000' : 'color:#3c5777';
+             let valstage = u.ser_stage == 'TR' ? 'color:#CC0000' : 'color:#3c5777';
              //console.log(dt);
              tabla.row
                  .add({
@@ -294,13 +298,13 @@ function build_modal_serie_old(dt) {
                      sernumber: u.ser_serial_number,
                      sertype: u.prd_level,
                      serstat: u.prd_level,
-                 });
-                 // .draw();
+                 })
+                 .draw();
              $(`#${u.pjt_id}`).parents('tr').attr('id',u.pjt_id);
          });
 
 }
-
+// otra forma de presentar los datos
 function build_modal_serie_new(dt) {
     console.log('Nivel 2');
     $('#tblSerie').DataTable();
@@ -314,17 +318,15 @@ function build_modal_serie_new(dt) {
         console.log(dt);
         var H =`
             <tr id="${u.pjt_id}">
-                <td class="sku"><i class='fas fa-edit toChange' id="${acc}" sku_original="${skufull}"></i> 
-                                <i class='fas fa-check-circle toCheck' id="${skufull}" style='${valstage}'></i></td>
+                <td class="sku"><i class="fas fa-edit toChange" id="${acc}" sku_original="${skufull}"></i> 
+                            <i class="fas fa-check-circle toCheck" id="${skufull}" style="${valstage}"></i></td>
                 <td class="sku">${skufull}</td>
                 <td class="supply">${u.prd_name}</td>
                 <td class="supply">${u.ser_serial_number}</td>
                 <td class="sku">${u.prd_level}</td>
                 <td class="sku">${u.prd_level}</td>
             </tr>`;
-        
         $('#tblSerie tbody').append(H);
-        
     });
     
 }
@@ -561,22 +563,24 @@ function confirm_to_GetOut(pjtid) {
 
 function putToWork(dt){
     console.log('TERMINO ACTUALIZAR', dt);
-   
-    let ver     =dt.split('|')[0];
-    let folio   =dt.split('|')[1];    
-    let paso    =dt.split('|')[2];
-
-    console.log('Regreso', ver,folio,paso);
+    // let ver     =dt.split(' | ')[0];
+    // let folio   =dt.split(' | ')[1];    
+    // let paso    =dt.split(' | ')[2];
+    // console.log('Regreso', folio);
+    let folio=dt;
+    $('#recordOutPut').hide();
     $('.bprint').removeClass('hide-items');
     $('.resFolio').text(refil(folio, 7));
     $('#MoveFolioModal').modal('show');
     $('#btnHideModal').on('click', function () {
         // window.location = 'WhOutputs';
+        $('#MoveFolioModal').modal('hide');
+
     });
-    $('#btnPrintReport').on('click', function () {
+   /*  $('#btnPrintReport').on('click', function () {
         console.log(dt);
         // $('.btn-print').trigger('click');
-    });
+    }); */
     modalLoading('H');
 }
 
@@ -592,104 +596,21 @@ function modalLoading(acc) {
         });
     }
 }
-/* function putSerieDetails_old(dt) {
-  let H = '<div class="box_submenu" id="boxSubmenu" style="position: fixed; top: 0%; bottom: 0%; left: 0%; width: 100%; background-color: #ffffff;\n' +
-    ' background-color: rgba(255, 255, 255, 0.6);'+
-    '  z-index: 200;">' +
-    '<div  style="position: fixed; top: 12%; bottom: 10%; left: 10%; width: 75%; background-color: #ffffff;\n' +
-    '    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.5);\n' +
-    '    border-radius: 10px;\n' +
-    '    padding: 15px;\n' +
-    '  z-index: 200;" >'+
 
-   '<span class="title" style="font-family: $font_secundary;\n' +
-    '        color: $dark;\n' +
-    '        font-size: 1.7em;"></span>' +
-    '<span class="btn_close closeFree" style="font-size: 1.1em;\n' +
-    '        font-weight: 900;\n' +
-    '        border: 3px solid $dark;\n' +
-    '        border-radius: 30px;\n' +
-    '        color: $dark;\n' +
-    '        padding: 4px 10px;\n' +
-    '        margin-top: 4px;\n' +
-    '        display: inline-block;\n' +
-    '        cursor: pointer;\n' +
-    '        &:hover {\n' +
-    '          background-color: $dark;\n' +
-    '          color: $light;">Cerrar</span>' +
-    '<table className="display compact nowrap" id="tblBoxSubmenu" style="width:  100%">'+
-    '<thead>'+
-  '<tr>'+
-  '  <th colSpan="4"></th>'+
-  '  </tr>'+
-  '  <tr>'+
-  '    <th style="width:  10%"></th>'+
-  '    <th style="width: 15%">SKU</th>'+
-  '    <th style="width: 50%">Descripcion Producto</th>'+
-  '    <th style="width:  25%">Num Serie</th>'+
-  '  </tr>'+
-  '  </thead>'+
-  ' </table>'+
-  ' </div></div>';
-  $('#SerieModal .overlay_modal').append(H);
+function printOutPutContent(verId) {
+    let user = Cookies.get('user').split('|');
+    /* let v = verId;
+    let u = user[0];
+    let n = user[2]; */
+    let h = localStorage.getItem('host');
+    let v = 1;
+    let u = 1;
+    let n = 'SuperUsuario';
 
-//   *
-//    * ejemplo para actualizar tabla
-//    * let sku = ${u.pjtdt_prod_sku.slice(0,7)+u.pjtdt_prod_sku.slice(7,11)}
-//    * $('#SerieModal .overlay_modal' #sku}
-  
+    console.log(user);
 
-
-  $('#tblBoxSubmenu').DataTable({
-    destroy: true,
-    order: [[1, 'asc']],
-    lengthMenu: [
-      [100, 150, 200, -1],
-      [100, 150, 200, 'Todos'],
-    ],
-    pagingType: 'simple_numbers',
-    language: {
-      url: 'app/assets/lib/dataTable/spanish.json',
-    },
-    scrollY: 'calc(100vh - 290px)',
-    scrollX: true,
-    fixedHeader: true,
-    columns: [
-      {data: 'deditable', class: 'edit'},
-      {data: 'dseriesku', class: 'sku left skufull'},
-      {data: 'dsername', class: 'product-name left pname'},
-      {data: 'dsernumber', class: 'sernumber'},
-    ],
-  });
-  build_modal_seriefree(dt);
-} */
-
-
-/*
-  $('#ChangeSerieModal .btn_back')
-    .unbind('click')
-    .on('click', function () {
-      getSeries(28);
-      //$('#ChangeSerieModal').addClass('overlay_hide');
-    });
-
-    $('.serief.modif')
-        .unbind('click')
-        .on('click', function () {
-            let serId = $(this).attr('id').slice(1, 10);
-
-            $('#ChangeSerieModal').removeClass('overlay_hide');
-
-            $('#ChangeSerieModal .btn_close_sec')
-                .unbind('click')
-                .on('click', function () {
-                    $('#ChangeSerieModal').addClass('overlay_hide');
-                });
-                getSeriesFree(serId);
-        });
-*/
-
-/** +++++  Activa los iconos OK */
-
-//Solicita las series de los productos  OK
-
+    window.open(
+        `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        '_blank'
+    );
+}

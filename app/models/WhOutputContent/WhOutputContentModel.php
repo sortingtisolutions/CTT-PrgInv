@@ -79,7 +79,7 @@ class WhOutputContentModel extends Model
                 where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
  */
         $updt = "UPDATE ctt_series set ser_stage = 'TR' 
-                where ser_sku = '$pjtcnid' and ser_stage = 'TA'";
+                where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
 
          $this->db->query($updt);
          return $pjtcnid;

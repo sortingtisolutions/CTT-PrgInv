@@ -70,6 +70,8 @@
                         </div>
                     </div>
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
+
+                    <!-- BOTON PARA REGISTRAR LA SALIDA -->
                     <div class="row">
                             <div class="col">
                                 <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordOutPut">Registrar Salida</button>
@@ -78,7 +80,9 @@
                                 <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
                             </div> -->
                     </div>
-                    <div style="height:10px;"></div> <!-- Agregar un espacio -->
+
+                    <div style="height:15px;"></div> <!-- Agregar un espacio -->
+                    <!-- BOTON PARA IMPRIMIR  -->
                     <div class="row bprint hide-items">
                             <div class="col">
                                 <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important; color:lightsalmon" id="printOutPut">Imprimir Salida</button>
@@ -218,7 +222,7 @@
 
             </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button>
+                    <!-- <button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button> -->
                     <button type="button" class="btn btn-secondary" id="btnHideModal">Cerrar</button>
                 </div>
             </div>

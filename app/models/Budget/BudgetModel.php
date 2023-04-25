@@ -331,12 +331,9 @@ public function stockProdcuts($params)
     }
 
 
-
 // Agrega Cotizaciones
     public function SaveBudget($params)
     {
-        /* $siglecomi=("'");
-        $doblecomi='"'; */
         $bdg_prod_sku           = $params['bdgSku'];
         $bdg_prod_level         = $params['bdgLevel'];
         $bdg_section            = $params['bdgSection'];

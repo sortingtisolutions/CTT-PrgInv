@@ -517,7 +517,7 @@ class ProjectDetailsModel extends Model
                 WHERE pjtvr_section= $pjtvr_section AND ver_id=$ver_id AND pjt_id=$pjt_id";
         $result =  $this->db->query($qry1);
 
-        while($row = $result->fetch_assoc()){
+        while($row = $result->fetch_assoc()){  /** === jjr  Agrega  ==  */
             $nextorder = $row["nextorder"];
             $qry = "INSERT INTO ctt_projects_mice (
                 pjtvr_prod_sku, 

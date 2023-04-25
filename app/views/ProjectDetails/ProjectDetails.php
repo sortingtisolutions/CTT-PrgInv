@@ -56,7 +56,6 @@
             <!-- HEADERS DE LA TABLA DE COTIZACIONES START -->
                 <thead>
                     <tr>
-                        
                         <th class="wclprod">Producto</th>
                         <th class="wcldays colbase"><i class="fas fa-caret-down selectionInput quantityBase inpt"></i>Cant.</th>
                         <th class="wclnumb colbase">Precio</th>
@@ -185,8 +184,6 @@
                 </table>
         </div>
     <!-- Totales -->
-
-
 
     <!-- Versiones de documentos guardados -->
         <div class="sidebar__versions invoice-border">

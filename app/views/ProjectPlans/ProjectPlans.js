@@ -902,14 +902,12 @@ function putProducts(dt) {
     // console.log(dt);
     prod = dt;
     $('#listProductsTable table tbody').html('');
+    if (dt[0].prd_id>0){  // agregado por jjr
     $.each(dt, function (v, u) {
         let H = `
-            <tr data-indx ="${v}" data-element="${
-            u.prd_sku
-        }|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
-                <th class="col_product" title="${
-                    u.prd_name
-                }"><div class="elipsis">${u.prd_name}</div></th>
+            <tr data-indx ="${v}" data-element="${u.prd_sku}|${u.prd_name.replace(/"/g, '')}|${u.sbc_name}">
+                <th class="col_product" title="${u.prd_name}">
+                <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_type">${u.prd_level}</td>
                 <td class="col_category">${u.sbc_name}</td>
@@ -917,6 +915,7 @@ function putProducts(dt) {
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
+    }
     $('.toCharge').addClass('hide-items');   //jjr
 
     $('#listProductsTable table tbody tr')
@@ -973,7 +972,7 @@ function loadBudget(inx, bdgId) {
     }
     `;
     //console.log(par);
-    let ky = registeredProduct('bdg' + prod[inx].prd_id);
+    let ky = registeredProduct('bdg' + prod[inx].prd_id, section);
     let stus = 'A';
     if (ky == 0) {
         var pagina = 'ProjectPlans/AddProductMice';
@@ -995,11 +994,12 @@ function putAddProductMice(dt) {
     $('#bdg0').attr('id', 'bdg' + dt);
 }
 
-function registeredProduct(id) {
+function registeredProduct(id, section) {
     ky = 0;
     $('#invoiceTable table tbody tr').each(function () {
         let idp = $(this).attr('id');
-        if (id == idp) {
+        let isec = $(this).attr('data-sect'); // agregado por jjr
+        if (id == idp && section==isec) {  // modificado por jjr
             let qty =
                 parseInt(
                     $(this)
@@ -1088,6 +1088,7 @@ function fillBudgetProds(jsn, days, stus) {
         data-insured = "${pds.pjtvr_insured}" 
         data-level   = "${pds.pjtvr_prod_level}" 
         data-mice    = "${pds.pjtvr_id}" 
+        data-sect    = "${pds.bdg_section}"
         class="budgetRow">
 
     <!-- Nombre del Producto -->

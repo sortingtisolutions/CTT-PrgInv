@@ -134,6 +134,7 @@ public function ProcessGetOutProject($request_params)
         $folio  = $this->model->NextExchange($request_params);       
 
         $versin = 0;
+        $Paso = '';
         $result = $this->model->GetProjectDetail($request_params);
         // echo 'Actualiza Existencia STP ';
         while($row = $result->fetch_assoc()){
@@ -221,11 +222,12 @@ public function ProcessGetOutProject($request_params)
                 $versin = 4;
                 // echo $stpid . ' | ' . 'END ' ;
             }
+            $Paso= $Paso . ' Seccion 2 ' ;
         }
-        $Paso= $Paso . ' Seccion 2 ' ;
-
+       
         $resultprjt = $this->model->GetOutProject($request_params);        
-        echo $versin .' | ' . $folio . ' | ' . $Paso;
+        // echo $versin .' | ' . $folio . ' | ' . $Paso;
+        echo $folio;
     
     } 
 

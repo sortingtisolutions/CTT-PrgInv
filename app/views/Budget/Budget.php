@@ -22,7 +22,6 @@
         </div>
     </div>
 
-
 <!-- Botones de reseteo -->
     <div class="invoice__section invoice__section-button invoice-border">
         <span class="invoice_button" id="newQuote"><i class="fas fa-plus"></i>nueva cotización</span>
@@ -49,7 +48,6 @@
             <table >
                 <thead>
                     <tr>
-                        
                         <th class="wclprod">Producto</th>
                         <th class="wcldays colbase"><i class="fas fa-caret-down selectionInput quantityBase inpt"></i>Cant.</th>
                         <th class="wclnumb colbase">Precio</th>
@@ -120,8 +118,6 @@
                         </th>
                         <td colspan=14></td>
                     </tr> 
-
-                    
                 </tbody>
                 
             </table>
@@ -325,7 +321,6 @@
         
     </div>
 
-
 <!-- Mini menu de opciones de producto -->
     <div class="invoice__menu-products invoice-border withShadow">
         <ul>
@@ -360,7 +355,6 @@
 
 <!-- Fondo obscuro -->
     <div class="invoice__modalBackgound"></div>
-
 
 <!-- Plantilla de tablas modales -->
     <div id="infoProductTemplate" class="table_hidden box_template">
@@ -406,6 +400,7 @@
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Quieres agregar Nombre del proyecto</span>
                         </td>
                     </tr>
+
                     <tr>
                         <td>Periodo</td>
                         <td>
@@ -414,6 +409,7 @@
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
                         </td>
                     </tr>
+
                     <tr>
                         <td>Duración del proyecto</td>
                         <td>
@@ -421,6 +417,7 @@
                             <span class="textAlert"></span>
                         </td>
                     </tr>
+
                     <tr>
                         <td>Locación</td>
                         <td>
@@ -428,6 +425,7 @@
                             <span class="textAlert"></span>
                         </td>
                     </tr>
+
                     <tr>
                         <td>Tipo de proyecto</td>
                         <td>
@@ -437,6 +435,7 @@
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de proyecto</span>
                         </td>
                     </tr>
+
                     <tr>
                         <td>Tipo de locación</td>
                         <td>
@@ -448,6 +447,7 @@
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de locación</span>
                         </td>
                     </tr>
+
                     <tr>
                         <td>Cliente</td>
                         <td>
@@ -458,6 +458,7 @@
                             <input type="hidden" name="txtCustomerOwnerEdt"  id="txtCustomerOwnerEdt">
                         </td>
                     </tr>
+
                     <tr>
                         <td>Productor</td>
                         <td>
@@ -532,7 +533,6 @@
                         </td>
                     </tr>
 
-
                     <tr>
                         <td>Tipo de dependencia</td>
                         <td>
@@ -546,7 +546,6 @@
                         </td>
                     </tr>
 
-                    
                     <tr class="hide">
                         <td>Proyecto padre</td>
                         <td>
@@ -559,7 +558,6 @@
                     </tr>
 
                     <tr>
-                        
                         <td colspan=2>
                             <button class="bn btn-ok" id="saveProject"></button>
                         </td>
@@ -569,7 +567,6 @@
             <div class="image_random"></div>
         </div>
     </div>
-
 
 <!-- formulario de comentarios -->
     <div id="commentsTemplates" class="table_hidden box_template">
@@ -586,7 +583,6 @@
         </div>
     </div>
 
-
 <!-- loading -->
     <div class="invoice__loading modalLoading">
         <div class="box_loading">
@@ -600,7 +596,6 @@
 <!-- end -->
     
 </div>
-
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'Budget/Budget.js?v=1.0.0.0' ?>"></script>
