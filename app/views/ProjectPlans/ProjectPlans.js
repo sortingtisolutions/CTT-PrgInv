@@ -209,11 +209,12 @@ function eventsAction() {
                     "discount"  : "${discount}",
                     "action"    : "${interfase}"
                 }]`;
+                console.log(par);
                 var pagina = 'ProjectPlans/SaveBudget';
                 var tipo = 'html';
-                var selector = saveBudget;
+                var selector = putsaveBudget;
                 fillField(pagina, par, tipo, selector);
-                // console.log(par);
+                
             }
         });
 
@@ -971,7 +972,7 @@ function loadBudget(inx, bdgId) {
         "daybasereal"               : "${days}"
     }
     `;
-    //console.log(par);
+    console.log(par);
     let ky = registeredProduct('bdg' + prod[inx].prd_id, section);
     let stus = 'A';
     if (ky == 0) {
@@ -991,6 +992,7 @@ function loadBudget(inx, bdgId) {
 }
 
 function putAddProductMice(dt) {
+    console.log('putAddProductMice-',par);
     $('#bdg0').attr('id', 'bdg' + dt);
 }
 
@@ -1018,6 +1020,7 @@ function registeredProduct(id, section) {
 }
 
 function putBudgets(dt) {
+    console.log('putBudgets-',dt)
     budg = dt;
     let days = getDaysPeriod();
 
@@ -1964,10 +1967,11 @@ function printBudget(verId) {
     );
 }
 
-function saveBudget(dt) {
+function putsaveBudget(dt) {
+    // console.log('putsaveBudget',dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-    // console.log(pjtId, verId);
+    // console.log('Ambos-',pjtId, verId);
     getBudgets(pjtId, verId);
     interfase = 'MST';
     purgeInterfase();

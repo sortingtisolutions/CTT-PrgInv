@@ -740,8 +740,12 @@ public function updateOrder($request_params)
                 );
                
                 $detlId = $this->model->SettingSeries($prdparam);
-                
-                $accesory = $this->model->GetAccesories($prodId);
+                $serId=$detlId;
+                    $paramacc = array(
+                        'prodId' => $prodId, 
+                        'serId' => $serId,
+                    );
+                $accesory = $this->model->GetAccesories($paramacc);
                 while($acc = $accesory->fetch_assoc()){
 
                     $aprodId = $acc["prd_id"];
@@ -771,8 +775,13 @@ public function updateOrder($request_params)
                         'detlId' => 0,
                     );
                     $detlId = $this->model->SettingSeries($pktparams);
-
-                    $accesory = $this->model->GetAccesories($kprodId);
+                    //echo 'Paso SettingSeries';
+                    $serId=$detlId;
+                    $paramaccpk = array(
+                        'prodId' => $kprodId, 
+                        'serId' => $serId,
+                    );
+                    $accesory = $this->model->GetAccesories($paramaccpk);
                     while($acc = $accesory->fetch_assoc()){
 
                         $aprodId = $acc["prd_id"];

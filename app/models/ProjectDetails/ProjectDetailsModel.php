@@ -565,11 +565,11 @@ class ProjectDetailsModel extends Model
                 '$ver_id',
                 '$prd_id',
                 '$pjt_id'
-            );
-            ";
+                );  ";
+            }
             $this->db->query($qry);
             $result = $this->db->insert_id;
-        }
+        
     }
 
 /** ====== Actualiza contenido de la version =================================================  */

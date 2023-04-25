@@ -88,8 +88,7 @@ class ProjectPlansModel extends Model
                 SELECT pjtvr_id, 'N' AS pjtvr_action, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_quantity AS pjtvr_quantity_ant, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, 
                     pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id 
                 FROM ctt_projects_version 
-                WHERE ver_id = $verId;
-                ";
+                WHERE ver_id = $verId;  ";
         $this->db->query($qry4);
 
         $qry5 = "SELECT pc.*, pj.pjt_id, sb.sbc_name,
@@ -117,6 +116,7 @@ class ProjectPlansModel extends Model
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 WHERE pc.ver_id = $verId  ORDER BY pc.pjtvr_order asc;";
+                
         return $this->db->query($qry5);
     } 
 
@@ -517,7 +517,8 @@ public function saveDateProject($params)
                 WHERE pjtvr_section= $pjtvr_section AND ver_id=$ver_id AND pjt_id=$pjt_id";
         $result =  $this->db->query($qry1);
 
-        while($row = $result->fetch_assoc()){
+        while($row = $result->fetch_assoc())
+        {
             $nextorder = $row["nextorder"];
         
             $qry = "INSERT INTO ctt_projects_mice (
@@ -568,20 +569,24 @@ public function saveDateProject($params)
                 '$pjt_id'
             );
             ";
+        }
         $this->db->query($qry);
         $result = $this->db->insert_id;
-        }
+        
     }
 
 /** ====== Actualiza contenido de la version =================================================  */
     public function settingMasterVersion($pjtId, $verId, $discount)
     {
-        $qry1 = "UPDATE ctt_version SET ver_master = 0, ver_active = 0, ver_discount_insured = $discount WHERE pjt_id = $pjtId;";
+        $qry1 = "UPDATE ctt_version 
+                SET ver_master = 0, ver_active = 0, ver_discount_insured = $discount 
+                WHERE pjt_id = $pjtId;";
         $this->db->query($qry1);
         
-        $qry2 = "UPDATE ctt_version SET ver_master = 1, ver_active = 1, ver_discount_insured = $discount WHERE ver_id = $verId;";
+        $qry2 = "UPDATE ctt_version 
+                SET ver_master = 1, ver_active = 1, ver_discount_insured = $discount 
+                WHERE ver_id = $verId;";
         return $this->db->query($qry2);
-
     }
 
     public function settingDiscountVersion($pjtId, $verId, $discount)

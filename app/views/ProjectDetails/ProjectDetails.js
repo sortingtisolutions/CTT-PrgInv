@@ -212,7 +212,7 @@ function eventsAction() {
                 console.log('Salvando Solo',par);
                 var pagina = 'ProjectDetails/SaveBudget';
                 var tipo = 'html';
-                var selector = saveBudget;
+                var selector = putsaveBudget;
                 fillField(pagina, par, tipo, selector);
             }
         });
@@ -1018,6 +1018,7 @@ function registeredProduct(id, section) {  // parametro de section agregado por 
 }
 
 function putBudgets(dt) {
+    console.log('putBudgets-',dt)
     budg = dt;
     let days = getDaysPeriod();
 
@@ -1957,10 +1958,11 @@ function printBudget(verId) {
     );
 }
 
-function saveBudget(dt) {
+function putsaveBudget(dt) {
+    console.log('putsaveBudget',dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-    // console.log('11',dt);
+    
     getBudgets(pjtId, verId);
     interfase = 'MST';
     purgeInterfase();

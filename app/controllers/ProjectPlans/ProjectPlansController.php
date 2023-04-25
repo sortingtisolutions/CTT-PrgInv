@@ -490,7 +490,7 @@ class ProjectPlansController extends Controller
                         'serId' => $serId,
                     );
                      echo $serId . ' - Prod ' . $prodId ;
-                    $accesory = $this->model->GetAccesories($paramacc);
+                    $accesory = $this->model->GetAccesories($paramacc);  //jjr
                     while($acc = $accesory->fetch_assoc()){
 
                         $acceId =  $acc["prd_id"];
@@ -626,7 +626,7 @@ class ProjectPlansController extends Controller
                     if ($qtyAct > $qtyAnt){
                         $dif = $qtyAct - $qtyAnt;
                         for ($i=1; $i <= $dif; $i++){
-                            echo 'Update ';
+                            //echo 'Update ';
                             $updQty = $this-> AddQuantityDetail($param);
                         }
                     } else if ($qtyAct < $qtyAnt){
@@ -745,8 +745,12 @@ class ProjectPlansController extends Controller
                 );
                
                 $detlId = $this->model->SettingSeries($prdparam);
-                
-                $accesory = $this->model->GetAccesories($prodId);
+                $serId=$detlId;
+                    $paramacc = array(
+                        'prodId' => $prodId, 
+                        'serId' => $serId,
+                    );
+                $accesory = $this->model->GetAccesories($paramacc);
                 while($acc = $accesory->fetch_assoc()){
 
                     $aprodId = $acc["prd_id"];
@@ -776,8 +780,13 @@ class ProjectPlansController extends Controller
                         'detlId' => 0,
                     );
                     $detlId = $this->model->SettingSeries($pktparams);
-
-                    $accesory = $this->model->GetAccesories($kprodId);
+                    //echo 'Paso SettingSeries';
+                    $serId=$detlId;
+                    $paramaccpk = array(
+                        'prodId' => $kprodId, 
+                        'serId' => $serId,
+                    );
+                    $accesory = $this->model->GetAccesories($paramaccpk);
                     while($acc = $accesory->fetch_assoc()){
 
                         $aprodId = $acc["prd_id"];
