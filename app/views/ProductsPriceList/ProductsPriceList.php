@@ -109,13 +109,26 @@
     </div>
 <!-- End Ventana modal PRODUCTOS RESERVADOS -->
 
-
 <!-- Start Ventana modal PRODUCTOS -->
 <div class="overlay_background overlay_hide" id="LoadingModal">
 
     </div>
 <!-- End Ventana modal PRODUCTOS -->
 
+<!-- Fondo obscuro -->
+<div class="invoice__modalBackgound"></div>
+
+<!-- loading -->
+<div class="invoice__loading modalLoading">
+        <div class="box_loading">
+            <p class="text_loading">
+                Cargando Informacion<br>
+                <i class="fas fa-spinner spin"></i> 
+                </p>
+            <p>Revisando Catalogos</p>
+        </div>
+    </div>
+<!-- end -->
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

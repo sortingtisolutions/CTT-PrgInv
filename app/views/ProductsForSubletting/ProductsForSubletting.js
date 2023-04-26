@@ -23,6 +23,49 @@ function inicial() {
     });
 }
 
+/**  +++++ Obtiene los datos de los proyectos activos +++++  */
+function get_Proyectos() {
+    var pagina = 'ProductsForSubletting/listProyects';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = put_Proyectos;
+    fillField(pagina, par, tipo, selector);
+}
+/**  +++++ Obtiene los datos de los productos activos +++++  */
+function get_products(pj) {
+    console.log(pj);
+    var pagina = 'ProductsForSubletting/listProducts';
+    var par = `[{"pjtId":"${pj}"}]`;
+    var tipo = 'json';
+    var selector = put_Products;
+    fillField(pagina, par, tipo, selector);
+}
+
+/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
+function get_coins() {
+    var pagina = 'ProductsForSubletting/listCoins';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = put_coins;
+    fillField(pagina, par, tipo, selector);
+}
+/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
+function get_suppliers() {
+    var pagina = 'ProductsForSubletting/listSuppliers';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = put_suppliers;
+    fillField(pagina, par, tipo, selector);
+}
+/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
+function get_stores() {
+    var pagina = 'ProductsForSubletting/listStores';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = put_stores;
+    fillField(pagina, par, tipo, selector);
+}
+
 /** ++++  Setea el calendario ++++++ */
 function setting_datepicket(sl, di, df) {
     let fc = moment(Date()).format('DD/MM/YYYY');
@@ -33,20 +76,8 @@ function setting_datepicket(sl, di, df) {
             locale: {
                 format: 'DD/MM/YYYY',
                 daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-                monthNames: [
-                    'Enero',
-                    'Febrero',
-                    'Marzo',
-                    'Abril',
-                    'Mayo',
-                    'Junio',
-                    'Julio',
-                    'Agosto',
-                    'Septiembre',
-                    'Octubre',
-                    'Noviembre',
-                    'Diciembre',
-                ],
+                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo', 'Junio',
+                    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
                 firstDay: 1,
             },
             minDate: fc,
@@ -135,7 +166,7 @@ function setting_table() {
             { data: 'editable', class: 'edit' },
             { data: 'prodname', class: 'product-name' },
             { data: 'prod_sku', class: 'sku' },
-            { data: 'prodpric', class: 'price' },
+            { data: 'prodpric', class: 'sku' },
             { data: 'supplier', class: 'supply' },
             { data: 'storesrc', class: 'stores' },
             { data: 'datestar', class: 'date' },
@@ -145,48 +176,6 @@ function setting_table() {
     });
 }
 
-/**  +++++ Obtiene los datos de los proyectos activos +++++  */
-function get_Proyectos() {
-    var pagina = 'ProductsForSubletting/listProyects';
-    var par = `[{"store":""}]`;
-    var tipo = 'json';
-    var selector = put_Proyectos;
-    fillField(pagina, par, tipo, selector);
-}
-/**  +++++ Obtiene los datos de los productos activos +++++  */
-function get_products(pj) {
-    console.log(pj);
-    var pagina = 'ProductsForSubletting/listProducts';
-    var par = `[{"pjtId":"${pj}"}]`;
-    var tipo = 'json';
-    var selector = put_Products;
-    fillField(pagina, par, tipo, selector);
-}
-
-/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
-function get_coins() {
-    var pagina = 'ProductsForSubletting/listCoins';
-    var par = `[{"store":""}]`;
-    var tipo = 'json';
-    var selector = put_coins;
-    fillField(pagina, par, tipo, selector);
-}
-/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
-function get_suppliers() {
-    var pagina = 'ProductsForSubletting/listSuppliers';
-    var par = `[{"store":""}]`;
-    var tipo = 'json';
-    var selector = put_suppliers;
-    fillField(pagina, par, tipo, selector);
-}
-/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
-function get_stores() {
-    var pagina = 'ProductsForSubletting/listStores';
-    var par = `[{"store":""}]`;
-    var tipo = 'json';
-    var selector = put_stores;
-    fillField(pagina, par, tipo, selector);
-}
 
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
@@ -207,76 +196,82 @@ function put_Proyectos(dt) {
 
 /**  ++++   Coloca los productos en el listado del input */
 function put_Products(dt) {
-    // console.log(pj);
-    // console.log(dt);
+    
+    console.log('put_Products-', dt);
     pd = dt;
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla'
         ? $('#tblProductForSubletting tbody tr').remove()
         : '';
     let tabla = $('#tblProductForSubletting').DataTable();
-    tabla.rows().remove().draw();
+    // tabla.rows().remove().draw();
     let cn = 0;
-    $.each(pd, function (v, u) {
-        let datestart = u.sub_date_start;
-        let dateend = u.sub_date_end;
+    if (pd[0].prd_name != undefined) {
+        $.each(pd, function (v, u) 
+        {
+            
+            let datestart = u.sub_date_start;
+            let dateend = u.sub_date_end;
 
-        if (datestart == null) {
-            datestart = define_days(
-                'i',
-                pj[px].pjt_date_start,
-                u.pjtcn_days_base,
-                u.pjtcn_days_trip,
-                u.pjtcn_days_test
-            );
-        }
-        if (dateend == null) {
-            dateend = define_days(
-                'f',
-                pj[px].pjt_date_start,
-                u.pjtcn_days_base,
-                u.pjtcn_days_trip,
-                u.pjtcn_days_test
-            );
-        }
-        let sku = u.pjtdt_prod_sku;
-        if (sku == 'Pendiente') {
-            sku = `<span class="pending">${sku}</sku>`;
-        }
-        // editable: `<i id="k${u.pjtdt_id}" class="fas fa-times-circle kill"></i>`,
-        tabla.row
-            .add({
-                editable: `<i id="k${u.pjtdt_id}" class="fas fa-certificate"></i>`,
-                prodname: u.prd_name,
-                prod_sku: sku,
-                prodpric: u.sub_price,
-                supplier: u.sup_business_name,
-                storesrc: u.str_name,
-                datestar: datestart,
-                date_end: dateend,
-                comments: u.sub_comments,
-            })
-            .draw();
-        $('#k' + u.pjtdt_id)
-            .parents('tr')
-            .attr({
-                id: u.pjtdt_id,
-                data_index: cn,
-                data_pjtcn: u.pjtcn_id,
-                data_produ: u.prd_id,
-                data_store: u.str_id,
-                data_suble: u.sub_id,
-                data_suply: u.sup_id,
-                data_coins: u.cin_id,
-                data_prsku: u.prd_sku,
-                data_serie: u.ser_id,
-            });
+            if (datestart == null) {
+                datestart = define_days(
+                    'i',
+                    pj[px].pjt_date_start,
+                    u.pjtcn_days_base,
+                    u.pjtcn_days_trip,
+                    u.pjtcn_days_test
+                );
+            }
+            if (dateend == null) {
+                dateend = define_days(
+                    'f',
+                    pj[px].pjt_date_start,
+                    u.pjtcn_days_base,
+                    u.pjtcn_days_trip,
+                    u.pjtcn_days_test
+                );
+            }
+            let sku = u.pjtdt_prod_sku;
+            if (sku == 'Pendiente') {
+                sku = `<span class="pending">${sku}</sku>`;
+            }
+            // editable: `<i id="k${u.pjtdt_id}" class="fas fa-times-circle kill"></i>`,
+            tabla.row
+                .add({
+                    editable: `<i id="k${u.pjtdt_id}" class="fas fa-certificate"></i>`,
+                    prodname: u.prd_name,
+                    prod_sku: sku,
+                    prodpric: u.sub_price,
+                    supplier: u.sup_business_name,
+                    storesrc: u.str_name,
+                    datestar: datestart,
+                    date_end: dateend,
+                    comments: u.sub_comments,
+                })
+                .draw();
+            $('#k' + u.pjtdt_id)
+                .parents('tr')
+                .attr({
+                    id: u.pjtdt_id,
+                    data_index: cn,
+                    data_pjtcn: u.pjtcn_id,
+                    data_produ: u.prd_id,
+                    data_store: u.str_id,
+                    data_suble: u.sub_id,
+                    data_suply: u.sup_id,
+                    data_coins: u.cin_id,
+                    data_prsku: u.prd_sku,
+                    data_serie: u.ser_id,
+                });
+            cn++;
+            // console.log('EACH-', u.ser_id);
+        });
+    }
 
-        cn++;
-    });
     $('#tblProductForSubletting tbody tr')
         .unbind('click')
         .on('click', function () {
+            console.log('CLICK-');
             let selected = $(this).attr('class').indexOf('selected');
             if (selected < 0) {
                 $('.objet').removeClass('objHidden');

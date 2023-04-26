@@ -12,10 +12,62 @@ $(document).ready(function () {
 function inicial() {
     setTimeout(() => {
         getCategories();
-        deep_loading('O');
+        // deep_loading('O');
         $('.tblProdMaster').css({display: 'none'});
+        modalLoading('S');
         getPriceList(0);
+        // modalLoading('H');
     }, 100);
+}
+
+
+/**
+ * Obtien el listado de los productos
+ * @param {number} catId Recibe el ID del catalogo
+ */
+function getPriceList(catId) {
+    var pagina = 'ProductsPriceList/listProducts';
+    var par = `[{"catId":"${catId}","grp":"${grp}","num":"${num}"}]`;
+    var tipo = 'json';
+    var selector = putPriceList;
+    fillField(pagina, par, tipo, selector);
+}
+
+/**
+ * Presenta el listado de los productos con sus precios
+ * @param {string} dt JSON con el listado obtenido de los produtos
+ */
+function putPriceList(dt) {
+    if (dt[0].prd_id != '0') {
+        var catId = dt[0].cat_id;
+        $.each(dt, function (v, u) {
+            pack = u.prd_level == 'K' ? 'fas' : 'far';
+            let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt"></i></span>`;
+            let invoice = u.doc_id == 0 ? '' : docInvo;
+            let reserved =
+                u.prd_reserved > 0 ? `<span class="toView" data-content="${u.prd_id}" data-name="${u.prd_name}" data-level="${u.prd_level}">${u.prd_reserved}</span>` : '';
+
+            var H = `
+                <tr class="odd">
+                    <td class="edit"></td>
+                    <td class="sku"><span class="hide-support">${u.prd_id}</span>${u.prd_sku}</td>
+                    <td class="product-name"><i class="${pack} fa-box-open fa-sm"></i> ${u.prd_name}</td>
+                    <td class="quantity"><span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.prd_stock}|${u.prd_level}">${u.prd_stock}</span></td>
+                    <td class="reserved">${reserved}</td>
+                    <td class="price">${u.prd_price}</td>
+                    <td class="sku">${u.prd_coin_type}</td>
+                    <td class="cellInvoice center">${invoice}</td>
+                    <td class="catalog">${u.cat_name}</td>
+                    <td class="catalog">${u.sbc_name}</td>
+                    <td class="sku">${u.srv_name}</td>
+                    <td class="catalog">${u.prd_english_name}</td>
+                </tr>`;
+            $('#tblPriceList tbody').append(H);
+        });
+        setting_table();
+        active_icons();
+        modalLoading('H');
+    }
 }
 
 /** +++++  configura la table de productos */
@@ -93,53 +145,6 @@ function setting_table() {
         });
 }
 
-/**
- * Obtien el listado de los productos
- * @param {number} catId Recibe el ID del catalogo
- */
-function getPriceList(catId) {
-    var pagina = 'ProductsPriceList/listProducts';
-    var par = `[{"catId":"${catId}","grp":"${grp}","num":"${num}"}]`;
-    var tipo = 'json';
-    var selector = putPriceList;
-    fillField(pagina, par, tipo, selector);
-}
-
-/**
- * Presenta el listado de los productos con sus precios
- * @param {string} dt JSON con el listado obtenido de los produtos
- */
-function putPriceList(dt) {
-    if (dt[0].prd_id != '0') {
-        var catId = dt[0].cat_id;
-        $.each(dt, function (v, u) {
-            pack = u.prd_level == 'K' ? 'fas' : 'far';
-            let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt"></i></span>`;
-            let invoice = u.doc_id == 0 ? '' : docInvo;
-            let reserved =
-                u.prd_reserved > 0 ? `<span class="toView" data-content="${u.prd_id}" data-name="${u.prd_name}" data-level="${u.prd_level}">${u.prd_reserved}</span>` : '';
-
-            var H = `
-                <tr class="odd">
-                    <td class="edit"></td>
-                    <td class="sku"><span class="hide-support">${u.prd_id}</span>${u.prd_sku}</td>
-                    <td class="product-name"><i class="${pack} fa-box-open fa-sm"></i> ${u.prd_name}</td>
-                    <td class="quantity"><span class="toLink" id="${u.prd_id}" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.prd_stock}|${u.prd_level}">${u.prd_stock}</span></td>
-                    <td class="reserved">${reserved}</td>
-                    <td class="price">${u.prd_price}</td>
-                    <td class="sku">${u.prd_coin_type}</td>
-                    <td class="cellInvoice center">${invoice}</td>
-                    <td class="catalog">${u.cat_name}</td>
-                    <td class="catalog">${u.sbc_name}</td>
-                    <td class="sku">${u.srv_name}</td>
-                    <td class="catalog">${u.prd_english_name}</td>
-                </tr>`;
-            $('#tblPriceList tbody').append(H);
-        });
-        setting_table();
-        active_icons();
-    }
-}
 
 function getProductReserve(prdId, prdLv, prdNm) {
     var pagina = 'ProductsPriceList/listProductsReserve';
@@ -205,7 +210,7 @@ function active_icons() {
             let qty = $(this).attr('data-content').split('|')[2];
             let pkt = $(this).attr('data-content').split('|')[3];
             let pkn = $(this).attr('data-content').split('|')[1];
-            console.log ('Existencias ', prd, qty, pkt, pkn );
+            console.log ('Existencias-', prd, qty, pkt, pkn );
             if (qty > 0) {
                 if (pkt == 'K') {
                     getProduct(prd, pkn);
@@ -374,21 +379,28 @@ function putSeries(dt) {
         .unbind('click')
         .on('click', function () {
             $('.overlay_background').addClass('overlay_hide');
+            $('#tblSerialList').DataTable().remove;           
         });
 
-    build_modal_serie(dt);
+    build_modal_serie(dt); 
 }
 
 /** +++++  Coloca los seriales en la tabla de seriales */
 function build_modal_serie(dt) {
+    console.log('build_modal_serie-',dt);
+    let lcskush='';
+    let lcskuhi='';
     let tabla = $('#tblSerialList').DataTable();
 
     $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
+        lcskush = u.ser_sku.slice(0, 7);
+        lcskuhi = u.ser_sku.slice(7, 11);
         tabla.row
             .add({
-                produsku: `<span class="hide-support">${u.ser_id}</span>${u.ser_sku.slice(0, 7)}-${u.ser_sku.slice(7, 11)}`,
+                // produsku: `<span class="hide-support">${u.ser_id}</span>${u.ser_sku.slice(0, 7)}-${u.ser_sku.slice(7, 11)}`,
+                produsku: `<span class="hide-support">${u.ser_id}</span>${lcskush}-${lcskuhi}`,
                 serlnumb: u.ser_serial_number,
                 dateregs: u.ser_date_registry,
                 cvstatus: u.ser_situation,
@@ -447,7 +459,25 @@ function build_modal_reserved(dt) {
 
     $.each(dt, function (v, u) {
         tabla.row
-            .add({seriesku: u.ser_sku, serinumb: u.ser_serial_number, sersitua: u.ser_situation, projname: u.pjt_name, projstar: u.pjt_date_start, projeend: u.pjt_date_end})
+            .add({seriesku: u.ser_sku, 
+                serinumb: u.ser_serial_number, 
+                sersitua: u.ser_situation, 
+                projname: u.pjt_name, 
+                projstar: u.pjt_date_start, 
+                projeend: u.pjt_date_end})
             .draw();
     });
+}
+
+function modalLoading(acc) {
+    if (acc == 'S') {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
+    } else {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+        });
+    }
 }

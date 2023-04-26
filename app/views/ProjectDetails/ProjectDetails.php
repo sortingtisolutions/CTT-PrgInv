@@ -329,7 +329,7 @@
     <div class="invoice__section-products invoice-border modalTable">
         <div class="modal__header  invoice-border">
             <div class="modal__header-concept">&nbsp;Listados de productos</div>
-            <div class="modal__header-concept">&nbsp;<span class="invoice_button toCharge hide-items">Cargando....</span></div>
+            <div class="modal__header-concept">&nbsp;<span class="invoice_button toCharge hide-items" style="color:#008000">Cargando....</span></div>
             <i class="far fa-window-close close_listProducts"></i>
         </div>
         <div class="modal__header  invoice-border">

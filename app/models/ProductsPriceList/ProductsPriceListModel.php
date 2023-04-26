@@ -136,7 +136,7 @@ public function listProducts($params)
                     FROM ctt_products as pd 
                     INNER JOIN ctt_series AS sr ON sr.prd_id = pd.prd_id
                     LEFT JOIN ctt_projects_detail AS dt ON dt.pjtdt_id = sr.pjtdt_id
-                    LEFT JOIN ctt_projects_content AS ct ON ct.pjtcn_id = dt.pjtvr_id
+                    LEFT JOIN ctt_projects_content AS ct ON ct.pjtvr_id = dt.pjtvr_id
                     LEFT JOIN ctt_projects AS pj ON pj.pjt_id = ct.pjt_id
                     WHERE pd.prd_id = $prdId AND sr.ser_situation<>'D' ORDER BY pd.prd_name,  pj.pjt_name DESC;
                 ";
