@@ -214,13 +214,13 @@ public function listProyects($store)
 
         // Agrega la nueva serie
         $qry1 = "INSERT INTO ctt_series (
-                    ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, ser_date_registry, 
-                    ser_reserve_count, ser_behaviour, ser_comments, 
+                    ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
+                    ser_date_registry, ser_reserve_count, ser_behaviour, ser_comments, 
                     prd_id, sup_id, cin_id, pjtdt_id
                 )
                 SELECT 
-                    '$newSku', '$serieNew', '$seriCost', ifnull(sr.ser_status,1), ifnull(sr.ser_situation,'EA'), ifnull(sr.ser_stage, 'R'), curdate(),
-                    '1', ifnull(sr.ser_behaviour,'C'), '$comments', 
+                    '$newSku', '$serieNew', '$seriCost', ifnull(sr.ser_status,1), ifnull(sr.ser_situation,'EA'), 
+                    ifnull(sr.ser_stage, 'R'), curdate(),'1', ifnull(sr.ser_behaviour,'C'), '$comments', 
                     pd.prd_id, '$supplier','$tpCoinId','$pjDetail'
                 FROM ctt_series AS sr  
                 RIGHT JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
@@ -238,12 +238,10 @@ public function listProyects($store)
         $this->db->query($qry2);
 
         // Agrega el nuevo registro en la tabla de subarrendos
-        $qry3 = "INSERT INTO ctt_subletting (
-                    sub_price, sub_quantity, sub_date_start, sub_date_end, sub_comments, 
-                    ser_id, sup_id, prj_id, cin_id)
-                SELECT 
-                    ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
-                    '$supplier', '$projecId', '$tpCoinId' 
+        $qry3 = "INSERT INTO ctt_subletting (sub_price, sub_quantity, sub_date_start, sub_date_end, 
+                    sub_comments, ser_id, sup_id, prj_id, cin_id, prd_id)
+                SELECT ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
+                    '$supplier', '$projecId', '$tpCoinId', prd_id 
                 FROM ctt_series WHERE pjtdt_id = $pjDetail;";
         $this->db->query($qry3);
 

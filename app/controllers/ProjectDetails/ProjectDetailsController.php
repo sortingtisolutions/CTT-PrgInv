@@ -210,6 +210,24 @@ public function listProjectsTypeCalled($request_params)
         echo $res;
     } 
 
+    // Lista los productos con Subarrendo
+    public function listProductsSub($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProductsSub($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
+
 // Lista los comentarios del proyecto
     public function listComments($request_params)
     {

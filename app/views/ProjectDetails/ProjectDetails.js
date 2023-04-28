@@ -12,6 +12,7 @@ let cust,
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
+let glbSec=0;  // jjr
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -148,7 +149,7 @@ function eventsAction() {
         .unbind('click')
         .on('click', function () {
             let item = $(this).attr('data-option');
-
+            glbSec = $(this).attr('data-option');
             $(this).hide();
 
             $(`#SC${item}`).show();
@@ -174,7 +175,7 @@ function eventsAction() {
         .unbind('click')
         .on('click', function () {
             let item = $(this).parents('tbody').attr('id');
-
+            glbSec = item.substring(3,2);  // jjr
             showListProducts(item);
         });
 
@@ -387,6 +388,15 @@ function getProducts(word, dstr, dend) {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
+/**  Obtiene el listado de productos de Subarrendo */
+function getProductsSub(word, dstr, dend) {
+    var pagina = 'Budget/listProductsSub';
+    var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
+    var tipo = 'json';
+    var selector = putProducts;
+    fillField(pagina, par, tipo, selector);
+}
+
 /**  Obtiene el listado de cotizaciones */
 function getBudgets(pjtId, verId) {
     var pagina = 'ProjectDetails/listBudgets';
@@ -870,7 +880,13 @@ function selProduct(res) {
         let dend = 0;
         if (res.length == 3) {
             $('.toCharge').removeClass('hide-items');  //jjr
-            getProducts(res.toUpperCase(), dstr, dend);
+            if (glbSec != 4) {  //IF agragado por jjr
+                console.log('Normal');
+                getProducts(res.toUpperCase(), dstr, dend);
+            } else {
+                console.log('Subarrendo');
+                getProductsSub(res.toUpperCase(), dstr, dend);
+            }
         } else {
             rowCurr.css({ display: 'none' });
             rowCurr.each(function (index) {

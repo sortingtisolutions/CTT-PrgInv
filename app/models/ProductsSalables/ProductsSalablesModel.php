@@ -10,19 +10,30 @@ class ProductsSalablesModel extends Model
     }
 
 
+// Registra el numero de folio 
+    public function NextExchange()
+    {
+        $qry = "INSERT INTO ctt_counter_exchange (con_status) VALUES ('1');	";
+        $this->db->query($qry);
+        return $this->db->insert_id;
+    }
+
 // Listado de almacenes  ****
         public function listStores($params)
         {
-            $qry = "SELECT str_id, str_name FROM ctt_stores WHERE str_id = 5 OR str_type = 'MOVILES' AND str_status = 1;";
+            $qry = "SELECT str_id, str_name FROM ctt_stores 
+                    WHERE (str_id = 30 OR str_type = 'MOVILES') 
+                    AND str_status = 1 order by str_name;";
             return $this->db->query($qry);
         }    
 
 // Listado de productos
         public function listProducts($params)
         {
-            $strId              = $this->db->real_escape_string($params['strId']);
+            $strId   = $this->db->real_escape_string($params['strId']);
 
-            $qry = "SELECT sr.ser_id, sr.ser_sku, pd.prd_sku, pd.prd_name, pd.prd_price, SUM(sp.stp_quantity) as stock
+            $qry = "SELECT sr.ser_id, sr.ser_sku, pd.prd_sku, pd.prd_name, pd.prd_price, 
+                    SUM(sp.stp_quantity) as stock
                     FROM ctt_series AS sr
                     INNER JOIN ctt_stores_products AS sp ON sp.ser_id = sr.ser_id
                     INNER JOIN ctt_products AS pd ON pd.prd_id = sr.prd_id
@@ -36,12 +47,11 @@ class ProductsSalablesModel extends Model
 // Listado de proyectos
         public function listProjects($params)
         {
-            $qry = "SELECT 
-                        pj.pjt_id, pj.pjt_number, pj.pjt_name, cu.cus_name 
+            $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name, if(cu.cus_name,NULL,'') AS cus_name
                     FROM ctt_projects AS pj
-                    INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-                    INNER JOIN ctt_customers AS cu On cu.cus_id = co.cus_id
-                    WHERE pjt_status in (2,3,4) ORDER BY pj.pjt_number;";
+                    LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+                    LEFT JOIN ctt_customers AS cu On cu.cus_id = co.cus_id
+                    WHERE pjt_status in (1,2,4,7,8) ORDER BY pj.pjt_number;";
             return $this->db->query($qry);
         }    
 
@@ -58,9 +68,11 @@ class ProductsSalablesModel extends Model
             $usrName            = strtoupper($user);
 
             $qr1 = "INSERT INTO ctt_sales 
-                        (sal_pay_form, sal_number_invoice, sal_customer_name, str_id, pjt_id, sal_saller, sal_project)
+                        (sal_pay_form, sal_number_invoice, sal_customer_name, str_id, pjt_id, 
+                        sal_saller, sal_project)
                     VALUES
-                        ('$salPayForm', '$salNumberInvoice', '$salCustomerName', '$strId', '$pjtId', '$usrName', '$pjtName');";
+                        ('$salPayForm', '$salNumberInvoice', '$salCustomerName', '$strId', '$pjtId', 
+                        '$usrName', '$pjtName');";
 
             $this->db->query($qr1);
             $salId = $this->db->insert_id;
@@ -69,20 +81,11 @@ class ProductsSalablesModel extends Model
             $qr2 = "UPDATE ctt_sales SET sal_number = '$salNumber' WHERE sal_id = $salId";
             $this->db->query($qr2);
 
-            $qr3 = "UPDATE ctt_comments SET com_action_id = '$salId', com_status = '1' WHERE com_id in ($comId)";
-            $this->db->query($qr3);
+            // $qr3 = "UPDATE ctt_comments SET com_action_id = '$salId', com_status = '1' WHERE com_id in ($comId)";
+            // $this->db->query($qr3);
 
             return $salId;
         }    
-
-
-// Registra el numero de folio 
-public function NextExchange()
-{
-    $qry = "INSERT INTO ctt_counter_exchange (con_status) VALUES ('1');	";
-    $this->db->query($qry);
-    return $this->db->insert_id;
-}
 
 
 // Guarda detalle de la venta
@@ -147,8 +150,6 @@ public function NextExchange()
             return $this->db->query($qry);
             
         }    
-
-
 
 // Guarda comentario
     public function SaveComments($params, $user)

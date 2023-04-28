@@ -15,7 +15,7 @@ function inicial() {
         get_stores();
         get_projects();
         fill_dinamic_table();
-        get_products(5);
+        get_products(30);
 
         $('#lstPayForm')
             .unbind('change')
@@ -36,7 +36,7 @@ function inicial() {
             window.location = 'ProductsSalables';
         });
         $('#newComment').on('click', function () {
-            addComments('sales', '');
+            // addComments('sales', '');
         });
 
         $('.required').on('focus', function () {
@@ -101,15 +101,17 @@ function put_stores(dt) {
         .unbind('change')
         .on('change', function () {
             let strId = $(this).val();
+            //console.log('lstStore',strId);
             get_products(strId);
         });
 }
 
 function put_projects(dt) {
+    console.log('put_projects',dt);
     proj = dt;
     if (dt[0].pjt_id > 0) {
         $.each(proj, function (v, u) {
-            let H = ` <option value="${v + 1}">${u.pjt_number}</option>`;
+            let H = ` <option value="${v + 1}">${u.pjt_name}</option>`;
             $('#lstProject').append(H);
         });
     } else {
@@ -123,7 +125,7 @@ function put_projects(dt) {
             var ix = $(this).val();
             if (ix > 0) {
                 $('#txtProject').parents('div.form_group').removeClass('hide');
-                $('#txtProject').val(proj[ix - 1].pjt_name.toUpperCase());
+                $('#txtProject').val(proj[ix - 1].pjt_number.toUpperCase());
                 $('#txtCustomer').val(proj[ix - 1].cus_name.toUpperCase());
             } else {
                 $('#txtProject').parents('div.form_group').addClass('hide');
@@ -134,7 +136,7 @@ function put_projects(dt) {
 }
 
 function put_products(dt) {
-    console.log(dt);
+    // console.log('put_products',dt);
     $('.list_products ul').html('');
     if (dt[0].ser_id > 0) {
         prod = dt;
@@ -142,14 +144,14 @@ function put_products(dt) {
         $.each(dt, function (v, u) {
             H = `
             <li data_indx ="${v}" data_content="${u.ser_sku}|${u.prd_name.replace(/"/g, '')}">
-                <div class="prodLevel">${u.ser_sku}</div>
+                <div class="prodLevel"></div> 
                 <div class="prodName">${u.prd_name}</div>
                 <div class="prodLevel">${u.prd_price}</div>
                 <div class="prodStock">${u.stock}</div>
             </li>
         `;
-
-            $('.list_products ul').append(H);
+        $('.list_products ul').append(H);
+//${u.ser_sku}
         });
 
         $('.list_products ul li')
@@ -191,6 +193,7 @@ function fill_dinamic_table() {
 }
 
 function add_boton() {
+    
     let H = `<br><button class="btn-add" id="addProduct">+ agregar producto</button>`;
     $('.frame_fix_top #tblControl thead th.product').append(H);
 
@@ -230,6 +233,7 @@ function add_boton() {
             .unbind('keyup')
             .on('keyup', function () {
                 let text = $(this).text().toUpperCase();
+                // console.log('Click Prods', text);
                 sel_product(text);
             });
     });
@@ -338,7 +342,7 @@ function registered_product(id) {
 /** ++++++ Selecciona los productos del listado */
 function sel_product(res) {
     $('.list_products').css({display: 'block'});
-    if (res.length < 1) {
+    if (res.length < 2) {
         $('.list_products ul li').css({display: 'block'});
     } else {
         $('.list_products ul li').css({display: 'none'});
@@ -385,55 +389,53 @@ function mkn(cf, tp) {
 }
 
 function saleApply() {
-    deep_loading('O');
+    
+        deep_loading('O');
+        if (folio == undefined) {
+            var pagina = 'ProductsSalables/NextExchange';
+            var par = '[{"par":""}]';
+            var tipo = 'html';
+            var selector = putNextExchangeNumber;
+            fillField(pagina, par, tipo, selector);
+        } else {
+            let ky = validator();
+            if (ky == 1) {
+                let pix = $('#lstProject').val();
+                console.log('saleApply',pix);
+                let payForm = $('#lstPayForm').val();
+                let invoice = $('#txtInvoice').val();
+                let customer = $('#txtCustomer').val().toUpperCase();
+                let pjtName = pix == '' ? '' : proj[pix - 1].pjt_name.toUpperCase();
+                let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
+                let strId = $('#lstStore').val();
 
-    if (folio == undefined) {
-        var pagina = 'ProductsSalables/NextExchange';
-        var par = '[{"par":""}]';
-        var tipo = 'html';
-        var selector = putNextExchangeNumber;
-        fillField(pagina, par, tipo, selector);
-    } else {
-        let ky = validator();
-        if (ky == 1) {
-            let pix = $('#lstProject').val();
-            console.log(pix);
-            let payForm = $('#lstPayForm').val();
-            let invoice = $('#txtInvoice').val();
-            let customer = $('#txtCustomer').val().toUpperCase();
-            let pjtName = pix == '' ? '' : proj[pix - 1].pjt_name.toUpperCase();
-            let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
-            let strId = $('#lstStore').val();
+                let par = `
+                    [{
+                        "salPayForm"        : "${payForm}",
+                        "salNumberInvoice"  : "${invoice}",
+                        "salCustomerName"   : "${customer}",
+                        "pjtName"           : "${pjtName}",
+                        "strId"             : "${strId}",
+                        "pjtId"             : "${pjtId}",
+                        "comId"             : "${comids}"
+                    }]`;
 
-            let par = `
-[{
-    "salPayForm"        : "${payForm}",
-    "salNumberInvoice"  : "${invoice}",
-    "salCustomerName"   : "${customer}",
-    "pjtName"           : "${pjtName}",
-    "strId"             : "${strId}",
-    "pjtId"             : "${pjtId}",
-    "comId"             : "${comids}"
-}]`;
-
-            console.log(par);
-
-            // console.log(par);
-            clean_required();
-            let rws = $('.frame_content #tblControl tbody tr').length;
-            if (rws > 0) {
-                var pagina = 'ProductsSalables/SaveSale';
-                var tipo = 'html';
-                var selector = saleDetailApply;
-                fillField(pagina, par, tipo, selector);
+                console.log(par);
+                clean_required();
+                let rws = $('.frame_content #tblControl tbody tr').length;
+                if (rws > 0) {
+                    var pagina = 'ProductsSalables/SaveSale';
+                    var tipo = 'html';
+                    var selector = saleDetailApply;
+                    fillField(pagina, par, tipo, selector);
+                } else {
+                    alert('Tabla vacia');
+                    deep_loading('C');
+                }
             } else {
-                alert('Tabla vacia');
                 deep_loading('C');
             }
-        } else {
-            deep_loading('C');
         }
-    }
 }
 
 function putNextExchangeNumber(dt) {
@@ -447,7 +449,7 @@ function saleDetailApply(dt) {
     let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
     let strId = $('#lstStore').val();
 
-    console.log(pix, pjtId, strId);
+    console.log('saleDetailApply',pix, pjtId, strId);
 
     $('.frame_content #tblControl tbody tr').each(function (v) {
         let ix = $(this).attr('data_index');
@@ -461,17 +463,17 @@ function saleDetailApply(dt) {
             let serId = prod[ix].ser_id;
 
             let par = `
-[{
-    "sldSku"        : "${productSku}",
-    "sldName"       : "${productName}",
-    "sldPrice"      : "${productPrice}",
-    "sldQuantity"   : "${quantity}",
-    "salId"         : "${salId}",
-    "serId"         : "${serId}",
-    "strId"         : "${strId}",
-    "pjtId"         : "${pjtId}",
-    "folio"         : "${folio}"
-}]`;
+                [{
+                    "sldSku"        : "${productSku}",
+                    "sldName"       : "${productName}",
+                    "sldPrice"      : "${productPrice}",
+                    "sldQuantity"   : "${quantity}",
+                    "salId"         : "${salId}",
+                    "serId"         : "${serId}",
+                    "strId"         : "${strId}",
+                    "pjtId"         : "${pjtId}",
+                    "folio"         : "${folio}"
+                }]`;
 
             console.log(par);
 
@@ -487,12 +489,12 @@ function setSaleDetailApply(dt) {
     console.log(dt);
     deep_loading('C');
 
-    let sal = dt.split('|')[0];
-    let usr = dt.split('|')[1];
-    let nme = dt.split('|')[2];
-    let hst = localStorage.getItem('host');
-    window.open(url + 'app/views/ProductsSalables/ProductsSalablesReport.php?i=' + sal + '&u=' + usr + '&n=' + nme + '&h=' + hst, '_blank');
-    window.location = 'ProductsSalables';
+    // let sal = dt.split('|')[0];
+    // let usr = dt.split('|')[1];
+    // let nme = dt.split('|')[2];
+    // let hst = localStorage.getItem('host');
+    // window.open(url + 'app/views/ProductsSalables/ProductsSalablesReport.php?i=' + sal + '&u=' + usr + '&n=' + nme + '&h=' + hst, '_blank');
+    // window.location = 'ProductsSalables';
 }
 
 function validator() {

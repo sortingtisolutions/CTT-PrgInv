@@ -40,7 +40,7 @@
                                         </div>
 
                                         <div class="form_group">
-                                            <label for="lstProject">Numero de proyecto:</label> 
+                                            <label for="lstProject">Nombre de proyecto:</label> 
                                             <select id="lstProject" name="lstProject" >
                                                 <option value="">Selecciona...</option>
                                             </select>
@@ -53,21 +53,16 @@
                                         
                                         <div class="form_group">
                                             <label for="txtCustomer">Cliente:</label> 
-                                            <input id="txtCustomer" name="txtCustomer" type="text" class="textbox required">
+                                            <input id="txtCustomer" name="txtCustomer" type="text" class="textbox">
                                         </div>
 
                                         <div class="form_group hide">
                                             <label for="txtInvoice">Num Factura:</label> 
                                             <input id="txtInvoice" name="txtInvoice" type="text" class="textbox">
                                         </div>
-
-                                       
                                     </form>
-
                                 </td>
                             </tr>
-
-                            
                         </table>
                     </div>
                 </div>
@@ -118,14 +113,14 @@
 </div>
 
 
-    <!-- Start Lista de productos -->
-    <div class="box_list_products" id="Products" >
-        <div class="sel_product" contenteditable="true"></div>
-        <div class="list_products">
-            <ul></ul>
-        </div>
+<!-- Start Lista de productos -->
+<div class="box_list_products" id="Products" >
+    <div class="sel_product" contenteditable="true"></div>
+    <div class="list_products">
+        <ul></ul>
     </div>
-    <!-- End Lista de productos -->
+</div>
+<!-- End Lista de productos -->
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

@@ -45,7 +45,12 @@
 				<div class="col-lg-4 d-flex flex-column align-items-end min-vh-100 set-login">
 					<div class="px-lg-5 pt-lg-4 pb-lg-3 p-4 w-100 mb-auto">
 						<img src="<?=  PATH_ASSETS . 'img/logo.png' ?>" alt="logo CTT Exr & Rentals" class="img-fluid logo" />
+						<div class="row">
+							<div style="height:10px;"></div>
+							<span><small> Version Web 1.1.13</small></span>
+						</div>
 					</div>
+					
 					<div class="px-lg-5 py-lg-4 p-4 w-100 align-self-center">
 						<h1 class="mb-4"><small>Bienvenido a</small><br />CTT Exp & Rentals</h1>
 						<form method="POST" action="<?= FOLDER_PATH . '/Login/signin' ?>">
