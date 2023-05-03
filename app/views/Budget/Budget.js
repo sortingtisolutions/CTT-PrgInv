@@ -241,7 +241,12 @@ function eventsAction() {
         .unbind('on')
         .on('click', function () {
             let verId = $('.version_current').attr('data-version');
-            printBudget(verId);
+            let fndaystrip=0;
+            if (fndaystrip==0){
+                printBudget(verId);
+            } else {
+                printBudget(verId);
+            }
         });
 
     // Busca los elementos que coincidan con lo escrito el input de cliente y poyecto
@@ -1754,8 +1759,12 @@ function printBudget(verId) {
     console.log('1 - ',t);
     console.log('2 - ',n); */
 
-    window.open(
+    /* window.open(
         `${url}app/views/Budget/BudgetReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        '_blank'
+    ); */
+    window.open(
+        `${url}app/views/Budget/BudgetReport-s-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
         '_blank'
     );
 }

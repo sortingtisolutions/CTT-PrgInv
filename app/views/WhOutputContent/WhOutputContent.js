@@ -479,7 +479,7 @@ function activeIconsSerieFree() {
         .on('click', function () {
         $('#boxSubmenu').remove()
 
-        });
+    });
 }
 
 function checkSerie(pjtcnid) {
@@ -599,15 +599,15 @@ function modalLoading(acc) {
 
 function printOutPutContent(verId) {
     let user = Cookies.get('user').split('|');
-    /* let v = verId;
+    let v = verId;
     let u = user[0];
-    let n = user[2]; */
+    let n = user[2];
     let h = localStorage.getItem('host');
-    let v = 1;
+    /* let v = 1;
     let u = 1;
     let n = 'SuperUsuario';
-
-    console.log(user);
+ */
+    console.log('Datos', v, u, n, h);
 
     window.open(
         `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,

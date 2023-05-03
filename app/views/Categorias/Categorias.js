@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 function inicial() {
     if (altr == 1) {
-        console.log('PASO 1');
+        // console.log('PASO 1');
         deep_loading('O');
         settingTable();
         getCategories();
@@ -27,7 +27,7 @@ function inicial() {
 function settingTable() {
     let title = 'Lista de Catálogos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-    console.log('PASO 1');
+    // console.log('PASO 1');
     $('#CategoriasTable').DataTable({
         order: [[1, 'asc']],
         dom: 'Blfrtip',
@@ -184,7 +184,7 @@ function actionButtons() {
 }
 
 function fillTableCategories(ix) {
-    console.log('PASO 2');  
+    // console.log('PASO 2');  
     let tabla = $('#CategoriasTable').DataTable();
     tabla.row
         .add({
@@ -325,13 +325,52 @@ function putDeleteCategory(dt) {
 
 function putSeries(dt) {
     console.log(dt);
+    let title = 'Detalle de Categoria';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#ExisteCatModal').removeClass('overlay_hide');
     $('#tblCatSerie').DataTable({
         destroy: true,
         order: [[1, 'asc']],
+        dom: 'Blfrtip',
         lengthMenu: [
             [100, 150, 200, -1],
             [100, 150, 200, 'Todos'],
+        ],
+        buttons: [
+            {
+                //Botón para Excel
+                extend: 'excel',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+            },
+            {
+                //Botón para descargar PDF
+                extend: 'pdf',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+            },
+            {
+                //Botón para imprimir
+                extend: 'print',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+            },
+            {
+                text: 'Borrar seleccionados',
+                // className: 'btn-apply hidden-field',
+            },
         ],
         pagingType: 'simple_numbers',
         language: {

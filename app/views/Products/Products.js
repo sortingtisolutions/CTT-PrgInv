@@ -5,7 +5,7 @@ let num = 0,
     lvl = '',
     flt = 0,
     btn = '';
-let cats, subs, sku1, sku2, sku3, sku4;
+let cats, subs, sku1, sku2, sku3, sku4, glbPkt;
 
 $(document).ready(function () {
     if (verifica_usuario()) {
@@ -15,7 +15,7 @@ $(document).ready(function () {
 //INICIO DE PROCESOS
 function inicial() {
     btn = 'solo productos';
-    console.log('AQUI EMPIEZA');
+    // console.log('AQUI EMPIEZA');
     if (altr == 1) {
         deep_loading('O');
         settingTable('0');
@@ -376,8 +376,9 @@ function activeIcons() {
             let prd = id.attr('id');
             let qty = $(this).text();
             let pkt = id.children('td.prodtype').text();
+            glbPkt = pkt
             let pkn = id.children('td.prodname').text();
-            console.log('CLick --', prd);
+            console.log('CLick --', prd, glbPkt);
             // let qty = $(this).parent().attr('data-content').split('|')[2];
             // let pkt = $(this).parent().attr('data-content').split('|')[3];
             // let pkn = $(this).parent().attr('data-content').split('|')[1];
@@ -872,17 +873,25 @@ function putSeries(dt) {
 
 /** +++++  Coloca los seriales en la tabla de seriales */
 function build_modal_serie(dt) {
+    let lprdsku='';
     let tabla = $('#tblSerie').DataTable();
     $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
     tabla.rows().remove().draw();
     $.each(dt, function (v, u) {
+        if (glbPkt=='P'){
+            lprdsku=u.ser_sku.slice(0, 10);
+        }else{
+            lprdsku=u.ser_sku.slice(0, 10) + '-' + u.ser_sku.slice(10, 15);
+        }
+
         let docInvo = `<span class="invoiceViewSer" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
         let invoice = u.doc_id == 0 ? '' : docInvo;
         tabla.row
             .add({
                 //sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i><i class="fas fa-times-circle serie kill" id="K${u.ser_id}"></i>`,
                 sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i>`,
-                produsku: `${u.ser_sku.slice(0, 10)}-${u.ser_sku.slice(10, 15)}`,
+                // produsku: `${u.ser_sku.slice(0, 10)}-${u.ser_sku.slice(10, 15)}`,
+                produsku: lprdsku,
                 serlnumb: u.ser_serial_number,
                 dateregs: u.ser_date_registry,
                 cvstatus: u.ser_situation,

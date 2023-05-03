@@ -18,7 +18,6 @@
                         <h4>Nueva subcategoria</h4>
 
                         <form id="formSubcategory" class="row g-3 needs-validation" novalidate>
-
                             <!-- Selector de categorias (catalogos) -->
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -66,7 +65,6 @@
                             </div>
 
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -90,7 +88,6 @@
                 </table>
             </div>
         <!-- End Tabla de contenido -->
-
         </div>
     </div>
 
@@ -118,10 +115,6 @@
             </div>
         </div>
     <!-- End Ventana Modal de STOCK -->
-
-
-
-
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

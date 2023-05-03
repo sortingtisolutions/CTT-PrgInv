@@ -89,7 +89,7 @@ $html = '
         <div class="container">
             <div class="name-report">
                 <p>
-                    <span class="number">Cotización '. $items[0]['ver_code'] .'</span>
+                    <span class="number">Nombre y numero de proyecto: '. $items[0]['pjt_name'] .' #' .$items[0]['pjt_number'] .' </span>
                 <br>
                     <span class="date">'.  $items[0]['ver_date_real'] .'</span>
                 </p>
@@ -116,6 +116,14 @@ $html = '
                                 <td class="concept">Teléfono:</td>
                                 <td class="data">'. $items[0]['cus_phone'] .'</td>
                             </tr>
+                            <tr>
+                                <td class="concept">Quien Solicita:</td>
+                                <td class="data">'. $items[0]['pjt_how_required'] .'</td>
+                            </tr>
+                            <tr>
+                                <td class="concept">Analista CTT:</td>
+                                <td class="data">'. $uname .'</td>
+                            </tr>
                         </table>
                         <!-- End datos del cliente -->
                     </td>
@@ -127,24 +135,32 @@ $html = '
                                 <td class="data"><strong>'. $items[0]['pjt_number'] .'</strong></td>
                             </tr>
                             <tr>
-                                <td class="concept">Proyecto:</td>
-                                <td class="data">'. $items[0]['pjt_name'] .'</td>
+                                <td class="concept">Version:</td>
+                                <td class="data">'. $items[0]['ver_code'] .'</td>
                             </tr>
                             <tr>
-                                <td class="concept">Locación:</td>
+                                <td class="concept">Ciudad:</td>
                                 <td class="data">'. $items[0]['pjt_location'] .'</td>
                             </tr>
-                            <tr>
+                            /* <tr>
                                 <td class="concept">Tipo de Locación:</td>
                                 <td class="data">'. $items[0]['loc_type_location'] .'</td>
-                            </tr>
+                            </tr> */
                             <tr>
                                 <td class="concept">Tipo de proyecto:</td>
                                 <td class="data">'. $items[0]['pjttp_name'] .'</td>
                             </tr>
                             <tr>
-                                <td class="concept">Periodo:</td>
+                                <td class="concept">Fechas de Proyecto:</td>
                                 <td class="data">'. $items[0]['period'] .'</td>
+                            </tr>
+                            <tr>
+                                <td class="concept">Dias de Viaje:</td>
+                                <td class="data">'. $items[0]['pjt_trip_go'] .'</td>
+                            </tr>
+                            <tr>
+                                <td class="concept">Dias de Pruebas:</td>
+                                <td class="data">'. $items[0]['pjt_test_tecnic'] .'</td>
                             </tr>
                             <tr>
                                 <td class="concept">&nbsp;</td>
@@ -175,10 +191,8 @@ $html = '
                                 <th class="tit-figure qnty">Cant.</th>
                                 <th class="tit-figure days">Días</th>
                                 <th class="tit-figure disc">Dcto.</th>
+                                <th class="tit-figure disc">% Dcto.</th>
                                 <th class="tit-figure amou">Importe</th>
-                                <th class="tit-figure days">Dias<br>Viaje</th>
-                                <th class="tit-figure amou">Dscto.<br>Viaje</th>
-                                <th class="tit-figure amou">Importe x<br>Viaje</th>
                                 <th class="tit-figure amou">Importe<br>Total</th>
                             </tr>
                         </thead>
@@ -203,8 +217,6 @@ $html = '
                                 $discountAmount = $subtotalBase * $discountBase;    //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
                                 $amountBase     = $subtotalBase - $discountAmount;  //  ----------------------- Costo base = importe base - importe de desucuento base
 
-                                $daysTrip       = $items[$i]['bdg_days_trip'];  //  --------------------------- Dias de viaje
-                                $discountTrip   = $items[$i]['bdg_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
                                 $amountTrip     = $price * $quantity * $daysTrip;   //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
                                 $discAmountTrip = $amountTrip * $discountTrip;  //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
                                 $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
@@ -231,10 +243,9 @@ $html = '
                                 <td class="dat-figure qnty">' . $quantity                                   . '</td>
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>
                                 <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
+                                <td class="dat-figure amou">' . $items[$i]['bdg_discount_base']      . '</td>
                                 <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
-                                <td class="dat-figure days">' . $daysTrip                                   . '</td>
-                                <td class="dat-figure amou">' . number_format($discAmountTrip , 2,'.',',')  . '</td>
-                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td>
+                                
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
@@ -245,10 +256,8 @@ $html = '
                         <tr>
                             <td class="tot-figure totl" colspan="4">Total Equipo Base</td>
                             <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
+                            <td class="tot-figure amou"> </td>
                             <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
-                            <td class="tot-figure days"></td>
-                            <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
-                            <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td>
                             <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                         </tr>
                     </tbody>

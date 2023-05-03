@@ -68,7 +68,6 @@
                 </div>
                 <!-- End área de listado -->
             </div>
-            
     </div>
 </div>
 

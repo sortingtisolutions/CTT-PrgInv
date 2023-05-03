@@ -361,24 +361,57 @@ function putSeries(dt) {
     });
 
     settindStockTbl();
-    $('.overlay_closer .title').html(`Subcategorias - ${subnme}`);
-    $('#ModifySerieModal').removeClass('overlay_hide');
-
-    $('#ModifySerieModal .btn_close')
-        .unbind('click')
-        .on('click', function () {
-            $('.overlay_background').addClass('overlay_hide');
-            $('#tblStock').DataTable().destroy();
-        });
+    
 }
 
 function settindStockTbl() {
+    let title = 'Detalle de Subcategoria';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    $('.overlay_closer .title').html(`Subcategorias - ${subnme}`);
+    $('#ModifySerieModal').removeClass('overlay_hide');
     $('#tblStock').DataTable({
         destroy: true,
         order: [[1, 'asc']],
+        dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, 150, 200, -1],
-            [50, 100, 150, 200, 'Todos'],
+            [50, 100, 200, -1],
+            [50, 100, 200, 'Todos'],
+        ],
+        buttons: [
+            {
+                //Botón para Excel
+                extend: 'excel',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+            },
+            {
+                //Botón para descargar PDF
+                extend: 'pdf',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+            },
+            {
+                //Botón para imprimir
+                extend: 'print',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+            },
+            {
+                text: 'Borrar seleccionados',
+                // className: 'btn-apply hidden-field',
+            },
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -398,6 +431,15 @@ function settindStockTbl() {
             {data: 'comments', class: 'comments'},
         ],
     });
+
+    $('#ModifySerieModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            // $('#tblStock').DataTable().destroy();
+            $('.overlay_background').addClass('overlay_hide');
+            let Dtable=$('#tblStock').DataTable().row().remove().draw();
+            Dtable.destroy();
+        });
 }
 
 // Obtiene el STOCK

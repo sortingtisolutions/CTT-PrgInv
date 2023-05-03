@@ -326,13 +326,53 @@ function putDeleteStore(dt) {
 
 function putSeries(dt) {
     console.log(dt);
+    
+    let title = 'Detalle de Almacen';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#ExisteStrModal').removeClass('overlay_hide');
     $('#tblStrSerie').DataTable({
         destroy: true,
         order: [[1, 'asc']],
+        dom: 'Blfrtip',
         lengthMenu: [
-            [100, 150, 200, -1],
-            [100, 150, 200, 'Todos'],
+            [100, 200, 300, -1],
+            [100, 200, 300, 'Todos'],
+        ],
+        buttons: [
+            {
+                //Botón para Excel
+                extend: 'excel',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+            },
+            {
+                //Botón para descargar PDF
+                extend: 'pdf',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+            },
+            {
+                //Botón para imprimir
+                extend: 'print',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+            },
+            {
+                text: 'Borrar seleccionados',
+                // className: 'btn-apply hidden-field',
+            },
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -371,13 +411,10 @@ function build_modal_serie(dt) {
         tabla.row
             .add({
                 sermodif: `<i></i>`,
-                produsku: `${u.prd_sku.slice(0, 7)}-${u.prd_sku.slice(7, 11)}`,
+                // produsku: `${u.prd_sku.slice(0, 7)}-${u.prd_sku.slice(7, 11)}`,
+                produsku: `${u.prd_sku}`,
                 serlnumb: u.prd_name,
                 dateregs: u.cantidad,
-               /*  servcost: u.cantidad,
-                cvsituat: u.prd_level,
-                cvestage: u.prd_level,
-                comments: u.prd_level, */
             })
             .draw();
         $(`#E${u.prd_sku}`).parents('tr').attr('data-product', u.prd_sku);
