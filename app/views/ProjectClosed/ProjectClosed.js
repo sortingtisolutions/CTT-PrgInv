@@ -34,6 +34,7 @@ function inicial() {
     if (altr == 1) {
         getProjects();
         widthTable(tblprod);
+        listChgStatus();
 
         $('#GuardarClosure').on('click', function () {
             let locID = $(this);
@@ -56,6 +57,14 @@ function inicial() {
             inicial();
         }, 100);
     }
+}
+
+function listChgStatus() {
+    var pagina = 'ProjectClosed/listChgStatus';
+    var par = '[{"parm":""}]';
+    var tipo = 'json';
+    var selector = putChgStatus;
+    fillField(pagina, par, tipo, selector);
 }
 
 // Obtiene el listado de los proyectos en etapa de pryecto
@@ -106,45 +115,48 @@ function activaCampos(pjtId) {
 
 function getProjectContent(pjtId) {
     let data = [
-        {
-            pjtId: pjtId,
-        },
-    ];
+        {pjtId: pjtId, },
+        ];
 
     var pagina = 'ProjectClosed/projectContent';
     var par = JSON.stringify(data);
     var tipo = 'JSON';
     var selector = putProjectContent;
     fillField(pagina, par, tipo, selector);
+    }
+
     function putProjectContent(dt) {
         console.log(dt);
-        /* <td class="lf">${u.ser_comments}</td> */
-        tblprod.find('tbody').html('');
-        $.each(dt, function (v, u) {
-            let H = `<tr>
-                        <td class="cn"></td>
-                        <td class="lf">${u.pjtdt_prod_sku}</td>
-                        <td class="lf">${u.pjtcn_prod_name}</td>
-                        <td class="cn">1</td>
-                        <td class="cn">${u.ser_situation}</td>
-                        <td class="rg">${fnm(u.costo, 2, '.', ',')}</td>
-                        <td class="lf"><input class="serprod fieldIn" type="text" id="id-${u.ser_id}" value="">${u.ser_comments}</td>
-                    </tr>`;
-            tblprod.append(H);
-        });
+        if (dt[0].pjtdt_id!=''){
+            /* <td class="lf">${u.ser_comments}</td> 
+                <td class="lf"><input class="serprod fieldIn" type="text" id="id-${u.ser_id}" value="">${u.ser_comments}</td> */
+            tblprod.find('tbody').html('');
+            $.each(dt, function (v, u) {
+
+                let H = `<tr id=${u.prd_id}, iname="${u.pjtcn_prod_name}">
+                            <td class="cn"><i class='fas fa-pen modif'></i></td>
+                            <td class="lf">${u.pjtdt_prod_sku}</td>
+                            <td class="lf">${u.pjtcn_prod_name}</td>
+                            <td class="cn">1</td>
+                            <td class="cn">${u.ser_situation}</td>
+                            <td class="rg">${fnm(u.costo, 2, '.', ',')}</td>
+                            <td class="lf">${u.ser_comments}</td>
+                        </tr>`;
+                tblprod.append(H);
+            });
+        }    
         widthTable(tblprod);
 
         let tot = dt.reduce((tt, pc) => tt + parseFloat(pc.costo), 0);
         totprj.html(fnm(tot, 2, '.', ','));
         console.log(tot);
+        activeIcons();
     }
-}
+
 
 function findExpenda(pjtId) {
     let data = [
-        {
-            pjtId: pjtId,
-        },
+        { pjtId: pjtId, },
     ];
 
     var pagina = 'ProjectClosed/saleExpendab';
@@ -152,6 +164,7 @@ function findExpenda(pjtId) {
     var tipo = 'JSON';
     var selector = putSaleExpendab;
     fillField(pagina, par, tipo, selector);
+
     function putSaleExpendab(dt) {
         let cfr = dt[0].expendables;
         totexp.html(fnm(cfr, 2, '.', ','));
@@ -274,4 +287,77 @@ function confirm_to_Closure(pjtid) {
 
 function putToWork(dt){
     console.log(dt)
+}
+
+function activeIcons() {
+    console.log('Activa Iconos');
+    $('.modif')
+        .unbind('click')
+        .on('click', function () {
+            console.log('Click Iconos');
+            let sltor = $(this);
+            let prdId = sltor.parents('tr').attr('id'); 
+            let Lname = sltor.parents('tr').attr('iname');
+            let prdNm = 'Modifica producto' ; //+ '-' + Lname
+            console.log('Click Iconos',prdId, Lname);
+            $('#txtPrdName').val(Lname);
+
+            $('#ProductModal').removeClass('overlay_hide');
+            $('.overlay_closer .title').html(prdNm);
+            putSelectProduct(prdId);
+            $('#ProductModal .btn_close')
+                .unbind('click')
+                .on('click', function () {
+                    $('.overlay_background').addClass('overlay_hide');
+                });
+        });
+
+}
+
+function putChgStatus(dt) {
+    if (dt[0].cin_id != '0') {
+        let cinId = dt[0].cin_id;
+        $.each(dt, function (v, u) {
+            var H = `<option value="${u.pjtcr_id}">${u.pjtcr_definition}-${u.pjtcr_description}</option>`;
+            $('#txtCinId').append(H);
+        });
+    }
+}
+
+function saveEditProduct() {
+    
+    let prdId = $('#txtPrdId').val();
+    let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
+    let prdCn = $(`#txtCinId option:selected`).val() == 0 ? '' : $(`#txtCinId option:selected`).text().split('-')[0];
+    let prdNp = $('#txtPrdNameProvider').val();
+
+    var par = `
+            [{
+                "prdId" : "${prdId}",
+                "prdNm" : "${prdNm}",
+                "prdCn" : "${prdCn}",
+                "prdNp" : "${prdNp}"
+            }] `;
+    console.log(par);
+   /*  var pagina = 'Products/saveEdtProduct';
+    var tipo = 'html';
+    var selector = resEdtProduct;
+    fillField(pagina, par, tipo, selector); */
+    resEdtProduct(prdId);
+}
+
+function putSelectProduct(dt) {
+    // listChgStatus();
+    $('#btn_save')
+        .unbind('click')
+        .on('click', function () {
+            $('#txtCinId').val('');
+            saveEditProduct();
+        });
+}
+
+function resEdtProduct(dt) {
+    $('#txtCinId').val('');
+    $('#ProductModal .btn_close').trigger('click');
+    activeIcons();
 }

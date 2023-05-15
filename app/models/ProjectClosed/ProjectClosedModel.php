@@ -19,6 +19,13 @@ class ProjectClosedModel extends Model
 
     }
 
+    /* -- Listado de proyectos  ------------------------------------- */    
+    public function listChgStatus($params)
+    {
+        $qry = "SELECT * FROM ctt_project_change_reason";
+        return $this->db->query($qry);
+
+    }
 
 /* -- Listado de contenido de proyecto seleccionado  -------------- */
     public function projectContent($params)
@@ -46,7 +53,6 @@ class ProjectClosedModel extends Model
     }
     
 
-
 /* -- Listado ventas de expendables  --------------------------------------------------------- */
     public function saleExpendab($params)
     {
@@ -57,21 +63,20 @@ class ProjectClosedModel extends Model
                 INNER JOIN ctt_sales as sl on sl.sal_id = sd.sal_id
                 WHERE pjt_id =  $pjtId;";
         return $this->db->query($qry);
-
     }
 
     public function saveDocumentClosure($params)
     {
-        $cusId =    $this->db->real_escape_string($params['cusId']);
-        $cloTotProy =  $this->db->real_escape_string($params['cloTotProy']);
-        $cloTotMaint = $this->db->real_escape_string($params['cloTotMaint']);
-        $cloTotExpen = $this->db->real_escape_string($params['cloTotExpen']);
-        $cloTotCombu =  $this->db->real_escape_string($params['cloTotCombu']);
-        $cloTotDisco =  $this->db->real_escape_string($params['cloTotDisco']);
-        $cloCommen = $this->db->real_escape_string($params['cloCommen']);
-        $pjtid = $this->db->real_escape_string($params['pjtid']);
-        $usrid = $this->db->real_escape_string($params['usrid']);
-        $verid = $this->db->real_escape_string($params['verid']);
+        $cusId          = $this->db->real_escape_string($params['cusId']);
+        $cloTotProy     =  $this->db->real_escape_string($params['cloTotProy']);
+        $cloTotMaint    = $this->db->real_escape_string($params['cloTotMaint']);
+        $cloTotExpen    = $this->db->real_escape_string($params['cloTotExpen']);
+        $cloTotCombu    =  $this->db->real_escape_string($params['cloTotCombu']);
+        $cloTotDisco    =  $this->db->real_escape_string($params['cloTotDisco']);
+        $cloCommen      = $this->db->real_escape_string($params['cloCommen']);
+        $pjtid          = $this->db->real_escape_string($params['pjtid']);
+        $usrid          = $this->db->real_escape_string($params['usrid']);
+        $verid          = $this->db->real_escape_string($params['verid']);
       
             $qry="INSERT INTO ctt_documents_closure(clo_total_proyects, clo_total_maintenance, 
             clo_total_expendables, clo_total_diesel, clo_total_discounts, clo_flag_send, 

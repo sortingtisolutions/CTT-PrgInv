@@ -15,7 +15,7 @@
                     <div class="row rowTop">
                         <h1>Control Salida de Proyecto</h1>
                      </div>
-                    <table class="display compact nowrap"  id="tblProyects" style="min-width: 1200px">
+                    <table class="display compact nowrap"  id="tblProyects" style="min-width: 1400px">
                         <thead>
                             <tr>
                                 <th style="width:  30px">Acciones</th>

@@ -97,7 +97,7 @@
                     </div>
 
                      <!-- Moneda posición 5 -->
-                     <div class="row pos5 hide-items">
+                     <div class="row pos6 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtCoin" class="form-select form-select-sm"><option value="0" selected>Selecciona moneda</option></select>
                             <label for="txtCoin">Moneda</label>
@@ -106,22 +106,26 @@
 
                     <!-- Costo,Cantidad,Serie posición 5,4 y 6 -->
                     <div class="row">
-                        <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos5 hide-items">
+                       <!--  <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos5 hide-items">
                         <input id="txtCost" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
-                            <label for="txtCost">Costo Total</label>
-                        </div>
-                        <div class="col-md-4 col-lg-4 col-xl-4 mb-2 pos4 form-floating hide-items">
+                            <label for="txtCost">C. Individual</label>
+                        </div> -->
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating hide-items">
                             <input id="txtQuantity" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos" value=1>
                             <label for="txtQuantity">Cantidad</label>
                         </div>
-                        <div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating pos6 hide-items">
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6 hide-items">
                             <input id="txtSerie" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" style="text-transform:uppercase" autocomplete="off">
                             <label for="txtSerie">Serie</label>
                         </div>
                     </div>
                     <!-- Marca 6 -->
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 hide-items">
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos4 hide-items">
+                        <input id="txtCost" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
+                            <label for="txtCost">Costo Individual</label>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6 hide-items">
                             <input id="txtMarca" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la marca de productos" style="text-transform:uppercase" autocomplete="off">
                             <label for="txtMarca">Marca</label>
                         </div>
@@ -137,7 +141,17 @@
                             <label for="txtPedimento">No. Pedimento</label>
                         </div>
                     </div>
-                   
+                   <!-- Costo Importacion,Pedimento 5,4  -->
+                   <div class="row pos3 hide-items">
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6 hide-items">
+                        <input id="txtCostTot" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
+                            <label for="txtCostTot">Costo Total</label>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos6 form-floating hide-items">
+                            <input id="txtNoEco" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar el numero del pedimento" style="text-transform:uppercase">
+                            <label for="txtNoEco">Num. Econo</label>
+                        </div>
+                    </div>
                     <!-- Comentarios posición 4 -->
                     <div class="row  pos1 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -154,9 +168,8 @@
                 </div>
             </div>
 
-
             <div class="mvst_table">
-                <h1>Entradas de almacenes</h1>
+                <h1>Entradas al almacen</h1>
                 <table class="display compact nowrap"  id="tblExchanges">
                     <thead>
                         <tr>
@@ -164,15 +177,17 @@
                             <th style="width:  80px">SKU</th>
                             <th style="width: 350px">Producto</th>
                             <th style="width:  60px">Cantidad</th>
-                            <th style="width:  60px">Costo Total</th>
+                            <th style="width:  60px">Costo <br>Individual</th>
                             <th style="width: 90px">No. Serie</th>
                             <th style="width: 90px">No. Pedimento</th>
-                            <th style="width: 80px">C. Importacion</th>
+                            <th style="width: 80px">Costo <br>Importacion</th>
+                            <th style="width: 80px">Costo <br>Total</th>
                             <th style="width:  50px">Cve. movimiento</th>
                             <th style="width: 140px">Almacen</th>
                             <th style="width: 180px">Proveedor</th>
                             <th style="width: 180px">Factura</th>
                             <th style="width: 100px">Marca</th>
+                            <th style="width:  50px">Núm. Econo</th>
                             <th style="width: 200px">Nota</th>
                         </tr>
                     </thead>

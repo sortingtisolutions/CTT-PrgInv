@@ -24,7 +24,7 @@ class MoveStoresInModel extends Model
 // Listado de Almacecnes
     public function listStores()
     {
-        $qry = "  SELECT * FROM ctt_stores WHERE str_status = 1";
+        $qry = "SELECT * FROM ctt_stores WHERE str_status = 1";
         return $this->db->query($qry);
     }
 
@@ -112,6 +112,8 @@ public function NextExchange()
         $pet_id             = $this->db->real_escape_string($param['pet']);
         $cpe_id             = $this->db->real_escape_string($param['cpe']);
         $bra_id             = $this->db->real_escape_string($param['bra']);
+        $ctotal            = $this->db->real_escape_string($param['cto']);
+        $necono             = $this->db->real_escape_string($param['nec']);
 
         $exc_employee_name	= $this->db->real_escape_string($employee_data[2]);
         $ser_status         = '1';
@@ -121,11 +123,12 @@ public function NextExchange()
         $ser_behaviour      = 'C';
 
         
-		$qry1 = "INSERT INTO ctt_series (
-                    ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
-                    ser_behaviour, prd_id, sup_id, cin_id,ser_brand,ser_cost_import,ser_import_petition
-                ) VALUES ('$exc_sku_product', '$exc_serie_product', '$ser_cost', '$ser_status', '$ser_situation', 
-                '$ser_stage', '$ser_behaviour', '$prd_id', '$sup_id', '$cin_id', '$bra_id', '$cpe_id', '$pet_id' );";
+		$qry1 = "INSERT INTO ctt_series (ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
+                    ser_behaviour, prd_id, sup_id, cin_id,ser_brand,ser_cost_import,ser_import_petition,
+                    ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments ) 
+                VALUES ('$exc_sku_product', '$exc_serie_product', '$ser_cost', '$ser_status', '$ser_situation', 
+                '$ser_stage', '$ser_behaviour', '$prd_id', '$sup_id', '$cin_id', '$bra_id', '$cpe_id', '$pet_id',
+                '$ctotal', '$necono','$str_id','$exc_comments');";
 
         $this->db->query($qry1);
         $serId = $this->db->insert_id;
@@ -149,7 +152,6 @@ public function NextExchange()
         $this->db->query($qry4);
 
         return $con_id ;
-
     }
 
 }

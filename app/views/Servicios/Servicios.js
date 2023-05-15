@@ -186,23 +186,14 @@ function getServiciosTable() {
          respuesta.forEach(function (row, index) {
             renglon =
                '<tr>' +
-               '<td class="text-center edit"> ' +
-               '<button onclick="EditServicios(' +
-               row.srv_id +
-               ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
-               '<button onclick="ConfirmDeleteServicio(' +
-               row.srv_id +
+               '<td class="text-center edit"> ' + '<button onclick="EditServicios(' + row.srv_id +
+               ')" + type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
+               '<button onclick="ConfirmDeleteServicio(' + row.srv_id +
                ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
                '</td>' +
-               "<td class='dtr-control text-center'>" +
-               row.srv_id +
-               '</td>' +
-               '<td>' +
-               row.srv_name +
-               '</td>' +
-               '<td>' +
-               row.srv_description +
-               '</td>' +
+               "<td class='dtr-control text-center'>" + row.srv_id + '</td>' +
+               '<td>' + row.srv_name + '</td>' +
+               '<td>' + row.srv_description + '</td>' +
                '</tr>';
             $('#tablaServiciosRow').append(renglon);
          });
@@ -217,8 +208,8 @@ function getServiciosTable() {
                info: false,
             },
             lengthMenu: [
-               [10, 25, 50, 100, -1],
-               ['10', '25', '50', 'Todo'],
+               [10, 25, -1],
+               ['10', '25', 'Todo'],
             ],
             dom: 'Blfrtip',
             buttons: [

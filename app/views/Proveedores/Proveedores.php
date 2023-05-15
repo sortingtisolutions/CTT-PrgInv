@@ -156,7 +156,7 @@
 
 					<div class="row">
 						<div class="col-12 col-md-12">		
-								<table id="ProveedoresTable" class="display compact nowrap" style="width:120px">         
+								<table id="ProveedoresTable" class="display compact nowrap" style="width:1700px">         
 									<thead>
 										<tr>
 											<th style="width: 30px"></th>
@@ -170,10 +170,10 @@
 											<th style="width: 100px">Telefono</th>
 											<th style="width: 100px">Telefono Adicional</th>
 											<th style="width: 100px" hidden>Tipo Proveedor Id</th>
-											<th style="width: 100px">Tipo Proveedor</th>
-											<th style="width: 100px">Anticipo</th>
-											<th style="width: 100px">Monto Anticipo</th>
-											<th style="width: 100px">Id Pro-Internacional</th>
+											<th style="width:  80px">Tipo <br>Proveedor</th>
+											<th style="width:  80px">Anticipo</th>
+											<th style="width:  80px">Monto Anticipo</th>
+											<th style="width:  80px">Id Pro-<br>Internacional</th>
 											<th style="width: 100px">Descripcion</th>
 											<th style="width: 100px">Credito</th>
 											<th style="width: 100px">Dias</th>

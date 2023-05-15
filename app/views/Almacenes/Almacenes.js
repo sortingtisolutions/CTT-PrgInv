@@ -149,7 +149,7 @@ function actionButtons() {
             let quant = $(this).html();
             let ctnme = $(this).parents('tr').children('td.store-name').html();
             strnme = ctnme;
-            console.log(strId, quant, ctnme);
+            // console.log(strId, quant, ctnme);
             if (quant > 0) {
                 deep_loading('O');
                 var pagina = 'Almacenes/listSeries';
@@ -208,8 +208,7 @@ function saveStore() {
     var empName = $('#selectRowEncargado').val();
     var strtype = $('#selectTipoAlmacen').val();
     var par = `
-        [{
-            "str_name"   : "${strName}",
+        [{  "str_name"   : "${strName}",
             "str_type"   : "${strtype}",
             "emp_name"   : "${empName}"
         }]`;
@@ -239,8 +238,7 @@ function updateStore() {
     var empName = $('#selectRowEncargado').val();
     var strType = $('#selectTipoAlmacen option:selected').val();
     var par = `
-        [{
-            "str_id"        : "${strId}",
+        [{  "str_id"        : "${strId}",
             "str_name"      : "${strName}",
             "emp_name"      : "${empName}",
             "str_type"      : "${strType}"
@@ -325,7 +323,7 @@ function putDeleteStore(dt) {
 }
 
 function putSeries(dt) {
-    console.log(dt);
+    // console.log(dt);
     
     let title = 'Detalle de Almacen';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
@@ -386,10 +384,6 @@ function putSeries(dt) {
             {data: 'produsku', class: 'sku'},
             {data: 'serlnumb', class: 'product-name'},
             {data: 'dateregs', class: 'sku'},
-           /*  {data: 'servcost', class: 'quantity'},
-            {data: 'cvsituat', class: 'code-type_s'},
-            {data: 'cvestage', class: 'code-type_s'},
-            {data: 'comments', class: 'comments'}, */
         ],
     });
 

@@ -150,30 +150,19 @@ public function listInvoice()
     public function listSeries($params)
     {
         $prodId = $this->db->real_escape_string($params['prdId']);
-        $qry = "SELECT DISTINCT
-                      se.ser_id
-                    , se.ser_sku
-                    , se.ser_serial_number
-                    , se.ser_cost
+        $qry = "SELECT DISTINCT se.ser_id , se.ser_sku, se.ser_serial_number, se.ser_cost
                     , date_format(se.ser_date_registry, '%d/%m/%Y') AS ser_date_registry
-                    , se.ser_situation
-                    , se.ser_stage
+                    , se.ser_situation , se.ser_stage
                     , CASE WHEN se.ser_behaviour = 'R' THEN 'SUBABRRENDADO' ELSE '' END comportamiento
-                    , se.ser_comments
-                    , pd.prd_sku 
-                    , pd.prd_name
-                    , pd.prd_id
-                    , sp.stp_quantity
-                    , st.str_name
-                    , ifnull(dc.doc_id,0) AS doc_id
-                    , dc.doc_name
-                    , dc.dot_id
+                    , se.ser_comments, pd.prd_sku, pd.prd_name, pd.prd_id, sp.stp_quantity, st.str_name
+                    , ifnull(dc.doc_id,0) AS doc_id, dc.doc_name, dc.dot_id, se.ser_brand,se.ser_cost_import
+                    , ser_import_petition, ser_no_econo
                 FROM ctt_series as se
                 INNER JOIN ctt_products AS pd ON pd.prd_id = se.prd_id 
                 LEFT JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
                 LEFT JOIN ctt_stores As st ON st.str_id = sp.str_id 
                 LEFT JOIN ctt_products_documents AS dt ON dt.prd_id = se.ser_id
-                LEFT JOIN ctt_documents AS dc ON dc.doc_id = dt.doc_id AND dc.dot_id = 1
+                LEFT JOIN ctt_documents AS dc ON dc.doc_id = dt.doc_id
                 WHERE se.prd_id IN ($prodId) AND sp.stp_quantity > 0
                 ORDER BY se.prd_id, se.ser_sku;";
         return $this->db->query($qry);
@@ -209,7 +198,8 @@ public function listInvoice()
                 date_format(sr.ser_date_registry, '%d/%m/%Y') AS ser_date_registry,
                 sp.sup_business_name, sr.ser_cost, sr.ser_comments, 
                 ifnull(dc.doc_id,0) As doc_id, dc.doc_name, dt.dot_id, dt.dot_name, 
-                ds.dcp_source, ifnull(ds.dcp_id,0) AS dcp_id 
+                ds.dcp_source, ifnull(ds.dcp_id,0) AS dcp_id,sr.ser_brand,
+                sr.ser_cost_import, sr.ser_import_petition, sr.ser_no_econo, sr.cin_id
                 FROM ctt_series AS sr
                 LEFT JOIN ctt_products_documents AS ds ON ds.prd_id = sr.ser_id
                 LEFT JOIN ctt_documents AS dc ON dc.doc_id = ds.doc_id
@@ -261,7 +251,7 @@ public function listInvoice()
                 WHERE   prd_id              = '$prdId';";
         $this->db->query($qry);
 
-            if ($prdDi == '0'&& $prdDc > '0' ){
+            if ($prdDi == '0' && $prdDc > '0' ){
                 $qry1 = "INSERT INTO ctt_products_documents 
                             (dcp_source, prd_id, doc_id) 
                         VALUES
@@ -299,14 +289,21 @@ public function saveEdtSeries($params)
     $serDt = $this->db->real_escape_string($params['serDt']);
     $serCm = $this->db->real_escape_string($params['serCm']);
     $serDi = $this->db->real_escape_string($params['serDi']);
+    $serBr = $this->db->real_escape_string($params['serBr']);
+    $serNp = $this->db->real_escape_string($params['serNp']);
+    $serCi = $this->db->real_escape_string($params['serCi']);
+    $serNe = $this->db->real_escape_string($params['serNe']);
     $serDc = $this->db->real_escape_string($params['serDc']);
    
     $qry = "UPDATE ctt_series
-            SET
-                    ser_serial_number   = UPPER('$serSr'),
-                    ser_date_registry   = '$serDt',
-                    ser_comments        = UPPER('$serCm')
-            WHERE   ser_id              = '$serId';";
+            SET ser_serial_number   = UPPER('$serSr'),
+                ser_date_registry   = '$serDt',
+                ser_brand           = UPPER('$serBr'),
+                ser_import_petition = UPPER('$serNp'),
+                ser_cost_import     = UPPER('$serCi'),
+                ser_no_econo        = UPPER('$serNe'),
+                ser_comments        = UPPER('$serCm')
+            WHERE ser_id  = '$serId';";
     $this->db->query($qry);
 
         if ($serDi == '0' && $serDc > '0' ){

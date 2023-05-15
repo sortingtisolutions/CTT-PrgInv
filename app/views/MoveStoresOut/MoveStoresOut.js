@@ -18,6 +18,7 @@ function inicial() {
     //getCategories();
     //getProducts();
     setting_table();
+
     $('#btn_exchange').on('click', function () {
         console.log('1');
         let id = $('#boxIdProducts').val();
@@ -25,6 +26,56 @@ function inicial() {
     });
 }
 
+// Solicita los tipos de movimiento
+function getExchange() {
+    var pagina = 'MoveStoresOut/listExchange';
+    var par = '[{"parm":""}]';
+    var tipo = 'json';
+    var selector = putTypeExchange;
+    fillField(pagina, par, tipo, selector);
+}
+// Solicita el listado de almacenes
+function getStores() {
+    var pagina = 'MoveStoresOut/listStores';
+    var par = '[{"parm":""}]';
+    var tipo = 'json';
+    var selector = putStores;
+    fillField(pagina, par, tipo, selector);
+}
+
+function getCategories() {
+    //console.log('categos');
+    var pagina = 'MoveStoresOut/listCategories';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = putCategories;
+    fillField(pagina, par, tipo, selector);
+}
+// Solicita los productos de un almacen seleccionado
+function getProducts(strId) {
+    var pagina = 'MoveStoresOut/listProducts';
+    var par = `[{"strId":"${strId}"}]`;
+    var tipo = 'json';
+    var selector = putProducts;
+    fillField(pagina, par, tipo, selector);
+}
+
+/*function getProducts(catId) {
+    var pagina = 'MoveStoresOut/listProducts';
+    var par = `[{"catId":"${catId}"}]`;
+    var tipo = 'json';
+    var selector = putProducts;
+    fillField(pagina, par, tipo, selector);
+} */
+
+// Solicita los movimientos acurridos
+function getExchanges() {
+    var pagina = 'MoveStoresOut/listExchanges';
+    var par = `[{"folio":"${folio}"}]`;
+    var tipo = 'json';
+    var selector = putExchanges;
+    fillField(pagina, par, tipo, selector);
+}
 function setting_table() {
     let title = 'Salidas de Almacen';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
@@ -100,56 +151,8 @@ function setting_table() {
     });
 }
 
-// Solicita los tipos de movimiento
-function getExchange() {
-    var pagina = 'MoveStoresOut/listExchange';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putTypeExchange;
-    fillField(pagina, par, tipo, selector);
-}
-// Solicita el listado de almacenes
-function getStores() {
-    var pagina = 'MoveStoresOut/listStores';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putStores;
-    fillField(pagina, par, tipo, selector);
-}
 
-function getCategories() {
-    //console.log('categos');
-    var pagina = 'MoveStoresOut/listCategories';
-    var par = `[{"store":""}]`;
-    var tipo = 'json';
-    var selector = putCategories;
-    fillField(pagina, par, tipo, selector);
-}
-// Solicita los productos de un almacen seleccionado
-function getProducts(strId) {
-    var pagina = 'MoveStoresOut/listProducts';
-    var par = `[{"strId":"${strId}"}]`;
-    var tipo = 'json';
-    var selector = putProducts;
-    fillField(pagina, par, tipo, selector);
-}
 
-/*function getProducts(catId) {
-    var pagina = 'MoveStoresOut/listProducts';
-    var par = `[{"catId":"${catId}"}]`;
-    var tipo = 'json';
-    var selector = putProducts;
-    fillField(pagina, par, tipo, selector);
-} */
-
-// Solicita los movimientos acurridos
-function getExchanges() {
-    var pagina = 'MoveStoresOut/listExchanges';
-    var par = `[{"folio":"${folio}"}]`;
-    var tipo = 'json';
-    var selector = putExchanges;
-    fillField(pagina, par, tipo, selector);
-}
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
 function putTypeExchange(dt) {
@@ -192,6 +195,7 @@ function putStores(dt) {
         $(`#txtStoreTarget option`).css({display: 'block'});
         $(`#txtStoreTarget option[value="${id}"]`).css({display: 'none'});
        //console.log('ID Almacen', id);
+        modalLoading('S');
         getProducts(id);
         //drawProducts(id);
     });
@@ -227,10 +231,10 @@ function putProducts(dt) {
     $.each(dt, function (v, u) {
         /* let H = `<div class="list-item" id="P-${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}">
         ${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}<div class="items-just"><div class="quantity editable" data-content="${u.stp_quantity}" contenteditable=true>${u.stp_quantity}</div><i class="fas fa-arrow-circle-right"></i></div></div>`; */
-        let H = `<div class="list-item" id="P-${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}">${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}</div>`;
+        let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}">${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}</div>`;
         $('#listProducts .list-items').append(H);
     });
-
+    modalLoading('H');
     $('#boxProducts').on('focus', function () {
         $('#listProducts').slideDown('fast');
     });
@@ -239,13 +243,17 @@ function putProducts(dt) {
         $('#listProducts').slideUp('fast');
     });
 
-    $('#boxProducts').keyup(function (e) {
+    // $('#boxProducts').keyup(function (e) {
+    $('#boxProducts')
+        .unbind('keyup')
+        .on('keyup', function () {
+    // keyup(function (e) {
         var res = $(this).val().toUpperCase();
-        if (res == '') {
+       /*  if (res == '') {
             $('#listProducts').slideUp(100);
         } else {
             $('#listProducts').slideDown(400);
-        }
+        } */
         res = omitirAcentos(res);
         sel_products(res);
     });
@@ -380,26 +388,26 @@ function exchange_apply(prId) {
         //console.log('DATOS- ', productId, productSKU, productName,productSerie,commnets);
         //update_array_products(productId, productQuantity);
         let par = `
-[{
-    "support"    :  "${folio}|${productSKU}|${typeExchangeIdSource}|${typeExchangeIdTarget}|${productId}|${storeIdSource}|${storeIdTarget}",
-    "prodsku"	: 	"${productSKU}",
-    "prodnme"	:	"${productName}",
-    "prodqty"	:	"${productQuantity}",
-    "prodser"	:	"${productSerie}",
-    "excodsr"	:	"${typeExchangeCodeSource}",
-    "stnmesr"	:	"${storeNameSource}",
-    "excodtg"	:	"${typeExchangeCodeTarget}",
-    "stnmetg"	:	"${storeNameTarget}",
-    "comment"	:	"${commnets}",
-    "project"	:	"${project}",
-    "excidsr"	:	"${typeExchangeIdSource}",
-    "excidtg"	:	"${typeExchangeIdTarget}",
-    "stoidsr"	:	"${storeIdSource}",
-    "stoidtg"	:	"${storeIdTarget}",
-    "dtfolio"	:	"${folio}"
-}]
+        [{
+            "support"    :  "${folio}|${productSKU}|${typeExchangeIdSource}|${typeExchangeIdTarget}|${productId}|${storeIdSource}|${storeIdTarget}",
+            "prodsku"	: 	"${productSKU}",
+            "prodnme"	:	"${productName}",
+            "prodqty"	:	"${productQuantity}",
+            "prodser"	:	"${productSerie}",
+            "excodsr"	:	"${typeExchangeCodeSource}",
+            "stnmesr"	:	"${storeNameSource}",
+            "excodtg"	:	"${typeExchangeCodeTarget}",
+            "stnmetg"	:	"${storeNameTarget}",
+            "comment"	:	"${commnets}",
+            "project"	:	"${project}",
+            "excidsr"	:	"${typeExchangeIdSource}",
+            "excidtg"	:	"${typeExchangeIdTarget}",
+            "stoidsr"	:	"${storeIdSource}",
+            "stoidtg"	:	"${storeIdTarget}",
+            "dtfolio"	:	"${folio}"
+        }]
             `;
-        console.log(par);
+        // console.log(par);
         fill_table(par);
     }
 }
@@ -456,7 +464,7 @@ function btn_apply_appears() {
 // Limpia los campos para uns nueva seleccion
 function clean_selectors() {
     // $('#txtTypeExchange').val(0);
-    $('#txtStoreSource').val(0);
+    // $('#txtStoreSource').val(0);
     $('#txtStoreTarget').val(0);
     $('#txtProducts').html('<option value="0" selected>Selecciona producto</option>');
     $('#txtQuantity').val('');
@@ -465,6 +473,7 @@ function clean_selectors() {
     $('#boxProducts').val('');
     $('#boxIdProducts').val('');
 }
+
 /** Actualiza la cantidad de cada producto dentro del arreglo */
 function update_array_products(id, cn) {
     let prId = $('#P-' + id);
@@ -506,7 +515,6 @@ function read_exchange_table() {
 
             // console.log(exchupda1);
             // console.log(exchupda2);
-
             // console.log(folio);
 
             if (codeTypeExchangeSource != '') {
@@ -530,30 +538,31 @@ function putNextExchangeNumber(dt) {
 function build_data_structure(pr) {
     let el = pr.split('|');
     let par = `
-[{
-    "fol" :  "${el[0]}",
-    "sku" :  "${el[1]}",
-    "pnm" :  "${el[2]}",
-    "qty" :  "${el[3]}",
-    "ser" :  "${el[4]}",
-    "str" :  "${el[5]}",
-    "com" :  "${el[6]}",
-    "cod" :  "${el[7]}",
-    "idx" :  "${el[8]}",
-    "prj" :  ""
-}]`;
+    [{
+        "fol" :  "${el[0]}",
+        "sku" :  "${el[1]}",
+        "pnm" :  "${el[2]}",
+        "qty" :  "${el[3]}",
+        "ser" :  "${el[4]}",
+        "str" :  "${el[5]}",
+        "com" :  "${el[6]}",
+        "cod" :  "${el[7]}",
+        "idx" :  "${el[8]}",
+        "prj" :  ""
+    }]`;
     save_exchange(par);
 }
+
 function build_update_store_data(pr) {
     let el = pr.split('|');
     let par = `
-[{
-    "prd" :  "${el[0]}",
-    "qty" :  "${el[1]}",
-    "str" :  "${el[2]}",
-    "mov" :  "${el[3]}"
-}]`;
-
+    [{
+        "prd" :  "${el[0]}",
+        "qty" :  "${el[1]}",
+        "str" :  "${el[2]}",
+        "mov" :  "${el[3]}"
+    }]`;
+    console.log('PAR-UP-',par);
     update_store(par);
 }
 
@@ -567,17 +576,9 @@ function save_exchange(pr) {
     fillField(pagina, par, tipo, selector);
 }
 
-function update_store(ap) {
-    // console.log(ap);
-    var pagina = 'MoveStoresOut/UpdateStores';
-    var par = ap;
-    var tipo = 'html';
-    var selector = updated_stores;
-    fillField(pagina, par, tipo, selector);
-}
-
 function exchange_result(dt) {
     $('.resFolio').text(refil(folio, 7));
+
     $('#MoveFolioModal').modal('show');
     $('#btnHideModal').on('click', function () {
         window.location = 'MoveStoresOut';
@@ -587,8 +588,18 @@ function exchange_result(dt) {
     });
 }
 
+function update_store(ap) {
+    // console.log(ap);
+    var pagina = 'MoveStoresOut/UpdateStoresSource';
+    var par = ap;
+    var tipo = 'html';
+    var selector = updated_stores;
+    fillField(pagina, par, tipo, selector);
+}
+
 function updated_stores(dt) {
     $('.resFolio').text(refil(folio, 7));
+
     $('#MoveFolioModal').modal('show');
     $('#btnHideModal').on('click', function () {
         window.location = 'MoveStoresOut';
@@ -618,7 +629,7 @@ function omitirAcentos(text) {
 
 /**  +++ Ocultalos productos del listado que no cumplen con la cadena  */
 function sel_products(res) {
-    if (res.length < 1) {
+    if (res.length < 3) {
         $('#listProducts .list-items div.list-item').css({display: 'block'});
     } else {
         $('#listProducts .list-items div.list-item').css({display: 'none'});
@@ -634,4 +645,17 @@ function sel_products(res) {
             $(this).css({display: 'block'});
         }
     });
+}
+
+function modalLoading(acc) {
+    if (acc == 'S') {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
+    } else {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+        });
+    }
 }

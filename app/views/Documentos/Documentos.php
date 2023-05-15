@@ -63,10 +63,10 @@
 
 							<div class="row">
 								<div class="col-6">
-									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 1rem !important;" id="GuardarDocumento">Guardar</button>
+									<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="GuardarDocumento">Guardar</button>
 								</div>
 								<div class="col-6">
-									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
+									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="LimpiarFormulario">Limpiar</button>
 								</div>
 							</div>
 						</form>
@@ -80,18 +80,17 @@
 
 					<div class="row">
 						<div class="col-12 col-md-12">		
-								<table id="DocumentosTable" class="display  display compact nowrap" style="width:100%">         
+								<table id="DocumentosTable" class="display  display compact nowrap" style="width:95%">         
 										<thead>
 											<tr>
-													<th style="width: 30px"></th>
+													<th style="width: 35px"></th>
 													<th style="width: 20px" hidden>Id</th>
 													<th style="width: 200px">Nombre</th>
-
 													<th style="width: 100px" hidden>id Tipo Documento</th>
 
 													<th style="width: 100px">Tipo Documento</th>
-													<th style="width: 200px">Codigo</th>
-													<th style="width: 100px">Tipo</th>
+													<th style="width: 100px">Codigo</th>
+													<th style="width:  60px">Tipo</th>
 													<th style="width: 100px">Fecha Admision</th>
 											</tr>
 										</thead>

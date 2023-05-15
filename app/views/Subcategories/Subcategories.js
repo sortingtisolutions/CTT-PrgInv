@@ -22,7 +22,7 @@ function inicial() {
 
     setInterval(() => {
         activeActions();
-    }, 2000);
+    }, 200);
 }
 
 /** ---- PETICIÓN DE DATOS ----*/
@@ -191,14 +191,14 @@ function activeActions() {
         });
 
     /**  ---- Habilita el bullet de cantidad para consulta de existencias ----- */
-    $('#tblSubcategory tbody tr td.quantity .toLink')
+    // $('#tblSubcategory tbody tr td.quantity .toLink')
+    $('.toLink')
         .unbind('click')
         .on('click', function () {
             selectSeries($(this));
         });
 }
 
-/** -------------------------------------------------------------------------- */
 /** ---- Start GRABA NUEVA SUBCATEGORIA ---- */
 /** ---- Registra la nueva subcategoria ---- */
 function saveSubcategory() {
@@ -207,8 +207,7 @@ function saveSubcategory() {
     let categyId = $('#lstCategory').val();
 
     var par = `
-    [{
-        "sbcName"   : "${subcatNm}",
+    [{  "sbcName"   : "${subcatNm}",
         "sbcCode"   : "${subcatCd}",
         "catId"     : "${categyId}"
     }]`;
@@ -234,9 +233,7 @@ function putSaveSubcategory(dt) {
     }
 }
 /** ---- End GRABA NUEVA SUBCATEGORIA ---- */
-/** -------------------------------------------------------------------------- */
 
-/** -------------------------------------------------------------------------- */
 /** ---- Start EDITA SUBCATEGORIA ---- */
 /** ---- Llena los campos del formulario para editar ---- */
 function editSubcategory(sbcId) {
@@ -282,11 +279,8 @@ function putUpdateSubcategory(dt) {
     }
 }
 /** ---- End EDITA SUBCATEGORIA ---- */
-/** -------------------------------------------------------------------------- */
 
-/** -------------------------------------------------------------------------- */
 /** ---- Start ELIMINA SUBCATEGORIA ---- */
-/** ---- Borra la subcategorias ---- */
 function deleteSubcategory(sbcId) {
     let cn = $(`#${sbcId}`).children('td.quantity').children('.toLink').html();
 
@@ -331,7 +325,8 @@ function putDeleteSubcategory(dt) {
 function selectSeries(reg) {
     let sbcId = reg.parents('tr').attr('id');
     let quant = reg.html();
-    let sbnme = reg.parents('tr').children('td.subName').html();
+    let sbnme = reg.parents('tr')
+                .children('td.subName').html();
     subnme = sbnme;
     if (quant > 0) {
         var pagina = 'Subcategories/listSeries';
@@ -342,8 +337,9 @@ function selectSeries(reg) {
     }
 }
 
-function putSeries(dt) {
-    $('#tblStock tbody').html('');
+function putSeries_old(dt) {
+    
+    /* $('#tblStock tbody').html('');
     $.each(dt, function (v, u) {
         let H = `
             <tr>
@@ -360,15 +356,15 @@ function putSeries(dt) {
         $('#tblStock tbody').append(H);
     });
 
-    settindStockTbl();
+    settindStockTbl(); */
     
 }
 
-function settindStockTbl() {
-    let title = 'Detalle de Subcategoria';
+function settindStockTbl_old() {
+    /* let title = 'Detalle de Subcategoria';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('.overlay_closer .title').html(`Subcategorias - ${subnme}`);
-    $('#ModifySerieModal').removeClass('overlay_hide');
+    $('#ShowSerieModal').removeClass('overlay_hide');
     $('#tblStock').DataTable({
         destroy: true,
         order: [[1, 'asc']],
@@ -432,14 +428,120 @@ function settindStockTbl() {
         ],
     });
 
-    $('#ModifySerieModal .btn_close')
+    $('#ShowSerieModal .btn_close')
         .unbind('click')
         .on('click', function () {
             // $('#tblStock').DataTable().destroy();
             $('.overlay_background').addClass('overlay_hide');
             let Dtable=$('#tblStock').DataTable().row().remove().draw();
             Dtable.destroy();
+        }); */
+}
+
+function putSeries(dt) {
+    // console.log(dt);
+    let title = 'Detalle de Subcategoria';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    $('.overlay_closer .title').html(`Subcategorias - ${subnme}`);
+    $('#ShowSerieModal').removeClass('overlay_hide');
+    $('#tblStock').DataTable({
+        destroy: true,
+        order: [[1, 'asc']],
+        dom: 'Blfrtip',
+        lengthMenu: [
+            [100, 200, -1],
+            [100, 200, 'Todos'],
+        ],
+        buttons: [
+            {
+                //Botón para Excel
+                extend: 'excel',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+            },
+            {
+                //Botón para descargar PDF
+                extend: 'pdf',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+            },
+            {
+                //Botón para imprimir
+                extend: 'print',
+                footer: true,
+                title: title,
+                filename: filename,
+
+                //Aquí es donde generas el botón personalizado
+                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+            },
+            {
+                text: 'Borrar seleccionados',
+                // className: 'btn-apply hidden-field',
+            },
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 290px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'produsku', class: 'sku'},
+            {data: 'prodname', class: 'productName'},
+            {data: 'serlnumb', class: 'serieNumber'},
+            {data: 'dateregs', class: 'dateRegs'},
+            {data: 'servcost', class: 'quantity'},
+            {data: 'cvstatus', class: 'code-type_s'},
+            {data: 'cvestage', class: 'code-type_s'},
+            {data: 'comments', class: 'comments'},
+        ],
+    });
+
+    $('#ShowSerieModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            // $('#tblStock').DataTable().destroy();
+            $('.overlay_background').addClass('overlay_hide');
+            /* let Dtable=$('#tblStock').DataTable().row().remove().draw();
+            Dtable.destroy(); */
         });
+    
+    build_modal_serie(dt);
+}
+
+function build_modal_serie(dt) {
+    let tabla = $('#tblStock').DataTable();
+    $('.overlay_closer .title').html(`Subcategoria - ${subnme}`);
+    tabla.rows().remove().draw();
+    $.each(dt, function (v, u) {
+        tabla.row
+            .add({
+                /*sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i><i class="fas fa-times-circle serie kill" id="K${u.ser_id}"></i>`,*/
+                // sermodif: `<i></i>`,
+                // produsku: `${u.ser_sku.slice(0, 10)}-${u.ser_sku.slice(7, 11)}`,
+                produsku: u.ser_sku,
+                prodname: u.prd_name,
+                serlnumb: u.ser_serial_number,
+                dateregs: u.ser_date_registry,
+                servcost: u.ser_cost,
+                cvstatus: u.ser_situation,
+                cvestage: u.ser_stage,
+                comments: u.ser_comments,
+            })
+            .draw();
+        $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.prd_id);
+        deep_loading('C');
+    });
 }
 
 // Obtiene el STOCK

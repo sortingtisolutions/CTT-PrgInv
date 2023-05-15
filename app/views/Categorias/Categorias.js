@@ -105,6 +105,7 @@ function getStores() {
 function putCategories(dt) {
     cats = dt;
 }
+
 //lena los datos de las categorias
 function fillCategories() {
     if (cats != null) {
@@ -149,7 +150,7 @@ function actionButtons() {
                 .children('td.category-name')
                 .html();
             catnme = ctnme;
-            console.log(catId, quant, ctnme);
+            // console.log(catId, quant, ctnme);
             if (quant > 0) {
                 deep_loading('O');
                 var pagina = 'Categorias/listSeries';
@@ -324,7 +325,7 @@ function putDeleteCategory(dt) {
 }
 
 function putSeries(dt) {
-    console.log(dt);
+    // console.log(dt);
     let title = 'Detalle de Categoria';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
     $('#ExisteCatModal').removeClass('overlay_hide');
@@ -383,7 +384,7 @@ function putSeries(dt) {
             { data: 'sermodif', class: 'edit' },
             { data: 'produsku', class: 'sku' },
             { data: 'prodname', class: 'product-name' },
-            { data: 'serlnumb', class: 'product-name' },
+            { data: 'serlnumb', class: 'quantity' },
             { data: 'dateregs', class: 'sku' },
             { data: 'servcost', class: 'quantity' },
             { data: 'cvstatus', class: 'code-type_s' },

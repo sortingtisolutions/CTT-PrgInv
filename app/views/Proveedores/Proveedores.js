@@ -97,14 +97,14 @@ function getProveedoresTable() {
                '<td>' + row.sup_email + '</td>' +
                '<td>' + row.sup_phone + '</td>' +
                '<td>' + row.sup_phone_extension + '</td>' +
-               '<td>' + row.sut_id + '</td>' +
-               '<td>' + row.sup_money_advance + '</td>' +
-               '<td>' + row.sup_advance_amount + '</td>' +
+               '<td class="sku">' + row.sut_id + '</td>' +
+               '<td class="sku">' + row.sup_money_advance + '</td>' +
+               '<td class="sku">' + row.sup_advance_amount + '</td>' +
                '<td>' + row.sup_id_international_supplier + '</td>' +
                '<td>' + row.sup_description_id_is + '</td>' +
                '<td>' + row.sup_credit + '</td>' +
                '<td>' + row.sup_credit_days + '</td>' +
-               '<td>' + row.sup_balance + '</td>' +
+               '<td class="sku">' + row.sup_balance + '</td>' +
                '<td>' + row.sup_way_pay + '</td>' +
                '<td>' + row.sup_bank + '</td>' +
                '<td>' + row.sup_clabe + '</td>' +
@@ -124,8 +124,8 @@ function getProveedoresTable() {
                info: false,
             },
             lengthMenu: [
-               [50, 100, -1],
-               ['50','100', 'Todo'],
+               [100, 200, -1],
+               ['100','200', 'Todo'],
             ],
             dom: 'Blfrtip',
             buttons: [

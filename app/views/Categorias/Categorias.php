@@ -52,7 +52,7 @@
 
                     <div class="row">
                         <div class="col-12 col-md-12">		
-                                <table id="CategoriasTable" class="display compact nowrap" style="width:100%" >         
+                                <table id="CategoriasTable" class="display compact nowrap" style="width:95%" >         
                                     <thead>
                                         <tr>
                                             <th style="width: 30px"></th>
@@ -72,7 +72,7 @@
 </div>
 
 <!-- Start Ventana modal EXISTENCIAS -->
-    <div class="overlay_background overlay_hide"id="ExisteCatModal">
+    <div class="overlay_background overlay_hide" id="ExisteCatModal">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <table class="display compact nowrap"  id="tblCatSerie">
@@ -80,10 +80,10 @@
                     <tr>
                         <th style="width:  30px"></th>
                         <th style="width: 100px">SKU</th>
-                        <th style="width: 200px">Descripcion</th>
+                        <th style="width: 250px">Descripcion</th>
                         <th style="width:  80px">Núm. serie</th>
-                        <th style="width: 120px">Fecha de alta</th>
-                        <th style="width:  50px">Costo</th>
+                        <th style="width: 100px">Fecha de alta</th>
+                        <th style="width:  70px">Costo</th>
                         <th style="width:  50px">Clave status</th>
                         <th style="width:  50px">Clave etapa</th>
                         <th style="width:  auto">Comentarios</th>

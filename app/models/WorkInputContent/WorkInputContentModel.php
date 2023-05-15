@@ -34,9 +34,17 @@ class WorkInputContentModel extends Model
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
 
+        // $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
+        //         pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
+        //         FROM ctt_projects_content WHERE pjt_id=$pjt_id order by pjtcn_order;";
+
         $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
                 pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
-                FROM ctt_projects_content WHERE pjt_id=$pjt_id order by pjtcn_order;";
+                FROM ctt_projects_content AS pjc
+                INNER JOIN ctt_projects_detail AS pjd ON pjd.pjtvr_id=pjc.pjtvr_id AND pjc.pjt_id=$pjt_id
+                left JOIN ctt_series AS ser ON ser.ser_id=pjd.ser_id
+                WHERE ser.ser_stage!='R' order by pjtcn_order;";
+
         return $this->db->query($qry);
     }
 
@@ -46,7 +54,7 @@ class WorkInputContentModel extends Model
         $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
        
         $qry = "SELECT *
-                FROM ctt_reason_maintenance;";
+                FROM ctt_project_change_reason;";
 
        return $this->db->query($qry);
    }

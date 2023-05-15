@@ -82,7 +82,7 @@ function getInvoice() {
     var pagina = 'Products/listInvoice';
     var par = '[{"parm":""}]';
     var tipo = 'json';
-    var selector = putInvoiceList;
+    var selector = putInvoice;  // putInvoiceList
     fillField(pagina, par, tipo, selector);
 }
 
@@ -146,7 +146,6 @@ function putCategories(dt) {
                 flt = 0;
                 btn = 'solo productos';
                 // getProducts(catId);
-
                 settingTable(catId);
             });
         });
@@ -194,6 +193,7 @@ function putCoins(dt) {
         $.each(dt, function (v, u) {
             var H = `<option value="${u.cin_id}">${u.cin_code}-${u.cin_name}</option>`;
             $('#txtCinId').append(H);
+            $('#txtSerCinId').append(H);
         });
     }
 }
@@ -208,53 +208,21 @@ function putDocuments(dt) {
     }
 }
 
+/** +++++  coloca los docuemntos de factura en serie */
+function putInvoice(dt) {
+    if (dt[0].doc_id != '0') {
+        $.each(dt, function (v, u) {
+            var H = `<option value="${u.doc_id}">${u.doc_name}</option>`;
+            $('#txtDocIdSerie').append(H);
+        });
+    }
+}
+
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
     prds = dt;
     fillProducts('0');
     console.log('LLena Products ');
-}
-
-/** +++++  coloca los productos en la tabla y filtra */
-function fillProducts(ft) {
-    $('#tblProducts tbody').html('');
-
-    var cod = ft == '1' ? 'A' : '';
-
-    if (prds[0].prd_id != '0') {
-        var catId = prds[0].cat_id;
-        $.each(prds, function (v, u) {
-            if (u.prd_level != cod) {
-                pack = u.prd_level == 'K' ? 'fas' : 'far';
-                let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
-                let invoice = u.doc_id == 0 ? '' : docInvo;
-                let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11);
-                /// agregar boton de elimniar
-                var H = `
-                <tr id="${u.prd_id}">
-                    <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
-                    <td class="sku">${skufull}</td>
-                    <td class="product-name editable" data_action="box" data_edit="prd_name"> ${u.prd_name}</td>
-                    <td class="price editable" data_action="box" data_edit="prd_price">${u.prd_price}</td>
-                    <td class="quantity" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.quantity}|${u.prd_level}"><span class="toLink">${u.quantity}</span></td>
-                    <td class="level">${u.prd_level}</td>
-                    <td class="sku editable list">${u.srv_name}</td>
-                    <td class="sku">${u.prd_coin_type}</td>
-                    <td class="cellInvoice center editable fileload">${invoice}</td>
-                    <td class="catalog editable" data_action="list">${u.sbc_name}</td>
-                    <td class="catalog editable" data_action="list">${u.cat_name}</td>
-                    <td class="catalog editable" data_action="box">${u.prd_english_name}</td>
-                    <td class="catalog editable" data_action="box">${u.prd_comments}</td>
-                </tr>`;
-                $('#tblProducts tbody').append(H);
-            }
-        });
-        settingTable();
-        console.log('fill 1--');
-        activeIcons();
-    } else {
-        settingTable();
-    }
 }
 
 /** +++++  configura la table de productos */
@@ -330,7 +298,7 @@ function settingTable(catId) {
         processing: true,
         serverSide: true,
         ajax: {url: 'Products/tableProducts', type: 'POST', data: {catId: catId, filter: flt}},
-        columnDefs: [{targets: -1, data: null, defaultContent: '<butotn>click</button>'}],
+        columnDefs: [{targets: -1, data: null, defaultContent: '<button>click</button>'}],
         columns: [
             {data: 'editable', class: 'editable edit', orderable: false},
             {data: 'produsku', class: 'produsku sku'},
@@ -360,6 +328,50 @@ function settingTable(catId) {
         });
 }
 
+
+/** +++++  coloca los productos en la tabla y filtra */
+function fillProducts(ft) {
+    $('#tblProducts tbody').html('');
+
+    var cod = ft == '1' ? 'A' : '';
+
+    if (prds[0].prd_id != '0') {
+        var catId = prds[0].cat_id;
+        $.each(prds, function (v, u) {
+            if (u.prd_level != cod) {
+                pack = u.prd_level == 'K' ? 'fas' : 'far';
+                let docInvo = `<span class="invoiceView" id="F${u.doc_id}"><i class="fas fa-file-alt" title="${u.doc_name}"></i></span>`;
+                let invoice = u.doc_id == 0 ? '' : docInvo;
+                let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11);
+                /// agregar boton de elimniar
+                var H = `
+                <tr id="${u.prd_id}">
+                    <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
+                    <td class="sku">${skufull}</td>
+                    <td class="product-name editable" data_action="box" data_edit="prd_name"> ${u.prd_name}</td>
+                    <td class="price editable" data_action="box" data_edit="prd_price">${u.prd_price}</td>
+                    <td class="quantity" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.quantity}|${u.prd_level}"><span class="toLink">${u.quantity}</span></td>
+                    <td class="level">${u.prd_level}</td>
+                    <td class="sku editable list">${u.srv_name}</td>
+                    <td class="sku">${u.prd_coin_type}</td>
+                    <td class="cellInvoice center editable fileload">${invoice}</td>
+                    <td class="catalog editable" data_action="list">${u.sbc_name}</td>
+                    <td class="catalog editable" data_action="list">${u.cat_name}</td>
+                    <td class="catalog editable" data_action="box">${u.prd_english_name}</td>
+                    <td class="catalog editable" data_action="box">${u.prd_comments}</td>
+                </tr>`;
+                $('#tblProducts tbody').append(H);
+            }
+        });
+        settingTable();
+        console.log('fill 1--');
+        activeIcons();
+    } else {
+        settingTable();
+    }
+}
+
+
 function getModalSeries(id) {
     let qty = $(`#${id}`).children('td.prodqtty').text();
     if (qty > 0) {
@@ -378,7 +390,7 @@ function activeIcons() {
             let pkt = id.children('td.prodtype').text();
             glbPkt = pkt
             let pkn = id.children('td.prodname').text();
-            console.log('CLick --', prd, glbPkt);
+            // console.log('CLick --', prd, glbPkt);
             // let qty = $(this).parent().attr('data-content').split('|')[2];
             // let pkt = $(this).parent().attr('data-content').split('|')[3];
             // let pkn = $(this).parent().attr('data-content').split('|')[1];
@@ -533,6 +545,8 @@ function putSelectProduct(dt) {
     $('#txtPrdLonely').html(lnl);
     $('#txtPrdInsured').html(ass);
 
+    // console.log('Carga-P ', dt);
+
     $('#tblEditProduct .checkbox i')
         .unbind('click')
         .on('click', function () {
@@ -560,12 +574,15 @@ function putSelectProduct(dt) {
     $('#btn_save')
         .unbind('click')
         .on('click', function () {
+            // console.log('CLick-boton');
             saveEditProduct();
         });
 }
 
 function saveEditProduct() {
+    
     let ky = validatorProductsFields();
+    // console.log('saveEditProduct', ky);
     if (ky == 0) {
         let prdId = $('#txtPrdId').val();
         let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
@@ -611,6 +628,7 @@ function saveEditProduct() {
                     "prdDi" : "${prdDi}"
                 }]
             `;
+            // console.log('Update-P ', par);
         var pagina = 'Products/saveEdtProduct';
         var tipo = 'html';
         var selector = resEdtProduct;
@@ -811,13 +829,13 @@ function cleanProductsFields() {
 
 function validatorProductsFields() {
     let ky = 0;
-
-    $('.required').each(function () {
+    // comentado para probar el flujo
+    /* $('.required').each(function () {
         if ($(this).val() == '' || $(this).val() == 0) {
             ky = 1;
             $(this).addClass('fail').parent().children('.fail_note').removeClass('hide');
         }
-    });
+    }); */
     inactiveFocus();
     return ky;
 }
@@ -858,6 +876,10 @@ function putSeries(dt) {
             {data: 'cinvoice', class: 'cellInvoice center editable fileload'},
             {data: 'serqntty', class: 'quantity'},
             {data: 'serstore', class: 'catalog'},
+            {data: 'serbrand', class: 'catalog'},
+            {data: 'sernumped', class: 'catalog'},
+            {data: 'sercosimp', class: 'catalog'},
+            {data: 'sernumeco', class: 'sku'},
             {data: 'comments', class: 'comments'},
         ],
     });
@@ -873,6 +895,8 @@ function putSeries(dt) {
 
 /** +++++  Coloca los seriales en la tabla de seriales */
 function build_modal_serie(dt) {
+    // console.log('build_modal_serie-',dt);
+
     let lprdsku='';
     let tabla = $('#tblSerie').DataTable();
     $('.overlay_closer .title').html(`${dt[0].prd_sku} - ${dt[0].prd_name}`);
@@ -899,6 +923,10 @@ function build_modal_serie(dt) {
                 cinvoice: invoice,
                 serqntty: u.stp_quantity,
                 serstore: u.str_name,
+                serbrand: u.ser_brand,
+                sernumped: u.ser_import_petition,
+                sercosimp: u.ser_cost_import,
+                sernumeco: u.ser_no_econo,
                 comments: u.ser_comments,
             })
             .draw();
@@ -912,7 +940,7 @@ function activeIconsSerie() {
         .unbind('click')
         .on('click', function () {
             var id = $(this).attr('id').slice(1, 10);
-            console.log(id);
+            // console.log(id);
             var pagina = 'Documentos/VerDocumento';
             var par = `[{"id":"${id}"}]`;
             var tipo = 'json';
@@ -982,18 +1010,25 @@ function putDelSerie(dt) {
 }
 
 function putSelectSerie(dt) {
-    console.log('3ro Click Modal');
-    console.log(dt);
-    getInvoice();
+    // console.log('3ro Click Modal');
+    // console.log(dt);
+    /* getInvoice(); */
     $('#txtSerIdSerie').val(dt[0].ser_id);
-    $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 7) + '-' + dt[0].ser_sku.slice(7, 15));
+    $('#txtSerSkuSerie').val(dt[0].ser_sku.slice(0, 10) + '-' + dt[0].ser_sku.slice(10, 15));
     $('#txtSerSerialNumber').val(dt[0].ser_serial_number);
     $('#txtSerDateRegistry').val(dt[0].ser_date_registry);
-    $('#txtSerSup').val(dt[0].sup_business_name);
     $('#txtSerCost').val(dt[0].ser_cost);
-    $('#txtDocIdSerie').val(dt[0].doc_name);
-    $('#txtDocId').val(dt[0].doc_id);
+
+    $('#txtSerBrand').val(dt[0].ser_brand);
+    $('#txtSerNumPed').val(dt[0].ser_import_petition);
+    $('#txtSerCostImp').val(dt[0].ser_cost_import);
+    $('#txtSerNumEco').val(dt[0].ser_no_econo);
+
+    $('#txtSerSup').val(dt[0].sup_business_name);
+   
+    $('#txtDocIdSerie').val(dt[0].doc_id);
     $('#txtDcpIdSerie').val(dt[0].dcp_id);
+    /* $('#txtDcpIdSerie').val(dt[0].dcp_id); */
     $('#txtSerComments').val(dt[0].ser_comments);
 
     $('#btn_save_serie')
@@ -1002,15 +1037,18 @@ function putSelectSerie(dt) {
             let dateReg = moment($('#txtSerDateRegistry').val(), 'DD/MM/YYYY').format('YYYYMMDD');
 
             let par = `
-            [{
-                "serId"  :  "${$('#txtSerIdSerie').val()}",
+            [{  "serId"  :  "${$('#txtSerIdSerie').val()}",
                 "serSr"  :  "${$('#txtSerSerialNumber').val()}",
                 "serDt"  :  "${dateReg}",
-                "serDc"  :  "${$('#txtDocId').val()}",
+                "serDc"  :  "${$('#txtDocIdSerie').val()}",
                 "serDi"  :  "${$('#txtDcpIdSerie').val()}",
+                "serBr"  :  "${$('#txtSerBrand').val()}",
+                "serNp"  :  "${$('#txtSerNumPed').val()}",
+                "serCi"  :  "${$('#txtSerCostImp').val()}",
+                "serNe"  :  "${$('#txtSerNumEco').val()}",
                 "serCm"  :  "${$('#txtSerComments').val()}"
-            }]
-        `;
+            }] `;
+            // console.log('Par-',par);
             var pagina = 'Products/saveEdtSeries';
             var tipo = 'html';
             var selector = resEdtSeries;
@@ -1051,6 +1089,7 @@ function putSelectSerie(dt) {
 }
 
 function resEdtSeries(dt) {
+    console.log(dt);
     let serId = $('#txtSerIdSerie').val();
     let serSr = $('#txtSerSerialNumber').val();
     let serDt = $('#txtSerDateRegistry').val();
@@ -1068,15 +1107,6 @@ function resEdtSeries(dt) {
 
     activeIconsSerie();
     $('#ModifySerieModal .btn_close').trigger('click');
-}
-
-function putInvoice(dt) {
-    if (dt[0].doc_id != '0') {
-        $.each(dt, function (v, u) {
-            var H = `<option value="${u.doc_id}">${u.doc_name}</option>`;
-            $('#txtDocIdSerie').append(H);
-        });
-    }
 }
 
 function putInvoiceList(dt) {
@@ -1117,10 +1147,12 @@ function putInvoiceList(dt) {
     });
 
     $('#listInvoice .list-item').on('click', function () {
+        // let prdNm = $(this).html();
+        // let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
         let prdNm = $(this).html();
-        let prdId = $(this).attr('id') + '|' + $(this).attr('data_complement');
+        let prdId = $(this).attr('id');
         $('#txtDocIdSerie').val(prdNm);
-        $('#txtIdInvoices').val(prdId);
+        $('#txtDcpIdSerie').val(prdId);
         $('#listInvoice').slideUp(100);
         //validator();
     });

@@ -12,10 +12,8 @@
             
         <div class="row mvst_group">
 
-
             <div class="mvst_panel">
                 <div class="form-group">
-
 
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -29,8 +27,7 @@
                             <label for="txtStoreSource" class="form-label">Almacen Origen</label>
                         </div>
                     </div>
-
-                                        
+                  
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtStoreTarget" class="form-select form-select-sm"><option value="0" selected>Selecciona almacen</option></select>
@@ -38,13 +35,13 @@
                         </div>
                     </div>
 
-<!--                    <div class="row">
+                   <!-- <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtCategory" class="form-select form-select-sm"><option value="0" selected>Catálogo</option></select>
                             <label for="txtCategory">Catálogo</label>
                         </div>
-                    </div>
--->
+                    </div> -->
+
                     <div class="row list-finder hide-items">
                         <!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <div id="boxProducts" type="text" class="box-items-list" >Productos
@@ -61,7 +58,6 @@
                         </div>
                     </div>
 
-
                     <!-- <div class="row">
                         <div class="col-md-7 col-lg-7 col-xl-7 mb-2 form-floating">
                             Cantidad disponible <span id="txtQuantityStored" class="notify">&nbsp;</span>
@@ -72,10 +68,6 @@
                         </div>
                     </div> -->
                     
-
-
-
-
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <textarea class="form-control form-control-sm" id="txtComments" style="height: 120px" rows="3"></textarea>
@@ -109,14 +101,10 @@
                         </tr>
                     </thead>
                     <tbody>	
-
                     </tbody>
-    
                 </table>
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -127,7 +115,6 @@
             <div class="modal-header ">
             </div>
             <div class="modal-body" style="padding: 0px !important;">
-
 
             <div class="row">
                 <div class="col-12 text-center">
@@ -143,6 +130,21 @@
             </div>
     </div>
 </div>
+
+<!-- Fondo obscuro -->
+<div class="invoice__modalBackgound"></div>
+
+<!-- loading -->
+<div class="invoice__loading modalLoading">
+        <div class="box_loading">
+            <p class="text_loading">
+                Identificando Productos<br>
+                <i class="fas fa-spinner spin"></i> 
+                </p>
+            <p>Cargando informacion del almacen seleccionado ...... </p>
+        </div>
+</div>
+<!-- end -->
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>

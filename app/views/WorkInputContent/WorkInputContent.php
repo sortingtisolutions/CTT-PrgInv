@@ -72,7 +72,7 @@
                     <div style="height:20px;"></div>
                     <div class="row">
                             <div class="col">
-                                <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordOutPut">Actualizar Entrada</button>
+                                <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordInPut">Actualizar Entrada</button>
                             </div>
                             <!-- <div class="col-6">
                                 <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>

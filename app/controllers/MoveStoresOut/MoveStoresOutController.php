@@ -137,7 +137,7 @@ class MoveStoresOutController extends Controller
 	} 
 
 // Actualiza la situacion del almacen
-	public function UpdateStores($request_params)
+	public function UpdateStoresSource($request_params)
 	{
 		echo $request_params['mov'] ;
 		if ($request_params['mov'] == 'S' ){

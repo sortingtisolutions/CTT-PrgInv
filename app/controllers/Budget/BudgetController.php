@@ -357,7 +357,7 @@ public function stockProdcuts($request_params)
     public function SaveProject($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->SaveProject($request_params);
+        $result = $this->model->SaveProject($request_params,$params);
         echo $result;
     } 
     

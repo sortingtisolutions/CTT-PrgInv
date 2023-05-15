@@ -14,18 +14,20 @@ function inicial() {
     setTimeout(() => {
         //deep_loading('O');
         //console.log('UNO');
-        $('.tblProyects').css({display: 'none'});
+        
         settingTable();
         getProjects(0);
+        $('.tblProyects').css({display: 'none'});
+
     }, 100);
 }
 
 /** +++++  Obtiene los proyectos de la base */
 function getProjects(catId) {
     var pagina = 'WorkInput/listProjects';
-    var par = `[{"catId":"${catId}"}]`;
+    var par = `[{"pjtId":""}]`;
     var tipo = 'json';
-    var selector = putProducts;
+    var selector = putProjects;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -39,8 +41,8 @@ function settingTable() {
         order: [[2, 'desc']],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, 200, -1],
-            [50, 100, 200, 'Todos'],
+            [50, 100, -1],
+            [50, 100, 'Todos'],
         ],
         buttons: [
             {
@@ -89,8 +91,6 @@ function settingTable() {
             {data: 'pjttp_name',    class: 'supply'},
             {data: 'pjt_date_start', class: 'date'},
             {data: 'pjt_date_end',  class: 'date'},
-            {data: 'pjt_date_project', class: 'date'},
-            {data: 'pjt_location',  class: 'supply'},
         ],
     });
 
@@ -105,23 +105,34 @@ function settingTable() {
 }
 
 /** +++++  coloca los productos en la tabla */
-function putProducts(dt) {
+function putProjects(dt) {
     console.log('DOS',dt);
+    let valstage='';
+    let valicon='';
     $('#tblProyects tbody').html('');
     if (dt[0].pjt_id != '0') {
         // var catId = dt[0].cat_id;
         //console.log('444',dt);
+        // <td class="date">${u.pjt_date_project}</td>
+        // <td class="supply editable">${u.pjt_location}</td>
+        // <td class="sku"><i class='fas fa-edit detail'></i><i class='fas fa-door-open toWork'></i></td>
+        
         $.each(dt, function (v, u) {
+            if (u.pjt_status == 7)
+            { valstage='color:#008000';
+              valicon='fa fa-cog toWork'; }
+            else 
+             { valstage='color:#CC0000';
+             valicon='fa fa-solid fa-edit detail'; }
+            console.log(valstage);
             var H = `
-                <tr id="${u.pjt_id}">
-                    <td class="sku"><i class='fas fa-edit detail'></i><i class='fas fa-door-open toWork'></i></td>
+                <tr id="${u.pjt_id}" style='${valstage}'>
+                    <td class="sku"><i class="${valicon}"</td>
                     <td class="supply">${u.pjt_name}</td>
                     <td class="sku">${u.pjt_number}</td>
                     <td class="supply">${u.pjttp_name}</td>
                     <td class="date">${u.pjt_date_start}</td>
                     <td class="date">${u.pjt_date_end}</td>
-                    <td class="date">${u.pjt_date_project}</td>
-                    <td class="supply editable">${u.pjt_location}</td>
                 </tr>`;
             $('#tblProyects tbody').append(H);
         });
@@ -181,4 +192,18 @@ function confirm_to_work(pjtid) {
 
 function putToWork(dt){
     console.log(dt)
+    window.location.reload();
+}
+
+function modalLoading(acc) {
+    if (acc == 'S') {
+        $('.invoice__modalBackgound').fadeIn('slow');
+        $('.invoice__loading')
+            .slideDown('slow')
+            .css({ 'z-index': 401, display: 'flex' });
+    } else {
+        $('.invoice__loading').slideUp('slow', function () {
+            $('.invoice__modalBackgound').fadeOut('slow');
+        });
+    }
 }

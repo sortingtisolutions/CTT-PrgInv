@@ -19,6 +19,16 @@ function inicial() {
     setting_table_AsignedProd();
     getProjects(prjid);
     getDetailProds();
+
+    $('#recordInPut').on('click', function () {
+        alert('Actualizar Registros');
+        // confirm_to_GetOut(prjid);
+     });
+
+     $('#printInPut').on('click', function () {
+        printOutPutContent(prjid);
+    
+     });
 }
 
 // Solicita los paquetes  OK
@@ -163,7 +173,8 @@ function putDetailsProds(dt) {
         let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
             tabla.row
                 .add({
-                    editable: `<i class="fas fa-solid fa-wrench toLink" id="${u.pjtcn_id}"></i>`,
+                    editable: `<i class="fas fa-solid fa-wrench toLink" id="${u.pjtcn_id}"></i>
+                                <i class="fas fa-cog toWork" id="" style=""></i>`,
                     pack_sku: skufull,
                     packname: u.pjtcn_prod_name,
                     packcount: u.pjtcn_quantity,
@@ -249,9 +260,9 @@ function build_modal_serie(dt) {
                     // <i class="fa-solid fa-wrench"></i>
                     // sermodif: `<i class='fas fa-wrenc toLink2' id="${u.pjtdt_prod_sku.slice(0, 7)}"  sku_original = "${skufull}"></i> <i class='fas fa-check-circle toCheck' id="${u.pjtdt_prod_sku.slice(0,7)+u.pjtdt_prod_sku.slice(7,11)}"></i>`,
                     // sermodif: `<i class='fas fa-edit toChange' id="${u.rmt_id}"></i></i> <i class='fas fa-check-circle toCheck' id=""></i>`,
-                    sermodif: `<i class='fas fa-check-circle toCheck' id="${u.rmt_id}" data="${u.rmt_description}"></i>`,
-                    seriesku: u.rmt_code,
-                    sername: u.rmt_description,
+                    sermodif: `<i class='fas fa-check-circle toCheck' id="${u.pjtcr_id}" data="${u.pjtcr_definition}"></i>`,
+                    seriesku: u.pjtcr_definition,
+                    sername: u.pjtcr_description,
                 })
                 .draw();
             //$(`#E${u.pjtcn_id}`).parents('tr').attr('data-product', u.pjtcn_id);

@@ -15,7 +15,7 @@
                     <div class="row rowTop">
                         <h1>Seleccion de Entrada de Proyecto</h1>
                      </div>
-                    <table class="display compact nowrap"  id="tblProyects" style="min-width: 1200px">
+                    <table class="display compact nowrap"  id="tblProyects" style="min-width: 1000px">
                         <thead>
                             <tr>
                                 <th style="width:  30px">Acciones</th>
@@ -24,8 +24,8 @@
                                 <th style="width: 100px">Tipo Proyecto</th>
                                 <th style="width:  40px">Fecha Inicio</th>
                                 <th style="width:  40px">Fecha Final</th>
-                                <th style="width:  60px">Hora <br>ultimo cambio</th>
-                                <th style="width: 150px">Locacion</th>
+                                <!-- <th style="width:  60px">Hora <br>ultimo cambio</th>
+                                <th style="width: 150px">Locacion</th> -->
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -52,7 +52,7 @@
             <div class="row">
                 <input type="hidden" class="form-control" id="txtIdProductPack" aria-describedby="basic-addon3">
                 <div class="col-12 text-center">
-                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Inicia registro de entrada del proyecto?</span>
+                    <span class="modal-title text-center" style="font-size: 1.0rem;" id="BorrarPerfilLabel">¿Inicia registro de entrada del proyecto?</span>
                 </div>
             </div>
 
@@ -73,11 +73,10 @@
             </div>
             <div class="modal-body" style="padding: 0px !important;">
 
-
             <div class="row">
                 <input type="hidden" class="form-control" id="txtIdProductPack" aria-describedby="basic-addon3">
                 <div class="col-12 text-center">
-                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Registrar Entrada de productos?</span>
+                    <span class="modal-title text-center" style="font-size: 1.0rem;" id="BorrarPerfilLabel">¿Registrar Entrada de productos?</span>
                 </div>
             </div>
 

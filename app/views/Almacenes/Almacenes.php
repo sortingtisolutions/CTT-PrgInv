@@ -99,10 +99,10 @@
 
 
 <!-- Start Ventana modal que muestra las EXISTENCIAS por serie -->
-<div class="overlay_background overlay_hide"id="ExisteStrModal" style="width:80%">
+<div class="overlay_background overlay_hide"id="ExisteStrModal" style="width:60%">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
-            <table class="display compact nowrap"  id="tblStrSerie">
+            <table class="display compact nowrap"  id="tblStrSerie" style="width:100%">
                 <thead>
                     <tr>
                         <th style="width:  10px"></th>

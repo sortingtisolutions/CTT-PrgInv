@@ -23,10 +23,10 @@
                         
                     </div>
                     <div id="dvProducts"></div>
-                    <table class="display compact nowrap order-column"  id="tblProducts" style="min-width:2000px;";>
+                    <table class="display compact nowrap"  id="tblProducts" style="min-width:1800px;";>
                         <thead>
                             <tr>
-                                <th style="width:  40px">&nbsp;</th>
+                                <th style="width:  30px">&nbsp;</th>
                                 <th style="width: 100px">SKU</th>
                                 <th style="width: 300px">Nombre</th>
                                 <th style="width:  70px">Precio</th>
@@ -34,11 +34,11 @@
                                 <th style="width:  40px">Tipo</th>
                                 <th style="width:  70px">Servicio</th>
                                 <th style="width:  50px">Moneda</th>
-                                <th style="width:  40px">Ficha<br>Técnica</th>
-                                <th style="width: 220px">Subcategoría</th>
-                                <th style="width: 220px">Catálogo</th>
-                                <th style="width: 300px">Nombre ingles</th>
-                                <th style="width: 510px">Descripción según proveedor</th>
+                                <th style="width:  50px">Ficha<br>Técnica</th>
+                                <th style="width: 200px">Subcategoría</th>
+                                <th style="width: 200px">Catálogo</th>
+                                <th style="width: 200px">Nombre ingles</th>
+                                <th style="width: auto">Descripción según proveedor</th>
                             </tr>
                         </thead>
                     </table>
@@ -61,13 +61,17 @@
                         <th style="width:  30px"></th>
                         <th style="width: 150px">SKU</th>
                         <th style="width:  80px">Núm. serie</th>
-                        <th style="width: 120px">Fecha de alta</th>
+                        <th style="width:  80px">Fecha de alta</th>
                         <th style="width:  50px">Clave status</th>
                         <th style="width:  50px">Clave etapa</th>
-                        <th style="width:  50px">Factura</th>
-                        <th style="width:  60px">Existencias</th>
-                        <th style="width: 200px">Almacen</th>
-                        <th style="width: 350px">Comentarios</th>
+                        <th style="width:  60px">Factura</th>
+                        <th style="width:  50px">Existencias</th>
+                        <th style="width: 100px">Almacen</th>
+                        <th style="width: 100px">Marca</th>
+                        <th style="width: 100px">No. Pedimento</th>
+                        <th style="width: 60px">Costo <br>Importación</th>
+                        <th style="width: 50px">Num. <br>Economico</th>
+                        <th style="width: 300px">Comentarios</th>
                     </tr>
                 </thead>
             </table>
@@ -90,7 +94,7 @@
                         <td class="concept"><span class="reqsign">*</span> Nombre del producto:</td>
                         <td class="data">
                             <input type="hidden" id="txtPrdId" name="txtPrdId" autocomplete="nope" >
-                            <input type="text" id="txtPrdName" name="txtPrdName" class="textbox required" style="width:300px; text-transform:uppercase" autocomplete="nope">
+                            <input type="text" id="txtPrdName" name="txtPrdName" class="textbox required" style="width:300px; text-transform:uppercase" autocomplete="off">
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
                             <span class="intructions">&nbsp;</span>
                         </td>
@@ -158,7 +162,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Accesorio:</td>
+                        <td class="concept"><span class="reqsign">&nbsp;</span>Tipo Artículo:</td> <!-- Accesorio -->
                         <td class="data">
                             
                             <div id="txtPrdLevel"  class="checkbox "><i class="far fa-square"></i> <i class="fas fa-check-square"></i></div>
@@ -195,7 +199,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Ficha técnica:</td>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Ficha técnica:</td>  <!-- Doc para producto -->
                         <td class="data">
                             <select id="txtDocId" name="txtDocId" class="textbox" style="width:300px">
                                 <option value="0">Selecciona la ficha técnica</option>
@@ -244,8 +248,6 @@
 <!-- End Ventana modal AGREGA O MODIFICA PRODUCTO -->
 
 
-
-
 <!-- Start Ventana modal AGREGA O MODIFICA SERIES -->
     <div class="overlay_background overlay_hide"id="ModifySerieModal">
         <div class="overlay_modal">
@@ -281,15 +283,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="concept"><span class="reqsign"></span> Proveedor:</td>
-                        <td class="data">
-                            <!-- <input id="txtSerIdSerie" name="txtSerIdSerie" type="hidden" > -->
-                            <input type="text" id="txtSerSup" name="txtSerSup" class="textbox" style="width:200px">
-                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
-                            <span class="intructions">Proveedor del producto</span>
-                        </td>
-                    </tr>
-                    <tr>
                         <td class="concept"><span class="reqsign"></span> Costo:</td>
                         <td class="data">
                             <!-- <input id="txtSerIdSerie" name="txtSerIdSerie" > -->
@@ -298,7 +291,64 @@
                             <span class="intructions">Costo total del producto</span>
                         </td>
                     </tr>
-                    <!-- <tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Moneda:</td>
+                        <td class="data">
+                            <select id="txtSerCinId" name="txtSerCinId" class="textbox required" style="width:200px">
+                                <option value="0">Selecciona moneda</option>
+                            </select>
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                            <span class="intructions">Tipo de moneda aplicada al precio</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign"></span> Marca:</td>
+                        <td class="data">
+                            <!-- <input id="txtSerIdSerie" name="txtSerIdSerie" > -->
+                            <input type="text" id="txtSerBrand" name="txtSerBrand" class="textbox" style="width:200px">
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
+                            <span class="intructions">Marca del artículo</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign"></span> Numero de pedimento:</td>
+                        <td class="data">
+                            <!-- <input id="txtSerIdSerie" name="txtSerIdSerie" > -->
+                            <input type="text" id="txtSerNumPed" name="txtSerNumPed" class="textbox" style="width:200px">
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
+                            <span class="intructions">Numero de pedimento del artículo</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign"></span> Costo Importacion:</td>
+                        <td class="data">
+                            <!-- <input id="txtSerIdSerie" name="txtSerIdSerie" > -->
+                            <input type="text" id="txtSerCostImp" name="txtSerCostImp" class="textbox" style="width:200px">
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
+                            <span class="intructions">Costo de la importación del artículo</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign"></span> Numero Economico:</td>
+                        <td class="data">
+                            <!-- <input id="txtSerIdSerie" name="txtSerIdSerie" > -->
+                            <input type="text" id="txtSerNumEco" name="txtSerNumEco" class="textbox" style="width:200px">
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
+                            <span class="intructions">Numero Economico del artículo</span>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="concept"><span class="reqsign"></span> Proveedor:</td>
+                        <td class="data">
+                            <!-- <input id="txtSerIdSerie" name="txtSerIdSerie" type="hidden" > -->
+                            <input type="text" id="txtSerSup" name="txtSerSup" class="textbox" style="width:300px">
+                            <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
+                            <span class="intructions">Proveedor del producto</span>
+                        </td>
+                    </tr>
+                    
+                    <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Factura:</td>
                         <td class="data">
                             <select id="txtDocIdSerie" name="txtDocIdSerie" class="textbox" style="width:300px">
@@ -306,20 +356,21 @@
                             </select>
                             <input type="hidden" id="txtDcpIdSerie" name="txtDcpIdSerie">
                             <span class="fail_note hide"></span>
-                            <span class="intructions">Selecciona la factura correspondiente al producto</span>
+                            <span class="intructions">Selecciona la factura correspondiente al articulo</span>
                         </td>
-                    </tr> -->
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span> Factura:</td>
+                    </tr>
+
+                    <!-- Doc para una serie --> <!-- Asignacion para una serie -->
+                    <!-- <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span> Factura:</td>   
                         <td class="data" style="position:relative;">
                             <input id="txtDocIdSerie" name="txtDocIdSerie" class="textbox" style="width:300px">
-                            <input type="hidden" id="txtDocId" name="txtDocId">
                             <input type="hidden" id="txtDcpIdSerie" name="txtDcpIdSerie">
                         <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>
                         </div>
                         </td>
-                    </tr>
+                    </tr> -->
 
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Descripción:</td>

@@ -108,22 +108,27 @@ function settingTable() {
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
     let valstage='';
+    let valicon='';
     $('#tblProyects tbody').html('');
     if (dt[0].pjt_id != '0') {
         // var catId = dt[0].cat_id;
         $.each(dt, function (v, u) {
             // <i class="fa-solid fa-dolly"></i>
             if (u.pjt_status == 4)
-            { valstage='color:#008000'; }
+            { valstage='color:#008000';
+              valicon='fa fa-cog toWork'; }
             else if (u.pjt_status == 7)
-             { valstage='color:#FFA500'; }
+             { valstage='color:#FFA500';
+             valicon='fa fa-solid fa-dolly detail'; }
             else
-            { valstage='color:#CC0000'; }
+            { valstage='color:#CC0000';
+            valicon='fa fa-solid fa-dolly detail'; }
             console.log(valstage);
             //let valstage = u.pjt_status == 4 ? 'color:#008000' : 'color:#CC0000';
+            // <td class="sku"><i class='fa fa-solid fa-dolly detail' title="Edita detalles del proyecto"></i><i class='fa fa-cog toWork'></i></td>
             var H = `
                 <tr id="${u.pjt_id}" style='${valstage}'>
-                    <td class="sku"><i class='fa fa-solid fa-dolly detail' title="Edita detalles del proyecto"></i><i class='fa fa-cog toWork'></i></td>
+                    <td class="sku"><i class="${valicon}"></i></td>
                     <td class="supply">${u.pjt_name}</td>
                     <td class="sku">${u.pjt_number}</td>
                     <td class="supply">${u.pjttp_name}</td>
@@ -193,6 +198,7 @@ function confirm_to_work(pjtid) {
 function putToWork(dt){
     console.log('Resultado Update',dt)
     modalLoading('H');
+    window.location.reload();
 }
 
 function modalLoading(acc) {

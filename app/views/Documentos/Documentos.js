@@ -179,7 +179,6 @@ function UnSelectRowTable() {
     setTimeout(() => {table.rows().deselect();}, 10);
 }
 
-
 //BORRAR  * *
 function DeleteDocumentos() {
     var location = "Documentos/DeleteDocumentos";
@@ -209,9 +208,6 @@ function DeleteDocumentos() {
         }).done(function () {});
 }
 
-
-
-
 //Limpia datos en modal  **
 function LimpiaModal() {
     $('#cargaFiles').val('');
@@ -223,7 +219,6 @@ function LimpiaModal() {
     $('#formDocumento').removeClass('was-validated');
     $('#titulo').text('Nuevo Documento');
     GetTypeDocumento();
-
 }
 
 //ver Documentos
@@ -269,41 +264,19 @@ function getDocumentosTable() {
          respuesta.forEach(function (row, index) {
             renglon =
                '<tr>' +
-              
                '<td class="text-center edit"> ' +
                    '<button onclick="VerDocumento(' + row.doc_id +')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-eye modif"></i></button>' +
                    '<button onclick="EditDocumento(' + row.doc_id +')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
                    '<button onclick="ConfirmDeletDocumento(' + row.doc_id +')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
                '</td>' +
 
-               "<td class='dtr-control text-center' hidden>" +
-               row.doc_id +
-               '</td>' +
-
-               '<td>' +
-               row.doc_name +
-               '</td>' +
-
-               '<td hidden>' +
-               row.dot_id +
-               '</td>' +
-
-               '<td>' +
-               row.dot_name +
-               '</td>' +
-
-               '<td>' +
-               row.doc_code +
-               '</td>' +
-
-               '<td>' +
-               row.doc_type +
-               '</td>' +
-      
-               '<td>' +
-               row.doc_admission_date +
-               '</td>' +
-      
+               "<td class='dtr-control text-center' hidden>" + row.doc_id + '</td>' +
+               '<td>' + row.doc_name + '</td>' +
+               '<td hidden>' + row.dot_id + '</td>' +
+               '<td>' + row.dot_name + '</td>' +
+               '<td>' + row.doc_code + '</td>' +
+               '<td class="sku">' + row.doc_type + '</td>' +
+               '<td>' + row.doc_admission_date + '</td>' +
                '</tr>';
             $('#tablaDocumentosRow').append(renglon);
          });

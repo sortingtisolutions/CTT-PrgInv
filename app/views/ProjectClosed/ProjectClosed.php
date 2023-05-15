@@ -166,6 +166,51 @@
     </div>
 </div>
 
+<!-- Start Ventana modal AGREGA O MODIFICA PRODUCTO -->
+<div class="overlay_background overlay_hide"id="ProductModal" style="width: 60%" >
+    <div class="overlay_modal">
+        <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+        <div class="formButtons">
+            <button type="button" class="btn btn-sm btn-primary" id="btn_save">Guardar</button>
+        </div>
+        <div class="formContent">
+            <table id="tblEditProduct">
+                <tr>
+                    <td class="concept"><span class="reqsign"></span> Nombre del producto:</td>
+                    <td class="data">
+                        <input id="txtPrdId" name="txtPrdId" autocomplete="off" >
+                        <input type="text" id="txtPrdName" name="txtPrdName" class="textbox required" style="width:300px; text-transform:uppercase" autocomplete="off">
+                        <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                        <span class="intructions">&nbsp;</span>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="concept"><span class="reqsign">&nbsp;</span>Motivo mantenimiento:</td>
+                    <td class="data">
+                        <select id="txtCinId" name="txtCinId" class="textbox required" style="width:250px">
+                            <option value="0">Selecciona motivo</option>
+                        </select>
+                        <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
+                        <span class="intructions">&nbsp;</span>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="concept"><span class="reqsign">&nbsp;</span> Comentario al producto:</td>
+                    <td class="data">
+                        <input type="text" id="txtPrdNameProvider" name="txtPrdCodeProvider" class="textbox" style="width:300px; text-transform:uppercase">
+                        <span class="fail_note hide"></span>
+                        <span class="intructions">Nombre descriptivo segun el proveedor</span>
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+    </div>
+</div>
+<!-- End Ventana modal AGREGA O MODIFICA PRODUCTO -->
+
 
 
 

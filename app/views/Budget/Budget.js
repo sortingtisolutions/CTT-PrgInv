@@ -1632,31 +1632,33 @@ function actionNewProject() {
                         cuoId = u.cuo_id;
                     }
                 });
-
+                let user = Cookies.get('user').split('|');
+                let usr = user[0];
                 let par = `
-            [{
-                "projId"         : "${projId}",
-                "pjtName"        : "${projName.toUpperCase()}",
-                "pjtLocation"    : "${projLocation.toUpperCase()}",
-                "pjtDateStart"   : "${projDateStart}",
-                "pjtDateEnd"     : "${projDateEnd}",
-                "pjtTime"        : "${projTime}",
-                "pjtType"        : "${projType}",
-                "locId"          : "${projLocationTypeValue}",
-                "cuoId"          : "${cuoId}",
-                "cusId"          : "${cusCte}",
-                "pjttcId"        : "${projTypeCall}",
-                "cusParent"      : "${cusCteRel}",
-                "pjtParent"      : "${proParent}",
-                "pjtStatus"      : "${proStatus}",
-                "pjtHowRequired" : "${howRequired.toUpperCase()}",
-                "pjtTripGo"      : "${tripGo}",
-                "pjtTripBack"    : "${tripBack}",
-                "pjtToCarryOn"   : "${toCarryOn}",
-                "pjtToCarryOut"  : "${toCarryOut}",
-                "pjtTestTecnic"  : "${testTecnic}",
-                "pjtTestLook"    : "${testLook}"
-            }]
+                    [{
+                        "projId"         : "${projId}",
+                        "pjtName"        : "${projName.toUpperCase()}",
+                        "pjtLocation"    : "${projLocation.toUpperCase()}",
+                        "pjtDateStart"   : "${projDateStart}",
+                        "pjtDateEnd"     : "${projDateEnd}",
+                        "pjtTime"        : "${projTime}",
+                        "pjtType"        : "${projType}",
+                        "locId"          : "${projLocationTypeValue}",
+                        "cuoId"          : "${cuoId}",
+                        "cusId"          : "${cusCte}",
+                        "pjttcId"        : "${projTypeCall}",
+                        "cusParent"      : "${cusCteRel}",
+                        "pjtParent"      : "${proParent}",
+                        "pjtStatus"      : "${proStatus}",
+                        "pjtHowRequired" : "${howRequired.toUpperCase()}",
+                        "pjtTripGo"      : "${tripGo}",
+                        "pjtTripBack"    : "${tripBack}",
+                        "pjtToCarryOn"   : "${toCarryOn}",
+                        "pjtToCarryOut"  : "${toCarryOut}",
+                        "pjtTestTecnic"  : "${testTecnic}",
+                        "pjtTestLook"    : "${testLook}",
+                        "usr"            : "${usr}"
+                    }]
             `;
 
                 var pagina = 'Budget/SaveProject';

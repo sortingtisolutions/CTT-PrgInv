@@ -73,7 +73,7 @@
         <!-- Start Tabla de contenido -->
             <div class="mvst_table">
                 <h1>Lista de Subcategorias</h1>
-                <table class="display compact nowrap"  id="tblSubcategory" style="width:650px; ">
+                <table class="display compact nowrap"  id="tblSubcategory" style="width:95%; ">
                     <thead>
                         <tr>
                             <th style="width:  40px"></th>
@@ -93,7 +93,7 @@
 
 
     <!-- Start Ventana Modal de STOCK -->
-        <div class="overlay_background overlay_hide"id="ModifySerieModal">
+        <div class="overlay_background overlay_hide" id="ShowSerieModal">
             <div class="overlay_modal">
                 <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
                 <h1></h1>

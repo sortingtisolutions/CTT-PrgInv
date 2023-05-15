@@ -324,7 +324,6 @@ public function stockProdcuts($params)
 // Agrega Comentario
     public function InsertComment($params, $userParam)
     {
-
         $group = explode('|',$userParam);
     
         $user   = $group[2];
@@ -426,8 +425,7 @@ public function stockProdcuts($params)
                         VALUES ($cusId, $cusParent);";
 
             $this->db->query($qry01);
-            $cuoId = $this->db->insert_id;
-            
+            $cuoId = $this->db->insert_id;  
         }
 
         $pjt_name               = $this->db->real_escape_string($params['pjtName']); 
@@ -448,6 +446,7 @@ public function stockProdcuts($params)
         $pjt_to_carry_out       = $this->db->real_escape_string($params['pjtToCarryOut']);
         $pjt_test_tecnic        = $this->db->real_escape_string($params['pjtTestTecnic']);
         $pjt_test_look          = $this->db->real_escape_string($params['pjtTestLook']);
+        $usr                    = $this->db->real_escape_string($params['usr']);
 
         $qry02 = "INSERT INTO ctt_projects (
                     pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
@@ -482,6 +481,11 @@ public function stockProdcuts($params)
                   SET pjt_number = '$pjt_number'
                   WHERE pjt_id = $pjtId;";
         $this->db->query($qry03);
+
+        $qry04 = "INSERT INTO ctt_attends_projects(pjt_id,usr_id,wta_id)
+                  VALUES ($pjtId,$usr,1);";
+        $this->db->query($qry04);
+        $wtaId = $this->db->insert_id; 
 
         return $pjtId;
 

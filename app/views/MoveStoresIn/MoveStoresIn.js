@@ -19,6 +19,7 @@ function inicial() {
     getCoins();
     getCategories();
     setting_table();
+
     $('#btn_exchange').on('click', function () {
         exchange_apply(0);
     });
@@ -43,44 +44,44 @@ function setting_table() {
         order: [[0, 'desc']],
         dom: 'Blfrtip',
         buttons: [
-            {
-                //Botón para Excel
-                extend: 'excel',
-                footer: true,
-                title: title,
-                filename: filename,
+        {
+            //Botón para Excel
+            extend: 'excel',
+            footer: true,
+            title: title,
+            filename: filename,
 
-                //Aquí es donde generas el botón personalizado
-                text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
-            },
-            {
-                //Botón para PDF
-                extend: 'pdf',
-                footer: true,
-                title: title,
-                filename: filename,
+            //Aquí es donde generas el botón personalizado
+            text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+        },
+        {
+            //Botón para PDF
+            extend: 'pdf',
+            footer: true,
+            title: title,
+            filename: filename,
 
-                //Aquí es donde generas el botón personalizado
-                text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
-            },
-            {
-                //Botón para imprimir
-                extend: 'print',
-                footer: true,
-                title: title,
-                filename: filename,
+            //Aquí es donde generas el botón personalizado
+            text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+        },
+        {
+            //Botón para imprimir
+            extend: 'print',
+            footer: true,
+            title: title,
+            filename: filename,
 
-                //Aquí es donde generas el botón personalizado
-                text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+            //Aquí es donde generas el botón personalizado
+            text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+        },
+        {
+            // Boton aplicar cambios
+            text: 'Aplicar movimientos',
+            className: 'btn-apply hidden-field',
+            action: function (e, dt, node, config) {
+                read_exchange_table();
             },
-            {
-                // Boton aplicar cambios
-                text: 'Aplicar movimientos',
-                className: 'btn-apply hidden-field',
-                action: function (e, dt, node, config) {
-                    read_exchange_table();
-                },
-            },
+        },
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -98,11 +99,13 @@ function setting_table() {
             {data: 'prodseri', class: 'serie-product'},
             {data: 'prodpeti', class: 'serie-product'},
             {data: 'prodimpo', class: 'serie-product'},
+            {data: 'costtota', class: 'price left'},
             {data: 'codexcsc', class: 'code-type_s'},
             {data: 'stnamesc', class: 'store-name_s'},
             {data: 'provname', class: 'store-name_s'},
             {data: 'factname', class: 'store-name_s'},
             {data: 'prodmarc', class: 'store-name_s'},
+            {data: 'numecono', class: 'store-name_s'},
             {data: 'comments', class: 'comments'},
         ],
     });
@@ -174,10 +177,11 @@ function getProducts(catId) {
     var selector = putExchanges;
     fillField(pagina, par, tipo, selector);
 } */
+
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
 function putTypeExchange(dt) {
-    console.log(dt);
+    // console.log(dt);
     if (dt[0].ext_id != 0) {
         $.each(dt, function (v, u) {
             if (u.ext_elements.substring(0, 1) != '0') {
@@ -198,7 +202,7 @@ function putTypeExchange(dt) {
 }
 /**  ++++++  configura la interfasede inputs requeridos */
 function setting_interface(code,id) {
-    //console.log('CODE ', code);
+    // console.log('CODE ', code);
     code.substring(1, 2) == '0' ? $('.pos1').addClass('hide-items') : $('.pos1').removeClass('hide-items');
     code.substring(2, 3) == '0' ? $('.pos2').addClass('hide-items') : $('.pos2').removeClass('hide-items');
     code.substring(3, 4) == '0' ? $('.pos3').addClass('hide-items') : $('.pos3').removeClass('hide-items');
@@ -222,12 +226,7 @@ function putStores(dt) {
         validator();
     });
 }
-/*
-    $('#txtInvoice').on('change', function () {
-        validator();
-    });
-}
-*/
+
 function putCoins(dt) {
     if (dt[0].cin_id != 0) {
         $.each(dt, function (v, u) {
@@ -442,37 +441,35 @@ function validator() {
         ky = 1;
         msg += 'Debes indicar el tipo de moneda';
     }
-    //console.log(ky, msg);
+                                        //console.log(ky, msg);
 
-    // if ($('#txtCost').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
-    //     ky = 1;
-    //     msg += 'Debes indicar el costo del producto';
-    // }
+                                        // if ($('#txtCost').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
+                                        //     ky = 1;
+                                        //     msg += 'Debes indicar el costo del producto';
+                                        // }
 
     //validacion de cantidad para agregar serie mayor a 1
     if ($('#txtQuantity').val() > 1) {
         // && $('#txtSerie').val() == 0
         $('#txtSerie').attr('disabled', true).val('');
-        //$('#txtCostImp').attr('disabled', true).val('');
+        $('#txtNoEco').attr('disabled', true).val('');
         
     } else if ($('#txtQuantity').val() == 1) {
         $('#txtSerie').attr('disabled', false);
-        //$('#txtCostImp').attr('disabled', false);
+        $('#txtNoEco').attr('disabled', false);
 
     } else {
         ky = 1;
         msg += ' Las series se capturan individualmente en la tabla';
     }
 
-    //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
-    //console.log($('#txtSerie').val(), $('#txtSerie').attr('disabled'));
+                                    //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
+                                    //console.log($('#txtSerie').val(), $('#txtSerie').attr('disabled'));
 
     if ($('#txtSerie').val() == '' && $('#txtSerie').attr('disabled') == undefined && $('.pos6').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
         msg += 'Debes indicar la serie del producto';
     }
-
-
 
     if (ky == 0) {
         $('#btn_exchange').removeClass('disabled');
@@ -489,7 +486,7 @@ function exchange_apply() {
     let prdSku = $('#txtIdProducts').val().split('|')[1];
     let prdName = $('#txtIdProducts').val().split('|')[2];
     let serie = parseInt($('#txtNextSerie').val());
-    let sersku = prdSku + refil(serie, 4);
+    let sersku = prdSku + refil(serie, 3);
     let serser = $('#txtSerie').val();
     let prodpeti = $('#txtPedimento').val();
     let prodimpo = $('#txtCostImp').val();
@@ -509,36 +506,38 @@ function exchange_apply() {
     let serbran = $('#txtMarca').val();
     let sercostimp = $('#txtCostImp').val();
     let serpetimp = $('#txtPedimento').val();
+    let sercosttot = $('#txtCostTot').val();
+    let sernumeco = $('#txtNoEco').val();
 
     serie++;
     //console.log('Paso 1 ', serie);
-    //update_array_products(prdId, serie);  // REVISAR EL DETALLE DE ESTA FUNCION
 
     if (quantity > 1) {
         for (var i = 0; i < quantity; i++) {
-            sersku = prdSku + refil(serie++, 4);
+            sersku = prdSku + refil(serie++, 3);
             update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
             let par = `
         [{
-            "support"  : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
-            "sersku"   : "${sersku}",
-            "prodser"  : "${serser}",
-            "prodpeti" : "${prodpeti}",
-            "prodimpo" : "${prodimpo}",
-            "sercost"  : "${sercost}",
-            "prodnme"  : "${prdName}",
-            "prodqty"  : "${'1'}",
-            "excodsr"  : "${exccode}",
-            "stnmesr"  : "${strName}",
-            "provname" : "${suppliernm}",
-            "factname" : "${docinvoicenm}",
-            "comment"  : "${comment}",
-            "serbran"  : "${serbran}",
-            "sercostimp"  : "${sercostimp}",
-            "serpetimp"  : "${serpetimp}"
-
+            "support"       : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
+            "sersku"        : "${sersku}",
+            "prodser"       : "${serser}",
+            "prodpeti"      : "${prodpeti}",
+            "prodimpo"      : "${prodimpo}",
+            "sercost"       : "${sercost}",
+            "prodnme"       : "${prdName}",
+            "prodqty"       : "${'1'}",
+            "excodsr"       : "${exccode}",
+            "stnmesr"       : "${strName}",
+            "provname"      : "${suppliernm}",
+            "factname"      : "${docinvoicenm}",
+            "comment"       : "${comment}",
+            "serbran"       : "${serbran}",
+            "sercostimp"    : "${sercostimp}",
+            "serpetimp"     : "${serpetimp}",
+            "sercosttot"    : "${sercosttot}",
+            "sernumeco"     : "${sernumeco}"
         }]`;
-            //console.log(par);
+            console.log(par);
             fill_table(par);
         }
     } else {
@@ -557,17 +556,19 @@ function exchange_apply() {
             "comment"  : "${comment}",
             "serbran"  : "${serbran}",
             "sercostimp"  : "${sercostimp}",
-            "serpetimp"  : "${serpetimp}"
+            "serpetimp"  : "${serpetimp}",
+            "sercosttot"    : "${sercosttot}",
+            "sernumeco"     : "${sernumeco}"
         }]`;
-        //console.log(par);
+        console.log(par);
         fill_table(par);
     }
     clean_selectors();
 }
 
-// Llena la tabla de movimientos
+// Llena la tabla de los datos de movimientos
 function fill_table(par) {
-    //console.log('Paso 3 ', par);
+    // console.log('Paso 3 ', par);
     let largo = $('#tblExchanges tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
     par = JSON.parse(par);
@@ -577,20 +578,20 @@ function fill_table(par) {
     tabla.row
         .add({
             editable: `<i class="fas fa-times-circle kill"></i>`,
-            prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 7)}-${par[0].sersku.slice(7, 11)}`,
+            prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 10)}-${par[0].sersku.slice(10, 13)}`,
             prodname: par[0].prodnme,
             prodcant: `<span>${par[0].prodqty}</span>`,
-            prodcost: par[0].sercost,
-            //prodseri: par[0].prodser, 
+            prodcost: par[0].sercost, 
             prodseri: '<input class="serprod fieldIn" type="text" id="PS-' + par[0].prodser + '" value="' + par[0].prodser + '">',
             prodpeti: par[0].serpetimp,
-            prodimpo: '<input class="serprod fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">',
-            //prodimpo: par[0].sercostimp,
+            prodimpo: '<input class="sercpet fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">',
+            costtota: par[0].sercosttot,
             codexcsc: par[0].excodsr,
             stnamesc: par[0].stnmesr,
             provname: par[0].provname,
             factname: par[0].factname,
             prodmarc: par[0].serbran,
+            numecono: '<input class="serecono fieldIn" type="text" id="PS-' + par[0].sernumeco + '" value="' + par[0].sernumeco + '">',
             comments: `<div>${par[0].comment}</div>`
         })
         .draw();
@@ -627,6 +628,8 @@ function clean_selectors() {
     $('#txtQuantity').val('');
     $('#txtSerie').attr('disabled', false);
     $('#txtSerie').val('');
+    $('#txtNoEco').attr('disabled', false);
+    $('#txtNoEco').val('');
     /*if ($('#txtSerie').attr('disabled') == true){
         //$('#txtSerie').attr('disabled', false);
         alert('VALIDA');
@@ -664,20 +667,22 @@ function read_exchange_table() {
             let serienum = $($(u).find('td')[5]).children('.serprod').val();
             //let serienum = $('.serprod').val();
             let petition = $($(u).find('td')[6]).text();
-            let costpeti = $($(u).find('td')[7]).children('.serprod').val();
-            let codeexch = $($(u).find('td')[8]).text();
-            let storname = $($(u).find('td')[9]).text();
-            let serbrand = $($(u).find('td')[12]).text();
-            let comments = $($(u).find('td')[13]).text();
+            let costpeti = $($(u).find('td')[7]).children('.sercpet').val();
+            let costtota = $($(u).find('td')[8]).text();
+            let codeexch = $($(u).find('td')[9]).text();
+            let storname = $($(u).find('td')[10]).text();
+            let serbrand = $($(u).find('td')[13]).text();
+            let numecono = $($(u).find('td')[14]).children('.serecono').val();
+            let comments = $($(u).find('td')[15]).text();
            
-            let typeexch = $(this).attr('data-content').split('|')[1];
             let producid = $(this).attr('data-content').split('|')[0];
+            let typeexch = $(this).attr('data-content').split('|')[1];
             let storesid = $(this).attr('data-content').split('|')[2];
             let sericoin = $(this).attr('data-content').split('|')[4];
             let suppliid = $(this).attr('data-content').split('|')[5];
             let docinvoi = $(this).attr('data-content').split('|')[6];
 
-            let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}|${petition}|${costpeti}|${serbrand}`;
+            let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}|${petition}|${costpeti}|${serbrand}|${costtota}|${numecono}`;
             console.log(truk);
             build_data_structure(truk);
         });
@@ -694,26 +699,28 @@ function putNextExchangeNumber(dt) {
 function build_data_structure(pr) {
     let el = pr.split('|');
     let par = `
-[{
-    "fol" :  "${el[0]}",
-    "sku" :  "${el[1]}",
-    "pnm" :  "${el[2].toUpperCase()}",
-    "qty" :  "${el[3]}",
-    "ser" :  "${el[4]}",
-    "str" :  "${el[5]}",
-    "com" :  "${el[6]}",
-    "cod" :  "${el[7]}",
-    "idx" :  "${el[8]}",
-    "prd" :  "${el[9]}",
-    "sti" :  "${el[10]}",
-    "cos" :  "${el[11]}",
-    "cin" :  "${el[12]}",
-    "sup" :  "${el[13]}",
-    "doc" :  "${el[14]}",
-    "pet" :  "${el[15]}",
-    "cpe" :  "${el[16]}",
-    "bra" :  "${el[17]}"
-}]`;
+    [{
+        "fol" :  "${el[0]}",
+        "sku" :  "${el[1]}",
+        "pnm" :  "${el[2].toUpperCase()}",
+        "qty" :  "${el[3]}",
+        "ser" :  "${el[4]}",
+        "str" :  "${el[5]}",
+        "com" :  "${el[6]}",
+        "cod" :  "${el[7]}",
+        "idx" :  "${el[8]}",
+        "prd" :  "${el[9]}",
+        "sti" :  "${el[10]}",
+        "cos" :  "${el[11]}",
+        "cin" :  "${el[12]}",
+        "sup" :  "${el[13]}",
+        "doc" :  "${el[14]}",
+        "pet" :  "${el[15]}",
+        "cpe" :  "${el[16]}",
+        "bra" :  "${el[17]}",
+        "cto" :  "${el[18]}",
+        "nec" :  "${el[19]}"
+    }]`;
     console.log(' Antes de Insertar', par);
     save_exchange(par);
 }
@@ -808,7 +815,7 @@ function sel_products(res) {
 
 function sel_invoice(res) {
     //console.log('SELECC',res);
-    if (res.length < 1) {
+    if (res.length < 2) {
         $('#listInvoice .list-items div.list-item').css({display: 'block'});
     } else {
         $('#listInvoice .list-items div.list-item').css({display: 'none'});
@@ -820,7 +827,7 @@ function sel_invoice(res) {
         cm = omitirAcentos(cm);
         var cr = cm.indexOf(res);
         if (cr > -1) {
-            //            alert($(this).children().html())
+            //        alert($(this).children().html())
             $(this).css({display: 'block'});
         }
     });
@@ -828,7 +835,7 @@ function sel_invoice(res) {
 
 function sel_suppliers(res) {
     //console.log('SELECC',res);
-    if (res.length < 1) {
+    if (res.length < 2) {
         $('#listSupplier .list-items div.list-item').css({display: 'block'});
     } else {
         $('#listSupplier .list-items div.list-item').css({display: 'none'});

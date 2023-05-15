@@ -23,6 +23,7 @@ class AlmacenesModel extends Model
 		return $str_id;
 
 	}
+	
 // Optiene los Usuaios existentes
 	public function GetAlmacenes($params)
 	{
@@ -35,7 +36,6 @@ class AlmacenesModel extends Model
 				GROUP BY str.str_id, str.str_name, str.str_type, str.emp_id, str.emp_fullname
 				ORDER BY str.str_id;";
 		return $this->db->query($qry);
-		
 	}
 
     public function GetAlmacen($params)
@@ -52,7 +52,6 @@ class AlmacenesModel extends Model
 		return $item;
 	}
 
-
     public function UpdateAlmacen($params)
 	{
 
@@ -62,11 +61,10 @@ class AlmacenesModel extends Model
 		$emp_name 	= $this->db->real_escape_string($params['emp_name']);
 
 		$qry = " UPDATE ctt_stores
-					SET 
-					str_name 		= UPPER('$str_name'),
-					str_type 		= UPPER('$str_type'),
-					emp_fullname 	= UPPER('$emp_name')
-		WHERE str_id = '$str_id';";
+					SET str_name 		= UPPER('$str_name'),
+						str_type 		= UPPER('$str_type'),
+						emp_fullname 	= UPPER('$emp_name')
+				WHERE str_id = '$str_id';";
 		$this->db->query($qry);	
 			
 		return $str_id;
@@ -80,7 +78,6 @@ class AlmacenesModel extends Model
 				SET str_status = 0
 				WHERE str_id = $str_id";
         return $this->db->query($qry);
-        
 	}
 
 
@@ -120,10 +117,10 @@ class AlmacenesModel extends Model
 	public function countQuantity($params)
     {
         $strId = $this->db->real_escape_string($params['strId']);
-        $qry = "SELECT str_id, ifnull(sum(sp.stp_quantity),0) AS cantidad
+        $qry = "SELECT sp.str_id, ifnull(sum(sp.stp_quantity),0) AS cantidad
 				FROM  ctt_stores_products AS sp
 				INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
-				WHERE str_id = $strId AND sr.pjtdt_id = 0;";
+				WHERE sp.str_id = $strId AND sr.pjtdt_id = 0;";
         return $this->db->query($qry);
     }
 
