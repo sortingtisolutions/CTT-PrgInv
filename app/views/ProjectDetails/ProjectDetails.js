@@ -1,14 +1,4 @@
-let cust,
-    proj,
-    prod,
-    vers,
-    budg,
-    tpprd,
-    relc,
-    proPar,
-    interfase,
-    tpcall,
-    dstgral;
+let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral, glbpjtid;
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
@@ -19,7 +9,6 @@ $('document').ready(function () {
     verifica_usuario();
     inicial();
 });
-
 //INICIO DE PROCESOS
 function inicial() {
     stickyTable();
@@ -228,6 +217,7 @@ function eventsAction() {
             ).length;
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data-project');
+                glbpjtid=pjtId;
                 // let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data-code');
                 let verCurr = lastVersionFinder();
 
@@ -266,7 +256,8 @@ function eventsAction() {
         .on('click', function () {
             let pjtId = $('.version_current').attr('data-project');
             let verId = $('.version_current').attr('data-version');
-            cancelProject(pjtId, verId);
+            cancelProject(pjtId, verId);  // comentado por jjr
+            // promoteProject(pjtId, verId);  // agregado por jjr
         });
     // Imprime la cotización en pantalla
     $('.toPrint')
@@ -347,6 +338,15 @@ function getProjects(pjId) {
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
 }
+
+function getProductsSub(word, dstr, dend) {
+    var pagina = 'ProjectDetails/listProductsSub';
+    var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
+    var tipo = 'json';
+    var selector = putProducts;
+    fillField(pagina, par, tipo, selector);
+}
+
 /**  Obtiene el listado de proyectos padre */
 function getProjectsParents() {
     swpjt = 0;
@@ -383,14 +383,6 @@ function getVersion(pjtId) {
 /**  Obtiene el listado de productos */
 function getProducts(word, dstr, dend) {
     var pagina = 'ProjectDetails/listProducts';
-    var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
-    var tipo = 'json';
-    var selector = putProducts;
-    fillField(pagina, par, tipo, selector);
-}
-/**  Obtiene el listado de productos de Subarrendo */
-function getProductsSub(word, dstr, dend) {
-    var pagina = 'Budget/listProductsSub';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
@@ -1404,6 +1396,23 @@ function activeInputSelector() {
                     default:
                 }
             }
+            else{  // agregado por JJR, que hace en caso de PAQUETE ???
+                switch (event) {
+                    case 'event_killProduct':
+                        killProduct(bdgId);
+                        break;
+                    case 'event_InfoProduct':
+                        /* infoProduct(bdgId, type);
+                        break; */
+                    case 'event_PerdProduct':
+                        /* periodProduct(bdgId);
+                        break; */
+                    case 'event_StokProduct':
+                        stockProduct(bdgId);
+                        break;
+                    default:
+                }
+            }
         });
 }
 
@@ -1991,11 +2000,13 @@ function putsaveBudget(dt) {
 // Guarda la cotización seleccionada
 // *************************************************
 function putSaveBudgetAs(dt) {
+    // console.log(dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
 
     interfase = 'MST';
-    getVersion(pjtId);
+    console.log('putSaveBudgetAs-',glbpjtid);
+    getVersion(glbpjtid);
     modalLoading('H');
 }
 

@@ -1,4 +1,4 @@
-let cust, proj, prod,  vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral;
+let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral, glbpjtid;
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
@@ -219,13 +219,14 @@ function eventsAction() {
             ).length;
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data-project');
+                glbpjtid=pjtId;
                 // let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data-code');
                 let verCurr = lastVersionFinder();
                 let vr = parseInt(verCurr.substring(1, 10));
 
                 let verNext = 'R' + refil(vr + 1, 4);
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
-                let lastmov = moment().format("DD/MM/YYYY HH:mm:ss A");  //agregado por jjr
+                let lastmov = moment().format("YYYY-MM-DD HH:mm:ss A");  //agregado por jjr
                 //console.log('FECHA- ', lastmov);
                 modalLoading('S');
                 let par = `
@@ -341,7 +342,7 @@ function getProjects(pjId) {
 
 /**  Obtiene el listado de productos de Subarrendo */
 function getProductsSub(word, dstr, dend) {
-    var pagina = 'Budget/listProductsSub';
+    var pagina = 'ProjectPlans/listProductsSub';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
@@ -1027,7 +1028,7 @@ function registeredProduct(id, section) {
 }
 
 function putBudgets(dt) {
-    console.log('putBudgets-',dt)
+    // console.log('putBudgets-',dt)
     budg = dt;
     let days = getDaysPeriod();
 
@@ -1969,7 +1970,7 @@ function printBudget(verId) {
     let h = localStorage.getItem('host');
     console.log('Print',v,u,n,h);
     window.open(
-        `${url}app/views/ProjectPlans/ProjectPlansReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        `${url}app/views/ProjectPlans/ProjectPlansReport-c-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
         '_blank'
     );
 }
@@ -1991,12 +1992,13 @@ function putsaveBudget(dt) {
 // Guarda la cotización seleccionada
 // *************************************************
 function putSaveBudgetAs(dt) {
-    // console.log(dt);
+    console.log(dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
     
     interfase = 'MST';
-    getVersion(pjtId);
+    console.log('putSaveBudgetAs-',glbpjtid);
+    getVersion(glbpjtid);
     modalLoading('H');
 }
 
@@ -2518,7 +2520,7 @@ function getDataMice() {
  * @param {*} ac Accion a realizar
  */
 function updateMice(pj, pd, fl, dt, sc, ac) {
-     console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
+    //  console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
 
     $(`#SC${sc}`).attr('data-switch', '0');
     var par = `[{

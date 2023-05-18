@@ -42,12 +42,21 @@ class MoveStoresOutModel extends Model
 	public function listProducts($param)
 	{
 		$strId = $this->db->real_escape_string($param['strId']);
+		$word = $this->db->real_escape_string($param['word']);
 
-		$qry = "SELECT * FROM ctt_products AS pr
-		INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
-		INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
-		WHERE sr.ser_status = 1 AND st.stp_quantity > 0
-		AND st.str_id='$strId' order by st.str_id;"; 
+		$qry ="SELECT * FROM ctt_products AS pr
+				INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
+				INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
+			WHERE sr.ser_status = 1 AND st.stp_quantity > 0
+			AND st.str_id=$strId AND upper(pr.prd_name) LIKE '%$word%' OR upper(pr.prd_sku) LIKE '%$word%' 
+			ORDER BY pr.prd_sku;";
+
+		/* $qry = "SELECT * FROM ctt_products AS pr
+					INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
+					INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
+				WHERE sr.ser_status = 1 AND st.stp_quantity > 0
+				AND st.str_id='$strId' 
+				order by st.str_id;";  */
 
 	/*	$qry = "SELECT sr.ser_id,sr.ser_sku,sr.ser_serial_number,sr.ser_cost,st.str_id,st.stp_quantity,
 		pd.prd_name,pd.prd_coin_type 
@@ -67,7 +76,6 @@ class MoveStoresOutModel extends Model
 		$qry = "SELECT * FROM ctt_stores_exchange WHERE exc_guid = '$guid' ORDER BY exc_date DESC;";
 		return $this->db->query($qry);
 	}
-
 
 // Registra los movimientos entre almacenes
 	public function NextExchange()
@@ -114,6 +122,7 @@ class MoveStoresOutModel extends Model
 		$qry = "UPDATE ctt_stores_products 
 				SET stp_quantity = stp_quantity - $quantity 
 				WHERE str_id = $idStrSrc and ser_id = $idPrd;";
+
 		return $this->db->query($qry);
 	}
 

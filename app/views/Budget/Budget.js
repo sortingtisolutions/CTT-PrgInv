@@ -1766,7 +1766,7 @@ function printBudget(verId) {
         '_blank'
     ); */
     window.open(
-        `${url}app/views/Budget/BudgetReport-s-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        `${url}app/views/Budget/BudgetReport-c-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
         '_blank'
     );
 }

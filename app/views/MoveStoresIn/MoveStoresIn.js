@@ -764,7 +764,8 @@ function exchange_result(dt) {
         window.location = 'MoveStoresIn';
     });
     $('#btnPrintReport').on('click', function () {
-        $('.btn-print').trigger('click');
+        // $('.btn-print').trigger('click');
+        printInfoGetOut(folio);
     });
 }
 
@@ -777,7 +778,8 @@ function updated_stores(dt) {
         window.location = 'MoveStoresIn';
     });
     $('#btnPrintReport').on('click', function () {
-        $('.btn-print').trigger('click');
+        // $('.btn-print').trigger('click');
+        printInfoGetOut(folio);
     });
 }
 
@@ -851,4 +853,17 @@ function sel_suppliers(res) {
             $(this).css({display: 'block'});
         }
     });
+}
+
+function printInfoGetOut(verId) {
+    let user = Cookies.get('user').split('|');
+    let v = verId;
+    let u = user[0];
+    let n = user[2];
+    let h = localStorage.getItem('host');
+    // console.log('Lanza Reporte',v,u,n,h);
+    window.open(
+        `${url}app/views/MoveStoresIn/MoveStoresInReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        '_blank'
+    );
 }

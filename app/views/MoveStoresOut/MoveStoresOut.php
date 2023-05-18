@@ -8,8 +8,7 @@
 </header>
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
-    <div class="contenido">
-            
+    <div class="contenido">    
         <div class="row mvst_group">
 
             <div class="mvst_panel">
@@ -35,13 +34,6 @@
                         </div>
                     </div>
 
-                   <!-- <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtCategory" class="form-select form-select-sm"><option value="0" selected>Catálogo</option></select>
-                            <label for="txtCategory">Catálogo</label>
-                        </div>
-                    </div> -->
-
                     <div class="row list-finder hide-items">
                         <!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <div id="boxProducts" type="text" class="box-items-list" >Productos
@@ -57,16 +49,6 @@
                             <div class="list-items" ></div>
                         </div>
                     </div>
-
-                    <!-- <div class="row">
-                        <div class="col-md-7 col-lg-7 col-xl-7 mb-2 form-floating">
-                            Cantidad disponible <span id="txtQuantityStored" class="notify">&nbsp;</span>
-                        </div>
-                        <div class="col-md-5 col-lg-5 col-xl-5 mb-2 form-floating">
-                            <input id="txtQuantity" type="text" class="form-control form-control-sm text-center number" >
-                            <label for="txtQuantity">Cantidad</label>
-                        </div>
-                    </div> -->
                     
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">

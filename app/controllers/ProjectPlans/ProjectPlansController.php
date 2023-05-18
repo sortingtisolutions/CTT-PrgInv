@@ -449,7 +449,7 @@ class ProjectPlansController extends Controller
             $quanty = $prdexp == '2'? 1: $quanty;
 
             if ( $bdglvl == 'A' ){
-                echo 'Accesorio';
+                // echo 'Accesorio';
                 for ($i = 1; $i<=$quanty; $i++){   // VALIDA LA CANTIDAD A REALIZA POR CONCEPTO 
 
                     $params = array(
@@ -506,7 +506,7 @@ class ProjectPlansController extends Controller
                         'prodId' => $prodId, 
                         'serId' => $serId,
                     );
-                     echo $serId . ' - Prod ' . $prodId ;
+                    // echo $serId . ' - Prod ' . $prodId ;
                     $accesory = $this->model->GetAccesories($paramacc);  //jjr
                     while($acc = $accesory->fetch_assoc()){
 
@@ -536,7 +536,7 @@ class ProjectPlansController extends Controller
                             'detlId' => $detlId,
                         );
                         $serie = $this->model->SettingSeries($accparams);
-                        echo $serId . ' - SER-ACC ' . $prodId ;
+                        // echo $serId . ' - SER-ACC ' . $prodId ;
                     }
 
                 }
@@ -571,14 +571,14 @@ class ProjectPlansController extends Controller
                             'detlId' => 0,
                         );
                         $detlId = $this->model->SettingSeries($prodparams);
-                        echo 'Paso SettingSeries';
+                        // echo 'Paso SettingSeries';
                         $serId=$detlId;
                         $paramaccpk = array(
                             'prodId' => $pkpdId, 
                             'serId' => $serId,
                         );
                         $accesory = $this->model->GetAccesories($paramaccpk);
-                        echo 'Paso GetAccesories';
+                        // echo 'Paso GetAccesories';
                         while($acc = $accesory->fetch_assoc()){
     
                             $acceId =  $acc["prd_id"];
@@ -607,7 +607,7 @@ class ProjectPlansController extends Controller
                                 'detlId' => $detlId,
                             );
                             $serie = $this->model->SettingSeries($accparams);
-                            echo 'Paso SettingSeries de un ACCESORIO';
+                            // echo 'Paso SettingSeries de un ACCESORIO';
                         }
                     }
                 }
@@ -702,11 +702,9 @@ class ProjectPlansController extends Controller
 
         $params         = $this->session->get('user');
         $par            = $this->model->SaveVersion($request_params);
-
         $pack           = explode('|', $par);
         $verId          = $pack[0];
         $pjtId          = $pack[1];
-
         $group = explode('|',$params);
 
         $user = $group[0];
@@ -716,16 +714,15 @@ class ProjectPlansController extends Controller
         $periods        = $this->model->cleanPeriods($pjtId);
         $series         = $this->model->restoreSeries($pjtId);
         $detail         = $this->model->cleanDetail($pjtId);
-
         $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
         $result         = $this->model->getProjectVersion($pjtId);
         $response       = $this->setSeries($result);
-        $Locpaso=3;
+        // $Locpaso=3;
         //$dateproject    = $this->model->saveDateProject($pjtId);  // comentado por jjr
-        $Locpaso=4;
-       
-        echo $verId . '|'. $pjtId . '|'. $user . '|'. $name . '|'. $otrov . '|-Paso '. $Locpaso;
+        // $Locpaso=4;
+        // echo $verId . '|'. $pjtId . '|'. $user . '|'. $name . '|'. $otrov . '|-Paso '. $Locpaso;
+        echo $verId . '|'. $pjtId . '|';
 
     } 
 

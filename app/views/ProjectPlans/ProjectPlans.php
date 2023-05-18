@@ -593,9 +593,9 @@
     <div class="invoice__loading modalLoading">
         <div class="box_loading">
             <p class="text_loading">
-                Guardando documento<br>
+                Guardando version<br>
                 <i class="fas fa-spinner spin"></i> 
-                </p>
+            </p>
             <p>Este proceso puede tardar varios minutos, le recomendamos no salir de la página ni cerrar el navegador.</p>
         </div>
      </div>
