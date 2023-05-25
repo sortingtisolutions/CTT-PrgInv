@@ -357,14 +357,13 @@ function activeIconsSerie() {
         //     getSerieDetail(serprd);
         // }
         });
-    
 }
 
 //**************  NIVEL 3 DE DATOS  *****************************************
 
 // AGREGA LAS SERIES DISPONIBLES
 function putSerieDetails(dt){
-    console.log(dt);
+    // console.log(dt);
     settingChangeSerie();
     console.log('Configuro SET');
     let tabla = $('#tblChangeSerie').DataTable();
@@ -397,7 +396,7 @@ function settingChangeSerie(){
     console.log('setting');
     $('#ChangeSerieModal').removeClass('overlay_hide');
     $('#tblChangeSerie').DataTable({
-        destroy: true,
+        bDestroy: true,
         order: [[1, 'asc']],
         lengthMenu: [
             [10, 30, 50, -1],
@@ -424,13 +423,10 @@ function settingChangeSerie(){
     $('#ChangeSerieModal .btn_close')
         .unbind('click')
         .on('click', function () {
-           $('.overlay_background').addClass('overlay_hide');
-           $('.overlay_closer .title').html('');
-            let Dtable=$('#tblChangeSerie').DataTable();
-            Dtable.rows().remove().draw();
-            Dtable.destroy();
-        //    $('#tblChangeSerie').DataTable().remove().draw();
-            // activeIcons();
+            $('.overlay_background').addClass('overlay_hide');
+            $('.overlay_closer .title').html('');
+            $('#tblChangeSerie').DataTable().destroy;
+;
         });
     
 }

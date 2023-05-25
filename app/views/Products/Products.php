@@ -62,8 +62,8 @@
                         <th style="width: 150px">SKU</th>
                         <th style="width:  80px">Núm. serie</th>
                         <th style="width:  80px">Fecha de alta</th>
-                        <th style="width:  50px">Clave status</th>
-                        <th style="width:  50px">Clave etapa</th>
+                        <th style="width:  40px">Clave status</th>
+                        <th style="width:  40px">Clave etapa</th>
                         <th style="width:  60px">Factura</th>
                         <th style="width:  50px">Existencias</th>
                         <th style="width: 100px">Almacen</th>
@@ -249,7 +249,7 @@
 
 
 <!-- Start Ventana modal AGREGA O MODIFICA SERIES -->
-    <div class="overlay_background overlay_hide"id="ModifySerieModal">
+    <div class="overlay_background overlay_hide"id="ModifySerieModal" style="width: 80%; left:20%; ">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <div class="formButtons">

@@ -327,8 +327,12 @@ public function stockProdcuts($request_params)
     public function SaveBudget($request_params)
     {
         $params =  $this->session->get('user');
+        $group = explode('|',$params);
+        $user = $group[0];
+        $name = $group[2]; 
+
         $result = $this->model->SaveBudget($request_params);
-        echo $result;
+        echo $result . '|' . $name;
         
     } 
 
@@ -357,7 +361,8 @@ public function stockProdcuts($request_params)
     public function SaveProject($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->SaveProject($request_params,$params);
+
+        $result = $this->model->SaveProject($request_params, $params);
         echo $result;
     } 
     
@@ -674,4 +679,23 @@ public function ProcessProjectProduct($request_params)
         echo $res;
     }  */
     
+
+// Lista los comentarios del proyecto
+public function listChangeProd($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->listChangeProd($request_params);
+    $i = 0;
+    while($row = $result->fetch_assoc()){
+        $rowdata[$i] = $row;
+        $i++;
+    }
+    if ($i>0){
+        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+    } else {
+        $res =  '[{"catsub":"0"}]';	
+    }
+    echo $res;
+} 
+
 }

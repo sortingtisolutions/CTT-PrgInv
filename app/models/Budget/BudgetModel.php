@@ -99,7 +99,6 @@ class BudgetModel extends Model
     {
         $pjtId = $this->db->real_escape_string($params['pjId']);
 
-
         $qry = "SELECT com_id, com_date,com_user, com_comment 
                 FROM ctt_comments 
                 WHERE com_source_section = 'projects' 
@@ -206,15 +205,17 @@ public function listDiscounts($params)
                     WHEN prd_level ='K' THEN 
                         (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
                     WHEN prd_level ='P' THEN 
-                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                                FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
-                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                                FROM ctt_products WHERE prd_id = pd.prd_id)
                     END AS stock
             FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-            WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 
-                AND upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%'
-            ORDER BY pd.prd_name ;";
+            WHERE (upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%')
+                AND pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
+            ORDER BY pd.prd_name;";
         return $this->db->query($qry);
     } 
 
@@ -238,9 +239,9 @@ public function listProductsSub($params)
         FROM ctt_products AS pd
         INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
         INNER JOIN ctt_subletting AS sbl ON sbl.prd_id = pd.prd_id
-        WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 
-            AND upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%'
-        ORDER BY pd.prd_name ;";
+        WHERE (upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%')
+            AND pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
+            ORDER BY pd.prd_name;";
     return $this->db->query($qry);
 } 
 
@@ -413,7 +414,7 @@ public function stockProdcuts($params)
 
 
 // Agrega nuevo proyecto
-    public function SaveProject($params)
+    public function SaveProject($params,$name)
     {
         $cuo            = $this->db->real_escape_string($params['cuoId']);
         $cusId          = $this->db->real_escape_string($params['cusId']); 
@@ -451,27 +452,11 @@ public function stockProdcuts($params)
         $qry02 = "INSERT INTO ctt_projects (
                     pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
                     pjt_how_required, pjt_trip_go, pjt_trip_back, pjt_to_carry_on, pjt_to_carry_out, pjt_test_tecnic, pjt_test_look,
-                    pjttp_id, pjttc_id, cuo_id, loc_id
-                ) VALUES (
-                    '$pjt_parent', 
-                    '$pjt_name', 
-                    '$pjt_date_start',
-                    '$pjt_date_end', 
-                    '$pjt_time', 
-                    '$pjt_location', 
-                    '$pjt_status',
-                    '$pjt_how_required',
-                    '$pjt_trip_go',
-                    '$pjt_trip_back',
-                    '$pjt_to_carry_on',
-                    '$pjt_to_carry_out',
-                    '$pjt_test_tecnic',
-                    '$pjt_test_look',
-                    $pjt_type, 
-                    $pjttc_id, 
-                    $cuo_id, 
-                    $loc_id
-                );";
+                    pjttp_id, pjttc_id, cuo_id, loc_id, pjt_whomake ) 
+                 VALUES ('$pjt_parent', '$pjt_name', '$pjt_date_start', '$pjt_date_end', '$pjt_time', 
+                    '$pjt_location', '$pjt_status', '$pjt_how_required', '$pjt_trip_go', '$pjt_trip_back',
+                    '$pjt_to_carry_on', '$pjt_to_carry_out', '$pjt_test_tecnic', '$pjt_test_look',
+                    $pjt_type, $pjttc_id, $cuo_id, $loc_id, '$usr' );";
         $this->db->query($qry02);
         $pjtId = $this->db->insert_id;
 
@@ -767,20 +752,29 @@ public function saveBudgetList($params)
 
 // Actualiza las fechas del proyecto
 public function UpdatePeriodProject($params)
-{
-    $pjtId                  = $this->db->real_escape_string($params['pjtId']);
-    $pjtDateStart           = $this->db->real_escape_string($params['pjtDateStart']);
-    $pjtDateEnd             = $this->db->real_escape_string($params['pjtDateEnd']);
-    $qry = "UPDATE ctt_projects 
-               SET pjt_date_start   = '$pjtDateStart', 
-                   pjt_date_end     = '$pjtDateEnd' 
-             WHERE pjt_id = $pjtId;";
-    $this->db->query($qry);
+    {
+        $pjtId                  = $this->db->real_escape_string($params['pjtId']);
+        $pjtDateStart           = $this->db->real_escape_string($params['pjtDateStart']);
+        $pjtDateEnd             = $this->db->real_escape_string($params['pjtDateEnd']);
+        $qry = "UPDATE ctt_projects 
+                SET pjt_date_start   = '$pjtDateStart', 
+                    pjt_date_end     = '$pjtDateEnd' 
+                WHERE pjt_id = $pjtId;";
+        $this->db->query($qry);
 
-    return $pjtId;
+        return $pjtId;
+    }
 
-}
+    // Listado los comentarios del proyecto
+    public function listChangeProd($params)
+        {
+            $catsub = $this->db->real_escape_string($params['catsub']);
 
+            $qry = "SELECT prd_id, prd_sku, prd_name FROM ctt_products 
+                    WHERE substr(prd_sku,1,4)='$catsub' AND prd_level='P'
+                    ORDER BY prd_id;";
 
+            return $this->db->query($qry);
+        }    
 
 }

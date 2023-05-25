@@ -6,10 +6,10 @@ $(document).ready(function () {
    inicial();
 });
 //INICIO DE PROCESOS
-function inicial() {
-   getProveedoresTable();
-   getTipoProveedor();
-   getOptionYesNo(0);
+function inicial() 
+{
+   getProjectsCfdi();
+   // getOptionYesNo(0);
 
    //Open modal *
    $('#nuevoProveedor').on('click', function () {
@@ -18,36 +18,40 @@ function inicial() {
    });
 
    //Guardar y salva Usuario *
-   $('#GuardarUsuario').on('click', function () {
-      if (validaFormulario() == 1) {
-         SaveProveedores();
-      }
-   });
-   //borra Usuario +
-   $('#BorrarProveedor').on('click', function () {
-      DeleteProveedor();
+   $('#GuardarCFDI').on('click', function () {
+         // read_exchange_table();
+         exchange_apply();
+         LimpiaModal();
+         getOptionYesNo();
    });
 
    $('#LimpiarFormulario').on('click', function () {
       LimpiaModal();
-      getTipoProveedor();
       getOptionYesNo();
-   });
-
-   $('#ProveedoresTable tbody').on('click', 'tr', function () {
-      positionRow = table.page.info().page * table.page.info().length + $(this).index();
-
-      setTimeout(() => {
-         RenglonesSelection = table.rows({selected: true}).count();
-         if (RenglonesSelection == 0 || RenglonesSelection == 1) {
-            $('.btn-apply').addClass('hidden-field');
-         } else {
-            $('.btn-apply').removeClass('hidden-field');
-         }
-      }, 10);
    });
 }
 
+function getProjectsCfdi() {
+   var pagina = 'AddInfoCfid/listProjectsCfdi';
+   var par = `[{"cat_id":""}]`;
+   var tipo = 'json';
+   var selector = putProjectsCfdi;
+   fillField(pagina, par, tipo, selector);
+}
+
+function saveExtraCfdi(pr) {
+   // console.log('PR-',pr);
+   var pagina = 'AddInfoCfid/saveExtraCfdi';
+   var par = pr;
+   var tipo = 'html';
+   var selector = putsaveExtraCfdi;
+   fillField(pagina, par, tipo, selector);
+}
+
+function putsaveExtraCfdi(dt) {
+   console.log('Id Insert-',dt);
+
+}
 //Valida los campos seleccionado *
 function validaFormulario() {
    var valor = 1;
@@ -61,491 +65,312 @@ function validaFormulario() {
    return valor;
 }
 
-//OBTIENE LA LISTA DE LOS PROVEEDORES PARA MOSTRAR EN TABLE
-function getProveedoresTable() {
-   var location = 'Proveedores/GetProveedores';
-   $('#ProveedoresTable').DataTable().destroy();
-   $('#tablaProveedoresRow').html('');
-   console.log('OTIENE PROVEEDORES');
-   $.ajax({
-      type: 'POST',
-      dataType: 'JSON',
-      url: location,
-      _success: function (respuesta) {
-         //console.log(respuesta);
-         var renglon = '';
-         respuesta.forEach(function (row, index) {
+function putProjectsCfdi(dt) {
+   // console.log(dt);
+      let title = 'Detalle salida CFDI';
+   let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+   $('#tblProjectCfdi').DataTable({
+       bDestroy: true,
+       order: [[1, 'asc']],
+       dom: 'Blfrtip',
+       lengthMenu: [
+           [25, 50, 100, -1],
+           [25, 50, 100, 'Todos'],
+       ],
+       buttons: [
+           {
+               //Botón para Excel
+               extend: 'excel',
+               footer: true,
+               title: title,
+               filename: filename,
 
-            if(row.sup_id != 0){
-            renglon =
-               '<tr>' +
-               '<td class="text-center edit"> ' +
-               '<button onclick="EditProveedores(' +
-               row.sup_id +
-               ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
-               '<button onclick="ConfirmDeletProveedor(' + row.sup_id +
-               ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
-               '</td>' +
-               "<td class='dtr-control text-center' hidden>" + row.sup_id + '</td>' +
-               '<td>' + row.sup_business_name + '</td>' +
-               '<td>' + row.sup_trade_name + '</td>' +
-               '<td hidden> ' + row.sut_id + '</td>' +
+               //Aquí es donde generas el botón personalizado
+               text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+           },
+           {
+               //Botón para descargar PDF
+               extend: 'pdf',
+               footer: true,
+               title: title,
+               filename: filename,
 
-               '<td>' + row.sup_contact + '</td>' +
-               '<td>' + row.sup_rfc + '</td>' +
-               '<td>' + row.sup_proof_tax_situation + '</td>' +   
-               '<td>' + row.sup_email + '</td>' +
-               '<td>' + row.sup_phone + '</td>' +
-               '<td>' + row.sup_phone_extension + '</td>' +
-               '<td>' + row.sut_id + '</td>' +
-               '<td>' + row.sup_money_advance + '</td>' +
-               '<td>' + row.sup_advance_amount + '</td>' +
-               '<td>' + row.sup_id_international_supplier + '</td>' +
-               '<td>' + row.sup_description_id_is + '</td>' +
-               '<td>' + row.sup_credit + '</td>' +
-               '<td>' + row.sup_credit_days + '</td>' +
-               '<td>' + row.sup_balance + '</td>' +
-               '<td>' + row.sup_way_pay + '</td>' +
-               '<td>' + row.sup_bank + '</td>' +
-               '<td>' + row.sup_clabe + '</td>' +
-               '</tr>';
+               //Aquí es donde generas el botón personalizado
+               text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+           },
+           {
+               //Botón para imprimir
+               extend: 'print',
+               footer: true,
+               title: title,
+               filename: filename,
+
+               //Aquí es donde generas el botón personalizado
+               text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+           },
+           {
+               text: 'Borrar seleccionados',
+               // className: 'btn-apply hidden-field',
+           },
+       ],
+       pagingType: 'simple_numbers',
+       language: {
+           url: 'app/assets/lib/dataTable/spanish.json',
+       },
+       scrollY: 'calc(100vh - 290px)',
+       scrollX: true,
+       fixedHeader: true,
+       columns: [
+           {data: 'sermodif', class: 'edit'},
+           {data: 'projname', class: 'supply'},
+           {data: 'projnum', class: 'sku'},
+           {data: 'projtnam', class: 'supply'},
+           {data: 'cusname', class: 'supply'},
+           {data: 'cusrfc', class: 'sku'},
+           {data: 'cusphone', class: 'supply'},
+           {data: 'cusaddre', class: 'product-name'},
+           {data: 'cusemail', class: 'supply'},
+           {data: 'cuscvect', class: 'sku'},
+           {data: 'cusconna', class: 'supply'},
+           {data: 'cusconph', class: 'sku'},
+           {data: 'projloca', class: 'product-name'},
+           {data: 'projend', class: 'date'},
+           {data: 'distcfdi', class: 'supply'},
+           {data: 'trancfdi', class: 'sku'},
+           {data: 'operacfdi', class: 'supply'},
+           {data: 'unidcfdi', class: 'supply'},
+           {data: 'placacfdi', class: 'supply'},
+           {data: 'permcfdi', class: 'supply'},
+           {data: 'cantcfdi', class: 'sku'},
+       ],
+   });
+   build_data_cfdi(dt);
+}
+
+/** +++++  Coloca los seriales en la tabla de seriales */
+function build_data_cfdi(dt) {
+   // console.log(dt);
+   let tabla = $('#tblProjectCfdi').DataTable();
+   // $('.overlay_closer .title').html(`CFDI - ${strnme}`);
+   tabla.rows().remove().draw();
+   $.each(dt, function (v, u) {
+       tabla.row
+           .add({
+               sermodif: `<i class="fas fa-pen modif" id="${u.pjt_id}" data_pro="${u.pjt_name}"></i> `, //<i class="fas fa-times-circle kill"></i>
+               projname: u.pjt_name,
+               projnum: u.pjt_number,
+               projtnam: u.pjttp_name,
+               cusname: u.cus_name,
+               cusrfc: u.cus_rfc,
+               cusphone: u.cus_phone,
+               cusaddre: u.cus_address,
+               cusemail: u.cus_email,
+               cuscvect: u.cus_cve_cliente,
+               cusconna: u.cus_contact_name,
+               cusconph: u.cus_contact_phone,
+               projloca: u.pjt_location,
+               projend: u.pjt_date_end,
+               distcfdi: u.cfdi_distancia,
+               trancfdi: u.cfid_transporte_ctt,
+               operacfdi: u.cfdi_operador_movil,
+               unidcfdi: u.cfdi_unidad_movil,
+               placacfdi: u.cfdi_placas,
+               permcfdi: u.cfdi_permiso_fed,
+               cantcfdi: u.cfdi_cantidad_eq,
+           })
+           .draw();
+       $(`#E${u.pjt_id}`).parents('tr').attr('id', u.pjt_id);
+   });
+   ActiveIcons();
+}
+
+function  ActiveIcons(){
+   $('td.edit i')
+        .unbind('click')
+        .on('click', function () {
+            let acc = $(this).attr('class').split(' ')[2];
+            // console.log(acc);
+            switch (acc) {
+                case 'modif':
+                  let idproj = $(this).attr('id');
+                  let nomproj = $(this).attr('data_pro');
+                  // console.log('CLickVal-',id,nomproj);
+                    editProjCfdi(idproj, nomproj);
+                    break;
+                case 'kill':
+                  console.log('Elimina');
+                  //   deleteCategory(catId);
+                    break;
+                default:
             }
-
-            $('#tablaProveedoresRow').append(renglon);
-         });
-
-         let title = 'Proveedores';
-         let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-
-         table = $('#ProveedoresTable').DataTable({
-            order: [[1, 'asc']],
-            select: {
-               style: 'multi',
-               info: false,
-            },
-            lengthMenu: [
-               [50, 100, -1],
-               ['50','100', 'Todo'],
-            ],
-            dom: 'Blfrtip',
-            buttons: [
-               {
-                  extend: 'excel',
-                  footer: true,
-                  title: title,
-                  filename: filename,
-                  //   className: 'btnDatableAdd',
-                  text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
-               },
-               {
-                  extend: 'pdf',
-                  footer: true,
-                  title: title,
-                  filename: filename,
-                  //   className: 'btnDatableAdd',
-                  text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
-               },
-               {
-                  //Botón para imprimir
-                  extend: 'print',
-                  footer: true,
-                  title: title,
-                  filename: filename,
-
-                  //Aquí es donde generas el botón personalizado
-                  text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-               },
-               {
-                  text: 'Borrar seleccionados',
-                  className: 'btn-apply hidden-field',
-                  action: function () {
-                     var selected = table.rows({selected: true}).data();
-                     var idSelected = '';
-                     selected.each(function (index) {
-                        idSelected += index[1] + ',';
-                     });
-                     idSelected = idSelected.slice(0, -1);
-                     if (idSelected != '') {
-                        ConfirmDeletProveedor(idSelected);
-                     }
-                  },
-               },
-            ],
-            // columnDefs: [
-            //    { responsivePriority: 1, targets: 0 },
-            //    { responsivePriority: 2, targets: -1 },
-            // ],
-            scrollY: 'calc(100vh - 260px)',
-            scrollX: true,
-            // scrollCollapse: true,
-            paging: true,
-            pagingType: 'simple_numbers',
-            fixedHeader: true,
-            language: {
-               url: './app/assets/lib/dataTable/spanish.json',
-            },
-         });
-      },
-      get success() {
-         return this._success;
-      },
-      set success(value) {
-         this._success = value;
-      },
-      error: function () {},
-   }).done(function () {});
+        });
 }
 
-
-// Obtiene el tipo de proveedor disponibles para encargados *
-function getTipoProveedor(id) {
-   $('#selectRowTipoProveedor').html("");
-   var location = 'Proveedores/GetTipoProveedores';
-   console.log('OBTIENE TIPO PROVEEDOR');
-   $.ajax({
-      type: 'POST',
-      dataType: 'JSON',
-      data: {id: id},
-      url: location,
-      success: function (respuesta) {
-         var renglon = "<option id='0'  value=''>Seleccione...</option> ";
-         respuesta.forEach(function (row, index) {
-            renglon += '<option id=' + row.sut_id + '  value="' + row.sut_id + '">' + row.sut_name + '</option> ';
-         });
-         $('#selectRowTipoProveedor').append(renglon);
-         if (id != undefined) {
-            $("#selectRowTipoProveedor option[value='" + id + "']").attr('selected', 'selected');
-         }
-      },
-      error: function () {},
-   }).done(function () {});
+function editProjCfdi(idproj,nomproj) {
+   $('#NomProject').val(nomproj);
+   $('#IdProject').val(idproj);
 }
 
+function exchange_apply() {
+   let pjtId = $('#IdProject').val();
+   let pjtname = $('#NomProject').val();
+   let distcfdi = $('#txtDistance').val();
+   let trancfdi = $('#transporteCtt').val();
+   let operacfdi = $('#txtOperaMov').val();
+   let unidcfdi = $('#txtOperaUnid').val();
+   let placacfdi = $('#txtPlacas').val();
+   let permfed = $('#txtPermFed').val();
+   let projqty = $('#txtQuantity').val();
 
-//Edita el Proveedores *
-function EditProveedores(id) {
-   UnSelectRowTable();
-   LimpiaModal();
-   $('#titulo').text('Editar Proveedor');
-
-   var location = 'Proveedores/GetProveedor';
-   $.ajax({
-      type: 'POST',
-      dataType: 'JSON',
-      data: {id: id},
-      url: location,
-      success: function (respuesta) {
-         console.log(respuesta);
-         $('#NomProveedor').val(respuesta.sup_business_name);
-         $('#NomComercial').val(respuesta.sup_trade_name);
-         $('#ContactoProveedor').val(respuesta.sup_contact);
-         $('#RfcProveedor').val(respuesta.sup_rfc);
-         $('#EmailProveedor').val(respuesta.sup_email);
-         $('#PhoneProveedor').val(respuesta.sup_phone);
-         $('#PhoneAdicional').val(respuesta.sup_phone_extension);
-         $('#MontoAnticipo').val(respuesta.sup_advance_amount);
-         $('#ProveInternacional').val(respuesta.sup_id_international_supplier);
-         $('#DatoDescripcion').val(respuesta.sup_description_id_is);
-         $('#DiasCredito').val(respuesta.sup_credit_days);
-         $('#MontoCredito').val(respuesta.sup_balance);
-         $('#DatoBanco').val(respuesta.sup_bank);
-         $('#DatoClabe').val(respuesta.sup_clabe);
-      
-         $('#EmpIdProveedor').val(respuesta.emp_id);
-         $('#IdProveedor').val(respuesta.sup_id);
-        
-         getTipoProveedor(respuesta.sut_id);
-         //$('#ProveedorModal').modal('show');
-      },
-      error: function (EX) {
-         console.log(EX);
-      },
-   }).done(function () {});
-}
-
-//confirm para borrar **
-function ConfirmDeletProveedor(id) {
-   $('#BorrarProveedorModal').modal('show');
-   $('#IdProveedorBorrar').val(id);
-}
-
-function UnSelectRowTable() {
-   setTimeout(() => {
-      table.rows().deselect();
-   }, 10);
-}
-
-//BORRAR DATOS DEL PROVEEDOR * *
-function DeleteProveedor() {
-   var location = 'Proveedores/DeleteProveedores';
-   IdProveedor = $('#IdProveedorBorrar').val();
-   $.ajax({
-      type: 'POST',
-      dataType: 'JSON',
-      data: {
-         IdProveedor: IdProveedor,
-      },
-      url: location,
-      success: function (respuesta) {
-         if ((respuesta = 1)) {
-            var arrayObJ = IdProveedor.split(',');
-            if (arrayObJ.length == 1) {
-               table
-                  .row(':eq(' + positionRow + ')')
-                  .remove()
-                  .draw();
-            } else {
-               table.rows({selected: true}).remove().draw();
-            }
-            $('#BorrarProveedorModal').modal('hide');
-         }
-         LimpiaModal();
-      },
-      error: function (EX) {
-         console.log(EX);
-      },
-   }).done(function () {});
-}
-
-
-function SaveProveedores() {
-
-   var IdProveedor = $('#IdProveedor').val();
-
-   var NomProveedor = $('#NomProveedor').val().toUpperCase();
-   var NomComercial = $('#NomComercial').val().toUpperCase();
-   var ContactoProveedor = $('#ContactoProveedor').val().toUpperCase();
-   var RfcProveedor = $('#RfcProveedor').val().toUpperCase();
-   var selectConstancia = $('#selectConstancia option:selected').text();
-
-   var EmailProveedor = $('#EmailProveedor').val();
-   var PhoneProveedor = $('#PhoneProveedor').val();
-   var PhoneAdicional = $('#PhoneAdicional').val();
-   var tipoProveedorId = $('#selectRowTipoProveedor option:selected').attr('id');
-   var tipoProveedorName = $('#selectRowTipoProveedor option:selected').text();
-
-   var selectAnticipo = $('#selectAnticipo option:selected').text();
-   var MontoAnticipo = $('#MontoAnticipo').val();
-   var ProveInternacional = $('#ProveInternacional').val();
-   var DatoDescripcion = $('#DatoDescripcion').val();
-
-   var selectCredito = $('#selectCredito option:selected').text();
-   var DiasCredito = $('#DiasCredito').val();
-   var MontoCredito = $('#MontoCredito').val();
-   var selectFormaPago = $('#selectFormaPago option:selected').text();
-   var DatoBanco = $('#DatoBanco').val();
-   var DatoClabe = $('#DatoClabe').val();
-   var par = `
+   if (trancfdi == 'Si') {
+       let par = `
        [{
-           "IdProveedor" :       "${IdProveedor}",
-           "NomProveedor" :      "${NomProveedor}",
-           "NomComercial" :      "${NomComercial}",
-           "ContactoProveedor" : "${ContactoProveedor}",
-           "RfcProveedor" :      "${RfcProveedor}",
-           "selectConstancia" :  "${selectConstancia}",
-           "EmailProveedor"   :  "${EmailProveedor}",
-           "PhoneProveedor" :    "${PhoneProveedor}",
-           "PhoneAdicional" :    "${PhoneAdicional}",
-           "tipoProveedorId" :   "${tipoProveedorId}",
-           "selectAnticipo" :    "${selectAnticipo}",
-           "MontoAnticipo" :     "${MontoAnticipo}",
-           "ProveInternacional" : "${ProveInternacional}",
-           "DatoDescripcion" :   "${DatoDescripcion}",
-           "selectCredito" :     "${selectCredito}",
-           "DiasCredito" :       "${DiasCredito}",
-           "MontoCredito" :      "${MontoCredito}",
-           "selectFormaPago" :   "${selectFormaPago}",
-           "DatoBanco"   :       "${DatoBanco}",
-           "DatoClabe"   :       "${DatoClabe}"
+           "pjtId"       : "${pjtId}",
+           "pjtname"        : "${pjtname}",
+           "distcfdi"       : "${distcfdi}",
+           "trancfdi"      : "${trancfdi}",
+           "operacfdi"      : "${operacfdi}",
+           "unidcfdi"       : "${unidcfdi}",
+           "placacfdi"       : "${placacfdi}",
+           "permfed"       : "${permfed}",
+           "projqty"       : "${projqty}"
        }]`;
-   console.log(par);
-   var pagina = 'Proveedores/SaveProveedores';
-   var tipo = 'html';
-   var selector = putSaveProveedor;
-   fillField(pagina, par, tipo, selector);
+         //   console.log(par);
+           fill_table(par);
+   } else {
+       let par = `
+       [{
+         "pjtId"       : "${pjtId}",
+         "pjtname"        : "${pjtname}",
+         "distcfdi"       : "${distcfdi}",
+         "trancfdi"      : "${trancfdi}",
+         "operacfdi"      : "${operacfdi}",
+         "unidcfdi"       : "${unidcfdi}",
+         "placacfdi"       : "${placacfdi}",
+         "prodqty"       : "${'1'}",
+         "permfed"       : "${permfed}",
+         "projqty"       : "${projqty}"
+     }]`;
+      //  console.log(par);
+       fill_table(par);
+   }
 }
 
-function putSaveProveedor(){
-   //console.log('Put SaveNew');
-   LimpiaModal();
-   getProveedoresTable();
-   getTipoProveedor();
-   getOptionYesNo();
+// Llena la tabla de los datos de movimientos
+function fill_table(par) {
+   // console.log('Paso 3 ', par);
+   saveExtraCfdi(par);
+   getProjectsCfdi();
 
 }
 
-//Guardar Proveedores **
-function SaveProveedores_old() {
-   var location = 'Proveedores/SaveProveedores';
+$('#transporteCtt').on('change', function () {
+   let valop = $(this).val();
+   // console.log(valop);
+   if (valop=='Si'){
+      $('.pos1').removeClass('hide-items');
+      // valop == 'Si' ? $('.pos1').addClass('hide-items') : $('.pos1').removeClass('hide-items');
+      // valop == 'No' ? $('.pos2').addClass('hide-items') : $('.pos2').removeClass('hide-items');
+   } else { $('.pos1').addClass('hide-items')  }
+});
 
-   var IdProveedor = $('#IdProveedor').val();
+function read_exchange_table() {
+       $('#tblProjectCfdi tbody tr').each(function (v, u) {
+           let col14 = $($(u).find('td')[1]).text();
+           let col15 = $($(u).find('td')[2]).text();
+           let col16 = $($(u).find('td')[3]).text();
+           let col17 = $($(u).find('td')[4]).text();
+           let col18 = $($(u).find('td')[5]).text();
+           let col19 = $($(u).find('td')[6]).text();
+           let col20 = $($(u).find('td')[7]).text();
+           let col21 = $($(u).find('td')[8]).text();
+         //   let idproj = $($(u).find('td')[13]).text();
+           let idproj = $('#IdProject').val();
 
-   var NomProveedor = $('#NomProveedor').val().toUpperCase();
-   var NomComercial = $('#NomComercial').val().toUpperCase();
-   var ContactoProveedor = $('#ContactoProveedor').val().toUpperCase();
-   var RfcProveedor = $('#RfcProveedor').val().toUpperCase();
-   var selectConstancia = $('#selectConstancia option:selected').text();
-   var EmailProveedor = $('#EmailProveedor').val();
-   var PhoneProveedor = $('#PhoneProveedor').val();
-   var PhoneAdicional = $('#PhoneAdicional').val();
-   var tipoProveedorId = $('#selectRowTipoProveedor option:selected').attr('id');
-   var tipoProveedorName = $('#selectRowTipoProveedor option:selected').text();
-   var selectAnticipo = $('#selectAnticipo option:selected').text();
-   var MontoAnticipo = $('#MontoAnticipo').val();
-   var ProveInternacional = $('#ProveInternacional').val();
-   var DatoDescripcion = $('#DatoDescripcion').val();
-   var selectCredito = $('#selectCredito option:selected').text();
-   var DiasCredito = $('#DiasCredito').val();
-   var MontoCredito = $('#MontoCredito').val();
-   var selectFormaPago = $('#selectFormaPago option:selected').text();
-   var DatoBanco = $('#DatoBanco').val();
-   var DatoClabe = $('#DatoClabe').val();
-
-   console.log(PhoneAdicional);
-   $.ajax({
-      type: 'POST',
-      dataType: 'JSON',
-      data: {
-         IdProveedor:      IdProveedor,
-         NomProveedor:     NomProveedor,
-         NomComercial:     NomComercial,
-         ContactoProveedor: ContactoProveedor,
-         RfcProveedor:     RfcProveedor,
-         selectConstancia: selectConstancia,
-         EmailProveedor:   EmailProveedor,
-         PhoneProveedor:   PhoneProveedor,
-         PhoneAdicional:   PhoneAdicional,
-         tipoProveedorId:  tipoProveedorId,
-         selectAnticipo:   selectAnticipo,
-         MontoAnticipo:    MontoAnticipo,
-         ProveInternacional: ProveInternacional,
-         DatoDescripcion:  DatoDescripcion,
-         selectCredito:    selectCredito,
-         DiasCredito:      DiasCredito,
-         MontoCredito:     MontoCredito,
-         selectFormaPago: selectFormaPago,
-         DatoBanco:        DatoBanco,
-         DatoClabe:        DatoClabe
-      },
-      url: location,
-      success: function (respuesta) {
-         if (IdProveedor != '') {
-            table
-               .row(':eq(' + positionRow + ')')
-               .remove()
-               .draw();
-         }
-         if (respuesta != 0) {
-            //getAlmacenesTable();
-           /*  var rowNode = table.row
-               .add({
-                  [0]:
-                     '<button onclick="EditProveedores(' +
-                     respuesta +
-                     ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button><button onclick="ConfirmDeletProveedor(' +
-                     respuesta +
-                     ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>',
-                  [1]: IdProveedor,
-                  [2]: NomProveedor,
-                  [3]: NomComercial,
-                  [4]: ContactoProveedor,
-                  [5]: RfcProveedor,
-                  [6]: selectConstancia,
-                  [7]: EmailProveedor,
-                  [8]: PhoneProveedor,
-                  [9]: PhoneAdicional,
-                  [10]: tipoProveedorId,
-                  [11]: selectAnticipo,
-                  [12]: MontoAnticipo,
-                  [13]: ProveInternacional,
-                  [14]: DatoDescripcion,
-                  [15]: selectCredito,
-                  [16]: DiasCredito,
-                  [17]: MontoCredito,
-                  [18]: selectFormaPago,
-                  [19]: DatoBanco,
-                  [20]: DatoClabe,
-               })
-               .draw()
-               .node();
-            $(rowNode).find('td').eq(0).addClass('edit');
-            $(rowNode).find('td').eq(1).addClass('text-center');
-            $(rowNode).find('td').eq(1).attr("hidden",true);
-            $(rowNode).find('td').eq(3).attr("hidden",true);
- */
-            LimpiaModal();
-            getProveedoresTable();
-            getTipoProveedor();
-            getOptionYesNo();
-         }
-      },
-      error: function (EX) {
-         console.log(EX);
-      },
-   }).done(function () {});
-
-   console.log('FIN SAVE');
+           let truk = `${col14}|${col15}|${col16}|${col17}|${col18}|${col19}|${col20}|${col20}|${idproj}`;
+         //   console.log(truk);
+         //   build_data_structure(truk);
+       });
+   
 }
 
-//Limpia datos en modal  **
 function LimpiaModal() {
    console.log('LIMPIANDO');
-   $('#NomProveedor').val('');
-   $('#NomComercial').val('');
-   $('#ContactoProveedor').val('');
-   $('#RfcProveedor').val('');
-
-   $('#EmailProveedor').val('');
-   $('#PhoneProveedor').val('');
-   $('#PhoneAdicional').val('');
-
-   $('#MontoAnticipo').val('');
-   $('#ProveInternacional').val('');
-   $('#DatoDescripcion').val('');
-   $('#DiasCredito').val('');
-   $('#MontoCredito').val('');
-
-   $('#DatoBanco').val('');
-   $('#DatoClabe').val('');
-   $('#EmpIdProveedor').val('');
-   $('#IdProveedor').val('');
-   /* $('#PhoneProveedor').val(''); */
-   $('#titulo').text('Nuevo Proveedor');
+   $('#IdProject').val('');
+   $('#NomProject').val('');
+   $('#txtDistance').val('');
+   $('#txtOperaMov').val('');
+   $('#txtOperaUnid').val('');
+   $('#txtPlacas').val('');
+   $('#txtPermFed').val('');
+   $('#txtQuantity').val('');
    $('#formProveedor').removeClass('was-validated');
-   console.log('TERMINANDO');
 }
 
-
 function getOptionYesNo(id) {
-   $('#selectConstancia').html("");
-   renglon = "<option id='2'  value=''></option> ";
-   $('#selectConstancia').append(renglon);
+   $('#transporteCtt').html("");
+   renglon = "<option id='0'  value=''></option> ";
+   $('#transporteCtt').append(renglon);
    renglon = "<option id='1'  value='Si'>Si</option> ";
-   $('#selectConstancia').append(renglon);
-   renglon = "<option id='0'  value='No'>No</option> ";
-   $('#selectConstancia').append(renglon);
+   $('#transporteCtt').append(renglon);
+   renglon = "<option id='2'  value='No'>No</option> ";
+   $('#transporteCtt').append(renglon);
 
-   $('#selectAnticipo').html("");
-   renglon = "<option id='2'  value=''></option> ";
-   $('#selectAnticipo').append(renglon);
-   renglon = "<option id='1'  value='Si'>Si</option> ";
-   $('#selectAnticipo').append(renglon);
-   renglon = "<option id='0'  value='No'>No</option> ";
-   $('#selectAnticipo').append(renglon);
+}
 
-   $('#selectCredito').html("");
-   renglon = "<option id='2'  value=''></option> ";
-   $('#selectCredito').append(renglon);
-   renglon = "<option id='1'  value='Si'>Si</option> ";
-   $('#selectCredito').append(renglon);
-   renglon = "<option id='0'  value='No'>No</option> ";
-   $('#selectCredito').append(renglon);
+function build_data_structure(pr) {
+   let el = pr.split('|');
+   let par = `
+   [{
+       "fol" :  "${el[0]}",
+       "sku" :  "${el[1]}",
+       "pnm" :  "${el[2].toUpperCase()}",
+       "qty" :  "${el[3]}",
+       "ser" :  "${el[4]}",
+       "str" :  "${el[5]}",
+       "com" :  "${el[6]}",
+       "cod" :  "${el[7]}",
+       "idx" :  "${el[8]}",
+       "prd" :  "${el[9]}",
+       "sti" :  "${el[10]}",
+       "cos" :  "${el[11]}",
+       "cin" :  "${el[12]}",
+       "sup" :  "${el[13]}",
+       "doc" :  "${el[14]}",
+       "pet" :  "${el[15]}",
+       "cpe" :  "${el[16]}",
+       "bra" :  "${el[17]}",
+       "cto" :  "${el[18]}",
+       "nec" :  "${el[19]}"
+   }]`;
+   // console.log(' Antes de Insertar', par);
+   // save_exchange(par);
 
-   $('#selectFormaPago').html("");
-   renglon = "<option id='2'  value=''></option> ";
-   $('#selectFormaPago').append(renglon);
-   renglon = "<option id='1'  value='Si'>Si</option> ";
-   $('#selectFormaPago').append(renglon);
-   renglon = "<option id='0'  value='No'>No</option> ";
-   $('#selectFormaPago').append(renglon);
+   
+   // let largo = $('#tblExchanges tbody tr td').html();
+   // par = JSON.parse(par);
+   // let tabla = $('#tblExchanges').DataTable();
+   // tabla.row
+   //     .add({
+   //         editable: `<i class="fas fa-times-circle kill"></i>`,
+   //         prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 10)}-${par[0].sersku.slice(10, 13)}`,
+   //         prodname: par[0].prodnme,
+   //         prodcant: `<span>${par[0].prodqty}</span>`,
+   //         prodcost: par[0].sercost, 
+   //         prodseri: '<input class="serprod fieldIn" type="text" id="PS-' + par[0].prodser + '" value="' + par[0].prodser + '">',
+   //         prodpeti: par[0].serpetimp,
+   //         prodimpo: '<input class="sercpet fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">',
+   //         costtota: par[0].sercosttot,
+   //         codexcsc: par[0].excodsr,
+   //         stnamesc: par[0].stnmesr,
+   //         provname: par[0].provname,
+   //         factname: par[0].factname,
+   //         prodmarc: par[0].serbran,
+   //         numecono: '<input class="serecono fieldIn" type="text" id="PS-' + par[0].sernumeco + '" value="' + par[0].sernumeco + '">',
+   //         comments: `<div>${par[0].comment}</div>`
+   //     })
+   //     .draw();
+
+   // $(`#SKU-${par[0].sersku}`).parent().parent().attr('data-content', par[0].support);
+
 }

@@ -110,7 +110,7 @@ function getPerfilesUsuario(idPerfil) {
             console.log('Perf-',respuesta);
             var renglon = "<option id='0'  value=''>Seleccione un perfil...</option> ";
             respuesta.forEach(function (row, index) {
-                renglon += '<option id=' + row.prf_id + '  value="">' + row.prf_name + '</option> ';
+                renglon += '<option id=' + row.prf_id + 'value="">' + row.prf_name + '</option> ';
             });
             $('#selectPerfilUsuario').append(renglon);
 
@@ -296,10 +296,7 @@ function SaveUsuario() {
                 var rowNode = table.row
                     .add({
                         [0]:
-                            '<button onclick="EditUsuario(' +
-                            respuesta +
-                            ',' +
-                            idPerfil +
+                            '<button onclick="EditUsuario(' + respuesta + ',' + idPerfil +
                             ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button><button onclick="ConfirmDeletUser(' +
                             respuesta +
                             ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>',
@@ -373,36 +370,19 @@ function getUsuariosTable() {
             respuesta.forEach(function (row, index) {
                 renglon =
                     '<tr>' +
-                    '<td class="text-center edit"> ' +
-                    '<button onclick="EditUsuario(' +
-                    row.usr_id +
-                    ',' +
-                    row.prf_id +
-                    ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
-                    '<button onclick="ConfirmDeletUser(' +
-                    row.usr_id +
-                    ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
-                    '</td>' +
-                    "<td class='dtr-control text-center'>" +
-                    row.usr_id +
-                    '</td>' +
-                    '<td>' +
-                    row.emp_fullname +
-                    '</td>' +
-                    '<td >' +
-                    row.emp_number +
-                    '</td>' +
-                    '<td>' +
-                    row.prf_name +
-                    '<td>' +
-                    row.usr_username +
-                    '</td>' +
-                    '<td>' +
-                    row.usr_dt_last_access +
-                    '</td>' +
-                    '<td>' +
-                    row.usr_dt_registry +
-                    '</td>' +
+                        '<td class="text-center edit"> ' +
+                        '<button onclick="EditUsuario(' +
+                        row.usr_id + ',' + row.prf_id + ')" type="button" class="btn btn-default btn-icon-edit" aria-label="Left Align"><i class="fas fa-pen modif"></i></button>' +
+                        '<button onclick="ConfirmDeletUser(' + row.usr_id +
+                        ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
+                        '</td>' +
+                        "<td class='dtr-control text-center'>" + row.usr_id + '</td>' +
+                        '<td>' + row.emp_fullname + '</td>' +
+                        '<td >' + row.emp_number + '</td>' +
+                        '<td>' + row.prf_name + '</td>' +
+                        '<td>' + row.usr_username + '</td>' +
+                        '<td>' + row.usr_dt_last_access + '</td>' +
+                        '<td>' + row.usr_dt_registry + '</td>' +
                     '</tr>';
                 $('#tablaUsuariosRow').append(renglon);
             });
@@ -417,8 +397,8 @@ function getUsuariosTable() {
                     info: false,
                 },
                 lengthMenu: [
-                    [10, 25, 50, 100, -1],
-                    ['10', '25', '50', 'Todo'],
+                    [25, 50,  -1],
+                    ['25', '50', 'Todo'],
                 ],
                 dom: 'Blfrtip',
                 buttons: [
@@ -438,7 +418,6 @@ function getUsuariosTable() {
                         //   className: 'btnDatableAdd',
                         text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
                     },
-
                     {
                         //Botón para imprimir
                         extend: 'print',

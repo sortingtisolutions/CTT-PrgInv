@@ -14,7 +14,8 @@ class AssignProjectsModel extends Model
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
 
-        $qry = "SELECT usr.usr_id, emp.emp_fullname,emp.emp_number FROM ctt_users AS usr
+        $qry = "SELECT usr.usr_id, emp.emp_fullname,emp.emp_number 
+                FROM ctt_users AS usr
                 RIGHT JOIN ctt_employees AS emp ON emp.emp_id=usr.emp_id
                 WHERE (emp.emp_id != 1 OR emp.emp_fullname != 'Super Usuario')
                 AND are_id=3;";

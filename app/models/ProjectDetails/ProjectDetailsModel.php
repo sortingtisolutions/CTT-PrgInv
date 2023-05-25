@@ -194,7 +194,7 @@ class ProjectDetailsModel extends Model
                     END AS stock
             FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-            WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 
+            WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
                 AND upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%'
             ORDER BY pd.prd_name ;";
         return $this->db->query($qry);

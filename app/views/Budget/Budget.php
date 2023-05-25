@@ -286,7 +286,7 @@
         <div class="finder__box"></div>
         <div class="finder__box"></div>
         <div class="finder__box-buttons">
-            <span class="invoice_button" id="btnNewProject"><i class="fas fa-plus"></i>nuevo proyecto</span>
+            <span class="invoice_button" id="btnNewProject" style="font-weight: 800"><i class="fas fa-plus"></i>nuevo proyecto</span>
         </div>
     </div>
 
@@ -328,13 +328,14 @@
             <li class="event_InfoProduct"><i class="fas fa-info-circle"></i> Información</li>
             <li class="event_PerdProduct" hidden><i class="fas fa-calendar-week"></i> Periodos</li>
             <li class="event_StokProduct"><i class="fas fa-layer-group"></i> Inventario</li>
+            <li class="event_ChangePakt" hidden><i class="fas fa-edit"></i> Cambia Paquete</li>
         </ul>
     </div>
 
 <!-- Modal General  -->
     <div class="invoice__modal-general invoice-border modalTable">
         <div class="modal__header invoice-border">
-            <div class="modal__header-concept">&nbsp;Listados de productos</div>
+            <div class="modal__header-concept" style="font-weight: 700">&nbsp;Listados de productos</div>
             <i class="far fa-window-close closeModal"></i>
         </div>
         <div class="modal__body">
@@ -357,18 +358,33 @@
     <div class="invoice__modalBackgound"></div>
 
 <!-- Plantilla de tablas modales -->
-    <div id="infoProductTemplate" class="table_hidden box_template">
-        <table class="table_template" style = "min-width: 600px; width:100%;" >
+<div id="infoDetProdTemplate" class="table_hidden box_template">
+        <table class="table_template" style = "min-width: 300px; width:80%;" >
             <thead>
                 <tr>
-                    <th style = "width: 150px">SKU</th>
-                    <th style = "width:  50px">Tipo</th>
-                    <th style = "min-width: 400px; width: auto;">Nombre del producto</th>
+                    <th style = "width: 100px">SKU</th>
+                    <th style = "min-width: 300px; width: auto;">Nombre del producto</th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
     </div>
+
+
+<!-- Plantilla de tablas modales -->
+    <div id="infoProductTemplate" class="table_hidden box_template">
+        <table class="table_template" style = "min-width: 500px; width:100%;" >
+            <thead>
+                <tr>
+                    <th style = "width: 150px">SKU</th>
+                    <th style = "width:  50px">Tipo</th>
+                    <th style = "min-width: 300px; width: auto;">Nombre del producto</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
 
 <!-- Listado de inventarios -->
     <div id="stockProductTemplate" class="table_hidden box_template">
@@ -574,12 +590,11 @@
             <!-- Lista de comentarios -->
             <div class="comments__list"></div>
             <!-- Captura de cumentario -->
-            <div class="comments__addNew">
-                <label for="txtComment">Escribe comentario</label><br>
-                <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput"></textarea><br>
-                <span class="invoice_button" id="newComment"><i class="fas fa-plus"></i>guardar comentario</span>
-
-            </div>
+                <div class="comments__addNew">
+                    <label for="txtComment">Escribe comentario</label><br>
+                    <textarea name="txtComment" id="txtComment" cols="100" rows="5" class="invoiceInput"></textarea><br>
+                    <span class="invoice_button" id="newComment"><i class="fas fa-plus"></i>guardar comentario</span>
+                </div>
         </div>
     </div>
 
@@ -593,11 +608,52 @@
             <p>La cotización se encuentra en proceso de ser promovida a presupuesto, este proceso puede tardar varios minutos</p>
         </div>
     </div>
-<!-- end -->
-    
+
 </div>
+<!-- end -->
+
+<div class="overlay_background overlay_hide" id="ChangeSerieModal" style="width: 80%">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Cambio</button>
+            <div style="height:15px;"></div> <!-- Agregar un espacio -->
+            <table class="display compact nowrap"  id="tblChangeSerie" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th style="width:  10px"></th>
+                        <th style="width: 100px">SKU</th>
+                        <th style="width:  40px">Tipo</th>
+                        <th style="width: 200px">Descripcion Producto</th>
+                        <th style="width:  40px">Cambio por:</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+<!-- End Ventana modal SERIES -->
+
+<!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
+<div class="overlay_background overlay_hide" id="SerieData" style="width: 60%; left:25%;">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+            <table class="display compact nowrap"  id="tblDataChg" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th style="width:  10px"></th>
+                        <th style="width:  80px">SKU</th>
+                        <th style="width: 180px">Descripcion Producto</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+<!-- End Ventana modal SERIES -->
+
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'Budget/Budget.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

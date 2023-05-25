@@ -275,6 +275,7 @@ function eventsAction() {
         });
 
     expandCollapseSection();
+
 }
 
 function expandCollapseSection() {
@@ -387,6 +388,15 @@ function getProductsRelated(id, tp) {
     var selector = putProductsRelated;
     fillField(pagina, par, tipo, selector);
 }
+/**  Obtiene el listado de projectos del paquete  */
+function getProductsRelatedPk(id, tp) {
+    var pagina = 'Budget/listProductsRelated';
+    var par = `[{"prdId":"${id}","type":"${tp}"}]`;
+    var tipo = 'json';
+    var selector = putProductsRelatedPk;
+    fillField(pagina, par, tipo, selector);
+}
+
 /**  Obtiene el listado de projectos del producto  */
 function getStockProjects(prdId) {
     var pagina = 'Budget/stockProdcuts';
@@ -421,8 +431,16 @@ function getComments(pjtId) {
     fillField(pagina, par, tipo, selector);
 }
 
-function getRelPrdAcc(id, tp) {
+/** Obtiene el listado de los comentarios del proyecto */
+function getChangeProd(catsub) {
+    var pagina = 'Budget/listChangeProd';
+    var par = `[{"catsub":"${catsub}"}]`;
+    var tipo = 'json';
+    var selector = putChangeProd;
+    fillField(pagina, par, tipo, selector);
+}
 
+function getRelPrdAcc(id, tp) {
     var pagina = 'Budget/GetAccesories';
     var par = `[{"prodId":"${id}","type":"${tp}"}]`;
     var tipo = 'json';
@@ -636,7 +654,16 @@ function actionSelProject(obj) {
 }
 
 function getCalendarPeriods(pj) {
-    let fecha = moment(Date()).format('DD/MM/YYYY');
+    // configura el calendario de seleccion de periodos
+    // let restdate= moment().add(5,'d');   // moment().format(‘dddd’); // Saturday
+    // let fecha = moment(Date()).format('DD/MM/YYYY'); 
+    let restdate='';
+    let todayweel =  moment(Date()).format('dddd');
+    if (todayweel=='Monday' || todayweel=='Sunday'){
+        restdate= moment().subtract(3, 'days');
+    } else { restdate= moment(Date()) }
+
+    let fecha = moment(restdate).format('DD/MM/YYYY');
     $('#projectPeriod').daterangepicker(
         {
             showDropdowns: true,
@@ -987,6 +1014,9 @@ function fillBudgetProds(jsn, days) {
 
     // AQUI Aplicar el porcentaje de descuento al seguro 15-ago-2022 8:52 am
     let prdName = pds.bdg_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
+    if(pds.bdg_prod_level=='K'){
+        console.log('ES UN PAQUETE-',pds.bdg_prod_sku);
+    }
 
     let H = `
     <tr id="bdg${pds.prd_id}" 
@@ -1186,6 +1216,14 @@ function activeInputSelector() {
                         case 'event_StokProduct':
                             stockProduct(bdgId);
                             break;
+                        case 'event_ChangePakt':
+                            if(type!='K'){
+                                alert('ESTE NO ES UN PAQUETE');
+                            }else{
+                                infoPackage(bdgId, type);
+                                // console.log('ESTE SI ES UN PAQUETE');
+                            }
+                            break;
                         default:
                     }
                 });
@@ -1228,10 +1266,39 @@ function infoProduct(bdgId, type) {
     $('.invoice__modal-general .modal__body').append(template.html());
     // template.show();
     $('.invoice__modal-general .modal__header-concept').html(
-        'Productos Relacionados'
+        'Informacion de Productos Relacionados'
     );
     closeModals();
 }
+// Muestra la información del paquete seleccionado
+function infoPackage(bdgId, type) {
+    getProductsRelatedPk(bdgId.substring(3, 20), type);
+
+/*     $('.invoice__modalBackgound').fadeIn('slow');
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
+    let template = $('#infoProductTemplate');
+    $('.invoice__modal-general .modal__body').append(template.html());
+    // template.show();
+    $('.invoice__modal-general .modal__header-concept').html(
+        'Productos del Paquete posible cambio');
+
+    closeModals(); */
+}
+
+function infoDetallePkt(lcatsub) {
+    getChangeProd(lcatsub);
+
+ /*    // $('.invoice__modalBackgound').fadeIn('slow');
+    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
+    let template = $('#infoDetProdTemplate');
+    $('.invoice__modal-general .modal__body').append(template.html());
+    // template.show();
+    $('.invoice__modal-general .modal__header-concept').html(
+        'Productos del Paquete posible cambio');
+
+    closeModals(); */
+}
+
 // Muestra la información de productos relacionados
 function putProductsRelated(dt) {
     $.each(dt, function (v, u) {
@@ -1245,10 +1312,237 @@ function putProductsRelated(dt) {
         `;
         $('.invoice__modal-general table tbody').append(H);
     });
+
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
     });
 }
+
+/// Muestra la información de los productos a poder cambiar
+function putProductsRelatedPk_old(dt) {
+    /* $.each(dt, function (v, u) {
+        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        let cat=u.prd_sku.substring(0,2);
+        let catsub=u.prd_sku.substring(0,4);
+        console.log('CATSUB',catsub);
+        if(cat=='01'){
+        let H = `
+            <tr ${levelProduct} data_cat="${catsub}">
+                <td>${u.prd_sku}</td>
+                <td>${u.prd_level}</td>
+                <td>${u.prd_name}</td>
+                <td data_cat=${catsub}><i class="fas fa-edit changePk"  data_cat="${catsub}"></i></td>
+            </tr>
+        `;
+        $('#tblChangeSerie tbody').append(H);
+        }else{
+            let H = `
+                <tr ${levelProduct} data_cat="${catsub}">
+                    <td>${u.prd_sku}</td>
+                    <td>${u.prd_level}</td>
+                    <td>${u.prd_name}</td>
+                    <td data_cat=${catsub}></td>
+                </tr>
+            `;
+            $('#tblChangeSerie tbody').append(H);
+        } 
+    }); */
+
+/*     $(`.invoice__modal-general table`).sticky({
+        top: 'thead tr:first-child',
+    }); */
+    ActiveChangePKT();
+}
+
+function settingChangeSerie(){
+    // console.log('settingChangeSerie');
+    $('#ChangeSerieModal').removeClass('overlay_hide');
+
+    $('#tblChangeSerie').DataTable({
+        bDestroy: true,
+        order: [[1, 'desc']],
+        lengthMenu: [
+            [50, 100, -1],
+            [50, 100, 'Todos'],
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 290px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'serchange', class: 'edit'},
+            {data: 'serdetsku', class: 'sku left'},
+            {data: 'serchoose', class: 'sku'},
+            {data: 'serdetname', class: 'supply left'},
+            {data: 'serdetstag', class: 'sku'},
+        ],
+    });
+
+    $('#ChangeSerieModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            // console.log('Click Close 1');
+           $('.overlay_background').addClass('overlay_hide');
+           $('.overlay_closer .title').html('');
+           $('#tblChangeSerie').DataTable().destroy;
+        });
+}
+
+function putProductsRelatedPk(dt){
+ 
+    // console.log('putProductsRelatedPk', dt);
+    settingChangeSerie();
+    let tabla = $('#tblChangeSerie').DataTable();
+    $('.overlay_closer .title').html(`PRODUCTOS A CAMBIAR : ${dt[0].prd_name} - ${dt[0].prd_sku}`);
+    tabla.rows().remove().draw();
+    $.each(dt, function (v, u) {
+        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        let cat=u.prd_sku.substring(0,2);
+        let catsub=u.prd_sku.substring(0,4);
+        // console.log('CATSUB-',catsub);
+        let valicon='';
+
+        if(cat=='01'){
+        valicon=`<i class='fas fa-edit changePk' data_cat="${catsub}" ></i>`
+        tabla.row
+            .add({
+                serchange: u.prd_id,
+                serdetsku: u.prd_sku,
+                serchoose: u.prd_level,
+                serdetname: u.prd_name,
+                serdetstag: valicon,
+            })
+            .draw();
+            $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub);
+        }else{
+           tabla.row
+            .add({
+                serchange: u.prd_id,
+                serdetsku: u.prd_sku,
+                serchoose: u.prd_level,
+                serdetname: u.prd_name,
+                serdetstag: valicon,
+            })
+            .draw();
+            $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub);
+        } 
+    });
+
+  /*   $(`.invoice__modal-general table`).sticky({
+        top: 'thead tr:first-child',
+    }); */
+    ActiveChangePKT();
+
+}
+
+function ActiveChangePKT(){
+    
+    $('.changePk')
+    .unbind('click')
+    .on('click', function () {
+        let id = $(this).attr('data_cat');
+        let lcatsub=id;
+        // console.log('THIS-', id);
+        // settingProdChg();
+
+        $('#SerieData').removeClass('overlay_hide');
+
+            $('#SerieData .btn_close')
+                .unbind('click')
+                .on('click', function () {
+                    // console.log('Click Close 2');
+                    $('#SerieData').addClass('overlay_hide');
+                    $('#tblDataChg').DataTable().destroy;
+                });
+
+        infoDetallePkt(lcatsub);
+       
+        // alert('Seleccion de Producto a cambiar ' + lcatsub + ' disponible');
+    });
+
+}
+
+function settingProdChg(){
+    $('#SerieData').removeClass('overlay_hide');
+    $('#tblDataChg').DataTable({
+        order: [[1, 'asc']],
+        dom: 'Blfrtip',
+        bDestroy: true,
+        lengthMenu: [
+            [50, 100, -1],
+            [50, 100, 'Todos'],
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 290px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'sermodif', class: 'edit'},
+            {data: 'seriesku', class: 'sku left'},
+            {data: 'sername', class: 'supply left'},
+        ],
+    });
+
+   /*  $('#SerieData .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            //console.log('Cierra Series');
+            $('.overlay_background').addClass('overlay_hide');
+            $('.overlay_closer .title').html('');
+            // let Dtable=$('#tblDataChg').DataTable();
+            // Dtable.rows().remove().draw();
+            // Dtable.destroy();
+    }); */
+}
+
+function putChangeProd(dt) {
+    // console.log('putChangeProd',dt);
+    settingProdChg();
+    
+    let tablaChg = $('#tblDataChg').DataTable();
+    $('#SerieData .overlay_closer .title').html(`LISTA DE PRODUCTOS DISPONIBLES :`);
+    tablaChg.rows().remove().draw();
+    if (dt[0].prd_id > 0) {
+        $.each(dt, function (v, u) {
+            // console.log(u);
+            tablaChg.row
+             .add({
+                 sermodif: `<i class="fas fa-edit toChange" id="${u.prd_id}" sku_original="${u.prd_sku}"></i>`,
+                 seriesku: u.prd_sku,
+                 sername: u.prd_name,
+             })
+             .draw();
+         $(`#${u.pjt_id}`).parents('tr').attr('id',u.pjt_id);
+        });
+    }
+}
+
+function putChangeProd_old(dt) {
+    console.log(dt);
+    if(dt[0].prd_id > 0){
+    $.each(dt, function (v, u) {
+    let H = `
+        <tr data_cat=${u.prd_id}>
+            <td>${u.prd_sku}</td>
+            <td>${u.prd_name}</td>
+        </tr>
+    `;
+    $('.invoice__modal-general table tbody').append(H);
+        
+    });
+    }
+    $(`.invoice__modal-general table`).sticky({
+        top: 'thead tr:first-child',
+    });
+}
+
+
 // Muestra el inventario de productos
 function stockProduct(bdgId, type) {
     getStockProjects(bdgId.substring(3, 20));
@@ -1258,7 +1552,7 @@ function stockProduct(bdgId, type) {
     let template = $('#stockProductTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept').html(
-        'inventarios del producto'
+        'Inventarios del producto'
     );
     closeModals();
 }
@@ -1290,9 +1584,8 @@ function editProject(pjtId) {
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#dataProjectTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
-    $('.invoice__modal-general .modal__header-concept').html(
-        'Edición de datos del proyecto'
-    );
+    $('.invoice__modal-general .modal__header-concept')
+        .html('Edición de datos del proyecto' );
     closeModals();
     fillContent();
     fillData(inx);
@@ -1300,8 +1593,17 @@ function editProject(pjtId) {
 
 function fillContent() {
     // configura el calendario de seleccion de periodos
-    let fecha = moment(Date()).format('DD/MM/YYYY');
+    // let restdate= moment().add(5,'d');   // moment().format(‘dddd’); // Saturday
+    // let fecha = moment(Date()).format('DD/MM/YYYY');
+    // let restdate= moment().subtract(3, 'days'); 
+    let restdate='';
+    let todayweel =  moment(Date()).format('dddd');
+    if (todayweel=='Monday' || todayweel=='Sunday'){
+        restdate= moment().subtract(3, 'days');
+    } else { restdate= moment(Date()) }
 
+    
+    let fecha = moment(restdate).format('DD/MM/YYYY');
     $('#calendar').daterangepicker(
         {
             autoApply: true,
@@ -1542,7 +1844,8 @@ function newProject() {
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#dataProjectTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
-    $('.invoice__modal-general .modal__header-concept').html('Nuevo proyecto');
+    $('.invoice__modal-general .modal__header-concept').html('Captura de datos para un nuevo proyecto');
+
     $('#saveProject')
         .html('Guardar proyecto')
         .removeAttr('class')
@@ -1633,7 +1936,9 @@ function actionNewProject() {
                     }
                 });
                 let user = Cookies.get('user').split('|');
+                // console.log('Datos Usuario-',user);
                 let usr = user[0];
+                let usrname = user[2];
                 let par = `
                     [{
                         "projId"         : "${projId}",
@@ -1660,7 +1965,7 @@ function actionNewProject() {
                         "usr"            : "${usr}"
                     }]
             `;
-
+                // console.log(par);
                 var pagina = 'Budget/SaveProject';
                 var tipo = 'html';
                 var selector = loadProject;
@@ -1714,6 +2019,7 @@ function fillComments(pjtId) {
 
     getComments(pjtId);
 }
+
 function putComments(dt) {
     $('.comments__list').html('');
     if (dt[0].com_id > 0) {
@@ -1723,6 +2029,8 @@ function putComments(dt) {
         });
     }
 }
+
+
 
 function fillCommnetElements(u) {
     console.log(u.com_comment);
@@ -1854,8 +2162,10 @@ function saveBudget(dt) {
 }
 
 function respBudget(dt) {
-    //console.log('REGRESO', dt);
-    getVersion(dt);
+    // console.log('REGRESO respBudget', dt);
+    let pjtId = dt.split('|')[0];
+    let UserN = dt.split('|')[1];
+    getVersion(pjtId);
 }
 
 /**  ++++  Obtiene los días definidos para el proyectos */
@@ -2217,3 +2527,5 @@ function findIndex(id, dt) {
 function subaccion() {
     console.log('');
 }
+
+

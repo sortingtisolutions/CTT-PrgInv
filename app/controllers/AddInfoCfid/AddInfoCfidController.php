@@ -23,9 +23,9 @@
 		  $this->render(__CLASS__, $params);
 		}
 
-		public function GetProveedores()
+		public function listProjectsCfdi()
 		{
-	      $result = $this->model->GetProveedores();
+	      $result = $this->model->listProjectsCfdi();
 		  $i = 0;
 		  while($row = $result->fetch_assoc()){
 			 $rowdata[$i] = $row;
@@ -40,7 +40,32 @@
 		}
 
 		// GUARDA LOS PROVEEDORES
-		public function SaveProveedores($request_params)
+		public function saveExtraCfdi($request_params)
+		{
+		  $result = $this->model->saveExtraCfdi($request_params);	  
+		  echo json_encode($result ,JSON_UNESCAPED_UNICODE);	
+		}
+
+		public function CheckExist($request_params)
+		{
+	      $result = $this->model->CheckExist($request_params);
+		  $i = 0;
+		  while($row = $result->fetch_assoc()){
+			 $rowdata[$i] = $row;
+			$i++;
+		  }
+			if ($i>0){
+				$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+			} else {
+				$res =  '[{"sup_id":"0"}]';	
+			}
+			echo $res;
+		}
+
+
+
+		
+		/* public function SaveProveedores($request_params)
 		{
 		  if($request_params['IdProveedor'] == ""){
 			$result = $this->model->SaveProveedores($request_params);	  
@@ -56,17 +81,13 @@
 		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
 		}
 
-		public function DeleteProveedores($request_params)
-		{
-		  $result = $this->model->DeleteProveedores($request_params);	  
-		  echo json_encode($result ,JSON_UNESCAPED_UNICODE);	
-		}
+
 
 		public function GetTipoProveedores($request_params)
 		{
 		  $result = $this->model->GetTipoProveedores($request_params);	  
 		  echo json_encode($result ,JSON_UNESCAPED_UNICODE);	
 		}
-
+ */
 	  
 	}
