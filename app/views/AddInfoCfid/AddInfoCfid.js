@@ -150,8 +150,11 @@ function putProjectsCfdi(dt) {
 /** +++++  Coloca los seriales en la tabla de seriales */
 function build_data_cfdi(dt) {
    // console.log(dt);
+   if(dt[0].pjt_id>0){
+
+   
    let tabla = $('#tblProjectCfdi').DataTable();
-   // $('.overlay_closer .title').html(`CFDI - ${strnme}`);
+   
    tabla.rows().remove().draw();
    $.each(dt, function (v, u) {
        tabla.row
@@ -182,6 +185,7 @@ function build_data_cfdi(dt) {
        $(`#E${u.pjt_id}`).parents('tr').attr('id', u.pjt_id);
    });
    ActiveIcons();
+   }
 }
 
 function  ActiveIcons(){

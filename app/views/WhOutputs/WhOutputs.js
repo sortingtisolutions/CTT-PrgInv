@@ -14,7 +14,7 @@ function inicial() {
     setTimeout(() => {
         //deep_loading('O');
         //console.log('UNO');
-        settingTable();
+        // settingTable();
         getProjects(0);
         $('.tblProyects').css({display: 'none'});
         
@@ -109,9 +109,11 @@ function settingTable() {
 function putProducts(dt) {
     let valstage='';
     let valicon='';
-    $('#tblProyects tbody').html('');
-    if (dt[0].pjt_id != '0') {
-        // var catId = dt[0].cat_id;
+    
+    if (dt[0].pjt_id > 0) {
+        settingTable();   // validar si es ta en buena posicion la funcion
+        $('#tblProyects tbody').html('');
+        // var catId = dt[0].cat_id;  
         $.each(dt, function (v, u) {
             // <i class="fa-solid fa-dolly"></i>
             if (u.pjt_status == 4)
