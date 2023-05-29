@@ -58,6 +58,7 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
+
 CREATE TABLE `ctt_suppliers` (
 	`sup_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID del proveedor',
 	`sup_business_name` VARCHAR(100) NULL DEFAULT '' COMMENT 'Nombre de la empresa' COLLATE 'utf8mb4_general_ci',

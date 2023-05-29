@@ -22,6 +22,7 @@ ADD
   COLUMN pjtpd_sequence INT NULL DEFAULT 1 COMMENT 'Secuencia de periodos'
 AFTER
   pjtdt_belongs;
+
 -- Actualizacion del 29 de ENERO 2022
   CREATE TABLE `cttapp_cire`.`ctt_comments` (
     `com_id` INT NOT NULL AUTO_INCREMENT COMMENT 'Id del comentario',
@@ -45,6 +46,7 @@ ADD
   COLUMN sld_date DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de registro del movimiento'
 AFTER
   sld_situation;
+  
 --AGREGADOS JORGE JUAREZ
 ALTER TABLE
   `ctt_series` CHANGE `ser_cost_import` `ser_cost_import` INT(11) NOT NULL COMMENT 'Costo individual de importacion';
