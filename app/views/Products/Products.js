@@ -637,6 +637,7 @@ function saveEditProduct() {
 }
 
 function resEdtProduct(dt) {
+    console.log('AQUI ACTUALIZA PRODUCTO');
     let prdId = dt.split('|')[0];
     let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
     let prdSk = $('#txtPrdSku').val();
@@ -1089,7 +1090,7 @@ function putSelectSerie(dt) {
 }
 
 function resEdtSeries(dt) {
-    console.log(dt);
+    console.log('AQUI ACTUALIZA TABLA SERIES',dt);
     let serId = $('#txtSerIdSerie').val();
     let serSr = $('#txtSerSerialNumber').val();
     let serDt = $('#txtSerDateRegistry').val();

@@ -82,11 +82,15 @@ class ProjectPlansModel extends Model
         $this->db->query($qry3);
 
         $qry4 = "INSERT INTO ctt_projects_mice (
-                    pjtvr_id, pjtvr_action, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_quantity_ant, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, 
-                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id
+                    pjtvr_id, pjtvr_action, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, 
+                    pjtvr_quantity_ant, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, 
+                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, 
+                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id
                 )
-                SELECT pjtvr_id, 'N' AS pjtvr_action, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_quantity AS pjtvr_quantity_ant, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, 
-                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id 
+                SELECT pjtvr_id, 'N' AS pjtvr_action, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, 
+                    pjtvr_quantity AS pjtvr_quantity_ant, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, 
+                    pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, 
+                    pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id 
                 FROM ctt_projects_version 
                 WHERE ver_id = $verId;  ";
         $this->db->query($qry4);
@@ -115,8 +119,7 @@ class ProjectPlansModel extends Model
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                WHERE pc.ver_id = $verId  ORDER BY pc.pjtvr_order asc;";
-                
+                WHERE pc.ver_id = $verId ORDER BY pc.pjtvr_order asc;";           
         return $this->db->query($qry5);
     } 
 
@@ -319,6 +322,19 @@ class ProjectPlansModel extends Model
 
         return $this->db->query($qry);
     } 
+
+/** ==== Valida existencia de dias de viaje ==================================  */
+    public function getExistTrip($params)
+    {
+        $pjtvrId    = $this->db->real_escape_string($params['pjtvrId']);
+        $prdId      = $this->db->real_escape_string($params['prdId']);
+
+        $qry = "SELECT COUNT(*) AS existrip 
+                FROM ctt_projects_content
+                WHERE pjtcn_days_trip<>0 AND pjt_id=$prdId";
+
+        return $this->db->query($qry);
+    }    
 
 
 /** ====== Actualiza cifras e la tabla temporal ==============================================  */
@@ -588,8 +604,7 @@ public function saveDateProject($params)
                 '$ver_id',
                 '$prd_id',
                 '$pjt_id'
-            );
-            ";
+            ); ";
         }
         $this->db->query($qry);
         $result = $this->db->insert_id;
@@ -746,7 +761,7 @@ public function saveDateProject($params)
     {
         $verId = $this->db->real_escape_string($params);
         $qry1 = "INSERT INTO ctt_projects_content (
-                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtvr_discount_insured, 
+                    pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, 
                     pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
                     pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id)
                 SELECT 
@@ -817,6 +832,7 @@ public function saveDateProject($params)
             $sersku  = $series->ser_sku; 
             $ser_reserve_count  = $series->ser_reserve_count;
 
+            // Agrega el registro en el detalle con los datos de la serie
             $qry3 = "INSERT INTO ctt_projects_detail (
                 pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id) 
                 VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
@@ -830,7 +846,7 @@ public function saveDateProject($params)
                             ser_situation = 'EA', ser_stage = 'R',
                             ser_reserve_count = $ser_reserve_count,
                             pjtdt_id = '$pjtdtId'
-                    WHERE ser_id = $serie;";
+                        WHERE ser_id = $serie;";
             $this->db->query($qry2);
 
         } else {
@@ -846,7 +862,6 @@ public function saveDateProject($params)
             $pjtdtId = $this->db->insert_id;
         }
         
-        // Agrega el registro en el detalle con los datos de la serie
             /*     if ( $serie != null){
             // Asigna el id del detalle en la serie correspondiente
             $qry4 = "UPDATE ctt_series 
@@ -859,8 +874,7 @@ public function saveDateProject($params)
         // Agrega los periodos desiganados a la serie 
         $qry5 = "INSERT INTO ctt_projects_periods 
                     (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs) 
-                VALUES 
-                    ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId')";
+                VALUES ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId')";
         $this->db->query($qry5);
 
         return  $pjtdtId;

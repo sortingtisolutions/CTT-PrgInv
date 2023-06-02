@@ -89,7 +89,7 @@ $html = '
         <div class="container">
             <div class="name-report">
                 <p>
-                    <span class="number">Nombre de proyecto: '. $items[0]['pjt_name'] . '  #' . $items[0]['ver_code'] .'</span>
+                    <span class="number">Nombre de proyecto: '. $items[0]['pjt_name'] . '  #' . $items[0]['pjt_number'] .'</span>
                 <br>
                     <span class="date">'.'</span>
                 </p>

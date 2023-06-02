@@ -1,4 +1,5 @@
 let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral, glbpjtid;
+let gblsku;
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
@@ -264,6 +265,7 @@ function eventsAction() {
         .unbind('click')
         .on('click', function () {
             let verId = $('.version_current').attr('data-version');
+            let pjtId = $('.version_current').attr('data-project');
             printBudget(verId);
         });
 
@@ -414,6 +416,16 @@ function getProductsRelated(id, tp, vr) {
     var selector = putProductsRelated;
     fillField(pagina, par, tipo, selector);
 }
+
+/**  Obtiene el listado de projectos del paquete  */
+function getProductsRelatedPk(id, tp, vr) {
+    var pagina = 'ProjectPlans/listProductsRelated';
+    var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}"}]`;
+    var tipo = 'json';
+    var selector = putProductsRelatedPk;
+    fillField(pagina, par, tipo, selector);
+}
+
 /**  Obtiene el listado de projectos del producto  */
 function getStockProjects(prdId) {
     var pagina = 'ProjectDetails/stockProducts';
@@ -446,12 +458,38 @@ function getComments(pjtId) {
     var selector = putComments;
     fillField(pagina, par, tipo, selector);
 }
+
+/** Obtiene el listado de los comentarios del proyecto */
+function getChangeProd(catsub) {
+    var pagina = 'ProjectPlans/listChangeProd';
+    var par = `[{"catsub":"${catsub}"}]`;
+    var tipo = 'json';
+    var selector = putChangeProd;
+    fillField(pagina, par, tipo, selector);
+}
+
+function getNewProdChg(skuold, skunew) {
+    var pagina = 'ProjectPlans/getNewProdChg';
+    var par = `[{"skuold":"${skuold}","skunew":"${skunew}"}]`;
+    var tipo = 'json';
+    var selector = putNewProdChg;
+    fillField(pagina, par, tipo, selector);
+}
+
 /** Obtiene el conteo productos para subarrendo */
 function getCounterPending(pjtvrId, prdId) {
     var pagina = 'ProjectDetails/countPending';
     var par = `[{"pjtvrId":"${pjtvrId}","prdId":"${prdId}"}]`;
     var tipo = 'json';
     var selector = putCounterPending;
+    fillField(pagina, par, tipo, selector);
+}
+
+function getExistTrip(pjtvrId, prdId) {
+    var pagina = 'ProjectPlans/getExistTrip';
+    var par = `[{"pjtvrId":"${pjtvrId}","prdId":"${prdId}"}]`;
+    var tipo = 'json';
+    var selector = putExistTrip;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -508,14 +546,17 @@ function putCustomersOwner(dt) {
     relc = dt;
 }
 
+function putExistTrip(dt) {
+    theredaytrip = dt[0].existrip;
+    console.log('putExistTrip',theredaytrip)
+}
+
 /**  Llena el listado de descuentos */
 function putDiscounts(dt) {
     $('#selDiscount').html('');
     $('#selDiscInsr').html('');
     $.each(dt, function (v, u) {
-        let H = `<option value="${u.dis_discount}">${
-            u.dis_discount * 100
-        }%</option>`;
+        let H = `<option value="${u.dis_discount}">${u.dis_discount * 100}%</option>`;
         $('#selDiscount').append(H);
         $('#selDiscInsr').append(H);
     });
@@ -709,6 +750,7 @@ function actionSelProject(obj) {
 
         fillProducer(pj.cus_parent);
         getVersion(pj.pjt_id);
+        getExistTrip('1', pj.pjt_id);
         // getCalendarPeriods(pj);
 
         $('.version_current').attr('data-project', pj.pjt_id);
@@ -939,11 +981,13 @@ function putProducts(dt) {
 }
 
 function fillBudget(pr, vr, ix) {
+    // console.log(ix);
     let nRows = $(`#listProductsTable table tbody tr`).length;
     loadBudget(ix, nRows);
 }
 
 function loadBudget(inx, bdgId) {
+    // console.log('loadBudget',prod[inx], 'INX', inx);
     let insurance = prod[inx].prd_insured == 0 ? 0 : 0.1;
     let produ = prod[inx].prd_name.replace(/\"/g, '°').replace(/\,/g, '^').replace(/\'/g, '¿');
     let subct = prod[inx].sbc_name.replace(/\"/g, '°').replace(/\,/g, '^');
@@ -953,6 +997,7 @@ function loadBudget(inx, bdgId) {
         .substring(2, 5);
     let pjtId = $('.version_current').attr('data-project');
     let verId = $('.version_current').attr('data-version');
+    let order = 0;
 
     let par = `{
         "pjtvr_id"                  : "0",
@@ -974,6 +1019,7 @@ function loadBudget(inx, bdgId) {
         "pjt_id"                    : "${pjtId}",
         "ver_id"                    : "${verId}",
         "pjtvr_stock"               : "${prod[inx].stock}",
+        "pjtvr_order"               : "${order}",
         "sbc_name"                  : "${subct}",
         "pjtvr_section"             : "${section}",
         "daybasereal"               : "${days}"
@@ -1026,7 +1072,7 @@ function registeredProduct(id, section) {  // parametro de section agregado por 
 }
 
 function putBudgets(dt) {
-    console.log('putBudgets-',dt)
+    // console.log('putBudgets-',dt)
     budg = dt;
     let days = getDaysPeriod();
 
@@ -1072,6 +1118,7 @@ function reOrdering() {
     $('tbody.sections_products')
         .find('tr.budgetRow')
         .each(function (index) {
+            //console.log('reOrdering', index)
             if (index >= 0) {
                 $(this)
                     .find('i.move_item')
@@ -1393,6 +1440,14 @@ function activeInputSelector() {
                     case 'event_StokProduct':
                         stockProduct(bdgId);
                         break;
+                    case 'event_ChangePakt':
+                        if(type!='K'){
+                            alert('ESTE NO ES UN PAQUETE');
+                        }else{
+                            // infoPackage(bdgId, type);
+                            // console.log('ESTE SI ES UN PAQUETE');
+                        }
+                        break;
                     default:
                 }
             }
@@ -1402,13 +1457,21 @@ function activeInputSelector() {
                         killProduct(bdgId);
                         break;
                     case 'event_InfoProduct':
-                        /* infoProduct(bdgId, type);
-                        break; */
+                        infoProduct(bdgId, type);
+                        break;
                     case 'event_PerdProduct':
                         /* periodProduct(bdgId);
                         break; */
                     case 'event_StokProduct':
                         stockProduct(bdgId);
+                        break;
+                    case 'event_ChangePakt':
+                        if(type!='K'){
+                            alert('ESTE NO ES UN PAQUETE');
+                        }else{
+                            infoPackage(bdgId, type);
+                            // console.log('ESTE SI ES UN PAQUETE');
+                        }
                         break;
                     default:
                 }
@@ -1418,6 +1481,7 @@ function activeInputSelector() {
 
 // Elimina el registro de la cotizacion
 function killProduct(bdgId) {
+    // console.log('INICIA KILL');
     let H = `<div class="emergent__warning">
     <p>¿Realmente requieres de borrar este producto?</p>
     <button id="killYes" class="btn btn-primary">Si</button>  
@@ -1443,14 +1507,7 @@ function killProduct(bdgId) {
                     showButtonVersion('S');
                     // showButtonToPrint('H');
                     // showButtonToSave('H');
-                    updateMice(
-                        pjtId,
-                        pid,
-                        'pjtvr_quantity_ant',
-                        0,
-                        section,
-                        'D'
-                    );
+                    updateMice( pjtId, pid, 'pjtvr_quantity_ant', 0, section,  'D' );
                     $('#' + bdgId).remove();
                 });
             }
@@ -1466,7 +1523,7 @@ function infoProduct(bdgId, type) {
     $('.invoice__modal-general .modal__body').append(template.html());
     // template.show();
     $('.invoice__modal-general .modal__header-concept').html(
-        'Productos Relacionados'
+        'Informacion de  los Productos Relacionados'
     );
     closeModals();
     setTimeout(() => {
@@ -1474,18 +1531,37 @@ function infoProduct(bdgId, type) {
         getProductsRelated(bdgId.substring(3, 20), type, verId);
     }, 500);
 }
+
+function infoPackage(bdgId, type) {
+    setTimeout(() => {
+        let verId = $('.version_current').data('version');
+        // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
+        getProductsRelatedPk(bdgId.substring(3, 20), type, verId);
+    }, 500);
+}
+
+function infoDetallePkt(lcatsub) {
+    setTimeout(() => {
+        // console.log('infoDetallePkt-'lcatsub);
+        getChangeProd(lcatsub);
+    }, 500);
+    
+}
+
 // Muestra la información de productos relacionados
 function putProductsRelated(dt) {
+    console.log('putProductsRelated',dt);
     $('.invoice__modal-general table tbody').html('');
     $.each(dt, function (v, u) {
         let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
         let prodSku =
             u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
         let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
+        let skushort=u.pjtdt_prod_sku.substring(0,7);
         if (u.prd_level != 'K') {
             let H = `
             <tr ${levelProduct}>
-                <td>${u.prd_sku}</td>
+                <td>${skushort}</td>
                 <td><span class="${pending}">${u.pjtdt_prod_sku.toUpperCase()}</span></td>
                 <td>${u.prd_level}</td>
                 <td>${u.prd_name}</td>
@@ -1502,7 +1578,7 @@ function putProductsRelated(dt) {
     });
 }
 function putProductsRelatedSons(dt, pr) {
-    let H = '';
+    /* let H = '';
     $.each(dt, function (v, u) {
         if (u.prd_parent == pr) {
             let levelProduct =
@@ -1521,7 +1597,187 @@ function putProductsRelatedSons(dt, pr) {
             `;
         }
     });
-    return H;
+    return H; */
+}
+
+function settingChangeSerie(){
+    // console.log('settingChangeSerie');
+    $('#ChangeSerieModal').removeClass('overlay_hide');
+
+    $('#tblChangeSerie').DataTable({
+        bDestroy: true,
+        order: [[1, 'asc']],
+        lengthMenu: [
+            [50, 100, -1],
+            [50, 100, 'Todos'],
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 290px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'serchange', class: 'edit'},
+            {data: 'serdetsku', class: 'sku left'},
+            {data: 'serchoose', class: 'sku'},
+            {data: 'serdetname', class: 'supply left'},
+            {data: 'serdetstag', class: 'sku'},
+        ],
+    });
+
+    $('#ChangeSerieModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            // console.log('Click Close 1');
+           $('.overlay_background').addClass('overlay_hide');
+           $('.overlay_closer .title').html('');
+           $('#tblChangeSerie').DataTable().destroy;
+        });
+}
+
+function putProductsRelatedPk(dt){
+ 
+    // console.log('putProductsRelatedPk', dt);
+    settingChangeSerie();
+    let tabla = $('#tblChangeSerie').DataTable();
+    $('.overlay_closer .title').html(`PRODUCTOS A CAMBIAR : ${dt[0].prd_name} - ${dt[0].pjtdt_prod_sku}`);
+    tabla.rows().remove().draw();
+    $.each(dt, function (v, u) {
+        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+        let cat=u.prd_sku.substring(0,2);
+        let catsub=u.pjtdt_prod_sku.substring(0,4);
+        let locsku=u.pjtdt_prod_sku.substring(0,7);
+        // console.log('CATSUB-',catsub);
+        let valicon='';
+
+        if(catsub=='010N' || catsub=='010S' || catsub=='010P'){
+        valicon=`<i class='fas fa-edit changePk' data_cat="${catsub}" data_sku="${locsku}" ></i>`
+        tabla.row
+            .add({
+                serchange: u.prd_id,
+                serdetsku: locsku,
+                serchoose: u.prd_level,
+                serdetname: u.prd_name,
+                serdetstag: valicon,
+            })
+            .draw();
+            // $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub, 'data_sku', gblsku);
+        }else{
+           tabla.row
+            .add({
+                serchange: u.prd_id,
+                serdetsku: u.prd_sku,
+                serchoose: u.prd_level,
+                serdetname: u.prd_name,
+                serdetstag: valicon,
+            })
+            .draw();
+            // $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub, 'data_sku', gblsku);
+        } 
+    });
+
+  /*   $(`.invoice__modal-general table`).sticky({
+        top: 'thead tr:first-child',
+    }); */
+    ActiveChangePKT();
+
+}
+
+function ActiveChangePKT(){
+    $('.changePk')
+    .unbind('click')
+    .on('click', function () {
+        let id = $(this).attr('data_cat');
+        gblsku = $(this).attr('data_sku');
+        let lcatsub=id;
+        // console.log('THIS-', lcatsub, gblsku);
+        // settingProdChg();
+        $('#SerieData').removeClass('overlay_hide');
+
+            $('#SerieData .btn_close')
+                .unbind('click')
+                .on('click', function () {
+                    // console.log('Click Close 2');
+                    $('#SerieData').addClass('overlay_hide');
+                    $('#tblDataChg').DataTable().destroy;
+                });
+
+        infoDetallePkt(lcatsub);
+        // alert('Seleccion de Producto a cambiar ' + lcatsub + ' disponible');
+    });
+}
+
+function settingProdChg(){
+    $('#SerieData').removeClass('overlay_hide');
+    $('#tblDataChg').DataTable({
+        order: [[1, 'asc']],
+        dom: 'Blfrtip',
+        bDestroy: true,
+        lengthMenu: [
+            [50, 100, -1],
+            [50, 100, 'Todos'],
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 290px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'sermodif', class: 'edit'},
+            {data: 'seriesku', class: 'sku left'},
+            {data: 'sername', class: 'supply left'},
+        ],
+    });
+}
+
+function putChangeProd(dt) {
+    // console.log('putChangeProd',dt);
+    settingProdChg();
+    
+    let tablaChg = $('#tblDataChg').DataTable();
+    $('#SerieData .overlay_closer .title').html(`LISTA DE PRODUCTOS DISPONIBLES :`);
+    tablaChg.rows().remove().draw();
+    if (dt[0].prd_id > 0) {
+        $.each(dt, function (v, u) {
+            // console.log(u);
+            tablaChg.row
+             .add({
+                 sermodif: `<i class="fas fa-edit toChange" id="${u.prd_id}" sku_original="${u.prd_sku}"></i>`,
+                 seriesku: u.prd_sku,
+                 sername: u.prd_name,
+             })
+             .draw();
+        //  $(`#${u.pjt_id}`).parents('tr').attr('id',u.pjt_id);
+        });
+        ApplyChangePKT();
+    }
+}
+
+
+function ApplyChangePKT(){
+    $('.toChange')
+    .unbind('click')
+    .on('click', function () {
+        // console.log($(this));
+        let skuold=gblsku;
+        let skunew = $(this).attr('sku_original');
+        // console.log('Val--',skuold, skunew);
+        getNewProdChg(skuold, skunew);
+
+    });
+}
+
+function putNewProdChg(dt) {
+    console.log('putNewProdChg',dt);
+    // $('#ChangeSerieModal .overlay_background').addClass('overlay_hide');
+    // $('#ChangeSerieModal tblChangeSerie').DataTable().destroy;
+    $('.overlay_background').addClass('overlay_hide');
+    $('.overlay_closer .title').html('');
+    $('#tblChangeSerie').DataTable().destroy;
 }
 
 // Muestra el inventario de productos
@@ -1532,9 +1788,8 @@ function stockProduct(bdgId, type) {
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#stockProductTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
-    $('.invoice__modal-general .modal__header-concept').html(
-        'inventarios del producto'
-    );
+    $('.invoice__modal-general .modal__header-concept')
+        .html('inventarios del producto');
     closeModals();
 }
 function putStockProjects(dt) {
@@ -1578,9 +1833,8 @@ function editProject(pjtId) {
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#dataProjectTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
-    $('.invoice__modal-general .modal__header-concept').html(
-        'Edición de datos del proyecto'
-    );
+    $('.invoice__modal-general .modal__header-concept')
+        .html('Edición de datos del proyecto');
     closeModals();
     fillContent();
     fillData(inx);
@@ -1825,7 +2079,7 @@ function newProject() {
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#dataProjectTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
-    $('.invoice__modal-general .modal__header-concept').html('Nuevo proyecto');
+    $('.invoice__modal-general .modal__header-concept').html('Captura de datos para un nuevo proyecto');
     $('#saveProject')
         .html('Guardar proyecto')
         .removeAttr('class')
@@ -1976,11 +2230,17 @@ function printBudget(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-
-    window.open(
-        `${url}app/views/ProjectDetails/ProjectDetailsReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    );
+    if (theredaytrip != 0){ // agregado jjr cambiar impresion c-s
+        window.open(
+            `${url}app/views/ProjectDetails/ProjectDetailsReport-c-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+            '_blank'
+        );
+    } else{
+        window.open(
+            `${url}app/views/ProjectPlans/ProjectPlansReport-s-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+            '_blank'
+        );   
+    }
 }
 
 function putsaveBudget(dt) {
@@ -1993,6 +2253,7 @@ function putsaveBudget(dt) {
     purgeInterfase();
     updateActiveVersion(verId);
     updateMasterVersion(verId);
+    getExistTrip(verId,pjtId);
     modalLoading('H');
 }
 
@@ -2005,8 +2266,9 @@ function putSaveBudgetAs(dt) {
     let pjtId = dt.split('|')[1];
 
     interfase = 'MST';
-    console.log('putSaveBudgetAs-',glbpjtid);
+    // console.log('putSaveBudgetAs-',glbpjtid);
     getVersion(glbpjtid);
+    getExistTrip(verId,pjtId);
     modalLoading('H');
 }
 
@@ -2492,7 +2754,7 @@ function getDataMice() {
  * @param {*} ac Accion a realizar
  */
 function updateMice(pj, pd, fl, dt, sc, ac) {
-    // console.log(pj, pd, fl, dt, sc, ac);
+    // console.log('UPDATEMICE', pj, pd, fl, dt, sc, ac);
 
     $(`#SC${sc}`).attr('data-switch', '0');
     var par = `[{

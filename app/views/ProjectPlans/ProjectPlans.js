@@ -1,5 +1,6 @@
 let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral, glbpjtid;
 let gblsku;
+let theredaytrip=0;
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
@@ -227,7 +228,7 @@ function eventsAction() {
 
                 let verNext = 'R' + refil(vr + 1, 4);
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
-                let lastmov = moment().format("YYYY-MM-DD HH:mm:ss A");  //agregado por jjr
+                let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  //agregado por jjr
                 //console.log('FECHA- ', lastmov);
                 modalLoading('S');
                 let par = `
@@ -482,6 +483,14 @@ function getCounterPending(pjtvrId, prdId) {
     fillField(pagina, par, tipo, selector);
 }
 
+function getExistTrip(pjtvrId, prdId) {
+    var pagina = 'ProjectPlans/getExistTrip';
+    var par = `[{"pjtvrId":"${pjtvrId}","prdId":"${prdId}"}]`;
+    var tipo = 'json';
+    var selector = putExistTrip;
+    fillField(pagina, par, tipo, selector);
+}
+
 /** LLENA DE DATOS */
 /**  Llena el listado de proyectos */
 function putProjects(dt) {
@@ -534,6 +543,11 @@ function putCustomers(dt) {
 /**  Llena el listado de prductores */
 function putCustomersOwner(dt) {
     relc = dt;
+}
+
+function putExistTrip(dt) {
+    theredaytrip = dt[0].existrip;
+    console.log('putExistTrip',theredaytrip)
 }
 
 /**  Llena el listado de descuentos */
@@ -731,6 +745,7 @@ function actionSelProject(obj) {
 
         fillProducer(pj.cus_parent);
         getVersion(pj.pjt_id);
+        getExistTrip('1', pj.pjt_id);
         // getCalendarPeriods(pj);
 
         $('.version_current').attr('data-project', pj.pjt_id);
@@ -1634,7 +1649,7 @@ function putProductsRelatedPk(dt){
         // console.log('CATSUB-',catsub);
         let valicon='';
 
-        if(catsub=='010N' || catsub=='010S' ){
+        if(catsub=='010N' || catsub=='010S' || catsub=='010P'){
         valicon=`<i class='fas fa-edit changePk' data_cat="${catsub}" data_sku="${locsku}" ></i>`
         tabla.row
             .add({
@@ -2215,10 +2230,17 @@ function printBudget(verId) {
     let n = user[2];
     let h = localStorage.getItem('host');
     console.log('Print',v,u,n,h);
-    window.open(
-        `${url}app/views/ProjectPlans/ProjectPlansReport-c-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    );
+    if (theredaytrip != 0){ // agregado jjr cambiar impresion c-s
+        window.open(
+            `${url}app/views/ProjectPlans/ProjectPlansReport-c-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+            '_blank'
+        );
+    } else{
+        window.open(
+            `${url}app/views/ProjectPlans/ProjectPlansReport-s-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+            '_blank'
+        );
+    }
 }
 
 function putsaveBudget(dt) {
@@ -2231,6 +2253,7 @@ function putsaveBudget(dt) {
     purgeInterfase();
     updateActiveVersion(verId);
     updateMasterVersion(verId);
+    getExistTrip(verId,pjtId);
     modalLoading('H');
 }
 
@@ -2238,13 +2261,14 @@ function putsaveBudget(dt) {
 // Guarda la cotización seleccionada
 // *************************************************
 function putSaveBudgetAs(dt) {
-    console.log(dt);
+    // console.log(dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
     
     interfase = 'MST';
-    console.log('putSaveBudgetAs-',glbpjtid);
+    // console.log('putSaveBudgetAs-',glbpjtid);
     getVersion(glbpjtid);
+    getExistTrip(verId,pjtId);
     modalLoading('H');
 }
 
@@ -2565,14 +2589,7 @@ function getDataMice() {
             .children('.input_invoice')
             .attr('data-real', quantity_act);
         if (quantity_act != quantity_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_quantity',
-                quantity_act,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_quantity', quantity_act, section, 'U');
         }
 
         let daysBase_act = parseInt(
@@ -2589,14 +2606,7 @@ function getDataMice() {
             .children('.input_invoice')
             .attr('data-real', daysBase_act);
         if (daysBase_act != daysBase_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_days_base',
-                daysBase_act,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_days_base', daysBase_act, section, 'U' );
         }
 
         let daysCost_act = parseInt(
@@ -2613,14 +2623,7 @@ function getDataMice() {
             .children('.input_invoice')
             .attr('data-real', daysCost_act);
         if (daysCost_act != daysCost_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_days_cost',
-                daysCost_act,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_days_cost', daysCost_act, section, 'U' );
         }
 
         let discountBase_act = parseFloat(
@@ -2631,14 +2634,7 @@ function getDataMice() {
         );
         $(this).children('td.discountBase').attr('data-real', discountBase_act);
         if (discountBase_act != discountBase_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_discount_base',
-                discountBase_act / 100,
-                section,
-                'U'
-            );
+            updateMice( pjtId, pid, 'pjtvr_discount_base', discountBase_act / 100, section, 'U');
         }
         let discountInsu_act = parseFloat(
             $(this).children('td.discountInsu').text()
@@ -2648,38 +2644,24 @@ function getDataMice() {
         );
         $(this).children('td.discountInsu').attr('data-real', discountInsu_act);
         if (discountInsu_act != discountInsu_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_discount_insured',
-                discountInsu_act / 100,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_discount_insured', discountInsu_act / 100, section, 'U');
         }
 
         let daysTrip_act = parseInt(
             $(this).children('td.daysTrip').children('.input_invoice').val()
         );
+        if (daysTrip_act!=0){  // agregado jjr
+            console.log('Hay dias de Viaje');
+            theredaytrip=1;
+        }
         let daysTrip_ant = parseInt(
-            $(this)
-                .children('td.daysTrip')
-                .children('.input_invoice')
-                .attr('data-real')
+            $(this).children('td.daysTrip').children('.input_invoice').attr('data-real')
         );
         $(this)
-            .children('td.daysTrip')
-            .children('.input_invoice')
-            .attr('data-real', daysTrip_act);
+            .children('td.daysTrip').children('.input_invoice').attr('data-real', daysTrip_act);
         if (daysTrip_act != daysTrip_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_days_trip',
-                daysTrip_act,
-                section,
-                'U'
-            );
+            updateMice( pjtId, pid, 'pjtvr_days_trip', daysTrip_act, section, 'U');
+            
         }
 
         let discountTrip_act = parseFloat(
@@ -2690,38 +2672,19 @@ function getDataMice() {
         );
         $(this).children('td.discountTrip').attr('data-real', discountTrip_act);
         if (discountTrip_act != discountTrip_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_discount_trip',
-                discountTrip_act / 100,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_discount_trip', discountTrip_act / 100, section, 'U');
         }
 
         let daysTest_act = parseInt(
             $(this).children('td.daysTest').children('.input_invoice').val()
         );
         let daysTest_ant = parseInt(
-            $(this)
-                .children('td.daysTest')
-                .children('.input_invoice')
-                .attr('data-real')
+            $(this).children('td.daysTest').children('.input_invoice').attr('data-real')
         );
         $(this)
-            .children('td.daysTest')
-            .children('.input_invoice')
-            .attr('data-real', daysTest_act);
+            .children('td.daysTest').children('.input_invoice').attr('data-real', daysTest_act);
         if (daysTest_act != daysTest_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_days_test',
-                daysTest_act,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_days_test', daysTest_act, section, 'U');
         }
 
         let discountTest_act = parseFloat(
@@ -2733,14 +2696,7 @@ function getDataMice() {
 
         $(this).children('td.discountTest').attr('data-real', discountTest_act);
         if (discountTest_act != discountTest_ant) {
-            updateMice(
-                pjtId,
-                pid,
-                'pjtvr_discount_test',
-                discountTest_act / 100,
-                section,
-                'U'
-            );
+            updateMice(pjtId, pid, 'pjtvr_discount_test', discountTest_act / 100, section, 'U');
         }
 
         let ordering = parseInt($(`#SC${section}`).data('switch'));

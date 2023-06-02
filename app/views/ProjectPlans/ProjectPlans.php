@@ -385,6 +385,7 @@
             <tbody></tbody>
         </table>
      </div>
+     
     <div id="stockProductTemplate" class="table_hidden box_template">
         <table class="table_template" style = "min-width:1150px; width:auto;">
             <thead>

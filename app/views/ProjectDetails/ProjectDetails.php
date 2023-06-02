@@ -370,7 +370,7 @@
 <!-- Modal General  -->
     <div class="invoice__modal-general invoice-border modalTable">
         <div class="modal__header invoice-border">
-            <div class="modal__header-concept"></div>
+            <div class="modal__header-concept" style="font-weight: 700"></div>
             <i class="far fa-window-close closeModal"></i>
         </div>
         <div class="modal__body"></div>
@@ -395,15 +395,15 @@
 
 <!-- Plantilla de tablas modales -->
     <div id="infoProductTemplate" class="table_hidden box_template">
-    <table class="table_template" style = "width:1590px;" >
+    <table class="table_template" style = "width:1390px;" >
             <thead>
                 <tr>
                     <th style = "width: 150px">SKU</th>
                     <th style = "width:  90px"></th>
                     <th style = "width:  50px">Tipo</th>
                     <th style = "width: 400px;">Nombre del producto</th>
-                    <th style = "width: 600px;">Comentarios</th>
-                    <th style = "width: 300px">Catálogo</th>
+                    <th style = "width: 200px">Catálogo</th>
+                    <th style = "width: 500px;">Comentarios</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -413,8 +413,8 @@
         <table class="table_template" style = "min-width:1150px; width:auto;">
             <thead>
                 <tr>
-                    <th style = "width: 80px"></th>
-                    <th style = "width:150px">SKU</th>
+                    <th style = "width: 20px"></th>
+                    <th style = "width: 80px">SKU</th>
                     <th style = "width:150px">Serie</th>
                     <th style = "width: 50px">Status</th>
                     <th style = "min-width:500px; width: auto">Proyecto</th>
@@ -632,10 +632,50 @@
 
 <!-- <div class="cuadroMovible"></div> -->
 
+<div class="overlay_background overlay_hide" id="ChangeSerieModal" style="width: 80%">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+           <!--  <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Cambio</button>
+            <div style="height:15px;"></div>  -->
+            <table class="display compact nowrap"  id="tblChangeSerie" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th style="width:  10px"></th>
+                        <th style="width:  80px">SKU</th>
+                        <th style="width:  40px">Tipo</th>
+                        <th style="width:  auto">Descripcion Producto</th>
+                        <th style="width:  40px">Cambio por:</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+<!-- End Ventana modal SERIES -->
+
+<!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
+<div class="overlay_background overlay_hide" id="SerieData" style="width: 60%; left:25%;">
+        <div class="overlay_modal">
+            <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+<!--             <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Cambio</button>
+            <div style="height:15px;"></div>  -->
+            <table class="display compact nowrap"  id="tblDataChg" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th style="width:  15px"></th>
+                        <th style="width:  80px">SKU</th>
+                        <th style="width: 180px">Descripcion Producto</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+<!-- End Ventana modal SERIES -->
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS  . 'ProjectDetails/ProjectDetails.js?v=1.0.0.0' ?>"></script>
-
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

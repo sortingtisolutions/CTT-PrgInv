@@ -148,7 +148,13 @@ function setting_table_AsignedProd() {
 
 //AGREGA LOS DATOS GENERALES DEL PROYECTO
 function putProjects(dt) {
-       
+    let user = Cookies.get('user').split('|');
+    let u = user[0];
+    let n = user[2];
+    let usrname=n.replaceAll('+',' ');
+
+    // console.log('Datas-',n, usrname);
+
     $('#txtProjectName').val(dt[0].pjt_name);
     $('#txtProjectNum').val(dt[0].pjt_number);
     $('#txtTipoProject').val(dt[0].pjttp_name);
@@ -156,7 +162,7 @@ function putProjects(dt) {
     $('#txtEndDate').val(dt[0].pjt_date_end);
     $('#txtLocation').val(dt[0].pjt_location);
     $('#txtCustomer').val(dt[0].cus_name);
-    $('#txtAnalyst').val(dt[0].analyst);
+    $('#txtAnalyst').val(usrname);
     $('#txtFreelance').val(dt[0].freelance);
 }
 
@@ -167,10 +173,10 @@ function putDetailsProds(dt) {
         // let tabla = $('#tblAsignedProd').DataTable();
         $('#tblAsignedProd tbody').html('');
         $.each(dt, function (v, u){
-        if (u.pjt_status == 4)
-            { valstage='color:#008000'; }
+            if (u.pjt_status == 4)
+                { valstage='color:#008000'; }
             else if (u.pjt_status == 7)
-             { valstage='color:#FFA500'; }
+                { valstage='color:#FFA500'; }
             else
             { valstage='color:#FFA500'; }
             //console.log(valstage);

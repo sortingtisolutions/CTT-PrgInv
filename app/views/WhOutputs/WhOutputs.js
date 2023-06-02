@@ -107,25 +107,24 @@ function settingTable() {
 
 /** +++++  coloca los productos en la tabla */
 function putProducts(dt) {
+    console.log(dt);
     let valstage='';
     let valicon='';
     
-    if (dt[0].pjt_id > 0) {
-        settingTable();   // validar si es ta en buena posicion la funcion
+    if (dt[0].pjt_id > 0) {        
         $('#tblProyects tbody').html('');
-        // var catId = dt[0].cat_id;  
         $.each(dt, function (v, u) {
             // <i class="fa-solid fa-dolly"></i>
             if (u.pjt_status == 4)
-            { valstage='color:#008000';
-              valicon='fa fa-cog toWork'; }
+                { valstage='color:#008000';
+                valicon='fa fa-cog toWork'; }
             else if (u.pjt_status == 7)
-             { valstage='color:#FFA500';
-             valicon='fa fa-solid fa-dolly detail'; }
+                { valstage='color:#FFA500';
+                valicon='fa fa-solid fa-dolly detail'; }
             else
-            { valstage='color:#CC0000';
-            valicon='fa fa-solid fa-dolly detail'; }
-            console.log(valstage);
+                { valstage='color:#CC0000';
+                valicon='fa fa-solid fa-dolly detail'; }
+            // console.log(valstage);
             //let valstage = u.pjt_status == 4 ? 'color:#008000' : 'color:#CC0000';
             // <td class="sku"><i class='fa fa-solid fa-dolly detail' title="Edita detalles del proyecto"></i><i class='fa fa-cog toWork'></i></td>
             var H = `
@@ -141,13 +140,12 @@ function putProducts(dt) {
                 </tr>`;
             $('#tblProyects tbody').append(H);
         });
-        // settingTable();
+        settingTable();
         activeIcons();
     } else {
         settingTable();
     }
 }
-
 
 /** +++++  Activa los iconos */
 function activeIcons() {
@@ -173,7 +171,6 @@ function activeIcons() {
 
             window.location = 'WhOutputContent';
         });
-
 }
 
 function confirm_to_work(pjtid) {
@@ -184,7 +181,6 @@ function confirm_to_work(pjtid) {
         let Id = $('#txtIdProductPack').val();
         let tabla = $('#tblProducts').DataTable();
         $('#starToWork').modal('hide');
-
         //console.log('Datos',pjtid,Id);
         modalLoading('S');
 
@@ -216,42 +212,3 @@ function modalLoading(acc) {
     }
 }
 
-
-/*
-function putSelectProject(dt) {
-    cleanProductsFields();
-    console.log(dt);
-    let prdId = dt[0].pjtcn_id;
-    let prdName = dt[0].pjtcn_prod_sku;
-    let prdSku = dt[0].pjtcn_prod_name;
-    let prdModel = dt[0].pjtcn_quantity;
-    let prdPrice = dt[0].pjtcn_prod_level;
-    let prdEnglishName = dt[0].pjt_date_project;
-    let prdCodeProvider = dt[0].pjt_location;
-    let prdNameProvider = dt[0].pjt_status;
-    let prdComments = dt[0].pjt_id;
-
-    $('#txtPrdId').val(prdId);
-    $('#txtPrdName').val(prdName);
-    $('#txtPrdSku').val(prdSku);
-    $('#txtPrdModel').val(prdModel);
-    $('#txtPrdPrice').val(prdPrice);
-    $('#txtPrdEnglishName').val(prdEnglishName);
-    $('#txtPrdCodeProvider').val(prdCodeProvider);
-    $('#txtPrdNameProvider').val(prdNameProvider);
-    $('#txtPrdComments').val(prdComments);
-
-    $('#btn_save')
-        .unbind('click')
-        .on('click', function () {
-            saveEditProduct();
-        });
-
-    function cleanProductsFields() {
-        $('.textbox').val('');
-        $('td.data select').val(0);
-        $('td.data .checkbox').html('<i class="far fa-square" data_val="0"></i>');
-        $('.required').removeClass('fail').parent().children('.fail_note').addClass('hide');
-    }
-}
-*/

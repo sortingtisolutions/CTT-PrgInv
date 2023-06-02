@@ -36,13 +36,13 @@ class ProjectDetailsController extends Controller
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"pjt_id":"0"}]';	
+            $res =  '[{"pjt_id":"0"}]';
         }
         echo $res;
-    } 
-    
+    }
+
 // Lista los proyectos padre
     public function listProjectsParents($request_params)
     {
@@ -54,14 +54,14 @@ class ProjectDetailsController extends Controller
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"pjt_id":"0"}]';	
+            $res =  '[{"pjt_id":"0"}]';
         }
         echo $res;
-    } 
+    }
 
-    
+
 // Lista los versiones
     public function listVersion($request_params)
     {
@@ -73,12 +73,12 @@ class ProjectDetailsController extends Controller
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"ver_id":"0"}]';	
+            $res =  '[{"ver_id":"0"}]';
         }
         echo $res;
-    } 
+    }
 
 // Lista el contendio del proyecto
     public function listBudgets($request_params)
@@ -91,12 +91,12 @@ class ProjectDetailsController extends Controller
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"pjtvr_id":"0"}]';	
+            $res =  '[{"pjtvr_id":"0"}]';
         }
         echo $res;
-    } 
+    }
 
 // Lista de clientes
     public function listCustomers($request_params)
@@ -109,12 +109,12 @@ class ProjectDetailsController extends Controller
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"cus_id":"0"}]';	
+            $res =  '[{"cus_id":"0"}]';
         }
         echo $res;
-    } 
+    }
 
 // Lista de productores
     public function listCustomersOwn($request_params)
@@ -127,12 +127,12 @@ class ProjectDetailsController extends Controller
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"cus_id":"0"}]';	
+            $res =  '[{"cus_id":"0"}]';
         }
         echo $res;
-    } 
+    }
 
 
 // Lista los descuentos
@@ -146,14 +146,14 @@ class ProjectDetailsController extends Controller
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"dis_id":"0"}]';	
+            $res =  '[{"dis_id":"0"}]';
         }
         echo $res;
-    } 
+    }
 
-    
+
 // Lista los tipos de proyectos
     public function listProjectsType($request_params)
     {
@@ -165,33 +165,33 @@ class ProjectDetailsController extends Controller
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"pjt_id":"0"}]';	
+            $res =  '[{"pjt_id":"0"}]';
         }
         echo $res;
 
-    } 
+    }
 
 /** ==== Lista los tipos de llamados =========================================================  */
-public function listProjectsTypeCalled($request_params)
-{
-    $params =  $this->session->get('user');
-    $result = $this->model->listProjectsTypeCalled($request_params);
-    $i = 0;
-    while($row = $result->fetch_assoc()){
-        $rowdata[$i] = $row;
-        $i++;
-    }
-    if ($i>0){
-        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-    } else {
-        $res =  '[{"pjttc_id":"0"}]';	
-    }
-    echo $res;
+    public function listProjectsTypeCalled($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProjectsTypeCalled($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"pjttc_id":"0"}]';
+        }
+        echo $res;
 
-} 
- 
+    }
+
 // Lista los productos
     public function listProducts($request_params)
     {
@@ -203,12 +203,12 @@ public function listProjectsTypeCalled($request_params)
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"prd_id":"0"}]';	
+            $res =  '[{"prd_id":"0"}]';
         }
         echo $res;
-    } 
+    }
 
     // Lista los productos con Subarrendo
     public function listProductsSub($request_params)
@@ -221,12 +221,12 @@ public function listProjectsTypeCalled($request_params)
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"prd_id":"0"}]';	
+            $res =  '[{"prd_id":"0"}]';
         }
         echo $res;
-    } 
+    }
 
 // Lista los comentarios del proyecto
     public function listComments($request_params)
@@ -239,14 +239,67 @@ public function listProjectsTypeCalled($request_params)
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"com_id":"0"}]';	
+            $res =  '[{"com_id":"0"}]';
         }
         echo $res;
-    } 
+    }
 
- 
+ // Lista los relacionados al producto
+    public function listProductsRelated($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProductsRelated($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"prd_id":"0"}]';
+        }
+        echo $res;
+    }
+ /** ==== Lista los relacionados al producto ==================================================  */
+    public function listProductsRelatedPk($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProductsRelated($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"prd_id":"0"}]';
+        }
+        echo $res;
+    }
+
+    /** ==== Lista los relacionados al producto ==================================================  */
+    public function listChangeProd($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listChangeProd($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"prd_id":"0"}]';
+        }
+        echo $res;
+    }
+
+
 // Guarda el comentario
     public function InsertComment($request_params)
     {
@@ -259,49 +312,20 @@ public function listProjectsTypeCalled($request_params)
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"com_id":"0"}]';	
+            $res =  '[{"com_id":"0"}]';
         }
         echo $res;
-        
-    } 
 
-    
-// Actualiza datos del proyecto
-    public function UpdateProject($request_params)
+    }
+
+
+/** ==== Valida existencia de dias de viaje ==================================  */
+    public function getExistTrip($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->UpdateProject($request_params);
-        echo $result;
-    } 
-//
-
-
-/** ==== Actualiza las fechas del proyecto ===================================================  */
-public function UpdatePeriodProject($request_params)
-{
-    $params =  $this->session->get('user');
-    $result = $this->model->UpdatePeriodProject($request_params);
-    echo $result;
-}    
-
-
-// Guarda nueva version
-    public function SaveVersion($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->SaveVersion($request_params);
-        echo $result;
-    } 
-//
-
-
-// Lista los relacionados al producto
-    public function listProductsRelated($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listProductsRelated($request_params);
+        $result = $this->model->getExistTrip($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -310,11 +334,43 @@ public function UpdatePeriodProject($request_params)
         if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
-            $res =  '[{"prd_id":"0"}]';	
+            $res =  '[{"cus_id":"0"}]';	
         }
         echo $res;
     } 
-//
+
+/** ==== Lista los relacionados al producto ==================================================  */
+public function getNewProdChg($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->updateNewProdChg($request_params);
+    // echo $result;
+    echo json_encode($result ,JSON_UNESCAPED_UNICODE);
+}
+
+// Actualiza datos del proyecto
+    public function UpdateProject($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->UpdateProject($request_params);
+        echo $result;
+    }
+
+/** ==== Actualiza las fechas del proyecto ===================================================  */
+public function UpdatePeriodProject($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->UpdatePeriodProject($request_params);
+    echo $result;
+}
+
+// Guarda nueva version
+    public function SaveVersion($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->SaveVersion($request_params);
+        echo $result;
+    }
 
 // Lista los proyectos en donde se encuentra un producto
     public function stockProducts($request_params)
@@ -327,18 +383,18 @@ public function UpdatePeriodProject($request_params)
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"prd_name":"0"}]';	
+            $res =  '[{"prd_name":"0"}]';
         }
         echo $res;
-    } 
+    }
 //
 
 
 /** ==== Cancela el proyecto =================================================================  */
     public function cancelProject($request_params)
-    {   
+    {
         $verId      = $request_params['verId'];
         $pjtId      = $request_params['pjtId'];
         $params     = $this->session->get('user');
@@ -351,7 +407,7 @@ public function UpdatePeriodProject($request_params)
         // $detail     = $this->model->cleanDetail($pjtId);
         $project    = $this->model->cancelProject($request_params, $user);
         echo $verId . '|'. $pjtId;
-    } 
+    }
 
 
 
@@ -366,12 +422,12 @@ public function UpdatePeriodProject($request_params)
             $i++;
         }
         if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
-            $res =  '[{"counter":"0"}]';	
+            $res =  '[{"counter":"0"}]';
         }
         echo $res;
-    } 
+    }
 
 
 /** ==== Actualiza la tabla concentradora del contenido del proyecto =========================  */
@@ -382,8 +438,6 @@ public function UpdatePeriodProject($request_params)
         echo $result;
     }
 
-
-
 /** ==== Actualiza el ordenamiento de productos del proyecto ================================  */
 public function updateOrder($request_params)
 {
@@ -392,7 +446,6 @@ public function updateOrder($request_params)
     echo $result;
 }
 
-
 /** ==== Agrega producto a la tabla concentradora ============================================  */
     public function AddProductMice($request_params)
     {
@@ -400,7 +453,6 @@ public function updateOrder($request_params)
         $result = $this->model->AddProductMice($request_params);
         echo $result;
     }
-
 
 /** ==== Actualiza contenido de la version actual ============================================  */
     public function SaveBudget($request_params)
@@ -419,18 +471,20 @@ public function updateOrder($request_params)
             //ACT convierte una version activa a una version master
             $version            = $this->model->settingMasterVersion($pjtId, $verId, $discount);
             $projectVersion     = $this->model->settingProjectVersion($pjtId, $verId);
+
             $periods            = $this->model->cleanPeriods($pjtId);
             $series             = $this->model->restoreSeries($pjtId);
             $detail             = $this->model->cleanDetail($pjtId);
+
             $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
             $projectMovemen     = $this->model->settingProjectMovemen($pjtId, $user);
             $result             = $this->model->getProjectVersion($pjtId);
             $dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->setSeries($result);
-            
+
 
         } else {
-            //MST actualiza los datos de una version maestra 
+            //MST actualiza los datos de una version maestra
             $projectMovemen     = $this->model->settingProjectMovemen($pjtId, $user);
             $projectDiscount    = $this->model->settingDiscountVersion($pjtId, $verId, $discount);
             $projectVersion     = $this->model->settingProjectVersion($pjtId, $verId);
@@ -438,7 +492,6 @@ public function updateOrder($request_params)
             $result             = $this->model->getVersionMice($pjtId);
             $dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->updateSeries($result);
-            
         }
 
         echo $verId . '|'. $pjtId . '|'. $projectMovemen;
@@ -460,7 +513,7 @@ public function updateOrder($request_params)
             $dyinic = $dytrip + $dytest;
             $dyfinl = $dytrip + $dybase;
             $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));
-            $dtfinl = date('Y-m-d',strtotime($dtstar . '+'. ($dyfinl-1) .' days')); 
+            $dtfinl = date('Y-m-d',strtotime($dtstar . '+'. ($dyfinl-1) .' days'));
 
             $bdgsku = $row["pjtcn_prod_sku"];
             $bdgnme = $row["pjtcn_prod_name"];
@@ -477,13 +530,13 @@ public function updateOrder($request_params)
             $quanty = $prdexp == '2'? 1: $quanty;
 
             if ( $bdglvl == 'A' ){
-                echo 'Accesorio';
-                for ($i = 1; $i<=$quanty; $i++){   // VALIDA LA CANTIDAD A REALIZA POR CONCEPTO 
+                // echo 'Accesorio';
+                for ($i = 1; $i<=$quanty; $i++){   // VALIDA LA CANTIDAD A REALIZA POR CONCEPTO
 
                     $params = array(
-                        'pjetId' => $pjetId, 
-                        'prodId' => $prodId, 
-                        'dtinic' => $dtinic, 
+                        'pjetId' => $pjetId,
+                        'prodId' => $prodId,
+                        'dtinic' => $dtinic,
                         'dtfinl' => $dtfinl,
                         'bdgsku' => $bdgsku,
                         'bdgnme' => $bdgnme,
@@ -502,15 +555,15 @@ public function updateOrder($request_params)
                         'detlId' => 0,
                     );
                     $serie = $this->model->SettingSeries($params);
-                    
+
                 }
             } else if ( $bdglvl == 'P' ){
                 for ($i = 1; $i<=$quanty; $i++){
-                    
+
                     $params = array(
-                        'pjetId' => $pjetId, 
-                        'prodId' => $prodId, 
-                        'dtinic' => $dtinic, 
+                        'pjetId' => $pjetId,
+                        'prodId' => $prodId,
+                        'dtinic' => $dtinic,
                         'dtfinl' => $dtfinl,
                         'bdgsku' => $bdgsku,
                         'bdgnme' => $bdgnme,
@@ -531,10 +584,10 @@ public function updateOrder($request_params)
                     $detlId = $this->model->SettingSeries($params);
                     $serId=$detlId;
                     $paramacc = array(
-                        'prodId' => $prodId, 
+                        'prodId' => $prodId,
                         'serId' => $serId,
                     );
-                     echo $serId . ' - Prod ' . $prodId ;
+                    //  echo $serId . ' - Prod ' . $prodId ;
                     $accesory = $this->model->GetAccesories($paramacc);
                     while($acc = $accesory->fetch_assoc()){
 
@@ -543,9 +596,9 @@ public function updateOrder($request_params)
                         $accePc =  $acc["prd_price"];
 
                         $accparams = array(
-                            'pjetId' => $pjetId, 
-                            'prodId' => $acceId, 
-                            'dtinic' => $dtinic, 
+                            'pjetId' => $pjetId,
+                            'prodId' => $acceId,
+                            'dtinic' => $dtinic,
                             'dtfinl' => $dtfinl,
                             'bdgsku' => $bdgsku,
                             'bdgnme' => $acceNm,
@@ -564,7 +617,7 @@ public function updateOrder($request_params)
                             'detlId' => $detlId,
                         );
                         $serie = $this->model->SettingSeries($accparams);
-                        echo $serId . ' - SER-ACC ' . $prodId ;
+                        // echo $serId . ' - SER-ACC ' . $prodId ;
                     }
 
                 }
@@ -578,9 +631,9 @@ public function updateOrder($request_params)
                         $pkpdPc =  $acc["prd_price"];
 
                         $prodparams = array(
-                            'pjetId' => $pjetId, 
-                            'prodId' => $pkpdId, 
-                            'dtinic' => $dtinic, 
+                            'pjetId' => $pjetId,
+                            'prodId' => $pkpdId,
+                            'dtinic' => $dtinic,
                             'dtfinl' => $dtfinl,
                             'bdgsku' => $bdgsku,
                             'bdgnme' => $pkpdNm,
@@ -601,20 +654,20 @@ public function updateOrder($request_params)
                         $detlId = $this->model->SettingSeries($prodparams);
                         $serId=$detlId;
                         $paramaccpk = array(
-                            'prodId' => $pkpdId, 
+                            'prodId' => $pkpdId,
                             'serId' => $serId,
                         );
                         $accesory = $this->model->GetAccesories($paramaccpk);
                         while($acc = $accesory->fetch_assoc()){
-    
+
                             $acceId =  $acc["prd_id"];
                             $acceNm =  $acc["prd_name"];
                             $accePc =  $acc["prd_price"];
-    
+
                             $accparams = array(
-                                'pjetId' => $pjetId, 
-                                'prodId' => $acceId, 
-                                'dtinic' => $dtinic, 
+                                'pjetId' => $pjetId,
+                                'prodId' => $acceId,
+                                'dtinic' => $dtinic,
                                 'dtfinl' => $dtfinl,
                                 'bdgsku' => $bdgsku,
                                 'bdgnme' => $acceNm,
@@ -661,9 +714,9 @@ public function updateOrder($request_params)
             );
 
             // print_r( $param);
-        
+
             if ($action == 'U'){
-                
+
                 if ($qtyAct > $qtyAnt){
                     $dif = $qtyAct - $qtyAnt;
                     for ($i=1; $i <= $dif; $i++){
@@ -686,12 +739,34 @@ public function updateOrder($request_params)
                     $updQty = $this-> AddQuantityDetail($param);
                 }
             }
-            
-            
         }
         return 1;
     }
 
+/** ==== Importa proyecto ====================================================================  */
+    public function importProject($request_params)
+    {
+        $params =  $this->session->get('user');
+        $par            = $this->model->SaveVersion($request_params);
+
+
+        $pack           = explode('|', $par);
+        $verId          = $pack[0];
+        $pjtId          = $pack[1];
+        $pjtIdo         = $request_params['pjtIdo'];
+
+        $mice = $this->model->importProject($pjtIdo, $pjtId, $verId);
+        $periods        = $this->model->cleanPeriods($pjtId);
+        $series         = $this->model->restoreSeries($pjtId);
+        $detail         = $this->model->cleanDetail($pjtId);
+        $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
+        $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
+        $result         = $this->model->getProjectVersion($pjtId);
+        $dateproject    = $this->model->saveDateProject($pjtId);
+        $response       = $this->setSeries($result);
+
+        echo $verId . '|'. $pjtId;
+    }
 
 /** ==== Guarda contenido de la nueva version ================================================  */
     public function SaveBudgetAs($request_params)
@@ -713,7 +788,7 @@ public function updateOrder($request_params)
         $periods        = $this->model->cleanPeriods($pjtId);
         $series         = $this->model->restoreSeries($pjtId);
         $detail         = $this->model->cleanDetail($pjtId);
-        //$projectMovemen = $this->model->settingProjectMovemen($pjtId, $user);
+        $projectMovemen = $this->model->settingProjectMovemen($pjtId, $user);
         $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
         $result         = $this->model->getProjectVersion($pjtId);
@@ -723,7 +798,7 @@ public function updateOrder($request_params)
 
         echo $verId . ' | '. $pjtId . ' | '. $user . ' | '. $name . ' | '. $otrov ;
 
-    } 
+    }
 
 
 /** ==== Agrega una nueva serie al detalle del proyecto ======================================  */
@@ -739,28 +814,28 @@ public function updateOrder($request_params)
         if ($servId == '1'){
             if ($prdLvl == 'A'){
                 $param = array(
-                    'prodId' => $prodId, 
-                    'pjetId' => $pjetId, 
-                    'dtinic' => $dtinic, 
-                    'dtfinl' => $dtfinl, 
+                    'prodId' => $prodId,
+                    'pjetId' => $pjetId,
+                    'dtinic' => $dtinic,
+                    'dtfinl' => $dtfinl,
                     'detlId' => 0,
                 );
                 $serie = $this->model->SettingSeries($param);
-                
+
             } elseif($prdLvl == 'P'){
-                
+
                 $prdparam = array(
-                    'prodId' => $prodId, 
-                    'pjetId' => $pjetId, 
-                    'dtinic' => $dtinic, 
-                    'dtfinl' => $dtfinl, 
+                    'prodId' => $prodId,
+                    'pjetId' => $pjetId,
+                    'dtinic' => $dtinic,
+                    'dtfinl' => $dtfinl,
                     'detlId' => 0,
                 );
-               
+
                 $detlId = $this->model->SettingSeries($prdparam);
                 $serId=$detlId;
                     $paramacc = array(
-                        'prodId' => $prodId, 
+                        'prodId' => $prodId,
                         'serId' => $serId,
                     );
                 $accesory = $this->model->GetAccesories($paramacc);
@@ -770,15 +845,15 @@ public function updateOrder($request_params)
                     $apjetId = $pjetId;
 
                     $accparams = array(
-                        'prodId' => $aprodId, 
+                        'prodId' => $aprodId,
                         'pjetId' => $apjetId,
-                        'dtinic' => $dtinic, 
+                        'dtinic' => $dtinic,
                         'dtfinl' => $dtfinl,
                         'detlId' => $detlId,
                     );
                     $serie = $this->model->SettingSeries($accparams);
                 }
-               
+
             } elseif($prdLvl == 'K'){
                 $products = $this->model->GetProducts($prodId);
                 while($pkt = $products->fetch_assoc()){
@@ -786,9 +861,9 @@ public function updateOrder($request_params)
                     $kpjetId = $pjetId;
 
                     $pktparams = array(
-                        'prodId' => $kprodId, 
+                        'prodId' => $kprodId,
                         'pjetId' => $kpjetId,
-                        'dtinic' => $dtinic, 
+                        'dtinic' => $dtinic,
                         'dtfinl' => $dtfinl,
                         'detlId' => 0,
                     );
@@ -796,7 +871,7 @@ public function updateOrder($request_params)
                     //echo 'Paso SettingSeries';
                     $serId=$detlId;
                     $paramaccpk = array(
-                        'prodId' => $kprodId, 
+                        'prodId' => $kprodId,
                         'serId' => $serId,
                     );
                     $accesory = $this->model->GetAccesories($paramaccpk);
@@ -804,11 +879,11 @@ public function updateOrder($request_params)
 
                         $aprodId = $acc["prd_id"];
                         $apjetId = $pjetId;
-    
+
                         $accparams = array(
-                            'prodId' => $aprodId, 
+                            'prodId' => $aprodId,
                             'pjetId' => $apjetId,
-                            'dtinic' => $dtinic, 
+                            'dtinic' => $dtinic,
                             'dtfinl' => $dtfinl,
                             'detlId' => $detlId,
                         );
@@ -823,8 +898,6 @@ public function updateOrder($request_params)
         return 1;
     }
 
-   
-
 
 /** ==== Elimina la serie correspondiente en el detalle del proyecto =========================  */
     public function KillQuantityDetail($request_params)
@@ -833,33 +906,6 @@ public function updateOrder($request_params)
         $result = $this->model->KillQuantityDetail($request_params);
         $res = $result;
         return $res;
-    }
-
-
-
-/** ==== Importa proyecto ====================================================================  */
-    public function importProject($request_params)
-    {
-        $params =  $this->session->get('user');
-        $par            = $this->model->SaveVersion($request_params);
-
-        
-        $pack           = explode('|', $par);
-        $verId          = $pack[0];
-        $pjtId          = $pack[1];
-        $pjtIdo         = $request_params['pjtIdo'];
-
-        $mice = $this->model->importProject($pjtIdo, $pjtId, $verId);
-        $periods        = $this->model->cleanPeriods($pjtId);
-        $series         = $this->model->restoreSeries($pjtId);
-        $detail         = $this->model->cleanDetail($pjtId);
-        $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
-        $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
-        $result         = $this->model->getProjectVersion($pjtId);
-        $dateproject    = $this->model->saveDateProject($pjtId);
-        $response       = $this->setSeries($result);
-
-        echo $verId . '|'. $pjtId;
     }
 
 /** ==========================================================================================  */

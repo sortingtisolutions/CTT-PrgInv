@@ -5,6 +5,7 @@ let num = 0,
     lvl = '',
     flt = 0;
 let cats, subs, sku1, sku2, sku3, sku4;
+let cusIdNew,newpar;
 
 $(document).ready(function () {
     if (verifica_usuario()) {
@@ -52,11 +53,20 @@ function getCustType() {
 
 /** +++++  Obtiene el cliente seleccionado */
 function getSelectCustomer(prdId) {
-    console.log(prdId);
+    // console.log(prdId);
     var pagina = 'Customers/getSelectCustomer';
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
     var selector = putSelectCustomer;
+    fillField(pagina, par, tipo, selector);
+}
+
+function getSelectCustomerNew(prdId) {
+    // console.log(prdId);
+    var pagina = 'Customers/getSelectCustomer';
+    var par = `[{"prdId":"${prdId}"}]`;
+    var tipo = 'json';
+    var selector = putCustomersNew;
     fillField(pagina, par, tipo, selector);
 }
 /** +++++  coloca las categorias */
@@ -249,18 +259,19 @@ function activeIcons() {
             //let cusNm = $(sltor.find('td')[2]).text();
             //find('td')[2]).text(prdNm);
             //(sltor.find('td')[1]).children('.data-content');
-
-            let prdNm = 'Modifica datos del Cliente';
-            //console.log('Dato:', cusNm);
-            $('#CustomerModal').removeClass('overlay_hide');
-            //$('.overlay_closer .title').html(prdNm, ':', cusNm );
-            $('.overlay_closer .title').html(prdNm);
-            getSelectCustomer(prdId);
-            $('#CustomerModal .btn_close')
-                .unbind('click')
-                .on('click', function () {
-                    $('.overlay_background').addClass('overlay_hide');
-                });
+            if (prdId != undefined){
+                let prdNm = 'Modifica datos del Cliente';
+                console.log('Dato:', prdId);
+                $('#CustomerModal').removeClass('overlay_hide');
+                //$('.overlay_closer .title').html(prdNm, ':', cusNm );
+                $('.overlay_closer .title').html(prdNm);
+                getSelectCustomer(prdId);
+                $('#CustomerModal .btn_close')
+                    .unbind('click')
+                    .on('click', function () {
+                        $('.overlay_background').addClass('overlay_hide');
+                    });
+            }
         });
 
     $('.kill')
@@ -269,24 +280,25 @@ function activeIcons() {
             let sltor = $(this);
             let prdId = sltor.parents('tr').attr('id');
             console.log('To Kill ' + prdId);
+            if (prdId != undefined){
+                $('#delProdModal').modal('show');
+                $('#txtIdProduct').val(prdId);
+                //borra paquete +
+                $('#btnDelProduct').on('click', function () {
+                    let cusId = $('#txtIdProduct').val();
+                    //console.log(Id);
+                    let tabla = $('#tblCustomers').DataTable();
+                    $('#delProdModal').modal('hide');
 
-            $('#delProdModal').modal('show');
-            $('#txtIdProduct').val(prdId);
-            //borra paquete +
-            $('#btnDelProduct').on('click', function () {
-                let cusId = $('#txtIdProduct').val();
-                //console.log(Id);
-                let tabla = $('#tblCustomers').DataTable();
-                $('#delProdModal').modal('hide');
-
-                let prdRow = $(`#${cusId}`);
-                tabla.row(prdRow).remove().draw();
-                var pagina = 'Customers/deleteCustomers';
-                var par = `[{"cusId":"${cusId}"}]`;
-                var tipo = 'html';
-                var selector = putDelCustomers;
-                fillField(pagina, par, tipo, selector);
-            });
+                    let prdRow = $(`#${cusId}`);
+                    tabla.row(prdRow).remove().draw();
+                    var pagina = 'Customers/deleteCustomers';
+                    var par = `[{"cusId":"${cusId}"}]`;
+                    var tipo = 'html';
+                    var selector = putDelCustomers;
+                    fillField(pagina, par, tipo, selector);
+                });
+            }
         });
 }
 
@@ -418,29 +430,50 @@ function saveEditCustomer() {
 
         var par = `
                 [{
-                    "cusId" :   "${cusId}",
-                    "cusName" : "${cusName}",
-                    "cusEmail" : "${cusEmail}",
-                    "cusPhone" : "${cusPhone}",
-                    "cusAdrr" : "${cusAdrr}",
-                    "cusRFC" : "${cusRFC}",
-                    "TypeProd" : "${TypeProd}",
-                    "cusQualy" : "${cusQualy}",
-                    "cusStat" : "${cusStat}",
-                    "cusICod" : "${cusICod}",
-                    "cusSatC" : "${cusSatC}",
+                    "cusId" :       "${cusId}",
+                    "cusName" :     "${cusName}",
+                    "cusEmail" :    "${cusEmail}",
+                    "cusPhone" :    "${cusPhone}",
+                    "cusAdrr" :     "${cusAdrr}",
+                    "cusRFC" :      "${cusRFC}",
+                    "TypeProd" :    "${TypeProd}",
+                    "cusQualy" :    "${cusQualy}",
+                    "cusStat" :     "${cusStat}",
+                    "cusICod" :     "${cusICod}",
+                    "cusSatC" :     "${cusSatC}",
                     "cusDirector" : "${cusDirector}",
                     "cusLegRepre" : "${cusLegRepre}",
                     "cusLegPhone" : "${cusLegPhone}",
                     "cusLegEmail" : "${cusLegEmail}",
-                    "cusCont" : "${cusCont}",
+                    "cusCont" :     "${cusCont}",
                     "cusContEmail" : "${cusContEmail}",
                     "cusContPhone" : "${cusContPhone}",
-                    "cusWorkC" : "${cusWorkC}",
-                    "cusInvoi" : "${cusInvoi}"
+                    "cusWorkC" :    "${cusWorkC}",
+                    "cusInvoi" :    "${cusInvoi}"
                 }]
             `;
-        console.log('EDITA ',par);
+                // ACTUALIZA EL REGISTRO DE LA TABLA QUE SE MODIFICO
+            let el = $(`#tblCustomers tr[id="${cusId}"]`);
+                $(el.find('td')[1]).text(cusName);
+                $(el.find('td')[2]).text(cusEmail);
+                $(el.find('td')[3]).text(cusPhone);
+                $(el.find('td')[5]).text(cusAdrr);
+                $(el.find('td')[6]).text(cusRFC);
+                $(el.find('td')[7]).text(TypeProd);
+                $(el.find('td')[8]).text(cusQualy);
+                $(el.find('td')[9]).text(cusStat);
+                $(el.find('td')[10]).text(cusICod);
+                $(el.find('td')[11]).text(cusSatC);
+                $(el.find('td')[12]).text(cusDirector);
+                $(el.find('td')[13]).text(cusLegRepre);
+                $(el.find('td')[14]).text(cusLegPhone);
+                $(el.find('td')[15]).text(cusLegEmail);
+                $(el.find('td')[16]).text(cusContEmail);
+                $(el.find('td')[17]).text(cusContPhone);
+                $(el.find('td')[18]).text(cusWorkC);
+                $(el.find('td')[19]).text(cusInvoi);
+
+        // console.log('EDITA ',par);
         var pagina = 'Customers/saveEditCustomer';
         var tipo = 'html';
         var selector = resEdtProduct;
@@ -449,7 +482,7 @@ function saveEditCustomer() {
 }
 
 function resEdtProduct(dt) {
-    console.log(dt);
+    console.log('resEdtProduct',dt);
     $('#CustomerModal .btn_close').trigger('click');
     activeIcons();
 }
@@ -569,7 +602,9 @@ function saveNewCustomer() {
                 "cusWorkC" : "${cusWorkC}",
                 "cusInvoi" : "${cusInvoi}"
             }] `;
-        console.log('NUEVO ', par);
+        // console.log('NUEVO ', par);
+
+        newpar=par;
         var pagina = 'Customers/saveNewCustomer';
         var tipo = 'html';
         var selector = resNewProduct;
@@ -577,9 +612,56 @@ function saveNewCustomer() {
     }
 }
 function resNewProduct(dt) {
-    console.log(dt);
+    // console.log('Regreso-',dt, 'PAR-', newpar);
     //$('#txtCategoryList').val(dt).trigger('change');
     $('#CustomerModal .btn_close').trigger('click');
+    cusIdNew=dt;
+    getSelectCustomerNew(cusIdNew);
+}
+
+function putCustomersNew(dt) {
+    console.log('putCustomersNew',dt);
+
+    // $('#tblCustomers tbody').html('');
+    let tabla = $('#tblCustomers').DataTable();
+
+    if (cusIdNew != '0') {
+        // console.log('PASO IF',cusIdNew);
+        // var catId = prds[0].cat_id;
+        $.each(dt, function (v, u) {
+            tabla.row
+            .add({
+                // sermodif: `<i class='fas fa-pen serie modif' id="E${u.ser_id}"></i><i class="fas fa-times-circle serie kill" id="K${u.ser_id}"></i>`,
+                editable: `<i class="fas fa-pen modif" id=${cusIdNew}></i><i class="fas fa-times-circle kill" id=${cusIdNew}></i>`,
+                namecli: u.cus_name,
+                emailcli: u.cus_email,
+                phonecli: u.cus_phone,
+                adrescli: u.cus_address,
+                rfccli: u.cus_rfc,
+                califcli: u.cus_qualification,
+                tipocli: u.cut_name,
+                codintcli: u.cus_cve_cliente,
+                codsatcli: u.cus_code_sat,
+                statuscli: u.cus_status,
+                namedirec: u.cus_legal_director,
+                namelegal: u.cus_legal_representative,
+                emaillegal: u.cus_legal_email,
+                phonelegal: u.cus_lega_phone,
+                namecontac: u.cus_contact_name,
+                phonecontac: u.cus_contact_phone,
+                emailcontac: u.cus_contact_email,
+                operatcli: u.cus_work_ctt,
+                lastfact: u.cus_last_invoice,
+            })
+            .draw();
+        $(`#E${u.cus_id}`).parents('tr').attr('id', u.cus_id);
+        });
+        // settingTable();
+        // console.log('AGREGO row');
+        activeIcons();
+    } else {
+        settingTable();
+    }
 }
 
 function cleanProductsFields() {

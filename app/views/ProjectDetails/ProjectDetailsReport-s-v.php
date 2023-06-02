@@ -3,7 +3,6 @@
 ini_set('display_errors', 'On');
 
 require_once '../../../vendor/autoload.php';
-
 //INICIO DE PROCESOS
 $verId = $_GET['v'];
 $usrId = $_GET['u'];
@@ -27,8 +26,8 @@ $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 $qry = "SELECT * , ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) AS ver_date_real,
-        CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) AS period
-        , vr.ver_discount_insured
+            CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) AS period
+            , vr.ver_discount_insured
         FROM ctt_projects_version AS bg
         INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
         INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
@@ -64,23 +63,23 @@ $header = '
 
     $costBase = 0;
     $subtotalAmount = 0;
-
+    
     for ($i = 0; $i<count($items); $i++){
-        $amountBase = $items[$i]['bdg_prod_price'] * $items[$i]['bdg_quantity']  * $items[$i]['bdg_days_cost'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de cobro 
-        $amountTrip = $items[$i]['bdg_prod_price'] * $items[$i]['bdg_quantity']  * $items[$i]['bdg_days_trip'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de viaje
-        $amountTest = $items[$i]['bdg_prod_price'] * $items[$i]['bdg_quantity']  * $items[$i]['bdg_days_test'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de prueba
-
-        $totalBase =  $amountBase - ($amountBase * $items[$i]['bdg_discount_base']);
-        $totalTrip =  $amountTrip - ($amountTrip * $items[$i]['bdg_discount_trip']);
-        $totalTest =  $amountTest - ($amountTest * $items[$i]['bdg_discount_test']);
+        $amountBase = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'] * $items[$i]['pjtvr_days_base'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de cobro 
+        $amountTrip = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'] * $items[$i]['pjtvr_days_trip'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de viaje
+        $amountTest = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'] * $items[$i]['pjtvr_days_test'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de prueba
+        
+        $totalBase = $amountBase - ($amountBase * $items[$i]['pjtvr_discount_base']);
+        $totalTrip = $amountTrip - ($amountTrip * $items[$i]['pjtvr_discount_trip']);
+        $totalTest = $amountTest - ($amountTest * $items[$i]['pjtvr_discount_test']);
 
         $totalInsrGral = $items[$i]['ver_discount_insured'];
         $subtotalAmount += $totalBase + $totalTrip + $totalTest;
 
-        if ($items[$i]['bdg_section'] == '1') $equipoBase = '1';
-        if ($items[$i]['bdg_section'] == '2') $equipoExtra = '1';
-        if ($items[$i]['bdg_section'] == '3') $equipoDias = '1';
-        if ($items[$i]['bdg_section'] == '4') $equipoSubarrendo = '1';
+        if ($items[$i]['pjtvr_section'] == '1') $equipoBase = '1';
+        if ($items[$i]['pjtvr_section'] == '2') $equipoExtra = '1';
+        if ($items[$i]['pjtvr_section'] == '3') $equipoDias = '1';
+        if ($items[$i]['pjtvr_section'] == '4') $equipoSubarrendo = '1';
 
     }
                 
@@ -89,9 +88,10 @@ $html = '
         <div class="container">
             <div class="name-report">
                 <p>
-                    <span class="number">Cotización: '. $items[0]['ver_code'] .'</span>
+                    <span class="number">Nombre de proyecto: '. $items[0]['pjt_name'] . '  # ' .$items[0]['pjt_number'] .' </span>
                 <br>
-                    <span class="date">'.'</span>
+                    <!--<span class="date">'.  $items[0]['ver_date_real'] .'</span>-->
+                    <span class="date">' . '</span>
                 </p>
             </div>
 
@@ -130,7 +130,7 @@ $html = '
                     <td class="half">
                         <!-- Start Datos del projecto -->
                         <table class="table-data">
-                        <!--<tr>
+                            <!--<tr>
                                 <td class="concept">Num. proyecto:</td>
                                 <td class="data"><strong>'. $items[0]['pjt_number'] .'</strong></td>
                             </tr> 
@@ -192,9 +192,9 @@ $html = '
                                 <th class="tit-figure days">Días</th>
                                 <th class="tit-figure disc">Dcto.</th>
                                 <th class="tit-figure amou">Importe</th>
-                                <th class="tit-figure days">Dias<br>Viaje</th>
+                                <!--<th class="tit-figure days">Dias<br>Viaje</th>
                                 <th class="tit-figure amou">Dscto.<br>Viaje</th>
-                                <th class="tit-figure amou">Importe x<br>Viaje</th>
+                                <th class="tit-figure amou">Importe x<br>Viaje</th>-->
                                 <th class="tit-figure amou">Importe<br>Total</th>
                             </tr>
                         </thead>
@@ -207,37 +207,37 @@ $html = '
                         $amountGralTotal    = 0;
 
                         for ($i = 0; $i<count($items); $i++){
-                            $section        = $items[$i]['bdg_section'] ;
+                            $section        = $items[$i]['pjtvr_section'] ;
 
                             if ($section == '1') {
-                                $product        = $items[$i]['bdg_prod_name'] ; //  --------------------------- Nombre del producto
-                                $price          = $items[$i]['bdg_prod_price'] ;    //  ----------------------- Precio del producto
-                                $quantity       = $items[$i]['bdg_quantity'] ;  //  --------------------------- Cantidad solicitada
-                                $daysBase       = $items[$i]['bdg_days_cost'] ; //  --------------------------- Dias de costo 
-                                $discountBase   = $items[$i]['bdg_discount_base'] ; //  ----------------------- Porcentaje de descuento base
-                                $subtotalBase   = $price * $quantity * $daysBase;   //  ----------------------- Importe base = (precio x cantidad) dias de costo
-                                $discountAmount = $subtotalBase * $discountBase;    //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
-                                $amountBase     = $subtotalBase - $discountAmount;  //  ----------------------- Costo base = importe base - importe de desucuento base
+                                $product        = $items[$i]['pjtvr_prod_name'] ; //  --------------------------- Nombre del producto
+                                $price          = $items[$i]['pjtvr_prod_price'] ;    //  ----------------------- Precio del producto
+                                $quantity       = $items[$i]['pjtvr_quantity'] ;  //  --------------------------- Cantidad solicitada
+                                $daysBase       = $items[$i]['pjtvr_days_cost'] ; //  --------------------------- Dias de costo 
+                                $discountBase   = $items[$i]['pjtvr_discount_base'] ; //  ----------------------- Porcentaje de descuento base
+                                $subtotalBase   = $price * $quantity * $daysBase;     //  ----------------------- Importe base = (precio x cantidad) dias de costo
+                                $discountAmount = $subtotalBase * $discountBase;      //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
+                                $amountBase     = $subtotalBase - $discountAmount;    //  ----------------------- Costo base = importe base - importe de desucuento base
 
-                                $daysTrip       = $items[$i]['bdg_days_trip'];  //  --------------------------- Dias de viaje
-                                $discountTrip   = $items[$i]['bdg_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
-                                $amountTrip     = $price * $quantity * $daysTrip;   //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
-                                $discAmountTrip = $amountTrip * $discountTrip;  //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
-                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
+                                $daysTrip       = $items[$i]['pjtvr_days_trip'];  //  --------------------------- Dias de viaje
+                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
+                                $amountTrip     = $price * $quantity * $daysTrip;     //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
+                                $discAmountTrip = $amountTrip * $discountTrip;    //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;    //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
 
-                                $discountBaseTotal  += $discountAmount;     //  ------------------------------- Descuento total base
-                                $amountBaseTotal    += $amountBase;         //  ------------------------------- Importe total base
-                                $discountTripTotal  += $discAmountTrip;     //  ------------------------------- Importe de descuento viaje
-                                $amountTripTotal    += $amountTrip;         //  ------------------------------- Importe por viaje
-                                $amountGralTotal    += $amountGral;         //  ------------------------------- Importe total
-                                $totalMain          += $amountGral;         //  ------------------------------- Total general
+                                $discountBaseTotal  += $discountAmount;         //  ----------------------------- Descuento total base
+                                $amountBaseTotal    += $amountBase;             //  ----------------------------- Importe total base
+                                $discountTripTotal  += $discAmountTrip;         //  ----------------------------- Importe de descuento viaje
+                                $amountTripTotal    += $amountTrip;             //  ----------------------------- Importe por viaje
+                                $amountGralTotal    += $amountGral;             //  ----------------------------- Importe total
+                                $totalMain          += $amountGral;             //  ----------------------------- Total general
 
-                                $Insured            = $items[$i]['bdg_insured'];        //  ------------------  Porcentaje de seguro
-                                $discoInsured       = $items[$i]['bdg_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
-                                $amountinsured      = $subtotalBase * $Insured;      //  ---------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
+                                $Insured            = $items[$i]['pjtvr_insured'];        //  ------------------  Porcentaje de seguro
+                                $discoInsured       = $items[$i]['pjtvr_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
+                                $amountinsured      = $subtotalBase * $Insured;      //  -----------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
                                 
-                                $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
-                                $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
+                                $amountDescInsured  = $amountinsured * $discoInsured;   //  --------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
+                                $totalInsured       = $amountinsured - $amountDescInsured ; //  ----------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
 
         $html .= '
@@ -248,9 +248,9 @@ $html = '
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>
                                 <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
                                 <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
-                                <td class="dat-figure days">' . $daysTrip                                   . '</td>
+                               <!-- <td class="dat-figure days">' . $daysTrip                                   . '</td>
                                 <td class="dat-figure amou">' . number_format($discAmountTrip , 2,'.',',')  . '</td>
-                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td> -->
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
@@ -262,9 +262,9 @@ $html = '
                             <td class="tot-figure totl" colspan="4">Total Equipo Base</td>
                             <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                             <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
-                            <td class="tot-figure days"></td>
+                            <!--<td class="tot-figure days"></td>
                             <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
-                            <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td>
+                            <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td> -->
                             <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                         </tr>
                     </tbody>
@@ -291,9 +291,9 @@ $html = '
                                 <th class="tit-figure days">Días</th>
                                 <th class="tit-figure disc">Dcto.</th>
                                 <th class="tit-figure amou">Importe</th>
-                                <th class="tit-figure days">Dias<br>Viaje</th>
+                                <!--<th class="tit-figure days">Dias<br>Viaje</th>
                                 <th class="tit-figure amou">Dscto.<br>Viaje</th>
-                                <th class="tit-figure amou">Importe x<br>Viaje</th>
+                                <th class="tit-figure amou">Importe x<br>Viaje</th>-->
                                 <th class="tit-figure amou">Importe<br>Total</th>
                             </tr>
                         </thead>
@@ -306,37 +306,37 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
-                            $section        = $items[$i]['bdg_section'] ;
+                            $section        = $items[$i]['pjtvr_section'] ;
         
                             if ($section == '2') {
-                                $product        = $items[$i]['bdg_prod_name'] ; //  --------------------------- Nombre del producto
-                                $price          = $items[$i]['bdg_prod_price'] ;    //  ----------------------- Precio del producto
-                                $quantity       = $items[$i]['bdg_quantity'] ;  //  --------------------------- Cantidad solicitada
-                                $daysBase       = $items[$i]['bdg_days_cost'] ; //  --------------------------- Dias de costo 
-                                $discountBase   = $items[$i]['bdg_discount_base'] ; //  ----------------------- Porcentaje de descuento base
-                                $subtotalBase   = $price * $quantity * $daysBase;   //  ----------------------- Importe base = (precio x cantidad) dias de costo
-                                $discountAmount = $subtotalBase * $discountBase;    //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
-                                $amountBase     = $subtotalBase - $discountAmount;  //  ----------------------- Costo base = importe base - importe de desucuento base
+                                $product        = $items[$i]['pjtvr_prod_name'] ; //  --------------------------- Nombre del producto
+                                $price          = $items[$i]['pjtvr_prod_price'] ;    //  ----------------------- Precio del producto
+                                $quantity       = $items[$i]['pjtvr_quantity'] ;  //  --------------------------- Cantidad solicitada
+                                $daysBase       = $items[$i]['pjtvr_days_cost'] ; //  --------------------------- Dias de costo 
+                                $discountBase   = $items[$i]['pjtvr_discount_base'] ; //  ----------------------- Porcentaje de descuento base
+                                $subtotalBase   = $price * $quantity * $daysBase;     //  ----------------------- Importe base = (precio x cantidad) dias de costo
+                                $discountAmount = $subtotalBase * $discountBase;      //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
+                                $amountBase     = $subtotalBase - $discountAmount;    //  ----------------------- Costo base = importe base - importe de desucuento base
 
-                                $daysTrip       = $items[$i]['bdg_days_trip'];  //  --------------------------- Dias de viaje
-                                $discountTrip   = $items[$i]['bdg_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
-                                $amountTrip     = $price * $quantity * $daysTrip;   //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
-                                $discAmountTrip = $amountTrip * $discountTrip;  //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
-                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
+                                $daysTrip       = $items[$i]['pjtvr_days_trip'];  //  --------------------------- Dias de viaje
+                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
+                                $amountTrip     = $price * $quantity * $daysTrip;     //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
+                                $discAmountTrip = $amountTrip * $discountTrip;    //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;    //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
 
-                                $discountBaseTotal  += $discountAmount;     //  ------------------------------- Descuento total base
-                                $amountBaseTotal    += $amountBase;         //  ------------------------------- Importe total base
-                                $discountTripTotal  += $discAmountTrip;     //  ------------------------------- Importe de descuento viaje
-                                $amountTripTotal    += $amountTrip;         //  ------------------------------- Importe por viaje
-                                $amountGralTotal    += $amountGral;         //  ------------------------------- Importe total
-                                $totalMain          += $amountGral;
+                                $discountBaseTotal  += $discountAmount;         //  ----------------------------- Descuento total base
+                                $amountBaseTotal    += $amountBase;             //  ----------------------------- Importe total base
+                                $discountTripTotal  += $discAmountTrip;         //  ----------------------------- Importe de descuento viaje
+                                $amountTripTotal    += $amountTrip;             //  ----------------------------- Importe por viaje
+                                $amountGralTotal    += $amountGral;             //  ----------------------------- Importe total
+                                $totalMain          += $amountGral;             //  ----------------------------- Total general
 
-                                $Insured            = $items[$i]['bdg_insured'];        //  ------------------  Porcentaje de seguro
-                                $discoInsured       = $items[$i]['bdg_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
-                                $amountinsured      = $subtotalBase * $Insured;      //  ---------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
+                                $Insured            = $items[$i]['pjtvr_insured'];        //  ------------------  Porcentaje de seguro
+                                $discoInsured       = $items[$i]['pjtvr_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
+                                $amountinsured      = $subtotalBase * $Insured;      //  -----------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
                                 
-                                $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
-                                $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
+                                $amountDescInsured  = $amountinsured * $discoInsured;   //  --------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
+                                $totalInsured       = $amountinsured - $amountDescInsured ; //  ----------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
         
         
@@ -348,9 +348,9 @@ $html = '
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>
                                 <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
                                 <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
-                                <td class="dat-figure days">' . $daysTrip                                   . '</td>
+                                <!-- <td class="dat-figure days">' . $daysTrip                                   . '</td>
                                 <td class="dat-figure amou">' . number_format($discAmountTrip , 2,'.',',')  . '</td>
-                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td> -->
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
@@ -362,9 +362,9 @@ $html = '
                                 <td class="tot-figure totl" colspan="4">Total Equipo Extra</td>
                                 <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
-                                <td class="tot-figure days"></td>
+                                <!--<td class="tot-figure days"></td>
                                 <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
-                                <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td>
+                            <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td> -->
                                 <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                             </tr>
                         </tbody>
@@ -391,9 +391,9 @@ $html = '
                                 <th class="tit-figure days">Días</th>
                                 <th class="tit-figure disc">Dcto.</th>
                                 <th class="tit-figure amou">Importe</th>
-                                <th class="tit-figure days">Dias<br>Viaje</th>
+                                <!--<th class="tit-figure days">Dias<br>Viaje</th>
                                 <th class="tit-figure amou">Dscto.<br>Viaje</th>
-                                <th class="tit-figure amou">Importe x<br>Viaje</th>
+                                <th class="tit-figure amou">Importe x<br>Viaje</th>-->
                                 <th class="tit-figure amou">Importe<br>Total</th>
                             </tr>
                         </thead>
@@ -406,37 +406,37 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
-                            $section        = $items[$i]['bdg_section'] ;
+                            $section        = $items[$i]['pjtvr_section'] ;
         
                             if ($section == '3') {
-                                $product        = $items[$i]['bdg_prod_name'] ; //  --------------------------- Nombre del producto
-                                $price          = $items[$i]['bdg_prod_price'] ;    //  ----------------------- Precio del producto
-                                $quantity       = $items[$i]['bdg_quantity'] ;  //  --------------------------- Cantidad solicitada
-                                $daysBase       = $items[$i]['bdg_days_cost'] ; //  --------------------------- Dias de costo 
-                                $discountBase   = $items[$i]['bdg_discount_base'] ; //  ----------------------- Porcentaje de descuento base
-                                $subtotalBase   = $price * $quantity * $daysBase;   //  ----------------------- Importe base = (precio x cantidad) dias de costo
-                                $discountAmount = $subtotalBase * $discountBase;    //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
-                                $amountBase     = $subtotalBase - $discountAmount;  //  ----------------------- Costo base = importe base - importe de desucuento base
+                                $product        = $items[$i]['pjtvr_prod_name'] ; //  --------------------------- Nombre del producto
+                                $price          = $items[$i]['pjtvr_prod_price'] ;    //  ----------------------- Precio del producto
+                                $quantity       = $items[$i]['pjtvr_quantity'] ;  //  --------------------------- Cantidad solicitada
+                                $daysBase       = $items[$i]['pjtvr_days_cost'] ; //  --------------------------- Dias de costo 
+                                $discountBase   = $items[$i]['pjtvr_discount_base'] ; //  ----------------------- Porcentaje de descuento base
+                                $subtotalBase   = $price * $quantity * $daysBase;     //  ----------------------- Importe base = (precio x cantidad) dias de costo
+                                $discountAmount = $subtotalBase * $discountBase;      //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
+                                $amountBase     = $subtotalBase - $discountAmount;    //  ----------------------- Costo base = importe base - importe de desucuento base
 
-                                $daysTrip       = $items[$i]['bdg_days_trip'];  //  --------------------------- Dias de viaje
-                                $discountTrip   = $items[$i]['bdg_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
-                                $amountTrip     = $price * $quantity * $daysTrip;   //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
-                                $discAmountTrip = $amountTrip * $discountTrip;  //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
-                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
+                                $daysTrip       = $items[$i]['pjtvr_days_trip'];  //  --------------------------- Dias de viaje
+                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
+                                $amountTrip     = $price * $quantity * $daysTrip;     //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
+                                $discAmountTrip = $amountTrip * $discountTrip;    //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;    //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
 
-                                $discountBaseTotal  += $discountAmount;     //  ------------------------------- Descuento total base
-                                $amountBaseTotal    += $amountBase;         //  ------------------------------- Importe total base
-                                $discountTripTotal  += $discAmountTrip;     //  ------------------------------- Importe de descuento viaje
-                                $amountTripTotal    += $amountTrip;         //  ------------------------------- Importe por viaje
-                                $amountGralTotal    += $amountGral;         //  ------------------------------- Importe total
-                                $totalMain          += $amountGral;
+                                $discountBaseTotal  += $discountAmount;         //  ----------------------------- Descuento total base
+                                $amountBaseTotal    += $amountBase;             //  ----------------------------- Importe total base
+                                $discountTripTotal  += $discAmountTrip;         //  ----------------------------- Importe de descuento viaje
+                                $amountTripTotal    += $amountTrip;             //  ----------------------------- Importe por viaje
+                                $amountGralTotal    += $amountGral;             //  ----------------------------- Importe total
+                                $totalMain          += $amountGral;             //  ----------------------------- Total general
 
-                                $Insured            = $items[$i]['bdg_insured'];        //  ------------------  Porcentaje de seguro
-                                $discoInsured       = $items[$i]['bdg_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
-                                $amountinsured      = $subtotalBase * $Insured;      //  ---------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
+                                $Insured            = $items[$i]['pjtvr_insured'];        //  ------------------  Porcentaje de seguro
+                                $discoInsured       = $items[$i]['pjtvr_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
+                                $amountinsured      = $subtotalBase * $Insured;      //  -----------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
                                 
-                                $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
-                                $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
+                                $amountDescInsured  = $amountinsured * $discoInsured;   //  --------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
+                                $totalInsured       = $amountinsured - $amountDescInsured ; //  ----------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
         
         
@@ -448,9 +448,9 @@ $html = '
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>
                                 <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
                                 <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
-                                <td class="dat-figure days">' . $daysTrip                                   . '</td>
+                                <!-- <td class="dat-figure days">' . $daysTrip                                   . '</td>
                                 <td class="dat-figure amou">' . number_format($discAmountTrip , 2,'.',',')  . '</td>
-                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td> -->
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
@@ -463,8 +463,8 @@ $html = '
                                 <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure days"></td>
-                                <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
-                                <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td>
+                                <!--<td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
+                            <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td> -->
                                 <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                             </tr>
                         </tbody>
@@ -478,8 +478,6 @@ $html = '
 /* Tabla de equipo subarrendo -------------------------  */
     if ($equipoSubarrendo == '1'){
         $html .= '
-        
-        
                     <!-- Start Tabla de equipo subarrendo  -->
                     <h2>Equipo Subarrendo</h2>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
@@ -491,9 +489,9 @@ $html = '
                                 <th class="tit-figure days">Días</th>
                                 <th class="tit-figure disc">Dcto.</th>
                                 <th class="tit-figure amou">Importe</th>
-                                <th class="tit-figure days">Dias<br>Viaje</th>
+                                <!--<th class="tit-figure days">Dias<br>Viaje</th>
                                 <th class="tit-figure amou">Dscto.<br>Viaje</th>
-                                <th class="tit-figure amou">Importe x<br>Viaje</th>
+                                <th class="tit-figure amou">Importe x<br>Viaje</th>-->
                                 <th class="tit-figure amou">Importe<br>Total</th>
                             </tr>
                         </thead>
@@ -506,37 +504,37 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
-                            $section        = $items[$i]['bdg_section'] ;
+                            $section        = $items[$i]['pjtvr_section'] ;
         
                             if ($section == '4') {
-                                $product        = $items[$i]['bdg_prod_name'] ; //  --------------------------- Nombre del producto
-                                $price          = $items[$i]['bdg_prod_price'] ;    //  ----------------------- Precio del producto
-                                $quantity       = $items[$i]['bdg_quantity'] ;  //  --------------------------- Cantidad solicitada
-                                $daysBase       = $items[$i]['bdg_days_cost'] ; //  --------------------------- Dias de costo 
-                                $discountBase   = $items[$i]['bdg_discount_base'] ; //  ----------------------- Porcentaje de descuento base
-                                $subtotalBase   = $price * $quantity * $daysBase;   //  ----------------------- Importe base = (precio x cantidad) dias de costo
-                                $discountAmount = $subtotalBase * $discountBase;    //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
-                                $amountBase     = $subtotalBase - $discountAmount;  //  ----------------------- Costo base = importe base - importe de desucuento base
+                                $product        = $items[$i]['pjtvr_prod_name'] ; //  --------------------------- Nombre del producto
+                                $price          = $items[$i]['pjtvr_prod_price'] ;    //  ----------------------- Precio del producto
+                                $quantity       = $items[$i]['pjtvr_quantity'] ;  //  --------------------------- Cantidad solicitada
+                                $daysBase       = $items[$i]['pjtvr_days_cost'] ; //  --------------------------- Dias de costo 
+                                $discountBase   = $items[$i]['pjtvr_discount_base'] ; //  ----------------------- Porcentaje de descuento base
+                                $subtotalBase   = $price * $quantity * $daysBase;     //  ----------------------- Importe base = (precio x cantidad) dias de costo
+                                $discountAmount = $subtotalBase * $discountBase;      //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
+                                $amountBase     = $subtotalBase - $discountAmount;    //  ----------------------- Costo base = importe base - importe de desucuento base
 
-                                $daysTrip       = $items[$i]['bdg_days_trip'];  //  --------------------------- Dias de viaje
-                                $discountTrip   = $items[$i]['bdg_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
-                                $amountTrip     = $price * $quantity * $daysTrip;   //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
-                                $discAmountTrip = $amountTrip * $discountTrip;  //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
-                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
+                                $daysTrip       = $items[$i]['pjtvr_days_trip'];  //  --------------------------- Dias de viaje
+                                $discountTrip   = $items[$i]['pjtvr_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
+                                $amountTrip     = $price * $quantity * $daysTrip;     //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
+                                $discAmountTrip = $amountTrip * $discountTrip;    //  --------------------------- Importe de descuento viaje = Importe de viaje x porcentaje de descuento viaje
+                                $amountGral     = $amountBase + $amountTrip - $discAmountTrip;    //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
 
-                                $discountBaseTotal  += $discountAmount;     //  ------------------------------- Descuento total base
-                                $amountBaseTotal    += $amountBase;         //  ------------------------------- Importe total base
-                                $discountTripTotal  += $discAmountTrip;     //  ------------------------------- Importe de descuento viaje
-                                $amountTripTotal    += $amountTrip;         //  ------------------------------- Importe por viaje
-                                $amountGralTotal    += $amountGral;         //  ------------------------------- Importe total
-                                $totalMain          += $amountGral;
+                                $discountBaseTotal  += $discountAmount;         //  ----------------------------- Descuento total base
+                                $amountBaseTotal    += $amountBase;             //  ----------------------------- Importe total base
+                                $discountTripTotal  += $discAmountTrip;         //  ----------------------------- Importe de descuento viaje
+                                $amountTripTotal    += $amountTrip;             //  ----------------------------- Importe por viaje
+                                $amountGralTotal    += $amountGral;             //  ----------------------------- Importe total
+                                $totalMain          += $amountGral;             //  ----------------------------- Total general
 
-                                $Insured            = $items[$i]['bdg_insured'];        //  ------------------  Porcentaje de seguro
-                                $discoInsured       = $items[$i]['bdg_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
-                                $amountinsured      = $subtotalBase * $Insured;      //  ---------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
+                                $Insured            = $items[$i]['pjtvr_insured'];        //  ------------------  Porcentaje de seguro
+                                $discoInsured       = $items[$i]['pjtvr_discount_insured'];   //  --------------  Porcentaje de descuento sobre seguro
+                                $amountinsured      = $subtotalBase * $Insured;      //  -----------------------  Importe de seguro = (precio * cantidad) porcentaje de seguro
                                 
-                                $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
-                                $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
+                                $amountDescInsured  = $amountinsured * $discoInsured;   //  --------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
+                                $totalInsured       = $amountinsured - $amountDescInsured ; //  ----------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
         
         
@@ -548,9 +546,9 @@ $html = '
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>
                                 <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
                                 <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
-                                <td class="dat-figure days">' . $daysTrip                                   . '</td>
+                                <!-- <td class="dat-figure days">' . $daysTrip                                   . '</td>
                                 <td class="dat-figure amou">' . number_format($discAmountTrip , 2,'.',',')  . '</td>
-                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($amountTrip , 2,'.',',')      . '</td> -->
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
@@ -563,8 +561,8 @@ $html = '
                                 <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure days"></td>
-                                <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
-                                <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td>
+                                <!--<td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td> -->
                                 <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                             </tr>
                         </tbody>
@@ -578,6 +576,8 @@ $html = '
 
 /* Tabla totales -------------------------  */
     $html .= '
+    
+    
                 <!-- Start Tabla de totales  -->
                 <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                     <thead>
@@ -594,6 +594,7 @@ $html = '
                     $subtotalAmount = $subtotalAmount + $totalInsr;
                     $amountiva    = $subtotalAmount * $iva;
                     $totalFull   = $subtotalAmount + $amountiva;
+    
     // Seguro
     $html .= '
                         <tr>
@@ -601,13 +602,16 @@ $html = '
                             <td class="tot-main amou">' . number_format($totalInsr , 2,'.',',')       . '</td>
                         </tr>
                         ';
+                        
+    
     // Subtotal
     $html .= '
                         <tr>
                             <td class="tot-main totl" colspan ="9">Subtotal</td>
                             <td class="tot-main amou">' . number_format($subtotalAmount , 2,'.',',')       . '</td>
                         </tr>
-                        ';        
+                        ';
+                        
     // IVA
     $html .= '
                         <tr>
@@ -634,6 +638,7 @@ $html = '
 
 /* Tabla totales -------------------------  */
 
+
 /* Tabla terminos y condiciones --------------------  */
 $html .= '
 <!-- Start Tabla de terminos  -->
@@ -657,7 +662,7 @@ $html .= '
     </table>
 </div>
 </section>
-<!-- End Tabla de costo equipo subarrendo  -->';
+<!-- End Tabla de terminos  -->';
 
 $html .= '
 <!-- Start Tabla de importantes para el cliente  -->
@@ -694,12 +699,12 @@ $html .= '
     </table>
 </div>
 </section>
-<!-- End Tabla de costo equipo subarrendo  -->';
+<!-- End Tabla de importantes para el cliente  -->';
 
 /* Tabla Terminos y condiciones -------------------------  */
 /* Tabla firmas -------------------------  */
 $html .= '
-<!-- Start Tabla de terminos  -->
+<!-- Start Tabla de firma  -->
 <div style="height:3px;"></div>
 <section>
 <div class="container name-report bline-d">
@@ -710,7 +715,7 @@ $html .= '
                 <td style="width:25mm; height:60px; margin: 3mm 2.5mm 0 2.5mm;"><span>&nbsp; </span> </td>
                 <td style="width:25mm; height:60px; margin: 3mm 2.5mm 0 2.5mm;"><span>&nbsp; </span> </td>
             </tr>
-            <tr class="tline-d" style="font-size: 1.1em; text-align: center">
+            <tr class="tline-d" style="font-size: 1.1em;" align="center">
                 <td class="prod" > Nombre Persona que acepta los Terminos </td>
                 <td class="prod" >Firma </td>
                 <td class="prod" >Razon Social de la empresa</td>
@@ -720,8 +725,9 @@ $html .= '
     </table>
 </div>
 </section>
-<!-- End Tabla de costo equipo subarrendo  -->';
+<!-- End Tabla de firma  -->';
 /* Tabla firmas -------------------------  */
+
 
 
 // Pie de pagina
@@ -735,7 +741,7 @@ $foot = '
                         <tr>
                             <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
                             <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
-                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
+                            <!--<td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td> -->
                             <td class="td-foot foot-rept" width="25%" style="text-align: right">Versión '. $items[0]['ver_code'].'</td>
                         </tr>
                     </table>
@@ -746,8 +752,9 @@ $foot = '
         </table>
         <table class="table-address">
             <tr>
-                <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
-                <td class="addIcon addColor02"><img class="img-logo" src="../../../app/assets/img/icon-location.png" style="width:4mm; height:auto;" /></td>
+                <td class="addData" align="center">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
+                <td class="addIcon addColor02" align="center"><img class="img-logo" src="../../../app/assets/img/icon-location.png" style="width:4mm; height:auto;" /></td>
+            
             </tr>
         </table>
     </footer>
@@ -777,7 +784,7 @@ $mpdf->SetHTMLFooter($foot);
 $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 $mpdf->Output(
-    "Cotizacion.pdf",
+    "Presupuesto.pdf",
     \Mpdf\Output\Destination::INLINE
 );
 

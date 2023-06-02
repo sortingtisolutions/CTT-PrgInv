@@ -259,43 +259,7 @@ class ProjectPlansController extends Controller
         echo $res;
     } 
 
-    /** ==== Lista los relacionados al producto ==================================================  */
-    public function listProductsRelatedPk($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listProductsRelated($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"prd_id":"0"}]';	
-        }
-        echo $res;
-    } 
-
-    /** ==== Lista los relacionados al producto ==================================================  */
-    public function listChangeProd($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->listChangeProd($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"prd_id":"0"}]';	
-        }
-        echo $res;
-    } 
-
-
+   
 /** ==== Lista los proyectos en donde se encuentra un producto ===============================  */
     public function stockProducts($request_params)
     {
@@ -333,7 +297,25 @@ class ProjectPlansController extends Controller
         echo $res;
         
     } 
-  
+
+/** ==== Valida existencia de dias de viaje ==================================  */
+    public function getExistTrip($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->getExistTrip($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"cus_id":"0"}]';	
+        }
+        echo $res;
+    } 
+
 /** ==== Lista los relacionados al producto ==================================================  */
 public function getNewProdChg($request_params)
 {
@@ -456,7 +438,6 @@ public function getNewProdChg($request_params)
             $result             = $this->model->getVersionMice($pjtId);
             //$dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->updateSeries($result);
-            
         }
 
         echo $verId . '|'. $pjtId;
@@ -870,8 +851,6 @@ public function getNewProdChg($request_params)
         return 1;
     }
 
-   
-
 
 /** ==== Elimina la serie correspondiente en el detalle del proyecto =========================  */
     public function KillQuantityDetail($request_params)
@@ -881,8 +860,6 @@ public function getNewProdChg($request_params)
         $res = $result;
         return $res;
     }
-
-
 
 /** ==========================================================================================  */
 }
