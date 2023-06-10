@@ -1938,7 +1938,8 @@ function actionNewProject() {
                 let user = Cookies.get('user').split('|');
                 // console.log('Datos Usuario-',user);
                 let usr = user[0];
-                let usrname = user[2];
+                let empname = user[2];
+                let empid = user[3];
                 let par = `
                     [{
                         "projId"         : "${projId}",
@@ -1963,6 +1964,8 @@ function actionNewProject() {
                         "pjtTestTecnic"  : "${testTecnic}",
                         "pjtTestLook"    : "${testLook}",
                         "usr"            : "${usr}"
+                        "empid"          : "${empid}"
+                        "empname"        : "${empname}"
                     }]
             `;
                 // console.log(par);

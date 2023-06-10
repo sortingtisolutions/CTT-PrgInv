@@ -498,14 +498,23 @@ function getExistTrip(pjtvrId, prdId) {
 function putProjects(dt) {
     if (dt[0].pjt_id > 0) {
         proj = dt;
+        let valstage='';
         $('.finder_list-projects ul').html('');
         $('.finder_list-projectsParent ul').html('');
         $.each(proj, function (v, u) {
+
+            if (u.pjt_status == 4)
+                { valstage='color:#008000'; }
+            else if (u.pjt_status == 7)
+                { valstage='color:#FFA500'; }
+            else
+                { valstage='color:#CC0000'; }
+
             if (u.pjt_status == '3' || u.pjt_status == '4' || u.pjt_status == '7' || u.pjt_status == '8') {
-                let H = ` <li id="P${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|M${u.pjt_parent}|${u.pjt_name}">${u.pjt_name}</li>`;
+                let H = ` <li id="P${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|M${u.pjt_parent}|${u.pjt_name}" style='${valstage}'>${u.pjt_name}</li>`;
                 $('.finder_list-projects ul').append(H);
             } else {
-                let M = ` <li id="M${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}">${u.pjt_name}</li>`;
+                let M = ` <li id="M${u.pjt_id}" class="alive" data-element="${v}|${u.cus_id}|${u.cus_parent}|${u.cuo_id}|${u.pjt_number}|${u.pjt_name}" style='${valstage}'>${u.pjt_name}</li>`;
                 $('.finder_list-projectsParent ul').append(M);
             }
         });
@@ -2261,7 +2270,7 @@ function putsaveBudget(dt) {
 // Guarda la cotización seleccionada
 // *************************************************
 function putSaveBudgetAs(dt) {
-    // console.log(dt);
+    console.log(dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
 

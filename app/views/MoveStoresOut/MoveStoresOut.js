@@ -21,8 +21,9 @@ function inicial() {
 
 
     $('#btn_exchange').on('click', function () {
-        console.log('1');
+        
         let id = $('#boxIdProducts').val();
+        // console.log('id-val', id);
         exchange_apply(id);
 
     });
@@ -227,7 +228,7 @@ function putProducts(dt) {
     var sl = $('#boxProducts').offset();
 
     $.each(dt, function (v, u) {
-        let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}">${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}</div>`;
+        let H = `<div class="list-item" id="${u.ser_id}" data-store="${u.str_id}" data-content="${u.ser_id}|${u.ser_sku}|${u.ser_serial_number}|${u.prd_name}|${u.ser_cost}|${u.prd_coin_type}|${u.prd_id}">${u.ser_sku} - ${u.prd_name} - ${u.ser_serial_number}</div>`;
         $('#listProducts .list-items').append(H);
     });
 
@@ -245,7 +246,7 @@ function putProducts(dt) {
     });
 
     $('#listProducts .list-item').on('click', function () {
-        console.log('Paso list');
+        // console.log('Paso list');
         let prdNm = $(this).html();
         let prdId = $(this).attr('id') + '|' + $(this).attr('data-content');
         $('#boxProducts').val(prdNm);
@@ -318,20 +319,21 @@ function exchange_apply(prId) {
         }
         //let prod = prId.attr('data-content').split('|');
         let prod = prId.split('|');
-        let productId = prod[0];
+        let serId = prod[0];
         let productSKU = prod[2];
         let productName = prod[4];
         //let productQuantity = prId.children().children('.quantity').text();
         let productQuantity = '1';
         let productSerie = prod[3];
+        let prdId = prod[7];
 
         let commnets = $('#txtComments').val();
         let project = '';
-        //console.log('DATOS- ', productId, productSKU, productName,productSerie,commnets);
-        //update_array_products(productId, productQuantity);
+        //console.log('DATOS- ', serId, productSKU, productName,productSerie,commnets);
+        //update_array_products(serId, productQuantity);
         let par = `
         [{
-            "support"    :  "${folio}|${productSKU}|${typeExchangeIdSource}|${typeExchangeIdTarget}|${productId}|${storeIdSource}|${storeIdTarget}",
+            "support"    :  "${folio}|${productSKU}|${typeExchangeIdSource}|${typeExchangeIdTarget}|${serId}|${storeIdSource}|${storeIdTarget}|${prdId}",
             "prodsku"	: 	"${productSKU}",
             "prodnme"	:	"${productName}",
             "prodqty"	:	"${productQuantity}",
@@ -349,7 +351,7 @@ function exchange_apply(prId) {
             "dtfolio"	:	"${folio}"
         }]
             `;
-        // console.log(par);
+        // console.log('exchange_apply',par);
         fill_table(par);
     }
 }
@@ -361,7 +363,6 @@ function fill_table(par) {
     par = JSON.parse(par);
 
     let tabla = $('#tblExchanges').DataTable();
-
     tabla.row
         .add({
             supports: par[0].support,
@@ -384,7 +385,7 @@ function fill_table(par) {
     $('.edit')
         .unbind('click')
         .on('click', function () {
-            console.log('CLICK');
+            console.log('CLICK EDIT');
             let qty = parseInt($(this).parent().children('td.quantity').text()) * -1;
             let pid = $(this).parent().children('td.sku').children('span.hide-support').text().split('|')[4];
            // update_array_products(pid, qty);
@@ -439,36 +440,37 @@ function read_exchange_table() {
             let product = $($(u).find('td')[2]).text();
             let quantity = $($(u).find('td')[3]).text();
             let serie = $($(u).find('td')[4]).text();
-            let storeSource = $($(u).find('td')[6]).text();
-            let comments = $($(u).find('td')[9]).text();
             let codeTypeExchangeSource = $($(u).find('td')[5]).text();
-            let idTypeExchangeSource = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[2];
-            let storeTarget = $($(u).find('td')[8]).text();
+            let storeSource = $($(u).find('td')[6]).text();
             let codeTypeExchangeTarget = $($(u).find('td')[7]).text();
+            let storeTarget = $($(u).find('td')[8]).text();
+            let comments = $($(u).find('td')[9]).text();
+            let idTypeExchangeSource = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[2];
             let idTypeExchangeTarget = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[3];
-            let productId = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[4];
+            let serId = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[4];
             let storeIdSource = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[5];
             let storeIdTarget = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[6];
+            let prodId = $($(u).find('td')[1]).children('span.hide-support').text().split('|')[7];
 
             let exchstruc1 = `${folio}|${sku}|${product}|${quantity}|${serie}|${storeSource}|${comments}|${codeTypeExchangeSource}|${idTypeExchangeSource}`;
             let exchstruc2 = `${folio}|${sku}|${product}|${quantity}|${serie}|${storeTarget}|${comments}|${codeTypeExchangeTarget}|${idTypeExchangeTarget}`;
-            let exchupda1 = `${productId}|${quantity}|${storeIdSource}`;
-            let exchupda2 = `${productId}|${quantity}|${storeIdTarget}`;
+            let exchupda1 = `${serId}|${quantity}|${storeIdSource}|${prodId}`;
+            let exchupda2 = `${serId}|${quantity}|${storeIdTarget}|${prodId}`;
 
-            if (codeTypeExchangeSource != '') {
+            if (codeTypeExchangeSource != '') { 
                 build_data_structure(exchstruc1);
-                build_update_store_data(`${exchupda1}|S`);
+                build_update_store_data(`${exchupda1}|S`);   // source store
             }
-            if (codeTypeExchangeTarget != '') {
+            if (codeTypeExchangeTarget != '') {  
                 build_data_structure(exchstruc2);
-                build_update_store_data(`${exchupda2}|T`);
+                build_update_store_data(`${exchupda2}|T`);   // target store
             }
         });
     }
 }
 
 function putNextExchangeNumber(dt) {
-    console.log(dt);
+    // console.log(dt);
     folio = dt;
     read_exchange_table();
 }
@@ -488,6 +490,7 @@ function build_data_structure(pr) {
         "idx" :  "${el[8]}",
         "prj" :  ""
     }]`;
+    // console.log('STRUCTURE-',par);
     save_exchange(par);
 }
 
@@ -495,12 +498,13 @@ function build_update_store_data(pr) {
     let el = pr.split('|');
     let par = `
     [{
-        "prd" :  "${el[0]}",
-        "qty" :  "${el[1]}",
-        "str" :  "${el[2]}",
-        "mov" :  "${el[3]}"
+        "serid" :  "${el[0]}",
+        "qty"   :  "${el[1]}",
+        "strid" :  "${el[2]}",
+        "prdid" :  "${el[3]}",
+        "mov"   :  "${el[4]}"
     }]`;
-    // console.log('PAR-UP-',par);
+    // console.log('STORE-DATA',par);
     update_store(par);
 }
 
@@ -533,12 +537,12 @@ function update_store(ap) {
     var pagina = 'MoveStoresOut/UpdateStoresSource';
     var par = ap;
     var tipo = 'html';
-    var selector = updated_stores;
+    var selector = putUpdatedstores;
     fillField(pagina, par, tipo, selector);
 }
 
-function updated_stores(dt) {
-    // console.log('updated_stores', dt);
+function putUpdatedstores(dt) {
+    // console.log('putUpdatedstores', dt);
 
     $('.resFolio').text(refil(folio, 7));
 
@@ -579,6 +583,7 @@ function sel_products(res) {
         let dend = 0;
         if (res.length == 3) {
             // console.log('Paso2',idstr,res);
+
                 getProducts(idstr,res);
 
         } else {
@@ -643,7 +648,7 @@ function printInfoGetOut(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-    console.log('Lanza Reporte',v,u,n,h);
+    // console.log('Lanza Reporte',v,u,n,h);
     window.open(
         `${url}app/views/MoveStoresOut/MoveStoresOutReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
         '_blank'

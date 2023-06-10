@@ -90,6 +90,7 @@ public function NextExchange()
     return $this->db->insert_id;
 }
 
+
 // Registra los movimientos entre almacenes
     public function SaveExchange($param, $user)
     {
@@ -132,23 +133,24 @@ public function NextExchange()
         $this->db->query($qry1);
         $serId = $this->db->insert_id;
 
-        $qry2 = "INSERT INTO ctt_stores_exchange (
-                    exc_sku_product, exc_product_name, exc_quantity, exc_serie_product, exc_store, exc_comments,  exc_employee_name, ext_code, ext_id, cin_id, con_id
-                ) VALUES (
-                    '$exc_sku_product', '$exc_product_name', $exc_quantity, '$exc_serie_product', '$exc_store', '$exc_comments', '$exc_employee_name', '$ext_code', $ext_id, $cin_id, $con_id
-                );";
+        $qry2 = "INSERT INTO ctt_stores_exchange (exc_sku_product, exc_product_name, 
+                            exc_quantity, exc_serie_product, exc_store, exc_comments,  
+                            exc_employee_name, ext_code, ext_id, cin_id, con_id) 
+                VALUES ('$exc_sku_product', '$exc_product_name', $exc_quantity, '$exc_serie_product', 
+                        '$exc_store', '$exc_comments', '$exc_employee_name', '$ext_code', $ext_id, 
+                        $cin_id, $con_id );";
         $this->db->query($qry2);
 
-
-		$qry3 = "INSERT INTO 
-                    ctt_stores_products (stp_quantity, str_id, ser_id, prd_id) 
-                VALUES 
-                    ($exc_quantity, $str_id, $serId, $prd_id);";
+		$qry3 = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id, prd_id) 
+                 VALUES ($exc_quantity, $str_id, $serId, $prd_id);";
         $this->db->query($qry3);
 
-        
-		$qry4 = "INSERT INTO ctt_products_documents (prd_id, doc_id, dcp_source) VALUES ($serId, $doc_id, 'S');";
+		$qry4 = "INSERT INTO ctt_products_documents (prd_id, doc_id, dcp_source) 
+                VALUES ($serId, $doc_id, 'S');";
         $this->db->query($qry4);
+
+        $qry5 = "SELECT fun_addstock($prd_id) FROM DUAL;";
+        $resultfun = $this->db->query($qry5);
 
         return $con_id ;
     }

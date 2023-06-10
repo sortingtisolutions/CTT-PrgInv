@@ -1636,7 +1636,7 @@ function settingChangeSerie(){
 
 function putProductsRelatedPk(dt){
  
-    // console.log('putProductsRelatedPk', dt);
+    console.log('putProductsRelatedPk', dt);
     settingChangeSerie();
     let tabla = $('#tblChangeSerie').DataTable();
     $('.overlay_closer .title').html(`PRODUCTOS A CAMBIAR : ${dt[0].prd_name} - ${dt[0].pjtdt_prod_sku}`);
@@ -1689,7 +1689,7 @@ function ActiveChangePKT(){
         let id = $(this).attr('data_cat');
         gblsku = $(this).attr('data_sku');
         let lcatsub=id;
-        // console.log('THIS-', lcatsub, gblsku);
+        console.log('THIS-', lcatsub, gblsku);
         // settingProdChg();
         $('#SerieData').removeClass('overlay_hide');
 
@@ -2651,7 +2651,7 @@ function getDataMice() {
             $(this).children('td.daysTrip').children('.input_invoice').val()
         );
         if (daysTrip_act!=0){  // agregado jjr
-            console.log('Hay dias de Viaje');
+            // console.log('Hay dias de Viaje');
             theredaytrip=1;
         }
         let daysTrip_ant = parseInt(

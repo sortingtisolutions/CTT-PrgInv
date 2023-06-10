@@ -259,7 +259,44 @@ class ProjectPlansController extends Controller
         echo $res;
     } 
 
-   
+
+    /** ==== Lista los relacionados al producto ==================================================  */
+    public function listProductsRelatedPk($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProductsRelated($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"prd_id":"0"}]';
+        }
+        echo $res;
+    }
+
+    /** ==== Lista los relacionados al producto ==================================================  */
+    public function listChangeProd($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listChangeProd($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"prd_id":"0"}]';
+        }
+        echo $res;
+    }
+
+
 /** ==== Lista los proyectos en donde se encuentra un producto ===============================  */
     public function stockProducts($request_params)
     {

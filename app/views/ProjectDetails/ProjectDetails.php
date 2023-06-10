@@ -289,7 +289,7 @@
     <div class="invoice__section-finder invoice-border">
     <!-- Seleccionador de clientes -->
         <div class="finder__box" id="groupCustomer">
-            <input type="text" name="txtCustomer" id="txtCustomer" placeholder="Cliente" class="invoiceInput inputSearch wtf">
+            <input type="text" name="txtCustomer" id="txtCustomer" placeholder="Lista de Cliente" class="invoiceInput inputSearch wtf">
             <i class="fas fa-times cleanInput"></i>
             <div class="finder_list finder_list-customer">
                 <ul> </ul>

@@ -15,10 +15,10 @@
             <div class="mvst_panel" style="width:280px; background-color: #e2edf3">
                 <div class="form-group">
                     <div class="form_primary">
-                        <h4 class="mainTitle">Datos de los Proyectos</h4>
+                        <h4 class="mainTitle">Usuarios de los Proyectos</h4>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtProjectName" type="text" class="form-control form-control-sm" >
+                                <input id="txtProjectName" type="text" class="form-control form-control-sm" style="font-size:10px; background:#EAEDED">
                                 <label for="txtProjectName">Nombre del Proyecto</label>
                             </div>
                         </div>
@@ -31,6 +31,17 @@
                                 <label for="selUsrP" class="form-label">Analista CTT</label>
                             </div>
                         </div>
+                        
+                        <div style="height:15px;"></div> <!-- Agregar un espacio -->
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <select id="selUsrC"  name="selUsrC"  class="form-select form-select-sm">
+                                    <option value="0">Selecciona Usuario</option>
+                                </select>
+                                <label for="selUsrC" class="form-label">Atiende Camara</label>
+                            </div>
+                        </div>
+
                         <div style="height:15px;"></div> <!-- Agregar un espacio -->
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -41,65 +52,33 @@
                             </div>
                         </div>
                     </div>  <!-- form_primary -->
-                    <div style="height:10px;"></div> <!-- Agregar un espacio -->
+                    <div style="height:15px;"></div> <!-- Agregar un espacio -->
 
                     <!-- BOTON PARA REGISTRAR LA SALIDA -->
                     <div class="row">
                             <div class="col">
-                                <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordOutPut">Actualizar</button>
+                                <button type="button" class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordChgUser">Actualizar</button>
                             </div>
                             <div class="col">
-                                <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="cleanForm">Limpiar</button>
+                                <button type="button" class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="cleanForm">Limpiar</button>
                             </div>
-                    </div>
-
-                    <div style="height:15px;"></div> <!-- Agregar un espacio -->
-                    <!-- BOTON PARA IMPRIMIR  -->
-                    <!-- <div class="row bprint hide-items">
-                            <div class="col">
-                                <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important; color:lightsalmon" id="printOutPut">Imprimir Salida</button>
-                            </div>
-                    </div> -->
-
-                    <div class="form_secundary">
-                        <h4>Seleccion de productos</h4>
-                        <div class="row">
-                            <input type="hidden" id="txtIdPackages" name="txtIdPackages"><br>
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <select id="txtCategoryProduct" class="form-select form-select-sm required">
-                                    <option value="0" data-content="||||" selected>Selecciona una categoría</option>
-                                </select>
-                                <label for="txtCategoryProduct">Categoria</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <select id="txtSubcategoryProduct" class="form-select form-select-sm required">
-                                    <option value="0" selected>Selecciona una subcategoría</option>
-                                </select>
-                                <label for="txtSubcategoryProduct" class="form-label">Subcategoia</label>
-                            </div>
-                        </div>
-                        
                     </div>
                 </div>
             </div>
 
 <!-- Tabla para presentar los contenidos del proyecto -->
             <div class="mvst_table">
+                <h1>Selección de Proyectos</h1>
                 <div class="mvst_list tblProdMaster">
-                        <h3>Asignacion de Productos</h3>
-                        <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%">
+                        <table class="display nowrap"  id="tblAsignedProd" style="width:100%; font-size: 0.7rem">
                             <thead>
-                                <tr>
+                                <tr >
                                     <th style="width:  20px"></th>
                                     <th style="width:  200px">Nombre Proyecto</th>
                                     <th style="width:  80px">No. Proyecto</th>
 									<th style="width:  80px">Tipo Proyecto</th>
                                     <th style="width:  70px">Fecha Inicio</th>
                                     <th style="width:  70px">Fecha Fin</th>
-                                    <th style="width:  40px">Analista CTT</th>
-                                    <th style="width:  40px">Atención Almacen</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

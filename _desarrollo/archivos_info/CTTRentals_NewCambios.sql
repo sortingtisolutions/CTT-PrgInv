@@ -89,3 +89,112 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 AUTO_INCREMENT=87
 ;
+
+-- *************  JUNIO 5 2023 ************
+CREATE TABLE `ctt_who_attend_projects` (
+	`whoatd_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`pjt_id` INT(11) NOT NULL COMMENT 'Id del Proyecto',
+	`usr_id` INT(11) NOT NULL COMMENT 'Id del Usuario del sistema',
+	`emp_id` INT(11) NOT NULL COMMENT 'id del empleado',
+	`emp_fullname` VARCHAR(100) NULL DEFAULT '' COMMENT 'Nombre del empleado' COLLATE 'utf8mb4_general_ci',
+	`are_id` INT(11) NOT NULL COMMENT 'Id de la area asignada al empleado',
+	PRIMARY KEY (`whoatd_id`) USING BTREE
+)
+COMMENT='Empleados que atienden el proyecto en las diferentes etapas'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+-- ************** FUNCIONES A CREAR ***********************
+
+DELIMITER //
+CREATE OR REPLACE DEFINER=`root`@`localhost` FUNCTION `fun_buscarentas`(`lval` VARCHAR(15)) RETURNS INT
+BEGIN
+declare salida		VARCHAR(2);
+declare p_sbc		INT;
+declare p_idprd		INT;
+	
+declare cur_findsku cursor for
+SELECT IFNULL(COUNT(*),0) FROM ctt_series AS sr
+INNER JOIN ctt_products AS pr ON pr.prd_id=sr.prd_id
+WHERE substr(sr.ser_sku,1,7)=lval AND pr.prd_level='P'
+AND sr.ser_situation<>'D';
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
+
+	OPEN cur_findsku;
+	loop1: LOOP
+	FETCH cur_findsku INTO p_idprd;
+
+	IF @find THEN
+		LEAVE loop1;
+	END IF;
+	
+	END LOOP loop1;
+	CLOSE cur_findsku;
+	
+    RETURN p_idprd;
+END //
+
+DELIMITER //
+CREATE OR REPLACE DEFINER=root@localhost FUNCTION fun_updateuser(pjtid INT, areid INT(2), empid INT, empname VARCHAR(100), usrid INT) RETURNS INT
+BEGIN
+
+declare lexist	INT DEFAULT 0;
+	
+select count(*) into lexist from ctt_who_attend_projects
+WHERE pjt_id=pjtid and are_id=areid;
+
+IF (lexist = 1) then
+	UPDATE ctt_who_attend_projects 
+	SET emp_id=empid, 
+		emp_fullname=empname,
+		usr_id=usrid
+	WHERE pjt_id=pjtid and are_id=areid;
+ELSE
+	INSERT INTO ctt_who_attend_projects (pjt_id,usr_id,emp_id,emp_fullname,are_id)
+	VALUES (pjtid,usrid,empid,empname,areid);
+
+END IF;
+
+RETURN lexist;
+END //
+
+
+DELIMITER //
+CREATE OR REPLACE DEFINER=root@localhost FUNCTION fun_addstock(prdid INT) RETURNS INT
+BEGIN
+
+declare lexist	INT DEFAULT 0;
+	
+select count(*) into lexist from ctt_products
+WHERE prd_id=prdid;
+
+IF (lexist >= 1) THEN
+
+	UPDATE ctt_products SET prd_stock=prd_stock+1 
+	WHERE prd_id=prdid;
+
+END IF;
+
+RETURN lexist;
+END //
+
+DELIMITER //
+CREATE OR REPLACE DEFINER=root@localhost FUNCTION fun_reststock(prdid INT) RETURNS INT
+BEGIN
+
+declare lexist	INT DEFAULT 0;
+	
+select count(*) into lexist from ctt_products
+WHERE prd_id=prdid;
+
+IF (lexist >= 1) THEN
+
+	UPDATE ctt_products SET prd_stock=prd_stock-1 
+	WHERE prd_id=prdid;
+
+END IF;
+
+RETURN lexist;
+END //
+

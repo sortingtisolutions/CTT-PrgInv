@@ -44,11 +44,13 @@ class MoveStoresOutModel extends Model
 		$strId = $this->db->real_escape_string($param['strId']);
 		$word = $this->db->real_escape_string($param['word']);
 
-		$qry ="SELECT * FROM ctt_products AS pr
+		$qry ="SELECT sr.ser_id,sr.ser_sku,sr.ser_serial_number,sr.ser_cost,st.str_id,st.stp_quantity,
+				sr.prd_id, pr.prd_name,pr.prd_coin_type
+				FROM ctt_products AS pr
 				INNER JOIN ctt_series AS sr ON sr.prd_id = pr.prd_id
 				INNER JOIN ctt_stores_products AS st ON st.ser_id = sr.ser_id
 			WHERE sr.ser_status = 1 AND st.stp_quantity > 0
-			AND st.str_id=$strId AND upper(pr.prd_name) LIKE '%$word%' OR upper(pr.prd_sku) LIKE '%$word%' 
+			AND st.str_id=$strId AND (upper(pr.prd_name) LIKE '%$word%' OR upper(pr.prd_sku) LIKE '%$word%') 
 			ORDER BY pr.prd_sku;";
 
 		/* $qry = "SELECT * FROM ctt_products AS pr
@@ -109,57 +111,66 @@ class MoveStoresOutModel extends Model
 				'$exc_serie_product', '$exc_store', '$exc_comments', '$exc_proyect', 
 				'$exc_employee_name', '$ext_code', $ext_id, $folio); ";
 		$this->db->query($qry);
+
 		return $folio;
 	}
 
 // Registra los movimientos entre almacenes origen
 	public function UpdateStoresSource($param)
 	{
-		$idPrd 			= $this->db->real_escape_string($param['prd']);
-		$idStrSrc 		= $this->db->real_escape_string($param['str']);
+		$idSer 			= $this->db->real_escape_string($param['serid']);
+		$idStrSrc 		= $this->db->real_escape_string($param['strid']);
 		$quantity 		= $this->db->real_escape_string($param['qty']);
+		$prdid 		= $this->db->real_escape_string($param['prdid']);
 
-		$qry = "UPDATE ctt_stores_products 
+		$qry = "SELECT fun_reststock($prdid) FROM DUAL; ";
+		$resultfun = $this->db->query($qry);
+
+		$qry1 = "UPDATE ctt_series SET ser_status=0 
+				 WHERE ser_id=$idSer;";
+        $resultup = $this->db->query($qry1); 
+				
+		$qry2 = "UPDATE ctt_stores_products 
 				SET stp_quantity = stp_quantity - $quantity 
-				WHERE str_id = $idStrSrc and ser_id = $idPrd;";
+				WHERE str_id = $idStrSrc and ser_id = $idSer;";
 
-		return $this->db->query($qry);
+		return $this->db->query($qry2);
 	}
 
 // Busca si existe asignado un almacen con este producto
 	public function SechingProducts($param)
 	{
-		$prodId = $this->db->real_escape_string($param['prd']);
-		$storId = $this->db->real_escape_string($param['str']);
+		$idSer = $this->db->real_escape_string($param['serid']);
+		$storId = $this->db->real_escape_string($param['strid']);
 
 		$qry = "SELECT count(*) as items 
 				FROM ctt_stores_products 
-				WHERE ser_id = $prodId AND str_id = $storId;";
+				WHERE ser_id = $idSer AND str_id = $storId;";
 		return $this->db->query($qry);
 	}
 	
 // Actualizala cantidad de productos en un almacen destino
 	public function UpdateProducts($param)
 	{
-		$idPrd 			= $this->db->real_escape_string($param['prd']);
-		$idStrSrc 		= $this->db->real_escape_string($param['str']);
+		$idSer 			= $this->db->real_escape_string($param['serid']);
+		$idStrSrc 		= $this->db->real_escape_string($param['strid']);
 		$quantity 		= $this->db->real_escape_string($param['qty']);
 
 		$qry = "UPDATE ctt_stores_products 
 				SET stp_quantity = stp_quantity + {$quantity} 
-				WHERE str_id = {$idStrSrc} and  ser_id = {$idPrd};";
+				WHERE str_id = {$idStrSrc} and  ser_id = {$idSer};";
 		return $this->db->query($qry);
 	}
 
 // Agrega el registro de relación almacen producto
 	public function InsertProducts($param)
 	{
-		$idPrd 			= $this->db->real_escape_string($param['prd']);
-		$idStrSrc 		= $this->db->real_escape_string($param['str']);
+		$idSer 			= $this->db->real_escape_string($param['serid']);
+		$idStrSrc 		= $this->db->real_escape_string($param['strid']);
 		$quantity 		= $this->db->real_escape_string($param['qty']);
 
 		$qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id) 
-				VALUES ($quantity, $idStrSrc, $idPrd);";
+				VALUES ($quantity, $idStrSrc, $idSer);";
 		return $this->db->query($qry);
 	}
 

@@ -8,7 +8,6 @@ class MoveStoresOutController extends Controller
 	private $session;
 	public $model;
 
-
 	public function __construct()
 	{
 		$this->model = new MoveStoresOutModel();
@@ -150,17 +149,15 @@ class MoveStoresOutController extends Controller
 			$params =  $this->session->get('user');
 			$item = $this->model->SechingProducts($request_params);
 			$num_items = $item->fetch_object();
-
 			if ($num_items->items > 0){
-				echo 'update';
+				// echo 'update';
 				// actualiza la cantidad en el almacen destino
 				$result = $this->model->UpdateProducts($request_params);
 				
 			} else {
-				echo 'insert';
+				// echo 'insert';
 				//agrega la relación almacen - producto
 				$result = $this->model->InsertProducts($request_params);
-				
 			}
 			$res = $result;
 			echo $res;

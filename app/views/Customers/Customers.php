@@ -23,7 +23,7 @@
                         
                     </div>
                     <div id="dvProducts"></div>
-                    <table class="display nowrap"  id="tblCustomers" style="min-width: 1700px">
+                    <table class="display nowrap"  id="tblCustomers" style="min-width: 1700px; font-size: 0.7rem">
                         <thead>
                             <tr>
                                 <th style="width:  5px"></th>

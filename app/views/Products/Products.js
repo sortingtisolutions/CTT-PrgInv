@@ -236,6 +236,8 @@ function settingTable(catId) {
         lengthMenu: [
             [100, 200, 300, -1],
             [100, 200, 300, 'Todos'],
+            [ -1],
+           /*  ['Todos'], */
         ],
         buttons: [
             {
@@ -290,6 +292,7 @@ function settingTable(catId) {
             url: 'app/assets/lib/dataTable/spanish.json',
         },
         scrollY: 'calc(100vh - 200px)',
+        ordering: true,
         scrollX: true,
         fixedHeader: true,
         createdRow: function (nRow, aData, iDataIndex) {
@@ -297,32 +300,35 @@ function settingTable(catId) {
         },
         processing: true,
         serverSide: true,
-        ajax: {url: 'Products/tableProducts', type: 'POST', data: {catId: catId, filter: flt}},
-        columnDefs: [{targets: -1, data: null, defaultContent: '<button>click</button>'}],
+        ajax: {url: 'Products/tableProducts', type: 'POST' , data: {catId: catId, filter: flt}}, 
+        // columnDefs: [{targets: -1, data: null, defaultContent: '<button>click</button>'}],
         columns: [
-            {data: 'editable', class: 'editable edit', orderable: false},
-            {data: 'produsku', class: 'produsku sku'},
-            {data: 'prodname', class: 'prodname product-name'},
-            {data: 'prodpric', class: 'prodpric price'},
-            {data: 'prodqtty', class: 'prodqtty quantity'},
-            {data: 'prodtype', class: 'prodtype type'},
-            {data: 'typeserv', class: 'typeserv lvl center'},
-            {data: 'prodcoin', class: 'prodcoin sku'},
-            {data: 'prddocum', class: 'prddocum cellInvoice center'},
-            {data: 'subcateg', class: 'subcateg catalog'},
-            {data: 'categori', class: 'categori catalog'},
-            {data: 'prodengl', class: 'prodengl catalog'},
-            {data: 'prdcomme', class: 'prdcomme catalog'},
+            {data: 'editable', name: 'editable', class: 'editable edit', orderable: false},
+            {data: 'produsku', name: 'produsku', class: 'produsku sku'},
+            {data: 'prodname', name: 'prodname', class: 'prodname product-name'},
+            {data: 'prodpric', name: 'prodpric', class: 'prodpric price'},
+            {data: 'prodqtty', name: 'prodqtty', class: 'prodqtty quantity'},
+            {data: 'prodtype', name: 'prodtype', class: 'prodtype type'},
+            {data: 'typeserv', name: 'typeserv', class: 'typeserv lvl center'},
+            {data: 'prodcoin', name: 'prodcoin', class: 'prodcoin sku'},
+            {data: 'prddocum', name: 'prddocum', class: 'prddocum cellInvoice center'},
+            {data: 'subcateg', name: 'subcateg', class: 'subcateg catalog'},
+            {data: 'categori', name: 'categori', class: 'categori catalog'},
+            {data: 'prodengl', name: 'prodengl', class: 'prodengl catalog'},
+            {data: 'prdcomme', name: 'prdcomme', class: 'prdcomme catalog'},
         ],
+    });
+    
+    tabla.unbind('draw').on('draw',function(){  // agregado por jjr para habilitar iconos o clases
+        // console.log('DIBUJANDO TABLA');
+        activeIcons();
     });
 
     $('.tblProdMaster')
         .delay(2000)
         .slideDown('fast', function () {
             // tabla.reload();
-
             //$('.produsku').trigger('click');
-
             activeIcons();
             deep_loading('C');
         });
@@ -331,11 +337,13 @@ function settingTable(catId) {
 
 /** +++++  coloca los productos en la tabla y filtra */
 function fillProducts(ft) {
+    settingTable();
     $('#tblProducts tbody').html('');
 
     var cod = ft == '1' ? 'A' : '';
 
     if (prds[0].prd_id != '0') {
+        let tabla = $('#tblProducts').DataTable();
         var catId = prds[0].cat_id;
         $.each(prds, function (v, u) {
             if (u.prd_level != cod) {
@@ -344,13 +352,36 @@ function fillProducts(ft) {
                 let invoice = u.doc_id == 0 ? '' : docInvo;
                 let skufull = u.prd_sku.slice(7, 11) == '' ? u.prd_sku.slice(0, 7) : u.prd_sku.slice(0, 7) + '-' + u.prd_sku.slice(7, 11);
                 /// agregar boton de elimniar
-                var H = `
+                // <td class="quantity" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.quantity}|${u.prd_level}"><span class="toLink">${u.quantity}</span></td>
+                let locqty=`<span class="quantity toLink" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.quantity}|${u.prd_level}"> ${u.quantity} </span>`
+                tabla.row
+                    .add({
+                        editable: `<i class="fas fa-pen modif"></i><i class="fas fa-times-circle kill"></i>`,
+                        produsku: skufull,
+                        prodname: u.prd_name,
+                        prodpric: u.prd_price,
+                        prodqtty: locqty,
+                        prodtype: u.prd_level,
+                        typeserv: u.srv_name,
+                        prodcoin: u.prd_coin_type,
+                        prddocum: invoice,
+                        subcateg: u.sbc_name,
+                        categori: u.cat_name,
+                        prodengl: u.prd_english_name,
+                        prdcomme: u.prd_comments,
+                    })
+                    .draw();
+                    $(`#${u.prd_id}`).parents('tr').attr('id', u.prd_id);
+
+                // prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 7)}-${par[0].sersku.slice(7, 11)}`,
+
+                /* var H = `
                 <tr id="${u.prd_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
                     <td class="sku">${skufull}</td>
                     <td class="product-name editable" data_action="box" data_edit="prd_name"> ${u.prd_name}</td>
                     <td class="price editable" data_action="box" data_edit="prd_price">${u.prd_price}</td>
-                    <td class="quantity" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.quantity}|${u.prd_level}"><span class="toLink">${u.quantity}</span></td>
+                    <td class="quantity toLink" data-content="${u.prd_sku}|${u.prd_name.replace(/\"/g, '°')}|${u.quantity}|${u.prd_level}">${u.quantity}</td>
                     <td class="level">${u.prd_level}</td>
                     <td class="sku editable list">${u.srv_name}</td>
                     <td class="sku">${u.prd_coin_type}</td>
@@ -360,10 +391,10 @@ function fillProducts(ft) {
                     <td class="catalog editable" data_action="box">${u.prd_english_name}</td>
                     <td class="catalog editable" data_action="box">${u.prd_comments}</td>
                 </tr>`;
-                $('#tblProducts tbody').append(H);
+                $('#tblProducts tbody').append(H); */
             }
         });
-        settingTable();
+        // settingTable();
         console.log('fill 1--');
         activeIcons();
     } else {
@@ -381,7 +412,7 @@ function getModalSeries(id) {
 
 /** +++++  Activa los iconos */
 function activeIcons() {
-    $('span.toLink')
+    $('.toLink')
         .unbind('click')
         .on('click', function () {
             let id = $(this).parents('tr');
@@ -390,7 +421,7 @@ function activeIcons() {
             let pkt = id.children('td.prodtype').text();
             glbPkt = pkt
             let pkn = id.children('td.prodname').text();
-            // console.log('CLick --', prd, glbPkt);
+            console.log('Click --', prd, glbPkt, qty);
             // let qty = $(this).parent().attr('data-content').split('|')[2];
             // let pkt = $(this).parent().attr('data-content').split('|')[3];
             // let pkn = $(this).parent().attr('data-content').split('|')[1];

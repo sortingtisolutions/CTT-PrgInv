@@ -448,27 +448,28 @@ public function stockProdcuts($params)
         $pjt_test_tecnic        = $this->db->real_escape_string($params['pjtTestTecnic']);
         $pjt_test_look          = $this->db->real_escape_string($params['pjtTestLook']);
         $usr                    = $this->db->real_escape_string($params['usr']);
+        $empid                    = $this->db->real_escape_string($params['empid']);
+        $empname                    = $this->db->real_escape_string($params['empname']);
 
         $qry02 = "INSERT INTO ctt_projects (
                     pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
                     pjt_how_required, pjt_trip_go, pjt_trip_back, pjt_to_carry_on, pjt_to_carry_out, pjt_test_tecnic, pjt_test_look,
-                    pjttp_id, pjttc_id, cuo_id, loc_id, pjt_whomake ) 
+                    pjttp_id, pjttc_id, cuo_id, loc_id ) 
                  VALUES ('$pjt_parent', '$pjt_name', '$pjt_date_start', '$pjt_date_end', '$pjt_time', 
                     '$pjt_location', '$pjt_status', '$pjt_how_required', '$pjt_trip_go', '$pjt_trip_back',
                     '$pjt_to_carry_on', '$pjt_to_carry_out', '$pjt_test_tecnic', '$pjt_test_look',
-                    $pjt_type, $pjttc_id, $cuo_id, $loc_id, '$usr' );";
+                    $pjt_type, $pjttc_id, $cuo_id, $loc_id);";
         $this->db->query($qry02);
         $pjtId = $this->db->insert_id;
 
         $pjt_number = 'P' . str_pad($pjtId, 7, "0", STR_PAD_LEFT);
 
-        $qry03 = "UPDATE ctt_projects
-                  SET pjt_number = '$pjt_number'
+        $qry03 = "UPDATE ctt_projects SET pjt_number = '$pjt_number'
                   WHERE pjt_id = $pjtId;";
         $this->db->query($qry03);
 
-        $qry04 = "INSERT INTO ctt_attends_projects(pjt_id,usr_id,wta_id)
-                  VALUES ($pjtId,$usr,1);";
+        $qry04 = "INSERT INTO ctt_who_attend_projects(pjt_id,usr_id,emp_id,emp_fullname,are_id)
+                  VALUES ($pjtId,$usr,$empid,$empname,1);";
         $this->db->query($qry04);
         $wtaId = $this->db->insert_id; 
 
