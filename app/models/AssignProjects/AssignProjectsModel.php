@@ -9,7 +9,7 @@ class AssignProjectsModel extends Model
       parent::__construct();
     }
 
-    // Listado de proyectos    ******
+// Listado de usuarios de programacion   ******
     public function listUsersP($params)
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
@@ -22,19 +22,7 @@ class AssignProjectsModel extends Model
 
         return $this->db->query($qry);
     }
-
-    public function listUsersA($params)
-    {
-        $pjt_id = $this->db->real_escape_string($params['pjt_id']);
-
-        $qry = "SELECT usr.usr_id,emp.emp_id, emp.emp_fullname,emp.emp_number FROM ctt_users AS usr
-                RIGHT JOIN ctt_employees AS emp ON emp.emp_id=usr.emp_id
-                WHERE (emp.emp_id != 1 OR emp.emp_fullname != 'Super Usuario')
-                AND are_id in (3);";
-
-        return $this->db->query($qry);
-    }
-
+//  Lista de usuarios de camara  ***********
     public function listUsersC($params)
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
@@ -47,6 +35,20 @@ class AssignProjectsModel extends Model
         return $this->db->query($qry);
     }
 
+    //  Lista de usuarios de almacen Iluminacion  ***********
+    public function listUsersA($params)
+    {
+        $pjt_id = $this->db->real_escape_string($params['pjt_id']);
+
+        $qry = "SELECT usr.usr_id,emp.emp_id, emp.emp_fullname,emp.emp_number FROM ctt_users AS usr
+                RIGHT JOIN ctt_employees AS emp ON emp.emp_id=usr.emp_id
+                WHERE (emp.emp_id != 1 OR emp.emp_fullname != 'Super Usuario')
+                AND are_id in (3);";
+
+        return $this->db->query($qry);
+    }
+
+   
 // Listado de Productos de Proyecto asigando
     public function listDetailProds($params)
     {

@@ -502,18 +502,18 @@ class ProjectPlansModel extends Model
 
     
 /** ====== Guarda una nueva version ==========================================================  */
-public function saveDateProject($params)
-{
-    $pjtId = $this->db->real_escape_string($params['pjtId']);
+    public function saveDateProject($pjtId)
+    {
+        $pjtId = $this->db->real_escape_string($pjtId);
 
-     $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = SYSDATE() WHERE pjt_id = $pjtId;";
-    /* $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = CURRENT_TIMESTAMP()  
-             WHERE pjt_id = $pjtId;"; */
-    
-    $this->db->query($qry1);
+        $qry1 = "UPDATE ctt_projects 
+                    SET pjt_date_last_motion = CURRENT_TIMESTAMP() 
+                    WHERE pjt_id = '$pjtId' ";
+        
+        $this->db->query($qry1);
 
-    return $pjtId;
-}
+        return $pjtId;
+    }
 
 
 /** ====== Guarda una nueva version ==========================================================  */

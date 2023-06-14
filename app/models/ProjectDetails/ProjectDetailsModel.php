@@ -511,13 +511,15 @@ public function promoteToProject($params)
     }  
 
  /** Actualiza la fecha del proyecto, en la que hubo un movimiento */   
-    public function saveDateProject($params)
+    public function saveDateProject($pjtId)
     {
-        $pjtId    = $this->db->real_escape_string($params['pjtId']);
-        $lastmov    = $this->db->real_escape_string($params['lastmov']);
+        $pjtId    = $this->db->real_escape_string('pjtId');
+        // $lastmov    = $this->db->real_escape_string($params['lastmov']);
     
-        // $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = SYSDATE() WHERE pjt_id = $pjtId;";
-        $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = $lastmov WHERE pjt_id = $pjtId;";
+        $qry1 = "UPDATE ctt_projects 
+                    SET pjt_date_last_motion = CURRENT_TIMESTAMP() 
+                    WHERE pjt_id = '$pjtId' ";
+        // $qry1 = "UPDATE ctt_projects SET pjt_date_last_motion = $lastmov WHERE pjt_id = $pjtId;";
         $this->db->query($qry1);
     
         return $pjtId;

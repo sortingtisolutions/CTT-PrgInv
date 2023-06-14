@@ -189,22 +189,27 @@ function eventsAction() {
             ).length;
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data-project');
+                glbpjtid=pjtId;
                 let verId = $('.version_current').attr('data-version');
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
-
-                modalLoading('S');
-                let par = `
-                [{
-                    "pjtId"     : "${pjtId}",
-                    "verId"     : "${verId}",
-                    "discount"  : "${discount}",
-                    "action"    : "${interfase}"
-                }]`;
-                console.log('Salvando Solo',par);
-                var pagina = 'ProjectDetails/SaveBudget';
-                var tipo = 'html';
-                var selector = putsaveBudget;
-                fillField(pagina, par, tipo, selector);
+                if (verId != undefined){
+                    modalLoading('S');
+                    let par = `
+                    [{
+                        "pjtId"     : "${pjtId}",
+                        "verId"     : "${verId}",
+                        "discount"  : "${discount}",
+                        "action"    : "${interfase}"
+                    }]`;
+                    // console.log('Salvando Solo',par);
+                    var pagina = 'ProjectDetails/SaveBudget';
+                    var tipo = 'html';
+                    var selector = putsaveBudget;
+                    fillField(pagina, par, tipo, selector);
+                } else{
+                    alert('No tienes una version creada, ' + 
+                            'debes crear en el modulo de cotizaciones');
+                }
             }
         });
 
@@ -221,25 +226,28 @@ function eventsAction() {
                 glbpjtid=pjtId;
                 // let verCurr = $('.sidebar__versions .version__list ul li:first').attr('data-code');
                 let verCurr = lastVersionFinder();
-
                 let vr = parseInt(verCurr.substring(1, 10));
-
                 let verNext = 'P' + refil(vr + 1, 4);
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
                 let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  // agregado por jjr
-                console.log('FECHA- ', lastmov);
-                modalLoading('S');
-                let par = `
-                [{
-                    "pjtId"           : "${pjtId}",
-                    "verCode"         : "${verNext}",
-                    "discount"        : "${discount}",
-                    "lastmov"        : "${lastmov}"
-                }]`;
-                var pagina = 'ProjectDetails/SaveBudgetAs';
-                var tipo = 'html';
-                var selector = putSaveBudgetAs;
-                fillField(pagina, par, tipo, selector);
+                // console.log('FECHA- ', lastmov);
+                if (vr != undefined){   //agregado por jjr
+                    modalLoading('S');
+                    let par = `
+                    [{
+                        "pjtId"           : "${pjtId}",
+                        "verCode"         : "${verNext}",
+                        "discount"        : "${discount}",
+                        "lastmov"        : "${lastmov}"
+                    }]`;
+                    var pagina = 'ProjectDetails/SaveBudgetAs';
+                    var tipo = 'html';
+                    var selector = putSaveBudgetAs;
+                    fillField(pagina, par, tipo, selector);
+                } else{
+                    alert('No tienes una version creada, ' + 
+                            'debes crear en el modulo de cotizaciones');
+                }
             }
         });
 
@@ -557,7 +565,7 @@ function putCustomersOwner(dt) {
 
 function putExistTrip(dt) {
     theredaytrip = dt[0].existrip;
-    console.log('putExistTrip',theredaytrip)
+    // console.log('putExistTrip',theredaytrip)
 }
 
 /**  Llena el listado de descuentos */
@@ -924,7 +932,7 @@ function selProduct(res) {
         if (res.length == 3) {
             $('.toCharge').removeClass('hide-items');  //jjr
             if (glbSec != 4) {  //IF agragado por jjr
-                console.log('Normal');
+                // console.log('Normal');
                 getProducts(res.toUpperCase(), dstr, dend);
             } else {
                 console.log('Subarrendo');
@@ -982,8 +990,9 @@ function putProducts(dt) {
     $('.toCharge').addClass('hide-items');   //jjr
 
     $('#listProductsTable table tbody tr')
-        .unbind('click')
+        // .unbind('click')
         .on('click', function () {
+            // console.log('Click Producto');
             let inx = $(this).attr('data-indx');
             fillBudget(prod[inx], vers, inx);
         });
@@ -1059,10 +1068,14 @@ function putAddProductMice(dt) {
 
 function registeredProduct(id, section) {  // parametro de section agregado por jjr
     ky = 0;
+    
     $('#invoiceTable table tbody tr').each(function () {
         let idp = $(this).attr('id');
         let isec = $(this).attr('data-sect');  // agregado por jjr
+        // console.log('Parametros- ', id, section);
+        // console.log('Valores THIS- ', idp, isec);
         if (id == idp && section==isec) {  // modificado por jjr
+            // console.log('Agrega Cantidad');
             let qty =
                 parseInt(
                     $(this)
@@ -1127,7 +1140,7 @@ function reOrdering() {
     $('tbody.sections_products')
         .find('tr.budgetRow')
         .each(function (index) {
-            //console.log('reOrdering', index)
+            // console.log('reOrdering', index);
             if (index >= 0) {
                 $(this)
                     .find('i.move_item')
@@ -1159,7 +1172,7 @@ function fillBudgetProds(jsn, days, stus) {
         data-insured = "${pds.pjtvr_insured}" 
         data-level   = "${pds.pjtvr_prod_level}" 
         data-mice    = "${pds.pjtvr_id}" 
-        data-sect    = "${pds.bdg_section}"
+        data-sect    = "${pds.pjtvr_section}"
         class="budgetRow">
 
     <!-- Nombre del Producto -->
@@ -2262,6 +2275,7 @@ function putsaveBudget(dt) {
     purgeInterfase();
     updateActiveVersion(verId);
     updateMasterVersion(verId);
+    getVersion(glbpjtid);
     getExistTrip(verId,pjtId);
     modalLoading('H');
 }
@@ -2270,7 +2284,7 @@ function putsaveBudget(dt) {
 // Guarda la cotización seleccionada
 // *************************************************
 function putSaveBudgetAs(dt) {
-    console.log(dt);
+    // console.log(dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
 
@@ -2781,6 +2795,7 @@ function updateMice(pj, pd, fl, dt, sc, ac) {
 }
 function receiveResponseMice(dt) {
     console.log(dt);
+
 }
 
 function OrderMice(m) {

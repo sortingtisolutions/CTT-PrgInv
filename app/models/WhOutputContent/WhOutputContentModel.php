@@ -92,6 +92,46 @@ class WhOutputContentModel extends Model
         
     }
 
+    public function changeSerieNew($params)
+    {
+        $serIdNew = $this->db->real_escape_string($params['serIdNew']);
+        $serIdOrg = $this->db->real_escape_string($params['serIdOrg']);
+
+        // Busca serie que se encuentre disponible y obtiene el id
+        $qry1 = "SELECT ser_id FROM ctt_projects_detail WHERE pjtdt_id=$serIdOrg;";
+        $resultid =  $this->db->query($qry1);
+        $iddetail = $resultid->fetch_object();
+            if ($iddetail != null){
+                $serid  = $iddetail->ser_id; 
+            } 
+
+        $qry2 = "SELECT ser_sku FROM ctt_series WHERE ser_id=$serIdNew;";
+        $resultid2 =  $this->db->query($qry2);
+        $iddetail2 = $resultid2->fetch_object();
+            if ($iddetail2 != null){ 
+                $prodsku  = $iddetail2->ser_sku; 
+            } 
+
+        // Actualiza las tablas Detalle y Series
+        $updt3 = "UPDATE ctt_projects_detail 
+                SET ser_id=$serIdNew, pjtdt_prod_sku='$prodsku'
+                WHERE ser_id=$serid AND pjtdt_id=$serIdOrg;";
+        $this->db->query($updt3);
+        $joinval=1;
+
+        $updt4 = "UPDATE ctt_series SET ser_situation='D', ser_stage='D', pjtdt_id=0
+                WHERE ser_id=$serid AND pjtdt_id=$serIdOrg;";
+        $this->db->query($updt4);
+        $joinval=$joinval+1;
+
+        $updt5 = "UPDATE ctt_series SET ser_situation='EA', ser_stage='R',  pjtdt_id=$serIdOrg
+                WHERE ser_id=$serIdNew AND pjtdt_id=0; ";
+        $this->db->query($updt5);
+        $joinval=$joinval+1;
+        
+        return  $joinval;
+             
+    }
     
     /** ==== Obtiene el contenido del proyecto =============================================================  */
    

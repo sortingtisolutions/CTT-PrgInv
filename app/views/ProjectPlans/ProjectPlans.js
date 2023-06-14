@@ -191,23 +191,28 @@ function eventsAction() {
             ).length;
             if (nRows > 0) {
                 let pjtId = $('.version_current').attr('data-project');
+                glbpjtid=pjtId;
                 let verId = $('.version_current').attr('data-version');
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
 
-                modalLoading('S');
-                let par = `
-                [{
-                    "pjtId"     : "${pjtId}",
-                    "verId"     : "${verId}",
-                    "discount"  : "${discount}",
-                    "action"    : "${interfase}"
-                }]`;
-                console.log(par);
-                var pagina = 'ProjectPlans/SaveBudget';
-                var tipo = 'html';
-                var selector = putsaveBudget;
-                fillField(pagina, par, tipo, selector);
-                
+                if (verId != undefined){
+                    modalLoading('S');
+                    let par = `
+                    [{
+                        "pjtId"     : "${pjtId}",
+                        "verId"     : "${verId}",
+                        "discount"  : "${discount}",
+                        "action"    : "${interfase}"
+                    }]`;
+                    console.log(par);
+                    var pagina = 'ProjectPlans/SaveBudget';
+                    var tipo = 'html';
+                    var selector = putsaveBudget;
+                    fillField(pagina, par, tipo, selector);
+                } else{
+                    alert('No tienes una version creada, ' + 
+                            'debes crear en el modulo de cotizaciones');
+                }
             }
         });
 
@@ -230,19 +235,24 @@ function eventsAction() {
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
                 let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  //agregado por jjr
                 //console.log('FECHA- ', lastmov);
-                modalLoading('S');
-                let par = `
-                [{
-                    "pjtId"           : "${pjtId}",
-                    "verCode"         : "${verNext}",
-                    "discount"        : "${discount}",
-                    "lastmov"        : "${lastmov}"
-                }]`;
+                if (vr != undefined){    //agregado por jjr
+                    modalLoading('S');
+                    let par = `
+                    [{
+                        "pjtId"           : "${pjtId}",
+                        "verCode"         : "${verNext}",
+                        "discount"        : "${discount}",
+                        "lastmov"        : "${lastmov}"
+                    }]`;
 
-                var pagina = 'ProjectPlans/SaveBudgetAs';
-                var tipo = 'html';
-                var selector = putSaveBudgetAs;
-                fillField(pagina, par, tipo, selector);
+                    var pagina = 'ProjectPlans/SaveBudgetAs';
+                    var tipo = 'html';
+                    var selector = putSaveBudgetAs;
+                    fillField(pagina, par, tipo, selector);
+                } else{
+                    alert('No tienes una version creada, ' + 
+                            'debes crear en el modulo de cotizaciones');
+                }
             }
         });
 
@@ -1022,7 +1032,7 @@ function loadBudget(inx, bdgId) {
         "daybasereal"               : "${days}"
     }
     `;
-    console.log(par);
+    // console.log(par);
     let ky = registeredProduct('bdg' + prod[inx].prd_id, section);
     let stus = 'A';
     if (ky == 0) {
@@ -1042,7 +1052,7 @@ function loadBudget(inx, bdgId) {
 }
 
 function putAddProductMice(dt) {
-    console.log('putAddProductMice-',par);
+    console.log('putAddProductMice-',dt);
     $('#bdg0').attr('id', 'bdg' + dt);
 }
 
@@ -1144,7 +1154,7 @@ function fillBudgetProds(jsn, days, stus) {
         data-insured = "${pds.pjtvr_insured}" 
         data-level   = "${pds.pjtvr_prod_level}" 
         data-mice    = "${pds.pjtvr_id}" 
-        data-sect    = "${pds.bdg_section}"
+        data-sect    = "${pds.pjtvr_section}"
         class="budgetRow">
 
     <!-- Nombre del Producto -->
@@ -2244,7 +2254,7 @@ function printBudget(verId) {
 }
 
 function putsaveBudget(dt) {
-    // console.log('putsaveBudget',dt);
+    console.log('putsaveBudget',dt);
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
     // console.log('Ambos-',pjtId, verId);
@@ -2253,6 +2263,7 @@ function putsaveBudget(dt) {
     purgeInterfase();
     updateActiveVersion(verId);
     updateMasterVersion(verId);
+    getVersion(glbpjtid);
     getExistTrip(verId,pjtId);
     modalLoading('H');
 }

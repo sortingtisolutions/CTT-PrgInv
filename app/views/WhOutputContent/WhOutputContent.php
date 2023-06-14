@@ -74,13 +74,24 @@
                     <!-- BOTON PARA REGISTRAR LA SALIDA -->
                     <div class="row">
                             <div class="col">
-                                <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordOutPut">Registrar Salida</button>
+                                <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="printdetails">Imprime Detalles</button>
                             </div>
                             <!-- <div class="col-6">
                                 <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
                             </div> -->
                     </div>
 
+
+                    <div style="height:10px;"></div> <!-- Agregar un espacio -->
+                    <!-- BOTON PARA IMPRIMIR DETALLE -->
+                    <div class="row">
+                            <div class="col">
+                                <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="recordOutPut">Registrar Salida</button>
+                            </div>
+                            <!-- <div class="col-6">
+                                <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
+                            </div> -->
+                    </div>
                     <div style="height:15px;"></div> <!-- Agregar un espacio -->
                     <!-- BOTON PARA IMPRIMIR  -->
                     <div class="row bprint hide-items">
@@ -158,23 +169,21 @@
 <!-- End Ventana modal SERIES -->
 
 <!-- Start Ventana modal CHANGESERIES -->
-<div class="overlay_background overlay_hide" id="ChangeSerieModal" style="width: 80%">
+<div class="overlay_background overlay_hide" id="ChangeSerieModal" style="width: 80%;  left:15%;">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
-            <div><h1></h1></div>
-            <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Cambio</button>
-           <!--  <div class="formButtons">
-                <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Cambio</button>
-            </div> -->
-            <table class="display compact nowrap"  id="tblChangeSerie" style="width: 100%">
+            <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Selección</button>
+           
+            <div style="height:5px;"></div> <!-- Agregar un espacio -->
+            
+            <table class="display compact nowrap"  id="tblChangeSerie" style="width: 95%">
                 <thead>
                     <tr>
-                        <th style="width:  10px"></th>
-                        <th style="width: 100px">SKU</th>
+                        <th style="width:  20px">Selecciona</th>
+                        <th style="width:  80px">SKU</th>
                         <th style="width: 200px">Descripcion Producto</th>
-                        <th style="width:  30px">Seleccionar</th>
                         <th style="width:  80px">Num Serie</th>
-                        <th style="width:  40px">Status</th>
+                        <th style="width:  40px">Situacion</th>
                         <th style="width:  40px">Etapa</th>
                     </tr>
                 </thead>

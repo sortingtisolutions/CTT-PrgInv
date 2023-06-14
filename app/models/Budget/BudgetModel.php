@@ -448,11 +448,10 @@ public function stockProdcuts($params)
         $pjt_test_tecnic        = $this->db->real_escape_string($params['pjtTestTecnic']);
         $pjt_test_look          = $this->db->real_escape_string($params['pjtTestLook']);
         $usr                    = $this->db->real_escape_string($params['usr']);
-        $empid                    = $this->db->real_escape_string($params['empid']);
-        $empname                    = $this->db->real_escape_string($params['empname']);
+        $empid                  = $this->db->real_escape_string($params['empid']);
+        $empname                = $this->db->real_escape_string($params['empname']);
 
-        $qry02 = "INSERT INTO ctt_projects (
-                    pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
+        $qry02 = "INSERT INTO ctt_projects (pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
                     pjt_how_required, pjt_trip_go, pjt_trip_back, pjt_to_carry_on, pjt_to_carry_out, pjt_test_tecnic, pjt_test_look,
                     pjttp_id, pjttc_id, cuo_id, loc_id ) 
                  VALUES ('$pjt_parent', '$pjt_name', '$pjt_date_start', '$pjt_date_end', '$pjt_time', 
@@ -469,12 +468,12 @@ public function stockProdcuts($params)
         $this->db->query($qry03);
 
         $qry04 = "INSERT INTO ctt_who_attend_projects(pjt_id,usr_id,emp_id,emp_fullname,are_id)
-                  VALUES ($pjtId,$usr,$empid,$empname,1);";
+                  VALUES ($pjtId,$usr,$empid,'$empname',1);";
         $this->db->query($qry04);
+
         $wtaId = $this->db->insert_id; 
 
         return $pjtId;
-
 
     }
 

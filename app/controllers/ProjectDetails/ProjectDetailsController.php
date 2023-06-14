@@ -777,7 +777,7 @@ public function updateOrder($request_params)
         $pack           = explode('|', $par);
         $verId          = $pack[0];
         $pjtId          = $pack[1];
-        $lastmov          = $pack[3];
+        // $lastmov        = $pack[3];
 
         $group = explode('|',$params);
 
@@ -792,9 +792,9 @@ public function updateOrder($request_params)
         $projectVersion = $this->model->settinProjectVersion($pjtId, $verId);
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
         $result         = $this->model->getProjectVersion($pjtId);
+        $dateproject    = $this->model->saveDateProject($pjtId);
         $response       = $this->setSeries($result);
-
-        //$dateproject    = $this->model->saveDateProject($pjtId, $lastmov);  //modificado por jjr
+          //modificado por jjr
 
         echo $verId . ' | '. $pjtId . ' | '. $user . ' | '. $name . ' | '. $otrov ;
 

@@ -136,7 +136,7 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
 END //
 
 DELIMITER //
-CREATE OR REPLACE DEFINER=root@localhost FUNCTION fun_updateuser(pjtid INT, areid INT(2), empid INT, empname VARCHAR(100), usrid INT) RETURNS INT
+CREATE FUNCTION fun_updateuser(pjtid INT, areid INT(2), empid INT, empname VARCHAR(100), usrid INT) RETURNS INT
 BEGIN
 
 declare lexist	INT DEFAULT 0;
@@ -159,9 +159,9 @@ END IF;
 RETURN lexist;
 END //
 
-
+--*********************************************
 DELIMITER //
-CREATE OR REPLACE DEFINER=root@localhost FUNCTION fun_addstock(prdid INT) RETURNS INT
+CREATE FUNCTION fun_addstock(prdid INT) RETURNS INT
 BEGIN
 
 declare lexist	INT DEFAULT 0;
@@ -179,8 +179,9 @@ END IF;
 RETURN lexist;
 END //
 
+--**********************************************
 DELIMITER //
-CREATE OR REPLACE DEFINER=root@localhost FUNCTION fun_reststock(prdid INT) RETURNS INT
+CREATE FUNCTION fun_reststock(prdid INT) RETURNS INT
 BEGIN
 
 declare lexist	INT DEFAULT 0;

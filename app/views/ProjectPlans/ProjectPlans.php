@@ -647,7 +647,7 @@
 <!-- End Ventana modal SERIES -->
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
-<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
+<!-- <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script> -->
 <script src="<?=  PATH_VIEWS  . 'ProjectPlans/ProjectPlans.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

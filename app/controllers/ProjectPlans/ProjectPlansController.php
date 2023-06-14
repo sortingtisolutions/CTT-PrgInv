@@ -464,20 +464,21 @@ public function getNewProdChg($request_params)
 
             $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
             $result             = $this->model->getProjectVersion($pjtId);
-            //$dateproject        = $this->model->saveDateProject($pjtId);
+            $dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->setSeries($result);
-            
+            $opt1='Opcion1';
         } else {
             //MST actualiza los datos de una version maestra 
             $projectDiscount    = $this->model->settingDiscountVersion($pjtId, $verId, $discount);
             $projectVersion     = $this->model->settingProjectVersion($pjtId, $verId);
             $projectContent     = $this->model->settingProjectContent($pjtId, $verId);
             $result             = $this->model->getVersionMice($pjtId);
-            //$dateproject        = $this->model->saveDateProject($pjtId);
+            $dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->updateSeries($result);
+            $opt1='Opcion2';
         }
 
-        echo $verId . '|'. $pjtId;
+        echo $verId . '|'. $pjtId . '|'. $opt1;
 
     }
 
@@ -701,7 +702,6 @@ public function getNewProdChg($request_params)
 
             // print_r( $param);
 
-
             switch ($action){
                 case 'U' :
                     if ($qtyAct > $qtyAnt){
@@ -782,11 +782,9 @@ public function getNewProdChg($request_params)
         $projectcontent = $this->model->settingProjectContent($pjtId, $verId);
         $result         = $this->model->getProjectVersion($pjtId);
         $response       = $this->setSeries($result);
-        // $Locpaso=3;
-        //$dateproject    = $this->model->saveDateProject($pjtId);  // comentado por jjr
-        // $Locpaso=4;
+        $dateproject    = $this->model->saveDateProject($pjtId);  // comentado por jjr
         // echo $verId . '|'. $pjtId . '|'. $user . '|'. $name . '|'. $otrov . '|-Paso '. $Locpaso;
-        echo $verId . '|'. $pjtId . '|';
+        echo $verId . '|'. $pjtId . '|'. $dateproject;
 
     } 
 

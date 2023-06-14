@@ -319,7 +319,7 @@ function settingTable(catId) {
         ],
     });
     
-    tabla.unbind('draw').on('draw',function(){  // agregado por jjr para habilitar iconos o clases
+    tabla.on('draw',function(){  // agregado por jjr para habilitar iconos o clases
         // console.log('DIBUJANDO TABLA');
         activeIcons();
     });

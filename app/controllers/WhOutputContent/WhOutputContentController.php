@@ -96,6 +96,12 @@ class WhOutputContentController extends Controller
         echo $result;
     }
 
+    public function changeSerieNew($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->changeSerieNew($request_params);
+        echo $result;
+    }
 
     public function listSeriesFree($request_params)
     {

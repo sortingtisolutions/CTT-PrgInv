@@ -21,7 +21,7 @@ function inicial() {
     getProjectType();
     getProjectTypeCalled();
     discountInsuredEvent();
-    
+
 }
 
 function stickyTable() {
@@ -360,7 +360,7 @@ function getProductsSub(word, dstr, dend) {
     var pagina = 'Budget/listProductsSub';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
-    var selector = putProducts;
+    var selector = putProductsSub;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -656,7 +656,7 @@ function actionSelProject(obj) {
 function getCalendarPeriods(pj) {
     // configura el calendario de seleccion de periodos
     // let restdate= moment().add(5,'d');   // moment().format(‘dddd’); // Saturday
-    // let fecha = moment(Date()).format('DD/MM/YYYY'); 
+    // let fecha = moment(Date()).format('DD/MM/YYYY');
     let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     if (todayweel=='Monday' || todayweel=='Sunday'){
@@ -776,7 +776,7 @@ function fillProducer(cusId) {
 
 // Muestra el listado de productos disponibles para su seleccion en la cotización
 function showListProducts(item) {
-   
+
     $('.invoice__section-products').fadeIn('slow');
 
     $('.productos__box-table').attr('data-section', item);
@@ -800,7 +800,7 @@ function showListProducts(item) {
 
 /** ++++++ Selecciona los productos del listado */
 function selProduct(res) {
-    
+
     res = res.toUpperCase();
     let rowCurr = $('#listProductsTable table tbody tr');
     let hearCnt = $('#listProductsTable table tbody tr th');
@@ -854,7 +854,7 @@ function omitirAcentos(text) {
 function putProducts(dt) {
     prod = dt;
     $('#listProductsTable table tbody').html('');
-    
+
     if (dt[0].prd_id>0){  // agregado por jjr
     $.each(dt, function (v, u) {
         let H = `
@@ -870,10 +870,12 @@ function putProducts(dt) {
     });
     }
     $('.toCharge').addClass('hide-items');   //jjr
-    
-    $('#listProductsTable table tbody tr').on('click', function () {
-        let inx = $(this).attr('data-indx');
-        fillBudget(prod[inx], vers, inx);
+
+    $('#listProductsTable table tbody tr')
+        .on('click', function () {
+            // console.log('Click Producto');
+            let inx = $(this).attr('data-indx');
+            fillBudget(prod[inx], vers, inx);
     });
 
 }
@@ -931,10 +933,14 @@ function loadBudget(inx, bdgId) {
 
 function registeredProduct(id, section) {  // parametro de section agregado por jjr
     ky = 0;
+
     $('#invoiceTable table tbody tr').each(function () {
         let idp = $(this).attr('id');
         let isec = $(this).attr('data-sect');  // agregado por jjr
+        // console.log('Parametros- ', id, section);
+        // console.log('Valores THIS- ', idp, isec);
         if (id == idp && section==isec) {  // modificado por jjr
+            // console.log('Agrega Cantidad');
             let qty =
                 parseInt(
                     $(this)
@@ -997,6 +1003,7 @@ function reOrdering() {
     $('tbody.sections_products')
         .find('tr.budgetRow')
         .each(function (index) {
+            // console.log('reOrdering', index);
             if (index >= 0) {
                 $(this)
                     .find('i.move_item')
@@ -1019,11 +1026,11 @@ function fillBudgetProds(jsn, days) {
     }
 
     let H = `
-    <tr id="bdg${pds.prd_id}" 
-        data-sku="${pds.bdg_prod_sku}" 
-        data-insured="${pds.bdg_insured}" 
-        data-level="${pds.bdg_prod_level}" 
-        data-sect="${pds.bdg_section}" 
+    <tr id="bdg${pds.prd_id}"
+        data-sku="${pds.bdg_prod_sku}"
+        data-insured="${pds.bdg_insured}"
+        data-level="${pds.bdg_prod_level}"
+        data-sect="${pds.bdg_section}"
         class="budgetRow">
 
         <!-- Nombre del Producto -->
@@ -1065,7 +1072,7 @@ function fillBudgetProds(jsn, days) {
         }<small>%</small></span></td>
         <td class="wclnumb col_cost coltest costTest">0.00</td>
         <td class="wclexpn col_caret colcontrol"></td>
-    </tr>  
+    </tr>
     `;
     $(`#SC${pds.bdg_section}`).show();
     $(`#SC${pds.bdg_section} tr.lastrow`).before(H);
@@ -1234,8 +1241,8 @@ function activeInputSelector() {
 function killProduct(bdgId) {
     let H = `<div class="emergent__warning">
     <p>¿Realmente requieres de eliminar este producto?</p>
-    <button id="killYes" class="btn btn-primary">Si</button>  
-    <button id="killNo" class="btn btn-danger">No</button>  
+    <button id="killYes" class="btn btn-primary">Si</button>
+    <button id="killNo" class="btn btn-danger">No</button>
     </div>`;
 
     $('body').append(H);
@@ -1345,7 +1352,7 @@ function putProductsRelatedPk_old(dt) {
                 </tr>
             `;
             $('#tblChangeSerie tbody').append(H);
-        } 
+        }
     }); */
 
 /*     $(`.invoice__modal-general table`).sticky({
@@ -1392,7 +1399,7 @@ function settingChangeSerie(){
 }
 
 function putProductsRelatedPk(dt){
- 
+
     // console.log('putProductsRelatedPk', dt);
     settingChangeSerie();
     let tabla = $('#tblChangeSerie').DataTable();
@@ -1428,7 +1435,7 @@ function putProductsRelatedPk(dt){
             })
             .draw();
             $(`#${u.pjt_id}`).parents('tr').attr('data_cat', catsub);
-        } 
+        }
     });
 
   /*   $(`.invoice__modal-general table`).sticky({
@@ -1439,7 +1446,7 @@ function putProductsRelatedPk(dt){
 }
 
 function ActiveChangePKT(){
-    
+
     $('.changePk')
     .unbind('click')
     .on('click', function () {
@@ -1459,7 +1466,7 @@ function ActiveChangePKT(){
                 });
 
         infoDetallePkt(lcatsub);
-       
+
         // alert('Seleccion de Producto a cambiar ' + lcatsub + ' disponible');
     });
 
@@ -1504,7 +1511,7 @@ function settingProdChg(){
 function putChangeProd(dt) {
     // console.log('putChangeProd',dt);
     settingProdChg();
-    
+
     let tablaChg = $('#tblDataChg').DataTable();
     $('#SerieData .overlay_closer .title').html(`LISTA DE PRODUCTOS DISPONIBLES :`);
     tablaChg.rows().remove().draw();
@@ -1534,7 +1541,7 @@ function putChangeProd_old(dt) {
         </tr>
     `;
     $('.invoice__modal-general table tbody').append(H);
-        
+
     });
     }
     $(`.invoice__modal-general table`).sticky({
@@ -1595,14 +1602,14 @@ function fillContent() {
     // configura el calendario de seleccion de periodos
     // let restdate= moment().add(5,'d');   // moment().format(‘dddd’); // Saturday
     // let fecha = moment(Date()).format('DD/MM/YYYY');
-    // let restdate= moment().subtract(3, 'days'); 
+    // let restdate= moment().subtract(3, 'days');
     let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     if (todayweel=='Monday' || todayweel=='Sunday'){
         restdate= moment().subtract(3, 'days');
     } else { restdate= moment(Date()) }
 
-    
+
     let fecha = moment(restdate).format('DD/MM/YYYY');
     $('#calendar').daterangepicker(
         {
@@ -1963,11 +1970,10 @@ function actionNewProject() {
                         "pjtToCarryOut"  : "${toCarryOut}",
                         "pjtTestTecnic"  : "${testTecnic}",
                         "pjtTestLook"    : "${testLook}",
-                        "usr"            : "${usr}"
-                        "empid"          : "${empid}"
+                        "usr"            : "${usr}",
+                        "empid"          : "${empid}",
                         "empname"        : "${empname}"
-                    }]
-            `;
+                    }] `;
                 // console.log(par);
                 var pagina = 'Budget/SaveProject';
                 var tipo = 'html';
@@ -2132,7 +2138,7 @@ function saveBudget(dt) {
             .data('order');
 
         if (bdgSku != undefined) {
-            
+
             let par = `
             [{
                 "bdgSku"          : "${bdgSku}",
@@ -2336,7 +2342,7 @@ function cleanTotalsArea() {
 function showButtonToCharge(acc) {
     elm = $('.invoice_button .toCharge');
     acc == 'S'
-        ? elm.css({ visibility: 'visible' })  
+        ? elm.css({ visibility: 'visible' })
         : elm.css({ visibility: 'hidden' });
 
        /* ? elm.css.removeClass('hide-items')
