@@ -12,30 +12,26 @@ $(document).ready(function () {
         inicial();
     }
 });
+
 //INICIO DE PROCESOS
 function inicial() {
     setting_table_AsignedProd();
     getProjects(prjid);
     getDetailProds();
 
-    // Boton para registrar la salida del proyecto y los productos
-    $('#recordOutPut').on('click', function () {
-        // let locID = $(this);
-        // let pjtid = locID.parents('tr').attr('id');
-        // console.log('Paso A Guardar..', prjid);
-        confirm_to_GetOut(prjid);
-            
-     });
-
-     $('#printOutPut').on('click', function () {
-        printOutPutContent(prjid);
-        
-     });
-
-     $('#printdetails').on('click', function(){
+    // Boton para imprimir el detalle de los productos
+    $('#printdetails').on('click', function(){
         printDetail(prjid);
      });
 
+    // Boton para registrar la salida del proyecto y los productos
+    $('#recordOutPut').on('click', function () {
+        confirm_to_GetOut(prjid); 
+     });
+    // Boton para imprimir la salida de los productos
+     $('#printOutPut').on('click', function () {
+        printOutPutContent(prjid);
+     });
 }
 
 // Solicita los paquetes  OK
@@ -79,7 +75,6 @@ function getSerieDetail(serid, serorg) {
 //**************  NIVEL 1 DE DATOS *****************************************
 
 // Configura la tabla de productos del proyecto
-
 function setting_table_AsignedProd() {
     let title = 'Contenido de proyectos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
@@ -156,9 +151,7 @@ function putProjects(dt) {
     let u = user[0];
     let n = user[2];
     let usrname=n.replaceAll('+',' ');
-
     // console.log('Datas-',n, usrname);
-
     $('#txtProjectName').val(dt[0].pjt_name);
     $('#txtProjectNum').val(dt[0].pjt_number);
     $('#txtTipoProject').val(dt[0].pjttp_name);
@@ -198,6 +191,7 @@ function putDetailsProds(dt) {
                 </tr>`;
             $('#tblAsignedProd tbody').append(H);
         });
+        activeIcons();
 //         {
 //         let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
 //             tabla.row
@@ -215,7 +209,7 @@ function putDetailsProds(dt) {
 // /*<i class="fas fa-times-circle choice pack kill" id="D-${u.pjtpd_id}"></i>`, */
 //             $(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
 //         });
-        activeIcons();
+        
     }
 }
 
@@ -226,18 +220,18 @@ function activeIcons() {
         .on('click', function () {
             //let selected = $(this).parent().attr('id');
             let pjtcnid = $(this).attr('id');
-            console.log('Click Nivel 2', pjtcnid);
+            // console.log('Click Nivel 2', pjtcnid);
             if (pjtcnid > 0) {
                 getSeries(pjtcnid);
             }
         });
-
 }
 
 //**************  NIVEL 2 DE DATOS  *****************************************
 
 // ### LISTO ### Llena prepara la table dentro del modal para series ### LISTO -- MODAL 1###
 function putSeries(dt) {
+    // console.log('putSeries');
     settingSeries(dt);
     build_modal_serie_old(dt);
     activeIconsSerie();
@@ -247,7 +241,8 @@ function settingSeries(dt){
         
     $('#SerieModal').removeClass('overlay_hide');
     $('#tblSerie').DataTable({
-        // destroy: true,
+        // retrieve: true,
+        bDestroy: true,
         order: [[1, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
@@ -281,7 +276,6 @@ function settingSeries(dt){
             $('#tblSerie').DataTable().destroy;
     });
    
-    // activeIcons();
 }
 
 // ### LISTO ### Llena con datos de series la tabla del modal --- MODAL 1
@@ -357,7 +351,6 @@ function myCheck(dt){
     $('#'+dt).attr("id",sertype).children("td.nombreclase").text(NuevoSku); */
 }
 
-
 //**************  NIVEL 3 DE DATOS  *****************************************
 
 // *****************  CONFIGURACION TABLA CAMBIO DE SERIES **************
@@ -365,6 +358,7 @@ function settingChangeSerie(){
     // console.log('setting');
     $('#ChangeSerieModal').removeClass('overlay_hide');
     $('#tblChangeSerie').DataTable({
+        // retrieve: true,
         bDestroy: true,
         order: [[1, 'asc']],
         lengthMenu: [
@@ -440,7 +434,6 @@ function activeIconsNewSerie() {
     $('.toChangeSer')
     .unbind('click')
     .on('click', function () {
-        
         let serIdSel = $(this).attr('id');
         let serIdOrg = $(this).attr('seridorg');
         serIdNew=serIdSel;
@@ -449,9 +442,7 @@ function activeIconsNewSerie() {
         $('#'+serIdSel).css({"color":"#CC0000"});  //#3c5777  normal
         // $('#'+serIdOrig).children(".claseElemento").css({"color":"#CC0000"});
         changeSerieNew(serIdSel, serIdOrg); 
-
     });
-
 }
 
 function changeSerieNew(serIdNew,serIdOrg) {
@@ -471,41 +462,6 @@ function changeSerieNew(serIdNew,serIdOrg) {
         
     }
 
-    function read_exchange_table() {
-        if (folio == undefined) {
-            var pagina = 'MoveStoresIn/NextExchange';
-            var par = '[{"par":""}]';
-            var tipo = 'html';
-            var selector = putNextExchangeNumber;
-            fillField(pagina, par, tipo, selector);
-        } else {
-            $('#tblChangeSerie tbody tr').each(function (v, u) {
-                let seriesku = $(this).attr('data-content').split('|')[3];
-                let prodname = $($(u).find('td')[2]).text();
-                let quantity = $($(u).find('td')[3]).text();
-                let sericost = $($(u).find('td')[4]).text();
-                let serienum = $($(u).find('td')[5]).children('.serprod').val();
-                //let serienum = $('.serprod').val();
-                let petition = $($(u).find('td')[6]).text();
-                let costpeti = $($(u).find('td')[7]).children('.serprod').val();
-                let codeexch = $($(u).find('td')[8]).text();
-                let storname = $($(u).find('td')[9]).text();
-                let serbrand = $($(u).find('td')[12]).text();
-                let comments = $($(u).find('td')[13]).text();
-               
-                let typeexch = $(this).attr('data-content').split('|')[1];
-                let producid = $(this).attr('data-content').split('|')[0];
-                let storesid = $(this).attr('data-content').split('|')[2];
-                let sericoin = $(this).attr('data-content').split('|')[4];
-                let suppliid = $(this).attr('data-content').split('|')[5];
-                let docinvoi = $(this).attr('data-content').split('|')[6];
-    
-                let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}|${petition}|${costpeti}|${serbrand}`;
-                console.log(truk);
-                build_data_structure(truk);
-            });
-        }
-    }
     
 function confirm_to_GetOut(pjtid) {
     $('#starClosure').modal('show');
@@ -517,13 +473,13 @@ function confirm_to_GetOut(pjtid) {
         console.log('Datos CLICK',pjtid);
         modalLoading('S');
         
-        /* var pagina = 'WhOutputContent/ProcessGetOutProject';
+        var pagina = 'WhOutputContent/ProcessGetOutProject';
         var par = `[{"pjtid":"${pjtid}"}]`;
         var tipo = 'json';
         var selector = putToWork;
-        fillField(pagina, par, tipo, selector); */
-        let Arg='23|56|PASO1,PASO2 ';
-        putToWork(Arg);
+        fillField(pagina, par, tipo, selector);
+        /* let Arg='23|56|PASO1,PASO2 ';
+        putToWork(Arg); */
     });
 }
 
@@ -543,11 +499,6 @@ function putToWork(dt){
         $('#MoveFolioModal').modal('hide');
 
     });
-
-   /*  $('#btnPrintReport').on('click', function () {
-        console.log(dt);
-        // $('.btn-print').trigger('click');
-    }); */
 
     modalLoading('H');
 }
@@ -571,11 +522,7 @@ function printDetail(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-    /* let v = 1;
-    let u = 1;
-    let n = 'SuperUsuario';
- */
-    console.log('Datos', v, u, n, h);
+    // console.log('Datos', v, u, n, h);
 
     window.open(
         `${url}app/views/WhOutputContent/WhOutputDetailReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
@@ -589,11 +536,7 @@ function printOutPutContent(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-    /* let v = 1;
-    let u = 1;
-    let n = 'SuperUsuario';
- */
-    console.log('Datos', v, u, n, h);
+    // console.log('Datos', v, u, n, h);
 
     window.open(
         `${url}app/views/WhOutputContent/WhOutputContentReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
@@ -648,4 +591,40 @@ function build_modal_seriefree(dt) {
          $(`#E${u.ser_id}`).parents('tr').attr('data-product', u.ser_id);
      });
      activeIconsSerieFree(); */
+ }
+
+ function read_exchange_table() {
+    /*  if (folio == undefined) {
+         var pagina = 'MoveStoresIn/NextExchange';
+         var par = '[{"par":""}]';
+         var tipo = 'html';
+         var selector = putNextExchangeNumber;
+         fillField(pagina, par, tipo, selector);
+     } else {
+         $('#tblChangeSerie tbody tr').each(function (v, u) {
+             let seriesku = $(this).attr('data-content').split('|')[3];
+             let prodname = $($(u).find('td')[2]).text();
+             let quantity = $($(u).find('td')[3]).text();
+             let sericost = $($(u).find('td')[4]).text();
+             let serienum = $($(u).find('td')[5]).children('.serprod').val();
+             //let serienum = $('.serprod').val();
+             let petition = $($(u).find('td')[6]).text();
+             let costpeti = $($(u).find('td')[7]).children('.serprod').val();
+             let codeexch = $($(u).find('td')[8]).text();
+             let storname = $($(u).find('td')[9]).text();
+             let serbrand = $($(u).find('td')[12]).text();
+             let comments = $($(u).find('td')[13]).text();
+            
+             let typeexch = $(this).attr('data-content').split('|')[1];
+             let producid = $(this).attr('data-content').split('|')[0];
+             let storesid = $(this).attr('data-content').split('|')[2];
+             let sericoin = $(this).attr('data-content').split('|')[4];
+             let suppliid = $(this).attr('data-content').split('|')[5];
+             let docinvoi = $(this).attr('data-content').split('|')[6];
+ 
+             let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}|${petition}|${costpeti}|${serbrand}`;
+             console.log(truk);
+             build_data_structure(truk);
+         });
+     } */
  }

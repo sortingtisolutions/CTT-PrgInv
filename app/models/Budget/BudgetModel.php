@@ -21,7 +21,6 @@ class BudgetModel extends Model
         return $this->db->query($qry);
     }    
 
-    
 // Listado de proyectos
     public function listProjects($params)
     {
@@ -30,34 +29,24 @@ class BudgetModel extends Model
 
         $qry = "SELECT 
                     pj.pjt_id  
-                    , pj.pjt_number 
-                    , pj.pjt_name  
+                    , pj.pjt_number , pj.pjt_name  
                     , DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project 
                     , DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start 
                     , DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end 
-                    , pj.pjt_time
-                    , pj.pjt_location 
+                    , pj.pjt_time, pj.pjt_location 
                     , pj.pjt_status 
-                    , pj.cuo_id 
-                    , pj.loc_id 
-                    , co.cus_id 
-                    , co.cus_parent 
-                    , pj.pjt_parent 
-                    , lo.loc_type_location 
-                    , pt.pjttp_name 
-                    , pt.pjttp_id
+                    , pj.cuo_id, pj.loc_id 
+                    , co.cus_id, co.cus_parent 
+                    , pj.pjt_parent , lo.loc_type_location 
+                    , pt.pjttp_name , pt.pjttp_id
                     , pj.pjttc_id
                     , '$pjId' as pjId
                     , pj.pjt_how_required
-                    , pjt_trip_go
-                    , pjt_trip_back
-                    , pjt_to_carry_on
-                    , pjt_to_carry_out
-                    , pjt_test_tecnic
-                    , pjt_test_look
-                    , pj.pjt_status
+                    , pjt_trip_go, pjt_trip_back
+                    , pjt_to_carry_on, pjt_to_carry_out
+                    , pjt_test_tecnic, pjt_test_look
                 FROM ctt_projects AS pj
-                INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+                LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
                 WHERE pj.pjt_status in ('1', '40') ORDER BY pj.pjt_id DESC;
@@ -145,7 +134,15 @@ class BudgetModel extends Model
         return $this->db->query($qry);
     }    
 
-
+    // Listado de clientes
+    public function getEdosRepublic($params)
+    {
+        $prd = $this->db->real_escape_string($params['prm']);
+        
+        $qry = "SELECT edos_id,edos_name,edos_abrev
+                FROM ctt_estados_mex ORDER BY edos_id;";
+        return $this->db->query($qry);
+    }    
 // Listado de versiones
     public function listVersion($params)
     {
@@ -450,14 +447,15 @@ public function stockProdcuts($params)
         $usr                    = $this->db->real_escape_string($params['usr']);
         $empid                  = $this->db->real_escape_string($params['empid']);
         $empname                = $this->db->real_escape_string($params['empname']);
+        $edos_id                = $this->db->real_escape_string($params['edos_id']);
 
         $qry02 = "INSERT INTO ctt_projects (pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
                     pjt_how_required, pjt_trip_go, pjt_trip_back, pjt_to_carry_on, pjt_to_carry_out, pjt_test_tecnic, pjt_test_look,
-                    pjttp_id, pjttc_id, cuo_id, loc_id ) 
+                    pjttp_id, pjttc_id, cuo_id, loc_id, edos_id) 
                  VALUES ('$pjt_parent', '$pjt_name', '$pjt_date_start', '$pjt_date_end', '$pjt_time', 
                     '$pjt_location', '$pjt_status', '$pjt_how_required', '$pjt_trip_go', '$pjt_trip_back',
                     '$pjt_to_carry_on', '$pjt_to_carry_out', '$pjt_test_tecnic', '$pjt_test_look',
-                    $pjt_type, $pjttc_id, $cuo_id, $loc_id);";
+                    '$pjt_type', $pjttc_id, $cuo_id, $loc_id, $edos_id );";
         $this->db->query($qry02);
         $pjtId = $this->db->insert_id;
 

@@ -287,10 +287,14 @@ function activeIconsSerie() {
         $('.overlay_background').addClass('overlay_hide');
         $('.overlay_closer .title').html('');
 
-        $('#tblAsigInput').DataTable().row().val()=motmanteince;
+        $('#tblAsigInput').DataTable().row[5].text($motmanteince);
         // myCheck(serprd);
     
         });
+
+
+        // let el = $(`#tblAsigInput tr td i[id="E${serId}"]`).parents('tr');
+        // $(el.find('td')[2]).html(serSr);
    /*  $('.toChange')
         .unbind('click')
         .on('click', function () {

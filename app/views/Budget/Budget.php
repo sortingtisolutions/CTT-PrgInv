@@ -427,28 +427,20 @@
                     </tr>
 
                     <tr>
-                        <td>Duración del proyecto</td>
-                        <td>
-                            <input type="text" id="txtTimeProject" name="txtTimeProject" class="textbox wt5" autocomplete="off"><br>
-                            <span class="textAlert"></span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Locación</td>
-                        <td>
-                            <input type="text" id="txtLocationEdt" name="txtLocationEdt" class="textbox wtf" autocomplete="off"><br>
-                            <span class="textAlert"></span>
-                        </td>
-                    </tr>
-
-                    <tr>
                         <td>Tipo de proyecto</td>
                         <td>
                             <select  id="txtTypeProjectEdt" name="txtTypeProjectEdt" class="textbox wtf required" >
                                 <option value="0"></option>
                             </select>
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de proyecto</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Duración del proyecto</td>
+                        <td>
+                            <input type="text" id="txtTimeProject" name="txtTimeProject" class="textbox wt5" autocomplete="off"><br>
+                            <span class="textAlert"></span>
                         </td>
                     </tr>
 
@@ -465,7 +457,41 @@
                     </tr>
 
                     <tr>
-                        <td>Cliente</td>
+                        <td>Locación</td>
+                        <td>
+                            <input type="text" id="txtLocationEdt" name="txtLocationEdt" class="textbox wtf" autocomplete="off"><br>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
+
+                    <tr class="hide">
+                        <td>Estado de la República</td>
+                        <td>
+                            <select id="txtEdosRepublic" name="txtEdosRepublic" class="textbox wt5">
+                                <option value="0"></option>
+                            </select>
+                            <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el estado</span>
+                        </td>
+                    </tr>
+
+                    <tr class="hide">
+                        <td>Días de viaje de ida</td>
+                        <td>
+                            <input type="text" id="txtTripGo" name="txtTripGo" class="textbox wt2" autocomplete="off"><br>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
+                    
+                    <tr class="hide">
+                        <td>Días viaje de regreso</td>
+                        <td>
+                            <input type="text" id="txtTripBack" name="txtTripBack" class="textbox wt2" autocomplete="off"><br>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Selecciona cliente</td>
                         <td>
                             <select id="txtCustomerEdt" class="textbox wtf">
                                 <option value="0"></option>
@@ -476,7 +502,7 @@
                     </tr>
 
                     <tr>
-                        <td>Productor</td>
+                        <td>Selecciona productor</td>
                         <td>
                             <select id="txtCustomerRelEdt" class="textbox wtf">
                                 <option value="0"></option>
@@ -494,23 +520,7 @@
                     </tr>
                     
                     <tr>
-                        <td>Viaje de ida</td>
-                        <td>
-                            <input type="text" id="txtTripGo" name="txtTripGo" class="textbox wt2" autocomplete="off"><br>
-                            <span class="textAlert"></span>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td>Viaje de regreso</td>
-                        <td>
-                            <input type="text" id="txtTripBack" name="txtTripBack" class="textbox wt2" autocomplete="off"><br>
-                            <span class="textAlert"></span>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td>Carga</td>
+                        <td>Días de Carga</td>
                         <td>
                             <input type="text" id="txtCarryOn" name="txtCarryOn" class="textbox wt2" autocomplete="off"><br>
                             <span class="textAlert"></span>
@@ -518,7 +528,7 @@
                     </tr>
                     
                     <tr>
-                        <td>Descarga</td>
+                        <td>Días de descarga</td>
                         <td>
                             <input type="text" id="txtCarryOut" name="txtCarryOut" class="textbox wt2" autocomplete="off"><br>
                             <span class="textAlert"></span>
@@ -526,7 +536,7 @@
                     </tr>
                     
                     <tr>
-                        <td>Pruebas técnicas</td>
+                        <td>Días pruebas técnicas</td>
                         <td>
                             <input type="text" id="txtTestTecnic" name="txtTestTecnic" class="textbox wt2" autocomplete="off"><br>
                             <span class="textAlert"></span>
@@ -534,7 +544,7 @@
                     </tr>
                     
                     <tr>
-                        <td>Pruebas look</td>
+                        <td>Días pruebas de look</td>
                         <td>
                             <input type="text" id="txtTestLook" name="txtTestLook" class="textbox wt2" autocomplete="off"><br>
                             <span class="textAlert"></span>
@@ -552,7 +562,7 @@
                     <tr>
                         <td>Tipo de dependencia</td>
                         <td>
-                            <select id="txtProjectDepend" class="textbox wt3 project__selection">
+                            <select id="txtProjectDepend" class="textbox wt5 project__selection">
                                 <option value="0" selected>PROYECTO UNICO</option>
                                 <option value="1">PROYECTO ADJUNTO</option>
                                 <option value="2">PROYECTO PADRE</option>

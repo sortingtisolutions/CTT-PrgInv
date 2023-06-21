@@ -199,3 +199,6 @@ END IF;
 RETURN lexist;
 END //
 
+--*********** 16 de junio ********************
+ALTER TABLE `ctt_projects`
+	ADD COLUMN `edos_id` INT(11) NOT NULL COMMENT 'Id del estado en caso de foraneo' AFTER `pjttc_id`;

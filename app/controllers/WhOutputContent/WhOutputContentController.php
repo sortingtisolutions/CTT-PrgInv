@@ -175,7 +175,6 @@ public function ProcessGetOutProject($request_params)
             $saveExc = $this->model->SaveExchange($paramsdet, $params);
             //$versin = 4;
             // echo $stpid . ' | ' . 'END ' ;
-            
             $Paso= ' Seccion 1 -' ;
         }
         

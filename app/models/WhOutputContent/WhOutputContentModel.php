@@ -162,7 +162,21 @@ class WhOutputContentModel extends Model
         return $folio;
     }
 
-public function SaveExchange($param, $user)
+    public function UpdateProducts($param)
+	{
+        $stpid 		= $this->db->real_escape_string($param['stpid']);
+        $quantity 	= $this->db->real_escape_string($param['stpqty']);
+		/* $idStrSrc 	= $this->db->real_escape_string($param['strid']);
+        $serid 		= $this->db->real_escape_string($param['serid']);
+        $prodId 	= $this->db->real_escape_string($param['prodId']); */
+		
+		$qry = "UPDATE ctt_stores_products 
+                SET stp_quantity = $quantity 
+                WHERE stp_id = $stpid;";
+		return $this->db->query($qry);
+	}
+
+    public function SaveExchange($param, $user)
 	{
 		$employee_data = explode("|",$user);
         $folio				= $this->db->real_escape_string($param['folio']);
@@ -190,7 +204,7 @@ public function SaveExchange($param, $user)
 
     public function GetProjectDetail($params)
     {
-        $pjtid        = $this->db->real_escape_string($params['pjtid']);
+        $pjtid     = $this->db->real_escape_string($params['pjtid']);
 
         $qry = "SELECT stp.stp_id,(stp.stp_quantity-1) AS stp_quantity, stp.str_id, stp.ser_id, stp.prd_id,
                 ct.pjtcn_prod_sku,ct.pjtcn_prod_name,ct.pjtcn_quantity,ct.pjt_id
@@ -202,26 +216,13 @@ public function SaveExchange($param, $user)
         return $this->db->query($qry);
     }
 
-    public function UpdateProducts($param)
-	{
-        $stpid 		= $this->db->real_escape_string($param['stpid']);
-        $quantity 	= $this->db->real_escape_string($param['stpqty']);
-		/* $idStrSrc 	= $this->db->real_escape_string($param['strid']);
-        $serid 		= $this->db->real_escape_string($param['serid']);
-        $prodId 	= $this->db->real_escape_string($param['prodId']); */
-		
-		$qry = "UPDATE ctt_stores_products 
-                SET stp_quantity = $quantity 
-                WHERE stp_id = $stpid;";
-		return $this->db->query($qry);
-	}
 
     public function GetOutProject($params)
     {
         $pjtid = $this->db->real_escape_string($params['pjtid']);
         
         $updt = "UPDATE ctt_projects SET pjt_status = '8' 
-                WHERE pjt_id = '$pjtid' AND pjt_status = '4'";
+                WHERE pjt_id = '$pjtid' ";
 
          /* $this->db->query($updt); */
          return $this->db->query($updt);
@@ -230,7 +231,7 @@ public function SaveExchange($param, $user)
 
     public function GetExistMovil($params)
     {
-        $pjtid        = $this->db->real_escape_string($params['pjtid']);
+        $pjtid    = $this->db->real_escape_string($params['pjtid']);
 
         $qry = "SELECT mov.str_id,mov.ser_id,mov.movstr_placas,pjc.pjt_id FROM ctt_mobile_store AS mov
                 INNER JOIN ctt_projects_detail AS pjd ON mov.ser_id=pjd.ser_id

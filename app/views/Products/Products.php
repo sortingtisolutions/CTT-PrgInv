@@ -52,7 +52,7 @@
 
 
 <!-- Start Ventana modal SERIES -->
-    <div class="overlay_background overlay_hide"id="SerieModal">
+    <div class="overlay_background overlay_hide "id="SerieModal">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <table class="display compact nowrap"  id="tblSerie">

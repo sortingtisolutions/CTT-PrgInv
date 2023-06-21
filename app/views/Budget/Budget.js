@@ -1,4 +1,4 @@
-let cust, proj, prod, vers, budg, tpprd, relc, proPar, tpcall, dstgral;
+let cust, edosRep, proj, prod, vers, budg, tpprd, relc, proPar, tpcall, dstgral;
 var swpjt = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 let glbSec=0;  // jjr
@@ -19,6 +19,7 @@ function inicial() {
     getCustomersOwner();
     getDiscounts();
     getProjectType();
+    getEdosRepublic();
     getProjectTypeCalled();
     discountInsuredEvent();
 
@@ -413,7 +414,13 @@ function getProjectType() {
     var selector = putProjectsType;
     fillField(pagina, par, tipo, selector);
 }
-
+function getEdosRepublic() {
+    var pagina = 'Budget/getEdosRepublic';
+    var par = `[{"prm":""}]`;
+    var tipo = 'json';
+    var selector = putEdosRepublic;
+    fillField(pagina, par, tipo, selector);
+}
 /** Obtiene el listado de los tipos de proyecto */
 function getProjectTypeCalled() {
     var pagina = 'Budget/listProjectsTypeCalled';
@@ -502,10 +509,15 @@ function putCustomers(dt) {
     selectCustomer();
 }
 /**  Llena el listado de prductores */
+function putEdosRepublic(dt) {
+    // console.log(dt);
+    edosRep = dt;
+}
+
+/**  Llena el listado de prductores */
 function putCustomersOwner(dt) {
     relc = dt;
 }
-
 /**  Llena el listado de descuentos */
 function putDiscounts(dt) {
     $('#selDiscount').html('');
@@ -518,7 +530,6 @@ function putDiscounts(dt) {
         $('#selDiscInsr').append(H);
     });
 }
-
 /**  Llena el listado de versiones */
 function putVersion(dt) {
     $('.version__list ul').html('');
@@ -1680,6 +1691,11 @@ function fillContent() {
             $('#txtCustomerRelEdt').append(H);
         }
     });
+    // Llena el selector de Estados
+    $.each(edosRep, function (v, u) {
+            let H = `<option value="${u.edos_id}"> ${u.edos_name}</option>`;
+            $('#txtEdosRepublic').append(H);
+    });
 
     $('.textbox')
         .unbind('focus')
@@ -1690,39 +1706,37 @@ function fillContent() {
 }
 
 function fillData(inx) {
+    console.log('fillData', inx);
     $('.textbox__result').show();
     $('.project__selection').hide();
 
     let pj = proj;
-
+    console.log('fillData', pj);
     $('#txtProjectIdEdt').val(pj[inx].pjt_id);
     $('#txtProjectEdt').val(pj[inx].pjt_name);
     $('#txtPeriodProjectEdt').val(
-        pj[inx].pjt_date_start + ' - ' + pj[inx].pjt_date_end
-    );
+        pj[inx].pjt_date_start + ' - ' + pj[inx].pjt_date_end);
     $('#txtTimeProject').val(pj[inx].pjt_time);
     $('#txtLocationEdt').val(pj[inx].pjt_location);
     $('#txtCustomerOwnerEdt').val(pj[inx].cuo_id);
     $(`#txtTypeProjectEdt option[value = "${pj[inx].pjttp_id}"]`).attr(
         'selected',
-        'selected'
-    );
+        'selected');
     $(`#txtTypeLocationEdt option[value = "${pj[inx].loc_id}"]`).attr(
         'selected',
-        'selected'
-    );
+        'selected');
     $(`#txtCustomerEdt option[value = "${pj[inx].cus_id}"]`).attr(
         'selected',
-        'selected'
-    );
+        'selected');
     $(`#txtCustomerRelEdt option[value = "${pj[inx].cus_parent}"]`).attr(
         'selected',
-        'selected'
-    );
+        'selected');
     $(`#txtTypeCalled option[value = "${pj[inx].pjttc_id}"]`).attr(
         'selected',
-        'selected'
-    );
+        'selected');
+    $(`#txtEdosRepublic option[value = "${pj[inx].loc_id}"]`).attr(
+        'selected',
+        'selected');
     $('#txtHowRequired').val(pj[inx].pjt_how_required);
     $('#txtTripGo').val(pj[inx].pjt_trip_go);
     $('#txtTripBack').val(pj[inx].pjt_trip_back);
@@ -1731,11 +1745,45 @@ function fillData(inx) {
     $('#txtTestTecnic').val(pj[inx].pjt_test_tecnic);
     $('#txtTestLook').val(pj[inx].pjt_test_look);
 
+    // valida si el proyecto es unico y tiene documento adjunto
+    let foreing = pj[inx].edos_id;
+    if (pj[inx].loc_id == 2 ){
+        $('#txtEdosRepublic').parents('tr').removeAttr('class');
+        $('#txtTripGo').parents('tr').removeAttr('class');
+        $('#txtTripBack').parents('tr').removeAttr('class');
+    }
+            // $('#txtEdosRepublic').parents('tr').removeAttr('class');
+            // $('#txtTripGo').parents('tr').removeAttr('class');
+            // $('#txtTripBack').parents('tr').removeAttr('class');
+
+        $('#txtTypeLocationEdt')
+        .unbind('change')
+        .on('change', function () {
+        let selectiontl = $(this).val();
+        if (selectiontl == 2) {
+            // console.log('Foraneo');
+            $('#txtEdosRepublic').parents('tr').removeAttr('class');
+            $('#txtTripGo').parents('tr').removeAttr('class');
+            $('#txtTripBack').parents('tr').removeAttr('class');
+            // $('#txtLocationEdt').val('');
+        } else {
+            // console.log('Otro');
+            // $('#txtLocationEdt').val('CDMX');
+            $('#txtEdosRepublic').parents('tr').addClass('hide');
+            $('#txtTripGo').parents('tr').addClass('hide');
+            $('#txtTripBack').parents('tr').addClass('hide');
+            // $(`#txtTypeLocationEdt option[value = "1"]`).attr(
+            //     'selected',
+            //     'selected'
+            // );
+        }
+    });
+
+    // valida si el proyecto es unico y tiene documento adjunto
     let depend = pj[inx].pjt_parent;
     let boxDepend = depend != '0' ? 'PROYECTO ADJUNTO' : 'PROYECTO UNICO';
 
     $(`#resProjectDepend`).html(boxDepend);
-
     let selection = pj[inx].pjt_parent;
     if (selection == 1) {
         $('#txtProjectParent').parents('tr').removeAttr('class');
@@ -1785,6 +1833,7 @@ function fillData(inx) {
                 let toCarryOut = $('#txtCarryOut').val();
                 let testTecnic = $('#txtTestTecnic').val();
                 let testLook = $('#txtTestLook').val();
+                let projEdosValue = $('#txtEdosRepublic option:selected').val();
 
                 let projDateStart = moment(
                     projPeriod.split(' - ')[0],
@@ -1863,6 +1912,7 @@ function newProject() {
 
     $('.textbox__result').hide();
     $('.project__selection').show();
+    $('#txtLocationEdt').val('CDMX');
 
     $('#txtProjectDepend')
         .unbind('change')
@@ -1878,7 +1928,31 @@ function newProject() {
                 );
             }
         });
+        
+        $('#txtTypeLocationEdt')
+        .unbind('change')
+        .on('change', function () {
+            let selection = $(this).val();
+            if (selection == 2) {
+                // console.log('Foraneo');
+                $('#txtEdosRepublic').parents('tr').removeAttr('class');
+                $('#txtTripGo').parents('tr').removeAttr('class');
+                $('#txtTripBack').parents('tr').removeAttr('class');
+                $('#txtLocationEdt').val('');
+            } else {
+                // console.log('Otro');
+                $('#txtLocationEdt').val('CDMX');
+                $('#txtEdosRepublic').parents('tr').addClass('hide');
+                $('#txtTripGo').parents('tr').addClass('hide');
+                $('#txtTripBack').parents('tr').addClass('hide');
+                // $(`#txtTypeLocationEdt option[value = "1"]`).attr(
+                //     'selected',
+                //     'selected'
+                // );
+            }
+        });
 }
+
 function actionNewProject() {
     $('#saveProject.insert')
         .unbind('click')
@@ -1888,9 +1962,7 @@ function actionNewProject() {
                 let projId = $('#txtProjectIdEdt').val();
                 let projName = $('#txtProjectEdt').val();
                 let projLocation = $('#txtLocationEdt').val();
-                let projLocationTypeValue = $(
-                    '#txtTypeLocationEdt option:selected'
-                ).val();
+                let projLocationTypeValue = $('#txtTypeLocationEdt option:selected').val();
                 let projPeriod = $('#txtPeriodProjectEdt').val();
                 let projTime = $('#txtTimeProject').val();
                 let projType = $('#txtTypeProjectEdt option:selected').val();
@@ -1905,6 +1977,7 @@ function actionNewProject() {
                 let toCarryOut = $('#txtCarryOut').val();
                 let testTecnic = $('#txtTestTecnic').val();
                 let testLook = $('#txtTestLook').val();
+                let edos_id = $('#txtEdosRepublic option:selected').val();
 
                 let projDateStart = moment(
                     projPeriod.split(' - ')[0],
@@ -1942,6 +2015,9 @@ function actionNewProject() {
                         cuoId = u.cuo_id;
                     }
                 });
+
+                if(projLocationTypeValue==2){ edos_id=7; }
+
                 let user = Cookies.get('user').split('|');
                 // console.log('Datos Usuario-',user);
                 let usr = user[0];
@@ -1972,7 +2048,8 @@ function actionNewProject() {
                         "pjtTestLook"    : "${testLook}",
                         "usr"            : "${usr}",
                         "empid"          : "${empid}",
-                        "empname"        : "${empname}"
+                        "empname"        : "${empname}",                       
+                        "edos_id"        : "${edos_id}"
                     }] `;
                 // console.log(par);
                 var pagina = 'Budget/SaveProject';
@@ -2083,7 +2160,7 @@ function printBudget(verId) {
         '_blank'
     ); */
     window.open(
-        `${url}app/views/Budget/BudgetReport-c-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+        `${url}app/views/Budget/BudgetReport-c-v_segmentos.php?v=${v}&u=${u}&n=${n}&h=${h}`,
         '_blank'
     );
 }
