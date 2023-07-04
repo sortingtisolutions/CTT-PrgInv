@@ -14,16 +14,15 @@ $(document).ready(function () {
 function inicial() {
     getExchange();
     getStores();
-    getSuppliers();
+    //getSuppliers();
     //getInvoice();
     getCoins();
     getCategories();
     setting_table();
-    fillContent();
-    $('#btn_exchange').addClass('disabled');
+    fillContent()
     // setting_datepicket($('#txtPeriod'), Date().format('DD/MM/YYYY')   ,Date().format('DD/MM/YYYY'));
-    
-    $('#btn_exchange').on('click', function () { 
+
+    $('#btn_exchange').on('click', function () {
         exchange_apply(0);
     });
 
@@ -34,29 +33,13 @@ function inicial() {
         validator();
     });
 
-
-    $('#txtMarca').on('blur', function () {
-        validator();
-    });
-
     $('#txtQuantity').on('blur', function () {
         validator();
     });
-    $('#txtCategory').on('blur', function () {
-        //validator();
-        let idCategoria = $('#txtCategory').val();
-        let codeSubCategoria = $('#txtSubCategory option:selected').data('code');
-
-        $('#txtSkuProduct').val(idCategoria.toString().padStart(2, '0')+codeSubCategoria);
-    });
-    //
-    /*$('#txtPeriodProjectEdt').on('blur', function () {
-        validator();
-    });*/
 }
 // Setea de la tabla
 function setting_table() {
-    let title = 'Entradas de arrendos';
+    let title = 'Entradas de Almacen';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
     $('#tblExchanges').DataTable({
@@ -112,19 +95,20 @@ function setting_table() {
         columns: [
             {data: 'editable', class: 'edit'},
             {data: 'prod_sku', class: 'sku'},
-            {data: 'prodname', class: 'left'},
-            {data: 'price', class: 'serie-product'},
-            {data: 'skuserie', class: 'serie-product'},
-            {data: 'seriename', class: 'serie-product'},
-            {data: 'brand', class: 'serie-product'},
-            {data: 'strtdate', class: 'serie-product'},
-            {data: 'enddate', class: 'serie-product'},
-            {data: 'store', class: 'store-name_s'},
-            {data: 'category', class: 'quantity'},
-            {data: 'subcategory', class: 'quantity'},
-            {data: 'supplier', class: 'store-name_s'},
-            {data: 'proyect', class: 'quantity'},
-            {data: 'comments', class: 'store-name_s'}
+            {data: 'prodname', class: 'product-name'},
+            {data: 'prodcant', class: 'quantity'},
+            {data: 'prodcost', class: 'price left'},
+            {data: 'prodseri', class: 'serie-product'},
+            {data: 'prodpeti', class: 'serie-product'},
+            {data: 'prodimpo', class: 'serie-product'},
+            {data: 'costtota', class: 'price left'},
+            {data: 'codexcsc', class: 'code-type_s'},
+            {data: 'stnamesc', class: 'store-name_s'},
+            {data: 'provname', class: 'store-name_s'},
+            {data: 'factname', class: 'store-name_s'},
+            {data: 'prodmarc', class: 'store-name_s'},
+            {data: 'numecono', class: 'store-name_s'},
+            {data: 'comments', class: 'comments'},
         ],
     });
 }
@@ -212,10 +196,10 @@ function putTypeExchange(dt) {
     // console.log(dt);
     if (dt[0].ext_id != 0) {
         $.each(dt, function (v, u) {
-            //if (u.ext_elements.substring(0, 1) != '0') {
-                let H = `<option value="${u.pjt_id}" data-content="${u.pjt_id}|${u.pjt_number}|${u.pjt_name}">${u.pjt_name}</option>`;
+            if (u.ext_elements.substring(0, 1) != '0') {
+                let H = `<option value="${u.ext_id}" data-content="${u.ext_code}|${u.ext_type}|${u.ext_link}|${u.ext_code_a}|${u.ext_type_a}|${u.ext_elements}">${u.ext_code} - ${u.ext_description}</option>`;
                 $('#txtTypeExchange').append(H);
-            //}
+            }
         });
     }
 
@@ -291,7 +275,7 @@ function putSubCategories(dt) {
     console.log('putSubCategories',dt);
     if (dt[0].sbc_id != 0) {
         $.each(dt, function (v, u) {
-            let H = `<option value="${u.sbc_id}" data-code="${u.sbc_code}"> ${u.sbc_name}</option>`;
+            let H = `<option value="${u.sbc_id} code="${u.sbc_code}"> ${u.sbc_name}</option>`;
             $('#txtSubCategory').append(H);
         });
 
@@ -406,7 +390,7 @@ function putSupplierList(dt) {
     var sl = $('#txtSuppliers').offset();
     $('#listSupplier .list-items').html('');
     //console.log(sl);
-    $('#listSupplier').css({top: sl.top + 30 + 'px'}); // volver a tomar al hacer scroll.
+    $('#listSupplier').css({top: sl.top + 30 + 'px'});
     $('#listSupplier').slideUp('100', function () {
         $('#listSupplier .list-items').html('');
     });
@@ -421,11 +405,6 @@ function putSupplierList(dt) {
         $('#listSupplier').slideDown('fast');
     });
 
-    //$('#listSupplier').scrollY();
-    $('#txtSupplier').on('scroll', function(){
-        sl = $('#txtSuppliers').offset();
-        $('#listSupplier').css({top: sl.top + 30 + 'px'});
-    });
     $('#listSupplier').on('mouseleave', function () {
         $('#listSupplier').slideUp('fast');
     });
@@ -466,50 +445,34 @@ function validator() {
 
     if ($('#txtTypeExchange').val() == 0) {
         ky = 1;
-        msg += 'Debes seleccionar un proyecto';
-    }
-    if ($('#txtMarca').val() == '') {
-        ky = 1;
-        msg += 'Debes seleccionar un proyecto';
+        msg += 'Debes seleccionar un tipo de movimiento';
     }
 
-    if ($('#txtStoreSource').val() == 0 ) {
+    if ($('#txtStoreSource').val() == 0 && $('.pos1').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
         msg += 'Debes seleccionar un almacen destino';
     }
 
-    
     if ($('#txtSuppliers').val() == 0 && $('.pos2').attr('class').indexOf('hide-items') < 0) {
         // && $('.pos2').attr('class').indexOf('hide-items') < 0
         ky = 1;
         msg += 'Debes seleccionar el proveedor';
     }
 
-    if ($('#txtCategory').val() == 0 && $('.pos3').attr('class').indexOf('hide-items') < 0) {
+    if ($('#txtIdInvoice').val() == 0 && $('.pos3').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
-        msg += 'Debes seleccionar una categoria';
+        msg += 'Debes seleccionar un producto';
     }
 
-    if ($('#txtSubCategory').val() == 0 && $('.pos1').attr('class').indexOf('hide-items') < 0) {
+    if ($('#txtIdProducts').val() == 0 && $('.pos1').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
-        msg += 'Debes seleccionar una subcategoria';
-    }
-    if ($('#txtPrice').val() == 0) {
-        ky = 1;
-        msg += 'Debes seleccionar el precio';
+        msg += 'Debes seleccionar un producto';
     }
 
-    if ($('#txtCoin').val() == 0 ) {
-        //*   && $('.pos5').attr('class').indexOf('hide-items') < 0
+    if ($('#txtCoin').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
         msg += 'Debes indicar el tipo de moneda';
     }
-    /*
-    if ($('#txtPeriodProjectEdt').val() == '' ) {
-        //*   && $('.pos5').attr('class').indexOf('hide-items') < 0
-        ky = 1;
-        msg += 'Debes indicar el tipo de moneda';
-    }*/
                                         //console.log(ky, msg);
 
                                         // if ($('#txtCost').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
@@ -518,25 +481,19 @@ function validator() {
                                         // }
 
     //validacion de cantidad para agregar serie mayor a 1
-    /*if ($('#txtQuantity').val() > 1) {
+    if ($('#txtQuantity').val() > 1) {
         // && $('#txtSerie').val() == 0
-        //console.log($('#txtQuantity').val() > 1);
         $('#txtSerie').attr('disabled', true).val('');
-        $('#txtSkuSerie').attr('disabled', true).val('');
-        //$('#txtNoEco').attr('disabled', true).val('');
+        $('#txtNoEco').attr('disabled', true).val('');
         
     } else if ($('#txtQuantity').val() == 1) {
         $('#txtSerie').attr('disabled', false);
-        $('#txtSkuSerie').attr('disabled', false);
-        //console.log( ky);
-        //ky = 0;
-        
-        //$('#txtNoEco').attr('disabled', false);
+        $('#txtNoEco').attr('disabled', false);
 
     } else {
         ky = 1;
         msg += ' Las series se capturan individualmente en la tabla';
-    }*/
+    }
 
                                     //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
                                     //console.log($('#txtSerie').val(), $('#txtSerie').attr('disabled'));
@@ -545,7 +502,6 @@ function validator() {
         ky = 1;
         msg += 'Debes indicar la serie del producto';
     }
-    
 
     if (ky == 0) {
         $('#btn_exchange').removeClass('disabled');
@@ -558,119 +514,93 @@ function validator() {
 
 // Aplica la seleccion para la tabla de movimientos
 function exchange_apply() {
-    
-    let prdName = $('#txtProduct').val();
-    let prdSku = $('#txtSkuProduct').val();
-    let price = $('#txtPrice').val();
-    
-    let skuSerie= $('#txtSkuSerie').val();
-    let noSerie = $('#txtSerie').val();
-    let serbran = $('#txtMarca').val();
-    
-    //let quantity = $('#txtQuantity').val();
-    
-    let startDate = moment(
-        $('#txtPeriodProjectEdt').val().split(' - ')[0],
-        'DD/MM/YYYY'
-    ).format('YYYY-MM-DD');
-
-    let endDate = moment(
-        $('#txtPeriodProjectEdt').val().split(' - ')[1],
-        'DD/MM/YYYY'
-    ).format('YYYY-MM-DD');
-    
-    let strid = $('#txtStoreSource').val();
-    let nameStore = $(`#txtStoreSource option[value="${strid}"]`).text();
-    
-    let idCategoria = $('#txtCategory').val();
-    let nameCategoria = $(`#txtCategory option[value="${idCategoria}"]`).text();
-
-    let idSubCategoria = $('#txtSubCategory').val();
-    let codeSubCategoria = $('#txtSubCategory option:selected').data('code');
-    let nameSubCategoria = $(`#txtSubCategory option[value="${idSubCategoria}"]`).text();
-
+    let prdId = $('#txtIdProducts').val().split('|')[0].substring(2, 100);
+    let prdSku = $('#txtIdProducts').val().split('|')[1];
+    let prdName = $('#txtIdProducts').val().split('|')[2];
+    let serie = parseInt($('#txtNextSerie').val());
+    let sersku = prdSku + refil(serie, 3);
+    let serser = $('#txtSerie').val();
+    let prodpeti = $('#txtPedimento').val();
+    let prodimpo = $('#txtCostImp').val();
+    let sercost = $('#txtCost').val();
+    let sercoin = $('#txtCoin').val();
+    let quantity = $('#txtQuantity').val();
     let supplier = $('#txtIdSuppliers').val();
     let suppliernm = $('#txtSuppliers').val();
-    
-    let idProyect = $('#txtTypeExchange').val();
-    let proyectName =  $(`#txtTypeExchange option[value="${idProyect}"]`).text();
+    let docinvoice = $('#txtIdInvoice').val();
+    let docinvoicenm = $('#txtInvoice').val();
+    let excId = $('#txtTypeExchange').val();
+    let exccode = $(`#txtTypeExchange option[value="${excId}"]`).attr('data-content').split('|')[0];
+    let strid = $('#txtStoreSource').val();
+    let strName = $(`#txtStoreSource option[value="${strid}"]`).text();
+    //let prodmarc = $('#txtMarca').val();
     let comment = $('#txtComments').val();
+    let serbran = $('#txtMarca').val();
+    let sercostimp = $('#txtCostImp').val();
+    let serpetimp = $('#txtPedimento').val();
+    let sercosttot = $('#txtCostTot').val();
+    let sernumeco = $('#txtNoEco').val();
 
-    let coin = $('#txtCoin').val();
+    serie++;
+    //console.log('Paso 1 ', serie);
 
-    let category =nameCategoria.replace(/\"/, '');
-    let subCategory = nameSubCategoria.replace(/\"/, '');
-    //console.log(prdSku);
-    let sersku = prdSku + refil(1, 3);
-    
-    //serie++;
-    console.log('Paso 1 ');
-        /*
     if (quantity > 1) {
         for (var i = 0; i < quantity; i++) {
-            //sersku = prdSku + refil(serie++, 3);
-            //update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
-            par = `
+            sersku = prdSku + refil(serie++, 3);
+            update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
+            let par = `
         [{
-            "support"  : "${strid}|${idCategoria}|${idSubCategoria}|${codeSubCategoria}|${supplier}|${idProyect}|${coin}",
-            "prdName"       : "${prdName}",
-            "prdSku"       : "${prdSku}",
-            "price"        : "${price}",
-            "skuSerie"       : "${skuSerie}",
-            "noSerie"      : "${noSerie}",
-            "serbran"      : "${serbran}",
-            "nameStore"       : "${nameStore}",
-            "nameCategoria"       : "${category}",
-            "nameSubCategoria"       : "${subCategory}",
-            "startDate"       : "${startDate}",
-            "endDate"       : "${endDate}",
-            "suppliernm"       : "${suppliernm}",
-            "proyectName"       : "${proyectName}",
-            "comment"      : "${comment}",
-            "strid"       : "${strid}",
-            "idCategoria"        : "${idCategoria}",
-            "idSubCategoria"       : "${idSubCategoria }",
-            "supplier"      : "${supplier}",
-            "idProyect"      : "${idProyect}"
-            
+            "support"       : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
+            "sersku"        : "${sersku}",
+            "prodser"       : "${serser}",
+            "prodpeti"      : "${prodpeti}",
+            "prodimpo"      : "${prodimpo}",
+            "sercost"       : "${sercost}",
+            "prodnme"       : "${prdName}",
+            "prodqty"       : "${'1'}",
+            "excodsr"       : "${exccode}",
+            "stnmesr"       : "${strName}",
+            "provname"      : "${suppliernm}",
+            "factname"      : "${docinvoicenm}",
+            "comment"       : "${comment}",
+            "serbran"       : "${serbran}",
+            "sercostimp"    : "${sercostimp}",
+            "serpetimp"     : "${serpetimp}",
+            "sercosttot"    : "${sercosttot}",
+            "sernumeco"     : "${sernumeco}"
         }]`;
             console.log(par);
             fill_table(par);
         }
-    } else {*/
-        par = `
+    } else {
+        let par = `
         [{
-            "support"  : "${strid}|${idCategoria}|${idSubCategoria}|${codeSubCategoria}|${supplier}|${idProyect}|${coin}",
-            "prdName"       : "${prdName}",
-            "prdSku"       : "${prdSku}",
-            "price"        : "${price}",
-            "skuSerie"       : "${sersku}",
-            "noSerie"      : "${noSerie}",
-            "serbran"      : "${serbran}",
-            "nameStore"       : "${nameStore}",
-            "nameCategoria"       : "${category}",
-            "nameSubCategoria"       : "${subCategory}",
-            "startDate"       : "${startDate}",
-            "endDate"       : "${endDate}",
-            "suppliernm"       : "${suppliernm}",
-            "proyectName"       : "${proyectName}",
-            "comment"      : "${comment}",
-            "strid"       : "${strid}",
-            "idCategoria"        : "${idCategoria}",
-            "idSubCategoria"       : "${idSubCategoria }",
-            "supplier"      : "${supplier}",
-            "idProyect"      : "${idProyect}"
-            
+            "support"  : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
+            "sersku"   : "${sersku}",
+            "prodser"  : "${serser}",
+            "sercost"  : "${sercost}",
+            "prodnme"  : "${prdName}",
+            "prodqty"  : "${quantity}",
+            "excodsr"  : "${exccode}",
+            "stnmesr"  : "${strName}",
+            "provname" : "${suppliernm}",
+            "factname" : "${docinvoicenm}",
+            "comment"  : "${comment}",
+            "serbran"  : "${serbran}",
+            "sercostimp"  : "${sercostimp}",
+            "serpetimp"  : "${serpetimp}",
+            "sercosttot"    : "${sercosttot}",
+            "sernumeco"     : "${sernumeco}"
         }]`;
         console.log(par);
         fill_table(par);
-    //}
+    }
     clean_selectors();
 }
 
 // Llena la tabla de los datos de movimientos
 function fill_table(par) {
-    console.log('Paso 3 ', par);
+    // console.log('Paso 3 ', par);
     let largo = $('#tblExchanges tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
     par = JSON.parse(par);
@@ -680,24 +610,25 @@ function fill_table(par) {
     tabla.row
         .add({
             editable: `<i class="fas fa-times-circle kill"></i>`,
-            prod_sku:`<span class="hide-support" id="SKU-${par[0].prdSku}"></span>${par[0].prdSku.slice(0, 10)}-${par[0].prdSku.slice(10, 13)}`,
-            prodname: par[0].prdName,
-            price: par[0].price,
-            skuserie:  par[0].skuSerie, 
-            seriename:'<input class="serie_name fieldIn" type="text" id="PS-" value="' + par[0].noSerie + '">',
-            brand: par[0].serbran,
-            strtdate: par[0].startDate,
-            enddate: par[0].endDate,
-            store: par[0].nameStore,
-            category: par[0].nameCategoria,
-            subcategory: par[0].nameSubCategoria,
-            supplier: par[0].suppliernm,
-            proyect: par[0].proyectName,
+            prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 10)}-${par[0].sersku.slice(10, 13)}`,
+            prodname: par[0].prodnme,
+            prodcant: `<span>${par[0].prodqty}</span>`,
+            prodcost: par[0].sercost, 
+            prodseri: '<input class="serprod fieldIn" type="text" id="PS-' + par[0].prodser + '" value="' + par[0].prodser + '">',
+            prodpeti: par[0].serpetimp,
+            prodimpo: '<input class="sercpet fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">',
+            costtota: par[0].sercosttot,
+            codexcsc: par[0].excodsr,
+            stnamesc: par[0].stnmesr,
+            provname: par[0].provname,
+            factname: par[0].factname,
+            prodmarc: par[0].serbran,
+            numecono: '<input class="serecono fieldIn" type="text" id="PS-' + par[0].sernumeco + '" value="' + par[0].sernumeco + '">',
             comments: `<div>${par[0].comment}</div>`
         })
         .draw();
 
-    $(`#SKU-${par[0].prdSku}`).parent().parent().attr('data-content', par[0].support);
+    $(`#SKU-${par[0].sersku}`).parent().parent().attr('data-content', par[0].support);
 
     btn_apply_appears();
 
@@ -725,23 +656,12 @@ function clean_selectors() {
     // $('#txtTypeExchange').val(0);
     //$('#txtStoreSource').val(0);
     //$('#txtStoreTarget').val(0);
-    //$('#txtTypeExchange').html('<option value="0" selected>Selecciona proyecto</option>');
-    //$('#txtStoreSource').html('<option value="0" selected>Selecciona almacen</option>');
-    //$('#txtCategory').html('<option value="0" selected>Catálogo</option>');
-    //$('#txtSubCategory').html('<option value="0" selected>Selecciona la subcategoria</option>');
-    //$('#txtCoin').html('<option value="0" selected>Selecciona moneda</option>');
+    $('#txtProducts').html('<option value="0" selected>Selecciona producto</option>');
     $('#txtQuantity').val('');
     $('#txtSerie').attr('disabled', false);
     $('#txtSerie').val('');
-    $('#txtProduct').val('');
-    $('#txtSkuProduct').val('');
-    $('#txtPrice').val('');
-    $('#txtMarca').val('');
-   // $('#txtQuantity').val('1');
-    //$('#txtNoEco').attr('disabled', false);
-    //$('#txtNoEco').val('');
-    $('#txtSkuSerie').attr('disabled', false).val('');
-    $('#txtSkuSerie').val('');
+    $('#txtNoEco').attr('disabled', false);
+    $('#txtNoEco').val('');
     /*if ($('#txtSerie').attr('disabled') == true){
         //$('#txtSerie').attr('disabled', false);
         alert('VALIDA');
@@ -749,13 +669,12 @@ function clean_selectors() {
 
     // ** HOLA ****
     
-    //$('#txtCost').val('');
+    $('#txtCost').val('');
+    $('#txtQuantityStored').html('&nbsp;');
     $('#txtComments').val('');
-    //$('#txtCostImp').val('');
-    $('#txtIdSuppliers').val('');
-    $('#txtSuppliers').val('');
-    //$('#txtPeriodProjectEdt').val('');
-    $('#txtPrice').val('');
+    $('#txtMarca').val('');
+    $('#txtCostImp').val('');
+    $('#txtPedimento').val('');
 }
 /** Actualiza la cantidad de cada producto dentro del arreglo */
 function update_array_products(id, sr) {
@@ -765,47 +684,41 @@ function update_array_products(id, sr) {
 }
 
 function read_exchange_table() {
-    /*if (folio == undefined) {
+    if (folio == undefined) {
         var pagina = 'NewSublet/NextExchange';
         var par = '[{"par":""}]';
         var tipo = 'html';
         var selector = putNextExchangeNumber;
         fillField(pagina, par, tipo, selector);
-    } else {*/
+    } else {
         $('#tblExchanges tbody tr').each(function (v, u) {
-            //let seriesku = $(this).attr('data-content').split('|')[3];
-            let prodsku = $($(u).find('td')[1]).text();
+            let seriesku = $(this).attr('data-content').split('|')[3];
             let prodname = $($(u).find('td')[2]).text();
-            let price = $($(u).find('td')[3]).text();
-            let skuserie =$($(u).find('td')[4]).text();
-            let seriename = $($(u).find('td')[5]).children('.serie_name').val();
+            let quantity = $($(u).find('td')[3]).text();
+            let sericost = $($(u).find('td')[4]).text();
+            let serienum = $($(u).find('td')[5]).children('.serprod').val();
             //let serienum = $('.serprod').val();
-            let brand= $($(u).find('td')[6]).text();
-            let strtdate = $($(u).find('td')[7]).text();
-            let enddate = $($(u).find('td')[8]).text();
-            let store = $($(u).find('td')[9]).text();
-            let category = $($(u).find('td')[10]).text();
-            let subcategory = $($(u).find('td')[11]).text();
-            let supplier = $($(u).find('td')[12]).text();
-            let proyect = $($(u).find('td')[13]).text();
-           
-            //
+            let petition = $($(u).find('td')[6]).text();
+            let costpeti = $($(u).find('td')[7]).children('.sercpet').val();
+            let costtota = $($(u).find('td')[8]).text();
+            let codeexch = $($(u).find('td')[9]).text();
+            let storname = $($(u).find('td')[10]).text();
+            let serbrand = $($(u).find('td')[13]).text();
+            let numecono = $($(u).find('td')[14]).children('.serecono').val();
             let comments = $($(u).find('td')[15]).text();
+           
+            let producid = $(this).attr('data-content').split('|')[0];
+            let typeexch = $(this).attr('data-content').split('|')[1];
+            let storesid = $(this).attr('data-content').split('|')[2];
+            let sericoin = $(this).attr('data-content').split('|')[4];
+            let suppliid = $(this).attr('data-content').split('|')[5];
+            let docinvoi = $(this).attr('data-content').split('|')[6];
 
-            let strid = $(this).attr('data-content').split('|')[0];
-            let id_cat = $(this).attr('data-content').split('|')[1];
-            let id_subc = $(this).attr('data-content').split('|')[2];
-            let id_codSuc = $(this).attr('data-content').split('|')[3];
-            let id_supplier = $(this).attr('data-content').split('|')[4];
-            let id_proy = $(this).attr('data-content').split('|')[5];
-            let coin= $(this).attr('data-content').split('|')[6];
-            
-
-            let truk = `${1}|${prodsku}|${prodname}|${price}|${skuserie}|${seriename}|${coin}|${brand}|${strtdate}|${enddate}|${store}|${id_cat}|${id_subc}|${id_supplier}|${id_proy}|${comments}|${supplier}`;
+            let truk = `${folio}|${seriesku}|${prodname}|${quantity}|${serienum}|${storname}|${comments}|${codeexch}|${typeexch}|${producid}|${storesid}|${sericost}|${sericoin}|${suppliid}|${docinvoi}|${petition}|${costpeti}|${serbrand}|${costtota}|${numecono}`;
             console.log(truk);
             build_data_structure(truk);
         });
-    //}
+    }
 }
 
 /* Generación del folio  */
@@ -821,23 +734,26 @@ function build_data_structure(pr) {
     [{
         "fol" :  "${el[0]}",
         "sku" :  "${el[1]}",
-        "pnm" :  "${el[2]}",
-        "prc" :  "${el[3]}",
-        "sks" :  "${el[4]}",
-        "srnm" :  "${el[5]}",
-        "coi" :  "${el[6]}",
-        "brd" :  "${el[7]}",
-        "sdt" :  "${el[8]}",
-        "edt" :  "${el[9]}",
-        "str" :  "${el[10]}",
-        "ctg" :  "${el[11]}",
-        "sbctg" :  "${el[12]}",
-        "idsup" :  "${el[13]}",
-        "pry" :  "${el[14]}",
-        "com" :  "${el[15]}",
-        "sup" :  "${el[16]}"
+        "pnm" :  "${el[2].toUpperCase()}",
+        "qty" :  "${el[3]}",
+        "ser" :  "${el[4]}",
+        "str" :  "${el[5]}",
+        "com" :  "${el[6]}",
+        "cod" :  "${el[7]}",
+        "idx" :  "${el[8]}",
+        "prd" :  "${el[9]}",
+        "sti" :  "${el[10]}",
+        "cos" :  "${el[11]}",
+        "cin" :  "${el[12]}",
+        "sup" :  "${el[13]}",
+        "doc" :  "${el[14]}",
+        "pet" :  "${el[15]}",
+        "cpe" :  "${el[16]}",
+        "bra" :  "${el[17]}",
+        "cto" :  "${el[18]}",
+        "nec" :  "${el[19]}"
     }]`;
-    //console.log(' Antes de Insertar', par);
+    console.log(' Antes de Insertar', par);
     save_exchange(par);
 }
 
@@ -857,13 +773,11 @@ function build_data_structure(pr) {
 /** Graba intercambio de almacenes */
 function save_exchange(pr) {
     //   console.log(pr);
-    var pagina = 'NewSublet/SaveSubletting';
+    var pagina = 'NewSublet/SaveExchange';
     var par = pr;
     var tipo = 'html';
     var selector = exchange_result;
-    console.log(par);
     fillField(pagina, par, tipo, selector);
-    //console.log(fillField(pagina, par, tipo, selector));
 }
 
 /* function update_store(ap) {
@@ -876,9 +790,8 @@ function save_exchange(pr) {
 } */
 
 function exchange_result(dt) {
-    //console.log(dt);
-    //$('.resFolio').text(refil(folio, 7));
-    $('#MoveResultModal').modal('show');
+    $('.resFolio').text(refil(folio, 7));
+    $('#MoveFolioModal').modal('show');
     $('#btnHideModal').on('click', function () {
         window.location = 'NewSublet';
     });
@@ -892,7 +805,7 @@ function updated_stores(dt) {
     // console.log(dt);
 
     $('.resFolio').text(refil(folio, 7));
-    $('#MoveResultModal').modal('show');
+    $('#MoveFolioModal').modal('show');
     $('#btnHideModal').on('click', function () {
         window.location = 'NewSublet';
     });
@@ -992,11 +905,11 @@ function fillContent() {
     // let restdate= moment().add(5,'d');   // moment().format(‘dddd’); // Saturday
     // let fecha = moment(Date()).format('DD/MM/YYYY');
     // let restdate= moment().subtract(3, 'days'); 
-    let restdate='';
+    /* let restdate='';
     let todayweel =  moment(Date()).format('dddd');
     if (todayweel=='Monday' || todayweel=='Sunday'){
         restdate= moment().subtract(3, 'days');
-    } else { restdate= moment(Date()) } 
+    } else { restdate= moment(Date()) } */
 
     
     let fecha = moment(Date()).format('DD/MM/YYYY');
@@ -1052,82 +965,4 @@ function fillContent() {
     }); */
     // Llena el selector de tipo de llamados
 
-
-    //
-    
-
-}
-
-
-function saveStore() {
-    var strName = $('#id_product').val();
-    var empName = $('#sku_product').val();
-    var strtype = $('#').val();
-    var par = `
-        [{  "str_name"   : "${strName}",
-            "str_type"   : "${strtype}",
-            "emp_name"   : "${empName}"
-        }]`;
-
-    strs = '';
-    var pagina = 'Almacenes/SaveAlmacen';
-    var tipo = 'html';
-    var selector = putSaveStore;
-    fillField(pagina, par, tipo, selector);
-}
-
-
-function saveNewSubletting() {
-    let ky = validatorSublettingFields();
-    if (ky == 0) {
-        let prdId = '0';
-        let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
-        let prdSk = $('#txtPrdSku').val();
-        let prdMd = $('#txtPrdModel').val();
-        let prdPr = $('#txtPrdPrice').val();
-        let prdEn = $('#txtPrdEnglishName').val();
-        let prdCd = $('#txtPrdCodeProvider').val();
-        let prdNp = $('#txtPrdNameProvider').val();
-        let prdCm = $('#txtPrdComments').val();
-        let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
-        let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
-        prdLv = prdLv == '1' ? 'A' : 'P';
-        let prdLn = $('#txtPrdLonely').children('i').attr('data_val');
-        let prdAs = $('#txtPrdInsured').children('i').attr('data_val');
-        let prdCt = $(`#txtCatId`).val();
-        let prdSb = $(`#txtSbcId`).val();
-        let prdCn = $(`#txtCinId`).val();
-        let prdSv = $(`#txtSrvId`).val();
-        let prdDc = $(`#txtDocId`).val();
-        let prdDi = $(`#txtDcpId`).val();
-
-        var par = `
-                [{
-                    "prdId" : "${prdId}",
-                    "prdNm" : "${prdNm}",
-                    "prdSk" : "${prdSk}",
-                    "prdMd" : "${prdMd}",
-                    "prdPr" : "${prdPr}",
-                    "prdEn" : "${prdEn}",
-                    "prdCd" : "${prdCd}",
-                    "prdNp" : "${prdNp}",
-                    "prdCm" : "${prdCm}",
-                    "prdVs" : "${prdVs}",
-                    "prdLv" : "${prdLv}",
-                    "prdLn" : "${prdLn}",
-                    "prdAs" : "${prdAs}",
-                    "prdCt" : "${prdCt}",
-                    "prdSb" : "${prdSb}",
-                    "prdCn" : "${prdCn}",
-                    "prdSv" : "${prdSv}",
-                    "prdDc" : "${prdDc}",
-                    "prdDi" : "${prdDi}"
-                }]
-            `;
-        /*  console.log(par); */
-        var pagina = 'Products/saveNewProduct';
-        var tipo = 'html';
-        var selector = resNewProduct;
-        fillField(pagina, par, tipo, selector);
-    }
 }

@@ -39,6 +39,7 @@ function getPriceList(catId) {
  */
 function putPriceList(dt) {
     if (dt[0].prd_id != '0') {
+        // setting_table();
         var catId = dt[0].cat_id;
         $.each(dt, function (v, u) {
             pack = u.prd_level == 'K' ? 'fas' : 'far';
@@ -46,7 +47,6 @@ function putPriceList(dt) {
             let invoice = u.doc_id == 0 ? '' : docInvo;
             let reserved =
                 u.prd_reserved > 0 ? `<span class="toView" data-content="${u.prd_id}" data-name="${u.prd_name}" data-level="${u.prd_level}">${u.prd_reserved}</span>` : '';
-
             var H = `
                 <tr class="odd">
                     <td class="edit"></td>
@@ -76,7 +76,7 @@ function setting_table() {
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
     $('#tblPriceList').DataTable({
-        order: [[1, 'asc']],
+        order: [[0, 'asc']],
         dom: 'Blfrtip',
         lengthMenu: [
             [100, 200, 300, -1],
@@ -272,6 +272,8 @@ function getProduct(prdId, prdName) {
 }
 
 function putProducts(dt) {
+    console.log(dt);
+    
     $('#ProductsModal').removeClass('overlay_hide');
 
     $('#tblProductlList').DataTable({

@@ -346,8 +346,10 @@ public function stockProdcuts($request_params)
         $user = $group[0];
         $name = $group[2]; 
 
-        $result = $this->model->SaveBudget($request_params);
-        echo $result . '|' . $name;
+        $resultIns = $this->model->SaveBudget($request_params);
+        $result = $this->reOrdenList($request_params);
+
+        echo $resultIns . '|' . $name . '|' . $result;
         
     } 
 
@@ -696,21 +698,44 @@ public function ProcessProjectProduct($request_params)
     
 
 // Lista los comentarios del proyecto
-public function listChangeProd($request_params)
-{
-    $params =  $this->session->get('user');
-    $result = $this->model->listChangeProd($request_params);
-    $i = 0;
-    while($row = $result->fetch_assoc()){
-        $rowdata[$i] = $row;
-        $i++;
-    }
-    if ($i>0){
-        $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-    } else {
-        $res =  '[{"catsub":"0"}]';	
-    }
-    echo $res;
-} 
+    public function listChangeProd($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listChangeProd($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"catsub":"0"}]';	
+        }
+        echo $res;
+    } 
+
+    public function reOrdenList($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listReordering($request_params);
+        $valnew=1;
+        while($row = $result->fetch_assoc())
+        {
+            $prdsku = $row["bdg_prod_sku"];
+            $docsec = $row["bdg_section"];
+            $bdg_id = $row["bdg_id"];
+            $docord = $row["bdg_order"];
+
+            $paramup = array(
+                'valnew' => $valnew,
+                'bdg_id' => $bdg_id,
+            );
+            $bandReOrder = $this->model->upReorderingProducts($paramup);
+            $valnew=$valnew + 1;
+        }
+
+        echo $bandReOrder ; 
+    } 
 
 }

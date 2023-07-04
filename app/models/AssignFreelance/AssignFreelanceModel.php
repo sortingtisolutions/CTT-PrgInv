@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No se permite acceso directo');
 
-class NewSubletModel extends Model
+class AssignFreelanceModel extends Model
 {
 
     public function __construct()
@@ -10,7 +10,7 @@ class NewSubletModel extends Model
     }
 
 // Listado de Tipos de movimiento  *****
-    public function listExchange()
+    public function listProyects()
     {
         $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name,  DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project, 
                 DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start, DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end, 
@@ -26,6 +26,7 @@ class NewSubletModel extends Model
     }
 
 // Listado de Almacecnes
+/*
     public function listStores()
     {
         $qry = "SELECT * FROM ctt_stores 
@@ -39,7 +40,6 @@ class NewSubletModel extends Model
         $qry = "  SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
         return $this->db->query($qry);
     }
-   
 // Listado de Facturas
     public function listInvoice($param)
     {
@@ -62,21 +62,19 @@ class NewSubletModel extends Model
     {
         $qry = "SELECT cin_id, cin_code, cin_name FROM ctt_coins WHERE cin_status = 1;";
         return $this->db->query($qry);
-    }
+    }*/
       
-// Listado de categorias
-    public function listCategories()
+// Listado de Areas
+    public function listAreas()
     {
-        $qry = "SELECT * FROM ctt_categories 
-                WHERE cat_status  = 1 AND cat_name NOT LIKE 'PAQUETE%';";
+        $qry = "SELECT DISTINCT free.free_area_id, are.are_name FROM ctt_freelances AS free INNER JOIN ctt_areas AS are ON are.are_id=free.free_area_id";
         return $this->db->query($qry);
     }
 
-    public function listSubCategories($param)
+    public function listFreelances($param)
     {
         $catId = $this->db->real_escape_string($param['catId']);
-        $qry = "SELECT * FROM ctt_subcategories 
-                WHERE sbc_status = 1 AND cat_id=$catId;";
+        $qry = "SELECT free.free_id, free.free_cve, free.free_name, free.free_area_id, free.free_rfc, free.free_address, free.free_phone, free.free_email, free.free_unit, free.free_plates, free.free_license, free.free_fed_perm, free.free_clase, free.`free_año` FROM ctt_freelances AS free LEFT JOIN ctt_assign_proyect AS ass ON ass.free_id=free.free_id WHERE ass.ass_status IS NULL AND free.free_area_id=  $catId;";
         return $this->db->query($qry);
     }
 
@@ -106,38 +104,25 @@ public function NextExchange()
 }
 
 // Registra los movimientos entre almacenes
-    public function SaveSubletting($param, $user)
+    public function SaveFreelanceProy($param, $user)
     {
         //$employee_data = explode("|",$user);
-        $con_id	    = $this->db->real_escape_string($param['fol']);
-        $prod_sku	= $this->db->real_escape_string($param['sku']);
-        $prod_name 	= $this->db->real_escape_string($param['pnm']);
-        $price		= $this->db->real_escape_string($param['prc']);
-        $skuserie	= $this->db->real_escape_string($param['sks']);
-        $seriename	= $this->db->real_escape_string($param['srnm']);
-        $coin	= $this->db->real_escape_string($param['coi']);
-        //$quantity	= $this->db->real_escape_string($param['qty']);
-        $brand		= $this->db->real_escape_string($param['brd']);
-        $strtdate	= $this->db->real_escape_string($param['sdt']);
-        $enddate	= $this->db->real_escape_string($param['edt']);
-        $store		= $this->db->real_escape_string($param['str']);
-		$category	= $this->db->real_escape_string($param['ctg']);
-        $subcategory= $this->db->real_escape_string($param['sbctg']);
-        $id_sup   = $this->db->real_escape_string($param['idsup']);
-        $proyect    = $this->db->real_escape_string($param['pry']);
-        $comments    = $this->db->real_escape_string($param['com']);
-        
-        $supplier  = $this->db->real_escape_string($param['sup']);
-
-        //$exc_employee_name	= $this->db->real_escape_string($employee_data[2]);
-        $ser_status         = '1';
-        $ser_situation      = 'D';
-        $ser_stage          = 'D';
-        // $ser_lonely         = '1';
-        $ser_behaviour      = 'C';
-        //return "hecho";
+        $pry_id	= $this->db->real_escape_string($param['pry']);
+        $free_id 	= $this->db->real_escape_string($param['free']);
+        $area_id		= $this->db->real_escape_string($param['area']);
+        $sdate	= $this->db->real_escape_string($param['sdate']);
+        $edate	= $this->db->real_escape_string($param['edate']);
+        $com	= $this->db->real_escape_string($param['com']);
 
 
+        $qry = "INSERT INTO ctt_assign_proyect (
+            pjt_id, free_id, ass_date_start, ass_date_end, ass_coments, 
+            ass_status) 
+        VALUES (
+            '$pry_id', '$free_id ', ' $sdate', '$edate', '$com','1'
+        );";
+        $this->db->query($qry);
+        $ass_Id = $this->db->insert_id;
         //PRODUCT
         /*
         $query = "SELECT COUNT(*) FROM ctt_products WHERE prd_sku = '$prod_sku'";
@@ -161,6 +146,7 @@ public function NextExchange()
             $prdId = $this->db->insert_id;
 
         }*/
+        /*
         $qry = "INSERT INTO ctt_products_paso (
             prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
             prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
@@ -189,9 +175,9 @@ public function NextExchange()
                     ser_id, sup_id, prj_id, cin_id,prd_id) 
                 VALUES (null, '$price', '1', '$strtdate', '$enddate', 
                 '$comments', '$serId', '$id_sup', '$proyect','$coin','$prdId');";
-        $this->db->query($qry2);
+        $this->db->query($qry2);*/
 
-        return $con_id;
+        return $ass_Id;
     }
 
 }

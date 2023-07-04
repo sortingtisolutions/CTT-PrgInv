@@ -50,9 +50,16 @@
 
                             <!-- Código de la subcategoria -->
                             <div class="row">
-                                <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
                                     <input id="txtSubcategoryCode" name="txtSubcategoryCode" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
                                     <label for="txtSubcategoryCode">Código Subcategoria</label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
+                                    <input id="txtOrderPrint" name="txtOrderPrint" type="text" class="form-control form-control-sm" style="text-transform:uppercase">
+                                    <label for="txtOrderPrint">Orden de Impresión</label>
                                 </div>
                             </div>
 
@@ -83,6 +90,7 @@
                             <th style="width: 200px">Catálogo</th>
                             <th style="width:  30px">Código</br>catálogo</th>
                             <th style="width:  50px">Existencias</th>
+                            <th style="width:  50px">Orden de<br>Impresión</th>
                         </tr>
                     </thead>
                 </table>

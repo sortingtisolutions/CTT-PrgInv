@@ -23,7 +23,6 @@
 						</div>
 
 						<hr>
-
 						<h6	class="nameProduct objet objHidden">Producto</h6>
 						<input type="hidden" id="txtIdProject" class="form-control">
 						<input type="hidden" id="txtIdProduct" class="form-control">

@@ -12,12 +12,12 @@ $(document).ready(function () {
 
 //INICIO DE PROCESOS
 function inicial() {
-    getExchange();
-    getStores();
-    getSuppliers();
+    getlistProyect();
+    //getStores();
+    //getSuppliers();
     //getInvoice();
-    getCoins();
-    getCategories();
+    //getCoins();
+    getAreas();
     setting_table();
     fillContent();
     $('#btn_exchange').addClass('disabled');
@@ -27,27 +27,20 @@ function inicial() {
         exchange_apply(0);
     });
 
-    $('#txtCost').on('blur', function () {
+    $('txtProject').on('blur', function () {
         validator();
     });
-    $('#txtSerie').on('blur', function () {
-        validator();
-    });
-
-
-    $('#txtMarca').on('blur', function () {
+    $('#txtArea').on('blur', function () {
         validator();
     });
 
-    $('#txtQuantity').on('blur', function () {
+
+    $('#txtFreelance').on('blur', function () {
         validator();
     });
-    $('#txtCategory').on('blur', function () {
-        //validator();
-        let idCategoria = $('#txtCategory').val();
-        let codeSubCategoria = $('#txtSubCategory option:selected').data('code');
 
-        $('#txtSkuProduct').val(idCategoria.toString().padStart(2, '0')+codeSubCategoria);
+    $('#txtFechaAdmision').on('blur', function () {
+        validator();
     });
     //
     /*$('#txtPeriodProjectEdt').on('blur', function () {
@@ -55,6 +48,7 @@ function inicial() {
     });*/
 }
 // Setea de la tabla
+
 function setting_table() {
     let title = 'Entradas de arrendos';
     let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
@@ -111,35 +105,28 @@ function setting_table() {
         fixedHeader: true,
         columns: [
             {data: 'editable', class: 'edit'},
-            {data: 'prod_sku', class: 'sku'},
-            {data: 'prodname', class: 'left'},
-            {data: 'price', class: 'serie-product'},
-            {data: 'skuserie', class: 'serie-product'},
-            {data: 'seriename', class: 'serie-product'},
-            {data: 'brand', class: 'serie-product'},
+            {data: 'proyname', class: 'sku'},
+            {data: 'freename', class: 'left'},
+            {data: 'area', class: 'serie-product'},
             {data: 'strtdate', class: 'serie-product'},
-            {data: 'enddate', class: 'serie-product'},
-            {data: 'store', class: 'store-name_s'},
-            {data: 'category', class: 'quantity'},
-            {data: 'subcategory', class: 'quantity'},
-            {data: 'supplier', class: 'store-name_s'},
-            {data: 'proyect', class: 'quantity'},
-            {data: 'comments', class: 'store-name_s'}
+            {data: 'enddate', class: 'serie-product'}, 
+            {data: 'comments', class: 'serie-product'}
         ],
     });
 }
 
 // Solicita los tipos de movimiento
-function getExchange() {
-    var pagina = 'NewSublet/listExchange';
+function getlistProyect() {
+    var pagina = 'AssignFreelance/listProyects';
     var par = '[{"parm":""}]';
     var tipo = 'json';
-    var selector = putTypeExchange;
+    var selector = putProject;
     fillField(pagina, par, tipo, selector);
 }
+/*
 // Solicita el listado de almacenes
 function getStores() {
-    var pagina = 'NewSublet/listStores';
+    var pagina = 'AssignFreelance/listStores';
     var par = '[{"parm":""}]';
     var tipo = 'json';
     var selector = putStores;
@@ -147,7 +134,7 @@ function getStores() {
 }
 // Solicita los provedores
 function getSuppliers() {
-    var pagina = 'MoveStoresIn/listSuppliers';
+    var pagina = 'AssignFreelance/listSuppliers';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     //var selector = putSuppliers;
@@ -156,7 +143,7 @@ function getSuppliers() {
 }
 // Solicita los documentos factura
 function getInvoice(id) {
-    var pagina = 'NewSublet/listInvoice';
+    var pagina = 'AssignFreelance/listInvoice';
     var par = `[{"extId":"${id}"}]`;
     var tipo = 'json';
     var selector = putInvoiceList;
@@ -164,28 +151,27 @@ function getInvoice(id) {
 }
 // Solicita los documentos factura
 function getCoins() {
-    var pagina = 'NewSublet/listCoins';
+    var pagina = 'AssignFreelance/listCoins';
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = putCoins;
     fillField(pagina, par, tipo, selector);
-}
+}*/
 // Solicita las categorias
-function getCategories() {
-    console.log('categos');
-    var pagina = 'NewSublet/listCategories';
+function getAreas() {
+    var pagina = 'AssignFreelance/listAreas';
     var par = `[{"store":""}]`;
     var tipo = 'json';
-    var selector = putCategories;
+    var selector = putAreas;
     fillField(pagina, par, tipo, selector);
 }
 
-function getSubCategories(catId) {
-    console.log(catId);
-    var pagina = 'NewSublet/listSubCategories';
+function getFreelance(catId) {
+    //console.log(catId);
+    var pagina = 'AssignFreelance/listFreelances';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
-    var selector = putSubCategories;
+    var selector = putFreelance;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -208,23 +194,23 @@ function getProducts(catId) {
 
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
-function putTypeExchange(dt) {
+function putProject(dt) {
     // console.log(dt);
     if (dt[0].ext_id != 0) {
         $.each(dt, function (v, u) {
             //if (u.ext_elements.substring(0, 1) != '0') {
                 let H = `<option value="${u.pjt_id}" data-content="${u.pjt_id}|${u.pjt_number}|${u.pjt_name}">${u.pjt_name}</option>`;
-                $('#txtTypeExchange').append(H);
+                $('#txtProject').append(H);
             //}
         });
     }
-
-    $('#txtTypeExchange').on('change', function () {
+ 
+    $('#txtProject').on('change', function () {
         let id = $(this).val();
-        link = $(`#txtTypeExchange option[value="${id}"]`).attr('data-content').split('|')[2];
-        code = $(`#txtTypeExchange option[value="${id}"]`).attr('data-content').split('|')[5];
+        link = $(`#txtProject option[value="${id}"]`).attr('data-content').split('|')[2];
+        code = $(`#txtProject option[value="${id}"]`).attr('data-content').split('|')[5];
         // setting_interface(code,id);
-        relocation_products();
+        //relocation_products();
         validator();
     });
 }
@@ -268,38 +254,43 @@ function putCoins(dt) {
     });
 }
 
-function putCategories(dt) {
-    if (dt[0].cat_id != 0) {
+function putAreas(dt) {
+    
+    if (dt[0].free_area_id != 0) {
         $.each(dt, function (v, u) {
-            let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
-            $('#txtCategory').append(H);
+            let H = `<option value="${u.free_area_id}"> ${u.are_name}</option>`;
+            $('#txtArea').append(H);
         });
 
-        $('#txtCategory').on('change', function () {
+        $('#txtArea').on('change', function () {
             let catId = $(this).val();
-            $('#txtSubCategory').html('');
-            $('#txtSubCategory').val('Selecciona la subategoria');
+            //console.log(catId);
+            
+            $('#txtFreelance').html('');
+            $('#txtFreelance').val('Selecciona el freelance');
             /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
             // $('#txtProducts').val('     Cargando Informacion . . . .');
-            getSubCategories(catId)
+            getFreelance(catId);
             // getProducts(catId);
         });
     }
 }
 
-function putSubCategories(dt) {
-    console.log('putSubCategories',dt);
-    if (dt[0].sbc_id != 0) {
+function putFreelance(dt) {
+    //console.log('putSubCategories',dt);
+    
+    if (dt[0].free_id != 0) {
         $.each(dt, function (v, u) {
-            let H = `<option value="${u.sbc_id}" data-code="${u.sbc_code}"> ${u.sbc_name}</option>`;
-            $('#txtSubCategory').append(H);
+            let H = `<option value="${u.free_id}" > ${u.free_name}</option>`;
+            $('#txtFreelance').append(H);
+            console.log(u.free_id);
         });
 
-        $('#txtSubCategory').on('change', function () {
+        $('#txtFreelance').on('change', function () {
             let subcatId = $(this).val();
-            /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
-            // getSubCategories(catId)
-            // getProducts(catId);
+            
+            getFreelance(subcatId);
+            
         });
     }
 }
@@ -464,7 +455,7 @@ function validator() {
     let ky = 0;
     let msg = '';
 
-    if ($('#txtTypeExchange').val() == 0) {
+    if ($('#txtProject').val() == 0) {
         ky = 1;
         msg += 'Debes seleccionar un proyecto';
     }
@@ -473,37 +464,20 @@ function validator() {
         msg += 'Debes seleccionar un proyecto';
     }
 
-    if ($('#txtStoreSource').val() == 0 ) {
-        ky = 1;
-        msg += 'Debes seleccionar un almacen destino';
-    }
-
-    
-    if ($('#txtSuppliers').val() == 0 && $('.pos2').attr('class').indexOf('hide-items') < 0) {
-        // && $('.pos2').attr('class').indexOf('hide-items') < 0
-        ky = 1;
-        msg += 'Debes seleccionar el proveedor';
-    }
-
-    if ($('#txtCategory').val() == 0 && $('.pos3').attr('class').indexOf('hide-items') < 0) {
+    if ($('#txtArea').val() == 0 ) {
         ky = 1;
         msg += 'Debes seleccionar una categoria';
     }
 
-    if ($('#txtSubCategory').val() == 0 && $('.pos1').attr('class').indexOf('hide-items') < 0) {
+    if ($('#txtFreelance').val() == 0 && $('.pos1').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
         msg += 'Debes seleccionar una subcategoria';
     }
-    if ($('#txtPrice').val() == 0) {
+    if ($('#txtFechaAdmision').val() == 0 && $('.pos1').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
-        msg += 'Debes seleccionar el precio';
+        msg += 'Debes seleccionar una subcategoria';
     }
 
-    if ($('#txtCoin').val() == 0 ) {
-        //*   && $('.pos5').attr('class').indexOf('hide-items') < 0
-        ky = 1;
-        msg += 'Debes indicar el tipo de moneda';
-    }
     /*
     if ($('#txtPeriodProjectEdt').val() == '' ) {
         //*   && $('.pos5').attr('class').indexOf('hide-items') < 0
@@ -540,11 +514,11 @@ function validator() {
 
                                     //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
                                     //console.log($('#txtSerie').val(), $('#txtSerie').attr('disabled'));
-
+/*
     if ($('#txtSerie').val() == '' && $('#txtSerie').attr('disabled') == undefined && $('.pos6').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
         msg += 'Debes indicar la serie del producto';
-    }
+    }*/
     
 
     if (ky == 0) {
@@ -559,49 +533,30 @@ function validator() {
 // Aplica la seleccion para la tabla de movimientos
 function exchange_apply() {
     
-    let prdName = $('#txtProduct').val();
-    let prdSku = $('#txtSkuProduct').val();
-    let price = $('#txtPrice').val();
+    let project = $('#txtProject').val();
+    let area = $('#txtArea').val();
+    let freelance = $('#txtFreelance').val();
     
-    let skuSerie= $('#txtSkuSerie').val();
-    let noSerie = $('#txtSerie').val();
-    let serbran = $('#txtMarca').val();
+    let fechaAdmision= $('#txtFechaAdmision').val();
+    let fechaFinalizacion = $('#txtFechaFinalizacion').val();
+    let txtComments = $('#txtComments').val();
+    let nameArea = $(`#txtArea option[value="${area}"]`).text();
     
-    //let quantity = $('#txtQuantity').val();
+    let nameFreelance = $(`#txtFreelance option[value="${freelance}"]`).text();
+    let nameProject = $(`#txtProject option[value="${project}"]`).text();
     
-    let startDate = moment(
-        $('#txtPeriodProjectEdt').val().split(' - ')[0],
-        'DD/MM/YYYY'
-    ).format('YYYY-MM-DD');
+    //let idCategoria = $('#txtArea').val();
+    //let nameCategoria = $(`#txtArea option[value="${idCategoria}"]`).text();
 
-    let endDate = moment(
-        $('#txtPeriodProjectEdt').val().split(' - ')[1],
-        'DD/MM/YYYY'
-    ).format('YYYY-MM-DD');
-    
-    let strid = $('#txtStoreSource').val();
-    let nameStore = $(`#txtStoreSource option[value="${strid}"]`).text();
-    
-    let idCategoria = $('#txtCategory').val();
-    let nameCategoria = $(`#txtCategory option[value="${idCategoria}"]`).text();
+    //let idSubCategoria = $('#txtFreelance').val();
+    //let codeSubCategoria = $('#txtFreelance option:selected').data('code');
+    //let nameSubCategoria = $(`#txtFreelance option[value="${idSubCategoria}"]`).text();
 
-    let idSubCategoria = $('#txtSubCategory').val();
-    let codeSubCategoria = $('#txtSubCategory option:selected').data('code');
-    let nameSubCategoria = $(`#txtSubCategory option[value="${idSubCategoria}"]`).text();
 
-    let supplier = $('#txtIdSuppliers').val();
-    let suppliernm = $('#txtSuppliers').val();
-    
-    let idProyect = $('#txtTypeExchange').val();
-    let proyectName =  $(`#txtTypeExchange option[value="${idProyect}"]`).text();
-    let comment = $('#txtComments').val();
-
-    let coin = $('#txtCoin').val();
-
-    let category =nameCategoria.replace(/\"/, '');
-    let subCategory = nameSubCategoria.replace(/\"/, '');
+    //let area =nameCategoria.replace(/\"/, '');
+    //let freelance = nameSubCategoria.replace(/\"/, '');
     //console.log(prdSku);
-    let sersku = prdSku + refil(1, 3);
+    //let sersku = prdSku + refil(1, 3);
     
     //serie++;
     console.log('Paso 1 ');
@@ -640,26 +595,13 @@ function exchange_apply() {
     } else {*/
         par = `
         [{
-            "support"  : "${strid}|${idCategoria}|${idSubCategoria}|${codeSubCategoria}|${supplier}|${idProyect}|${coin}",
-            "prdName"       : "${prdName}",
-            "prdSku"       : "${prdSku}",
-            "price"        : "${price}",
-            "skuSerie"       : "${sersku}",
-            "noSerie"      : "${noSerie}",
-            "serbran"      : "${serbran}",
-            "nameStore"       : "${nameStore}",
-            "nameCategoria"       : "${category}",
-            "nameSubCategoria"       : "${subCategory}",
-            "startDate"       : "${startDate}",
-            "endDate"       : "${endDate}",
-            "suppliernm"       : "${suppliernm}",
-            "proyectName"       : "${proyectName}",
-            "comment"      : "${comment}",
-            "strid"       : "${strid}",
-            "idCategoria"        : "${idCategoria}",
-            "idSubCategoria"       : "${idSubCategoria }",
-            "supplier"      : "${supplier}",
-            "idProyect"      : "${idProyect}"
+            "support"  : "${area}|${freelance}|${project}",
+            "project"       : "${nameProject}",
+            "area"       : "${nameArea}",
+            "freelance"        : "${nameFreelance}",
+            "fechaAdmision"       : "${fechaAdmision}",
+            "fechaFinalizacion"      : "${fechaFinalizacion}",
+            "comments"      : "${txtComments}"
             
         }]`;
         console.log(par);
@@ -677,27 +619,19 @@ function fill_table(par) {
 
     let tabla = $('#tblExchanges').DataTable();
 
-    tabla.row
+    var row= tabla.row
         .add({
             editable: `<i class="fas fa-times-circle kill"></i>`,
-            prod_sku:`<span class="hide-support" id="SKU-${par[0].prdSku}"></span>${par[0].prdSku.slice(0, 10)}-${par[0].prdSku.slice(10, 13)}`,
-            prodname: par[0].prdName,
-            price: par[0].price,
-            skuserie:  par[0].skuSerie, 
-            seriename:'<input class="serie_name fieldIn" type="text" id="PS-" value="' + par[0].noSerie + '">',
-            brand: par[0].serbran,
-            strtdate: par[0].startDate,
-            enddate: par[0].endDate,
-            store: par[0].nameStore,
-            category: par[0].nameCategoria,
-            subcategory: par[0].nameSubCategoria,
-            supplier: par[0].suppliernm,
-            proyect: par[0].proyectName,
-            comments: `<div>${par[0].comment}</div>`
+            proyname:par[0].project,
+            freename: par[0].freelance,
+            area: par[0].area,
+            strtdate:  par[0].fechaAdmision, 
+            enddate:par[0].fechaFinalizacion,
+            comments: par[0].comments
         })
         .draw();
 
-    $(`#SKU-${par[0].prdSku}`).parent().parent().attr('data-content', par[0].support);
+        $(row.node()).attr('data-content', par[0].support);
 
     btn_apply_appears();
 
@@ -722,40 +656,15 @@ function btn_apply_appears() {
 
 // Limpia los campos para uns nueva seleccion
 function clean_selectors() {
-    // $('#txtTypeExchange').val(0);
-    //$('#txtStoreSource').val(0);
-    //$('#txtStoreTarget').val(0);
-    //$('#txtTypeExchange').html('<option value="0" selected>Selecciona proyecto</option>');
-    //$('#txtStoreSource').html('<option value="0" selected>Selecciona almacen</option>');
-    //$('#txtCategory').html('<option value="0" selected>Catálogo</option>');
-    //$('#txtSubCategory').html('<option value="0" selected>Selecciona la subcategoria</option>');
-    //$('#txtCoin').html('<option value="0" selected>Selecciona moneda</option>');
-    $('#txtQuantity').val('');
-    $('#txtSerie').attr('disabled', false);
-    $('#txtSerie').val('');
-    $('#txtProduct').val('');
-    $('#txtSkuProduct').val('');
-    $('#txtPrice').val('');
-    $('#txtMarca').val('');
-   // $('#txtQuantity').val('1');
-    //$('#txtNoEco').attr('disabled', false);
-    //$('#txtNoEco').val('');
-    $('#txtSkuSerie').attr('disabled', false).val('');
-    $('#txtSkuSerie').val('');
-    /*if ($('#txtSerie').attr('disabled') == true){
-        //$('#txtSerie').attr('disabled', false);
-        alert('VALIDA');
-    } */
-
-    // ** HOLA ****
     
-    //$('#txtCost').val('');
+    //$('#txtProject').val(0);
+    $('#txtArea').val(0);
+    $('#txtFreelance').val(0);
+    $('#txtFechaAdmision').val('');
+    $('#txtFechaFinalizacion').val('');
     $('#txtComments').val('');
-    //$('#txtCostImp').val('');
-    $('#txtIdSuppliers').val('');
-    $('#txtSuppliers').val('');
-    //$('#txtPeriodProjectEdt').val('');
-    $('#txtPrice').val('');
+
+   
 }
 /** Actualiza la cantidad de cada producto dentro del arreglo */
 function update_array_products(id, sr) {
@@ -774,34 +683,30 @@ function read_exchange_table() {
     } else {*/
         $('#tblExchanges tbody tr').each(function (v, u) {
             //let seriesku = $(this).attr('data-content').split('|')[3];
-            let prodsku = $($(u).find('td')[1]).text();
-            let prodname = $($(u).find('td')[2]).text();
-            let price = $($(u).find('td')[3]).text();
-            let skuserie =$($(u).find('td')[4]).text();
-            let seriename = $($(u).find('td')[5]).children('.serie_name').val();
+            
+            //let proy = $($(u).find('td')[1]).text();
+            let proyname = $($(u).find('td')[1]).text();
+            let freename = $($(u).find('td')[2]).text();
+            let area = $($(u).find('td')[3]).text();
+            let strtdate =$($(u).find('td')[4]).text();
+            let enddate = $($(u).find('td')[5]).text();
             //let serienum = $('.serprod').val();
-            let brand= $($(u).find('td')[6]).text();
-            let strtdate = $($(u).find('td')[7]).text();
-            let enddate = $($(u).find('td')[8]).text();
-            let store = $($(u).find('td')[9]).text();
-            let category = $($(u).find('td')[10]).text();
-            let subcategory = $($(u).find('td')[11]).text();
-            let supplier = $($(u).find('td')[12]).text();
-            let proyect = $($(u).find('td')[13]).text();
-           
-            //
-            let comments = $($(u).find('td')[15]).text();
+            let comments= $($(u).find('td')[6]).text();
 
-            let strid = $(this).attr('data-content').split('|')[0];
-            let id_cat = $(this).attr('data-content').split('|')[1];
+            let id_are = $(this).attr('data-content').split('|')[0];
+            let id_free = $(this).attr('data-content').split('|')[1];
+            let id_proj = $(this).attr('data-content').split('|')[2];
+            
+            /*
+            
             let id_subc = $(this).attr('data-content').split('|')[2];
             let id_codSuc = $(this).attr('data-content').split('|')[3];
             let id_supplier = $(this).attr('data-content').split('|')[4];
             let id_proy = $(this).attr('data-content').split('|')[5];
             let coin= $(this).attr('data-content').split('|')[6];
-            
+            */
 
-            let truk = `${1}|${prodsku}|${prodname}|${price}|${skuserie}|${seriename}|${coin}|${brand}|${strtdate}|${enddate}|${store}|${id_cat}|${id_subc}|${id_supplier}|${id_proy}|${comments}|${supplier}`;
+            let truk = `${id_proj}|${id_free}|${id_are}|${strtdate}|${enddate}|${comments}`;
             console.log(truk);
             build_data_structure(truk);
         });
@@ -819,23 +724,12 @@ function build_data_structure(pr) {
     let el = pr.split('|');
     let par = `
     [{
-        "fol" :  "${el[0]}",
-        "sku" :  "${el[1]}",
-        "pnm" :  "${el[2]}",
-        "prc" :  "${el[3]}",
-        "sks" :  "${el[4]}",
-        "srnm" :  "${el[5]}",
-        "coi" :  "${el[6]}",
-        "brd" :  "${el[7]}",
-        "sdt" :  "${el[8]}",
-        "edt" :  "${el[9]}",
-        "str" :  "${el[10]}",
-        "ctg" :  "${el[11]}",
-        "sbctg" :  "${el[12]}",
-        "idsup" :  "${el[13]}",
-        "pry" :  "${el[14]}",
-        "com" :  "${el[15]}",
-        "sup" :  "${el[16]}"
+        "pry" :  "${el[0]}",
+        "free" :  "${el[1]}",
+        "area" :  "${el[2]}",
+        "sdate" :  "${el[3]}",
+        "edate" :  "${el[4]}",
+        "com" :  "${el[5]}"
     }]`;
     //console.log(' Antes de Insertar', par);
     save_exchange(par);
@@ -857,11 +751,11 @@ function build_data_structure(pr) {
 /** Graba intercambio de almacenes */
 function save_exchange(pr) {
     //   console.log(pr);
-    var pagina = 'NewSublet/SaveSubletting';
+    var pagina = 'AssignFreelance/SaveFreelanceProy';
     var par = pr;
     var tipo = 'html';
     var selector = exchange_result;
-    console.log(par);
+    //console.log(par);
     fillField(pagina, par, tipo, selector);
     //console.log(fillField(pagina, par, tipo, selector));
 }
@@ -878,9 +772,10 @@ function save_exchange(pr) {
 function exchange_result(dt) {
     //console.log(dt);
     //$('.resFolio').text(refil(folio, 7));
+    
     $('#MoveResultModal').modal('show');
     $('#btnHideModal').on('click', function () {
-        window.location = 'NewSublet';
+        window.location = 'AssignFreelance';
     });
     $('#btnPrintReport').on('click', function () {
         // $('.btn-print').trigger('click');
@@ -1076,58 +971,3 @@ function saveStore() {
     fillField(pagina, par, tipo, selector);
 }
 
-
-function saveNewSubletting() {
-    let ky = validatorSublettingFields();
-    if (ky == 0) {
-        let prdId = '0';
-        let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
-        let prdSk = $('#txtPrdSku').val();
-        let prdMd = $('#txtPrdModel').val();
-        let prdPr = $('#txtPrdPrice').val();
-        let prdEn = $('#txtPrdEnglishName').val();
-        let prdCd = $('#txtPrdCodeProvider').val();
-        let prdNp = $('#txtPrdNameProvider').val();
-        let prdCm = $('#txtPrdComments').val();
-        let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
-        let prdLv = $('#txtPrdLevel').children('i').attr('data_val');
-        prdLv = prdLv == '1' ? 'A' : 'P';
-        let prdLn = $('#txtPrdLonely').children('i').attr('data_val');
-        let prdAs = $('#txtPrdInsured').children('i').attr('data_val');
-        let prdCt = $(`#txtCatId`).val();
-        let prdSb = $(`#txtSbcId`).val();
-        let prdCn = $(`#txtCinId`).val();
-        let prdSv = $(`#txtSrvId`).val();
-        let prdDc = $(`#txtDocId`).val();
-        let prdDi = $(`#txtDcpId`).val();
-
-        var par = `
-                [{
-                    "prdId" : "${prdId}",
-                    "prdNm" : "${prdNm}",
-                    "prdSk" : "${prdSk}",
-                    "prdMd" : "${prdMd}",
-                    "prdPr" : "${prdPr}",
-                    "prdEn" : "${prdEn}",
-                    "prdCd" : "${prdCd}",
-                    "prdNp" : "${prdNp}",
-                    "prdCm" : "${prdCm}",
-                    "prdVs" : "${prdVs}",
-                    "prdLv" : "${prdLv}",
-                    "prdLn" : "${prdLn}",
-                    "prdAs" : "${prdAs}",
-                    "prdCt" : "${prdCt}",
-                    "prdSb" : "${prdSb}",
-                    "prdCn" : "${prdCn}",
-                    "prdSv" : "${prdSv}",
-                    "prdDc" : "${prdDc}",
-                    "prdDi" : "${prdDi}"
-                }]
-            `;
-        /*  console.log(par); */
-        var pagina = 'Products/saveNewProduct';
-        var tipo = 'html';
-        var selector = resNewProduct;
-        fillField(pagina, par, tipo, selector);
-    }
-}

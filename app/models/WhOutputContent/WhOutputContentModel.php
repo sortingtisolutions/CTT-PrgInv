@@ -52,7 +52,8 @@ class WhOutputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
                 INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
-                WHERE pcn.pjtcn_id=$pjtcnid ORDER BY pdt.pjtdt_prod_sku;";
+                WHERE pcn.pjtcn_id=$pjtcnid AND prd.prd_level!='A' 
+                ORDER BY pdt.pjtdt_prod_sku;";
 
        return $this->db->query($qry);
    }
@@ -63,11 +64,23 @@ class WhOutputContentModel extends Model
        $serorg = $this->db->real_escape_string($params['serorg']);
 
         $qry = "SELECT '$serorg' as id_orig, ser_id, ser_sku, ser_serial_number, 
-                ser_situation, ser_stage, pr.prd_name, pr.prd_sku
+                ser_situation, ser_stage, pr.prd_name, pr.prd_sku, sr.ser_no_econo
                 FROM ctt_series AS sr
                 INNER JOIN ctt_products as pr on sr.prd_id = pr.prd_id
-                WHERE sr.ser_sku LIKE '$ser_id%' and sr.ser_situation='D' and sr.ser_status=1;";
+                WHERE pr.prd_level!='A' AND (sr.ser_sku LIKE '$ser_id%' 
+                AND sr.ser_situation='D' and sr.ser_status=1);";
             
+       return $this->db->query($qry);
+   }
+
+   public function listComments($params)
+   {
+        $pjt_id = $this->db->real_escape_string($params['pjt_id']);
+       
+        $qry = "SELECT com_id, com_user, com_comment FROM ctt_comments 
+                WHERE com_Action_id=$pjt_id
+                ORDER BY com_date;";
+
        return $this->db->query($qry);
    }
 

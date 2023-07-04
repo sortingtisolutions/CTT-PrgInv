@@ -686,7 +686,7 @@ function resEdtProduct(dt) {
     let docInvo = `<span class="invoiceView" id="F${prdDi}"><i class="fas fa-file-alt"></i></span>`;
     let prdDc = prdDi == 0 ? '' : docInvo;
     prdLv = prdLv == 'A' ? 'A' : 'P';
-
+    console.log('ACTUALIZA JJR');
     let el = $(`#tblProducts tr[id="${prdId}"]`);
     $(el.find('td')[1]).text(prdSk);
     $(el.find('td')[2]).text(prdNm);
@@ -1088,7 +1088,8 @@ function putSelectSerie(dt) {
         });
 
     let fecha = moment(Date()).format('DD/MM/YYYY');
-    let fechaStart = moment(Date()).subtract(90, 'days').format('DD/MM/YYYY');
+    // let fechaStart = moment(Date()).subtract(730, 'days').format('DD/MM/YYYY');
+    let fechaStart = moment(Date()).subtract(10, 'years').format('DD/MM/YYYY');
 
     $('#calendar').daterangepicker(
         {

@@ -179,12 +179,13 @@ public function listSubCategories($request_params)
 	} 
 
 // Registra los movimientos entre almacenes
-    public function SaveSubletting($request_params)
+    public function SaveExchange($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->SaveSubletting($request_params, $params);
+        $result = $this->model->SaveExchange($request_params, $params);
         $res = $result;
         echo $res;
     } 
+
 
 }

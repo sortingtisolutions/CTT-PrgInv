@@ -73,8 +73,8 @@ function settingTable() {
         ],
         dom: 'Blfrtip',
         lengthMenu: [
-            [50, 100, 200, -1],
-            [50, 100, 200, 'Todos'],
+            [100, 200, -1],
+            [100, 200, 'Todos'],
         ],
         buttons: [
             {
@@ -129,6 +129,7 @@ function settingTable() {
             {data: 'catgname', name: 'catgname', class: 'catName'},
             {data: 'catgcode', name: 'catgcode', class: 'catCode center'},
             {data: 'quantity', name: 'quantity', class: 'quantity'},
+            {data: 'ordprint', name: 'ordprint', class: 'ordprint center'},            
         ],
     });
     deep_loading('C');
@@ -170,6 +171,7 @@ function activeActions() {
             $('#txtSubcategoryCode').val('');
             $('#lstSubcategory').val('');
             $('#lstCategory').val('');
+            $('#txtOrderPrint').val('');
         });
 
     /**  ---- Habilita los iconos de control de la tabla ----- */
@@ -205,11 +207,12 @@ function saveSubcategory() {
     let subcatNm = $('#txtSubcategory').val().toUpperCase();
     let subcatCd = $('#txtSubcategoryCode').val().toUpperCase();
     let categyId = $('#lstCategory').val();
-
+    let sbcOrd = $('#txtOrderPrint').val();
     var par = `
     [{  "sbcName"   : "${subcatNm}",
         "sbcCode"   : "${subcatCd}",
-        "catId"     : "${categyId}"
+        "catId"     : "${categyId}",
+        "sbcOrd"    : "${sbcOrd}"
     }]`;
 
     subs = null;
@@ -237,24 +240,29 @@ function putSaveSubcategory(dt) {
 /** ---- Start EDITA SUBCATEGORIA ---- */
 /** ---- Llena los campos del formulario para editar ---- */
 function editSubcategory(sbcId) {
+    console.log('editSubcategory', sbcId);
     let ix = goThroughSubcategory(sbcId);
     $('#txtSubcategory').val(subs[ix].sbc_name);
     $('#txtIdSubcategory').val(subs[ix].sbc_id);
     $('#txtSubcategoryCode').val(subs[ix].sbc_code);
     $('#lstCategory').val(subs[ix].cat_id);
+    $('#txtOrderPrint').val(subs[ix].sbc_order_print);
 }
+
 /** ---- Actualiza la subcategoria seleccionada ---- */
 function updateSubcategory() {
     var sbcId = $('#txtIdSubcategory').val();
     var sbcName = $('#txtSubcategory').val().replace(/\"/g, '°').replace(/\,/g, '^').replace(/\'/g, '¿');
     var sbcCode = $('#txtSubcategoryCode').val();
     var catId = $('#lstCategory').val();
+    var sbcOrd = $('#txtOrderPrint').val();
     var par = `
         [{
             "sbcId"    : "${sbcId}",
             "sbcName"  : "${sbcName}",
             "sbcCode"  : "${sbcCode}",
-            "catId"    : "${catId}"
+            "catId"    : "${catId}",
+            "sbcOrd"   : "${sbcOrd}"
         }]`;
     //console.log('Datos : ', par);
     subs = null;

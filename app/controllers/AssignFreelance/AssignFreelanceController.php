@@ -1,9 +1,9 @@
 <?php
     defined('BASEPATH') or exit('No se permite acceso directo');
-    require_once ROOT . FOLDER_PATH . '/app/models/NewSublet/NewSubletModel.php';
+    require_once ROOT . FOLDER_PATH . '/app/models/AssignFreelance/AssignFreelanceModel.php';
     require_once LIBS_ROUTE .'Session.php';
 
-class NewSubletController extends Controller
+class AssignFreelanceController extends Controller
 {
     private $session;
     public $model;
@@ -11,7 +11,7 @@ class NewSubletController extends Controller
 
     public function __construct()
     {
-        $this->model = new NewSubletModel();
+        $this->model = new AssignFreelanceModel();
         $this->session = new Session();
         $this->session->init();
         if($this->session->getStatus() === 1 || empty($this->session->get('user')))
@@ -26,10 +26,10 @@ class NewSubletController extends Controller
 
 
 // LISTA LOS TIPOS DE MOVIMIENTOS
-    public function listExchange()
+    public function listProyects()
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listExchange();
+        $result = $this->model->listProyects();
         $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;
@@ -62,10 +62,10 @@ class NewSubletController extends Controller
     }    
 
 // Lista los Categorias 
-    public function listCategories($request_params)
+    public function listAreas($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listCategories();
+        $result = $this->model->listAreas();
             $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;
@@ -80,10 +80,10 @@ class NewSubletController extends Controller
     }    
 
 // Lista los Categorias 
-public function listSubCategories($request_params)
+public function listFreelances($request_params)
 {
     $params =  $this->session->get('user');
-    $result = $this->model->listSubCategories($request_params);
+    $result = $this->model->listFreelances($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -179,10 +179,10 @@ public function listSubCategories($request_params)
 	} 
 
 // Registra los movimientos entre almacenes
-    public function SaveSubletting($request_params)
+    public function SaveFreelanceProy($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->SaveSubletting($request_params, $params);
+        $result = $this->model->SaveFreelanceProy($request_params, $params);
         $res = $result;
         echo $res;
     } 

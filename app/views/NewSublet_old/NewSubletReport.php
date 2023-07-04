@@ -5,7 +5,7 @@ ini_set('display_errors', 'On');
 require_once '../../../vendor/autoload.php';
 
 //INICIO DE PROCESOS
-$prdId = $_GET['v'];
+$verId = $_GET['v'];
 $usrId = $_GET['u'];
 $uname = $_GET['n'];
 
@@ -15,14 +15,9 @@ $conkey = decodificar($_GET['h']) ;
 $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
-$qry = "SELECT pjtcn_prod_name, pdt.pjtdt_prod_sku, sr.ser_serial_number, pj.pjt_number, 
-                pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad
-        FROM ctt_projects_content AS pcn
-        INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
-        INNER JOIN ctt_series AS sr ON sr.ser_id=pdt.ser_id
-        INNER JOIN ctt_projects AS pj ON pj.pjt_id=pcn.pjt_id
-        WHERE pcn.pjt_id=$prdId AND substr(pdt.pjtdt_prod_sku,11,1)!='A' 
-        ORDER BY pdt.pjtdt_prod_sku;";
+$qry = "SELECT * 
+        FROM ctt_stores_exchange AS bg
+        WHERE bg.con_id = $verId ORDER BY exc_id;";
 
 $res = $conn->query($qry);
 $conn->close();
@@ -30,6 +25,7 @@ $conn->close();
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
+
 
 // Cabezal de la página
 $header = '
@@ -52,9 +48,9 @@ $html = '
         <div class="container">
             <div class="name-report">
                 <p>
-                    <span class="number">Detalle del proyecto: '. $items[0]['pjt_name'] .' </span>
+                    <span class="number">Informe de Entrada a Almacen: '. str_pad($items[0]['con_id'],7,'0',STR_PAD_LEFT) .'</span>
                 <br>
-                    <span class="date">Fecha de salida'.  $items[0]['pjt_date_start'] .'</span>
+                    <span class="date">'.  $items[0]['exc_date'] .'</span>
                 </p>
             </div>
 
@@ -65,7 +61,7 @@ $html = '
                         <table class="table-data">
                             <tr>
                                 <td class="concept">Nombre Empleado:</td>
-                                <td class="data"><strong>'. $uname .'</strong></td>
+                                <td class="data"><strong>'. $items[0]['exc_employee_name'] .'</strong></td>
                             </tr>
                             <tr>
                                 <td class="concept">&nbsp;</td>
@@ -83,15 +79,19 @@ $html = '
 /* Tabla de equipo base -------------------------  */
 if ($equipoBase == '1'){
         $html .= '
+
+
                     <!-- Start Tabla de costo base  -->
                     <h2>Lista de equipo</h2>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                         <thead>
                             <tr>
-                                <th class="tit-figure prod">Producto</th>
                                 <th class="tit-figure amou">Sku</th>
+                                <th class="tit-figure prod">Producto</th>
                                 <th class="tit-figure qnty">Cant.</th>
                                 <th class="tit-figure amou">No. Serie</th>
+                                <th class="tit-figure disc">Clave Movimiento</th>
+                                <th class="tit-figure amou">Almacen Afectado</th>
                                 <th class="tit-figure prod">Notas</th>
                             </tr>
                         </thead>
@@ -101,19 +101,24 @@ if ($equipoBase == '1'){
                             $section     = 1;
 
                             if ($section == '1') {
-                                $prodname     = $items[$i]['pjtcn_prod_name'] ;  //  ------------
-                                $prodsku      = $items[$i]['pjtdt_prod_sku'] ; //  ------------
-                                $quantity     = $items[$i]['dt_cantidad'] ;  //  ------------
-                                $sernum       = $items[$i]['ser_serial_number'] ; //  -------- 
+                                $product        = $items[$i]['exc_sku_product'] ; //  --------------------------- Nombre del producto
+                                $price          = $items[$i]['exc_product_name'] ;    //  ----------------------- Precio del producto
+                                $quantity       = $items[$i]['exc_quantity'] ;  //  --------------------------- Cantidad solicitada
+                                $daysBase       = $items[$i]['exc_serie_product'] ; //  --------------------------- Dias de costo 
+                                $discountBase   = $items[$i]['ext_code'] ; //  ----------------------- Porcentaje de descuento base
+                                $daysTrip       = $items[$i]['exc_store'];  //  --------------------------- Dias de viaje
+                                $discountTrip   = $items[$i]['exc_comments'];  //  ----------------------- Porcentaje de descuento viaje
             
                                 
         $html .= '
                             <tr>
-                                <td class="dat-figure supply"><dd>' . $prodname . '</dd></td>
-                                <td class="dat-figure sku">' . $prodsku  . '</td>
-                                <td class="dat-figure qnty">' . $quantity  . '</td>
-                                <td class="dat-figure days">' . $sernum . '</td>
-                                <td class="dat-figure prod"> </td>
+                                <td class="dat-figure amou">' . $product                . '</td>
+                                <td class="dat-figure prod">' . $price                  . '</td>
+                                <td class="dat-figure qnty">' . $quantity               . '</td>
+                                <td class="dat-figure days">' . $daysBase               . '</td>
+                                <td class="dat-figure disc">' . $discountBase           . '</td>
+                                <td class="dat-figure amou">' . $daysTrip               . '</td>
+                                <td class="dat-figure prod">' . $discountTrip           . '</td>
                             </tr>
                             ';
                             }
@@ -125,6 +130,8 @@ if ($equipoBase == '1'){
                             <td class="tot-figure amou"></td>
                             <td class="tot-figure amou"></td>
                             <td class="tot-figure amou"></td>
+                            <td class="tot-figure amou"></td>
+                            <td class="tot-figure prod"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -145,9 +152,10 @@ $foot = '
                             <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
                             <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
                             <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
-                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Versión '. $prdId .'</td>
+                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Versión '. $verId .'</td>
                         </tr>
                     </table>
+
                 </td>
             </tr>
             
@@ -164,6 +172,7 @@ $foot = '
         </table>
     </footer>
 ';
+
 
 $css = file_get_contents('../../assets/css/reports_p.css');
 

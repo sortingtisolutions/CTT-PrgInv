@@ -38,17 +38,18 @@ class WorkInputContentModel extends Model
         //         pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
         //         FROM ctt_projects_content WHERE pjt_id=$pjt_id order by pjtcn_order;";
 
-        $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
+        $qry = "SELECT pjtcn_id, pjd.pjtdt_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
                     pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
                 FROM ctt_projects_content AS pjc
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.pjtvr_id=pjc.pjtvr_id 
-                WHERE pjc.pjt_id=$pjt_id order by pjtcn_order;";
+                WHERE pjc.pjt_id=$pjt_id AND SUBSTR(pjtdt_prod_sku,11,1)!='A'
+                order by pjtcn_order;";
 
         return $this->db->query($qry);
     }
 
    // Listado de Motivos para mantenimiento
-   public function listSeries($params)
+   public function listReason($params)
    {
         $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
        

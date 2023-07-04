@@ -38,6 +38,7 @@ class SubcategoriesModel extends Model
             array( 'db' => 'catgname', 'dt' => 'catgname' ),
             array( 'db' => 'catgcode', 'dt' => 'catgcode' ),
             array( 'db' => 'quantity', 'dt' => 'quantity' ),
+            array( 'db' => 'ordprint', 'dt' => 'ordprint' ),
         );
         $sql_details = array(
             'user' => USER,
@@ -59,7 +60,7 @@ class SubcategoriesModel extends Model
     {
 
         $qry = "SELECT sc.sbc_id, sc.sbc_code, sc.sbc_name, ct.cat_name, 
-                        ct.cat_id, '0' as quantity 
+                        ct.cat_id, '0' as quantity, sbc_order_print 
                 FROM  ctt_subcategories        AS sc   
                 INNER JOIN ctt_categories      AS ct ON ct.cat_id = sc.cat_id
                 WHERE sc.sbc_status = '1' AND ct.cat_status = '1' 
@@ -90,10 +91,10 @@ class SubcategoriesModel extends Model
         $sbcName = $this->db->real_escape_string($params['sbcName']);
         $sbcCode = $this->db->real_escape_string($params['sbcCode']);
         $catId = $this->db->real_escape_string($params['catId']);
+        $sbcOrd = $this->db->real_escape_string($params['sbcOrd']);
 
-
-        $qry = "INSERT INTO ctt_subcategories(sbc_code, sbc_name, sbc_status, cat_id)
-                VALUES('$sbcCode',UPPER('$sbcName'),1,'$catId')";
+        $qry = "INSERT INTO ctt_subcategories(sbc_code, sbc_name, sbc_status, cat_id, sbc_order_print)
+                VALUES('$sbcCode',UPPER('$sbcName'),1,'$catId', '$sbcOrd')";
         $this->db->query($qry);	
         $sbcId = $this->db->insert_id;
 		return $sbcId;
@@ -106,23 +107,23 @@ class SubcategoriesModel extends Model
         $sbcName    = $this->db->real_escape_string($params['sbcName']);
         $sbcCode    = $this->db->real_escape_string($params['sbcCode']);
         $catId      = $this->db->real_escape_string($params['catId']);
+        $sbcOrd     = $this->db->real_escape_string($params['sbcOrd']);
 
         $qry = "UPDATE ctt_subcategories
-                SET 
-                      sbc_name  = UPPER('$sbcName'),
-                      sbc_code  = '$sbcCode',
-                      cat_id    = '$catId'
+                SET   sbc_name      = UPPER(REPLACE('$sbcName','\°','\"')),
+                      sbc_code      = '$sbcCode',
+                      cat_id        = '$catId',
+                      sbc_order_print  = '$sbcOrd'
                 WHERE sbc_id    = '$sbcId';";
 
         $this->db->query($qry);	
 
-        $qry2 = "UPDATE ctt_subcategories
+        /* $qry2 = "UPDATE ctt_subcategories
         SET   sbc_name  = REPLACE(sbc_name,'\°','\"')
         WHERE sbc_id    = '$sbcId';";
 
         $this->db->query($qry2);	
-
-
+ */
         return $sbcId;
     }
 //UPPER('$sbcName'),

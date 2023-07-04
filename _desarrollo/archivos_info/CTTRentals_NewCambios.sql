@@ -202,3 +202,33 @@ END //
 --*********** 16 de junio ********************
 ALTER TABLE `ctt_projects`
 	ADD COLUMN `edos_id` INT(11) NOT NULL COMMENT 'Id del estado en caso de foraneo' AFTER `pjttc_id`;
+
+--*********** 26 de junio ********************
+ALTER TABLE `ctt_subcategories`
+	ADD COLUMN `sbc_order_print` INT(11) NOT NULL AFTER `cat_id`;
+
+
+CREATE TABLE `ctt_freelances` (
+	`free_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id del Freelance',
+	`free_cve` INT(11) NULL DEFAULT NULL COMMENT 'clave para control del Freelance',
+	`free_name` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Nombre del Freelance' COLLATE 'utf8mb4_general_ci',
+	`free_area_id` INT(11) NULL DEFAULT NULL COMMENT 'Id con relacion a ctt_area',
+	`free_rfc` VARCHAR(15) NULL DEFAULT NULL COMMENT 'RFC del Freelance' COLLATE 'utf8mb4_general_ci',
+	`free_adress` VARCHAR(200) NULL DEFAULT NULL COMMENT 'Direccion del Freelance' COLLATE 'utf8mb4_general_ci',
+	`free_email` VARCHAR(100) NULL DEFAULT NULL COMMENT 'correo electronico' COLLATE 'utf8mb4_general_ci',
+	`free_phone` VARCHAR(13) NULL DEFAULT NULL COMMENT 'telefono del freelance' COLLATE 'utf8mb4_general_ci',
+	`free_unit` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Unidad movil que opera' COLLATE 'utf8mb4_general_ci',
+	`free_plates` VARCHAR(10) NULL DEFAULT NULL COMMENT 'Placas de la unidad' COLLATE 'utf8mb4_general_ci',
+	`free_license` VARCHAR(15) NULL DEFAULT NULL COMMENT 'Numero de licencia del Freelance' COLLATE 'utf8mb4_general_ci',
+	`free_fed_perm` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Permiso federal del Freelance' COLLATE 'utf8mb4_general_ci',
+	`free_clase` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Clase de la unidad movil' COLLATE 'utf8mb4_general_ci',
+	`free_año` INT(4) NULL DEFAULT NULL COMMENT 'Año de la unidad movil',
+	PRIMARY KEY (`free_id`) USING BTREE
+)
+COMMENT='Tabla de datos de los Freelance '
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+ALTER TABLE `ctt_series`
+	CHANGE COLUMN `ser_import_petition` `ser_import_petition` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Numero de Pedimento de importación' COLLATE 'utf8mb4_general_ci' AFTER `ser_cost_import`;

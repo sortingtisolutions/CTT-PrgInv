@@ -203,7 +203,7 @@ $html = '
         if ($aux>0) {
         $html .= '
                     
-                    <h3 class="">'.$category.'</h3>
+                    <h3 class="" style="color:#008000">'.$category.'</h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                         <thead>
                             <tr>
@@ -318,7 +318,7 @@ $html = '
             if ($aux>0) {
             $html .= '
             
-                        <h3 class="">'.$category.'</h3>
+                        <h3 class="" style="color:#4682B4">'.$category.'</h3>
                         <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                             <thead>
                                 <tr>
@@ -796,7 +796,7 @@ $html .= '
 <!-- End Tabla de costo equipo subarrendo  -->';
 /* Tabla firmas -------------------------  */
 
-
+//<td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
 // Pie de pagina
 $foot = '
     <footer>
@@ -808,7 +808,6 @@ $foot = '
                         <tr>
                             <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
                             <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
-                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
                             <td class="td-foot foot-rept" width="25%" style="text-align: right">Versión '. $items[0]['ver_code'].'</td>
                         </tr>
                     </table>

@@ -32,7 +32,6 @@ public function listProyects($store)
         return $this->db->query($qry);
     }    
 
-
 // Listado de Proveedores
     public function listSuppliers($store)
     {

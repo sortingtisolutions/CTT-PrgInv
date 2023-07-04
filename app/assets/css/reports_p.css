@@ -127,7 +127,7 @@ section .container .table-data .dat-figure {
   padding: 0.5mm 1.2mm;
   border-bottom: 1px dotted #cccccc;
   border-right: 1px solid #cccccc;
-  font-size: 1em;
+  font-size: 1.1em;
 }
 section .container .table-data .tot-figure {
   padding: 1.9mm 1.2mm;
@@ -243,4 +243,11 @@ footer .table-address .addColor03 {
 
 .rtext {
   text-align: right;
+}
+section .container .tit-rep {
+  text-align: center;
+  color: #191970;
+  font-size: 15pt;
+  font-variant: small-caps;
+
 }/*# sourceMappingURL=reports_p.css.map */

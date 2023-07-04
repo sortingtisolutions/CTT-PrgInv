@@ -68,18 +68,21 @@
                                 <label for="txtFreelance">Freelance Asignado</label>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <textarea class="form-control form-control-sm" id="txtComments" style="height:70px;" autocomplete="off" rows="5"></textarea>
+                                <label for="txtComments">Comentarios de Programación</label>
+                            </div>
+                        </div>
                     </div>
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
 
                     <!-- BOTON PARA REGISTRAR LA SALIDA -->
-                    <div class="row">
+                    <!-- <div class="row">
                             <div class="col">
                                 <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="printdetails">Imprime Detalles</button>
                             </div>
-                            <!-- <div class="col-6">
-                                <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
-                            </div> -->
-                    </div>
+                    </div> -->
 
 
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
@@ -148,18 +151,18 @@
 </div>
 
 <!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
-<div class="overlay_background overlay_hide" id="SerieModal" style="width: 80%">
+<div class="overlay_background overlay_hide" id="SerieModal" style="width: 45%; left:15%;">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
-            <table class="display compact nowrap"  id="tblSerie" style="width: 100%">
+            <table class="display compact nowrap"  id="tblSerie" style="width: 90%">
                 <thead>
                     <tr>
                         <th style="width:  30px"></th>
-                        <th style="width: 100px">SKU</th>
-                        <th style="width: 350px">Descripcion Producto</th>
+                        <th style="width:  80px">SKU</th>
+                        <!-- <th style="width: 350px">Descripcion Producto</th> -->
                         <th style="width:  70px">Num Serie</th>
-                        <th style="width:  50px">Tipo de <br>Producto</th>
-                        <th style="width:  50px">Status</th>
+                        <th style="width:  40px">Tipo de <br>Producto</th>
+                        <!-- <th style="width:  50px">Status</th> -->
                     </tr>
                 </thead>
                 <!-- <tbody></tbody> -->
@@ -169,22 +172,22 @@
 <!-- End Ventana modal SERIES -->
 
 <!-- Start Ventana modal CHANGESERIES -->
-<div class="overlay_background overlay_hide" id="ChangeSerieModal" style="width: 80%;  left:15%;">
+<div class="overlay_background overlay_hide" id="ChangeSerieModal" style="width: 45%;  left:25%;">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
-            <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Selección</button>
+            <!-- <button type="button" class="btn btn-sm btn-primary" id="btn_save">Aplicar Selección</button> -->
            
             <div style="height:5px;"></div> <!-- Agregar un espacio -->
             
-            <table class="display compact nowrap"  id="tblChangeSerie" style="width: 95%">
+            <table class="display compact nowrap"  id="tblChangeSerie" style="width: 90%">
                 <thead>
                     <tr>
                         <th style="width:  20px">Selecciona</th>
-                        <th style="width:  80px">SKU</th>
-                        <th style="width: 200px">Descripcion Producto</th>
+                        <!-- <th style="width:  80px" >SKU</th>
+                        <th style="width: 200px" >Descripcion Producto</th> -->
                         <th style="width:  80px">Num Serie</th>
-                        <th style="width:  40px">Situacion</th>
-                        <th style="width:  40px">Etapa</th>
+                        <th style="width:  40px">No. Econo</th>
+                       <!--  <th style="width:  40px">Etapa</th> -->
                     </tr>
                 </thead>
                 <tbody></tbody>

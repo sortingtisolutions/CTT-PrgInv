@@ -40,7 +40,17 @@
                         </div>
                     </div> -->
 
-                    
+                    <!-- Proveedores posición 2 -->
+                    <div class="row list-finder pos2 ">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                    <input id="txtSuppliers" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" autocomplete="off">
+                                    <label for="txtSuppliers">Proveedores</label>
+                                    <input type="hidden" id="txtIdSuppliers" name="txtIdSuppliers">
+                            </div>
+                            <div id="listSupplier" class="list-group list-hide">
+                                <div class="list-items" ></div>
+                            </div>
+                    </div>
 
 
                     <!-- Factura posición 3 
@@ -68,13 +78,13 @@
                     <!-- Categoria posición 4 -->
                     <div class="row pos1">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtCategory" class="form-select form-select-sm"><option value="0" selected></option></select>
+                            <select id="txtCategory" class="form-select form-select-sm"><option value="0" selected>Catálogo</option></select>
                             <label for="txtCategory">Catálogo</label>
                         </div>
                     </div>
                     <div class="row pos1">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtSubCategory" class="form-select form-select-sm"><option value='0' selected>Selecciona la subcategoria</option></select>
+                            <select id="txtSubCategory" class="form-select form-select-sm"><option value="0" selected>Selecciona la subcategoria</option></select>
                             <label for="txtSubCategory">Subcategorias</label>
                         </div>
                     </div>
@@ -97,27 +107,22 @@
                     <!-- Costo,Cantidad,Serie posición 5,4 y 6 -->
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6">
-                            <input id="txtProduct" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" style="text-transform:uppercase" autocomplete="off">
-                            <label for="txtProduct">Nombre del Producto</label>
+                            <input id="txtSerie" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" style="text-transform:uppercase" autocomplete="off">
+                            <label for="txtSerie">Nombre del Producto</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating">
-                            <input id="txtPrice" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos">
-                            <label for="txtPrice">Precio de renta</label>
-                        </div>
-                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating">
-                            <input id="txtSkuProduct" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos" style="text-transform:uppercase">
-                            <label for="txtSkuProduct">Sku Producto</label>
+                            <input id="txtQuantity" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos" value=1>
+                            <label for="txtQuantity">Precio asignado</label>
                         </div>
                         
-                        <div class="pos6">
+                    </div>
+                    <div class="row pos6">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtCoin" class="form-select form-select-sm"><option value="0" selected>Selecciona moneda</option></select>
                             <label for="txtCoin">Moneda</label>
                         </div>
-                    </div>
-                        
                     </div>
 
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
@@ -125,77 +130,24 @@
                         <h1>DATOS DE LA SERIE</h1>
                     </div>
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
-                    <!--
-                    <div class="box_template">
-                        <div class="project_data-box">
-                            <div class="project_data-table">
-                                <table  id="">
-                                    <tr>
-                                        <td>
-                                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos4 ">
-                                                <input id="txtCost" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
-                                                <label for="txtCost">Num. Serie</label>
-                                            </div>
-                                        </td>
-                                        <td >
-                                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 ">
-                                                <input id="txtMarca" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la marca de productos" style="text-transform:uppercase" autocomplete="off">
-                                                <label for="txtMarca">Marca</label>
-                                            </div>
-                                        </td>
-                                    </tr>
 
-                                    <tr>
-                                        
-                                        <td>
-                                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 ">
-                                                <input type="text" id="txtPeriodProjectEdt"  name="txtPeriodProjectEdt" class="textbox wtf required" autocomplete="off">
-                                                
-                                                <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
-                                                <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>-->
-                    
                     <!-- Marca 6 -->
-                    
-                    <!-- Proveedores posición 2 -->
-                    <div class="row list-finder pos2 ">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtSuppliers" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" autocomplete="off">
-                                <label for="txtSuppliers">Proveedores</label>
-                                <input type="hidden" id="txtIdSuppliers" name="txtIdSuppliers">
-                        </div>
-                        <div id="listSupplier" class="list-group list-hide">
-                            <div class="list-items" ></div>
-                        </div>
-                    </div>
                     <div class="row">
-                        <!--<div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating">
-                            <input id="txtQuantity" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos" value=1>
-                            <label for="txtQuantity">Cantidad</label>
-                        </div>-->
-                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6">
-                            <input id="txtSerie" type="text" class="form-control form-control-sm text-center number required serie"  data-mesage="Debes agregar la serie de productos" style="text-transform:uppercase" autocomplete="off">
-                            <label for="txtSerie">Serie</label>
-                            
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos4 ">
+                        <input id="txtCost" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
+                            <label for="txtCost">Num. Serie</label>
                         </div>
-                        
-                        <!--<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos4 ">
-                            <input id="txtSkuSerie" type="text" class="form-control form-control-sm text-center number required skuserie" data-mesage="Debes Agregar el precio" >
-                            <label for="txtSkuSerie">Sku Serie</label>
-                        </div>-->
-                        
+                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6 ">
+                            <input id="txtMarca" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la marca de productos" style="text-transform:uppercase" autocomplete="off">
+                            <label for="txtMarca">Marca</label>
+                        </div>
                     </div>
                     <!-- Costo Importacion,Pedimento 5,4  -->
-                    <!--<div class="row pos3 ">-->
-                        
-                        
-                        <!--<div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating">
+                    <div class="row pos3 ">
+                    <input type="text" id="txtPeriodProjectEdt"  name="txtPeriodProjectEdt" class="textbox wtf required" autocomplete="off">
+                            <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
+                            <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
+                       <!--  <div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating">
 								<input id="txtPeriod" type="text" class="form-control form-control-sm text-center"  data-mesage="Debes elegir un periodo">
 								<label for="txtPeriod" >Periodo</label>
 						</div> -->
@@ -203,31 +155,19 @@
                             <input id="txtPedimento" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar el numero del pedimento" style="text-transform:uppercase">
                             <label for="txtPedimento">F. Fin Subarrendo</label>
                         </div> -->
-                    <!--</div>-->
+                    </div>
 
                    <!-- Costo Importacion,Pedimento 5,4  -->
-                  <div class="row pos3 ">
-                    <!--
+                   <!-- <div class="row pos3 ">
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6 ">
-                            <input id="txtQuantity" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" value=1>
-                            <label for="txtQuantity">Cantidad</label>
-                        </div> -->
-                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6 ">
-                            <input id="txtMarca" type="text" class="form-control form-control-sm text-center required"  data-mesage="Debes agregar la marca de productos" style="text-transform:uppercase" autocomplete="off">
-                            <label for="txtMarca">Marca</label>
+                        <input id="txtCostTot" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
+                            <label for="txtCostTot">Costo Total</label>
                         </div>
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos6 form-floating ">
-                            <input id="txtNoPedimento" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar el numero del pedimento" style="text-transform:uppercase">
-                            <label for="txtNoPedimento">Num. de pedimento</label>
+                            <input id="txtNoEco" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar el numero del pedimento" style="text-transform:uppercase">
+                            <label for="txtNoEco">Num. Econo</label>
                         </div>
-                    </div> 
-                    <div class="col-md-9 col-lg-9 col-xl-9 mb-2 form-floating form__modal-group" >
-                        <input type="text" id="txtPeriodProjectEdt"  name="txtPeriodProjectEdt" class="form-control form-control-sm text-center" autocomplete="off" style="width:200px; height:38px">
-                        <!--<label for="txtPeriodo">Periodo</label>-->
-                        <i class="fas fa-calendar-alt icoTextBox" id="calendar"></i><br>
-                        <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
-                    </div>
-                    <div style="height:20px;"></div> <!-- Agregar un espacio -->
+                    </div> -->
                     <!-- Comentarios posición 4 -->
                     <div class="row  pos1 ">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -254,18 +194,19 @@
                         <tr>
                             <th style="width:  20px"></th>
                             <th style="width:  80px">Sku Producto</th>
-                            <th style="width: 300px">Nombre del Producto</th>
-                            <th style="width: 80px">Precio de Renta</th>
+                            <th style="width: 350px">Nombre del Producto</th>
+                            <th style="width: 180px">Precio de Renta</th>
                             <th style="width:  80px">Sku Serie</th>
                             <th style="width: 90px">No. Serie</th>
                             <th style="width:  60px">Marca</th>
                             <th style="width:  50px">Fecha Inicial</th>
                             <th style="width:  60px">Fecha Final</th>
                             <th style="width: 140px">Almacen</th>
-                            <th style="width: 130px">Catalogo</th>
-                            <th style="width: 130px">Subcategoria</th>
-                            <th style="width: 130px">Proveedor</th>
-                            <th style="width: 140px">Proyecto Asignado</th>
+                            <th style="width: 90px">Catalogo</th>
+                            <th style="width: 90px">Subcategoria</th>
+                            <th style="width: 180px">Proveedor</th>
+                            <th style="width: 80px">Proyecto Asignado</th>
+                            <th style="width: 80px">Otro</th>
                             <th style="width: 200px">Nota</th>
                         </tr>
                     </thead>
@@ -279,7 +220,7 @@
 </div>
 
 <!-- Modal Borrar -->
-<div class="modal fade" id="MoveResultModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
+<div class="modal fade" id="MoveFolioModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
             <div class="modal-header ">
@@ -289,14 +230,13 @@
 
             <div class="row">
                 <div class="col-12 text-center">
-                    <!--<span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">Folio: <h3 class="resFolio">000000000000</h3></span>-->
-                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¡Subarrendo guardado exitosamente!</span>
+                    <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">Folio: <h3 class="resFolio">000000000000</h3></span>
                 </div>
             </div>
 
             </div>
                 <div class="modal-footer">
-                    <!--<button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button>-->
+                    <button type="button" class="btn btn-primary" id="btnPrintReport">Imprimir</button>
                     <button type="button" class="btn btn-secondary" id="btnHideModal">Cerrar</button>
                 </div>
             </div>

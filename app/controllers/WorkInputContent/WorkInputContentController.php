@@ -62,10 +62,10 @@ class WorkInputContentController extends Controller
         }
 
         // Lista las series
-    public function listSeries($request_params)
+    public function listReason($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listSeries($request_params);
+        $result = $this->model->listReason($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;

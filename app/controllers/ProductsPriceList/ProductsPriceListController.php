@@ -139,6 +139,4 @@ public function listCategories($request_params)
         echo $res;
     }
 
-
-
 }

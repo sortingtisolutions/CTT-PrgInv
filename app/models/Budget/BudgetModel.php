@@ -195,12 +195,13 @@ public function listDiscounts($params)
         $word = $this->db->real_escape_string($params['word']);
         $dstr = $this->db->real_escape_string($params['dstr']);
         $dend = $this->db->real_escape_string($params['dend']);
-
-        $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, 
-                        sb.sbc_name,
+//(SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
+        $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
+                        pd.prd_insured, sb.sbc_name,
                 CASE 
                     WHEN prd_level ='K' THEN 
-                        (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
+                        (SELECT prd_stock
+                                FROM ctt_products WHERE prd_id = pd.prd_id)
                     WHEN prd_level ='P' THEN 
                         (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
                                 FROM ctt_products WHERE prd_id = pd.prd_id)
@@ -380,26 +381,18 @@ public function stockProdcuts($params)
 
         $qry = "INSERT INTO ctt_budget (
                     bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_prod_level, bdg_section, 
-                    bdg_quantity, bdg_days_base, bdg_days_cost, bdg_discount_base, bdg_discount_insured, bdg_days_trip, 
-                    bdg_discount_trip, bdg_days_test, bdg_discount_test,bdg_insured, bdg_order,
-                    ver_id, prd_id 
+                    bdg_quantity, bdg_days_base, bdg_days_cost, bdg_discount_base, bdg_discount_insured, 
+                    bdg_days_trip, bdg_discount_trip, bdg_days_test, bdg_discount_test,bdg_insured, 
+                    bdg_order, ver_id, prd_id 
                 ) VALUES (
-                    '$bdg_prod_sku', 
-                    REPLACE('$bdg_prod_name','\¿','\''),    
-                    '$bdg_prod_price',      
-                    '$bdg_prod_level', 
-                    '$bdg_section',  
-                    '$bdg_quantity', 
-                    '$bdg_days_base',           
-                    '$bdg_days_cost',           
-                    '$bdg_discount_base',   
-                    '$bdg_discount_insured',   
-                    '$bdg_days_trip', 
-                    '$bdg_discount_trip', 
-                    '$bdg_days_test', 
-                    '$bdg_discount_test', 
-                    '$bdg_insured', 
-                    '$bdg_order', 
+                    '$bdg_prod_sku', REPLACE('$bdg_prod_name','\¿','\''),    
+                    '$bdg_prod_price', '$bdg_prod_level', 
+                    '$bdg_section',  '$bdg_quantity', 
+                    '$bdg_days_base',  '$bdg_days_cost',           
+                    '$bdg_discount_base', '$bdg_discount_insured',   
+                    '$bdg_days_trip', '$bdg_discount_trip', 
+                    '$bdg_days_test', '$bdg_discount_test', 
+                    '$bdg_insured', '$bdg_order', 
                     '$ver_id', 
                     '$prd_id'
                 );
@@ -538,6 +531,7 @@ public function UpdateProject($params)
 public function saveBudgetList($params)
 {
     $verId = $this->db->real_escape_string($params['verId']);
+
     $qry = "SELECT *, ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) as ver_date_real,
                 CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) as period
             FROM ctt_budget AS bg
@@ -775,4 +769,48 @@ public function UpdatePeriodProject($params)
             return $this->db->query($qry);
         }    
 
+    public function getExistTrip($params)
+    {
+        $pjtvrId    = $this->db->real_escape_string($params['pjtvrId']);
+        $prdId      = $this->db->real_escape_string($params['prdId']);
+
+        $qry = "SELECT COUNT(*) AS existrip 
+                FROM ctt_budget
+                WHERE bdg_days_trip<>0 AND ver_id=$prdId";
+
+        return $this->db->query($qry);
+    } 
+
+    public function listReordering($params)
+    {
+        $verId      = $this->db->real_escape_string($params['verId']);
+
+       /*  $qry = "SELECT bdg_id, bdg_prod_sku,bdg_section,bdg_order
+                FROM ctt_budget WHERE ver_id=$verId
+                GROUP BY bdg_id,bdg_prod_sku,bdg_section,bdg_order 
+                ORDER BY bdg_section, SUBSTR(bdg_prod_sku,1,4);"; */
+
+        $qry = "SELECT bdg_id, bdg_prod_sku,bdg_section,bdg_order
+                FROM ctt_budget AS bg
+                INNER JOIN ctt_subcategories AS sb 
+                ON sb.cat_id=substr(bdg_prod_sku,1,2) AND sb.sbc_code=substr(bdg_prod_sku,3,2)
+                WHERE ver_id=7
+                GROUP BY bdg_id,bdg_prod_sku,bdg_section,bdg_order 
+                ORDER BY bdg_section, SUBSTR(bdg_prod_sku,1,4);";
+
+        $result =  $this->db->query($qry);
+                
+        return $this->db->query($qry);
+    } 
+
+    public function upReorderingProducts($params)
+    {
+        $valnew      = $this->db->real_escape_string($params['valnew']);
+        $bdgid      = $this->db->real_escape_string($params['bdg_id']);
+
+        $qry = "UPDATE ctt_budget SET bdg_order=$valnew
+		        WHERE bdg_id=$bdgid;";
+    
+        return $this->db->query($qry);
+    } 
 }

@@ -281,7 +281,7 @@ function getDocumentosTable() {
             $('#tablaDocumentosRow').append(renglon);
          });
 
-         let title = 'Categorias';
+         let title = 'Documentos';
          let filename =
             title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 

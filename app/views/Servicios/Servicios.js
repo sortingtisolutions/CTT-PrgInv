@@ -198,7 +198,7 @@ function getServiciosTable() {
             $('#tablaServiciosRow').append(renglon);
          });
 
-         let title = 'Categorias';
+         let title = 'Servicios';
          let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
          table = $('#ServiciosTable').DataTable({

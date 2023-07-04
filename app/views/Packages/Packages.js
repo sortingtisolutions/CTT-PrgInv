@@ -41,7 +41,7 @@ function setting_table_packages() {
         order: [[1, 'asc']],
         pageLength: 1000,
         select: true,
-        dom: 'Brti',
+        dom: 'Blfrtip',
         buttons: [
             {
                 // Boton aplicar cambios

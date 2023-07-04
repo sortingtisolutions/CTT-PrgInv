@@ -445,7 +445,7 @@ function validator() {
     // console.log(msg);
 }
 
-/*  ++++++++ Define las fechas de inicio y de fin   +++++++ */
+/*  ********* Define las fechas de inicio y de fin   +++++++ */
 function define_days(st, dt, db, dr, ds) {
     let dats = '';
     let dytr = parseInt(dr) / 2;

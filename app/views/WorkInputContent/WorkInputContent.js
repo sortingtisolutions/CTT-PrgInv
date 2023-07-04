@@ -51,12 +51,12 @@ function getDetailProds() {
 }
 
 //Solicita las series de los productos  OK
-function getSeries(pjtcnid) {
+function getReason(pjtcnid) {
     // console.log('ID-Contenido Producto', pjtcnid);
-    var pagina = 'WorkInputContent/listSeries';
+    var pagina = 'WorkInputContent/listReason';
     var par = `[{"pjtcnid":""}]`;
     var tipo = 'json';
-    var selector = putSeries;
+    var selector = putReason;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -75,10 +75,13 @@ function getSerieDetail(serid, serorg) {
 function setting_table_AsignedProd() {
     
     let tabla = $('#tblAsigInput').DataTable({
+        bDestroy: true,
         order: [[1, 'asc']],
-        pageLength: 1000,
-        select: true,
-        dom: 'Brti',
+        dom: 'Blfrtip',
+        lengthMenu: [
+                [100, 200, -1],
+                [100, 200, 'Todos'],
+            ],
         buttons: [
             {
                 // Boton aplicar cambios
@@ -122,55 +125,15 @@ function putProjects(dt) {
 }
 
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
-function putDetailsProds_old(dt) {
-    if (dt[0].pjtpd_id != '0')
-    {
-        let tabla = $('#tblAsigInput').DataTable();
-        $.each(dt, function (v, u)         {
-        let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
-            tabla.row
-                .add({
-                    editable: `<i class="fas fa-edit toLink" id="${u.pjtcn_id}"></i>`,
- /*                   pack_sku: `<span class="hide-support" id="SKU-${u.pjtcn_prod_sku}">${u.pjtcn_id}</span>${u.pjtcn_prod_sku}`, */
-                    pack_sku: skufull,
-                    packname: u.pjtcn_prod_name,
-                    packcount: u.pjtcn_quantity,
-                    packlevel: u.pjtcn_prod_level,
-                    packstatus: '<input class="serprod fieldIn" type="text" id="id' + u.pjtcn_id + '" value="'+'">'
-                    /* '<input class="serprod fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">' */
-                })
-                .draw();
-/*<i class="fas fa-times-circle choice pack kill" id="D-${u.pjtpd_id}"></i>`, */
-            $(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
-        });
-        activeIcons();
-    }
-}
-
 
 function putDetailsProds(dt) {
-   /*  $('#tblAsigInput').DataTable();
-    tblprod.find('tbody').html('');
-    $.each(dt, function (v, u) {
-        let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
-        let H = `<tr>
-                    <td class="cn"><i class="fas fa-edit toLink" id="${u.pjtcn_id}"></i></td>
-                    <td class="lf">${skufull}</td>
-                    <td class="lf">${u.pjtcn_prod_name}</td>
-                    <td class="cn">${u.pjtcn_quantity}</td>
-                    <td class="cn">${u.pjtcn_prod_level}</td>
-                    <td class="lf"><input class="serprod fieldIn" type="text" id="id-${u.pjtcn_id}" value=""></td>
-                </tr>`;
-        tblprod.append(H);
-    }); */
-    /* widthTable(tblprod); */
-    /* activeIcons(); */
-
     if (dt[0].pjtpd_id != '0')
     {
         let tabla = $('#tblAsigInput').DataTable();
+        let valcontent='';
         $.each(dt, function (v, u)         {
-        let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
+        // let skufull = u.pjtdt_prod_sku.slice(7, 11) == '' ? u.pjtdt_prod_sku.slice(0, 7) : u.pjtdt_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
+        let skufull = u.pjtdt_prod_sku;
             tabla.row
                 .add({
                     editable: `<i class="fas fa-solid fa-wrench toLink" id="${u.pjtcn_id}"></i>
@@ -179,15 +142,14 @@ function putDetailsProds(dt) {
                     packname: u.pjtcn_prod_name,
                     packcount: u.pjtcn_quantity,
                     packlevel: u.pjtcn_prod_level,
-                    packstatus: '<input class="serprod fieldIn" type="text" id="id' + u.pjtcn_id + '" value="'+'">'
+                    packstatus: valcontent,
                 })
                 .draw();
-            $(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
+            $(`#SKU-${u.pjtcn_prod_sku}`).parent('tr').attr('id', u.pjtcn_id).addClass('indicator');
         });
         activeIcons();
     }
 }
-
 // ### LISTO ###   habilita el botones para validar en TABLA INICIAL
 function activeIcons() {
     $('.toLink')
@@ -198,7 +160,7 @@ function activeIcons() {
             glbcnid=pjtcnid;
             console.log('Cont-Producto', pjtcnid);
             if (pjtcnid > 0) {
-                getSeries(pjtcnid);
+                getReason(pjtcnid);
             }
         });
 }
@@ -206,12 +168,12 @@ function activeIcons() {
 //**************  NIVEL 2 DE DATOS  *****************************************
 
 // ### LISTO ### Llena prepara la table dentro del modal para series ### LISTO -- MODAL 1###
-function putSeries(dt) {
-    settingSeries();
-    build_modal_serie(dt);
+function putReason(dt) {
+    settingReason();
+    build_modalReason(dt);
 }
 
-function settingSeries(){
+function settingReason(){
         // console.log('Setting-Series');
         $('#ReasonMtModal').removeClass('overlay_hide');
         $('#tblMaintenance').DataTable({
@@ -248,10 +210,11 @@ function settingSeries(){
         activeIcons();
 }
 // ### LISTO ### Llena con datos de series la tabla del modal --- MODAL 1
-function build_modal_serie(dt) {
-        console.log('Nivel 2', dt);
+function build_modalReason(dt) {
+        // console.log('Nivel 2', dt);
+        
+        $('#ReasonMtModal .overlay_closer .title').html('LISTADO DE MOTIVOS:');
         let tabla = $('#tblMaintenance').DataTable();
-        $('.overlay_closer .title').html('LISTADO DE MOTIVOS:');
         /* tabla.rows().remove().draw(); */
         $.each(dt, function (v, u) {
             // let valstage = u.ser_stage == 'TA' ? 'color:#CC0000' : 'color:#3c5777';
@@ -274,39 +237,31 @@ function build_modal_serie(dt) {
 
 /** ### LISTO ### +++++  Activa los iconos del modal de serie */
 function activeIconsSerie() {
-    console.log('ACTIVA MOTIVOS DE MANTENIMIENTO');
+    // console.log('ACTIVA MOTIVOS DE MANTENIMIENTO');
     $('.toCheck')
         .unbind('click')
         .on('click', function () {
         let serprd = $(this).attr('id');
         let motdesc = $(this).attr('data');
-        console.log('Click Selecciona Motivo', serprd, motdesc);
         motmanteince = motdesc;
 
-        console.log('Cierra Motivos seleccionado');
+        console.log('Cierra Motivo seleccionado',serprd ,motmanteince,'TR',glbcnid);
+
+        let el = $(`#tblAsigInput tr[id="${glbcnid}"]`);
+        // $(el.find('td')[1]).text(prdSk);
+        // $(el.find('td')[2]).text(prdNm);
+        // $(el.find('td')[3]).text(prdPr);
+        $(el.find('td')[5]).html(motmanteince);
+
+        // el.row(glbcnid).remove().draw();
+        
         $('.overlay_background').addClass('overlay_hide');
         $('.overlay_closer .title').html('');
 
-        $('#tblAsigInput').DataTable().row[5].text($motmanteince);
+        // $('#tblAsigInput').DataTable().row[5].text($motmanteince);
         // myCheck(serprd);
     
         });
-
-
-        // let el = $(`#tblAsigInput tr td i[id="E${serId}"]`).parents('tr');
-        // $(el.find('td')[2]).html(serSr);
-   /*  $('.toChange')
-        .unbind('click')
-        .on('click', function () {
-            let serprd = $(this).attr('id');
-            let serorg = $(this).attr('sku_original');
-                //let serprd = "28";
-                //let qty = $(this).parent('td').attr('data-content');
-                console.log('Click Modal Series', serprd);
-                if (serprd != "") {
-                    getSerieDetail(serprd, serorg);
-            }
-    }); */
 }
 
 //**************  NIVEL 3 DE DATOS  *****************************************
@@ -586,12 +541,38 @@ function checkSerie(pjtcnid) {
   build_modal_seriefree(dt);
 } */
 
+function putDetailsProds_old(dt) {
+    //     if (dt[0].pjtpd_id != '0')
+    //     {
+    //         let tabla = $('#tblAsigInput').DataTable();
+    //         $.each(dt, function (v, u)         {
+    //         let skufull = u.pjtcn_prod_sku.slice(7, 11) == '' ? u.pjtcn_prod_sku.slice(0, 7) : u.pjtcn_prod_sku.slice(0, 7) + '-' + u.pjtcn_prod_sku.slice(7, 11);
+    //             tabla.row
+    //                 .add({
+    //                     editable: `<i class="fas fa-edit toLink" id="${u.pjtcn_id}"></i>`,
+    //  /*                   pack_sku: `<span class="hide-support" id="SKU-${u.pjtcn_prod_sku}">${u.pjtcn_id}</span>${u.pjtcn_prod_sku}`, */
+    //                     pack_sku: skufull,
+    //                     packname: u.pjtcn_prod_name,
+    //                     packcount: u.pjtcn_quantity,
+    //                     packlevel: u.pjtcn_prod_level,
+    //                     packstatus: '<input class="serprod fieldIn" type="text" id="id' + u.pjtcn_id + '" value="'+'">'
+    //                     /* '<input class="serprod fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">' */
+    //                 })
+    //                 .draw();
+    // /*<i class="fas fa-times-circle choice pack kill" id="D-${u.pjtpd_id}"></i>`, */
+    //             $(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
+    //         });
+    //         activeIcons();
+    //     }
+    }
+    
+    
 
 /*
   $('#ChangeReasonMtModal .btn_back')
     .unbind('click')
     .on('click', function () {
-      getSeries(28);
+      getReason(28);
       //$('#ChangeReasonMtModal').addClass('overlay_hide');
     });
 
@@ -607,7 +588,7 @@ function checkSerie(pjtcnid) {
                 .on('click', function () {
                     $('#ChangeReasonMtModal').addClass('overlay_hide');
                 });
-                getSeriesFree(serId);
+                getReasonFree(serId);
         });
 */
 

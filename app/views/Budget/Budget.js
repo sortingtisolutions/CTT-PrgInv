@@ -1,5 +1,6 @@
 let cust, edosRep, proj, prod, vers, budg, tpprd, relc, proPar, tpcall, dstgral;
 var swpjt = 0;
+let theredaytrip=0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 let glbSec=0;  // jjr
 
@@ -57,7 +58,7 @@ function discountInsuredEvent() {
                 .unbind('change')
                 .on('change', function (e) {
                     let insured = parseFloat(
-                        $('#insuTotal').text().replace(/\,/g, '')
+                        $('#insu    ').text().replace(/\,/g, '')
                     );
                     //console.log(insured);
                     if (insured > 0) {
@@ -455,8 +456,21 @@ function getRelPrdAcc(id, tp) {
     fillField(pagina, par, tipo, selector);
 }
 
+function getExistTrip(pjtvrId, prdId) {
+    var pagina = 'Budget/getExistTrip';
+    var par = `[{"pjtvrId":"${pjtvrId}","prdId":"${prdId}"}]`;
+    var tipo = 'json';
+    var selector = putExistTrip;
+    fillField(pagina, par, tipo, selector);
+}
+
 function putRelPrdAcc(dt){
     console.log(dt);
+}
+
+function putExistTrip(dt) {
+    theredaytrip = dt[0].existrip;
+    console.log('putExistTrip',theredaytrip)
 }
 
 /** LLENA DE DATOS */
@@ -986,7 +1000,7 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    $('tbody.sections_products').sortable({
+    /* $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
         axis: 'y',
@@ -1005,7 +1019,7 @@ function putBudgets(dt) {
                 });
             showButtonVersion('S');
         },
-    });
+    }); */
 
     reOrdering();
 }
@@ -2159,10 +2173,17 @@ function printBudget(verId) {
         `${url}app/views/Budget/BudgetReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
         '_blank'
     ); */
-    window.open(
-        `${url}app/views/Budget/BudgetReport-c-v_segmentos.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    );
+    if (theredaytrip != 0){ // agregado jjr cambiar impresion c-s
+        window.open(
+            `${url}app/views/Budget/BudgetReport-c-v_segmentos.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+            '_blank'
+        );
+    } else{
+        window.open(
+            `${url}app/views/Budget/BudgetReport-s-v_segmentos.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+            '_blank'
+        );
+    }
 }
 
 // *************************************************
@@ -2238,13 +2259,14 @@ function saveBudget(dt) {
                 "prdId"           : "${prdId}",
                 "pjtId"           : "${pjtId}"
             }]`;
-            //console.log(par);
+            console.log(par);
             var pagina = 'Budget/SaveBudget';
             var tipo = 'html';
             var selector = respBudget;
             fillField(pagina, par, tipo, selector);
         }
     });
+    getExistTrip(verId,pjtId);
 }
 
 function respBudget(dt) {
@@ -2252,6 +2274,7 @@ function respBudget(dt) {
     let pjtId = dt.split('|')[0];
     let UserN = dt.split('|')[1];
     getVersion(pjtId);
+    
 }
 
 /**  ++++  Obtiene los días definidos para el proyectos */

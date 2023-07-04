@@ -936,7 +936,7 @@ DROP VIEW ctt_vw_subcategories;
 CREATE VIEW ctt_vw_subcategories AS
 SELECT CONCAT('<i class="fas fa-pen modif" data="', sc.sbc_id, '"></i><i class="fas fa-times-circle kill" data="', sc.sbc_id, '"></i>') AS editable,
   sc.sbc_id AS subcatid, sc.sbc_code AS subccode, sc.sbc_name AS subcname, ct.cat_name AS catgname, ct.cat_id AS catgcode,
-  CONCAT('<span class="toLink">', IFNULL(SUM(sc.sbc_quantity), 0),'</span>') AS quantity
+  CONCAT('<span class="toLink">', IFNULL(SUM(sc.sbc_quantity), 0),'</span>') AS quantity, sbc_order_print AS ordprint
 FROM ctt_subcategories AS sc
     INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
 WHERE sc.sbc_status = '1' AND ct.cat_status = '1'
