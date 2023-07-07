@@ -470,7 +470,7 @@ function putRelPrdAcc(dt){
 
 function putExistTrip(dt) {
     theredaytrip = dt[0].existrip;
-    console.log('putExistTrip',theredaytrip)
+    // console.log('putExistTrip',theredaytrip)
 }
 
 /** LLENA DE DATOS */
@@ -2259,7 +2259,7 @@ function saveBudget(dt) {
                 "prdId"           : "${prdId}",
                 "pjtId"           : "${pjtId}"
             }]`;
-            console.log(par);
+            // console.log(par);
             var pagina = 'Budget/SaveBudget';
             var tipo = 'html';
             var selector = respBudget;
@@ -2366,11 +2366,8 @@ function updateTotals() {
 
         assre = stt01 * daybs * assur;
         assin = assre * (desIn / 100);
-
         costassu += assre - assin; //     Total de Seguro
-
         let prcdscins = parseFloat($('#insuDesctoPrc').html()) / 100;
-
         desctins = costassu * prcdscins;
     });
 
@@ -2381,11 +2378,8 @@ function updateTotals() {
     $('#insuDescto').html(mkn(desctins, 'n'));
 
     let desctot = costassu - desctins;
-
     totlCost = costbase + costtrip + costtest + desctot;
-
     $('#costTotal').html(mkn(totlCost, 'n'));
-
     let ttlrws = $('#invoiceTable').find('tbody tr.budgetRow').length;
     $('#numberProducts').html(ttlrws);
 }

@@ -64,26 +64,26 @@ class ProductsController extends Controller
 
 
 // Lista los servicios
-public function listServices($request_params)
-{
-	$params =  $this->session->get('user');
-	$result = $this->model->listServices($request_params);
-	$i = 0;
-	while($row = $result->fetch_assoc()){
-		$rowdata[$i] = $row;
-		$i++;
+	public function listServices($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->listServices($request_params);
+		$i = 0;
+		while($row = $result->fetch_assoc()){
+			$rowdata[$i] = $row;
+			$i++;
+		}
+		if ($i>0){
+			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+		} else {
+			$res =  '[{"srv_id":"0"}]';	
+		}
+		echo $res;
 	}
-	if ($i>0){
-		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-	} else {
-		$res =  '[{"srv_id":"0"}]';	
-	}
-	echo $res;
-}
 
 
 // Lista los tipos de monedas
-public function listCoins($request_params)
+	public function listCoins($request_params)
 	{
 		$params =  $this->session->get('user');
 		$result = $this->model->listCoins($request_params);
@@ -99,7 +99,6 @@ public function listCoins($request_params)
 		}
 		echo $res;
 	}
-
 
 // Lista los documentos de fichas técnicas
 public function listDocument($request_params)
@@ -145,6 +144,23 @@ public function listDocument($request_params)
 		echo $res;
     }
 
+	public function listProducts2($request_params)
+	{
+		$params =  $this->session->get('user');
+        $result = $this->model->listProducts2($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    }
+
 	// Lista las Facturas
 	public function listInvoice($request_params)
 	{
@@ -183,7 +199,6 @@ public function listDocument($request_params)
 	}
 
 	
-	
 // Lista las series
 	public function listSeries($request_params)
 	{
@@ -202,27 +217,47 @@ public function listDocument($request_params)
 		echo $res;
 	}
 
-	
+	public function maxAccesorio($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->maxAccesorio($request_params);
+		$i = 0;
+		while($row = $result->fetch_assoc()){
+			$rowdata[$i] = $row;
+			$i++;
+		}
+		if ($i>0){
+			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+		} else {
+			$res =  '[{"prd_id":"0"}]';	
+		}
+		echo $res;
+	}
+
+	public function maxAccesorio_old($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->maxAccesorio($request_params);
+		echo $result;
+	}
 
 // Obtiene datos del producto seleccionado
-public function getSelectSerie($request_params)
-{
-	$params =  $this->session->get('user');
-	$result = $this->model->getSelectSerie($request_params);
-	$i = 0;
-	while($row = $result->fetch_assoc()){
-		$rowdata[$i] = $row;
-		$i++;
+	public function getSelectSerie($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->getSelectSerie($request_params);
+		$i = 0;
+		while($row = $result->fetch_assoc()){
+			$rowdata[$i] = $row;
+			$i++;
+		}
+		if ($i>0){
+			$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+		} else {
+			$res =  '[{"ser_id":"0"}]';	
+		}
+		echo $res;
 	}
-	if ($i>0){
-		$res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-	} else {
-		$res =  '[{"ser_id":"0"}]';	
-	}
-	echo $res;
-}
-
-
 
 // Guarda los cambios de un producto
 	public function saveEdtProduct($request_params)
@@ -233,17 +268,14 @@ public function getSelectSerie($request_params)
 		echo $res;
 	}
 
-
-
 // Guarda los cambios de una serie
-public function saveEdtSeries($request_params)
-{
-	$params =  $this->session->get('user');
-	$result = $this->model->saveEdtSeries($request_params);
-	$res = $result;
-	echo $res;
-}
-
+	public function saveEdtSeries($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->saveEdtSeries($request_params);
+		$res = $result;
+		echo $res;
+	}
 
 // Guarda nuevo producto
 	public function saveNewProduct($request_params)
@@ -254,8 +286,6 @@ public function saveEdtSeries($request_params)
 		echo $res;
 	}
 
-
-	
 // Borra un producto seleccionado
 	public function deleteProduct($request_params)
 	{
@@ -265,17 +295,14 @@ public function saveEdtSeries($request_params)
 		echo $res;
 	}
 
-
-	
 // Borra una serie seleccionada
-public function deleteSerie($request_params)
-{
-	$params =  $this->session->get('user');
-	$result = $this->model->deleteSerie($request_params);
-	$res = $result ;
-	echo $res;
-}
+	public function deleteSerie($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->deleteSerie($request_params);
+		$res = $result ;
+		echo $res;
+	}
 
-	
 
 }

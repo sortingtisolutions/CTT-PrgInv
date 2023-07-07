@@ -30,10 +30,10 @@ public function SaveDocumento($request_params)
 		$newFileName = $fileName;
 
 		$sql = "INSERT INTO ctt_documents(doc_name, doc_type, doc_size, doc_content_type, doc_document,  dot_id, doc_admission_date,doc_code)
-				VALUES ('$newFileName','$fileExtension',$fileSize,'$fileType','','$tipoDocumento','$fechaadmision','$Code');";
+				VALUES ('$newFileName','$fileExtension',$fileSize,'$fileType','$file','$tipoDocumento','$fechaadmision','$Code');";
 
 		/* $sql = "INSERT INTO ctt_documents(doc_name, doc_type, doc_size, doc_content_type, doc_document,  dot_id, doc_admission_date,doc_code)
-		VALUES ('$newFileName','$fileExtension',$fileSize,'$fileType','$file','$tipoDocumento','$fechaadmision','$Code');"; */
+				VALUES ('$newFileName','$fileExtension',$fileSize,'$fileType','$file','$tipoDocumento','$fechaadmision','$Code');"; */
 
 		$this->db->query($sql);
 		/* $lastid = $this->db->insert_id;

@@ -232,3 +232,13 @@ ENGINE=InnoDB
 
 ALTER TABLE `ctt_series`
 	CHANGE COLUMN `ser_import_petition` `ser_import_petition` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Numero de Pedimento de importación' COLLATE 'utf8mb4_general_ci' AFTER `ser_cost_import`;
+
+ALTER TABLE `ctt_products`
+	CHANGE COLUMN `prd_stock` `prd_stock` INT(11) NULL DEFAULT 0 COMMENT 'Cantidad existente en almacenes' AFTER `cin_id`;
+
+ALTER TABLE `ctt_projects_content`
+	ADD COLUMN `pjtvr_action` VARCHAR(2) NULL DEFAULT NULL COMMENT 'accion sobre el registro' COLLATE 'utf8mb4_general_ci' AFTER `pjtvr_id`;
+
+ALTER TABLE `ctt_projects_version`
+	ADD COLUMN `pjtvr_action` VARCHAR(2) NOT NULL DEFAULT '' COMMENT 'accion a seguir' COLLATE 'utf8mb4_general_ci' AFTER `pjt_id`;
+

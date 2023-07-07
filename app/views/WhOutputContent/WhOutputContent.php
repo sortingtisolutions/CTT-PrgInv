@@ -130,7 +130,7 @@
 <!-- Tabla para presentar los contenidos del proyecto -->
             <div class="mvst_table">
                 <div class="mvst_list tblProdMaster">
-                        <h3>Asignacion de Productos</h3>
+                        <h1>Asignacion de Productos</h1>
                         <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%">
                             <thead>
                                 <tr>

@@ -196,7 +196,7 @@ $mpdf->SetHTMLFooter($foot);
 $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 $mpdf->Output(
-    "Salida_Almacen.pdf",
+    "Entrada_Almacen.pdf",
     \Mpdf\Output\Destination::INLINE
 );
 

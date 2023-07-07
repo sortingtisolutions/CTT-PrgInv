@@ -11,12 +11,8 @@
     <div class="contenido">
             
         <div class="row mvst_group">
-
-
             <div class="mvst_panel">
                 <div class="form-group">
-
-
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtTypeExchange" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona tipo de movimiento</option></select>
@@ -52,7 +48,6 @@
                             </div>
                     </div>
 
-
                     <!-- Factura posición 3 
                     <div class="row pos3 hide-items">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -67,7 +62,6 @@
                                     <input id="txtInvoice" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar una factura" autocomplete="off">
                                     <label for="txtInvoice">Factura</label>
                                     <input type="hidden" id="txtIdInvoice" name="txtIdInvoice">
-                    
                             </div>
                             <div id="listInvoice" class="list-group list-hide">
                                 <div class="list-items" ></div>

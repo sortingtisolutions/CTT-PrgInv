@@ -1,5 +1,5 @@
 var seccion = '';
-let folio;
+let folio, mthseries;
 let = pr = [];
 let = link = '';
 
@@ -195,6 +195,7 @@ function putTypeExchange(dt) {
         let id = $(this).val();
         link = $(`#txtTypeExchange option[value="${id}"]`).attr('data-content').split('|')[2];
         code = $(`#txtTypeExchange option[value="${id}"]`).attr('data-content').split('|')[5];
+        // console.log('Click txtTypeExchange',id,'|',link,'|',code )
         setting_interface(code,id);
         relocation_products();
         validator();
@@ -250,7 +251,7 @@ function putCategories(dt) {
         $('#txtCategory').on('change', function () {
             let catId = $(this).val();
             /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
-            $('#txtProducts').val('     Cargando Informacion . . . .');
+            $('#txtProducts').val('   Cargando Informacion . . . .');
             getProducts(catId);
         });
     }
@@ -270,6 +271,7 @@ function putProducts(dt) {
         let H = `<div class="list-item" id="P-${u.prd_id}" data_serie="${u.serNext}" data_complement="${u.prd_sku}|${u.prd_name}">${u.prd_sku}-${u.prd_name}</div>`;
         $('#listProducts .list-items').append(H);
     });
+
     /* QUITA NOTA EN EL CAMPO DE PRODUCTOS */
     $('#txtProducts').val('');
     
@@ -402,7 +404,6 @@ function putSupplierList(dt) {
 // reubica el input de los productos
 function relocation_products() {
     var ps = $('#txtProducts').offset();
-
     $('#listProducts').css({top: ps.top + 30 + 'px'});
 }
 
@@ -510,34 +511,34 @@ function exchange_apply() {
     let sernumeco = $('#txtNoEco').val();
 
     serie++;
-    //console.log('Paso 1 ', serie);
-
+    // console.log('Paso exchange_apply', quantity);
+    mthseries=quantity;
     if (quantity > 1) {
         for (var i = 0; i < quantity; i++) {
             sersku = prdSku + refil(serie++, 3);
             update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
             let par = `
-        [{
-            "support"       : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
-            "sersku"        : "${sersku}",
-            "prodser"       : "${serser}",
-            "prodpeti"      : "${prodpeti}",
-            "prodimpo"      : "${prodimpo}",
-            "sercost"       : "${sercost}",
-            "prodnme"       : "${prdName}",
-            "prodqty"       : "${'1'}",
-            "excodsr"       : "${exccode}",
-            "stnmesr"       : "${strName}",
-            "provname"      : "${suppliernm}",
-            "factname"      : "${docinvoicenm}",
-            "comment"       : "${comment}",
-            "serbran"       : "${serbran}",
-            "sercostimp"    : "${sercostimp}",
-            "serpetimp"     : "${serpetimp}",
-            "sercosttot"    : "${sercosttot}",
-            "sernumeco"     : "${sernumeco}"
-        }]`;
-            console.log(par);
+            [{
+                "support"       : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
+                "sersku"        : "${sersku}",
+                "prodser"       : "${serser.toUpperCase()}",
+                "prodpeti"      : "${prodpeti}",
+                "prodimpo"      : "${prodimpo}",
+                "sercost"       : "${sercost}",
+                "prodnme"       : "${prdName}",
+                "prodqty"       : "${'1'}",
+                "excodsr"       : "${exccode}",
+                "stnmesr"       : "${strName}",
+                "provname"      : "${suppliernm}",
+                "factname"      : "${docinvoicenm}",
+                "comment"       : "${comment}",
+                "serbran"       : "${serbran}",
+                "sercostimp"    : "${sercostimp}",
+                "serpetimp"     : "${serpetimp}",
+                "sercosttot"    : "${sercosttot}",
+                "sernumeco"     : "${sernumeco}"
+            }]`;
+            // console.log(par);
             fill_table(par);
         }
     } else {
@@ -545,7 +546,7 @@ function exchange_apply() {
         [{
             "support"  : "${prdId}|${excId}|${strid}|${sersku}|${sercoin}|${supplier}|${docinvoice}",
             "sersku"   : "${sersku}",
-            "prodser"  : "${serser}",
+            "prodser"  : "${serser.toUpperCase()}",
             "sercost"  : "${sercost}",
             "prodnme"  : "${prdName}",
             "prodqty"  : "${quantity}",
@@ -560,7 +561,7 @@ function exchange_apply() {
             "sercosttot"    : "${sercosttot}",
             "sernumeco"     : "${sernumeco}"
         }]`;
-        console.log(par);
+        // console.log(par);
         fill_table(par);
     }
     clean_selectors();
@@ -574,29 +575,53 @@ function fill_table(par) {
     par = JSON.parse(par);
 
     let tabla = $('#tblExchanges').DataTable();
-
-    tabla.row
+    if(mthseries==1){
+        tabla.row
         .add({
             editable: `<i class="fas fa-times-circle kill"></i>`,
             prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 10)}-${par[0].sersku.slice(10, 13)}`,
             prodname: par[0].prodnme,
             prodcant: `<span>${par[0].prodqty}</span>`,
             prodcost: par[0].sercost, 
-            prodseri: '<input class="serprod fieldIn" type="text" id="PS-' + par[0].prodser + '" value="' + par[0].prodser + '">',
+            prodseri: par[0].prodser,
             prodpeti: par[0].serpetimp,
-            prodimpo: '<input class="sercpet fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">',
+            prodimpo: par[0].sercostimp,
             costtota: par[0].sercosttot,
             codexcsc: par[0].excodsr,
             stnamesc: par[0].stnmesr,
             provname: par[0].provname,
             factname: par[0].factname,
             prodmarc: par[0].serbran,
-            numecono: '<input class="serecono fieldIn" type="text" id="PS-' + par[0].sernumeco + '" value="' + par[0].sernumeco + '">',
+            numecono: par[0].sernumeco,
             comments: `<div>${par[0].comment}</div>`
         })
         .draw();
 
-    $(`#SKU-${par[0].sersku}`).parent().parent().attr('data-content', par[0].support);
+        $(`#SKU-${par[0].sersku}`).parent().parent().attr('data-content', par[0].support);
+    } else{
+        tabla.row
+            .add({
+                editable: `<i class="fas fa-times-circle kill"></i>`,
+                prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 10)}-${par[0].sersku.slice(10, 13)}`,
+                prodname: par[0].prodnme,
+                prodcant: `<span>${par[0].prodqty}</span>`,
+                prodcost: par[0].sercost, 
+                prodseri: '<input class="serprod fieldIn" type="text" id="PS-' + par[0].prodser + '" value="' + par[0].prodser + '">',
+                prodpeti: par[0].serpetimp,
+                prodimpo: '<input class="sercpet fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">',
+                costtota: par[0].sercosttot,
+                codexcsc: par[0].excodsr,
+                stnamesc: par[0].stnmesr,
+                provname: par[0].provname,
+                factname: par[0].factname,
+                prodmarc: par[0].serbran,
+                numecono: '<input class="serecono fieldIn" type="text" id="PS-' + par[0].sernumeco + '" value="' + par[0].sernumeco + '">',
+                comments: `<div>${par[0].comment}</div>`
+            })
+            .draw();
+
+        $(`#SKU-${par[0].sersku}`).parent().parent().attr('data-content', par[0].support);
+    }
 
     btn_apply_appears();
 
@@ -609,7 +634,7 @@ function fill_table(par) {
 }
 
 function btn_apply_appears() {
-    console.log('Paso 4 ');
+    // console.log('Paso 4 ');
     let tabla = $('#tblExchanges').DataTable();
     let rengs = tabla.rows().count();
     if (rengs > 0) {
@@ -634,15 +659,14 @@ function clean_selectors() {
         //$('#txtSerie').attr('disabled', false);
         alert('VALIDA');
     } */
-
-    // ** HOLA ****
-    
+    mthseries=0;
     $('#txtCost').val('');
     $('#txtQuantityStored').html('&nbsp;');
     $('#txtComments').val('');
     $('#txtMarca').val('');
     $('#txtCostImp').val('');
     $('#txtPedimento').val('');
+    $('#txtCostTot').val('');
 }
 /** Actualiza la cantidad de cada producto dentro del arreglo */
 function update_array_products(id, sr) {
@@ -704,7 +728,7 @@ function build_data_structure(pr) {
         "sku" :  "${el[1]}",
         "pnm" :  "${el[2].toUpperCase()}",
         "qty" :  "${el[3]}",
-        "ser" :  "${el[4]}",
+        "ser" :  "${el[4].toUpperCase()}",
         "str" :  "${el[5]}",
         "com" :  "${el[6]}",
         "cod" :  "${el[7]}",
@@ -782,8 +806,6 @@ function updated_stores(dt) {
         printInfoGetOut(folio);
     });
 }
-
-
 
 /**  ++++ Omite acentos para su facil consulta */
 function omitirAcentos(text) {

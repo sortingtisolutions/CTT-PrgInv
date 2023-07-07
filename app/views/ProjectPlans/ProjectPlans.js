@@ -2385,7 +2385,7 @@ function updateTotals() {
 
         let prcdscins = parseFloat($('#insuDesctoPrc').html()) / 100;
         desctins = costassu * prcdscins;
-        /* totlPrds++; */
+        totlPrds++;
     });
 
     $('#costBase').html(mkn(costbase, 'n'));

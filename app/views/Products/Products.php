@@ -96,9 +96,34 @@
                             <input type="hidden" id="txtPrdId" name="txtPrdId" autocomplete="nope" >
                             <input type="text" id="txtPrdName" name="txtPrdName" class="textbox required" style="width:300px; text-transform:uppercase" autocomplete="off">
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
-                            <span class="intructions">&nbsp;</span>
+                            <span class="intructions">Nombre correspondiente al producto</span>
                         </td>
                     </tr>
+                    <tr>
+                        <td class="concept"><span class="reqsign">&nbsp;</span>Tipo Artículo: </td> <!-- Accesorio -->
+                        <td class="data">
+                            <div id="txtPrdLevel"  class="checkbox"><i class="far fa-square"></i> <i class="fas fa-check-square"></i></div>
+                            <span class="fail_note hide"></span>
+                            <span class="intructions">Indica si es un producto o un accesorio</span>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="concept"> Producto:</td>
+                        <td class="">
+                            <div class="row list-finder pos2 ">
+                                <div class="data">
+                                    <input id="txtProducts" type="text" class="form-control form-control-sm required" style="font-size: 0.8em;" data-mesage="Debes seleccionar un proveedor" autocomplete="off" disabled>
+                                    <input type="hidden" id="txtIdProducts" name="txtIdProducts">
+                                </div>
+                                <div id="listProduct" class="list-group list-hide">
+                                    <div class="list-items" ></div>
+                                </div>
+                            </div>
+                            <span class="fail_note hide"></span>
+                            <span style="font-size: 0.7em; color: #999999; margin-bottom: 10px;	margin-top: 2px;" >Listado de productos para crear un accesorio</span>
+                        </td>
+                    </tr>
+                    <tr>
                     <tr>
                         <td class="concept"><span class="reqsign">*</span> SKU:</td>
                         <td class="data">
@@ -136,7 +161,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Catálogo:</td>
                         <td class="data">
-                            <select id="txtCatId" name="txtCatId" class="textbox required" style="width:300px">
+                            <select id="txtCatId" name="txtCatId" class="textbox " style="width:300px">
                                 <option value="0">Selecciona catálogo</option>
                             </select>
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
@@ -146,7 +171,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Subcategoria:</td>
                         <td class="data">
-                            <select id="txtSbcId" name="txtSbcId" class="textbox required" style="width:300px">
+                            <select id="txtSbcId" name="txtSbcId" class="textbox " style="width:300px">
                                 <option value="0">Selecciona subcategoría</option>
                             </select>
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i> Campo requerido</span>
@@ -161,15 +186,7 @@
                             <span class="intructions">Indica si este producto se mostrará en la lista de precios</span>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="concept"><span class="reqsign">&nbsp;</span>Tipo Artículo:</td> <!-- Accesorio -->
-                        <td class="data">
-                            
-                            <div id="txtPrdLevel"  class="checkbox "><i class="far fa-square"></i> <i class="fas fa-check-square"></i></div>
-                            <span class="fail_note hide"></span>
-                            <span class="intructions">Indica si es un producto o un accesorio</span>
-                        </td>
-                    </tr>
+                   
                     <tr>
                         <td class="concept"><span class="reqsign">&nbsp;</span> Renta sin accesorios:</td>
                         <td class="data">
@@ -277,7 +294,7 @@
                     <tr>
                         <td class="concept"><span class="reqsign"></span> Fecha de Alta:</td>
                         <td class="data">
-                            <input type="text" id="txtSerDateRegistry" name="txtSerDateRegistry" disabled class="textbox" style="width:150px"> <i class="fas fa-calendar-alt" id="calendar"></i>
+                            <input type="text" id="txtSerDateRegistry" name="txtSerDateRegistry"  class="textbox" style="width:150px"> <i class="fas fa-calendar-alt" id="calendar"></i>
                             <span class="fail_note hide"><i class="fas fa-arrow-left"></i></span>
                             <span class="intructions">Fecha de registro del producto</span>
                         </td>

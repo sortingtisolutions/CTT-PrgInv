@@ -426,7 +426,23 @@ public function stockProdcuts($request_params)
         $result = $this->model->PromoteVersion($request_params);
         echo $result;
     } 
-
+// Promueve la version de proyecto
+    public function getExistTrip($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->getExistTrip($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
 // Genera el archivo de la cotización
 public function saveBudgetList($request_params)
 {   

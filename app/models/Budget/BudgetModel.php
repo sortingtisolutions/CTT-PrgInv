@@ -728,8 +728,7 @@ public function saveBudgetList($params)
         
         return $this->db->query($qry1);
     }
-
-
+// **************************
     public function GetProducts($params)
     {
         $prodId        = $this->db->real_escape_string($params);
@@ -740,7 +739,6 @@ public function saveBudgetList($params)
         return $this->db->query($qry);
 
     }
-
 
 // Actualiza las fechas del proyecto
 public function UpdatePeriodProject($params)
@@ -768,7 +766,7 @@ public function UpdatePeriodProject($params)
 
             return $this->db->query($qry);
         }    
-
+// **************************
     public function getExistTrip($params)
     {
         $pjtvrId    = $this->db->real_escape_string($params['pjtvrId']);
@@ -776,11 +774,11 @@ public function UpdatePeriodProject($params)
 
         $qry = "SELECT COUNT(*) AS existrip 
                 FROM ctt_budget
-                WHERE bdg_days_trip<>0 AND ver_id=$prdId";
+                WHERE bdg_days_trip<>0 AND ver_id=$pjtvrId";
 
         return $this->db->query($qry);
     } 
-
+// **************************
     public function listReordering($params)
     {
         $verId      = $this->db->real_escape_string($params['verId']);
@@ -794,7 +792,7 @@ public function UpdatePeriodProject($params)
                 FROM ctt_budget AS bg
                 INNER JOIN ctt_subcategories AS sb 
                 ON sb.cat_id=substr(bdg_prod_sku,1,2) AND sb.sbc_code=substr(bdg_prod_sku,3,2)
-                WHERE ver_id=7
+                WHERE ver_id=$verId
                 GROUP BY bdg_id,bdg_prod_sku,bdg_section,bdg_order 
                 ORDER BY bdg_section, SUBSTR(bdg_prod_sku,1,4);";
 

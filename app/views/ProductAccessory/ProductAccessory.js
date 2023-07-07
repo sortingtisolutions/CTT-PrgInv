@@ -14,12 +14,40 @@ $(document).ready(function () {
 });
 //INICIO DE PROCESOS
 function inicial() {
-    setting_table_accesorys();
     setting_table_product();
+    setting_table_accesorys();
     getCategory();
     getSubcategory();
 }
 
+// Solicita las categorias
+function getCategory() {
+    var pagina = 'ProductAccessory/listCategories';
+    var par = '[{"parm":""}]';
+    var tipo = 'json';
+    var selector = putCategory;
+    fillField(pagina, par, tipo, selector);
+}
+// Solicita las subcategorias
+function getSubcategory() {
+    var pagina = 'ProductAccessory/listSubCategories';
+    var par = `[{"catId":""}]`;
+    var tipo = 'json';
+    var selector = putSubCategory;
+    fillField(pagina, par, tipo, selector);
+}
+
+// SOLICITA LOS PRODUCTOS SEGUN SU SUBCATEGORIA ID
+function getProducts(sbc_id) {
+    //deleteTablaAccesorios();
+
+    // console.log('id subcategoria:' + sbc_id);
+    var pagina = 'ProductAccessory/listProductsById';
+    var par = '[{"sbc_id":"' + sbc_id + '"}]';
+    var tipo = 'json';
+    var selector = putProducts;
+    fillField(pagina, par, tipo, selector);
+}
 // Configura la tabla de paquetes
 function setting_table_product() {
     let tabla = $('#tblPackages').DataTable({
@@ -80,35 +108,6 @@ function setting_table_accesorys() {
             {data: 'prodname', class: 'product-name'},
         ],
     });
-}
-
-// Solicita las categorias
-function getCategory() {
-    var pagina = 'ProductAccessory/listCategories';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putCategory;
-    fillField(pagina, par, tipo, selector);
-}
-// Solicita las subcategorias
-function getSubcategory() {
-    var pagina = 'ProductAccessory/listSubCategories';
-    var par = `[{"catId":""}]`;
-    var tipo = 'json';
-    var selector = putSubCategory;
-    fillField(pagina, par, tipo, selector);
-}
-
-// SOLICITA LOS PRODUCTOS SEGUN SU SUBCATEGORIA ID
-function getProducts(sbc_id) {
-    //deleteTablaAccesorios();
-
-    // console.log('id subcategoria:' + sbc_id);
-    var pagina = 'ProductAccessory/listProductsById';
-    var par = '[{"sbc_id":"' + sbc_id + '"}]';
-    var tipo = 'json';
-    var selector = putProducts;
-    fillField(pagina, par, tipo, selector);
 }
 
 /* LLENA LOS DATOS DE LOS ELEMENTOS */
@@ -192,7 +191,7 @@ function putProducts(dt) {
         $.each(dt, function (v, u) {
             var rowNode = tabla.row
                 .add({
-                    pack_sku: `<span class="hide-support" id="SKU-${u.prd_id}">${u.prd_id}</span>${u.prd_sku}`,
+                    pack_sku: `<span class="hide-support" id="SKU-${u.prd_id}" data-sku="${u.prd_sku}">${u.prd_id}</span>${u.prd_sku}`,
                     packname: u.prd_name,
                 })
 
@@ -229,6 +228,7 @@ function selSubcategoryPack(id) {
         });
     }
     $('#txtSubcategoryPack').change(function () {
+        // let id = $(this).val();
         let id = $(this).val();
         lsbc_id = id;
         console.log(id);
@@ -287,11 +287,11 @@ function action_selected_packages() {
             productoSelectId = arraryPrd[0];
             productoSelectSKU = arraryPrd[1];
 
-            /*                 console.log("se seleccione un producto");
-                console.log(productoSelectSKU);
-                console.log(productoSelectId); */
+            // console.log("se seleccione un producto");
+            console.log(productoSelectSKU);
+            // console.log(productoSelectId);
 
-            getAccesoriesById(productoSelectId);
+            getAccesoriesById(productoSelectSKU);
             //select_products(prdId);
         });
 }
@@ -309,7 +309,9 @@ function putAccesoriesById(dt) {
 
     if (dt[0].prd_id != '') {
         $.each(dt, function (v, u) {
+            
             putNewAccesorio(u.prd_id, u.prd_sku, u.prd_name);
+
         });
     }
 }

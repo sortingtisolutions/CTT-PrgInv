@@ -145,7 +145,13 @@ public function listInvoice()
                 ORDER BY p.prd_sku ;";
         return $this->db->query($qry);
     }
-
+    public function listProducts2()
+    {
+        $qry = "SELECT prd_id,prd_sku,prd_name 
+                FROM ctt_products as A WHERE A.prd_visibility=1 AND A.prd_level='P';";
+        return $this->db->query($qry);
+    }
+    
     // Listado de Productos
     public function listSeries($params)
     {
@@ -186,6 +192,7 @@ public function listInvoice()
                             ),0) AS documId
                 FROM ctt_products AS pr
                 WHERE pr.prd_id = $prdId limit 1;";
+
         return $this->db->query($qry);
     }
 
@@ -274,8 +281,6 @@ public function listInvoice()
                         $this->db->query($qry1);
             } 
             
-
-
         return $prdId .'|'. $prdDc;
     }
 
@@ -441,6 +446,15 @@ public function saveEdtSeries($params)
         $this->db->query($qry2);
 
         return $serId.'|'.$prdId;
+    }
+
+    public function maxAccesorio($params)
+    {
+        $prdsku = $this->db->real_escape_string($params['prdsku']);
+
+        $qry = "SELECT '$prdsku' as prdsku, fun_buscamaxacc('$prdsku') AS maxacc FROM DUAL;";
+        return $this->db->query($qry);
+ 
     }
 }
 

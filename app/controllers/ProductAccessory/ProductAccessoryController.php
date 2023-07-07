@@ -120,7 +120,7 @@ class ProductAccessoryController extends Controller
 public function listProductsById($request_params)
 {
     $params =  $this->session->get('user');
-    $result = $this->model->listProductsById($request_params['sbc_id']);
+    $result = $this->model->listProductsById($request_params);
     $i = 0;
     while($row = $result->fetch_assoc()){
         $rowdata[$i] = $row;

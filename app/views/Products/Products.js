@@ -1,5 +1,5 @@
 let seccion = '';
-let docs, prds;
+let docs, prds, maxacc;
 let grp = 50;
 let num = 0,
     lvl = '',
@@ -25,6 +25,7 @@ function inicial() {
         getCoins();
         getDocument();
         getInvoice();
+        getListProducts();
     } else {
         setTimeout(() => {
             inicial();
@@ -94,6 +95,13 @@ function getProducts(catId) {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
+function getListProducts() {
+    var pagina = 'Products/listProducts2';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = putProductsList;
+    fillField(pagina, par, tipo, selector);
+}
 
 /** +++++  Obtiene las series de un producto seleccionado */
 function getSeries(prdId) {
@@ -101,6 +109,14 @@ function getSeries(prdId) {
     var par = `[{"prdId":"${prdId}"}]`;
     var tipo = 'json';
     var selector = putSeries;
+    fillField(pagina, par, tipo, selector);
+}
+function getMaxAccesorio(prdsku) {
+    // console.log('Busca',prdsku);
+    var pagina = 'Products/maxAccesorio';
+    var par = `[{"prdsku":"${prdsku}"}]`;
+    var tipo = 'json';
+    var selector = putMaxAccesorioc;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -223,6 +239,103 @@ function putProducts(dt) {
     prds = dt;
     fillProducts('0');
     console.log('LLena Products ');
+}
+
+function putProductsList(dt) {
+    // console.log('putProductsList',dt);
+    var sl = $('#txtProducts').offset();
+    $('#listProduct .list-items').html('');
+    //console.log(sl);
+    $('#listProduct').css({left: sl.left + 10 + 'px', top: sl.top + 30 +'px'}); // volver a tomar al hacer scroll.
+    $('#listProduct').slideUp('200', function () {
+        $('#listProduct .list-items').html('');
+    });
+
+    $.each(dt, function (v, u) {
+        let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_id}|${u.prd_name}|${u.prd_sku}">${u.prd_name}</div>`;
+        $('#listProduct .list-items').append(H);
+    });
+
+    $('#txtProducts').on('focus', function () {
+        $('#listProduct').slideDown('fast');
+    });
+
+    $('#listProduct').on('scroll', function(){
+        sl = $('#txtProducts').offset();
+        $('#listProduct').css({left: sl.left + 10 + 'px', top: sl.top + 30 +'px'});
+    });
+
+    $('#listProduct').on('mouseleave', function () {
+        $('#listProduct').slideUp('fast');
+    });
+
+    $('#txtProducts').keyup(function (e) {
+        var res = $(this).val().toUpperCase();
+        if (res == '') {
+            $('#listProduct').slideUp(100);
+        } else {
+            $('#listProduct').slideDown(400);
+        }
+        res = omitirAcentos(res);
+        sel_products(res);
+        
+    });
+
+    $('#listProduct .list-item').on('click', function () {
+        // console.log('AQUI escoges');
+        let prdNm = $(this).html();
+        let prdId = $(this).attr('id');
+        let prdsku = $(this).attr('data_complement').split('|')[2];
+        MaxAccesorio(prdsku,prdNm,prdId);
+        // let newprdsku = prdsku + 'XXX';
+        //console.log('selecciona elemento', prdId,'---', prdNm, '** ', prdsku);
+        // $('#txtProducts').val(prdNm);
+        // $('#txtIdProducts').val(prdId);
+        // $('#txtPrdSku').val(newprdsku);
+        // $('#listProduct').slideUp(100);
+        // validator();
+    });
+}
+
+function MaxAccesorio(prdsku,prdNm,prdId,) {
+        // console.log('MaxAccesorio',prdNm,prdId,prdsku);
+    if (maxacc == undefined) {
+        getMaxAccesorio(prdsku,prdNm,prdId);
+        
+    } else {
+        // console.log('Regreso a MaxAccesorio',prdNm,prdId,prdsku);
+        let newprdsku = prdsku + 'XXX' + maxacc;
+        $('#txtProducts').val(prdNm);
+        $('#txtIdProducts').val(prdId);
+        $('#txtPrdSku').val(newprdsku);
+        $('#listProduct').slideUp(100);
+    }
+}
+
+function putMaxAccesorioc(dt) {
+    // console.log('putMaxAccesorioc',dt);
+    let prdsku = dt[0].prdsku;
+    maxacc = dt[0].maxacc;
+    MaxAccesorio(prdsku,'',maxacc);
+}
+
+function sel_products(res) {
+    //console.log('SELECC',res);
+    if (res.length < 2) {
+        $('#llistProduct .list-items div.list-item').css({display: 'block'});
+    } else {
+        $('#listProduct .list-items div.list-item').css({display: 'none'});
+    }
+
+    $('#listProduct .list-items div.list-item').each(function (index) {
+        var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
+        cm = omitirAcentos(cm);
+        var cr = cm.indexOf(res);
+        if (cr > -1) {
+            //            alert($(this).children().html())
+            $(this).css({display: 'block'});
+        }
+    });
 }
 
 /** +++++  configura la table de productos */
@@ -622,7 +735,7 @@ function saveEditProduct() {
         let prdPr = $('#txtPrdPrice').val();
         let prdEn = $('#txtPrdEnglishName').val();
         let prdCd = $('#txtPrdCodeProvider').val();
-        let prdNp = $('#txtPrdCodeProvider').val();
+        let prdNp = $('#txtPrdNameProvider').val();
         let prdCm = $('#txtPrdComments').val();
         let prdVs = $('#txtPrdVisibility').children('i').attr('data_val');
         let prdLl = $('#txtPrdLevel').children('i').attr('data_val');
@@ -668,7 +781,7 @@ function saveEditProduct() {
 }
 
 function resEdtProduct(dt) {
-    console.log('AQUI ACTUALIZA PRODUCTO');
+    // console.log('AQUI ACTUALIZA PRODUCTO');
     let prdId = dt.split('|')[0];
     let prdNm = $('#txtPrdName').val().replace(/\"/g, '°');
     let prdSk = $('#txtPrdSku').val();
@@ -734,16 +847,24 @@ function createNewProduct() {
             /* AGREGA VALORES AL ACCESORIO */
             if (itmId == 'txtPrdLevel') {
                 if (accr == 1) {
-                    $(`#txtCatId`).val(20);
-                    $(`#txtSbcId`).val(152);
+                    $(`#txtCatId`).val(0);
+                    $(`#txtSbcId`).val(0);
+                    $(`#txtPrdSku`).val('');
                     $(`#txtCatId`).attr('disabled', true);
                     $(`#txtSbcId`).attr('disabled', true);
-                    console.log('Valores del Accesorio, Cat=20, SubCat=152');
+                    $(`#txtSrvId`).attr('disabled', true);
+                    $(`#txtProducts`).attr('disabled', false);
+                    maxacc=undefined;
+                    // console.log('Valores del Accesorio, Cat=20, SubCat=152');
                 } else {
                     $(`#txtCatId`).val(0);
                     $(`#txtSbcId`).val(0);
+                    $(`#txtProducts`).val('');
+                    $('#txtPrdSku').val('');
                     $(`#txtCatId`).attr('disabled', false);
                     $(`#txtSbcId`).attr('disabled', false);
+                    $(`#txtProducts`).attr('disabled', true);
+                    $(`#txtSrvId`).attr('disabled', false);
                 }
             }
         });
@@ -848,7 +969,11 @@ function saveNewProduct() {
 }
 function resNewProduct(dt) {
     console.log(dt);
-    $('#txtCategoryList').val(dt).trigger('change');
+    if(dt!='null'){
+        $('#txtCategoryList').val(dt).trigger('change');
+    }else{
+        $('#txtCategoryList').val(10).trigger('change');
+    }
     $('#ProductModal .btn_close').trigger('click');
 }
 
@@ -1122,7 +1247,7 @@ function putSelectSerie(dt) {
 }
 
 function resEdtSeries(dt) {
-    console.log('AQUI ACTUALIZA TABLA SERIES',dt);
+    // console.log('AQUI ACTUALIZA TABLA SERIES',dt);
     let serId = $('#txtSerIdSerie').val();
     let serSr = $('#txtSerSerialNumber').val();
     let serDt = $('#txtSerDateRegistry').val();

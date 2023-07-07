@@ -31,7 +31,7 @@ class MoveStoresInModel extends Model
 // Listado de proveedores
     public function listSuppliers()
     {
-        $qry = "  SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
+        $qry = "SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
         return $this->db->query($qry);
     }
    
@@ -39,14 +39,10 @@ class MoveStoresInModel extends Model
     public function listInvoice($param)
     {
         $extId = $this->db->real_escape_string($param['extId']);
+
         $dotId='0';
-        if($extId==9)
-        {
-            $dotId='1';
-        } elseif($extId==10)
-        {
-            $dotId='4'; 
-        }
+        if($extId==9 or $extId==11) { $dotId='1';}
+        elseif($extId==10) { $dotId='4'; }
 
         $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id IN ($dotId)";
         return $this->db->query($qry);
@@ -72,9 +68,9 @@ class MoveStoresInModel extends Model
         $catId = $this->db->real_escape_string($param['catId']);
         
         $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, (
-                    SELECT ifnull(max(convert(substring( ser_sku,8,4), signed integer)),0) + 1 
-                    FROM ctt_series WHERE prd_id = pd.prd_id AND ser_behaviour = 'C'
-                ) as serNext, sb.sbc_name, ct.cat_name
+                    SELECT ifnull(max(convert(substring(ser_sku,8,3), signed integer)),0) + 1 
+                    FROM ctt_series WHERE prd_id = pd.prd_id) as serNext, 
+                    sb.sbc_name, ct.cat_name
                 FROM ctt_products AS pd 
                 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
