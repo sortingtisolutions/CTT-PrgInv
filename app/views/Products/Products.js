@@ -938,8 +938,7 @@ function saveNewProduct() {
         let prdDi = $(`#txtDcpId`).val();
 
         var par = `
-                [{
-                    "prdId" : "${prdId}",
+                [{  "prdId" : "${prdId}",
                     "prdNm" : "${prdNm}",
                     "prdSk" : "${prdSk}",
                     "prdMd" : "${prdMd}",

@@ -46,7 +46,7 @@ class AssignFreelanceController extends Controller
 // Lista los almacenes 
     public function listStores($request_params)
     {
-        $params =  $this->session->get('user');
+       /*  $params =  $this->session->get('user');
         $result = $this->model->listStores();
             $i = 0;
             while($row = $result->fetch_assoc()){
@@ -58,7 +58,7 @@ class AssignFreelanceController extends Controller
             } else {
                 $res =  '[{"str_id":"0"}]';	
             }
-            echo $res;
+            echo $res; */
     }    
 
 // Lista los Categorias 
@@ -119,7 +119,7 @@ public function listFreelances($request_params)
 // Lista los proveedores
     public function listSuppliers($request_params)
     {
-        $params =  $this->session->get('user');
+        /* $params =  $this->session->get('user');
         $result = $this->model->listSuppliers();
         $i = 0;
         while($row = $result->fetch_assoc()){
@@ -131,13 +131,13 @@ public function listFreelances($request_params)
         } else {
             $res =  '[{"sup_id":"0"}]';	
         }
-        echo $res;
+        echo $res; */
     } 
 
 // Lista los Facturas
     public function listInvoice($request_params)
     {
-        $params =  $this->session->get('user');
+        /* $params =  $this->session->get('user');
         $result = $this->model->listInvoice($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
@@ -149,12 +149,12 @@ public function listFreelances($request_params)
         } else {
             $res =  '[{"doc_id":"0"}]';	
         }
-        echo $res;
+        echo $res; */
     } 
 // Lista los Monedas
     public function listCoins($request_params)
     {
-        $params =  $this->session->get('user');
+       /*  $params =  $this->session->get('user');
         $result = $this->model->listCoins();
         $i = 0;
         while($row = $result->fetch_assoc()){
@@ -166,7 +166,7 @@ public function listFreelances($request_params)
         } else {
             $res =  '[{"cin_id":"0"}]';	
         }
-        echo $res;
+        echo $res; */
     } 
 
 // Obtiene el folio del movimiento

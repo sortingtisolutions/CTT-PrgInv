@@ -18,59 +18,65 @@
                     <h4 class="mainTitle">Datos de los Proyectos</h4>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtProjectName" type="text" class="form-control form-control-sm" >
+                                <input id="txtProjectName" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
                                 <label for="txtProjectName">Nombre del Proyecto</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtProjectNum" type="text" class="form-control form-control-sm" >
+                                <input id="txtProjectNum" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled >
                                 <label for="txtProjectNum">Numero Proyecto</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtTipoProject" type="text" class="form-control form-control-sm"  >
+                                <input id="txtTipoProject" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
                                 <label for="txtTipoProject">Tipo de Proyecto</label>
                             </div>
                         </div>
 						<div class="row">
 							<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
-								<input id="txtStartDate" type="text" class="form-control form-control-sm">
+								<input id="txtStartDate" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
 								<label for="txtStartDate" >Fecha Incial</label>
 							</div>
 							<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
-								<input id="txtEndDate" type="text" class="form-control form-control-sm">
+								<input id="txtEndDate" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
 								<label for="txtEndDate">Fecha Final</label>
 							</div>
 						</div>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtLocation" type="text" class="form-control form-control-sm" >
+                                <input id="txtLocation" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
                                 <label for="txtLocation">Dirección de Locación</label>
                             </div>
                         </div>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtCustomer" type="text" class="form-control form-control-sm" >
+                                <input id="txtCustomer" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
                                 <label for="txtCustomer">Nombre Cliente</label>
                             </div>
                         </div>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <input id="txtAnalyst" type="text" class="form-control form-control-sm" >
+                                <input id="txtAnalyst" type="text" class="form-control form-control-sm" style="background-color: #FFFAFF" disabled>
                                 <label for="txtAnalyst">Analista de Programación</label>
                             </div>
                         </div>
-						<div class="row">
+                        <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                            <select id="txtArea" class="form-select form-select-sm"><option value='0'></option></select>
+                            <label for="txtArea">Freelances Asignados</label>
+                        </div>
+                        </div>
+						<!-- <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtFreelance" type="text" class="form-control form-control-sm" >
                                 <label for="txtFreelance">Freelance Asignado</label>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                <textarea class="form-control form-control-sm" id="txtComments" style="height:70px;" autocomplete="off" rows="5"></textarea>
+                                <textarea class="form-control form-control-sm" id="txtComments" style="height:70px; background-color: #FFFAFF" autocomplete="off" rows="5" disabled></textarea>
                                 <label for="txtComments">Comentarios de Programación</label>
                             </div>
                         </div>

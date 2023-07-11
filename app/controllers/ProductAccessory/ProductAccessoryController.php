@@ -63,7 +63,7 @@ class ProductAccessoryController extends Controller
 // Lista de paquetes
     public function listPackages()
     {
-        $params =  $this->session->get('user');
+       /*  $params =  $this->session->get('user');
         $result = $this->model->listPackages();
         $i = 0;
         while($row = $result->fetch_assoc()){
@@ -75,13 +75,13 @@ class ProductAccessoryController extends Controller
         } else {
             $res =  '[{"prd_id":"0"}]';	
         }
-        echo $res;
+        echo $res; */
     }
 
 // Obtiene el Id correspondiente al paquete nuevo 
     public function lastIdSubcategory($request_params)
     {
-        $params =  $this->session->get('user');
+       /*  $params =  $this->session->get('user');
         $result = $this->model->lastIdSubcategory($request_params['sbcId']);
         $i = 0;
         while($row = $result->fetch_assoc()){
@@ -93,7 +93,7 @@ class ProductAccessoryController extends Controller
         } else {
             $res =  '[{"nextId":""}]';	
         }
-        echo $res;
+        echo $res; */
     }
 
     
@@ -138,8 +138,26 @@ public function listProductsById($request_params)
 // Lista los productos relacionados al paquete
     public function listProductsPack($request_params)
     {
-        $params =  $this->session->get('user');
+        /* $params =  $this->session->get('user');
         $result = $this->model->listProductsPack($request_params['prdId']);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":""}]';	
+        }
+        echo $res; */
+    }
+
+// Lista los productos relacionados al paquete
+    public function listSeriesProd($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listSeriesProd($request_params['prdId']);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -153,7 +171,6 @@ public function listProductsById($request_params)
         echo $res;
     }
 
-    
 // Lista los productos relacionados al paquete
 public function listAccesorios($request_params)
 {

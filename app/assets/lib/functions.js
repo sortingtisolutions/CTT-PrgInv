@@ -56,7 +56,25 @@ function show_error(xhr, textStatus, error, selector) {
     Error: ${error} <br>
     ResponseText: ${xhr.responseText} <br>
     final<br>`;
-    $('#msgError').html(H).removeClass('reposo');
+    const btn_close = $('<button></button>')
+      .attr('id', 'btn_close')
+      .append($('<i></i>').addClass('far fa-window-close'))
+      .on('click', function() {
+        $('#msgError').hide();
+        }).css({
+            'background-color': '#f5eec0',
+            'color': '#000000',
+            'border': 'none',
+            'padding': '6px 10px',
+            'cursor': 'pointer',
+            'position': 'absolute',
+            'top': '0',
+            'right': '0'
+        });
+    btn_close.find('i').css('font-size', '20px');
+    $('#msgError').empty().append(H,btn_close).removeClass('reposo');
+    $('#msgError').show();
+    // $('#msgError').html(H).removeClass('reposo');
 }
 
 // RELLENA CON CEROS A LA IZQUIERDA

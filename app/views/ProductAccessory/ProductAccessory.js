@@ -1,4 +1,4 @@
-let subcategos;
+let subcategos, proddatos;
 let products;
 var productoSelectId = 0;
 var productoSelectSKU = '';
@@ -39,15 +39,29 @@ function getSubcategory() {
 
 // SOLICITA LOS PRODUCTOS SEGUN SU SUBCATEGORIA ID
 function getProducts(sbc_id) {
-    //deleteTablaAccesorios();
-
-    // console.log('id subcategoria:' + sbc_id);
     var pagina = 'ProductAccessory/listProductsById';
     var par = '[{"sbc_id":"' + sbc_id + '"}]';
     var tipo = 'json';
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
+
+function getSeriesProd(prdId) {
+    var pagina = 'ProductAccessory/listSeriesProd';
+    var par = `[{"prdId":"${prdId}"}]`;
+    var tipo = 'json';
+    var selector = putSeriesProd;
+    fillField(pagina, par, tipo, selector);
+}
+
+function getAccesoriesById(prdId) {
+    var pagina = 'ProductAccessory/getAccesoriesById';
+    var par = `[{"prdId":"${prdId}"}]`;
+    var tipo = 'json';
+    var selector = putAccesoriesById;
+    fillField(pagina, par, tipo, selector);
+}
+
 // Configura la tabla de paquetes
 function setting_table_product() {
     let tabla = $('#tblPackages').DataTable({
@@ -136,6 +150,96 @@ function putSubCategory(dt) {
     subcategos = dt;
 }
 
+// Llena el selector de subcategorias
+function selSubcategoryPack(id) {
+    deleteTablaAccesorios();
+    deleteTablaProducts();
+    // console.log('selSubcategoryPack');
+
+    if (subcategos[0].sbc_id != 0) {
+        $.each(subcategos, function (v, u) {
+            if (u.cat_id === id) {
+                let H = `<option value="${u.sbc_id}" data-content="${u.sbc_id}|${u.cat_id}|${u.sbc_code}">${u.sbc_code} - ${u.sbc_name}</option>`;
+                $('#txtSubcategoryPack').append(H);
+            }
+        });
+    }
+    $('#txtSubcategoryPack').change(function () {
+        // let id = $(this).val();
+        let id = $(this).val();
+        lsbc_id = id;
+        // console.log('subcategoria seleccionada-',id);
+        getProducts(id);
+    });
+}
+
+function putProducts(dt) {
+    // console.log('putProducts',dt);
+    proddatos = dt;
+    selProductsSub(dt);
+}
+
+/* carga de accesorios por id */
+function putAccesoriesById(dt) {
+    console.log('putAccesoriesById',dt);
+    deleteTablaAccesorios();
+
+    if (dt[0].prd_id != '') {
+        $.each(dt, function (v, u) {
+            putNewAccesorio(u.prd_id, u.prd_sku, u.prd_name);
+        });
+    }
+}
+
+// Llena el selector de subcategorias
+function selProductsSub(dt) {
+    console.log('selProductsSub',dt);
+    if (dt[0].prd_id != 0) {
+        $.each(dt, function (v, u) {
+                let H = `<option value="${u.prd_id}" data-content="${u.prd_id}|${u.sbc_id}|${u.prd_sku}">${u.prd_sku} - ${u.prd_name}</option>`;
+                $('#txtProductSubCat').append(H);
+        });
+    }
+    $('#txtProductSubCat').change(function () {
+        // let id = $(this).val();
+        let id = $(this).val();
+        lsbc_id = id;
+        console.log('GET SERIES-',id);
+        getSeriesProd(id);
+    });
+}
+
+//llena la tabla de productos
+function putSeriesProd(dt) {
+    deleteTablaAccesorios();
+    deleteTablaProducts();
+    if (dt[0].ser_id != '0') {
+        let tabla = $('#tblPackages').DataTable();
+        tabla.clear().draw(); //BORRA LOS REGISTROS EXISTENTES
+        $.each(dt, function (v, u) {
+            var rowNode = tabla.row
+                .add({
+                    pack_sku: `<span class="hide-support" id="SKU-${u.ser_id}" data-sku="${u.ser_sku}">${u.ser_id}</span>${u.ser_sku}`,
+                    packname: u.ser_serial_number,
+                })
+                .draw()
+                .node();
+            // $(rowNode).find('td').eq(1).attr('hidden', true);
+
+            $(`#SKU-${u.ser_id}`)
+                .parent()
+                .parent()
+                .attr('id', u.ser_id + '-' + u.ser_sku)
+                .addClass('indicator');
+        });
+
+        load_Accesories();
+        action_selected_packages();
+    } else {
+        console.log('llego al else');
+    }
+}
+
 function putAccesorios(dt) {
     $('#listProducts').html('');
     if (dt[0].prd_id != '0') {
@@ -147,7 +251,6 @@ function putAccesorios(dt) {
             $('#listProducts').append(H);
         });
     }
-
     drawProducts();
 }
 
@@ -180,60 +283,39 @@ function drawProducts() {
         });
 }
 
-//llena la tabla de productos
-function putProducts(dt) {
-    deleteTablaAccesorios();
-    deleteTablaProducts();
-    if (dt[0].prd_id != '0') {
-        let tabla = $('#tblPackages').DataTable();
-        tabla.clear().draw(); //BORRA LOS REGISTROS EXISTENTES
+let sbccnt = 0;
 
-        $.each(dt, function (v, u) {
-            var rowNode = tabla.row
-                .add({
-                    pack_sku: `<span class="hide-support" id="SKU-${u.prd_id}" data-sku="${u.prd_sku}">${u.prd_id}</span>${u.prd_sku}`,
-                    packname: u.prd_name,
-                })
+//***************************************** */
 
-                .draw()
-                .node();
-            // $(rowNode).find('td').eq(1).attr('hidden', true);
+function action_selected_packages() {
+    $('.indicator td')
+        .unbind('click')
+        .on('click', function () {
+            var prdId = $(this).parent().attr('id');
+            var arraryPrd = prdId.split('-');
 
-            $(`#SKU-${u.prd_id}`)
-                .parent()
-                .parent()
-                .attr('id', u.prd_id + '-' + u.prd_sku)
-                .addClass('indicator');
+            //$("#selectAccesorios").css('visibility', 'visible');;
+            productoSelectId = arraryPrd[0];
+            productoSelectSKU = arraryPrd[1];
+
+            let tabla = $('#tblPackages').DataTable();
+
+            setTimeout(() => {
+                var RenglonesSelection = tabla.rows({selected: true}).count();
+                if (RenglonesSelection == 0) {
+                    $('#selectAccesorios').css('visibility', 'hidden');
+                    deleteTablaAccesorios();
+                } else {
+                    $('#selectAccesorios').css('visibility', 'visible');
+                }
+            }, 100);
+            // console.log("se seleccione un producto");
+            console.log(productoSelectSKU);
+            // console.log(productoSelectId);
+
+            getAccesoriesById(productoSelectSKU);
+            //select_products(prdId);
         });
-
-        load_Accesories();
-        action_selected_packages();
-    } else {
-        console.log('llego al else');
-    }
-}
-
-// Llena el selector de subcategorias
-function selSubcategoryPack(id) {
-    deleteTablaAccesorios();
-    deleteTablaProducts();
-    // console.log('selSubcategoryPack');
-
-    if (subcategos[0].sbc_id != 0) {
-        $.each(subcategos, function (v, u) {
-            if (u.cat_id === id) {
-                let H = `<option value="${u.sbc_id}" data-content="${u.sbc_id}|${u.cat_id}|${u.sbc_code}">${u.sbc_code} - ${u.sbc_name}</option>`;
-                $('#txtSubcategoryPack').append(H);
-            }
-        });
-    }
-    $('#txtSubcategoryPack').change(function () {
-        // let id = $(this).val();
-        let id = $(this).val();
-        lsbc_id = id;
-        console.log(id);
-        getProducts(id);
-    });
 }
 
 // Llena el selector de subcategorias
@@ -256,74 +338,6 @@ function selSubcategoryProduct(id) {
             console.log(id);
             drawProducts(id);
         });
-}
-let sbccnt = 0;
-
-//***************************************** */
-//****************AQUI***************** */
-//***************************************** */
-
-function action_selected_packages() {
-    $('.indicator td')
-        .unbind('click')
-        .on('click', function () {
-            var prdId = $(this).parent().attr('id');
-            var arraryPrd = prdId.split('-');
-
-            //$("#selectAccesorios").css('visibility', 'visible');;
-
-            let tabla = $('#tblPackages').DataTable();
-
-            setTimeout(() => {
-                var RenglonesSelection = tabla.rows({selected: true}).count();
-                if (RenglonesSelection == 0) {
-                    $('#selectAccesorios').css('visibility', 'hidden');
-                    deleteTablaAccesorios();
-                } else {
-                    $('#selectAccesorios').css('visibility', 'visible');
-                }
-            }, 100);
-
-            productoSelectId = arraryPrd[0];
-            productoSelectSKU = arraryPrd[1];
-
-            // console.log("se seleccione un producto");
-            console.log(productoSelectSKU);
-            // console.log(productoSelectId);
-
-            getAccesoriesById(productoSelectSKU);
-            //select_products(prdId);
-        });
-}
-
-function getAccesoriesById(prdId) {
-    var pagina = 'ProductAccessory/getAccesoriesById';
-    var par = `[{"prdId":"${prdId}"}]`;
-    var tipo = 'json';
-    var selector = putAccesoriesById;
-    fillField(pagina, par, tipo, selector);
-}
-/* carga de accesorios por id */
-function putAccesoriesById(dt) {
-    deleteTablaAccesorios();
-
-    if (dt[0].prd_id != '') {
-        $.each(dt, function (v, u) {
-            
-            putNewAccesorio(u.prd_id, u.prd_sku, u.prd_name);
-
-        });
-    }
-}
-
-function deleteTablaAccesorios() {
-    let tabla = $('#tblProducts').DataTable();
-    tabla.rows().remove().draw();
-}
-
-function deleteTablaProducts() {
-    let tabla = $('#tblPackages').DataTable();
-    tabla.rows().remove().draw();
 }
 
 function saveAccesoryId(prdId) {
@@ -382,20 +396,17 @@ function putAccesoriostable(dt) {
 
 //revisar aqui si no graba producto
 function product_apply(prId) {
-    //console.log(prId);
+    console.log('product_apply',prId);
     let acce = prId.attr('id').split('-');
-    //console.log(acce);
-    //VALIDAR QUE NO EXISTA EL ACCESORIO
     saveAccesoryId(acce[0]);
     //console.log(acce[2]);
     //console.log("respuesta conseguida"+accesorioExist);
     setTimeout(() => {
         if (accesorioExist != 0) {
             putNewAccesorio(acce[0], accesorioExist, acce[2]);
-
             //putNewAccesorio(acce[0],productoSelectSKU,acce[2]);
-
             //$(`.list-item[data-subcateg^="accesorio 41"]`).attr("hidden",true);
+
             $(`.list-item[data-subcateg^="${acce[2]}"]`).attr('hidden', true);
         }
     }, 500);
@@ -403,7 +414,7 @@ function product_apply(prId) {
 
 function putNewAccesorio(idAccesorio, idSku, idName) {
     //inserta el renglon en base
-    // console.log(idAccesorio + idSku + idName);
+    console.log('putNewAccesorio',idAccesorio + idSku + idName);
 
     let tabla = $('#tblProducts').DataTable();
     tabla.row
@@ -445,4 +456,14 @@ function confirm_delet_product(id) {
 function putDelPackages(dt) {
     $('#delPackModal').modal('hide');
     load_Accesories();
+}
+
+function deleteTablaAccesorios() {
+    let tabla = $('#tblProducts').DataTable();
+    tabla.rows().remove().draw();
+}
+
+function deleteTablaProducts() {
+    let tabla = $('#tblPackages').DataTable();
+    tabla.rows().remove().draw();
 }

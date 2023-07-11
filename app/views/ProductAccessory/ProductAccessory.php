@@ -18,7 +18,6 @@
                 <div class="form_primary">
                     <h4 class="mainTitle">RELACIÓN PRODUCTO-ACCESORIO</h4>
 
-
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtCategoryPack" class="form-select form-select-sm required">
@@ -28,13 +27,21 @@
                             </div>
                         </div>
 
-
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <select id="txtSubcategoryPack" class="form-select form-select-sm required">
                                     <option value="0" selected>Selecciona una subcategoría</option>
                                 </select>
-                                <label for="txtSubcategoryPack" class="form-label">Subcategoia</label>
+                                <label for="txtSubcategoryPack" class="form-label">Subcategoria</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <select id="txtProductSubCat" class="form-select form-select-sm required">
+                                    <option value="0" selected>Selecciona un producto</option>
+                                </select>
+                                <label for="txtProductSubCat" class="form-label">Productos</label>
                             </div>
                         </div>
 
@@ -88,11 +95,11 @@
                 <h1>Asignacion y selección de accesorios</h1>
                 <div class="double-column">
                     <div class="left-side">
-                        <h3>Productos</h3>
+                        <h3>SERIES</h3>
                         <table class="display compact nowrap"  id="tblPackages"  style="width:100%">
                             <thead>
                                 <tr>
-                                    <th style="width:  70px">SKU</th>
+                                    <th style="width:  70px">Sku-Serie</th>
                                     <th style="width:  auto">Descripcion</th>
                                 </tr>
                             </thead>

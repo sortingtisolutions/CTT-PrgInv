@@ -12,14 +12,9 @@ class NewSubletModel extends Model
 // Listado de Tipos de movimiento  *****
     public function listExchange()
     {
-        $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name,  DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project, 
-                DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start, DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end, 
-                pj.pjt_location, pj.pjt_status, pj.cuo_id, pj.loc_id, co.cus_id, co.cus_parent, lo.loc_type_location,
-                pt.pjttp_name
+        $qry = "SELECT pj.pjt_id, pj.pjt_number, pj.pjt_name  
             FROM ctt_projects AS pj
-            INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-            INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
-            LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
+            WHERE pj.pjt_status in ('2','4','7','8')
             ORDER BY pj.pjt_id DESC;";
 
         return $this->db->query($qry);
@@ -126,7 +121,6 @@ public function NextExchange()
         $id_sup   = $this->db->real_escape_string($param['idsup']);
         $proyect    = $this->db->real_escape_string($param['pry']);
         $comments    = $this->db->real_escape_string($param['com']);
-        
         $supplier  = $this->db->real_escape_string($param['sup']);
 
         //$exc_employee_name	= $this->db->real_escape_string($employee_data[2]);
@@ -134,58 +128,32 @@ public function NextExchange()
         $ser_situation      = 'D';
         $ser_stage          = 'D';
         // $ser_lonely         = '1';
-        $ser_behaviour      = 'C';
+        $ser_behaviour      = 'R';
         //return "hecho";
 
-
-        //PRODUCT
-        /*
-        $query = "SELECT COUNT(*) FROM ctt_products WHERE prd_sku = '$prod_sku'";
-        $res = $this->db->query($query);
-        if ($res->num_rows > 0) {
-            $query = "SELECT prd_id FROM ctt_products WHERE prd_sku = '$prod_sku'";
-            $res = $this->db->query($query);
-            $resp = $res->fetch_assoc();
-            $prdId = $resp['prd_id'];
-        }else{
-            $qry = "INSERT INTO ctt_products_paso (
-                prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
-                prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
-                prd_insured, sbc_id, srv_id, cin_id, prd_status) 
-            VALUES (
-                '$prod_sku', UPPER('$prod_name'), '', '', UPPER('$supplier'), 
-                '', '$price', '', UPPER('$comments'), '', 
-                '', '', '$subcategory', '', '$coin', '1'
-            );";
-            $this->db->query($qry);
-            $prdId = $this->db->insert_id;
-
-        }*/
         $qry = "INSERT INTO ctt_products_paso (
             prd_sku, prd_name, prd_english_name, prd_code_provider, prd_name_provider, 
             prd_model, prd_price, prd_visibility, prd_comments, prd_level, prd_lonely, 
             prd_insured, sbc_id, srv_id, cin_id, prd_status) 
-        VALUES (
-            '$prod_sku', UPPER('$prod_name'), '', '', UPPER('$supplier'), 
-            '', '$price', '', UPPER('$comments'), '', 
-            '', '', '$subcategory', '', '$coin', '1'
-        );";
+        VALUES ('$prod_sku', UPPER('$prod_name'), '', '', UPPER('$supplier'), 
+            '', '$price', '', UPPER('$comments'), '', '', '', '$subcategory', 
+            '', '$coin', '1' );";
         $this->db->query($qry);
         $prdId = $this->db->insert_id;
         
         // SERIE
-		$qry1 = "INSERT INTO ctt_series_paso (ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, 
-                    ser_behaviour, prd_id, sup_id, cin_id,ser_brand,ser_cost_import,ser_import_petition,
-                    ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments) 
+		$qry1 = "INSERT INTO ctt_series_paso (ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, 
+                    ser_stage, ser_behaviour, prd_id, sup_id, cin_id,ser_brand,ser_cost_import,
+                    ser_import_petition, ser_sum_ctot_cimp, ser_no_econo, str_id, ser_comments) 
                 VALUES ('$skuserie', '$prod_sku', '$price', '$ser_status', '$ser_situation', 
                 '$ser_stage', '$ser_behaviour', '$prdId', '$id_sup', '$coin', '$brand', '', '',
-                '', '','','$comments');";
+                '', '','$store','$comments');";
 
         $this->db->query($qry1);
         $serId = $this->db->insert_id;
 
         // SUBLETTING
-        $qry2 = "INSERT INTO ctt_subletting_paso (sub_id, sub_price, sub_quantity, sub_date_start, sub_date_end, sub_comments, 
+        $qry2 = "INSERT INTO ctt_subletting (sub_id, sub_price, sub_quantity, sub_date_start, sub_date_end, sub_comments, 
                     ser_id, sup_id, prj_id, cin_id,prd_id) 
                 VALUES (null, '$price', '1', '$strtdate', '$enddate', 
                 '$comments', '$serId', '$id_sup', '$proyect','$coin','$prdId');";

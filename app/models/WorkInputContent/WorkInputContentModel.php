@@ -20,7 +20,7 @@ class WorkInputContentModel extends Model
                 DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y %H:%i ') AS pjt_date_project,
                 pj.pjt_location, cus.cus_name, '1' as analyst, '33' as freelance, pj.pjt_id
                 FROM ctt_projects AS pj 
-                INNER JOIN ctt_customers_owner AS cuw ON cuw.cuo_id=pj.cuo_id
+                LEFT JOIN ctt_customers_owner AS cuw ON cuw.cuo_id=pj.cuo_id
                 LEFT JOIN ctt_customers AS cus ON cus.cus_id=cuw.cus_id
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
@@ -44,6 +44,19 @@ class WorkInputContentModel extends Model
                 INNER JOIN ctt_projects_detail AS pjd ON pjd.pjtvr_id=pjc.pjtvr_id 
                 WHERE pjc.pjt_id=$pjt_id AND SUBSTR(pjtdt_prod_sku,11,1)!='A'
                 order by pjtcn_order;";
+
+        return $this->db->query($qry);
+    }
+
+    public function listFreelances($params)
+    {
+        $pjt_id = $this->db->real_escape_string($params['pjt_id']);
+
+        $qry = "SELECT fr.free_id,fr.free_name,ar.are_name FROM ctt_freelances AS fr
+                INNER JOIN ctt_areas AS ar ON ar.are_id=fr.free_area_id
+                INNER JOIN ctt_assign_proyect AS ap ON ap.free_id=fr.free_id
+                WHERE ap.pjt_id=$pjt_id 
+                ORDER BY are_name";
 
         return $this->db->query($qry);
     }

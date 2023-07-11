@@ -286,7 +286,6 @@
             </div>
             <div class="modal-body" style="padding: 0px !important;">
 
-
             <div class="row">
                 <div class="col-12 text-center">
                     <!--<span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">Folio: <h3 class="resFolio">000000000000</h3></span>-->

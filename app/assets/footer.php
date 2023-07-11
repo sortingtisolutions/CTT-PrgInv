@@ -3,7 +3,7 @@
 		<div class="logo"></div>
 	</footer>
 
-<div id="msgError" class="msgError reposo"></div>	
+<div id="msgError" class="msgError reposo" style="width: 600px; height: 300px; margin-left: 30%; margin-top: 5%;"></div>	
 
 	<!-- Scripts -->
 

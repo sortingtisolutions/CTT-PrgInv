@@ -137,7 +137,7 @@ function putDetailsProds(dt) {
             tabla.row
                 .add({
                     editable: `<i class="fas fa-solid fa-wrench toLink" id="${u.pjtcn_id}"></i>
-                                <i class="fas fa-cog toWork" id="" style=""></i>`,
+                                <i class="fas fa-cog toWork" id="${u.pjtcn_id}" style=""></i>`,
                     pack_sku: skufull,
                     packname: u.pjtcn_prod_name,
                     packcount: u.pjtcn_quantity,
@@ -162,7 +162,18 @@ function activeIcons() {
             if (pjtcnid > 0) {
                 getReason(pjtcnid);
             }
-        });
+    });
+    $('.toWork')
+        .unbind('click')
+        .on('click', function () {
+            //let selected = $(this).parent().attr('id');
+            let pjtcnid = $(this).attr('id');
+            glbcnid=pjtcnid;
+            console.log('Cont-Producto', pjtcnid);
+            if (pjtcnid > 0) {
+                getReason(pjtcnid);
+            }
+    });
 }
 
 //**************  NIVEL 2 DE DATOS  *****************************************

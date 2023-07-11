@@ -27,17 +27,17 @@ class ProductAccessoryModel extends Model
 // Listado de paquetes
 public function listPackages()
 {
-    $qry = "SELECT * FROM ctt_products WHERE prd_level ='K' AND prd_status =1;";
-    return $this->db->query($qry);
+    // $qry = "SELECT * FROM ctt_products WHERE prd_level ='K' AND prd_status =1;";
+    // return $this->db->query($qry);
 }
 
 // Listado de subcategorias
     public function lastIdSubcategory($params)
     {
-        $sbcId = $this->db->real_escape_string($params);
-        $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,3), signed integer)),0) + 1 as nextId  
-                FROM ctt_products where sbc_id = $sbcId;";
-        return $this->db->query($qry);
+        // $sbcId = $this->db->real_escape_string($params);
+        // $qry = "SELECT ifnull(max(convert(substring( prd_sku,5,3), signed integer)),0) + 1 as nextId  
+        //         FROM ctt_products where sbc_id = $sbcId;";
+        // return $this->db->query($qry);
     }
 
     
@@ -70,11 +70,22 @@ public function listProductsById($request_params)
 // Listado de productos del paquete
 public function listProductsPack($params)
 {
+    // $prdId = $this->db->real_escape_string($params);
+    // $qry = "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent  
+    //         FROM ctt_products_packages AS pk
+    //         INNER JOIN ctt_products AS pr ON pr.prd_id = pk.prd_id
+    //         WHERE pk.prd_parent = $prdId AND prd_status =1;";
+    // return $this->db->query($qry);
+}
+
+public function listSeriesProd($params)
+{
     $prdId = $this->db->real_escape_string($params);
-    $qry = "SELECT pr.prd_id, pr.prd_sku, pr.prd_name, pr.prd_price, pk.prd_parent  
-            FROM ctt_products_packages AS pk
-            INNER JOIN ctt_products AS pr ON pr.prd_id = pk.prd_id
-            WHERE pk.prd_parent = $prdId AND prd_status =1;";
+
+    $qry = "SELECT ser.ser_id, ser.ser_sku,ser.ser_serial_number,prd.prd_name 
+            FROM ctt_series AS ser
+            INNER JOIN ctt_products AS prd ON prd.prd_id=ser.prd_id
+            WHERE prd.prd_id=$prdId";
     return $this->db->query($qry);
 }
 
@@ -83,24 +94,31 @@ public function getAccesoriesById($params)
 {
     $prdId = $this->db->real_escape_string($params['prdId']);
 
+    $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name  
+            FROM ctt_products AS prd 
+            WHERE SUBSTR(prd.prd_sku,1,10)='$prdId' and prd.prd_level='A' and prd.prd_status = 1
+            GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
+
+    return $this->db->query($qry);
+
     // $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name 
     //         FROM ctt_accesories as acc
     //         INNER JOIN ctt_products AS prd on prd.prd_id = acc.prd_id
     //         WHERE acc.prd_parent = $prdId and acc.acr_status = 1 order by prd.prd_sku;";
 
-    $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name  
+    /* $qry = "SELECT prd.prd_id , prd.prd_sku, prd_name  
             FROM ctt_products AS prd 
             WHERE SUBSTR(prd.prd_sku,1,7)='$prdId' and prd.prd_level='A' and prd.prd_status = 1
-            GROUP BY prd.prd_id , prd.prd_sku, prd_name;";
-    return $this->db->query($qry);
+            GROUP BY prd.prd_id , prd.prd_sku, prd_name;"; */
 }
 
 // Listado de accesorios
 public function listAccesorios($param)
 {
-    //$prd_id                     = $this->db->real_escape_string($param['prdId']);
-    $qry = "SELECT prd_id, prd_name, prd_sku FROM ctt_products 
-            WHERE prd_level = 'A' AND substr(prd_sku,5,1) = '';";
+    //$prd_id       = $this->db->real_escape_string($param['prdId']);
+    $qry = "SELECT prd_id, prd_name, prd_sku 
+            FROM ctt_products 
+            WHERE prd_level = 'A' AND substr(prd_sku,8,3) = 'XXX';";
     return $this->db->query($qry);
 }
 

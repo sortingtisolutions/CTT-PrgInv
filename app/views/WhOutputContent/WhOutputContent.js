@@ -19,6 +19,7 @@ function inicial() {
     getProjects(prjid);
     getComments(prjid);
     getDetailProds();
+    getFreelances(prjid);
 
 
     // Boton para registrar la salida del proyecto y los productos
@@ -51,6 +52,14 @@ function getDetailProds() {
     fillField(pagina, par, tipo, selector);
 }
 
+function getFreelances(prjid) {
+    //console.log(prjid)
+    var pagina = 'WhOutputContent/listFreelances';
+    var par = `[{"pjt_id":"${prjid}"}]`;
+    var tipo = 'json';
+    var selector = putFreelances;
+    fillField(pagina, par, tipo, selector);
+}
 //Solicita las series de los productos  OK
 function getSeries(pjtcnid) {
     // console.log('ID-Contenido Producto', pjtcnid);
@@ -209,6 +218,15 @@ function putDetailsProds(dt) {
             $(`#SKU-${u.pjtcn_prod_sku}`).parent().parent().attr('id', u.pjtcn_id).addClass('indicator');
         });
         activeIcons();
+    }
+}
+
+function putFreelances(dt) {
+    if (dt[0].free_id != 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.free_id}"> ${u.free_name} - ${u.are_name}</option>`;
+            $('#txtArea').append(H);
+        });
     }
 }
 // ***************** se agregan los comentarios del proyecto jjr ***************

@@ -44,7 +44,7 @@ class ProjectDetailsModel extends Model
                     , pjt_test_look
                     , pj.pjt_status
                 FROM ctt_projects AS pj
-                INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+                LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
                 WHERE pj.pjt_status in ('3','4','40','7','8') ORDER BY pj.pjt_id DESC;  

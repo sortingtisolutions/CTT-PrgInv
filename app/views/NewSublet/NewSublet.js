@@ -54,80 +54,6 @@ function inicial() {
         validator();
     });*/
 }
-// Setea de la tabla
-function setting_table() {
-    let title = 'Entradas de arrendos';
-    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-
-    $('#tblExchanges').DataTable({
-        order: [[0, 'desc']],
-        dom: 'Blfrtip',
-        buttons: [
-        {
-            //Botón para Excel
-            extend: 'excel',
-            footer: true,
-            title: title,
-            filename: filename,
-
-            //Aquí es donde generas el botón personalizado
-            text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
-        },
-        {
-            //Botón para PDF
-            extend: 'pdf',
-            footer: true,
-            title: title,
-            filename: filename,
-
-            //Aquí es donde generas el botón personalizado
-            text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
-        },
-        {
-            //Botón para imprimir
-            extend: 'print',
-            footer: true,
-            title: title,
-            filename: filename,
-
-            //Aquí es donde generas el botón personalizado
-            text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-        },
-        {
-            // Boton aplicar cambios
-            text: 'Aplicar movimientos',
-            className: 'btn-apply hidden-field',
-            action: function (e, dt, node, config) {
-                read_exchange_table();
-            },
-        },
-        ],
-        pagingType: 'simple_numbers',
-        language: {
-            url: 'app/assets/lib/dataTable/spanish.json',
-        },
-        scrollY: 'calc(100vh - 190px)',
-        scrollX: true,
-        fixedHeader: true,
-        columns: [
-            {data: 'editable', class: 'edit'},
-            {data: 'prod_sku', class: 'sku'},
-            {data: 'prodname', class: 'left'},
-            {data: 'price', class: 'serie-product'},
-            {data: 'skuserie', class: 'serie-product'},
-            {data: 'seriename', class: 'serie-product'},
-            {data: 'brand', class: 'serie-product'},
-            {data: 'strtdate', class: 'serie-product'},
-            {data: 'enddate', class: 'serie-product'},
-            {data: 'store', class: 'store-name_s'},
-            {data: 'category', class: 'quantity'},
-            {data: 'subcategory', class: 'quantity'},
-            {data: 'supplier', class: 'store-name_s'},
-            {data: 'proyect', class: 'quantity'},
-            {data: 'comments', class: 'store-name_s'}
-        ],
-    });
-}
 
 // Solicita los tipos de movimiento
 function getExchange() {
@@ -205,6 +131,81 @@ function getProducts(catId) {
     var selector = putExchanges;
     fillField(pagina, par, tipo, selector);
 } */
+
+// Setea de la tabla
+function setting_table() {
+    let title = 'Entradas de arrendos';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+
+    $('#tblExchanges').DataTable({
+        order: [[0, 'desc']],
+        dom: 'Blfrtip',
+        buttons: [
+        {
+            //Botón para Excel
+            extend: 'excel',
+            footer: true,
+            title: title,
+            filename: filename,
+
+            //Aquí es donde generas el botón personalizado
+            text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+        },
+        {
+            //Botón para PDF
+            extend: 'pdf',
+            footer: true,
+            title: title,
+            filename: filename,
+
+            //Aquí es donde generas el botón personalizado
+            text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+        },
+        {
+            //Botón para imprimir
+            extend: 'print',
+            footer: true,
+            title: title,
+            filename: filename,
+
+            //Aquí es donde generas el botón personalizado
+            text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+        },
+        {
+            // Boton aplicar cambios
+            text: 'Aplicar movimientos',
+            className: 'btn-apply hidden-field',
+            action: function (e, dt, node, config) {
+                read_exchange_table();
+            },
+        },
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 190px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'editable', class: 'edit'},
+            {data: 'prod_sku', class: 'sku'},
+            {data: 'prodname', class: 'left'},
+            {data: 'price', class: 'serie-product'},
+            {data: 'skuserie', class: 'serie-product'},
+            {data: 'seriename', class: 'serie-product'},
+            {data: 'brand', class: 'serie-product'},
+            {data: 'strtdate', class: 'serie-product'},
+            {data: 'enddate', class: 'serie-product'},
+            {data: 'store', class: 'store-name_s'},
+            {data: 'category', class: 'quantity'},
+            {data: 'subcategory', class: 'quantity'},
+            {data: 'supplier', class: 'store-name_s'},
+            {data: 'proyect', class: 'quantity'},
+            {data: 'comments', class: 'store-name_s'}
+        ],
+    });
+}
 
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
@@ -455,7 +456,6 @@ function putSupplierList(dt) {
 // reubica el input de los productos
 function relocation_products() {
     var ps = $('#txtProducts').offset();
-
     $('#listProducts').css({top: ps.top + 30 + 'px'});
 }
 
@@ -604,7 +604,7 @@ function exchange_apply() {
     let sersku = prdSku + refil(1, 3);
     
     //serie++;
-    console.log('Paso 1 ');
+    // console.log('Paso 1 ');
         /*
     if (quantity > 1) {
         for (var i = 0; i < quantity; i++) {
@@ -660,7 +660,6 @@ function exchange_apply() {
             "idSubCategoria"       : "${idSubCategoria }",
             "supplier"      : "${supplier}",
             "idProyect"      : "${idProyect}"
-            
         }]`;
         console.log(par);
         fill_table(par);
@@ -765,13 +764,7 @@ function update_array_products(id, sr) {
 }
 
 function read_exchange_table() {
-    /*if (folio == undefined) {
-        var pagina = 'NewSublet/NextExchange';
-        var par = '[{"par":""}]';
-        var tipo = 'html';
-        var selector = putNextExchangeNumber;
-        fillField(pagina, par, tipo, selector);
-    } else {*/
+
         $('#tblExchanges tbody tr').each(function (v, u) {
             //let seriesku = $(this).attr('data-content').split('|')[3];
             let prodsku = $($(u).find('td')[1]).text();
@@ -788,8 +781,6 @@ function read_exchange_table() {
             let subcategory = $($(u).find('td')[11]).text();
             let supplier = $($(u).find('td')[12]).text();
             let proyect = $($(u).find('td')[13]).text();
-           
-            //
             let comments = $($(u).find('td')[15]).text();
 
             let strid = $(this).attr('data-content').split('|')[0];
@@ -800,12 +791,10 @@ function read_exchange_table() {
             let id_proy = $(this).attr('data-content').split('|')[5];
             let coin= $(this).attr('data-content').split('|')[6];
             
-
-            let truk = `${1}|${prodsku}|${prodname}|${price}|${skuserie}|${seriename}|${coin}|${brand}|${strtdate}|${enddate}|${store}|${id_cat}|${id_subc}|${id_supplier}|${id_proy}|${comments}|${supplier}`;
+            let truk = `${1}|${prodsku}|${prodname}|${price}|${skuserie}|${seriename}|${coin}|${brand}|${strtdate}|${enddate}|${strid}|${id_cat}|${id_subc}|${id_supplier}|${id_proy}|${comments}|${supplier}`;
             console.log(truk);
             build_data_structure(truk);
         });
-    //}
 }
 
 /* Generación del folio  */
