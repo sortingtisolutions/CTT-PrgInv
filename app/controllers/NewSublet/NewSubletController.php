@@ -24,6 +24,7 @@ class NewSubletController extends Controller
         $this->render(__CLASS__, $params);
     }
 
+
 // LISTA LOS TIPOS DE MOVIMIENTOS
     public function listExchange()
     {
@@ -113,6 +114,22 @@ public function listSubCategories($request_params)
         }
         echo $res;
     } 
+    public function listProducts2($request_params)
+	{
+		$params =  $this->session->get('user');
+        $result = $this->model->listProducts2();
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pro_id":"0"}]';	
+        }
+        echo $res;
+    }
 
 
 // Lista los proveedores

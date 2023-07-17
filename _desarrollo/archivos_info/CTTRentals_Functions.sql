@@ -1,4 +1,25 @@
 -- ************** FUNCIONES A CREAR ***********************
+
+--**************fun_addstock**********************
+DELIMITER //
+CREATE FUNCTION fun_addstock(prdid INT) RETURNS INT
+BEGIN
+
+declare lexist	INT DEFAULT 0;
+	
+select count(*) into lexist from ctt_products
+WHERE prd_id=prdid;
+
+IF (lexist >= 1) THEN
+
+	UPDATE ctt_products SET prd_stock=prd_stock+1 
+	WHERE prd_id=prdid;
+
+END IF;
+
+RETURN lexist;
+END //
+
 -- ************** fun_buscarentas ***********************
 DELIMITER //
 CREATE OR REPLACE DEFINER=`root`@`localhost` FUNCTION `fun_buscarentas`(`lval` VARCHAR(15)) RETURNS INT
@@ -29,6 +50,26 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
     RETURN p_idprd;
 END //
 
+--*****************fun_reststock*********************
+DELIMITER //
+CREATE FUNCTION fun_reststock(prdid INT) RETURNS INT
+BEGIN
+
+declare lexist	INT DEFAULT 0;
+	
+select count(*) into lexist from ctt_products
+WHERE prd_id=prdid;
+
+IF (lexist >= 1) THEN
+
+	UPDATE ctt_products SET prd_stock=prd_stock-1 
+	WHERE prd_id=prdid;
+
+END IF;
+
+RETURN lexist;
+END //
+
 -- ************** fun_updateuser ***********************
 DELIMITER //
 CREATE OR REPLACE DEFINER=`root`@`localhost` FUNCTION `fun_updateuser`(pjtid INT, areid INT(2), empid INT, empname VARCHAR(100), usrid INT) RETURNS INT
@@ -54,49 +95,10 @@ END IF;
 RETURN lexist;
 END //
 
---**************fun_addstock**********************
-DELIMITER //
-CREATE FUNCTION fun_addstock(prdid INT) RETURNS INT
-BEGIN
-
-declare lexist	INT DEFAULT 0;
-	
-select count(*) into lexist from ctt_products
-WHERE prd_id=prdid;
-
-IF (lexist >= 1) THEN
-
-	UPDATE ctt_products SET prd_stock=prd_stock+1 
-	WHERE prd_id=prdid;
-
-END IF;
-
-RETURN lexist;
-END //
-
---*****************fun_reststock*********************
-DELIMITER //
-CREATE FUNCTION fun_reststock(prdid INT) RETURNS INT
-BEGIN
-
-declare lexist	INT DEFAULT 0;
-	
-select count(*) into lexist from ctt_products
-WHERE prd_id=prdid;
-
-IF (lexist >= 1) THEN
-
-	UPDATE ctt_products SET prd_stock=prd_stock-1 
-	WHERE prd_id=prdid;
-
-END IF;
-
-RETURN lexist;
-END //
 
 --***************fun_buscamaxacc*************************
 DELIMITER //
-CREATE OR REPLACE DEFINER=`root`@`localhost` FUNCTION `fun_buscamaxacc`(`lval` VARCHAR(15)) RETURNS VARCHAR(2)
+CREATE FUNCTION fun_buscamaxacc(lval VARCHAR(15)) RETURNS VARCHAR(2)
 BEGIN
 -- Desarrolo por jjr
 declare salida		VARCHAR(2);

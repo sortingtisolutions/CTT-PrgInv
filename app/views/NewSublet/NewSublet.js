@@ -20,6 +20,8 @@ function inicial() {
     getCategories();
     setting_table();
     fillContent();
+    getListProducts();
+
     $('#btn_exchange').addClass('disabled');
     // setting_datepicket($('#txtPeriod'), Date().format('DD/MM/YYYY')   ,Date().format('DD/MM/YYYY'));
     
@@ -27,22 +29,31 @@ function inicial() {
         exchange_apply(0);
     });
 
-    $('#txtCost').on('blur', function () {
+     $('#txtPrice').on('blur', function () {
         validator();
     });
+    $('#txtOffer').on('blur', function () {
+        validator();
+    });
+    $('#txtProducts').on('blur', function () {
+        //console.log($('#txtProducts').val());
+        validator();
+    });
+    /*
     $('#txtSerie').on('blur', function () {
         validator();
     });
 
+
     $('#txtMarca').on('blur', function () {
         validator();
-    });
+    });*/
 
-    $('#txtQuantity').on('blur', function () {
+    $('#txtSubCategory').on('blur', function () {
         validator();
-    });
+    }); 
     $('#txtCategory').on('blur', function () {
-        //validator();
+        validator();
         let idCategoria = $('#txtCategory').val();
         let codeSubCategoria = $('#txtSubCategory option:selected').data('code');
 
@@ -52,6 +63,86 @@ function inicial() {
     /*$('#txtPeriodProjectEdt').on('blur', function () {
         validator();
     });*/
+}
+// Setea de la tabla
+function setting_table() {
+    let title = 'Entradas de arrendos';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+
+    $('#tblExchanges').DataTable({
+        order: [[0, 'desc']],
+        dom: 'Blfrtip',
+        buttons: [
+        {
+            //Botón para Excel
+            extend: 'excel',
+            footer: true,
+            title: title,
+            filename: filename,
+
+            //Aquí es donde generas el botón personalizado
+            text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
+        },
+        {
+            //Botón para PDF
+            extend: 'pdf',
+            footer: true,
+            title: title,
+            filename: filename,
+
+            //Aquí es donde generas el botón personalizado
+            text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
+        },
+        {
+            //Botón para imprimir
+            extend: 'print',
+            footer: true,
+            title: title,
+            filename: filename,
+
+            //Aquí es donde generas el botón personalizado
+            text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
+        },
+        {
+            // Boton aplicar cambios
+            text: 'Aplicar movimientos',
+            className: 'btn-apply hidden-field',
+            action: function (e, dt, node, config) {
+                read_exchange_table();
+            },
+        },
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 190px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'editable', class: 'edit'},
+            {data: 'prod_sku', class: 'sku'},
+            {data: 'prodname', class: 'left'},
+            {data: 'price', class: 'serie-product'},
+            {data: 'subprice', class: 'serie-product'},
+
+            {data: 'skuserie', class: 'serie-product'},
+            {data: 'collectionTime', class: 'store-name_s'},
+            {data: 'deliveryTime', class: 'quantity'},
+            {data: 'strtdate', class: 'serie-product'},
+            {data: 'enddate', class: 'serie-product'},
+
+            {data: 'store', class: 'store-name_s'},
+            {data: 'category', class: 'quantity'},
+            {data: 'subcategory', class: 'quantity'},
+            {data: 'supplier', class: 'store-name_s'},
+            {data: 'location', class: 'quantity'},
+
+            {data: 'staff', class: 'store-name_s'},
+            {data: 'staffCtt', class: 'serie-product'},
+            {data: 'comments', class: 'store-name_s'}
+        ],
+    });
 }
 
 // Solicita los tipos de movimiento
@@ -115,88 +206,29 @@ function getSubCategories(catId) {
 }
 
 // Solicita los productos de un almacen seleccionado
-function getProducts(catId) {
-   /*  var pagina = 'NewSublet/listProducts';
-    var par = `[{"catId":"${catId}"}]`;
+function get_products(pj) {
+    console.log(pj);
+    var pagina = 'NewSublet/listProducts';
+    var par = `[{"pjtId":"${pj}"}]`;
     var tipo = 'json';
     var selector = putProducts;
-    fillField(pagina, par, tipo, selector); */
+    fillField(pagina, par, tipo, selector);
 }
-
-// Setea de la tabla
-function setting_table() {
-    let title = 'Entradas de arrendos';
-    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-
-    $('#tblExchanges').DataTable({
-        order: [[0, 'desc']],
-        dom: 'Blfrtip',
-        buttons: [
-        {
-            //Botón para Excel
-            extend: 'excel',
-            footer: true,
-            title: title,
-            filename: filename,
-
-            //Aquí es donde generas el botón personalizado
-            text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
-        },
-        {
-            //Botón para PDF
-            extend: 'pdf',
-            footer: true,
-            title: title,
-            filename: filename,
-
-            //Aquí es donde generas el botón personalizado
-            text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
-        },
-        {
-            //Botón para imprimir
-            extend: 'print',
-            footer: true,
-            title: title,
-            filename: filename,
-
-            //Aquí es donde generas el botón personalizado
-            text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-        },
-        {
-            // Boton aplicar cambios
-            text: 'Aplicar movimientos',
-            className: 'btn-apply hidden-field',
-            action: function (e, dt, node, config) {
-                read_exchange_table();
-            },
-        },
-        ],
-        pagingType: 'simple_numbers',
-        language: {
-            url: 'app/assets/lib/dataTable/spanish.json',
-        },
-        scrollY: 'calc(100vh - 190px)',
-        scrollX: true,
-        fixedHeader: true,
-        columns: [
-            {data: 'editable', class: 'edit'},
-            {data: 'prod_sku', class: 'sku'},
-            {data: 'prodname', class: 'left'},
-            {data: 'price', class: 'serie-product'},
-            {data: 'skuserie', class: 'serie-product'},
-            {data: 'seriename', class: 'serie-product'},
-            {data: 'brand', class: 'serie-product'},
-            {data: 'strtdate', class: 'serie-product'},
-            {data: 'enddate', class: 'serie-product'},
-            {data: 'store', class: 'store-name_s'},
-            {data: 'category', class: 'quantity'},
-            {data: 'subcategory', class: 'quantity'},
-            {data: 'supplier', class: 'store-name_s'},
-            {data: 'proyect', class: 'quantity'},
-            {data: 'comments', class: 'store-name_s'}
-        ],
-    });
+function getListProducts() {
+    var pagina = 'NewSublet/listProducts2';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = putProductsList;
+    fillField(pagina, par, tipo, selector);
 }
+// Solicita los movimientos acurridos
+/*function getExchanges() {
+    var pagina = 'NewSublet/listExchanges';
+    var par = `[{"folio":"${folio}"}]`;
+    var tipo = 'json';
+    var selector = putExchanges;
+    fillField(pagina, par, tipo, selector);
+} */
 
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
@@ -345,6 +377,61 @@ function putProducts(dt) {
         validator();
     });
 }
+function putProductsList(dt) {
+    var sl = $('#txtProducts').offset();
+    $('#listProduct .list-items').html('');
+    $('#listProduct').css({top: sl.top + 30 + 'px'});// volver a tomar al hacer scroll.
+    $('#listProduct').slideUp('200', function () {
+        $('#listProduct .list-items').html('');
+    });
+
+    $.each(dt, function (v, u) {
+        let H = `<div class="list-item" id="${u.prd_id}" data_complement="${u.prd_id}|${u.prd_name}|${u.prd_price}|${u.sup_id}">${u.prd_name}</div>`;
+        $('#listProduct .list-items').append(H);
+    });
+
+    $('#txtProducts').on('focus', function () {
+        $('#listProduct').slideDown('fast');
+    });
+
+    $('#txtProducts').on('scroll', function(){
+        sl = $('#txtProducts').offset();
+        $('#listProduct').css({top: sl.top + 30 + 'px'});
+    });
+    $('#listProduct').on('mouseleave', function () {
+        $('#listProduct').slideUp('fast');
+    });
+
+    $('#txtProducts').keyup(function (e) {
+        var res = $(this).val().toUpperCase();
+        if (res == '') {
+            $('#listProduct').slideUp(100);
+        } else {
+            $('#listProduct').slideDown(400);
+        }
+        res = omitirAcentos(res);
+        sel_products(res);
+    });
+
+    $('#listProduct .list-item').on('click', function () {
+        let prdNm = $(this).html();
+        let prdId = $(this).attr('id');
+        let price = $(this).attr('data_complement').split('|')[2];
+        let supplier = $(this).attr('data_complement').split('|')[3];
+        console.log($(this).attr('data_complement').split('|')[3]);
+        //console.log('selecciona elemento', prdId,'---', prdNm);
+        $('#txtProducts').val(prdNm);
+        $('#txtIdProducts').val(prdId);
+        $('#txtPrice').val(price);
+        $('#txtSuppliers').val(supplier);
+        
+        $('#listProduct').slideUp(100);
+        // AGREGAR DATOS
+
+        //get_products(prdId);
+        //validator();
+    });
+}
 // AGREGA LAS FACTURAS CON TEXTO SELECTIVO
 function putInvoiceList(dt) {
     var fc = $('#txtInvoice').offset();
@@ -447,6 +534,7 @@ function putSupplierList(dt) {
 // reubica el input de los productos
 function relocation_products() {
     var ps = $('#txtProducts').offset();
+
     $('#listProducts').css({top: ps.top + 30 + 'px'});
 }
 
@@ -454,7 +542,11 @@ function relocation_products() {
 function validator() {
     let ky = 0;
     let msg = '';
-
+    if ($('#txtStoreSource').val() == 0 ) {
+        ky = 1;
+        msg += 'Debes seleccionar un almacen destino';
+    }
+    /*
     if ($('#txtTypeExchange').val() == 0) {
         ky = 1;
         msg += 'Debes seleccionar un proyecto';
@@ -462,19 +554,7 @@ function validator() {
     if ($('#txtMarca').val() == '') {
         ky = 1;
         msg += 'Debes seleccionar un proyecto';
-    }
-
-    if ($('#txtStoreSource').val() == 0 ) {
-        ky = 1;
-        msg += 'Debes seleccionar un almacen destino';
-    }
-
-    
-    if ($('#txtSuppliers').val() == 0 && $('.pos2').attr('class').indexOf('hide-items') < 0) {
-        // && $('.pos2').attr('class').indexOf('hide-items') < 0
-        ky = 1;
-        msg += 'Debes seleccionar el proveedor';
-    }
+    }*/
 
     if ($('#txtCategory').val() == 0 && $('.pos3').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
@@ -490,11 +570,20 @@ function validator() {
         msg += 'Debes seleccionar el precio';
     }
 
+
+    
+    if ($('#txtSuppliers').val() == 0 && $('.pos2').attr('class').indexOf('hide-items') < 0) {
+        // && $('.pos2').attr('class').indexOf('hide-items') < 0
+        ky = 1;
+        msg += 'Debes seleccionar el proveedor';
+    }
+
+    /*
     if ($('#txtCoin').val() == 0 ) {
         //*   && $('.pos5').attr('class').indexOf('hide-items') < 0
         ky = 1;
         msg += 'Debes indicar el tipo de moneda';
-    }
+    }*/
     /*
     if ($('#txtPeriodProjectEdt').val() == '' ) {
         //*   && $('.pos5').attr('class').indexOf('hide-items') < 0
@@ -531,11 +620,11 @@ function validator() {
 
                                     //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
                                     //console.log($('#txtSerie').val(), $('#txtSerie').attr('disabled'));
-
+/* 
     if ($('#txtSerie').val() == '' && $('#txtSerie').attr('disabled') == undefined && $('.pos6').attr('class').indexOf('hide-items') < 0) {
         ky = 1;
         msg += 'Debes indicar la serie del producto';
-    }
+    } */
     
 
     if (ky == 0) {
@@ -549,18 +638,19 @@ function validator() {
 
 // Aplica la seleccion para la tabla de movimientos
 function exchange_apply() {
-    
-    let prdName = $('#txtProduct').val();
-    let prdSku = $('#txtSkuProduct').val();
+    //console.log($('#txtProducts').val());
+
+    let prdName;
+    let prdSku = $('#txtSkuProduct').val() + refil(1, 3);
     let price = $('#txtPrice').val();
     
-    let skuSerie= $('#txtSkuSerie').val();
-    let noSerie = $('#txtSerie').val();
-    let serbran = $('#txtMarca').val();
+    let subprice = parseInt($('#txtOffer').val());
+    let serie = parseInt($('#txtNextSerie').val());
     
-    //let quantity = $('#txtQuantity').val();
+    let prdId = $('#txtIdProducts').val();
+    let quantity = $('#txtQuantity').val();
     
-    let startDate = moment(
+    /* let startDate = moment(
         $('#txtPeriodProjectEdt').val().split(' - ')[0],
         'DD/MM/YYYY'
     ).format('YYYY-MM-DD');
@@ -568,8 +658,11 @@ function exchange_apply() {
     let endDate = moment(
         $('#txtPeriodProjectEdt').val().split(' - ')[1],
         'DD/MM/YYYY'
-    ).format('YYYY-MM-DD');
-    
+    ).format('YYYY-MM-DD'); */
+
+
+    let startDate = $('#txtFechaReco').val();
+    let endDate  = $('#txtFechaEnt').val();
     let strid = $('#txtStoreSource').val();
     let nameStore = $(`#txtStoreSource option[value="${strid}"]`).text();
     
@@ -582,79 +675,114 @@ function exchange_apply() {
 
     let supplier = $('#txtIdSuppliers').val();
     let suppliernm = $('#txtSuppliers').val();
+
     
-    let idProyect = $('#txtTypeExchange').val();
-    let proyectName =  $(`#txtTypeExchange option[value="${idProyect}"]`).text();
+    let collectionTime = $('#txtCollectionTime').val();
+    let deliveryTime = $('#txtDeliveryTime').val();
+       
+    let location = $('#txtLocation').val();
+    let staff = $('#txtStaff').val();
+    
+    let staffCtt = $('#txtStaffCtt').val();
+    //let proyectName =  $(`#txtTypeExchange option[value="${idProyect}"]`).text();
     let comment = $('#txtComments').val();
 
-    let coin = $('#txtCoin').val();
+    
 
     let category =nameCategoria.replace(/\"/, '');
     let subCategory = nameSubCategoria.replace(/\"/, '');
     //console.log(prdSku);
     let sersku = prdSku + refil(1, 3);
-    
-    //serie++;
-    // console.log('Paso 1 ');
-        /*
+
+    if ($('#txtProducts')!='undefined') {
+        prdName = $('#txtProducts').val();
+    }else{
+        prdName=$('#txtProducts').text();
+    }
+    console.log(prdName);
+    serie++;
+    update_array_products(prdId, serie);
+    console.log('Paso 1 ');
+        
     if (quantity > 1) {
         for (var i = 0; i < quantity; i++) {
-            //sersku = prdSku + refil(serie++, 3);
-            //update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
+            sersku = prdSku + refil(serie++, 3);
+            
+            if (prdId!='') {
+                update_array_products(prdId, serie);
+            }else{
+                update_array_products(1, serie);
+            }
             par = `
         [{
-            "support"  : "${strid}|${idCategoria}|${idSubCategoria}|${codeSubCategoria}|${supplier}|${idProyect}|${coin}",
+            "support"  : "${strid}|${idCategoria}|${idSubCategoria}|${codeSubCategoria}|${supplier}|${prdId}",
             "prdName"       : "${prdName}",
             "prdSku"       : "${prdSku}",
             "price"        : "${price}",
-            "skuSerie"       : "${skuSerie}",
-            "noSerie"      : "${noSerie}",
-            "serbran"      : "${serbran}",
+            "subprice" : "${subprice}",
+
+            "skuSerie"       : "${sersku}",
+            "noSerie"      : "${sersku}",
             "nameStore"       : "${nameStore}",
             "nameCategoria"       : "${category}",
+
             "nameSubCategoria"       : "${subCategory}",
             "startDate"       : "${startDate}",
             "endDate"       : "${endDate}",
             "suppliernm"       : "${suppliernm}",
-            "proyectName"       : "${proyectName}",
             "comment"      : "${comment}",
+
+            "collectionTime"       : "${collectionTime}",
+            "deliveryTime"        : "${deliveryTime}",
+            "location"       : "${location }",
+            "staff"      : "${staff}",
+            "staffCtt"      : "${staffCtt}",
+            
             "strid"       : "${strid}",
             "idCategoria"        : "${idCategoria}",
             "idSubCategoria"       : "${idSubCategoria }",
-            "supplier"      : "${supplier}",
-            "idProyect"      : "${idProyect}"
+            "supplier"      : "${supplier}"
             
         }]`;
             console.log(par);
             fill_table(par);
         }
-    } else {*/
+    } else {
         par = `
         [{
-            "support"  : "${strid}|${idCategoria}|${idSubCategoria}|${codeSubCategoria}|${supplier}|${idProyect}|${coin}",
+            "support"  : "${strid}|${idCategoria}|${idSubCategoria}|${codeSubCategoria}|${supplier}|${prdId}",
             "prdName"       : "${prdName}",
             "prdSku"       : "${prdSku}",
             "price"        : "${price}",
+            "subprice" : "${subprice}",
+
+
             "skuSerie"       : "${sersku}",
-            "noSerie"      : "${noSerie}",
-            "serbran"      : "${serbran}",
+            "noSerie"      : "${sersku}",
             "nameStore"       : "${nameStore}",
             "nameCategoria"       : "${category}",
+
             "nameSubCategoria"       : "${subCategory}",
             "startDate"       : "${startDate}",
             "endDate"       : "${endDate}",
             "suppliernm"       : "${suppliernm}",
-            "proyectName"       : "${proyectName}",
             "comment"      : "${comment}",
+
+            "collectionTime"       : "${collectionTime}",
+            "deliveryTime"        : "${deliveryTime}",
+            "location"       : "${location }",
+            "staff"      : "${staff}",
+            "staffCtt"      : "${staffCtt}",
+            
             "strid"       : "${strid}",
             "idCategoria"        : "${idCategoria}",
             "idSubCategoria"       : "${idSubCategoria }",
-            "supplier"      : "${supplier}",
-            "idProyect"      : "${idProyect}"
+            "supplier"      : "${supplier}"
+            
         }]`;
         console.log(par);
         fill_table(par);
-    //}
+    }
     clean_selectors();
 }
 
@@ -673,16 +801,21 @@ function fill_table(par) {
             prod_sku:`<span class="hide-support" id="SKU-${par[0].prdSku}"></span>${par[0].prdSku.slice(0, 10)}-${par[0].prdSku.slice(10, 13)}`,
             prodname: par[0].prdName,
             price: par[0].price,
-            skuserie:  par[0].skuSerie, 
-            seriename:'<input class="serie_name fieldIn" type="text" id="PS-" value="' + par[0].noSerie + '">',
-            brand: par[0].serbran,
+            subprice: par[0].subprice,
+            //skuserie:  par[0].skuSerie, 
+            skuserie:'<input class="serie_name fieldIn" type="text" id="PS-" value="' + par[0].noSerie + '">',
             strtdate: par[0].startDate,
             enddate: par[0].endDate,
             store: par[0].nameStore,
+            collectionTime: par[0].collectionTime,
+            deliveryTime: par[0].deliveryTime,
+            location: par[0].location,
+            staff: par[0].staff,
+            staffCtt: par[0].staffCtt,
             category: par[0].nameCategoria,
             subcategory: par[0].nameSubCategoria,
             supplier: par[0].suppliernm,
-            proyect: par[0].proyectName,
+            //proyect: par[0].proyectName,
             comments: `<div>${par[0].comment}</div>`
         })
         .draw();
@@ -712,40 +845,48 @@ function btn_apply_appears() {
 
 // Limpia los campos para uns nueva seleccion
 function clean_selectors() {
-    // $('#txtTypeExchange').val(0);
-    //$('#txtStoreSource').val(0);
-    //$('#txtStoreTarget').val(0);
-    //$('#txtTypeExchange').html('<option value="0" selected>Selecciona proyecto</option>');
-    //$('#txtStoreSource').html('<option value="0" selected>Selecciona almacen</option>');
-    //$('#txtCategory').html('<option value="0" selected>Catálogo</option>');
-    //$('#txtSubCategory').html('<option value="0" selected>Selecciona la subcategoria</option>');
-    //$('#txtCoin').html('<option value="0" selected>Selecciona moneda</option>');
-    $('#txtQuantity').val('');
-    $('#txtSerie').attr('disabled', false);
-    $('#txtSerie').val('');
-    $('#txtProduct').val('');
+    $('#txtProducts').val('');
     $('#txtSkuProduct').val('');
     $('#txtPrice').val('');
-    $('#txtMarca').val('');
-   // $('#txtQuantity').val('1');
-    //$('#txtNoEco').attr('disabled', false);
-    //$('#txtNoEco').val('');
-    $('#txtSkuSerie').attr('disabled', false).val('');
-    $('#txtSkuSerie').val('');
-    /*if ($('#txtSerie').attr('disabled') == true){
-        //$('#txtSerie').attr('disabled', false);
-        alert('VALIDA');
-    } */
-
-    // ** HOLA ****
+    $('#txtOffer').val('');
     
-    //$('#txtCost').val('');
-    $('#txtComments').val('');
-    //$('#txtCostImp').val('');
-    $('#txtIdSuppliers').val('');
+    $('#txtNextSerie').val(0);
+    
+    $('#txtIdProducts').val(0);
+    $('#txtQuantity').val(1);
+    
+    /* let startDate = moment(
+        $('#txtPeriodProjectEdt').val().split(' - ')[0],
+        'DD/MM/YYYY'
+    ).format('YYYY-MM-DD');
+
+    let endDate = moment(
+        $('#txtPeriodProjectEdt').val().split(' - ')[1],
+        'DD/MM/YYYY'
+    ).format('YYYY-MM-DD'); */
+
+
+    $('#txtFechaReco').val('');
+    $('#txtFechaEnt').val('');
+    $('#txtStoreSource').val(0);
+    
+    $('#txtCategory').val(0);
+
+    $('#txtSubCategory').val(0);
+
+    $('#txtIdSuppliers').val(0);
     $('#txtSuppliers').val('');
-    //$('#txtPeriodProjectEdt').val('');
-    $('#txtPrice').val('');
+
+    
+    $('#txtCollectionTime').val('');
+    $('#txtDeliveryTime').val('');
+       
+    $('#txtLocation').val('');
+    $('#txtStaff').val('');
+    
+    $('#txtStaffCtt').val('');
+    //let proyectName =  $(`#txtTypeExchange option[value="${idProyect}"]`).text();
+    $('#txtComments').val('');
 }
 /** Actualiza la cantidad de cada producto dentro del arreglo */
 function update_array_products(id, sr) {
@@ -755,37 +896,50 @@ function update_array_products(id, sr) {
 }
 
 function read_exchange_table() {
-
+    /*if (folio == undefined) {
+        var pagina = 'NewSublet/NextExchange';
+        var par = '[{"par":""}]';
+        var tipo = 'html';
+        var selector = putNextExchangeNumber;
+        fillField(pagina, par, tipo, selector);
+    } else {*/
         $('#tblExchanges tbody tr').each(function (v, u) {
             //let seriesku = $(this).attr('data-content').split('|')[3];
             let prodsku = $($(u).find('td')[1]).text();
-            let prodname = $($(u).find('td')[2]).text();
+            let productName = $($(u).find('td')[2]).text();
             let price = $($(u).find('td')[3]).text();
-            let skuserie =$($(u).find('td')[4]).text();
-            let seriename = $($(u).find('td')[5]).children('.serie_name').val();
-            //let serienum = $('.serprod').val();
-            let brand= $($(u).find('td')[6]).text();
-            let strtdate = $($(u).find('td')[7]).text();
-            let enddate = $($(u).find('td')[8]).text();
-            let store = $($(u).find('td')[9]).text();
-            let category = $($(u).find('td')[10]).text();
-            let subcategory = $($(u).find('td')[11]).text();
-            let supplier = $($(u).find('td')[12]).text();
-            let proyect = $($(u).find('td')[13]).text();
-            let comments = $($(u).find('td')[15]).text();
+            let subPrice = $($(u).find('td')[4]).text();
 
-            let strid = $(this).attr('data-content').split('|')[0];
+            let serSku = $($(u).find('td')[5]).children('.serie_name').val();
+            
+            //let subQuantity = $($(u).find('td')[1]).text();
+            let subCollectiontime = $($(u).find('td')[6]).text();
+            let subDeliveryTime = $($(u).find('td')[7]).text();
+            let dateStart = $($(u).find('td')[8]).text();
+            let dateEnd = $($(u).find('td')[9]).text();
+
+
+            let supplier = $($(u).find('td')[13]).text();
+            let subLocation = $($(u).find('td')[14]).text();
+            let nameProvider = $($(u).find('td')[15]).text();
+            let nameProviderCtt = $($(u).find('td')[16]).text();
+            let comments = $($(u).find('td')[17]).text();
+            
+
+            let store = $(this).attr('data-content').split('|')[0];
             let id_cat = $(this).attr('data-content').split('|')[1];
             let id_subc = $(this).attr('data-content').split('|')[2];
-            let id_codSuc = $(this).attr('data-content').split('|')[3];
-            let id_supplier = $(this).attr('data-content').split('|')[4];
-            let id_proy = $(this).attr('data-content').split('|')[5];
-            let coin= $(this).attr('data-content').split('|')[6];
+            let id_supplier =$(this).attr('data-content').split('|')[3];
+            let prdId = $(this).attr('data-content').split('|')[5];
             
-            let truk = `${1}|${prodsku}|${prodname}|${price}|${skuserie}|${seriename}|${coin}|${brand}|${strtdate}|${enddate}|${strid}|${id_cat}|${id_subc}|${id_supplier}|${id_proy}|${comments}|${supplier}`;
+            
+            
+
+            let truk = `${prodsku}|${price}|${subPrice}|${subCollectiontime}|${subDeliveryTime}|${subLocation}|${nameProvider}|${nameProviderCtt}|${dateStart}|${dateEnd}|${store}|${id_cat}|${id_subc}|${id_supplier}|${comments}|${supplier}|${productName}|${serSku}|${prdId}`;
             console.log(truk);
             build_data_structure(truk);
         });
+    //}
 }
 
 /* Generación del folio  */
@@ -799,25 +953,31 @@ function build_data_structure(pr) {
     let el = pr.split('|');
     let par = `
     [{
-        "fol" :  "${el[0]}",
-        "sku" :  "${el[1]}",
-        "pnm" :  "${el[2]}",
-        "prc" :  "${el[3]}",
-        "sks" :  "${el[4]}",
-        "srnm" :  "${el[5]}",
-        "coi" :  "${el[6]}",
-        "brd" :  "${el[7]}",
+        
+        "sku" :  "${el[0]}",
+        "prc" :  "${el[1]}",
+        "sprc" :  "${el[2]}",
+        "sbclt" :  "${el[3]}",
+        "sbdt" :  "${el[4]}",
+
+        "sbl" :  "${el[5]}",
+        "nmprv" :  "${el[6]}",
+        "nmprvc" :  "${el[7]}",
         "sdt" :  "${el[8]}",
         "edt" :  "${el[9]}",
+
         "str" :  "${el[10]}",
         "ctg" :  "${el[11]}",
         "sbctg" :  "${el[12]}",
         "idsup" :  "${el[13]}",
-        "pry" :  "${el[14]}",
-        "com" :  "${el[15]}",
-        "sup" :  "${el[16]}"
+        "com" :  "${el[14]}",
+
+        "sup" :  "${el[15]}",
+        "pnm" :  "${el[16]}",
+        "srsk" :  "${el[12]}",
+        "prd" :  "${el[13]}"
     }]`;
-    //console.log(' Antes de Insertar', par);
+    console.log(' Antes de Insertar', par);
     save_exchange(par);
 }
 
@@ -856,7 +1016,7 @@ function save_exchange(pr) {
 } */
 
 function exchange_result(dt) {
-    //console.log(dt);
+    console.log(dt);
     //$('.resFolio').text(refil(folio, 7));
     $('#MoveResultModal').modal('show');
     $('#btnHideModal').on('click', function () {

@@ -103,100 +103,6 @@ COMMENT='Empleados que atienden el proyecto en las diferentes etapas'
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
--- ************** FUNCIONES A CREAR ***********************
-
-DELIMITER //
-CREATE OR REPLACE DEFINER=`root`@`localhost` FUNCTION `fun_buscarentas`(`lval` VARCHAR(15)) RETURNS INT
-BEGIN
-declare salida		VARCHAR(2);
-declare p_sbc		INT;
-declare p_idprd		INT;
-	
-declare cur_findsku cursor for
-SELECT IFNULL(COUNT(*),0) FROM ctt_series AS sr
-INNER JOIN ctt_products AS pr ON pr.prd_id=sr.prd_id
-WHERE substr(sr.ser_sku,1,7)=lval AND pr.prd_level='P'
-AND sr.ser_situation<>'D';
-
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
-
-	OPEN cur_findsku;
-	loop1: LOOP
-	FETCH cur_findsku INTO p_idprd;
-
-	IF @find THEN
-		LEAVE loop1;
-	END IF;
-	
-	END LOOP loop1;
-	CLOSE cur_findsku;
-	
-    RETURN p_idprd;
-END //
-
-DELIMITER //
-CREATE FUNCTION fun_updateuser(pjtid INT, areid INT(2), empid INT, empname VARCHAR(100), usrid INT) RETURNS INT
-BEGIN
-
-declare lexist	INT DEFAULT 0;
-	
-select count(*) into lexist from ctt_who_attend_projects
-WHERE pjt_id=pjtid and are_id=areid;
-
-IF (lexist = 1) then
-	UPDATE ctt_who_attend_projects 
-	SET emp_id=empid, 
-		emp_fullname=empname,
-		usr_id=usrid
-	WHERE pjt_id=pjtid and are_id=areid;
-ELSE
-	INSERT INTO ctt_who_attend_projects (pjt_id,usr_id,emp_id,emp_fullname,are_id)
-	VALUES (pjtid,usrid,empid,empname,areid);
-
-END IF;
-
-RETURN lexist;
-END //
-
---*********************************************
-DELIMITER //
-CREATE FUNCTION fun_addstock(prdid INT) RETURNS INT
-BEGIN
-
-declare lexist	INT DEFAULT 0;
-	
-select count(*) into lexist from ctt_products
-WHERE prd_id=prdid;
-
-IF (lexist >= 1) THEN
-
-	UPDATE ctt_products SET prd_stock=prd_stock+1 
-	WHERE prd_id=prdid;
-
-END IF;
-
-RETURN lexist;
-END //
-
---**********************************************
-DELIMITER //
-CREATE FUNCTION fun_reststock(prdid INT) RETURNS INT
-BEGIN
-
-declare lexist	INT DEFAULT 0;
-	
-select count(*) into lexist from ctt_products
-WHERE prd_id=prdid;
-
-IF (lexist >= 1) THEN
-
-	UPDATE ctt_products SET prd_stock=prd_stock-1 
-	WHERE prd_id=prdid;
-
-END IF;
-
-RETURN lexist;
-END //
 
 --*********** 16 de junio ********************
 ALTER TABLE `ctt_projects`
@@ -253,3 +159,68 @@ ALTER TABLE `ctt_categories`
 
 ALTER TABLE `ctt_project_change_reason`
 	ADD COLUMN `pjtcr_code_stage` VARCHAR(3) NULL DEFAULT '' COMMENT 'Codigo del motivo del cambio de estatus' COLLATE 'utf8mb4_general_ci' AFTER `pjtcr_description`;
+
+CREATE TABLE `ctt_assign_proyect` (
+	`ass_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID de la asignacion',
+	`pjt_id` INT(11) NULL DEFAULT NULL COMMENT 'Id relacion con ctt_projects',
+	`free_id` INT(11) NULL DEFAULT NULL COMMENT 'Id relacion con ctt_freelances',
+	`ass_date_start` DATETIME NULL DEFAULT NULL COMMENT 'Fecha de asignacion del freelance',
+	`ass_date_end` DATETIME NULL DEFAULT NULL COMMENT 'Fecha en la que se completa la asignacion',
+	`ass_coments` VARCHAR(50) NULL DEFAULT NULL COMMENT 'Comentarios sobre la asignacion' COLLATE 'utf8mb4_general_ci',
+	`ass_status` INT(11) NULL DEFAULT NULL COMMENT 'Estado actual de la asignacion. ',
+	PRIMARY KEY (`ass_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `ctt_maintenance_status` (
+	`mts_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`mts_description` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`mts_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+CREATE TABLE `ctt_products_maintenance` (
+	`pmt_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id de la tabla',
+	`pmt_days` INT(11) NULL DEFAULT NULL COMMENT 'Dias de duracion de reparacion si existe',
+	`pmt_hours` INT(11) NULL DEFAULT NULL COMMENT 'Horas de duracion de reparacion, si existe',
+	`pmt_date_start` DATE NULL DEFAULT NULL COMMENT 'Fecha de comienzo de la reparación ',
+	`pmt_date_end` DATE NULL DEFAULT NULL COMMENT 'Fecha final de la reparacion',
+	`pmt_comments` VARCHAR(50) NULL DEFAULT '' COMMENT 'Comentarios sobre la reparacion' COLLATE 'utf8mb4_general_ci',
+	`mts_id` INT(11) NULL DEFAULT '0' COMMENT '1. revisado 2. atendiendose 3. concluido',
+	`ser_id` INT(11) NULL DEFAULT '0' COMMENT 'Id en relacion con la tabla ctt_series',
+	`pjtcr_id` INT(11) NULL DEFAULT '0' COMMENT 'Id en relacion con la tabla ctt_project_change_reason',
+	PRIMARY KEY (`pmt_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+
+DROP TABLE IF EXISTS
+CREATE TABLE `ctt_subletting` (
+	`sub_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID del subarrendo',
+	`sub_price` DECIMAL(10,2) NULL DEFAULT '0.00' COMMENT 'precio de renta del producto por unidad',
+	`sub_quantity` INT(11) NULL DEFAULT NULL COMMENT 'Cantidad de piezas subarrendadas',
+	`sub_collection_time` TIME NULL DEFAULT NULL,
+	`sub_delivery_time` TIME NULL DEFAULT NULL,
+	`sub_location` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`sub_name_provider_staff` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`sub_name_provider_ctt` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`sub_date_start` DATETIME NULL DEFAULT NULL COMMENT 'Fecha de inicio de periodo de subarrendo',
+	`sub_date_end` DATETIME NULL DEFAULT NULL COMMENT 'Fecha de término de periodo de subarrendo',
+	`sub_comments` VARCHAR(300) NOT NULL COMMENT 'Comentarios referentes al subarrendo' COLLATE 'utf8mb4_general_ci',
+	`ser_id` INT(11) NULL DEFAULT NULL COMMENT 'Id del serial del producto relacion ctt_serial',
+	`sup_id` INT(11) NULL DEFAULT NULL COMMENT 'Id del proveedor relacion ctt_suppliers',
+	`prj_id` INT(11) NULL DEFAULT NULL COMMENT 'Id del proyecto ',
+	`cin_id` INT(11) NULL DEFAULT NULL COMMENT 'ID del tipo de moneda relacion ctt_coin',
+	`prd_id` INT(11) NULL DEFAULT NULL COMMENT 'ID del producto relacion con ctt_products',
+	PRIMARY KEY (`sub_id`) USING BTREE
+)
+COMMENT='Tabla de situación de subarrendos'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
