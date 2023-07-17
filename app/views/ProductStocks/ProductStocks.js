@@ -1,9 +1,8 @@
 var seccion = '';
 ///const folio = uuidv4();
-let folio;
+let folio,url;
 let pr = [];
 let link = '';
-let url;
 var isConcepto = 0;
 
 $(document).ready(function () {
@@ -29,7 +28,6 @@ function inicial() {
 
     setting_table(); // Inicializa data table
     setting_table_pro(); // inicializa la tabla de productos
-
     setting_datepicket($('#txtStartDate')); //fecha del dia en curso
 
     $('#btn_products').on('click', function () {

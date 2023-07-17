@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="contenido">
         <div class="row mvst_group">
-            <div class="mvst_panel" style="background-color: #e2edf3">
+            <div class="mvst_panel">
 
                 <div class="form-group">
                 <div>
@@ -18,14 +18,18 @@
                 </div>
                 
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtProject" class="form-select form-select-sm required"><option value="0" data-content="||||" selected>Selecciona el Proyecto</option></select>
-                            <label for="txtProject">Proyecto relacionado</label>
-                        </div>
-                    </div>
-
+						<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+							<select id="txtProject" class="form-select form-select-sm " aria-label="Floating label select" data-mesage="Debes seleccionar un proyecto">
+								<option value="0" selected>Selecciona proyecto</option>
+							</select>
+							<label for="txtProject">Proyecto</label>
+						</div>
+					</div>
+                    
+                    <hr>
                     <!-- Categoria posición 4 -->
-                    <div class="row pos1">
+                    <input id="txtIdAssign" name="txtIdAssign" type="hidden"  class="form-control form-control-sm" style="text-transform: uppercase" >
+                    <div class="row pos1 ">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <select id="txtArea" class="form-select form-select-sm"><option value="0" selected>Selecciona el area</option></select>
                             <label for="txtArea">Area</label>
@@ -33,7 +37,7 @@
                     </div>
                     <div class="row pos1">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtFreelance" class="form-select form-select-sm"><option value='0' selected>Selecciona la subcategoria</option></select>
+                            <select id="txtFreelance" class="form-select form-select-sm"><option value='0' selected>Selecciona el freelance</option></select>
                             <label for="txtFreelance">Freelance</label>
                         </div>
                     </div>
@@ -63,14 +67,14 @@
                     <!-- Boton posición 4 -->
                         <div class="row pos1 ">
                             <div class="col-md-12 mb-5">
-                                <button id="btn_exchange" type="button" class="btn btn-sm btn-primary" >Agregar</button>
+                                <button id="btn_guardar" type="button" class="btn btn-sm btn-primary" >Guardar</button>
                             </div>
                         </div>
                 </div>
             </div>
 
             <div class="mvst_table">
-                <h1>Listado de subarrendos no existentes</h1>
+                <h1>Asignacion de freelance</h1>
                 <table class="display compact nowrap"  id="tblExchanges">
                     <thead>
                         <tr>

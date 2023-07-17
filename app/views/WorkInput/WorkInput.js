@@ -14,7 +14,6 @@ function inicial() {
     setTimeout(() => {
         //deep_loading('O');
         //console.log('UNO');
-        
         settingTable();
         getProjects(0);
         $('.tblProyects').css({display: 'none'});
@@ -30,7 +29,6 @@ function getProjects(catId) {
     var selector = putProjects;
     fillField(pagina, par, tipo, selector);
 }
-
 
 /** +++++  configura la table de productos */
 function settingTable() {

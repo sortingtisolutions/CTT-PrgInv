@@ -85,7 +85,6 @@ $html = '
 ';
 
 /* Tabla de equipo base -------------------------  */
-
         $html .= '
                     <!-- Start Tabla de costo base  -->
                     <h2>Lista de equipo</h2>

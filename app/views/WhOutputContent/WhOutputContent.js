@@ -2,6 +2,7 @@ let products;
 //let prjid = window.location.pathname.split("/").pop();
 let prjid, serIdNew;
 let serIdAnt=0;
+let user,v,u,n,em;  //datos de usuaria para impresion
 //var prjid;
 
 $(document).ready(function () {
@@ -15,10 +16,15 @@ $(document).ready(function () {
 
 //INICIO DE PROCESOS
 function inicial() {
+    user = Cookies.get('user').split('|');
+    u = user[0];
+    n = user[2];
+    em = user[3];
+
     setting_table_AsignedProd();
     getProjects(prjid);
     getComments(prjid);
-    getDetailProds();
+    getDetailProds(prjid,em);
     getFreelances(prjid);
 
 
@@ -44,9 +50,9 @@ function getProjects(prjid) {
 }
 
 // Solicita los productos del proyecto  OK
-function getDetailProds() {
+function getDetailProds(prjid,empid) {
     var pagina = 'WhOutputContent/listDetailProds';
-    var par = `[{"pjt_id":"${prjid}"}]`;
+    var par = `[{"pjt_id":"${prjid}", "empid":"${empid}"}]`;
     var tipo = 'json';
     var selector = putDetailsProds;
     fillField(pagina, par, tipo, selector);
@@ -166,14 +172,13 @@ function setting_table_AsignedProd() {
             {data: 'packstatus', class: 'sel sku'},
         ],
     });
-
 }
 
 //AGREGA LOS DATOS GENERALES DEL PROYECTO
 function putProjects(dt) {
-    let user = Cookies.get('user').split('|');
+    /* let user = Cookies.get('user').split('|');
     let u = user[0];
-    let n = user[2];
+    let n = user[2]; */
     let usrname=n.replaceAll('+',' ');
     // console.log('Datas-',n, usrname);
     $('#txtProjectName').val(dt[0].pjt_name);
@@ -184,7 +189,7 @@ function putProjects(dt) {
     $('#txtLocation').val(dt[0].pjt_location);
     $('#txtCustomer').val(dt[0].cus_name);
     $('#txtAnalyst').val(usrname);
-    $('#txtFreelance').val(dt[0].freelance);
+    // $('#txtFreelance').val(dt[0].freelance);
 }
 
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
@@ -225,7 +230,7 @@ function putFreelances(dt) {
     if (dt[0].free_id != 0) {
         $.each(dt, function (v, u) {
             let H = `<option value="${u.free_id}"> ${u.free_name} - ${u.are_name}</option>`;
-            $('#txtArea').append(H);
+            $('#txtFreelance').append(H);
         });
     }
 }
@@ -373,6 +378,7 @@ function checkSerie(pjtcnid) {
 }
 
 function myCheck(dt){
+    // console.log('myCheck',dt);
     $('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
     /* $('#'+dt).attr("id",NuevoSku).children("td.nombreclase").text(NuevoSku);
@@ -537,10 +543,10 @@ function modalLoading(acc) {
 }
 /**********  Impresion del contenido de un proyecto ***********/    
 function printContent(verId) {
-    let user = Cookies.get('user').split('|');
+    // let user = Cookies.get('user').split('|');
     let v = verId;
-    let u = user[0];
-    let n = user[2];
+    // let u = user[0];
+    // let n = user[2];
     let h = localStorage.getItem('host');
     // console.log('Datos', v, u, n, h);
 
@@ -551,13 +557,11 @@ function printContent(verId) {
 }
 /**********  Impresion del detalle(series) de un proyecto ***********/  
 function printDetail(verId) {
-    let user = Cookies.get('user').split('|');
+    // let user = Cookies.get('user').split('|');
     let v = verId;
-    let u = user[0];
-    let n = user[2];
+    // let u = user[0];
+    // let n = user[2];
     let h = localStorage.getItem('host');
-    // console.log('Datos', v, u, n, h);
-
     window.open(
         `${url}app/views/WhOutputContent/WhOutputDetailReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
         '_blank'
@@ -565,10 +569,10 @@ function printDetail(verId) {
 }
 /**********  Impresion de la salida de un proyecto ***********/  
 function printOutPut(verId) {
-    let user = Cookies.get('user').split('|');
+    // let user = Cookies.get('user').split('|');
     let v = verId;
-    let u = user[0];
-    let n = user[2];
+    // let u = user[0];
+    // let n = user[2];
     let h = localStorage.getItem('host');
     // console.log('Datos', v, u, n, h);
 

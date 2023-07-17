@@ -14,6 +14,7 @@
         <!-- Start Panel de control lateral -->
             <div class="mvst_panel" style="background-color: #5F9EAB" >
                 <div class="form-group">
+                    
                     <div class="row">
                         <h4>Nueva Forma de Pago</h4>
 

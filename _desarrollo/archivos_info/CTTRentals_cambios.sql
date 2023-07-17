@@ -91,6 +91,7 @@ ADD
   COLUMN cus_fill INT NULL DEFAULT '0' COMMENT 'Porcentaje de llenado de campos fiscales'
 AFTER
   cus_contract;
+
 DROP VIEW ctt_vw_projects;
 CREATE VIEW ctt_vw_projects AS
 SELECT

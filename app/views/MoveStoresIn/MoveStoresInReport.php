@@ -79,8 +79,6 @@ $html = '
 /* Tabla de equipo base -------------------------  */
 if ($equipoBase == '1'){
         $html .= '
-
-
                     <!-- Start Tabla de costo base  -->
                     <h2>Lista de equipo</h2>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
@@ -172,7 +170,6 @@ $foot = '
         </table>
     </footer>
 ';
-
 
 $css = file_get_contents('../../assets/css/reports_p.css');
 

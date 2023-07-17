@@ -59,7 +59,6 @@ function inicial() {
             inicial();
         }, 100);
     }
-
 }
 
 function settingTable() {
@@ -164,7 +163,6 @@ function getCustomers() {
             findcli.append(H);
         });
     }
-
     /* findcli.unbind('change').on('change', function () {
         deep_loading('O');
         let pjtId = $(this).val();

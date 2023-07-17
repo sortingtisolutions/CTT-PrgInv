@@ -4,12 +4,10 @@ require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
 class ProjectFiscalFieldsModel extends Model
 {
-
     public function __construct()
     {
         parent::__construct();
     }
-
 
 
 // Obtiene la lista de productos   *****

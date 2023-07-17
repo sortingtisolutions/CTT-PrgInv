@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class AssignFreelanceModel extends Model
 {
-
     public function __construct()
     {
       parent::__construct();
@@ -17,15 +16,52 @@ class AssignFreelanceModel extends Model
                 pj.pjt_location, pj.pjt_status, pj.cuo_id, pj.loc_id, co.cus_id, co.cus_parent, lo.loc_type_location,
                 pt.pjttp_name
             FROM ctt_projects AS pj
-            LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-            LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
+            INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+            INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
             LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
             ORDER BY pj.pjt_id DESC;";
 
         return $this->db->query($qry);
     }
 
+// Listado de Almacecnes
+/*
+    public function listStores()
+    {
+        $qry = "SELECT * FROM ctt_stores 
+                WHERE str_status = 1 and str_name LIKE 'SUBARRENDO%' ";
+        return $this->db->query($qry);
+    }
 
+// Listado de proveedores
+    public function listSuppliers()
+    {
+        $qry = "  SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
+        return $this->db->query($qry);
+    }
+// Listado de Facturas
+    public function listInvoice($param)
+    {
+        $extId = $this->db->real_escape_string($param['extId']);
+        $dotId='0';
+        if($extId==9)
+        {
+            $dotId='1';
+        } elseif($extId==10)
+        {
+            $dotId='4'; 
+        }
+
+        $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id IN ($dotId)";
+        return $this->db->query($qry);
+    }
+       
+// Listado de Monedas
+    public function listCoins()
+    {
+        $qry = "SELECT cin_id, cin_code, cin_name FROM ctt_coins WHERE cin_status = 1;";
+        return $this->db->query($qry);
+    }*/
       
 // Listado de Areas
     public function listAreas()
@@ -37,12 +73,23 @@ class AssignFreelanceModel extends Model
     public function listFreelances($param)
     {
         $catId = $this->db->real_escape_string($param['catId']);
-        $qry = "SELECT fr.free_id, fr.free_cve, fr.free_name, fr.free_area_id, fr.free_rfc, fr.free_adress, 
-                fr.free_phone, fr.free_email, fr.free_unit, fr.free_plates, fr.free_license, fr.free_fed_perm, 
-                fr.free_clase, fr.`free_año` 
-                FROM ctt_freelances AS fr 
-                LEFT JOIN ctt_assign_proyect AS ass ON ass.free_id=fr.free_id 
-                WHERE ass.ass_status IS NULL AND fr.free_area_id= $catId;";
+        $qry = "SELECT free.free_id, free.free_cve, free.free_name, free.free_area_id, free.free_rfc, free.free_address, free.free_phone, free.free_email, free.free_unit, free.free_plates, free.free_license, free.free_fed_perm, free.free_clase, free.`free_año` 
+        FROM ctt_freelances AS free LEFT JOIN ctt_assign_proyect AS ass ON ass.free_id=free.free_id WHERE free.free_area_id= '$catId' AND NOT EXISTS (
+      SELECT 1
+      FROM ctt_assign_proyect AS assi
+      WHERE assi.free_id = free.free_id AND assi.ass_status = 1
+   );";
+        return $this->db->query($qry);
+    }
+    public function listFreelance2($param)
+    {
+        $catId = $this->db->real_escape_string($param['catId']);
+        $qry = "SELECT free.free_id, free.free_cve, free.free_name, free.free_area_id, free.free_rfc, free.free_address, free.free_phone, free.free_email, free.free_unit, free.free_plates, free.free_license, free.free_fed_perm, free.free_clase, free.`free_año` 
+        FROM ctt_freelances AS free LEFT JOIN ctt_assign_proyect AS ass ON ass.free_id=free.free_id WHERE free.free_area_id=  $catId AND NOT EXISTS (
+      SELECT 1
+      FROM ctt_assign_proyect AS assi
+      WHERE assi.free_id = free.free_id AND assi.ass_status = 1
+   );";
         return $this->db->query($qry);
     }
 
@@ -144,46 +191,69 @@ public function NextExchange()
                 '$comments', '$serId', '$id_sup', '$proyect','$coin','$prdId');";
         $this->db->query($qry2);*/
 
-        return $ass_Id;
+        return $free_id;
     }
-
-    // Listado de Almacecnes
-/*
-    public function listStores()
+    
+    public function listFreelances2($params)
     {
-        $qry = "SELECT * FROM ctt_stores 
-                WHERE str_status = 1 and str_name LIKE 'SUBARRENDO%' ";
+        $pjtId = $this->db->real_escape_string($params['pjtId']);
+        $qry = "SELECT free.free_id, free.free_cve, free.free_name, free.free_area_id, 
+        free.free_rfc, free.free_address, free.free_phone, free.free_email, 
+        free.free_unit, free.free_plates, free.free_license, free.free_fed_perm, 
+        free.free_clase, free.`free_año`, prd.pjt_id, prd.pjt_name, are.are_id, are.are_name,
+        ass.ass_id,ass.ass_date_start, ass.ass_date_end, ass.ass_coments
+        FROM ctt_freelances AS free 
+        INNER JOIN ctt_areas AS are ON are.are_id=free.free_area_id
+        LEFT JOIN ctt_assign_proyect  AS ass ON ass.free_id=free.free_id
+        LEFT JOIN ctt_projects AS prd ON prd.pjt_id= ass.pjt_id WHERE prd.pjt_id =  '$pjtId' AND ass_status";
+        
         return $this->db->query($qry);
-    }
-
-// Listado de proveedores
-    public function listSuppliers()
+    }  
+    public function listAssign()
     {
-        $qry = "  SELECT * FROM ctt_suppliers WHERE sup_status = 1 AND sut_id NOT IN (3);";
+        $qry = "SELECT free.free_id, free.free_cve, free.free_name, free.free_area_id, 
+        free.free_rfc, free.free_address, free.free_phone, free.free_email, 
+        free.free_unit, free.free_plates, free.free_license, free.free_fed_perm, 
+        free.free_clase, free.`free_año`, prd.pjt_id, prd.pjt_name, are.are_id, are.are_name,
+        ass.ass_id,ass.ass_date_start, ass.ass_date_end, ass.ass_coments
+        FROM ctt_freelances AS free 
+        INNER JOIN ctt_areas AS are ON are.are_id=free.free_area_id
+        LEFT JOIN ctt_assign_proyect  AS ass ON ass.free_id=free.free_id
+        LEFT JOIN ctt_projects AS prd ON prd.pjt_id= ass.pjt_id";
+        
         return $this->db->query($qry);
-    }
-// Listado de Facturas
-    public function listInvoice($param)
-    {
-        $extId = $this->db->real_escape_string($param['extId']);
-        $dotId='0';
-        if($extId==9)
-        {
-            $dotId='1';
-        } elseif($extId==10)
-        {
-            $dotId='4'; 
-        }
+    }  
 
-        $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id IN ($dotId)";
-        return $this->db->query($qry);
-    }
+    public function UpdateAssignFreelance($param)
+    {
+        
+        $ass_id	= $this->db->real_escape_string($param['ass']);
+        $pry_id	= $this->db->real_escape_string($param['pry']);
+        $free_id 	= $this->db->real_escape_string($param['free']);
+        $area_id		= $this->db->real_escape_string($param['area']);
+        $sdate	= $this->db->real_escape_string($param['sdate']);
+        $edate	= $this->db->real_escape_string($param['edate']);
+        $com	= $this->db->real_escape_string($param['com']);
+
+            $qry = "UPDATE ctt_assign_proyect
+                        SET pjt_id     =       '$pry_id',
+                        free_id        =              '$free_id',
+                        ass_date_start =              '$sdate',
+                        ass_date_end   =        '$edate',
+                        ass_coments    =             '$com',
+                        ass_status      =                 '1'                 
+                        WHERE ass_id ='$ass_id';";
+        $this->db->query($qry);
+        return $ass_id;
        
-// Listado de Monedas
-    public function listCoins()
-    {
-        $qry = "SELECT cin_id, cin_code, cin_name FROM ctt_coins WHERE cin_status = 1;";
+    }
+    public function DeleteAssignFreelance($params)
+	{
+        $ass_id 	= $this->db->real_escape_string($params['ass_id']);
+		$qry = "UPDATE ctt_assign_proyect
+				SET ass_status = null
+				WHERE ass_id = $ass_id";
         return $this->db->query($qry);
-    }*/
+	}
 
 }

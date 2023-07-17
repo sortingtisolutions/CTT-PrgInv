@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class MaintenanceModel extends Model
 {
-
     public function __construct()
     {
       parent::__construct();
@@ -13,7 +12,7 @@ class MaintenanceModel extends Model
 public function listProyects($store)
 {
     $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (1,2,4) ;";
+    $qry = "SELECT * FROM ctt_projects WHERE pjt_status = 8 ;";
     return $this->db->query($qry);
 }    
 
@@ -21,14 +20,17 @@ public function listProyects($store)
     public function listProducts($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);
-        $qry = "SELECT 
-                    prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id,
-                    DATE_FORMAT(sub_date_start,'%d/%m/%Y') AS sub_date_start, DATE_FORMAT(sub_date_end,'%d/%m/%Y') AS sub_date_end, 
-                    sub_comments, pjtcn_days_base, pjtcn_days_trip, pjtcn_days_test,
-                    ifnull(prd_id,0) AS prd_id, ifnull(sup_id,0) AS sup_id, ifnull(str_id,0) AS str_id, 
-                    ifnull(sub_id,0) AS sub_id, ifnull(sut_id,0) AS sut_id, ifnull(pjtdt_id,0) AS pjtdt_id,
-                    ifnull(pjtcn_id,0) AS pjtcn_id, ifnull(cin_id,0) AS cin_id
-                FROM ctt_vw_subletting WHERE pjt_id = $pjtId;";
+        $qry = "SELECT pd.prd_name,pd.prd_sku, pd.prd_id, ser.ser_id, ser.ser_sku, ser.ser_serial_number, ser.ser_status, ser.ser_situation, ser.ser_stage, pjd.pjtdt_id,
+        pj.pjt_name, pj.pjt_id, pj.pjt_date_start, pj.pjt_date_end, ifnull(pdm.pmt_id,0) as pmt_id, ifnull(pdm.pmt_days,0) AS pmt_days, ifnull(pdm.pmt_hours,0) AS pmt_hours, ifnull(pdm.pmt_date_start,'') AS pmt_date_start, ifnull(pdm.pmt_date_end,'') AS pmt_date_end, ifnull(pdm.pmt_comments,'') AS pmt_comments, ifnull(pdm.pjtcr_id,0) AS pjtcr_id, ifnull(mts.mts_description,'') AS mts_description, ifnull(pdm.mts_id,0) AS mts_id
+        from ctt_products as pd 
+        INNER JOIN ctt_series AS ser ON ser.prd_id = pd.prd_id
+        INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id = ser.ser_id
+        INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
+        INNER JOIN ctt_projects AS pj ON pjc.pjt_id = pj.pjt_id 
+        LEFT JOIN ctt_products_maintenance AS pdm ON pdm.ser_id = ser.ser_id
+        LEFT JOIN ctt_maintenance_status AS mts ON mts.mts_id = pdm.mts_id
+        WHERE pj.pjt_id='$pjtId' AND ser.ser_situation='M' ";
+        
         return $this->db->query($qry);
     }    
 
@@ -40,7 +42,6 @@ public function listProyects($store)
         AND sut_id in (3) ORDER BY sup_business_name;";
         return $this->db->query($qry);
     }   
-
 
 // Listado de monedas
     public function listCoins()
@@ -58,6 +59,11 @@ public function listProyects($store)
         return $this->db->query($qry);
     }
 
+    public function listChangeReasons($params)
+    {
+        $qry = "SELECT * FROM ctt_project_change_reason AS pjtcr";
+        return $this->db->query($qry);
+    }
 
 
 // Agrega el serial del producto en subarrendo
@@ -73,7 +79,6 @@ public function listProyects($store)
         $ser_behaviour = 'R';
         $prd_id = $params['produid'];
         $cin_id = $params['cointyp'];
-
 
         $qry = "INSERT INTO 
                     ctt_series (ser_sku, ser_serial_number, ser_cost, ser_status, ser_situation, ser_stage, ser_lonely, ser_behaviour, prd_id, cin_id ) 
@@ -256,45 +261,45 @@ public function listProyects($store)
 
     }
 
-    public function changeSubletting($params)
+    public function changeMaintain($params)
     {
-        $pjDetail 		= $this->db->real_escape_string($params['pjDetail']);
-        $producId 		= $this->db->real_escape_string($params['producId']);
-        $produSku 		= $this->db->real_escape_string($params['produSku']);
-        $seriCost 		= $this->db->real_escape_string($params['seriCost']);
+        $comments 		= $this->db->real_escape_string($params['comments']);
+        $days 		    = $this->db->real_escape_string($params['days']);
+        $hrs		    = $this->db->real_escape_string($params['hrs']);
         $dtResIni 		= $this->db->real_escape_string($params['dtResIni']);
         $dtResFin 		= $this->db->real_escape_string($params['dtResFin']);
-        $comments 		= $this->db->real_escape_string($params['comments']);
-        $supplier 		= $this->db->real_escape_string($params['supplier']);
-        $tpCoinId 		= $this->db->real_escape_string($params['tpCoinId']);
-        $projecId 		= $this->db->real_escape_string($params['projecId']);
-        $storesId 		= $this->db->real_escape_string($params['storesId']);
-        $seriesId 		= $this->db->real_escape_string($params['seriesId']);
+        $status 		= $this->db->real_escape_string($params['status']);
+        $serieId	    = $this->db->real_escape_string($params['serieId']);
+        $projChange 	= $this->db->real_escape_string($params['projChange']);
+        
+        $idMaintain 	= $this->db->real_escape_string($params['idMaintain']);
 
-        $qry1 = "UPDATE ctt_series 
+        
+        if($status ==3){
+            $qry1 = "UPDATE ctt_series 
                     SET 
-                        cin_id = '$tpCoinId', 
-                        ser_cost = '$seriCost'
-                    WHERE ser_id = '$seriesId';";
-        $this->db->query($qry1);
+                        ser_situation = 'D', 
+                        ser_stage = 'D'
+                    WHERE ser_id = '$serieId';";
+            $this->db->query($qry1);
+        }
+        
+        
 
-        $qry2 = "UPDATE ctt_subletting
+        $qry2 = "UPDATE ctt_products_maintenance
                     SET 
-                        sub_price = '$seriCost',
-                        sub_comments = '$comments',
-                        cin_id = '$tpCoinId',
-                        sub_date_start = '$dtResIni',
-                        sub_date_end = '$dtResFin'
-                    WHERE ser_id = '$seriesId' AND prj_id ='$projecId';";
+                        pmt_days = '$days',
+                        pmt_hours = '$hrs',
+                        pmt_date_start = '$dtResIni',
+                        pmt_date_end = '$dtResFin',
+                        pmt_comments = '$comments',
+                        mts_id = '$status'
+                    WHERE pmt_id = '$idMaintain'";
         $this->db->query($qry2);
 
-        $qry3 = "UPDATE ctt_stores_products
-                    SET 
-                        str_id = '$storesId'
-                    WHERE ser_id = '$seriesId';";
-        $this->db->query($qry3);
+        
 
-        return $pjDetail;
+        return $idMaintain;
     }
 
 // Lista el productomodificado
@@ -312,4 +317,71 @@ public function listProyects($store)
         return $this->db->query($qry);
     }
 
+
+    // Guardar los datos del mantenimiento
+    public function saveMaintain($params)
+    {
+        
+        $comments 		= $this->db->real_escape_string($params['comments']);
+        $days 		    = $this->db->real_escape_string($params['days']);
+        $hrs		    = $this->db->real_escape_string($params['hrs']);
+        $dtResIni 		= $this->db->real_escape_string($params['dtResIni']);
+        $dtResFin 		= $this->db->real_escape_string($params['dtResFin']);
+        $status 		= $this->db->real_escape_string($params['status']);
+        $serieId	    = $this->db->real_escape_string($params['serieId']);
+        $projChange 	= $this->db->real_escape_string($params['projChange']);
+
+        // Obtiene el ultimo sku registrado para el producto seleccionado
+       /* $qry = "SELECT ifnull(max(ser_sku),0) as last_sku, ifnull(ser_serial_number,0) as last_serie FROM ctt_series WHERE prd_id = $producId AND LEFT(RIGHT(ser_sku, 4),1) ='R';";
+        $result = $this->db->query($qry);
+
+        $skus = $result->fetch_object();
+        $sku = $skus->last_sku;
+        $serie = $skus->last_serie;
+        $skuNew = intval($sku) +1 ;
+        $skuNew = 'R' . str_pad($skuNew, 3, "0", STR_PAD_LEFT);
+        $serieNew = intval($serie) +1 ;
+        $serieNew = 'R' . str_pad($serieNew, 3, "0", STR_PAD_LEFT);
+
+        $newSku = $produSku . $skuNew;*/
+
+        // Agrega la nueva serie
+        $qry1 = "INSERT INTO ctt_products_maintenance (
+            pmt_days, pmt_hours, pmt_date_start, pmt_date_end, pmt_comments,mts_id, ser_id, pjtcr_id
+        )  VALUES
+        ('$days', '$hrs', '$dtResIni', '$dtResFin', '$comments','$status', '$serieId','$projChange')";
+                
+        $this->db->query($qry1);
+
+        $pmtId = $this->db->insert_id;
+            /*
+        // Actualiza el detalle del proyecto con la serie
+        $qry2 = "UPDATE ctt_projects_detail AS pd
+                INNER JOIN ctt_series AS sr ON sr.pjtdt_id = pd.pjtdt_id
+                SET pd.pjtdt_prod_sku = sr.ser_sku, pd.ser_id = sr.ser_id
+                WHERE pd.pjtdt_id = $pjDetail ;";
+        $this->db->query($qry2);
+
+        // Agrega el nuevo registro en la tabla de subarrendos
+        $qry3 = "INSERT INTO ctt_subletting (
+                    sub_price, sub_quantity, sub_date_start, sub_date_end, sub_comments, 
+                    ser_id, sup_id, prj_id, cin_id)
+                SELECT 
+                    ser_cost, '1', '$dtResIni', '$dtResFin', '$comments', ser_id, 
+                    '$supplier', '$projecId', '$tpCoinId' 
+                FROM ctt_series WHERE pjtdt_id = $pjDetail;";
+        $this->db->query($qry3);
+
+        $qry4 = " INSERT INTO ctt_stores_products 
+                    (stp_quantity, str_id, ser_id, prd_id) 
+                VALUES 
+                    ('1','$storesId', '$serieId','$producId');";
+        $this->db->query($qry4);*/
+
+        return $pmtId;
+
+    }
+
 }
+
+

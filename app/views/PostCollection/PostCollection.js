@@ -129,7 +129,6 @@ function putSubcategories(dt) {
     }
 }
 
-
 /** +++++  Activa la accion de eventos */
 function activeIcons() {
     /**  ---- Acciones de Guardar categoria ----- */
@@ -183,7 +182,6 @@ function activeIcons() {
         });
 }
 
-/** -------------------------------------------------------------------------- */
 /** ---- Start GRABA NUEVA SUBCATEGORIA ---- */
 /** ---- Registra la nueva subcategoria ---- */
 function saveSubcategory() {

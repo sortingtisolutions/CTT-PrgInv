@@ -3,48 +3,42 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class CategoriasModel extends Model
 {
-
 	public function __construct()
 	{
 		parent::__construct();
 	}
-//Guarda proveedor  ***
-	public function SaveCategoria($params)
+
+	public function GetAlmacenes($params)
 	{
-
-		$cat_name = $this->db->real_escape_string($params['cat_name']);
-		$str_id = $this->db->real_escape_string($params['str_id']);
-
-
-			$qry = "INSERT INTO ctt_categories(cat_name, cat_status, str_id)
-					VALUES (UPPER('$cat_name'),1,'$str_id')";
-			$this->db->query($qry);	
-			$cat_id = $this->db->insert_id;
-			
-			return $cat_id;
+	
+		$qry = "SELECT str.str_id, str.str_name, UPPER(str.str_type) as str_type, str.emp_id, str.emp_fullname,
+				'0' as cantidad 
+				FROM  ctt_stores AS str
+				LEFT JOIN ctt_stores_products AS sp ON str.str_id = sp.str_id
+				WHERE str.str_status = 1 
+				GROUP BY str.str_id, str.str_name, str.str_type, str.emp_id, str.emp_fullname
+				ORDER BY str.str_id;";
+		return $this->db->query($qry);
 	}
+
 // Optiene los Usuaios existentes
 	public function GetCategorias()
 	{
-		$qry = "SELECT ct.*, st.str_name,'0' AS cantidad 
+		$qry = "SELECT ct.*, st.str_name,'0' AS cantidad , ar.are_name
 				FROM ctt_categories  	AS ct 
 				INNER JOIN ctt_stores	AS st ON st.str_id = ct.str_id
+				LEFT JOIN ctt_areas as ar on ar.are_id=ct.are_id
 				WHERE ct.cat_status = 1 and st.str_status=1 ORDER BY ct.cat_id;";
 
 		return $this->db->query($qry);
-		
 	}
 
-    public function GetCategoria($params)
+    public function listAreas($params)
 	{
-		/* $qry = "SELECT cat_id, cat_name, str_id FROM ctt_categories WHERE cat_id = ".
-		$result = $this->db->query($qry);
-		if($row = $result->fetch_row()){
-			$item = array("cat_id" =>$row[0],
-			"cat_name" =>$row[1],
-			"str_id" =>$row[2]);
-		}
-		return $item; */
+		$qry = "SELECT * FROM ctt_areas
+				WHERE are_id in (2,3) AND are_status = 1 ORDER BY are_id;";
+
+		return $this->db->query($qry);
 	}
 
 
@@ -53,12 +47,30 @@ class CategoriasModel extends Model
 		$cat_name 	= $this->db->real_escape_string($params['cat_name']);
 		$cat_id 	= $this->db->real_escape_string($params['cat_id']);
 		$str_id 	= $this->db->real_escape_string($params['str_id']);
+		$areId 		= $this->db->real_escape_string($params['areId']);
 
 		$qry = "UPDATE ctt_categories
 				SET cat_name = UPPER('$cat_name'),
-					str_id = '$str_id'
+					str_id = '$str_id',
+					are_id = '$areId',
 				WHERE cat_id = $cat_id;";
 		return 	$this->db->query($qry);	
+	}
+
+	//Guarda proveedor  ***
+	public function SaveCategoria($params)
+	{
+		$cat_name = $this->db->real_escape_string($params['cat_name']);
+		$str_id = $this->db->real_escape_string($params['str_id']);
+		$catId = $this->db->real_escape_string($params['catId']);
+		$areId = $this->db->real_escape_string($params['areId']);
+
+			$qry = "INSERT INTO ctt_categories(cat_id,cat_name, cat_status, str_id,are_id)
+					VALUES ('$catId', UPPER('$cat_name'),1,'$str_id','$areId')";
+			$this->db->query($qry);	
+			$cat_id = $this->db->insert_id;
+			
+		return $cat_id;
 	}
 
     //borra proveedor

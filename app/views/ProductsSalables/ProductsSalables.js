@@ -52,7 +52,6 @@ function inicial() {
 }
 
 /** OBTENCION DE DATOS */
-
 /**  Obtiene el listado de almacenes */
 function get_stores() {
     var pagina = 'ProductsSalables/listStores';
@@ -151,7 +150,7 @@ function put_products(dt) {
             </li>
         `;
         $('.list_products ul').append(H);
-//${u.ser_sku}
+            //${u.ser_sku}
         });
 
         $('.list_products ul li')
@@ -169,24 +168,24 @@ function put_products(dt) {
 function fill_dinamic_table() {
     caching_events('fill_dinamic_table');
     let H = `
-    
-    <table class="table_control" id="tblControl" style="width: 700px;">
-        <thead>
-            <tr>
-                <th rowspan="2" class="w5 fix product">PRODUCTO</th>
-                <th colspan="3" class="zone_01 headrow" >&nbsp;</th>
-            </tr>
-            <tr class="headrow">
-                <th class="w4 zone_01" >CANTIDAD </th>
-                <th class="w3 zone_01" >PRECIO </th>
-                <th class="w3 zone_03" >IMPORTE</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-        </tbody>
-    </table>
+        <table class="table_control" id="tblControl" style="width: 700px;">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="w5 fix product">PRODUCTO</th>
+                    <th colspan="3" class="zone_01 headrow" >&nbsp;</th>
+                </tr>
+                <tr class="headrow">
+                    <th class="w4 zone_01" >CANTIDAD </th>
+                    <th class="w3 zone_01" >PRECIO </th>
+                    <th class="w3 zone_03" >IMPORTE</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table> 
     `;
+
     $('#tbl_dynamic').html(H);
     tbldynamic('tbl_dynamic');
     add_boton();
@@ -246,7 +245,6 @@ function fill_purchase(pr, ix) {
     // console.log(ix);
 
     $('#Products .sel_product').text('');
-
     //  let prdName = pr.prod_name.replace(/°/g, '"');
 
     let ky = registered_product(pr.ser_id);

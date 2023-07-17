@@ -12,6 +12,7 @@
         <th>Edit</th>
         <th>Remove</th>
       </thead>
+      
       <tbody>
         <?php
         while ($row = $clients->fetch_assoc())

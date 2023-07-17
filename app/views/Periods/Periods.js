@@ -39,7 +39,6 @@ function iniciador() {
 
     function colocaDias() {
         var H = '';
-
         let p1 = 0,
             p2 = 0,
             p3 = 1;

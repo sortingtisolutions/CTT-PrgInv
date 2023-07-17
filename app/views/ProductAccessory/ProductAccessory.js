@@ -275,10 +275,7 @@ function drawProducts() {
         .on('click', function () {
             let id = $(this).parents('.list-item');
             console.log('SE DIO' + id);
-            //console.log($(this).val());
-
             //console.log( $(this).parents('.list-item').attr('id'));
-            //console.log('se dio click en el circulo');
             product_apply(id);
         });
 }

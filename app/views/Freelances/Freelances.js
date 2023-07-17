@@ -149,8 +149,7 @@ function settingTable() {
             {data: 'licfree', class: 'supply'},
             {data: 'fedpfree', class: 'supply'},
             {data: 'clasefree', class: 'supply'},
-            {data: 'anfree', class: 'supply'},
-            
+            {data: 'anfree', class: 'supply'}, 
         ],
     });
 
@@ -225,7 +224,6 @@ function putCustType(dt) {
         });
     }
 }
-
 /** +++++  Activa los iconos */
 function activeIcons() {
     /*  $('.toLink')
@@ -478,16 +476,6 @@ function createNewFreelance() {
         .on('click', function () {
             saveNewFreelance();
         });
-}
-
-function subcategoriesGetCode(sbcId) {
-    /* let sbcCode = '';
-    $.each(subs, function (v, u) {
-        if (u.sbc_id == sbcId) {
-            sbcCode = u.sbc_code;
-        }
-    });
-    return sbcCode; */
 }
 
 function fillFieldSkuBox() {

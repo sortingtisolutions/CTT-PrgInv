@@ -17,7 +17,6 @@
                         <table class="table_information form-floating " >
                             <tr>
                                 <td class="formSales">
-
                                 </td>
                             </tr>
                         
@@ -89,13 +88,11 @@
                                             <input id="txtInvoice" name="txtInvoice" type="text" class="textbox">
                                         </div>
 
-                                       
                                     </form>
 
                                 </td>
                             </tr>
-
-                            
+ 
                         </table>
                     </div>
                 </div>
@@ -108,7 +105,6 @@
                         </div>   
                     </div>
                 </div>
-
 
             </div>
 
@@ -153,15 +149,14 @@
 </div>
 
 
-    <!-- Start Lista de productos -->
-    <div class="box_list_products" id="Products" >
-        <div class="sel_product" contenteditable="true"></div>
-        <div class="list_products">
-            <ul></ul>
-        </div>
+<!-- Start Lista de productos -->
+<div class="box_list_products" id="Products" >
+    <div class="sel_product" contenteditable="true"></div>
+    <div class="list_products">
+        <ul></ul>
     </div>
-    <!-- End Lista de productos -->
-
+</div>
+<!-- End Lista de productos -->
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS . 'ClosedProyectChange/ClosedProyectChange.js?v=1.0.0.0' ?>"></script>

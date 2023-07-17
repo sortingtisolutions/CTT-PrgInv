@@ -40,7 +40,6 @@ class MoveStoresOutController extends Controller
 			}
 			echo $res;
 
-			  
 		  // $params = array('unidad' => $res);
 		  // $this->render(__CLASS__, $params);
 	}

@@ -7,4 +7,5 @@ $(document).ready(function () {
     pos = 4;
     //console.log(host,localStorage);
     verifica_usuario();
+    
 });

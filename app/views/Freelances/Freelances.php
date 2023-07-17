@@ -12,8 +12,7 @@
     <div class="container-fluid">
         <div class="contenido">
             <div class="row mvst_group">
-                <div class="mvst_list tblProdMaster">
-                    
+                <div class="mvst_list tblProdMaster">                   
                     <div class="row rowTop">
                         <h1>Listado de Clientes con un Proyecto</h1>
                         
@@ -68,6 +67,7 @@
                             <span class="intructions">Nombre Principal del freelance</span>
                         </td>
                     </tr>
+                    
                     <tr>
                         <td class="concept"><span class="reqsign">*</span> Clave del Freelance: </td>
                         <td class="data">

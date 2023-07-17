@@ -20,7 +20,6 @@ function inicial() {
         getScores();
         getCustType();
         getOptionYesNo();
-        
     }, 100);
 }
 
@@ -167,7 +166,6 @@ function settingTable() {
         });
 }
 
-
 function fillCustomers(ft) {
     $('#tblCustomers tbody').html('');
 
@@ -214,7 +212,6 @@ function fillCustomers(ft) {
         settingTable();
     }
 }
-
 
 /** +++++  coloca los tipos de calificacion */
 function putScores(dt) {
@@ -524,16 +521,6 @@ function createNewCustomer() {
         .on('click', function () {
             saveNewCustomer();
         });
-}
-
-function subcategoriesGetCode(sbcId) {
-    /* let sbcCode = '';
-    $.each(subs, function (v, u) {
-        if (u.sbc_id == sbcId) {
-            sbcCode = u.sbc_code;
-        }
-    });
-    return sbcCode; */
 }
 
 function fillFieldSkuBox() {

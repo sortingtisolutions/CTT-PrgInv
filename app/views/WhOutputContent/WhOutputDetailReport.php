@@ -105,8 +105,7 @@ if ($equipoBase == '1'){
                                 $prodsku      = $items[$i]['pjtdt_prod_sku'] ; //  ------------
                                 $quantity     = $items[$i]['dt_cantidad'] ;  //  ------------
                                 $sernum       = $items[$i]['ser_serial_number'] ; //  -------- 
-            
-                                
+                              
         $html .= '
                             <tr>
                                 <td class="dat-figure supply"><dd>' . $prodname . '</dd></td>

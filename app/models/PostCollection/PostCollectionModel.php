@@ -4,7 +4,6 @@ require( ROOT . PATH_ASSETS.  'ssp.class.php' );
 
 class PostCollectionModel extends Model
 {
-
 	public function __construct()
 	{
 		parent::__construct();

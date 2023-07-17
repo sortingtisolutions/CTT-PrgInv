@@ -33,7 +33,6 @@
         $isConcepto = $el[13];
     }
 
-
     $html = '
         <header>
             <div class="cornisa">

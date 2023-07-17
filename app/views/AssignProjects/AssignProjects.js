@@ -30,7 +30,6 @@ function inicial() {
         .on('click', function () {
             CleanCombos();
      });
-
 }
 
 // Solicita los paquetes  OK
@@ -238,7 +237,6 @@ function activeIcons() {
                 editProject(pjtid,pjtnm);
             }
         });
-
 }
 
 function editProject(pjtid,pjtnm) {
@@ -354,8 +352,7 @@ function printOutPutContent(verId) {
     let n = user[2];
     let h = localStorage.getItem('host');
 
-    console.log('Datos', v, u, n, h);
-
+    // console.log('Datos', v, u, n, h);
     window.open(
         `${url}app/views/AssignProjects/AssignProjectsReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
         '_blank'

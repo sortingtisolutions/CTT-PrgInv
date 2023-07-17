@@ -29,7 +29,6 @@ function getProjects(catId) {
     fillField(pagina, par, tipo, selector);
 }
 
-
 /** +++++  configura la table de productos */
 function settingTable() {
     let title = 'Control salida de proyectos';
@@ -103,7 +102,6 @@ function settingTable() {
             //$('#tblCollets').DataTable().draw();
             deep_loading('C');
         });
-
 }
 
 /** +++++  coloca los productos en la tabla */
@@ -135,7 +133,6 @@ function putProducts(dt) {
         settingTable();
     }
 }
-
 
 /** +++++  Activa los iconos */
 function activeIcons() {

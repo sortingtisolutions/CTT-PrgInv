@@ -1,5 +1,5 @@
-let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral, glbpjtid;
-let gblsku;
+let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral;
+let gblsku, glbpjtid;
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded

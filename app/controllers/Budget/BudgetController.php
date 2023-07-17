@@ -152,6 +152,7 @@ class BudgetController extends Controller
         }
         echo $res;
     } 
+    
 // Lista los comentarios del proyecto
     public function listComments($request_params)
     {

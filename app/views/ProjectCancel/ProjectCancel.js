@@ -137,7 +137,6 @@ function actionButtons() {
         .on('click', function () {
             let acc = $(this).attr('class').split(' ')[2];
             let pjtId = $(this).data('element');
-
             switch (acc) {
                 case 'active':
                     console.log('habilita proyecto');
@@ -154,10 +153,10 @@ function actionButtons() {
 
 function CancelProyect(pjtId) {
     let H = `<div class="emergent__warning">
-    <p>¿Realmente requieres cancelar este Proyecto?</p>
-    <button id="killYes" class="btn btn-primary">Si</button>  
-    <button id="killNo" class="btn btn-danger">No</button>  
-    </div>`;
+        <p>¿Realmente requieres cancelar este Proyecto?</p>
+        <button id="killYes" class="btn btn-primary">Si</button>  
+        <button id="killNo" class="btn btn-danger">No</button>  
+        </div>`;
 
     $('body').append(H);
 

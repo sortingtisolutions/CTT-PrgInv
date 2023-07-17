@@ -15,6 +15,7 @@
             <div class="mvst_panel" style="width:280px; background-color: #e2e8f8">
                 <div class="form-group">
                 <div class="form_primary">
+                    
                     <h4 class="mainTitle">Datos de los Proyectos</h4>
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -63,10 +64,10 @@
                             </div>
                         </div>
                         <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                            <select id="txtArea" class="form-select form-select-sm"><option value='0'></option></select>
-                            <label for="txtArea">Freelances Asignados</label>
-                        </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                <select id="txtFreelance" class="form-select form-select-sm"><option value='0'></option></select>
+                                <label for="txtFreelance">Freelances Asignados</label>
+                            </div>
                         </div>
 						<!-- <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">

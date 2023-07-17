@@ -254,7 +254,6 @@ function exchange_apply() {
     let prod = prId.split('|');
     let productSKU = prod[2];
     let productSerie = prod[3];
-
     let commnets = $('#txtComments').val();
 
     let par = `

@@ -29,7 +29,6 @@ function inicial() {
 
     setting_table(); // Inicializa data table
     setting_table_pro(); // inicializa la tabla de productos
-
     setting_datepicket($('#txtStartDate')); //fecha del dia en curso
 
     $('#btn_products').on('click', function () {

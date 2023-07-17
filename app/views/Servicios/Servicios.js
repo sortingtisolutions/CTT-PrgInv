@@ -93,7 +93,7 @@ function UnSelectRowTable() {
    }, 10);
 }
 
-//BORRAR  * *
+//BORRAR  *************
 function DeleteServicio() {
    var location = 'Servicios/DeleteServicio';
    IdServicio = $('#IdServicioBorrar').val();

@@ -17,7 +17,6 @@
                         <table class="table_information form-floating " >
                             <tr>
                                 <td class="formSales">
-
                                 </td>
                             </tr>
                         
@@ -75,7 +74,6 @@
                         </div>   
                     </div>
                 </div>
-
 
             </div>
 

@@ -8,7 +8,6 @@ class MoveStoresInController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new MoveStoresInModel();
@@ -24,8 +23,7 @@ class MoveStoresInController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-
-// LISTA LOS TIPOS DE MOVIMIENTOS
+    // LISTA LOS TIPOS DE MOVIMIENTOS
     public function listExchange()
     {
         $params =  $this->session->get('user');

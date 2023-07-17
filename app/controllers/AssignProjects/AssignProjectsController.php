@@ -24,7 +24,6 @@ class AssignProjectsController extends Controller
 		$this->render(__CLASS__, $params);
     }
 
-
     // Lista los proyectos
     public function listUsersP($request_params)
     {

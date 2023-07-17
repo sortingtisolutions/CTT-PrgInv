@@ -201,7 +201,6 @@ function activeActions() {
         });
 }
 
-/** ---- Start GRABA NUEVA SUBCATEGORIA ---- */
 /** ---- Registra la nueva subcategoria ---- */
 function saveSubcategory() {
     let subcatNm = $('#txtSubcategory').val().toUpperCase();

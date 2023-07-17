@@ -6,6 +6,7 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">  
@@ -118,7 +119,6 @@
                     </div>
                         
                 </div>
-                <!-- caja de totales del reporte -->
                 <!-- Tabla de productos del proyecto -->
                     <div class="tabla__contenedor">
                         <table  id="tblProducts">
@@ -210,8 +210,6 @@
     </div>
 </div>
 <!-- End Ventana modal AGREGA O MODIFICA PRODUCTO -->
-
-
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

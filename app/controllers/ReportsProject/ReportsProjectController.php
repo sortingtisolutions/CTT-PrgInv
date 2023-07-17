@@ -8,7 +8,6 @@ class ReportsProjectController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new ReportsProjectModel();
@@ -41,7 +40,6 @@ class ReportsProjectController extends Controller
             }
             echo $res;
 
-              
           // $params = array('unidad' => $res);
           // $this->render(__CLASS__, $params);
     }

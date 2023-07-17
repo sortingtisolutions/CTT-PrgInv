@@ -176,7 +176,6 @@ function setting_table() {
     });
 }
 
-
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
     pj = dt;

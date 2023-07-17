@@ -1,5 +1,4 @@
 -- ************** FUNCIONES A CREAR ***********************
-
 -- ************** fun_buscarentas ***********************
 DELIMITER //
 CREATE OR REPLACE DEFINER=`root`@`localhost` FUNCTION `fun_buscarentas`(`lval` VARCHAR(15)) RETURNS INT

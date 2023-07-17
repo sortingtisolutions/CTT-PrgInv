@@ -23,13 +23,12 @@
 								</div>
 							</div>
 
-                  
 							<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                           <div class="custom-file">
-                           <input type="file"  class="custom-file-input form-control form-control-sm" id="cargaFiles" >
+                           	<div class="custom-file">
+                           		<input type="file"  class="custom-file-input form-control form-control-sm" id="cargaFiles" >
                            </div>
-                        </div>
+                           </div>
 							</div>
 
 							<div class="row">
@@ -104,7 +103,6 @@
 			</div>
 	</div>
 </div>
-
 
 <!-- Modal Borrar -->
 <div class="modal fade" id="BorrarDocumentosModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">

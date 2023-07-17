@@ -8,7 +8,6 @@ class WorkInputContentController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new WorkInputContentModel();
@@ -44,22 +43,39 @@ class WorkInputContentController extends Controller
     }
 
     // Lista los productos
-        public function listDetailProds($request_params)
-        {
-            $params =  $this->session->get('user');
-            $result = $this->model->listDetailProds($request_params);
-            $i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-            } else {
-                $res =  '[{"pjt_id":"0"}]';
-            }
-            echo $res;
+    public function listDetailProds($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listDetailProds($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
         }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"pjt_id":"0"}]';
+        }
+        echo $res;
+    }
+
+    public function listSeries($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listSeries($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"ser_id":"0"}]';
+        }
+        echo $res;
+    }
 
         // Lista las series
     public function listReason($request_params)
@@ -79,22 +95,22 @@ class WorkInputContentController extends Controller
         echo $res;
     }
 
-        public function checkSeries($request_params)
-        {
-            $params =  $this->session->get('user');
-            $result = $this->model->checkSeries($request_params);
-            /*$i = 0;
-            while($row = $result->fetch_assoc()){
-                $rowdata[$i] = $row;
-                $i++;
-            }
-            if ($i>0){
-                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
-            } else {
-                $res =  '[{"ser_id":"0"}]';
-            }*/
-            echo $result;
+    public function checkSeries($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->checkSeries($request_params);
+        /*$i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
         }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
+        } else {
+            $res =  '[{"ser_id":"0"}]';
+        }*/
+        echo $result;
+    }
 
 
     public function listSeriesFree($request_params)
@@ -112,6 +128,20 @@ class WorkInputContentController extends Controller
             $res =  '[{"ser_id":"0"}]';
         }
         echo $res;
+    }
+
+    public function createTblResp($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->createTblResp($request_params);
+        echo $result;
+    }
+
+    public function regManteince($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->regManteince($request_params);
+        echo $result;
     }
 
     // Obtiene datos del producto seleccionado

@@ -6,6 +6,7 @@
 <header>
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
+
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
     <div class="contenido">  
@@ -137,8 +138,6 @@
                     <label>Totales </label>
                     <button class="bn btn-ok" id="">$1,945,350</button>
                     </td>
-
-
                 </tr> 
                 <td>
                     <h1></h1>
@@ -151,14 +150,6 @@
                                 <th style="width:  60px">Cantidad</th>
                                 <th style="width:  60px">Status</th>
                                 <th style="width: 350px">Comentarios</th>
-                                <!-- <th style="width: 90px">Otro</th>
-                                <th style="width: 80px">Otro</th>
-                                <th style="width:  50px">Otro</th>
-                                <th style="width: 40px">Otro</th> 
-                                <th style="width: 180px">Otro</th>
-                                <th style="width: 180px">Otro</th>
-                                <th style="width: 100px">Otro</th>
-                                <th style="width: 100px">Otro</th> -->
                             </tr>
                         </thead>
                     <tbody>	

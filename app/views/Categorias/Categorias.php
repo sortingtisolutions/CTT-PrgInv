@@ -13,15 +13,22 @@
                 <!-- Start área de formularios -->
                 <div class=" mvst_panel">
                     <div class="form-group">
-                        <h4 id="titulo">Nuevo Catalogo</h4>  
-                        <form id="formCategoria" class="row g-3 needs-validation" novalidate>
+                        <h4 id="titulo">Nuevo Catalogo</h4>
 
+                        <form id="formCategoria" class="row g-3 needs-validation" novalidate>
                             <div class="row">
                                 <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                     <input id="NomCategoria" name="NomCategoria" type="text" class="form-control form-control-sm" style="text-transform:uppercase" required >
                                     <label for="NomCategoria">Nombre Catálogo</label>
                                 </div>
                                 <input id="IdCategoria" name="IdCategoria" type="hidden" >
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                    <input id="numCategoria" name="numCategoria" type="number" class="form-control form-control-sm" maxlength="2" required >
+                                    <label for="numCategoria">Numero al Catálogo (Id)</label>
+                                </div>
                             </div>
 
                             <div class="row">
@@ -34,13 +41,23 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-6">
-                                    <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 1rem !important;" id="GuardarCategoria">Guardar</button>
-                                </div>
-                                <div class="col-6">
-                                    <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
+                                <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+                                    <select id="selectRowArea"  name="selectRowArea"  class="form-select form-select-sm" required>
+                                            <option value="0" selected>&nbsp;</option>
+                                    </select>
+                                    <label for="selectRowArea" class="form-label">Area del catalogo</label>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="GuardarCategoria">Guardar</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="LimpiarFormulario">Limpiar</button>
+                                </div>
+                            </div>
+                            
                         </form>
                     </div>
                 </div>
@@ -60,6 +77,7 @@
                                             <th style="width: auto">Nombre</th>
                                             <th style="width: auto">Almacen</th>
                                             <th style="width: 30px">Existencias</th>
+                                            <th style="width: 30px">Area</th>
                                         </tr>
                                     </thead>
                                 </table>

@@ -32,6 +32,7 @@
                             <label for="fechaInitial">Fecha Inicial</label>
                         </div>
                     </div>
+                    
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                             <input id="fechaEnd" name="fechaEnd" type="date"  class="form-control form-control-sm" style="text-transform: uppercase" >

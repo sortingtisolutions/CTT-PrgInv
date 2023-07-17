@@ -11,7 +11,6 @@
             
         <div class="row mvst_group">
 
-
             <div class="mvst_panel">
                 <div class="form-group">
                 <h4 id="titulo">Salida de Productos</h4>
@@ -45,8 +44,6 @@
                             <div class="list-items" id="listProducts"></div>
                         </div>
                     </div>
-
-                    
 
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">

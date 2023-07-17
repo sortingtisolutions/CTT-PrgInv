@@ -1,7 +1,6 @@
 <?php 
   	defined('BASEPATH') or exit('No se permite acceso directo'); 
-	//   require ROOT . FOLDER_PATH . "/app/assets/header.php";
-	  
+	//   require ROOT . FOLDER_PATH . "/app/assets/header.php";  
 ?>
 <!-- CUERPO DE LA PAGINA -->
 <!DOCTYPE html>
@@ -10,7 +9,6 @@
 		<!-- Required meta tags -->
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-
 		<!-- Bootstrap CSS -->
 		<link
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
@@ -47,7 +45,7 @@
 						<img src="<?=  PATH_ASSETS . 'img/logo.png' ?>" alt="logo CTT Exr & Rentals" class="img-fluid logo" />
 						<div class="row">
 							<div style="height:10px;"></div>
-							<span><small> Version Web 1.1.16</small></span>
+							<span><small> Version Web 1.2.0</small></span>
 						</div>
 					</div>
 					

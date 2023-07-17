@@ -151,10 +151,7 @@ function putProjectsCfdi(dt) {
 function build_data_cfdi(dt) {
    // console.log(dt);
    if(dt[0].pjt_id>0){
-
-   
    let tabla = $('#tblProjectCfdi').DataTable();
-   
    tabla.rows().remove().draw();
    $.each(dt, function (v, u) {
        tabla.row
@@ -347,34 +344,4 @@ function build_data_structure(pr) {
        "cto" :  "${el[18]}",
        "nec" :  "${el[19]}"
    }]`;
-   // console.log(' Antes de Insertar', par);
-   // save_exchange(par);
-
-   
-   // let largo = $('#tblExchanges tbody tr td').html();
-   // par = JSON.parse(par);
-   // let tabla = $('#tblExchanges').DataTable();
-   // tabla.row
-   //     .add({
-   //         editable: `<i class="fas fa-times-circle kill"></i>`,
-   //         prod_sku: `<span class="hide-support" id="SKU-${par[0].sersku}"></span>${par[0].sersku.slice(0, 10)}-${par[0].sersku.slice(10, 13)}`,
-   //         prodname: par[0].prodnme,
-   //         prodcant: `<span>${par[0].prodqty}</span>`,
-   //         prodcost: par[0].sercost, 
-   //         prodseri: '<input class="serprod fieldIn" type="text" id="PS-' + par[0].prodser + '" value="' + par[0].prodser + '">',
-   //         prodpeti: par[0].serpetimp,
-   //         prodimpo: '<input class="sercpet fieldIn" type="text" id="PS-' + par[0].sercostimp + '" value="' + par[0].sercostimp + '">',
-   //         costtota: par[0].sercosttot,
-   //         codexcsc: par[0].excodsr,
-   //         stnamesc: par[0].stnmesr,
-   //         provname: par[0].provname,
-   //         factname: par[0].factname,
-   //         prodmarc: par[0].serbran,
-   //         numecono: '<input class="serecono fieldIn" type="text" id="PS-' + par[0].sernumeco + '" value="' + par[0].sernumeco + '">',
-   //         comments: `<div>${par[0].comment}</div>`
-   //     })
-   //     .draw();
-
-   // $(`#SKU-${par[0].sersku}`).parent().parent().attr('data-content', par[0].support);
-
 }

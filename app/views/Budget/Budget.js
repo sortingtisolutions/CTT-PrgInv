@@ -23,7 +23,6 @@ function inicial() {
     getEdosRepublic();
     getProjectTypeCalled();
     discountInsuredEvent();
-
 }
 
 function stickyTable() {
@@ -42,9 +41,8 @@ function discountInsuredEvent() {
         .unbind('click')
         .on('click', function () {
             let elm = $(this);
-            console.log(elm.offset().left);
-            console.log(elm.offset().top);
-
+            // console.log(elm.offset().left);
+            // console.log(elm.offset().top);
             let posLeft = elm.offset().left - 90;
             let posTop = elm.offset().top - 80;
 
@@ -146,7 +144,6 @@ function eventsAction() {
             let item = $(this).attr('data-option');
             glbSec = $(this).attr('data-option');
             $(this).hide();
-
             $(`#SC${item}`).show();
         });
 
@@ -155,7 +152,6 @@ function eventsAction() {
         .unbind('click')
         .on('click', function () {
             let item = $(this).parents('tbody').attr('id');
-
             showListProducts(item);
         });
 
@@ -216,21 +212,18 @@ function eventsAction() {
             getProjectsParents();
             newProject();
         });
-
     // Agrega nueva cotización
     $('#newQuote')
         .unbind('click')
         .on('click', function () {
             window.location = 'Budget';
         });
-
     // Agrega nueva cotización
     $('#newQuote')
         .unbind('click')
         .on('click', function () {
             window.location = 'Budget';
         });
-
     // Agrega nueva cotización
     $('.toSave')
         .unbind('click')
@@ -250,7 +243,6 @@ function eventsAction() {
                 printBudget(verId);
             }
         });
-
     // Busca los elementos que coincidan con lo escrito el input de cliente y poyecto
     $('.inputSearch')
         .unbind('keyup')
@@ -260,7 +252,7 @@ function eventsAction() {
             let txt = id.val().toUpperCase();
             sel_items(txt, obj);
         });
-
+    // Limpia campo
     $('.cleanInput')
         .unbind('click')
         .on('click', function () {
@@ -306,7 +298,7 @@ function expandCollapseSection() {
     }
 }
 
-/** OBTENCION DE DATOS */
+/**************** OBTENCION DE DATOS *****************/
 /**  Obtiene el listado de proyectos */
 function getProjects(pjId) {
     swpjt = 0;
@@ -365,7 +357,6 @@ function getProductsSub(word, dstr, dend) {
     var selector = putProductsSub;
     fillField(pagina, par, tipo, selector);
 }
-
 /**  Obtiene el listado de cotizaciones */
 function getBudgets() {
     var pagina = 'Budget/listBudgets';
@@ -473,7 +464,7 @@ function putExistTrip(dt) {
     // console.log('putExistTrip',theredaytrip)
 }
 
-/** LLENA DE DATOS */
+/******************* LLENA DE DATOS **********************/
 /**  Llena el listado de proyectos */
 function putProjects(dt) {
     if (dt[0].pjt_id > 0) {

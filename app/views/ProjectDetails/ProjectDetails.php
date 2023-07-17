@@ -51,6 +51,7 @@
                 <ul></ul>
             </div>
         </div>
+        
         <div class="invoice__box-table" id="invoiceTable">
             <table >
             <!-- HEADERS DE LA TABLA DE COTIZACIONES START -->

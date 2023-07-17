@@ -3,6 +3,7 @@
 	require ROOT . FOLDER_PATH . "/app/assets/header.php";
 ?>
 <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.dataTables.min.css">
+
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
@@ -16,11 +17,9 @@
                     
                     <div class="row rowTop">
                         <h1>Listado de Clientes con un Proyecto</h1>
-                        
                         <!-- <select id="txtCategoryList" class="topList">
                             <option value="0">SELECCIONA CATÁLOGO</option>
                         </select> -->
-                        
                     </div>
                     <div id="dvProducts"></div>
                     <table class="display nowrap"  id="tblCustomers" style="min-width: 1700px; font-size: 0.7rem">

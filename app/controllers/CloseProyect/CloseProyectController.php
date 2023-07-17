@@ -150,7 +150,7 @@ class CloseProyectController extends Controller
         echo $res;
     } 
 
-// Obtiene el folio del movimiento
+    // Obtiene el folio del movimiento
 	public function NextExchange($request_params)
 	{
 		$params =  $this->session->get('user');
@@ -159,7 +159,7 @@ class CloseProyectController extends Controller
         echo $res;
 	} 
 
-// Registra los movimientos entre almacenes
+    // Registra los movimientos entre almacenes
     public function SaveExchange($request_params)
     {
         $params =  $this->session->get('user');

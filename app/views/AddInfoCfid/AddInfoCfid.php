@@ -74,6 +74,7 @@
 									<label for="txtQuantity">Cantidad</label>
 								</div>
 							</div>
+							
 							<div style="height:5px;"></div> 
 							<div class="row">
 								<div class="col-6">

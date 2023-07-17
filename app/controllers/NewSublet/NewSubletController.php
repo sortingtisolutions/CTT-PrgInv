@@ -24,7 +24,6 @@ class NewSubletController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-
 // LISTA LOS TIPOS DE MOVIMIENTOS
     public function listExchange()
     {

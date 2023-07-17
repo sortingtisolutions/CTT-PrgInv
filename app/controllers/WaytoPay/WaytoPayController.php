@@ -7,8 +7,8 @@
     class WaytoPayController extends Controller
     {
 
-        private $session;
-        public $model;
+    private $session;
+    public $model;
 
         public function __construct()
         {
@@ -43,8 +43,7 @@
             echo $res;	
         }
 
-
-// Graba la nueva subcategoria
+    // Graba la nueva subcategoria
         public function SaveSubcategory($request_params)
         {
             $result = $this->model->SaveSubcategory($request_params);
@@ -52,7 +51,7 @@
             echo $res;	
         }
 
-// Actualiza la subcategorias seleccionada
+    // Actualiza la subcategorias seleccionada
         public function UpdateSubcategory($request_params)
         {
             $params = $this->session->get('user');
@@ -61,7 +60,7 @@
             echo $res;
         }
 
-// Actualiza el status de la subcategorias a eliminar
+    // Actualiza el status de la subcategorias a eliminar
         public function DeleteSubcategory($request_params)
         {
             $params = $this->session->get('user');

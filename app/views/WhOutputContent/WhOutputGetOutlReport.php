@@ -9,7 +9,6 @@ $verId = $_GET['v'];
 $usrId = $_GET['u'];
 $uname = $_GET['n'];
 
-
 $conkey = decodificar($_GET['h']) ;
 
 $h = explode("|",$conkey);

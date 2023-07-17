@@ -14,6 +14,7 @@
         <!-- Start Panel de control lateral -->
             <div class="mvst_panel">
                 <div class="form-group">
+                    
                     <div class="row">
                         <h4>Nueva subcategoria</h4>
 

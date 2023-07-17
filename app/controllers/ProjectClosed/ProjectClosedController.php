@@ -8,7 +8,6 @@ class ProjectClosedController extends Controller
     private $session;
     public $model;
 
-
     public function __construct()
     {
         $this->model = new ProjectClosedModel();
@@ -24,9 +23,6 @@ class ProjectClosedController extends Controller
         $this->render(__CLASS__, $params);
     }
 
-
-
-    
 /* -- Listado de proyectos  ------------------------------------------------------------------ */
     public function listProjects($request_params)
     {

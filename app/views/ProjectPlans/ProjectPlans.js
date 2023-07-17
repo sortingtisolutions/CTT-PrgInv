@@ -42,7 +42,6 @@ function discountInsuredEvent() {
         .unbind('click')
         .on('click', function () {
             let elm = $(this);
-
             let posLeft = elm.offset().left - 90;
             let posTop = elm.offset().top - 80;
 

@@ -235,17 +235,13 @@ function getPerfilesTable() {
                row.prf_id +
                ')" type="button" class="btn btn-default btn-icon-delete" aria-label="Left Align"><i class="fas fa-times-circle kill"></i></button>' +
                '</td>' +
-               "<td class='dtr-control text-center'>" +
-               row.prf_id +
+               "<td class='dtr-control text-center'>" + row.prf_id +
                '</td>' +
-               '<td >' +
-               row.prf_name +
+               '<td >' + row.prf_name +
                '</td>' +
-               '<td>' +
-               row.prf_code +
+               '<td>' + row.prf_code +
                '</td>' +
-               '<td>' +
-               row.prf_description +
+               '<td>' + row.prf_description +
                '</td>' +
                '</tr>';
             $('#tablaPerfilesRow').append(renglon);
@@ -282,7 +278,6 @@ function getPerfilesTable() {
                   //   className: 'btnDatableAdd',
                   text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
                },
-
                {
                   //Botón para imprimir
                   extend: 'print',

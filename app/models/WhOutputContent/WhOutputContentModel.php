@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class WhOutputContentModel extends Model
 {
-
     public function __construct()
     {
       parent::__construct();
@@ -18,7 +17,7 @@ class WhOutputContentModel extends Model
                 DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start,
                 DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end,
                 DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y %H:%i ') AS pjt_date_project,
-                pj.pjt_location, cus.cus_name, '1' as analyst, '33' as freelance, pj.pjt_id
+                pj.pjt_location, cus.cus_name, pj.pjt_id
                 FROM ctt_projects AS pj 
                 LEFT JOIN ctt_customers_owner AS cuw ON cuw.cuo_id=pj.cuo_id
                 LEFT JOIN ctt_customers AS cus ON cus.cus_id=cuw.cus_id
@@ -33,10 +32,22 @@ class WhOutputContentModel extends Model
     public function listDetailProds($params)
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
+        $empid = $this->db->real_escape_string($params['empid']);
 
-        $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
-                pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
-                FROM ctt_projects_content WHERE pjt_id=$pjt_id order by pjtcn_order;";
+        if ($empid==1){
+            $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
+            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
+            FROM ctt_projects_content WHERE pjt_id=$pjt_id order by pjtcn_order;";
+        }
+        else{
+            $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
+            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order,SUBSTR(pjc.pjtcn_prod_sku,1,2)
+            FROM ctt_projects_content AS pjc
+            INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
+            INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
+            WHERE pjc.pjt_id=$pjt_id AND em.emp_id=$empid
+            ORDER BY pjc.pjtcn_order;";
+        }
         return $this->db->query($qry);
     }
 

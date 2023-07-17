@@ -13,8 +13,6 @@ $(document).ready(function () {
 function inicial() {
     getExchange();
     getStores();
-    //getSuppliers();
-    //getInvoice();
     getCoins();
     getCategories();
     setting_table();
@@ -123,23 +121,7 @@ function getStores() {
     var selector = putStores;
     fillField(pagina, par, tipo, selector);
 }
-// Solicita los provedores
-function getSuppliers() {
-    var pagina = 'MoveStoresIn/listSuppliers';
-    var par = `[{"store":""}]`;
-    var tipo = 'json';
-    //var selector = putSuppliers;
-    var selector = putSupplierList;
-    fillField(pagina, par, tipo, selector);
-}
-// Solicita los documentos factura
-function getInvoice(id) {
-    var pagina = 'MoveStoresIn/listInvoice';
-    var par = `[{"extId":"${id}"}]`;
-    var tipo = 'json';
-    var selector = putInvoiceList;
-    fillField(pagina, par, tipo, selector);
-}
+
 // Solicita los documentos factura
 function getCoins() {
     var pagina = 'MoveStoresIn/listCoins';
@@ -165,14 +147,7 @@ function getProducts(catId) {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
-// Solicita los movimientos acurridos
-/*function getExchanges() {
-    var pagina = 'MoveStoresIn/listExchanges';
-    var par = `[{"folio":"${folio}"}]`;
-    var tipo = 'json';
-    var selector = putExchanges;
-    fillField(pagina, par, tipo, selector);
-} */
+
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
 function putTypeExchange(dt) {

@@ -6,10 +6,9 @@
     <?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
 <style>
-    
-.hiddenElement {
-    visibility: hidden !important;
-}
+    .hiddenElement {
+        visibility: hidden !important;
+    }
 </style>
 
 <!-- CUERPO DE LA PAGINA -->

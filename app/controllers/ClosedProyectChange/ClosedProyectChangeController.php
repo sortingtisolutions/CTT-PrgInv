@@ -97,7 +97,7 @@ class ClosedProyectChangeController extends Controller
             $res = $result;
             echo $res;
         } 
-// Guarda detalle de la venta
+    // Guarda detalle de la venta
         public function SaveSaleDetail($request_params)
         {
             $params =  $this->session->get('user');
@@ -105,7 +105,8 @@ class ClosedProyectChangeController extends Controller
             $res = $result;
             echo $res;
         } 
-// Guarda Comentario
+
+    // Guarda Comentario
         public function SaveComments($request_params)
         {
             $params =  $this->session->get('user');
@@ -116,7 +117,7 @@ class ClosedProyectChangeController extends Controller
             $res = $result;
             echo $res;
         } 
-// Guarda el archivo de venta
+    // Guarda el archivo de venta
         public function saveSaleList($request_params)
         {
             $params =  $this->session->get('user');

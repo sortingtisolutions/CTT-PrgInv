@@ -16,9 +16,7 @@
                     
                     <div class="row rowTop">
                         <h1>Proyectos</h1>
-                        
-                        
-                        
+                          
                     </div>
                     <div id="dvProjects"></div>
                     <table class="display compact nowrap"  id="tblProjects" >

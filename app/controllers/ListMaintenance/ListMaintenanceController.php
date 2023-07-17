@@ -25,7 +25,6 @@
             $this->render(__CLASS__, $params);
         }
 
-
 // Obtiene la lista de subcategorias activas
         public function listWaytoPay($request_params)
         {

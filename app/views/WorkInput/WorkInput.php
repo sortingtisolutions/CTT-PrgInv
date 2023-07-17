@@ -14,6 +14,7 @@
                 <div class="mvst_list tblProdMaster">
                     <div class="row rowTop">
                         <h1>Seleccion de Entrada de Proyecto</h1>
+                        
                      </div>
                     <table class="display compact nowrap"  id="tblProyects" style="min-width: 1000px">
                         <thead>

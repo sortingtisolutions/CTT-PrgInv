@@ -16,12 +16,14 @@
                 <div class="form-group">
                     <div class="form_primary">
                         <h4 class="mainTitle">Usuarios de los Proyectos</h4>
+
 						<div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
                                 <input id="txtProjectName" type="text" class="form-control form-control-sm" style="font-size:10px; background:#EAEDED">
                                 <label for="txtProjectName">Nombre del Proyecto</label>
                             </div>
                         </div>
+
                         <div style="height:15px;"></div> <!-- Agregar un espacio -->
                         <div class="row">
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
@@ -97,12 +99,14 @@
             <div class="modal-header ">
             </div>
             <div class="modal-body" style="padding: 0px !important;">
+            
             <div class="row">
                 <input type="hidden" class="form-control" id="txtIdClosure" aria-describedby="basic-addon3">
                 <div class="col-12 text-center">
                     <span class="modal-title text-center" style="font-size: 1.2rem;" id="BorrarPerfilLabel">¿Estas seguro de actualizar usuarios?</span>
                 </div>
             </div>
+            
             </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
@@ -149,7 +153,6 @@
         </div>
     </div>
 <!-- end -->
-
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>

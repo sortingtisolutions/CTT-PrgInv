@@ -174,7 +174,6 @@ $html = '
     <!-- End Datos de identificación  -->
 ';
 
-
 /* Tabla de equipo base -------------------------  */
     if ($equipoBase == '1'){
         $html .= '

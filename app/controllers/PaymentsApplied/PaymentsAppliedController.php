@@ -25,7 +25,6 @@
             $this->render(__CLASS__, $params);
         }
 
-
 // Obtiene la lista de subcategorias activas
         public function listPaymentsApplied($request_params)
         {

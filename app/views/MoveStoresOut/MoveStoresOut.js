@@ -19,13 +19,10 @@ function inicial() {
     eventsAction();
     setting_table();
 
-
     $('#btn_exchange').on('click', function () {
-        
         let id = $('#boxIdProducts').val();
         // console.log('id-val', id);
         exchange_apply(id);
-
     });
 }
 
@@ -62,14 +59,6 @@ function getProducts(strId,word) {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
-
-/*function getProducts(catId) {
-    var pagina = 'MoveStoresOut/listProducts';
-    var par = `[{"catId":"${catId}"}]`;
-    var tipo = 'json';
-    var selector = putProducts;
-    fillField(pagina, par, tipo, selector);
-} */
 
 // Solicita los movimientos acurridos
 function getExchanges() {

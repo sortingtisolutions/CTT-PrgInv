@@ -9,10 +9,7 @@
 <!-- CUERPO DE LA PAGINA -->
 <div class="container-fluid">
 	<div class="contenido">
-			
 		<div class="row mvst_group">
-
-
 			<div class="mvst_panel">
 				<div class="form-group">
 
@@ -28,8 +25,7 @@
 							<label for="txtStoreSource" class="form-label">Almacen Origen</label>
 						</div>
 					</div>
-
-										
+				
 					<div class="row" hidden>
 						<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 							<select id="txtStoreTarget" class="form-select form-select-sm"><option value="0" selected>Selecciona almacen</option></select>
@@ -63,8 +59,6 @@
 									<label for="selectTipoMedida" class="form-label">Tamaño Codigos de Barras</label>
 								</div>
 							</div>
-
-
 					<!-- <div class="row">
 						<div class="col-md-7 col-lg-7 col-xl-7 mb-2 form-floating">
 							Cantidad disponible <span id="txtQuantityStored" class="notify">&nbsp;</span>
@@ -75,10 +69,6 @@
 						</div>
 					</div> -->
 					
-
-
-
-
 <!-- 					<div class="row">
 						<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 							<textarea class="form-control form-control-sm" id="txtComments" style="height: 120px" rows="3"></textarea>
@@ -103,13 +93,6 @@
 							<th style="width:  30px"></th>
 							<th style="width:  80px">SKU</th>
 							<th style="width: 350px">Producto</th>
-<!-- 							<th style="width:  60px">Cantidad</th>
- --><!-- 							<th style="width: 100px">No. Serie</th>
-							<th style="width:  50px">Tipo Origen</th>
-							<th style="width: 150px">Almacen Origen</th>
-							<th style="width:  50px">Tipo Destino</th>
-							<th style="width: 150px">Almacen Destino</th>
-							<th style="width: 350px">Nota</th> -->
 						</tr>
 					</thead>
 					<tbody>	
@@ -118,15 +101,9 @@
 	
 				</table>
 			</div>
-
-
-		
-			
 		</div>
-
 	</div>
 </div>
-
 
 
 <div class="modal fade" tabindex="-1" id="modalCodigoBarra">

@@ -92,7 +92,7 @@ function UnSelectRowTable() {
     }, 10);
 }
 
-//BORRAR  * *
+//BORRAR  *********
 function DeletPuesto() {
     var location = 'Puestos/DeletePuesto';
     IdPuesto = $('#IdPuestoBorrar').val();

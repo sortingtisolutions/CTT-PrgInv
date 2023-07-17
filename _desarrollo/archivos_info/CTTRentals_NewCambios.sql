@@ -58,7 +58,6 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
-
 CREATE TABLE `ctt_suppliers` (
 	`sup_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID del proveedor',
 	`sup_business_name` VARCHAR(100) NULL DEFAULT '' COMMENT 'Nombre de la empresa' COLLATE 'utf8mb4_general_ci',
@@ -242,3 +241,15 @@ ALTER TABLE `ctt_projects_content`
 ALTER TABLE `ctt_projects_version`
 	ADD COLUMN `pjtvr_action` VARCHAR(2) NOT NULL DEFAULT '' COMMENT 'accion a seguir' COLLATE 'utf8mb4_general_ci' AFTER `pjt_id`;
 
+ALTER TABLE `ctt_categories`
+	ADD COLUMN `are_id` INT(11) NULL DEFAULT NULL COMMENT 'Id relacion con el area' AFTER `str_id`;
+
+ALTER TABLE `ctt_categories`
+	CHANGE COLUMN `cat_id` `cat_id` INT(11) NOT NULL COMMENT 'ID del catálogo' FIRST;
+
+ALTER TABLE `ctt_categories`
+	CHANGE COLUMN `str_id` `str_id` INT(11) NULL DEFAULT 0 COMMENT 'Id Relacion ctt_stores' AFTER `cat_status`,
+	CHANGE COLUMN `are_id` `are_id` INT(11) NULL DEFAULT 0 COMMENT 'Id relacion con el area' AFTER `str_id`;
+
+ALTER TABLE `ctt_project_change_reason`
+	ADD COLUMN `pjtcr_code_stage` VARCHAR(3) NULL DEFAULT '' COMMENT 'Codigo del motivo del cambio de estatus' COLLATE 'utf8mb4_general_ci' AFTER `pjtcr_description`;

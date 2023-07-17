@@ -8,7 +8,6 @@ class CustomersController extends Controller
 	private $session;
 	public $model;
 
-
 		public function __construct()
 		{
 			$this->model = new CustomersModel();
@@ -42,7 +41,6 @@ class CustomersController extends Controller
 			}
 			echo $res;
 		}
-
 
 	// Lista las subcategorias
 		public function listSubcategories($request_params)

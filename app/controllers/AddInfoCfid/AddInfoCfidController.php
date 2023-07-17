@@ -5,7 +5,6 @@
 
 	class AddInfoCfidController extends Controller
 	{
-
 		private $session;
 		public $model;
 
@@ -62,9 +61,6 @@
 			echo $res;
 		}
 
-
-
-		
 		/* public function SaveProveedores($request_params)
 		{
 		  if($request_params['IdProveedor'] == ""){

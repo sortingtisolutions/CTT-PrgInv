@@ -125,6 +125,24 @@ function getExchanges() {
     var selector = putExchanges;
     fillField(pagina, par, tipo, selector);
 }
+/** Graba intercambio de almacenes */
+function save_exchange(pr) {
+    //   console.log(pr);
+    var pagina = 'MoveStoresOut/SaveExchange';
+    var par = pr;
+    var tipo = 'html';
+    var selector = exchange_result;
+    fillField(pagina, par, tipo, selector);
+}
+
+function update_store(ap) {
+    // console.log(ap);
+    var pagina = 'MoveStoresOut/UpdateStores';
+    var par = ap;
+    var tipo = 'html';
+    var selector = updated_stores;
+    fillField(pagina, par, tipo, selector);
+}
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
 function putTypeExchange(dt) {
@@ -159,7 +177,6 @@ function putStores(dt) {
             $('#txtStoreSource').append(H);
             $('#txtStoreTarget').append(H);
         });
-       
     }
 
     $('#txtStoreSource').on('change', function () {
@@ -180,6 +197,7 @@ function putProducts(dt) {
     });
     drawProducts();
 }
+
 // Dibuja los productos
 function drawProducts() {
    /*  $('.list-item').addClass('hide-items');
@@ -440,25 +458,6 @@ function build_update_store_data(pr) {
             ]`;
 
     update_store(par);
-}
-
-/** Graba intercambio de almacenes */
-function save_exchange(pr) {
-    //   console.log(pr);
-    var pagina = 'MoveStoresOut/SaveExchange';
-    var par = pr;
-    var tipo = 'html';
-    var selector = exchange_result;
-    fillField(pagina, par, tipo, selector);
-}
-
-function update_store(ap) {
-    // console.log(ap);
-    var pagina = 'MoveStoresOut/UpdateStores';
-    var par = ap;
-    var tipo = 'html';
-    var selector = updated_stores;
-    fillField(pagina, par, tipo, selector);
 }
 
 function exchange_result(dt) {}

@@ -141,13 +141,12 @@ function put_products(dt) {
         let H = '';
         $.each(dt, function (v, u) {
             H = `
-            <li data_indx ="${v}" data_content="${u.ser_sku}|${u.prd_name.replace(/"/g, '')}">
-                <div class="prodLevel">${u.ser_sku}</div>
-                <div class="prodName">${u.prd_name}</div>
-                <div class="prodLevel">${u.prd_price}</div>
-                <div class="prodStock">${u.stock}</div>
-            </li>
-        `;
+                <li data_indx ="${v}" data_content="${u.ser_sku}|${u.prd_name.replace(/"/g, '')}">
+                    <div class="prodLevel">${u.ser_sku}</div>
+                    <div class="prodName">${u.prd_name}</div>
+                    <div class="prodLevel">${u.prd_price}</div>
+                    <div class="prodStock">${u.stock}</div>
+                </li> `;
 
             $('.list_products ul').append(H);
         });
@@ -167,25 +166,24 @@ function put_products(dt) {
 function fill_dinamic_table() {
     caching_events('fill_dinamic_table');
     let H = `
-    
-    <table class="table_control" id="tblControl" style="width: 900px;">
-        <thead>
-            <tr>
-                <th rowspan="2" class="w5 fix product">CODIGO</th>
-                <th colspan="3" class="zone_01 headrow" >&nbsp;</th>
-            </tr>
-            <tr class="headrow">
-                <th class="w4 zone_01" >CANTIDAD </th>
-                <th class="w3 zone_01" >DESCRIPCION </th>
-                <th class="w3 zone_03" >PRECIO</th>
-                <th class="w3 zone_03" >DESCUENTO</th>
-                <th class="w3 zone_03" >TOTAL</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-        </tbody>
-    </table>
+        <table class="table_control" id="tblControl" style="width: 900px;">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="w5 fix product">CODIGO</th>
+                    <th colspan="3" class="zone_01 headrow" >&nbsp;</th>
+                </tr>
+                <tr class="headrow">
+                    <th class="w4 zone_01" >CANTIDAD </th>
+                    <th class="w3 zone_01" >DESCRIPCION </th>
+                    <th class="w3 zone_03" >PRECIO</th>
+                    <th class="w3 zone_03" >DESCUENTO</th>
+                    <th class="w3 zone_03" >TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
     `;
     $('#tbl_dynamic').html(H);
     tbldynamic('tbl_dynamic');

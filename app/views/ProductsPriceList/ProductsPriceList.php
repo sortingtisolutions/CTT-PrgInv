@@ -12,7 +12,8 @@
         <div class="row mvst_group">
             <div class="mvst_list tblProdMaster">
                 <div class="row rowTop">
-                    <h1>Lista de precios</h1>
+                <h1>Lista de precios</h1>
+                
                     <select id="txtCategoryList" class="topList"></select>
                 </div>
                 <table class="display compact nowrap"  id="tblPriceList">

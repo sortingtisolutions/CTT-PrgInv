@@ -189,7 +189,6 @@
                             <input id="txtSkuSerie" type="text" class="form-control form-control-sm text-center number required skuserie" data-mesage="Debes Agregar el precio" >
                             <label for="txtSkuSerie">Sku Serie</label>
                         </div>-->
-                        
                     </div>
                     <!-- Costo Importacion,Pedimento 5,4  -->
                     <!--<div class="row pos3 ">-->
@@ -237,7 +236,6 @@
                     </div>
 
                     <div style="height:10px;"></div> <!-- Agregar un espacio -->
-
                     <!-- Boton posición 4 -->
                         <div class="row pos1 ">
                             <div class="col-md-12 mb-5">

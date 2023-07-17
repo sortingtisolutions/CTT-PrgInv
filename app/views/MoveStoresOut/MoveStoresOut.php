@@ -56,6 +56,7 @@
                             <label for="txtComments">Comentarios</label>
                         </div>
                     </div>
+                    
                     <div class="row">
                         <div class="col-md-12 mb-5">
                             <button id="btn_exchange" type="button" class="btn btn-sm btn-primary" >Agregar</button>

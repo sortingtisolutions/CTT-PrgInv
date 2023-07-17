@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS `ctt_accesories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Productos o accesorios dependientes de otros productos';
 
 
-
 /* ACCIONES  */
 DROP TABLE IF EXISTS `ctt_actions`;
 CREATE TABLE IF NOT EXISTS `ctt_actions` (
@@ -22,7 +21,6 @@ CREATE TABLE IF NOT EXISTS `ctt_actions` (
     `mod_id`                    int(11) DEFAULT NULL                            COMMENT 'ID del modulo relacion ctt_module',
   PRIMARY KEY (`acc_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Tabla de tipos de acciones realizadas por un usuario dentro del sistema';
-
 
 
 /* BITACORA DE ACTIVIDAD  */

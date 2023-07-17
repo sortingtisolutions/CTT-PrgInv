@@ -116,7 +116,6 @@ function getProveedoresTable() {
 
          let title = 'Proveedores';
          let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
-
          table = $('#ProveedoresTable').DataTable({
             order: [[1, 'asc']],
             select: {
@@ -306,7 +305,6 @@ function DeleteProveedor() {
       },
    }).done(function () {});
 }
-
 
 function SaveProveedores() {
 

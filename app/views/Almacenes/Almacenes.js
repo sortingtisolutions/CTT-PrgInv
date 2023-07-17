@@ -141,7 +141,7 @@ function actionButtons() {
                 default:
             }
         });
-
+    /**  ---- Presenta series relacionadas al almacen ----- */
     $('.toLink')
         .unbind('click')
         .on('click', function () {

@@ -24,8 +24,6 @@ function inicial() {
     }, 2000);
 }
 
-/** ---- PETICIÓN DE DATOS ----*/
-
 /** ---- Obtiene listado de subcategorias */
 function getSubcategories() {
     var pagina = 'WaytoPay/listWaytoPay';

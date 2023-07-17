@@ -94,14 +94,6 @@ function setting_datepicket(selector) {
     });
 }
 
-// Solicita los tipos de movimiento
-/* function getExchange() {
-    var pagina = 'StoreProductsList/listExchange';
-    var par = '[{"parm":""}]';
-    var tipo = 'json';
-    var selector = putTypeExchange;
-    fillField(pagina, par, tipo, selector);
-} */
 // Solicita el listado de almacenes
 function getStores() {
     var pagina = 'StoreProductsList/listStores';

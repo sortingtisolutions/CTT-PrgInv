@@ -34,7 +34,6 @@ function inicial() {
         validator();
     });
 
-
     $('#txtMarca').on('blur', function () {
         validator();
     });
@@ -123,14 +122,6 @@ function getProducts(catId) {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector); */
 }
-// Solicita los movimientos acurridos
-/*function getExchanges() {
-    var pagina = 'NewSublet/listExchanges';
-    var par = `[{"folio":"${folio}"}]`;
-    var tipo = 'json';
-    var selector = putExchanges;
-    fillField(pagina, par, tipo, selector);
-} */
 
 // Setea de la tabla
 function setting_table() {

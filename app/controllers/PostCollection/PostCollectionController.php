@@ -26,7 +26,7 @@
         }
 
 
-// Obtiene la lista de subcategorias activas
+    // Obtiene la lista de subcategorias activas
         public function listPostCollection($request_params)
         {
             $result = $this->model->listPostCollection($request_params);
@@ -44,7 +44,7 @@
         }
 
 
-// Graba la nueva subcategoria
+    // Graba la nueva subcategoria
         public function SaveSubcategory($request_params)
         {
             $result = $this->model->SaveSubcategory($request_params);

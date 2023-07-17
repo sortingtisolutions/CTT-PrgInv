@@ -31,7 +31,6 @@ while($row = $res->fetch_assoc()){
 $payform = $items[0]['sal_pay_form'];
 if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO'){$payform = 'TARJETA DE CRÉDITO';}
 
-
 $header = '
 <header>
     <div class="cornisa">
@@ -45,7 +44,6 @@ $header = '
         </table>
     </div>
 </header>';
-
 
 $html = '
 <section>
@@ -67,7 +65,7 @@ $html = '
                             <td class="concept">Cliente:</td>
                             <td class="data">'.  $items[0]['sal_customer_name'] .'</td>
                         </tr>';
-if ($items[0]['pjt_id'] > '0' ){
+    if ($items[0]['pjt_id'] > '0' ){
     
     $html .= '
                         <tr>
@@ -79,15 +77,15 @@ if ($items[0]['pjt_id'] > '0' ){
                             <td class="data">'.  $items[0]['pjt_name'] .'</td>
                         </tr>';
 
-}
+    }
 
-$html .= '
-                        <tr>
-                            <td class="concept">Forma de pago:</td>
-                            <td class="data">'.  $payform .'</td>
-                        </tr>';
+    $html .= '
+                            <tr>
+                                <td class="concept">Forma de pago:</td>
+                                <td class="data">'.  $payform .'</td>
+                            </tr>';
 
-if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO' ){
+    if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO' ){
 
     $html .= '
                         <tr>
@@ -95,9 +93,9 @@ if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO' ){
                             <td class="data">'.  $items[0]['sal_number_invoice'] .'</td>
                         </tr>';
 
-}
+    }
 
-$html .='
+    $html .='
                         <tr>
                             <td class="concept">Almacén:</td>
                             <td class="data">'.  $items[0]['str_name'] .'</td>
@@ -109,7 +107,7 @@ $html .='
         </table>
         <!-- End Datos de identificación  -->';
 
-$html .= '
+    $html .= '
 
 
         <!-- Start Tabla de costo base  -->
@@ -124,15 +122,15 @@ $html .= '
             </thead>
             <tbody>';
 
-for ($i = 0; $i < count($items); $i++){
-    $price = $items[$i]['sld_price'] ;
-    $color = '';
-    if ($items[$i]['sld_situation'] == 'DEVOLUCION'){$price = $price * -1; $color = 'retColor';}
-    $quant = $items[$i]['sld_quantity'] ;
-    $amount = $price * $quant;
-    $subtotal += $amount;
+    for ($i = 0; $i < count($items); $i++){
+        $price = $items[$i]['sld_price'] ;
+        $color = '';
+        if ($items[$i]['sld_situation'] == 'DEVOLUCION'){$price = $price * -1; $color = 'retColor';}
+        $quant = $items[$i]['sld_quantity'] ;
+        $amount = $price * $quant;
+        $subtotal += $amount;
 
-$html .= '
+    $html .= '
                 <tr >
                     <td class="dat-figure prod '. $color .'">'.  $items[$i]['sld_sku'] . ' - ' . $items[$i]['sld_name'] . '</td>
                     <td class="dat-figure pric '. $color .'">' . number_format($price , 2,'.',',') . '</td>
@@ -143,7 +141,7 @@ $html .= '
 
             }
 
-if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO'){
+    if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO'){
 
         
     $iva = $subtotal * .16;
@@ -161,9 +159,9 @@ if ($items[0]['sal_pay_form'] == 'TARJETA DE CREDITO'){
     </tr>';
 
 
-} else {
-    $total = $subtotal;
-}
+    } else {
+        $total = $subtotal;
+    }
 
 $html .= '
 

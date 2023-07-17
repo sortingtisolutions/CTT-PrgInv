@@ -59,7 +59,6 @@ function getServices() {
     var selector = putServices;
     fillField(pagina, par, tipo, selector);
 }
-
 // Solicita las monedas
 function getCoins() {
     var pagina = 'Products/listCoins';
@@ -68,7 +67,6 @@ function getCoins() {
     var selector = putCoins;
     fillField(pagina, par, tipo, selector);
 }
-
 // Solicita las monedas
 function getDocument() {
     var pagina = 'Products/listDocument';
@@ -77,8 +75,7 @@ function getDocument() {
     var selector = putDocuments;
     fillField(pagina, par, tipo, selector);
 }
-
-// Solicita las facturas
+// solicita las facturas
 function getInvoice() {
     var pagina = 'Products/listInvoice';
     var par = '[{"parm":""}]';
@@ -86,7 +83,6 @@ function getInvoice() {
     var selector = putInvoice;  // putInvoiceList
     fillField(pagina, par, tipo, selector);
 }
-
 /** +++++  Obtiene los productos de la base */
 function getProducts(catId) {
     var pagina = 'Products/listProducts';
@@ -95,6 +91,7 @@ function getProducts(catId) {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
+/** +++++   */
 function getListProducts() {
     var pagina = 'Products/listProducts2';
     var par = `[{"store":""}]`;
@@ -102,7 +99,6 @@ function getListProducts() {
     var selector = putProductsList;
     fillField(pagina, par, tipo, selector);
 }
-
 /** +++++  Obtiene las series de un producto seleccionado */
 function getSeries(prdId) {
     var pagina = 'Products/listSeries';

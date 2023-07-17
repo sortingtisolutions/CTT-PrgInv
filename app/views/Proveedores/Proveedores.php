@@ -13,6 +13,7 @@
 				<div class="mvst_panel">
 					<div class="form-group">
 						<h5 id="titulo">Nuevo Proveedor</h4>  
+						
 						<form id="formProveedor" class="row g-3 needs-validation" novalidate>
 
 							<div class="row" hidden>

@@ -324,9 +324,7 @@ function returnApply() {
             "storId" : "5"
         }]
         `;
-
-            console.log(par);
-
+            // console.log(par);
             var pagina = 'ProductsSalablesList/SaveReturn';
             var tipo = 'html';
             var selector = setReturn;

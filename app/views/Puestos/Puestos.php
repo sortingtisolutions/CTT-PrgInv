@@ -11,7 +11,8 @@
 				<!-- Start área de formularios -->
 				<div class="mvst_panel" style="width:300px; background-color: #f8f2e2">
 					<div class="form-group">
-						<h4 id="titulo">Nuevo Puesto</h4>  
+						<h4 id="titulo">Nuevo Puesto</h4> 
+						 
 						<form id="formPuestos" class="row g-3 needs-validation" novalidate>
 
 							<div class="row" hidden>

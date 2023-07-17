@@ -153,7 +153,6 @@ function getProjectContent(pjtId) {
         activeIcons();
     }
 
-
 function findExpenda(pjtId) {
     let data = [
         { pjtId: pjtId, },
@@ -180,7 +179,6 @@ function findExpenda(pjtId) {
 }
 
 function saveDocumentClosure() {
-    
         let cloTotProy = $('#totProject').val();
         let cloTotMaint = $('#totMaintenance').val();
         let cloTotExpen = $('#totExpendab').val();
@@ -218,7 +216,6 @@ function resSaveClosure(dt) {
     /* $('#CustomerModal .btn_close').trigger('click');
     activeIcons(); */
 }
-
 
 function findMaintenance(pjtId) {
     let cfr = 0;

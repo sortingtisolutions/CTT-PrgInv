@@ -14,6 +14,7 @@ function inicial() {
         settingTable();
         getCategories();
         getStores();
+        getAreas();
         fillCategories();
         confirm_alert();
     } else {
@@ -42,7 +43,6 @@ function settingTable() {
                 footer: true,
                 title: title,
                 filename: filename,
-
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-excel"><i class="fas fa-file-excel"></i></button>',
             },
@@ -52,7 +52,6 @@ function settingTable() {
                 footer: true,
                 title: title,
                 filename: filename,
-
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-pdf"><i class="fas fa-file-pdf"></i></button>',
             },
@@ -62,7 +61,6 @@ function settingTable() {
                 footer: true,
                 title: title,
                 filename: filename,
-
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
             },
@@ -77,9 +75,10 @@ function settingTable() {
         columns: [
             { data: 'editable', class: 'edit', orderable: false },
             { data: 'category', class: 'sku' },
-            { data: 'catname', class: 'category-name' },
+            { data: 'catname',  class: 'category-name' },
             { data: 'storename', class: 'store-name' },
             { data: 'quantity', class: 'quantity' },
+            { data: 'area',     class: 'store-name' },
         ],
     });
 }
@@ -95,10 +94,19 @@ function getCategories() {
 
 function getStores() {
     // Solicita los productos de un almacen seleccionado
-    var pagina = 'Almacenes/GetAlmacenes';
+    var pagina = 'Categorias/GetAlmacenes';
     var par = `[{"cat_id":""}]`;
     var tipo = 'json';
     var selector = putStores;
+    fillField(pagina, par, tipo, selector);
+}
+
+function getAreas() {
+    // Solicita los productos de un almacen seleccionado
+    var pagina = 'Categorias/listAreas';
+    var par = `[{"are_id":""}]`;
+    var tipo = 'json';
+    var selector = putAreas;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -194,11 +202,10 @@ function fillTableCategories(ix) {
             catname: cats[ix].cat_name,
             storename: cats[ix].str_name,
             quantity: `<span class="toLink">${cats[ix].cantidad}</span>`,
+            area: cats[ix].are_name,
         })
         .draw();
-    $('#md' + cats[ix].cat_id)
-        .parents('tr')
-        .attr('id', cats[ix].cat_id);
+    $('#md' + cats[ix].cat_id).parents('tr').attr('id', cats[ix].cat_id);
     get_quantity(cats[ix].cat_id);
     actionButtons();
     deep_loading('C');
@@ -206,20 +213,33 @@ function fillTableCategories(ix) {
 
 function putStores(dt) {
     $.each(dt, function (v, u) {
-        let H = `<option value="${u.str_id}">${u.str_name}</option>`;
-        $('#selectRowAlmacen').append(H);
+        if(u.str_type=='ESTATICOS'){
+            let H = `<option value="${u.str_id}">${u.str_name}</option>`;
+            $('#selectRowAlmacen').append(H);
+        }
+    });
+}
+
+function putAreas(dt) {
+    $.each(dt, function (v, u) {
+            let H = `<option value="${u.are_id}">${u.are_name}</option>`;
+            $('#selectRowArea').append(H);
     });
 }
 
 function saveCategory() {
     var catName = $('#NomCategoria').val();
+    var catId = $('#numCategoria').val();
     var strId = $('#selectRowAlmacen option:selected').val();
-    var par = `
-        [{
-            "cat_name" : "${catName}",
-            "str_id"   : "${strId}"
-        }]`;
+    var areId = $('#selectRowArea option:selected').val();
 
+    var par = `
+        [{  "cat_name" : "${catName}",
+            "str_id"   : "${strId}",
+            "catId"    : "${catId}",
+            "areId"    : "${areId}"
+        }]`;
+    // console.log('par-save',par);
     cats = '';
     var pagina = 'Categorias/SaveCategoria';
     var tipo = 'html';
@@ -243,13 +263,16 @@ function updateCategory() {
     var catId = $('#IdCategoria').val();
     var catName = $('#NomCategoria').val();
     var strId = $('#selectRowAlmacen option:selected').val();
+    var areId = $('#selectRowArea option:selected').val();
+
     var par = `
-        [{
-            "cat_id" : "${catId}",
-            "cat_name" : "${catName}",
-            "str_id"   : "${strId}"
+        [{  "cat_id"    : "${catId}",
+            "cat_name"  : "${catName}",
+            "str_id"    : "${strId}",
+            "areId"     : "${areId}"
         }]`;
 
+    console.log('par-up',par);
     cats = '';
     var pagina = 'Categorias/UpdateCategoria';
     var tipo = 'html';
@@ -269,7 +292,11 @@ function putUpdateCategory(dt) {
         $(`#${cats[ix].cat_id}`)
             .children('td.store-name')
             .html(cats[ix].str_name);
+        $(`#${cats[ix].cat_id}`)
+            .children('td.area')
+            .html(cats[ix].are_name);
         putQuantity(cats[ix].cat_id);
+
         $('#LimpiarFormulario').trigger('click');
     } else {
         setTimeout(() => {
@@ -282,7 +309,9 @@ function editCategory(catId) {
     let ix = goThroughCategory(catId);
     $('#NomCategoria').val(cats[ix].cat_name);
     $('#IdCategoria').val(cats[ix].cat_id);
+    $('#numCategoria').val(cats[ix].cat_id);
     $('#selectRowAlmacen').val(cats[ix].str_id);
+    $('#selectRowArea').val(cats[ix].are_id);
 }
 
 function deleteCategory(catId) {

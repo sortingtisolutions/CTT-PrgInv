@@ -170,13 +170,6 @@ function getProducts(catId) {
     fillField(pagina, par, tipo, selector);
 }
 // Solicita los movimientos acurridos
-/*function getExchanges() {
-    var pagina = 'MoveStoresIn/listExchanges';
-    var par = `[{"folio":"${folio}"}]`;
-    var tipo = 'json';
-    var selector = putExchanges;
-    fillField(pagina, par, tipo, selector);
-} */
 
 /*  LLENA LOS DATOS DE LOS ELEMENTOS */
 // Dibuja los tipos de movimiento
@@ -442,12 +435,12 @@ function validator() {
         ky = 1;
         msg += 'Debes indicar el tipo de moneda';
     }
-                                        //console.log(ky, msg);
+                        //console.log(ky, msg);
 
-                                        // if ($('#txtCost').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
-                                        //     ky = 1;
-                                        //     msg += 'Debes indicar el costo del producto';
-                                        // }
+                        // if ($('#txtCost').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
+                        //     ky = 1;
+                        //     msg += 'Debes indicar el costo del producto';
+                        // }
 
     //validacion de cantidad para agregar serie mayor a 1
     if ($('#txtQuantity').val() > 1) {

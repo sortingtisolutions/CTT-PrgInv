@@ -102,10 +102,9 @@ function putSubcategories(dt) {
     $('#tblSubcategory tbody').html('');
     var prds=dt;
     if (prds[0].pjtcr_id != '0') {
-        
         // var catId = prds[0].wtp_id;
         $.each(prds, function (v, u) {
-            // if (u.wtp_id != '') {
+        // if (u.wtp_id != '') {
                 var H = `
                 <tr id="${u.pjtcr_id}">
                     <td class="edit"><i class='fas fa-pen modif'></i><i class="fas fa-times-circle kill"></i></td>    
@@ -116,7 +115,6 @@ function putSubcategories(dt) {
             }
         //}
         );
-        
         // settingTable();
         console.log('2', prds);
         activeIcons();
@@ -179,7 +177,6 @@ function activeIcons() {
         });
 }
 
-/** -------------------------------------------------------------------------- */
 /** ---- Start GRABA NUEVA SUBCATEGORIA ---- */
 /** ---- Registra la nueva subcategoria ---- */
 function saveSubcategory() {
@@ -212,10 +209,7 @@ function putSaveSubcategory(dt) {
         }, 100);
     }
 }
-/** ---- End GRABA NUEVA SUBCATEGORIA ---- */
-/** -------------------------------------------------------------------------- */
 
-/** -------------------------------------------------------------------------- */
 /** ---- Start EDITA SUBCATEGORIA ---- */
 /** ---- Llena los campos del formulario para editar ---- */
 function editSubcategory(sbcId) {
@@ -260,10 +254,7 @@ function putUpdateSubcategory(dt) {
         }, 100);
     }
 }
-/** ---- End EDITA SUBCATEGORIA ---- */
-/** -------------------------------------------------------------------------- */
 
-/** -------------------------------------------------------------------------- */
 /** ---- Start ELIMINA SUBCATEGORIA ---- */
 /** ---- Borra la subcategorias ---- */
 function deleteSubcategory(sbcId) {

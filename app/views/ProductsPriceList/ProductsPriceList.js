@@ -20,7 +20,6 @@ function inicial() {
     }, 100);
 }
 
-
 /**
  * Obtien el listado de los productos
  * @param {number} catId Recibe el ID del catalogo
@@ -144,7 +143,6 @@ function setting_table() {
             deep_loading('C');
         });
 }
-
 
 function getProductReserve(prdId, prdLv, prdNm) {
     var pagina = 'ProductsPriceList/listProductsReserve';

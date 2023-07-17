@@ -45,31 +45,6 @@ function get_products(pj) {
     fillField(pagina, par, tipo, selector);
 }
 
-/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
-function get_coins() {
-    /* var pagina = 'ProductsForSubletting/listCoins';
-    var par = `[{"store":""}]`;
-    var tipo = 'json';
-    var selector = put_coins;
-    fillField(pagina, par, tipo, selector); */
-}
-/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
-function get_suppliers() {
-    /* var pagina = 'ProductsForSubletting/listSuppliers';
-    var par = `[{"store":""}]`;
-    var tipo = 'json';
-    var selector = put_suppliers;
-    fillField(pagina, par, tipo, selector); */
-}
-/**  +++++ Obtiene los datos los proveedores que subarrendan +++++  */
-function get_stores() {
-    /* var pagina = 'ProductsForSubletting/listStores';
-    var par = `[{"store":""}]`;
-    var tipo = 'json';
-    var selector = put_stores;
-    fillField(pagina, par, tipo, selector); */
-}
-
 /** ++++  formatea la tabla ++++++ */
 function setting_table() {
     let title = 'Productos ';

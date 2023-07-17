@@ -24,25 +24,28 @@
           $this->render(__CLASS__, $params);
         }
         //OBTIENE LAS CATEGORIAS PARA DESPLEGAR
-        public function GetCategoria($request_params)
+        /* public function GetCategoria($request_params)
         {
           $result = $this->model->GetCategoria($request_params);
           echo json_encode($result,JSON_UNESCAPED_UNICODE);	
         }
-
-        public function SaveCategoria($request_params)
-        {
-         
-            $result = $this->model->SaveCategoria($request_params);	  
-            echo $result;
-        }
-        public function UpdateCategoria($request_params)
-        {
-         
-            $result = $this->model->UpdateCategoria($request_params);
-            $catId= $request_params['cat_id'];	  
-            echo $catId;
-        }
+ */
+        public function GetAlmacenes($request_params)
+		{
+			$params =  $this->session->get('user');
+            $result = $this->model->GetAlmacenes($request_params);
+            $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"str_id":"0"}]';	
+            }
+            echo $res;
+		}
 
         public function GetCategorias($request_params)
         {
@@ -61,12 +64,22 @@
             echo $res;
         }
 
-        public function DeleteCategoria($request_params)
+        public function listAreas($request_params)
         {
-            $result = $this->model->DeleteCategoria($request_params);
-            $catId= $request_params['cat_id'];	  
-            echo $catId;	
-        } 
+            $params =  $this->session->get('user');
+            $result = $this->model->listAreas($request_params);
+            $i = 0;
+            while($row = $result->fetch_assoc()){
+                $rowdata[$i] = $row;
+                $i++;
+            }
+            if ($i>0){
+                $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+            } else {
+                $res =  '[{"are_id":"0"}]';	
+            }
+            echo $res;
+        }
 
         public function listSeries($request_params)
         {
@@ -84,6 +97,28 @@
             }
             echo $res;
         }
+
+        public function SaveCategoria($request_params)
+        {
+         
+            $result = $this->model->SaveCategoria($request_params);	  
+            echo $result;
+        }
+        
+        public function UpdateCategoria($request_params)
+        {
+         
+            $result = $this->model->UpdateCategoria($request_params);
+            $catId= $request_params['cat_id'];	  
+            echo $catId;
+        }
+
+        public function DeleteCategoria($request_params)
+        {
+            $result = $this->model->DeleteCategoria($request_params);
+            $catId= $request_params['cat_id'];	  
+            echo $catId;	
+        } 
 
         public function countQuantity($request_params)
         {

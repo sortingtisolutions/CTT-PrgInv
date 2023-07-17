@@ -12,7 +12,8 @@
 				<!-- Start área de formularios -->
 				<div class="mvst_panel">
 					<div class="form-group">
-						<h4 id="titulo">Nuevo Usuario</h4>  
+						<h4 id="titulo">Nuevo Usuario</h4> 
+						 
 						<form id="formUsuario" class="row g-3 needs-validation" novalidate>
 
 							<div class="row hide">

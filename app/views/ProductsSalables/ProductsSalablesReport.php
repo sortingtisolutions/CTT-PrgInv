@@ -110,8 +110,6 @@ $html .='
         <!-- End Datos de identificación  -->';
 
 $html .= '
-
-
         <!-- Start Tabla de costo base  -->
         <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
             <thead>

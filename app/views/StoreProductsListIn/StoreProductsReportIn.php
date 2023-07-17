@@ -129,10 +129,6 @@
     </footer>
  ';
 
-
-
-   
-
     $css = file_get_contents('../../assets/css/reports.css');
 
     

@@ -16,8 +16,6 @@
             </table>
         </div>
 
-        
-
         <div class="contador"></div>
         
         <script src="<?=  PATH_ASSETS . 'lib/sticky.js?v=1.0.0.0' ?>"></script>

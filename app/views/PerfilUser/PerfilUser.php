@@ -28,14 +28,14 @@
 								</div>
 							</div>
 
-                     <div class="row">
+                     		<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<input id="CodPerfil" name="CodPerfil" type="text" class="form-control form-control-sm" required >
 									<label for="CodPerfil">Codigo Perfil</label>
 								</div>
 							</div>
 
-                     <div class="row">
+                     		<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 									<input id="DesPerfil" name="DesPerfil" type="text" class="form-control form-control-sm" required >
 									<label for="DesPerfil">Descripcion Perfil</label>
@@ -43,11 +43,11 @@
 							</div>
 
                      
-                     <div class="row">
+                     		<div class="row">
 								<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 
-                        <div class="row margin-cero" >
-                        <div class="col-12 col-md-12 " >
+							<div class="row margin-cero" >
+							<div class="col-12 col-md-12 " >
                               <div class="col-12 text-center colorSecundario" style="font-weight: 600 !important;">
                                  Disponibles
                               </div>

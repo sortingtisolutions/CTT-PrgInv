@@ -20,7 +20,6 @@ function getCustomerFields(cusId) {
     var selector = putCustomerFields;
     fillField(pagina, par, tipo, selector);
 }
-
 /** +++++  configura la table de proyectos */
 function settingTable() {
     let title = 'Lista de proyectos';
@@ -119,7 +118,7 @@ function activeIcons() {
                 pjtStatus = 5;
             }
 
-            freeProject(pjtId, pjtStatus);
+        freeProject(pjtId, pjtStatus);
         });
 
     $('.kill')
@@ -148,7 +147,7 @@ function putUpdateProjects(dt) {
 }
 
 function showCustomModal(cusId) {
-    console.log(cusId);
+    // console.log(cusId);
     $('#CustomerModal').removeClass('overlay_hide');
 
     $('#CustomerModal .btn_close')

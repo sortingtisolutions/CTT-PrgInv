@@ -55,7 +55,6 @@ while ($row = $res2->fetch_assoc()) {
     $categories[] = $row["cat_name"];
 }
 
-
 // Cabezal de la página
 $header = '
     <header>
@@ -90,7 +89,6 @@ $header = '
         if ($items[$i]['bdg_section'] == '2') $equipoExtra = '1';
         if ($items[$i]['bdg_section'] == '3') $equipoDias = '1';
         if ($items[$i]['bdg_section'] == '4') $equipoSubarrendo = '1';
-
     }
                 
 $html = '

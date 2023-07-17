@@ -8,7 +8,6 @@
 </header>
 
 <!-- CUERPO DE LA PAGINA -->
-
 <div class="invoice__container">
 <!-- Nombre del proyecto y tablero de control -->
     <div class="invoice__section invoice__section-panel invoice-border">
@@ -22,13 +21,13 @@
         </div>
     </div>
 
-<!-- Botones de reseteo -->
+    <!-- Botones de reseteo -->
     <div class="invoice__section invoice__section-button invoice-border">
         <span class="invoice_button" id="newQuote"><i class="fas fa-plus"></i>nueva cotización</span>
     </div>
 
 
-<!-- Parilla de productos seleccionado -->
+    <!-- Parilla de productos seleccionado -->
     <div class="invoice__section invoice__section-grid invoice-border">
         <div class="invoice_controlPanel">
             <span class="version_current"></span>
@@ -125,7 +124,7 @@
     </div>
 
 
-<!-- Totales y versiones -->
+    <!-- Totales y versiones -->
     <div class="invoice__section invoice__section-sidebar">
 
     <!-- Totales -->
@@ -188,7 +187,7 @@
     </div>
     
     
-<!-- Informacion del proyecto y cliente seleccionado -->
+    <!-- Informacion del proyecto y cliente seleccionado -->
     <div class="invoice__section-details invoice-border">
         <div class="detail__box detail__box-project ">
             <div class="detail__box-fullRow">
@@ -256,7 +255,7 @@
     </div>
 
 
-<!-- Buscador de clientes y proyectos -->
+    <!-- Buscador de clientes y proyectos -->
     <div class="invoice__section-finder invoice-border">
         <div class="finder__box" id="groupCustomer">
             <input type="text" name="txtCustomer" id="txtCustomer" placeholder="Cliente" class="invoiceInput inputSearch wtf">
@@ -290,8 +289,7 @@
         </div>
     </div>
 
-
-<!-- Listado de productos -->
+    <!-- Listado de productos -->
     <div class="invoice__section-products invoice-border modalTable">
         <div class="modal__header  invoice-border">
             <div class="modal__header-concept">&nbsp;Listados de productos</div>

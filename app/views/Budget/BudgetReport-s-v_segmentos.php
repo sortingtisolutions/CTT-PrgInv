@@ -421,7 +421,6 @@ $html = '
     }
 /* Tabla de equipo extra -------------------------  */
 
-
 /* Tabla de equipo dias -------------------------  */
     if ($equipoDias == '1'){
         $html .= '
@@ -534,7 +533,6 @@ $html = '
     }
 /* Tabla de equipo dias -------------------------  */
 
-
 /* Tabla de equipo subarrendo -------------------------  */
     if ($equipoSubarrendo == '1'){
         $html .= '
@@ -645,9 +643,8 @@ $html = '
     }
 }
         
-    }
+}
 /* Tabla de equipo subarrendo -------------------------  */
-
 
 
 /* Tabla totales -------------------------  */

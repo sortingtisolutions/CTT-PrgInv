@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class WorkInputContentModel extends Model
 {
-
     public function __construct()
     {
       parent::__construct();
@@ -18,7 +17,7 @@ class WorkInputContentModel extends Model
                 DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start,
                 DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end,
                 DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y %H:%i ') AS pjt_date_project,
-                pj.pjt_location, cus.cus_name, '1' as analyst, '33' as freelance, pj.pjt_id
+                pj.pjt_location, cus.cus_name, pj.pjt_id
                 FROM ctt_projects AS pj 
                 LEFT JOIN ctt_customers_owner AS cuw ON cuw.cuo_id=pj.cuo_id
                 LEFT JOIN ctt_customers AS cus ON cus.cus_id=cuw.cus_id
@@ -33,18 +32,22 @@ class WorkInputContentModel extends Model
     public function listDetailProds($params)
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
+        $empid = $this->db->real_escape_string($params['empid']);
 
-        // $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
-        //         pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
-        //         FROM ctt_projects_content WHERE pjt_id=$pjt_id order by pjtcn_order;";
-
-        $qry = "SELECT pjtcn_id, pjd.pjtdt_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
-                    pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
-                FROM ctt_projects_content AS pjc
-                INNER JOIN ctt_projects_detail AS pjd ON pjd.pjtvr_id=pjc.pjtvr_id 
-                WHERE pjc.pjt_id=$pjt_id AND SUBSTR(pjtdt_prod_sku,11,1)!='A'
-                order by pjtcn_order;";
-
+        if ($empid==1){
+            $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
+            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
+            FROM ctt_projects_content WHERE pjt_id=$pjt_id order by pjtcn_order;";
+        }
+        else{
+            $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
+            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order,SUBSTR(pjc.pjtcn_prod_sku,1,2)
+            FROM ctt_projects_content AS pjc
+            INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
+            INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
+            WHERE pjc.pjt_id=$pjt_id AND em.emp_id=$empid
+            ORDER BY pjc.pjtcn_order;";
+        }
         return $this->db->query($qry);
     }
 
@@ -61,17 +64,22 @@ class WorkInputContentModel extends Model
         return $this->db->query($qry);
     }
 
-   // Listado de Motivos para mantenimiento
-   public function listReason($params)
+    public function listSeries($params)
    {
         $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
        
-        $qry = "SELECT *
-                FROM ctt_project_change_reason;";
+        $qry = "SELECT pdt.pjtdt_id, pdt.pjtdt_prod_sku, prd.prd_name, prd.prd_level, prd.prd_status, pdt.ser_id, pdt.pjtvr_id, 
+                sr.ser_sku, sr.ser_serial_number, sr.ser_situation, sr.ser_stage
+                FROM ctt_projects_content AS pcn
+                INNER JOIN ctt_projects_version as pjv ON pcn.pjtvr_id=pjv.pjtvr_id
+                INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
+                INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
+                LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
+                WHERE pcn.pjtcn_id=$pjtcnid AND prd.prd_level!='A' 
+                ORDER BY pdt.pjtdt_prod_sku;";
 
        return $this->db->query($qry);
    }
-
 
    public function listSeriesFree($params)
    {
@@ -87,18 +95,66 @@ class WorkInputContentModel extends Model
        return $this->db->query($qry);
    }
 
+   // Listado de Motivos para mantenimiento
+   public function listReason($params)
+   {
+        $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
+       
+        $qry = "SELECT * FROM ctt_project_change_reason;";
+
+       return $this->db->query($qry);
+   }
+
+
     // check de Productos
     public function checkSeries($params)
     {
-        /* $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
-        // $updt = "update ctt_series set ser_situation = 'TA', ser_stage = 'TA' 
-        //         where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
+        $serId = $this->db->real_escape_string($params['serId']);
 
-        $updt = "update ctt_series set ser_stage = 'TA' 
-                where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
+        $updt = "UPDATE ctt_series 
+                SET ser_situation='D', ser_stage = 'D', pjtdt_id=0
+                WHERE ser_id = $serId;";
 
          $this->db->query($updt);
-         return $pjtcnid; */
+         return $serId;
+        
+    }
+
+    public function regManteince($params)
+    {
+        $serId = $this->db->real_escape_string($params['serId']);
+        $codstag = $this->db->real_escape_string($params['codstag']);
+
+        $updt = "UPDATE ctt_series 
+                SET ser_situation='M', ser_stage = '$codstag', pjtdt_id=0
+                WHERE ser_id = $serId;";
+
+         $this->db->query($updt);
+         return $serId;
+        
+    }
+
+    // check de Productos
+    public function createTblResp($params)
+    {
+        $prjid = $this->db->real_escape_string($params['prjid']);
+        $prjnum = $this->db->real_escape_string($params['prjnum']);
+
+        $updt = "CREATE TABLE CLOSE_PROYECT_".$prjnum." SELECT pjd.pjtdt_id, pjd.pjtdt_prod_sku, pjd.pjtvr_id, 
+                pjtcn_id, pjtcn_prod_sku, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, 
+                pjtcn_discount_base, pjtcn_discount_insured, pjtcn_days_trip, pjtcn_discount_trip, 
+                pjtcn_days_test, pjtcn_discount_test ,pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
+                pjtcn_order, ver_id, pjt_id, 
+                sr.ser_id, ser_sku, ser_serial_number,ser_situation, ser_stage, 
+                prd.prd_id, prd_name, prd_price, sbc_id 
+                FROM ctt_projects_detail AS pjd
+                INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id=pjd.pjtvr_id
+                INNER JOIN ctt_series AS sr ON sr.ser_id=pjd.ser_id
+                INNER JOIN ctt_products AS prd ON prd.prd_id=sr.prd_id
+                WHERE pjc.pjt_id=$prjid;";
+
+         $this->db->query($updt);
+         return $prjid;
         
     }
 

@@ -43,14 +43,14 @@
             echo $res;	
         }
 
-// Obtiene la lista de subcategorias activas
+    // Obtiene la lista de subcategorias activas
         public function tableSubcategories($request_params)
         {
             $result = $this->model->tableSubcategories($request_params);
             echo $result;
         }
 
-// Obtiene la lista de subcategorias activas
+    // Obtiene la lista de subcategorias activas
         public function listSubcategories($request_params)
         {
             $result = $this->model->listSubcategories($request_params);

@@ -36,7 +36,6 @@
                             </div>
 
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -60,7 +59,6 @@
                 </table>
             </div>
         <!-- End Tabla de contenido -->
-
         </div>
     </div>
 

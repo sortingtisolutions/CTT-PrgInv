@@ -62,7 +62,6 @@
                         </div>
                         </div>
 
-
                     </div>
 
                     <div class="form_secundary">
@@ -83,13 +82,10 @@
                                 <label for="txtSubcategoryProduct" class="form-label">Subcategoia</label>
                             </div>
                         </div>
- -->
-
-                        
+ -->   
                     </div>
                 </div>
             </div>
-
 
             <div class="mvst_table">
                 <h1>Asignacion y selección de accesorios</h1>

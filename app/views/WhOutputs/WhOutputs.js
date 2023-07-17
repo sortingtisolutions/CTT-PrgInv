@@ -16,8 +16,7 @@ function inicial() {
         //console.log('UNO');
         // settingTable();
         getProjects(0);
-        $('.tblProyects').css({display: 'none'});
-        
+        $('.tblProyects').css({display: 'none'});  
     }, 100);
 }
 
@@ -29,7 +28,6 @@ function getProjects(catId) {
     var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
-
 
 /** +++++  configura la table de productos */
 function settingTable() {

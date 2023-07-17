@@ -18,7 +18,6 @@
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
 
-
 <?php
 
 function codificar($dato) {

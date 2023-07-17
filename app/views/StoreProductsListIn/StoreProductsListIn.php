@@ -12,7 +12,6 @@
             
         <div class="row mvst_group">
 
-
             <div class="mvst_panel">
                 <div class="form-group">
                 <h4 id="titulo">Recepción de Productos de un Llamado</h4>

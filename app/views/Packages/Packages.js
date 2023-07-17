@@ -298,7 +298,6 @@ function selSubcategoryProduct(id) {
             $('.list-group').slideUp('slow');
             //console.log('Click sucategoria');
         });
-
 }
 
 // Crea el paquete
@@ -322,22 +321,6 @@ function packages_apply(subcat) {
         let exmId = 1;
 
         sbccnt = 0;
-
-        //     console.log(`
-        // prdsku:         ${prdsku}
-        // prdName:        ${prdName}
-        // prdModel:       ${prdModel}
-        // prdPrice:       ${prdPrice}
-        // prdCoinType:    ${prdCoinType}
-        // prdVisibility:  ${prdVisibility}
-        // prdComments:    ${prdComments}
-        // prdStatus:      ${prdStatus}
-        // prdLevel:       ${prdLevel}
-        // sbcId:          ${sbcId}
-        // supId:          ${supId}
-        // srvId:          ${srvId}
-        // exmId:          ${exmId}
-        //     `);
 
         let par = `[{
         "prdsku"        : "${prdsku}",

@@ -403,7 +403,6 @@
     </div>
 <!-- End Ventana modal AGREGA O MODIFICA SERIES -->
 
-
 <!-- Start Ventana modal ELIMINA PRODUCTO -->
     <div class="modal fade" id="delProdModal" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -411,7 +410,6 @@
                 <div class="modal-header ">
                 </div>
                 <div class="modal-body" style="padding: 0px !important;">
-
 
                 <div class="row">
                     <input type="hidden" class="form-control" id="txtIdProduct" aria-describedby="basic-addon3">
@@ -455,7 +453,6 @@
         </div>
     </div>
 <!-- End Ventana modal ELIMINA SERIE -->
-
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>

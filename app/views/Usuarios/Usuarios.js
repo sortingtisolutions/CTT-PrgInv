@@ -152,7 +152,6 @@ function EditUsuario(id, idPerfil) {
         success: function (respuesta) {
             //console.log(respuesta);
             $('#IdUsuario').val(respuesta.usr_id);
-
             $('#NomUsuario').val(respuesta.emp_fullname);
             $('#UserNameUsuario').val(respuesta.usr_username);
 
