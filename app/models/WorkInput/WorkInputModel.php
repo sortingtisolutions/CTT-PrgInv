@@ -26,9 +26,10 @@ class WorkInputModel extends Model
                 DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end, 
                 DATE_FORMAT(pj.pjt_date_last_motion,'%d/%m/%Y %H:%i ') AS pjt_date_project, 
                 pj.pjt_location, pj.pjt_status,pj.pjt_id
-                FROM ctt_projects AS pj INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id 
+                FROM ctt_projects AS pj 
+                LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id 
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id 
-                WHERE pj.pjt_status in ('4','7','8') ORDER BY pjt_date_start ASC;";
+                WHERE pj.pjt_status in ('7','8') ORDER BY pjt_date_start ASC;";
         return $this->db->query($qry);
     }
 

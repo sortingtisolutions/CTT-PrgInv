@@ -878,9 +878,9 @@ function putProducts(dt) {
                 <th class="col_product" title="${u.prd_name}">
                 <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
-                <td class="col_type">${u.prd_level}</td>
-                <td class="col_category">${u.sbc_name}</td>
+                <td class="col_category">${u.cat_name}</td>
                 <td class="col_category">${u.prd_price}</td>
+                <td class="col_type">${u.prd_level}</td>
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
@@ -1037,9 +1037,9 @@ function fillBudgetProds(jsn, days) {
 
     // AQUI Aplicar el porcentaje de descuento al seguro 15-ago-2022 8:52 am
     let prdName = pds.bdg_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
-    if(pds.bdg_prod_level=='K'){
+    /* if(pds.bdg_prod_level=='K'){
         console.log('ES UN PAQUETE-',pds.bdg_prod_sku);
-    }
+    } */
 
     let H = `
     <tr id="bdg${pds.prd_id}"
@@ -2152,18 +2152,11 @@ function printBudget(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-
-    /* let t = user[1];
-    console.log('User',user);
-    console.log('Host',h);
-    console.log('0 - ',u);
-    console.log('1 - ',t);
-    console.log('2 - ',n); */
-
     /* window.open(
         `${url}app/views/Budget/BudgetReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
         '_blank'
     ); */
+
     if (theredaytrip != 0){ // agregado jjr cambiar impresion c-s
         window.open(
             `${url}app/views/Budget/BudgetReport-c-v_segmentos.php?v=${v}&u=${u}&n=${n}&h=${h}`,
@@ -2250,7 +2243,7 @@ function saveBudget(dt) {
                 "prdId"           : "${prdId}",
                 "pjtId"           : "${pjtId}"
             }]`;
-            // console.log(par);
+            console.log(par);
             var pagina = 'Budget/SaveBudget';
             var tipo = 'html';
             var selector = respBudget;
@@ -2261,9 +2254,10 @@ function saveBudget(dt) {
 }
 
 function respBudget(dt) {
-    // console.log('REGRESO respBudget', dt);
+    console.log('respBudget', dt);
     let pjtId = dt.split('|')[0];
     let UserN = dt.split('|')[1];
+    // console.log('--',pjtId,UserN);
     getVersion(pjtId);
     
 }

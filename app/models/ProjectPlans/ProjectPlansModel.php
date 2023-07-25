@@ -173,10 +173,11 @@ class ProjectPlansModel extends Model
         $dend = $this->db->real_escape_string($params['dend']);
 
         $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, 
-                        sb.sbc_name,
+                        sb.sbc_name,cat_name,
                 CASE 
                     WHEN prd_level ='K' THEN 
-                        (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
+                        (SELECT prd_stock
+                                FROM ctt_products WHERE prd_id = pd.prd_id)
                     WHEN prd_level ='P' THEN 
                         (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
@@ -184,6 +185,7 @@ class ProjectPlansModel extends Model
                     END AS stock
                 FROM ctt_products AS pd
                 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+                INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
                 WHERE (upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%') 
                         AND pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
                 ORDER BY pd.prd_name ;";

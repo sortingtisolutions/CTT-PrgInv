@@ -104,13 +104,11 @@ function settingTable() {
 
 /** +++++  coloca los productos en la tabla */
 function putProjects(dt) {
-    console.log('DOS',dt);
+    // console.log('DOS',dt);
     let valstage='';
     let valicon='';
     $('#tblProyects tbody').html('');
     if (dt[0].pjt_id != '0') {
-        // var catId = dt[0].cat_id;
-        //console.log('444',dt);
         // <td class="date">${u.pjt_date_project}</td>
         // <td class="supply editable">${u.pjt_location}</td>
         // <td class="sku"><i class='fas fa-edit detail'></i><i class='fas fa-door-open toWork'></i></td>
@@ -141,7 +139,6 @@ function putProjects(dt) {
     }
 }
 
-
 /** +++++  Activa los iconos */
 function activeIcons() {
     $('.toWork')
@@ -167,7 +164,6 @@ function activeIcons() {
 
             window.location = 'WorkInputContent';
         });
-
 }
 
 function confirm_to_work(pjtid) {

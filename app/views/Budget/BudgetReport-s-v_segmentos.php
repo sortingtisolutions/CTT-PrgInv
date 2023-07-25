@@ -39,7 +39,7 @@ $qry = "SELECT *, ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) as ver_date_
         INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
         LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE bg.ver_id = $verId  ORDER BY bdg_section, bdg_order;";
+        WHERE bg.ver_id = $verId  ORDER BY sbc_order_print, bdg_section;";
 
 $res = $conn->query($qry);
 //$conn->close();
@@ -47,14 +47,23 @@ $res = $conn->query($qry);
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
-// OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
-$query="SELECT DISTINCT ct.cat_id, ct.cat_name FROM ctt_categories AS ct INNER JOIN ctt_subcategories AS sb ON sb.cat_id = ct.cat_id INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id INNER JOIN ctt_budget AS bg ON bg.prd_id = pd.prd_id WHERE bg.ver_id = $verId ORDER BY bdg_section, bdg_order;";
+$query="SELECT DISTINCT sb.sbc_id, sb.sbc_name FROM ctt_subcategories AS sb 
+        INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
+        INNER JOIN ctt_budget AS bg ON bg.prd_id = pd.prd_id 
+        WHERE bg.ver_id = $verId ORDER BY sbc_order_print, bdg_section;";
 $res2 = $conn->query($query);
-$categories=array();
-while ($row = $res2->fetch_assoc()) {
-    $categories[] = $row["cat_name"];
-}
+$subcategories=array();
+$rr = 0;
 
+while ($row = $res2->fetch_assoc()) {
+    
+    $subcategories[$rr]["sbc_id"] = $row["sbc_id"];
+    $subcategories[$rr]["sbc_name"] = $row["sbc_name"];
+    $rr++;
+}
+$conn->close();
+date_default_timezone_set('America/Mexico_City');
+$hoy=new DateTime();
 
 // Cabezal de la página
 $header = '
@@ -63,7 +72,7 @@ $header = '
             <table class="table-main" border="0">
                 <tr>
                     <td class="box-logo side-color">
-                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:37mm; height:13mm; margin: 3mm 2.5mm 0 2.5mm;"/>
+                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:42mm; height:16mm; margin: 3mm 2.5mm 0 2.5mm;"/>
                     </td>
                     <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
                     <p>
@@ -73,9 +82,7 @@ $header = '
                     </td>
                 </tr>
             </table>
-           
         </div>
-       
     </header>';
 
     $costBase = 0;
@@ -150,7 +157,7 @@ $html = '
                             </tr> -->
                             <tr>
                                 <td class="concept">Fecha Cotización:</td>
-                                <td class="data">'. $items[0]['pjt_location'] .'</td>
+                                <td class="data">'. $hoy->format('d/m/Y') .'</td>
                             </tr>
                             <tr>
                                 <td class="concept">Ciudad:</td>
@@ -168,14 +175,23 @@ $html = '
                                 <td class="concept">Fechas de Proyecto:</td>
                                 <td class="data">'. $items[0]['period'] .'</td>
                             </tr>
-                            <tr>
-                                <td class="concept">Dias de Viaje:</td>
-                                <td class="data">'. $items[0]['pjt_trip_go'] .'</td>
-                            </tr>
-                            <tr>
-                                <td class="concept">Dias de Pruebas:</td>
-                                <td class="data">'. $items[0]['pjt_test_tecnic'] .'</td>
-                            </tr>
+                            ';
+                            if ($items[0]['pjt_trip_go']) {
+                                $html .='
+                                    <tr>
+                                        <td class="concept">Dias de Viaje:</td>
+                                        <td class="data">'. $items[0]['pjt_trip_go'] .'</td>
+                                    </tr>';
+                            }
+                            if ($items[0]['pjt_test_tecnic']) {
+                                $html .='
+                                <tr>
+                                    <td class="concept">Dias de Pruebas:</td>
+                                    <td class="data">'. $items[0]['pjt_test_tecnic'] .'</td>
+                                </tr>';
+                            }
+                            
+                            $html .='
                             <tr>
                                 <td class="concept">&nbsp;</td>
                                 <td class="data">&nbsp;</td>
@@ -192,36 +208,36 @@ $html = '
 
 /* Tabla de equipo base -------------------------  */
     if ($equipoBase == '1'){
+        $sumaEquipo = 0;
+        $totalEquipo =0;
         $html .= '
         
         
                     <!-- Start Tabla de equipo base  -->
                     <h2>Equipo Base</h2>';
-        foreach ($categories as $category) {
+        foreach ( $subcategories as $category) {
             $aux=0;
+            $sub =0;
             for ($i = 0; $i<count($items); $i++){
                 $section = $items[$i]['bdg_section'];
-                if ($section == '1' && $items[$i]['cat_name'] == $category) {
+                if ($section == '1' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
                     $aux=$aux+1;
+                    $sub = $i;
                 }
             }
         if ($aux>0) {
         $html .= '
-                    
-                    <h3 class="" style="color:#4682B4"><dd>'.$category.'</dd></h3>
-                    <table autosize="1" style="break-inside:auto" class="table-data bline">
+                    <h3 class="" style="color:#4682B4"><dd>'.$category['sbc_name'].'</dd></h3>
+                    <table autosize="1" style="page-break-inside:void" class="table-data bline">
                         <thead>
                             <tr>
-                                <th class="tit-figure prod">Producto</th>
+                                <th class="tit-figure prod">Equipo</th>
                                 <th class="tit-figure pric">Precio</th>
                                 <th class="tit-figure qnty">Cant.</th>
                                 <th class="tit-figure days">Días</th>
                                 <th class="tit-figure disc">Dcto %</th>
-                                <th class="tit-figure amou">Importe</th>
-                                 
-                                 
-                                 
-                                <th class="tit-figure amou">Importe<br>Total</th>
+                                <th class="tit-figure amou">Precio por día</th>
+                                <th class="tit-figure amou">Total</th>
                             </tr>
                         </thead>
                         <tbody>';
@@ -233,7 +249,7 @@ $html = '
                         $amountGralTotal    = 0;
 
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['cat_name'] ==$category) {
+                            if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
                             $section        = $items[$i]['bdg_section'] ;
 
                             if ($section == '1') {
@@ -266,6 +282,7 @@ $html = '
                                 $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
                                 $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
+                                $totalEquipo += $amountGral;
 
         $html .= '
                             <tr>
@@ -284,18 +301,13 @@ $html = '
                         }
                     
         $html .= '
-                        <tr>
-                            <td class="tot-figure totl" colspan="6">Seguro</td>                       
-                            <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
-                        </tr>
-                        <tr>
-                            <td class="tot-figure totl" colspan="6">Subtotal Base</td>
-                            <!--<td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
-                            <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>-->
+                            <tr>
+                            <td class="dat-figure totl" style="font-weight: bold;" colspan="4">Subtotal Dias</td>
+                            <td class="dat-figure amou" style="font-weight: bold;">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
+                            <td class="dat-figure amou" style="font-weight: bold;">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
                             
-                            <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
+                            <td class="dat-figure amou" style="font-weight: bold;">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                         </tr>
-                        
                     </tbody>
                 </table>
                 <div style="height:30px;"></div>
@@ -303,6 +315,32 @@ $html = '
 
                     }
         }
+
+        $html .= '
+                <!-- Start Tabla de totales  -->
+                <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+                    <thead>
+                        <tr>
+                            <th class="tit-figure" colspan="9">&nbsp;</th>
+                            <th class="tit-figure amou" >&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+             
+    // Total
+    $html .= '
+                        <tr>
+                            <td class="tot-main totl" colspan="9">Total de equipo base</td>
+                            <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
+                        </tr>
+                        ';
+                        
+    
+                    
+    $html .= '
+                    </tbody>
+                </table>
+                <!-- End Tabla de costo equipo subarrendo  -->';
     }
 /* Tabla de equipo base -------------------------  */
 
@@ -313,31 +351,32 @@ $html = '
         
                     <!-- Start Tabla de equipo extra  -->
                     <h2>Equipo Extra</h2>';
-            foreach ($categories as $category) {
+        $sumaEquipo = 0;
+        $totalEquipo =0;
+            foreach ($subcategories as $category) {
                 $aux=0;
+                $sub =0;
                 for ($i = 0; $i<count($items); $i++){
                     $section = $items[$i]['bdg_section'];
-                    if ($section == '2' && $items[$i]['cat_name'] == $category) {
+                    if ($section == '2' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
                         $aux=$aux+1;
+                        $sub = $i;
                     }
                 }
             if ($aux>0) {
             $html .= '
             
-                        <h3 class="" style="color:#4682B4"><dd>'.$category.'</dd></h3>
-                        <table autosize="1" style="break-inside:auto" class="table-data bline">
+                        <h3 class="" style="color:#4682B4"><dd>'.$category['sbc_name'].'</dd></h3>
+                        <table autosize="1" style="break-inside:void" class="table-data bline">
                             <thead>
                                 <tr>
-                                    <th class="tit-figure prod">Producto</th>
+                                    <th class="tit-figure prod">Equipo</th>
                                     <th class="tit-figure pric">Precio</th>
                                     <th class="tit-figure qnty">Cant.</th>
                                     <th class="tit-figure days">Días</th>
                                     <th class="tit-figure disc">Dcto %</th>
-                                    <th class="tit-figure amou">Importe</th>
-                                     
-                                     
-                                     
-                                    <th class="tit-figure amou">Importe<br>Total</th>
+                                    <th class="tit-figure amou">Precio por día</th>
+                                    <th class="tit-figure amou">Total</th>
                                 </tr>
                             </thead>
                             <tbody>';
@@ -349,7 +388,7 @@ $html = '
                             $amountGralTotal    = 0;
             
                             for ($i = 0; $i<count($items); $i++){
-                                if ($items[$i]['cat_name'] ==$category) {
+                                if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
                                 $section        = $items[$i]['bdg_section'] ;
             
                                 if ($section == '2') {
@@ -382,6 +421,8 @@ $html = '
                                     $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
                                     $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                     $totalInsr         += $totalInsured;
+                                    $totalEquipo += $amountGral;
+
             
             
             $html .= '
@@ -405,11 +446,11 @@ $html = '
         
         $html .= '
                             <tr>
-                                <td class="tot-figure totl" colspan="4">Subtotal Extra</td>
-                                <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
-                                <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
+                                <td class="dat-figure totl" style="font-weight: bold;" colspan="4">Subtotal Extra</td>
+                                <td class="dat-figure amou" style="font-weight: bold;">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
+                                <td class="dat-figure amou" style="font-weight: bold;">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
                                 
-                                <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
+                                <td class="dat-figure amou" style="font-weight: bold;">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                             </tr>
                         </tbody>
                     </table>
@@ -417,9 +458,35 @@ $html = '
                     <!-- End Tabla de costo equipo extra  -->';
             }
         }
+        $html .= '
+                <!-- Start Tabla de totales  -->
+                <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+                    <thead>
+                        <tr>
+                            <th class="tit-figure" colspan="9">&nbsp;</th>
+                            <th class="tit-figure amou" >&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+         
+    // Total
+    $html .= '
+                        <tr>
+                            <td class="tot-main totl" colspan="9">Total de equipo extra</td>
+                            <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
+                        </tr>
+                        ';
+                        
+    
+                    
+    $html .= '
+                    </tbody>
+                </table>
+                <!-- End Tabla de costo equipo subarrendo  -->';
         
     }
 /* Tabla de equipo extra -------------------------  */
+
 
 /* Tabla de equipo dias -------------------------  */
     if ($equipoDias == '1'){
@@ -427,31 +494,32 @@ $html = '
         
                 <!-- Start Tabla de equipo dias  -->
                 <h2>Equipo Días</h2>';
-        foreach ($categories as $category) {
+        $sumaEquipo = 0;
+        $totalEquipo =0;
+        foreach ($subcategories as $category) {
             $aux=0;
+            $sub =0;
             for ($i = 0; $i<count($items); $i++){
                 $section = $items[$i]['bdg_section'];
-                if ($section == '3' && $items[$i]['cat_name'] == $category) {
+                if ($section == '3' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
                     $aux=$aux+1;
+                    $sub = $i;
                 }
             }
         if ($aux>0) {
         $html .= '
 
-                    <h3 class="" style="color:#4682B4"><dd>'.$category.'</dd></h3>
+                    <h3 class="" style="color:#4682B4"><dd>'.$category['sbc_name'].'</dd></h3>
                     <table autosize="1" style="break-inside:void" class="table-data bline">
                         <thead>
                             <tr>
-                                <th class="tit-figure prod">Producto</th>
+                                <th class="tit-figure prod">Equipo</th>
                                 <th class="tit-figure pric">Precio</th>
                                 <th class="tit-figure qnty">Cant.</th>
                                 <th class="tit-figure days">Días</th>
                                 <th class="tit-figure disc">Dcto %</th>
-                                <th class="tit-figure amou">Importe</th>
-                                 
-                                 
-                                 
-                                <th class="tit-figure amou">Importe<br>Total</th>
+                                <th class="tit-figure amou">Precio por día</th>
+                                <th class="tit-figure amou">Total</th>
                             </tr>
                         </thead>
                         <tbody>';
@@ -463,7 +531,7 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['cat_name'] ==$category) {
+                            if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
                             $section        = $items[$i]['bdg_section'] ;
         
                             if ($section == '3') {
@@ -496,6 +564,7 @@ $html = '
                                 $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
                                 $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
+                                $totalEquipo += $amountGral;
         
         
         $html .= '
@@ -529,9 +598,40 @@ $html = '
                     <!-- End Tabla de costo equipo extra  -->';
             }
         }
+        $html .= '
+        <!-- Start Tabla de totales  -->
+        <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+            <thead>
+                <tr>
+                    <th class="tit-figure" colspan="9">&nbsp;</th>
+                    <th class="tit-figure amou" >&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+
+// Subtotal
+ 
+
+                
+// Total
+$html .= '
+                <tr>
+                    <td class="tot-main totl" colspan="9">Total de equipo dias</td>
+                    <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
+                </tr>
+                ';
+                
+
+            
+$html .= '
+            </tbody>
+        </table>
+        <!-- End Tabla de costo equipo subarrendo  -->';
         
     }
 /* Tabla de equipo dias -------------------------  */
+
 
 /* Tabla de equipo subarrendo -------------------------  */
     if ($equipoSubarrendo == '1'){
@@ -539,31 +639,32 @@ $html = '
         
         <!-- Start Tabla de equipo subarrendo  -->
         <h2>Equipo Subarrendo</h2>';
-    foreach ($categories as $category) {
+        $sumaEquipo = 0;
+        $totalEquipo =0;
+    foreach ($subcategories as $category) {
         $aux=0;
-        for ($i = 0; $i<count($items); $i++){
-            $section = $items[$i]['bdg_section'];
-            if ($section == '4' && $items[$i]['cat_name'] == $category) {
-                $aux=$aux+1;
+        $sub =0;
+            for ($i = 0; $i<count($items); $i++){
+                $section = $items[$i]['bdg_section'];
+                if ($section == '4' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
+                    $aux=$aux+1;
+                    $sub = $i;
+                }
             }
-        }
     if ($aux>0) {
     $html .= '
 
-                    <h3 class="" style="color:#4682B4"><dd>'.$category.'</dd></h3>
+                    <h3 class="" style="color:#4682B4"><dd>'.$category['sbc_name'].'</dd></h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline">
                         <thead>
                             <tr>
-                                <th class="tit-figure prod">Producto</th>
+                                <th class="tit-figure prod">Equipo</th>
                                 <th class="tit-figure pric">Precio</th>
                                 <th class="tit-figure qnty">Cant.</th>
                                 <th class="tit-figure days">Días</th>
                                 <th class="tit-figure disc">Dcto %</th>
-                                <th class="tit-figure amou">Importe</th>
-                                 
-                                 
-                                 
-                                <th class="tit-figure amou">Importe<br>Total</th>
+                                <th class="tit-figure amou">Precio por día</th>
+                                <th class="tit-figure amou">Total</th>
                             </tr>
                         </thead>
                         <tbody>';
@@ -575,7 +676,7 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['cat_name'] ==$category) {
+                            if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
                             $section        = $items[$i]['bdg_section'] ;
         
                             if ($section == '4') {
@@ -608,6 +709,7 @@ $html = '
                                 $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
                                 $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
+                                $totalEquipo += $amountGral;
         
         
         $html .= '
@@ -642,9 +744,40 @@ $html = '
                     <!-- End Tabla de costo equipo subarrendo  -->';
     }
 }
+$html .= '
+<!-- Start Tabla de totales  -->
+<table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+    <thead>
+        <tr>
+            <th class="tit-figure" colspan="9">&nbsp;</th>
+            <th class="tit-figure amou" >&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>';
+
+
+// Subtotal
+
+
         
-}
+// Total
+$html .= '
+        <tr>
+            <td class="tot-main totl" colspan="9">Total de equipo de subarrendo</td>
+            <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
+        </tr>
+        ';
+        
+
+    
+$html .= '
+    </tbody>
+</table>
+<!-- End Tabla de costo equipo subarrendo  -->';
+        
+    }
 /* Tabla de equipo subarrendo -------------------------  */
+
 
 
 /* Tabla totales -------------------------  */
@@ -740,7 +873,7 @@ $html .= '
         <tbody>
             <tr>
                 <td>
-                <ul style="font-size: 0.8em;">
+                <ul style="font-size: 0.9em;">
                     <li>Toda cotización, considera las condiciones estipuladas en la solicitud de servicio, en caso de que éstas varíen, los costos finales deberán asentarse una vez finalizado el proyecto</li>
                     <li>Ninguna cotización, tiene valor fiscal, ni legal, ni implica obligación alguna para la empresa SIMPLEMENTE SERVICIOS S.A. DE C.V. y/o su personal</li>
                     <li> Los montos referidos en esta cotización tienen una vigencia de 30 dias a partir de la fecha del envio de la misma al cliente. Posteriormente a este periodo de tiempo los montos pueden variar</li>
@@ -801,19 +934,44 @@ $foot = '
                 <td>
                     <table width="100%">
                         <tr>
-                            <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
+                            <td class="td-foot foot-date" width="25%"></td>
                             <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
-                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Versión '. $items[0]['ver_code'].'</td>
+                            <td class="td-foot foot-rept" width="25%" style="text-align: right"></td>
                         </tr>
                     </table>
                 </td>
             </tr> 
         </table>
+        
         <table class="table-address">
             <tr>
-                <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
-                <td class="addIcon addColor02"><img class="img-logo" src="../../../app/assets/img/icon-location.png" style="width:4mm; height:auto;" /></td>
+                <td class="addData">
+                    reservaciones@cttrentals.com, 
+                
+                </td>
+                <td class="addData">
+                    presupuestos@cttrentals.com,
+                </td>
+                <td class="addData">
+                
+                    proyectos@cttrentals.com,
+                </td>
+                <td class="addData">
+                    cotizaciones@cttrentals.com.
+                </td>
             </tr>
+
+            
+        </table>
+        <table class="table-address">
+            
+            <tr>
+                <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
+                
+            </tr>
+            
+            
+            
         </table>
     </footer>
 ';
@@ -830,9 +988,9 @@ $mpdf= new \Mpdf\Mpdf([
     'margin_left' => 5,
     'margin_right' => 5,
     'margin_top' => 25,
-    'margin_bottom' => 30,
+    'margin_bottom' => 35,
     'margin_header' => 5,
-    'margin_footer' => 10, 
+    'margin_footer' => 4, 
     'orientation' => 'P'
     ]);
 

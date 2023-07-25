@@ -41,7 +41,6 @@
     </div>
 <!-- End Contenedor Listado de PRODUCTOS  -->
 
-
 <!-- End Ventana modal Iniciar Proceso de Atencion -->
 <div class="modal fade" id="starToWork" tabindex="-1" aria-labelledby="BorrarPerfilLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">

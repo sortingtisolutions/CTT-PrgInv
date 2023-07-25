@@ -34,7 +34,6 @@ function inicial() {
         validator();
     });
 
-
     $('#txtFreelance').on('blur', function () {
         validator();
     });
@@ -161,7 +160,6 @@ function getAssign() {
     var selector = putAssign;
     fillField(pagina, par, tipo, selector);
 }
-
 function get_Freelances(pj) {
     var pagina = 'AssignFreelance/listFreelances2';
     var par = `[{"pjtId":"${pj}"}]`;
@@ -192,24 +190,10 @@ function putProject(dt) {
         let id = $(this).val();
         link = $(`#txtProject option[value="${id}"]`).attr('data-content').split('|')[2];
         code = $(`#txtProject option[value="${id}"]`).attr('data-content').split('|')[5];
-        // setting_interface(code,id);
-        //relocation_products();
-        //console.log($(this).val());
         get_Freelances(id);
     });
 }
-/**  ++++++  configura la interfasede inputs requeridos */
-function setting_interface(code,id) {
-    // console.log('CODE ', code);
-    /* code.substring(1, 2) == '0' ? $('.pos1').addClass('hide-items') : $('.pos1').removeClass('hide-items');
-    code.substring(2, 3) == '0' ? $('.pos2').addClass('hide-items') : $('.pos2').removeClass('hide-items');
-    code.substring(3, 4) == '0' ? $('.pos3').addClass('hide-items') : $('.pos3').removeClass('hide-items');
-    code.substring(4, 5) == '0' ? $('.pos4').addClass('hide-items') : $('.pos4').removeClass('hide-items');
-    code.substring(5, 6) == '0' ? $('.pos5').addClass('hide-items') : $('.pos5').removeClass('hide-items');
-    code.substring(6, 7) == '0' ? $('.pos6').addClass('hide-items') : $('.pos6').removeClass('hide-items');
-    getSuppliers();
-    getInvoice(id); */
-}
+
 
 // Dibuja los almacenes
 function putStores(dt) {
@@ -501,27 +485,6 @@ function put_Freelances(dt) {
         });
     }
 }
-/*
-function fillTable(ix) {
-    let tabla = $('#tblExchanges').DataTable();
-    // console.log(strs.length);
-    var row= tabla.row
-    .add({
-        editable: `<i class="fas fa-pen modif" id ="md${u.free_id}"></i><i class="fas fa-times-circle kill"></i>`,
-        proyname:u.pjt_name,
-        freename: u.free_name,
-        area:u.are_name,
-        strtdate:  u.ass_date_start, 
-        enddate:u.ass_date_end,
-        comments: u.ass_coments
-    })
-    .draw();
-    $(row.node()).attr('data-content', u.free_id + '|'+u.are_id+'|'+u.pjt_id+'|'+u.ass_id);
-    /*$('#md' + strs[ix].str_id)
-        .parents('tr')
-        .attr('id', strs[ix].str_id);
-    actionButtons();
-}*/
 
 function actionButtons() {
     /**  ---- Acciones de edición ----- */
@@ -544,23 +507,6 @@ function actionButtons() {
             }
         });
         /*
-    $('.toLink')
-        .unbind('click')
-        .on('click', function () {
-            let strId = $(this).parents('tr').attr('id');
-            let quant = $(this).html();
-            let ctnme = $(this).parents('tr').children('td.store-name').html();
-            strnme = ctnme;
-            // console.log(strId, quant, ctnme);
-            if (quant > 0) {
-                deep_loading('O');
-                var pagina = 'Almacenes/listSeries';
-                var par = `[{"strId":"${strId}"}]`;
-                var tipo = 'json';
-                var selector = putSeries;
-                fillField(pagina, par, tipo, selector);
-            }
-        });*/
 
     /**  ---- Acciones de Guardar categoria ----- */
     $('#btn_guardar')
@@ -574,15 +520,6 @@ function actionButtons() {
             }
             
         });
-    /**  ---- Lismpia los campos ----- 
-    $('#LimpiarFormulario')
-        .unbind('click')
-        .on('click', function () {
-            $('#NomAlmacen').val('');
-            $('#IdAlmacen').val('');
-            $('#selectTipoAlmacen option[value="0"]').attr('selected', true);
-            $('#selectRowEncargado').val('');
-        });*/
 }
 
 function saveStore() {
@@ -863,352 +800,6 @@ function validator() {
         //console.clear();
         //console.log(msg);
     }
-    /*
-    if ($('#txtPeriodProjectEdt').val() == '' ) {
-        //*   && $('.pos5').attr('class').indexOf('hide-items') < 0
-        ky = 1;
-        msg += 'Debes indicar el tipo de moneda';
-    }*/
-                                        //console.log(ky, msg);
-
-                                        // if ($('#txtCost').val() == 0 && $('.pos5').attr('class').indexOf('hide-items') < 0) {
-                                        //     ky = 1;
-                                        //     msg += 'Debes indicar el costo del producto';
-                                        // }
-
-    //validacion de cantidad para agregar serie mayor a 1
-    /*if ($('#txtQuantity').val() > 1) {
-        // && $('#txtSerie').val() == 0
-        //console.log($('#txtQuantity').val() > 1);
-        $('#txtSerie').attr('disabled', true).val('');
-        $('#txtSkuSerie').attr('disabled', true).val('');
-        //$('#txtNoEco').attr('disabled', true).val('');
-        
-    } else if ($('#txtQuantity').val() == 1) {
-        $('#txtSerie').attr('disabled', false);
-        $('#txtSkuSerie').attr('disabled', false);
-        //console.log( ky);
-        //ky = 0;
-        
-        //$('#txtNoEco').attr('disabled', false);
-
-    } else {
-        ky = 1;
-        msg += ' Las series se capturan individualmente en la tabla';
-    }*/
-
-                                    //if ($('#txtSerie').val() == 0 && $('.pos6').attr('class').indexOf('hide-items') < 0) {
-                                    //console.log($('#txtSerie').val(), $('#txtSerie').attr('disabled'));
-/*
-    if ($('#txtSerie').val() == '' && $('#txtSerie').attr('disabled') == undefined && $('.pos6').attr('class').indexOf('hide-items') < 0) {
-        ky = 1;
-        msg += 'Debes indicar la serie del producto';
-    }*/
     
 }
-
-// reubica el input de los productos
-/* function relocation_products() {
-    var ps = $('#txtProducts').offset();
-
-    $('#listProducts').css({top: ps.top + 30 + 'px'});
-} */
-
-// Aplica la seleccion para la tabla de movimientos
-/*
-function exchange_apply() {
-    
-    let project = $('#txtProject').val();
-    let area = $('#txtArea').val();
-    let freelance = $('#txtFreelance').val();
-    
-    let fechaAdmision= $('#txtFechaAdmision').val();
-    let fechaFinalizacion = $('#txtFechaFinalizacion').val();
-    let txtComments = $('#txtComments').val();
-    let nameArea = $(`#txtArea option[value="${area}"]`).text();
-    
-    let nameFreelance = $(`#txtFreelance option[value="${freelance}"]`).text();
-    let nameProject = $(`#txtProject option[value="${project}"]`).text();
-    
-    //let idCategoria = $('#txtArea').val();
-    //let nameCategoria = $(`#txtArea option[value="${idCategoria}"]`).text();
-
-    //let idSubCategoria = $('#txtFreelance').val();
-    //let codeSubCategoria = $('#txtFreelance option:selected').data('code');
-    //let nameSubCategoria = $(`#txtFreelance option[value="${idSubCategoria}"]`).text();
-
-
-    //let area =nameCategoria.replace(/\"/, '');
-    //let freelance = nameSubCategoria.replace(/\"/, '');
-    //console.log(prdSku);
-    //let sersku = prdSku + refil(1, 3);
-    
-    //serie++;
-    console.log('Paso 1 ');
-        /*
-    if (quantity > 1) {
-        for (var i = 0; i < quantity; i++) {
-            //sersku = prdSku + refil(serie++, 3);
-            //update_array_products(prdId, serie); // REVISAR EL DETALLE DE ESTA FUNCION
-            par = `
-        [{
-            "support"  : "${strid}|${idCategoria}|${idSubCategoria}|${codeSubCategoria}|${supplier}|${idProyect}|${coin}",
-            "prdName"       : "${prdName}",
-            "prdSku"       : "${prdSku}",
-            "price"        : "${price}",
-            "skuSerie"       : "${skuSerie}",
-            "noSerie"      : "${noSerie}",
-            "serbran"      : "${serbran}",
-            "nameStore"       : "${nameStore}",
-            "nameCategoria"       : "${category}",
-            "nameSubCategoria"       : "${subCategory}",
-            "startDate"       : "${startDate}",
-            "endDate"       : "${endDate}",
-            "suppliernm"       : "${suppliernm}",
-            "proyectName"       : "${proyectName}",
-            "comment"      : "${comment}",
-            "strid"       : "${strid}",
-            "idCategoria"        : "${idCategoria}",
-            "idSubCategoria"       : "${idSubCategoria }",
-            "supplier"      : "${supplier}",
-            "idProyect"      : "${idProyect}"
-            
-        }]`;
-            console.log(par);
-            fill_table(par);
-        }
-    } else {*/
-    /*
-        par = `
-        [{
-            "support"  : "${area}|${freelance}|${project}",
-            "project"       : "${nameProject}",
-            "area"       : "${nameArea}",
-            "freelance"        : "${nameFreelance}",
-            "fechaAdmision"       : "${fechaAdmision}",
-            "fechaFinalizacion"      : "${fechaFinalizacion}",
-            "comments"      : "${txtComments}"
-            
-        }]`;
-        console.log(par);
-        fill_table(par);
-    //}
-    clean_selectors();
-}*/
-
-// Llena la tabla de los datos de movimientos
-/*
-function fill_table(par) {
-    console.log('Paso 3 ', par);
-    let largo = $('#tblExchanges tbody tr td').html();
-    largo == 'Ningún dato disponible en esta tabla' ? $('#tblExchanges tbody tr').remove() : '';
-    par = JSON.parse(par);
-
-    let tabla = $('#tblExchanges').DataTable();
-
-    var row= tabla.row
-        .add({
-            editable: `<i class="fas fa-times-circle kill"></i>`,
-            proyname:par[0].project,
-            freename: par[0].freelance,
-            area: par[0].area,
-            strtdate:  par[0].fechaAdmision, 
-            enddate:par[0].fechaFinalizacion,
-            comments: par[0].comments
-        })
-        .draw();
-
-        $(row.node()).attr('data-content', par[0].support);
-
-    btn_apply_appears();
-
-    $('.edit')
-        .unbind('click')
-        .on('click', function () {
-            tabla.row($(this).parent('tr')).remove().draw();
-            btn_apply_appears();
-        });
-}*/
-/*
-function btn_apply_appears() {
-    console.log('Paso 4 ');
-    let tabla = $('#tblExchanges').DataTable();
-    let rengs = tabla.rows().count();
-    if (rengs > 0) {
-        $('.btn-apply').removeClass('hidden-field');
-    } else {
-        $('.btn-apply').addClass('hidden-field');
-    }
-}*/
-
-
-/** Actualiza la cantidad de cada producto dentro del arreglo */
-/*
-function update_array_products(id, sr) {
-    //console.log('Paso 2 ', id, sr);
-    $('#txtNextSerie').val(sr);
-    $(`#P-${id}`).attr('data_serie', sr);
-}*/
-/*
-function read_exchange_table() {
-    
-        $('#tblExchanges tbody tr').each(function (v, u) {
-            //let seriesku = $(this).attr('data-content').split('|')[3];
-            
-            //let proy = $($(u).find('td')[1]).text();
-            let proyname = $($(u).find('td')[1]).text();
-            let freename = $($(u).find('td')[2]).text();
-            let area = $($(u).find('td')[3]).text();
-            let strtdate =$($(u).find('td')[4]).text();
-            let enddate = $($(u).find('td')[5]).text();
-            //let serienum = $('.serprod').val();
-            let comments= $($(u).find('td')[6]).text();
-
-            let id_are = $(this).attr('data-content').split('|')[0];
-            let id_free = $(this).attr('data-content').split('|')[1];
-            let id_proj = $(this).attr('data-content').split('|')[2];
-
-            let truk = `${id_proj}|${id_free}|${id_are}|${strtdate}|${enddate}|${comments}`;
-            console.log(truk);
-            build_data_structure(truk);
-        });
-    //}
-}*/
-
-/* Generación del folio  */
-/*
-function putNextExchangeNumber(dt) {
-    //console.log(dt);
-    folio = dt;
-    read_exchange_table();
-}*/
-/*
-function build_data_structure(pr) {
-    let el = pr.split('|');
-    let par = `
-    [{
-        "pry" :  "${el[0]}",
-        "free" :  "${el[1]}",
-        "area" :  "${el[2]}",
-        "sdate" :  "${el[3]}",
-        "edate" :  "${el[4]}",
-        "com" :  "${el[5]}"
-    }]`;
-    //console.log(' Antes de Insertar', par);
-    save_exchange(par);
-}*/
-
-/* function build_update_store_data(pr) {
-    let el = pr.split('|');
-    let par = `
-[{
-    "prd" :  "${el[0]}",
-    "qty" :  "${el[1]}",
-    "str" :  "${el[2]}",
-    "mov" :  "${el[3]}"
-}]`;
-
-    update_store(par);
-} */
-
-/** Graba intercambio de almacenes */
-/*
-function save_exchange(pr) {
-    //   console.log(pr);
-    var pagina = 'AssignFreelance/SaveFreelanceProy';
-    var par = pr;
-    var tipo = 'html';
-    var selector = exchange_result;
-    //console.log(par);
-    fillField(pagina, par, tipo, selector);
-    //console.log(fillField(pagina, par, tipo, selector));
-}*/
-
-/* function update_store(ap) {
-    // console.log(ap);
-    var pagina = 'NewSublet/UpdateStores';
-    var par = ap;
-    var tipo = 'html';
-    var selector = updated_stores;
-    fillField(pagina, par, tipo, selector);
-} */
-
-/**  +++ Ocultalos productos del listado que no cumplen con la cadena  */
-/*
-function sel_products(res) {
-    if (res.length < 1) {
-        $('#listProducts .list-items div.list-item').css({display: 'block'});
-    } else {
-        $('#listProducts .list-items div.list-item').css({display: 'none'});
-    }
-
-    $('#listProducts .list-items div.list-item').each(function (index) {
-        var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
-
-        cm = omitirAcentos(cm);
-        var cr = cm.indexOf(res);
-        if (cr > -1) {
-            //            alert($(this).children().html())
-            $(this).css({display: 'block'});
-        }
-    });
-}
-
-function sel_invoice(res) {
-    //console.log('SELECC',res);
-    if (res.length < 2) {
-        $('#listInvoice .list-items div.list-item').css({display: 'block'});
-    } else {
-        $('#listInvoice .list-items div.list-item').css({display: 'none'});
-    }
-
-    $('#listInvoice .list-items div.list-item').each(function (index) {
-        var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
-
-        cm = omitirAcentos(cm);
-        var cr = cm.indexOf(res);
-        if (cr > -1) {
-            //        alert($(this).children().html())
-            $(this).css({display: 'block'});
-        }
-    });
-}
-
-function sel_suppliers(res) {
-    //console.log('SELECC',res);
-    if (res.length < 2) {
-        $('#listSupplier .list-items div.list-item').css({display: 'block'});
-    } else {
-        $('#listSupplier .list-items div.list-item').css({display: 'none'});
-    }
-
-    $('#listSupplier .list-items div.list-item').each(function (index) {
-        var cm = $(this).attr('data_complement').toUpperCase().replace(/|/g, '');
-
-        cm = omitirAcentos(cm);
-        var cr = cm.indexOf(res);
-        if (cr > -1) {
-            //            alert($(this).children().html())
-            $(this).css({display: 'block'});
-        }
-    });
-}
-
-function printInfoGetOut(verId) {
-    let user = Cookies.get('user').split('|');
-    let v = verId;
-    let u = user[0];
-    let n = user[2];
-    let h = localStorage.getItem('host');
-    // console.log('Lanza Reporte',v,u,n,h);
-    window.open(
-        `${url}app/views/NewSublet/NewSubletReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    );
-}*/
-
-
-
-
-
 

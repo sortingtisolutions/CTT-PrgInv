@@ -34,28 +34,53 @@ $qry = "SELECT * , ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) AS ver_date
         INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
         INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
         INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
+		INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id 
+		INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
         LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE bg.ver_id = $verId order by  bg.pjtvr_section, bg.pjtvr_order;";
+        WHERE bg.ver_id = $verId order by   sbc_order_print, bg.pjtvr_section;";
 
 $res = $conn->query($qry);
-$conn->close();
+
+// OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
+$query="SELECT DISTINCT sb.sbc_id, sb.sbc_name FROM ctt_subcategories AS sb 
+INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
+INNER JOIN ctt_projects_version AS bg on bg.prd_id = pd.prd_id 
+WHERE bg.ver_id = $verId ORDER BY sbc_order_print, bg.pjtvr_section;";
+
+$res2 = $conn->query($query);
+$subcategories=array();
+$rr = 0;
 
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
 
+while ($row2 = $res2->fetch_assoc()) {
+    $subcategories[$rr]["sbc_id"] = $row2["sbc_id"];
+    $subcategories[$rr]["sbc_name"] = $row2["sbc_name"];
+    $rr++;
+}
+
+$conn->close();
+date_default_timezone_set('America/Mexico_City');
+$hoy=new DateTime();
 
 // Cabezal de la página
 $header = '
-    <header>
+     <header>
         <div class="cornisa">
             <table class="table-main" border="0">
                 <tr>
                     <td class="box-logo side-color">
-                        <img class="img-logo" src="../../../app/assets/img/logo-blanco.jpg"  style="width:20mm; height:auto; margin: 3mm 2.5mm 0 2.5mm;"/>
+                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:42mm; height:16mm; margin: 3mm 2.5mm 0 2.5mm;"/>
                     </td>
-
+                    <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
+                    <p>
+                        <span class="number">Proyecto: '. $items[0]['pjt_name'] . '   #' . $items[0]['pjt_number'] .'</span>
+                        <br><span class="date">'.'</span>
+                    </p>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -86,14 +111,6 @@ $header = '
 $html = '
 <section>
 <div class="container">
-    <div class="name-report">
-        <p>
-            <span class="number">Nombre de proyecto: '. $items[0]['pjt_name'] . '  # ' . $items[0]['ver_code'] .'</span>
-        <br>
-            <span class="date">'.'</span>
-        </p>
-    </div>
-
     <table class="table-data bline-d tline">
         <tr>
             <td class="rline half">
@@ -138,6 +155,10 @@ $html = '
                         <td class="data">'. $items[0]['ver_code'] .'</td>
                     </tr> -->
                     <tr>
+                        <td class="concept">Fecha Cotización:</td>
+                        <td class="data">'. $hoy->format('d/m/Y') .'</td>
+                    </tr>
+                    <tr>
                         <td class="concept">Ciudad:</td>
                         <td class="data">'. $items[0]['pjt_location'] .'</td>
                     </tr>
@@ -152,15 +173,23 @@ $html = '
                     <tr>
                         <td class="concept">Fechas de Proyecto:</td>
                         <td class="data">'. $items[0]['period'] .'</td>
-                    </tr>
-                    <tr>
-                        <td class="concept">Dias de Viaje:</td>
-                        <td class="data">'. $items[0]['pjt_trip_go'] .'</td>
-                    </tr>
-                    <tr>
-                        <td class="concept">Dias de Pruebas:</td>
-                        <td class="data">'. $items[0]['pjt_test_tecnic'] .'</td>
-                    </tr>
+                    </tr>';
+                    if ($items[0]['pjt_trip_go']) {
+                        $html .='
+                            <tr>
+                                <td class="concept">Dias de Viaje:</td>
+                                <td class="data">'. $items[0]['pjt_trip_go'] .'</td>
+                            </tr>';
+                    }
+                    if ($items[0]['pjt_test_tecnic']) {
+                        $html .='
+                        <tr>
+                            <td class="concept">Dias de Pruebas:</td>
+                            <td class="data">'. $items[0]['pjt_test_tecnic'] .'</td>
+                        </tr>';
+                    }
+                    
+                    $html .='
                     <tr>
                         <td class="concept">&nbsp;</td>
                         <td class="data">&nbsp;</td>
@@ -174,26 +203,39 @@ $html = '
     <!-- End Datos de identificación  -->
 ';
 
+
 /* Tabla de equipo base -------------------------  */
     if ($equipoBase == '1'){
+        $sumaEquipo = 0;
+        $totalEquipo =0;
         $html .= '
-
-
-                    <!-- Start Tabla de costo base  -->
-                    <h2>Equipo Base</h2>
+                    <!-- Start Tabla de equipo base  -->
+                    <h2>Equipo Base</h2>';
+            foreach ($subcategories as $category) {
+            $aux=0;
+            for ($i = 0; $i<count($items); $i++){
+                $section = $items[$i]['pjtvr_section'];
+                if ($section == '1' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
+                    $aux=$aux+1;
+                }
+            }
+            if ($aux>0) {
+            $html .= '
+                    
+                    <h3 class="" style="color:#008000">'.$category['sbc_name'].'</h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                         <thead>
                             <tr>
-                                <th class="tit-figure prod">Producto</th>
-                                <th class="tit-figure pric">Precio</th>
-                                <th class="tit-figure qnty">Cant.</th>
-                                <th class="tit-figure days">Días</th>
-                                <th class="tit-figure disc">Dcto.</th>
-                                <th class="tit-figure amou">Importe</th>
-                                <th class="tit-figure days">Dias<br>Viaje</th>
-                                <th class="tit-figure amou">Dscto.<br>Viaje</th>
-                                <th class="tit-figure amou">Importe x<br>Viaje</th>
-                                <th class="tit-figure amou">Importe<br>Total</th>
+                            <th class="tit-figure prod">Equipo</th>
+                            <th class="tit-figure pric">Precio</th>
+                            <th class="tit-figure qnty">Cant.</th>
+                            <th class="tit-figure days">Días</th>
+                            <th class="tit-figure disc">Dcto.</th>
+                            <th class="tit-figure amou">Precio por día/th>
+                            <th class="tit-figure days">Dias<br>Viaje</th>
+                            <th class="tit-figure amou">Dscto.<br>Viaje</th>
+                            <th class="tit-figure amou">Importe x<br>Viaje</th>
+                            <th class="tit-figure amou">Total</th>
                             </tr>
                         </thead>
                         <tbody>';
@@ -205,6 +247,7 @@ $html = '
                         $amountGralTotal    = 0;
 
                         for ($i = 0; $i<count($items); $i++){
+                            if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
                             $section        = $items[$i]['pjtvr_section'] ;
 
                             if ($section == '1') {
@@ -253,8 +296,9 @@ $html = '
                             </tr>
                             ';
                             }
-
                         }
+
+                    }
         $html .= '
                         <tr>
                             <td class="tot-figure totl" colspan="4">Total Equipo Base</td>
@@ -268,18 +312,32 @@ $html = '
                     </tbody>
                 </table>
                 <!-- End Tabla de costo base  -->';
+        }
+    }
 
     }
 /* Tabla de equipo base -------------------------  */
 
 
 /* Tabla de equipo extra -------------------------  */
-    if ($equipoExtra == '1'){
+    if ($equipoExtra == '1'){ 
+        $sumaEquipo = 0;
+        $totalEquipo =0;
         $html .= '
-        
-        
-                    <!-- Start Tabla de equipo extra  -->
-                    <h2>Equipo Extra</h2>
+                    <!-- Start Tabla de equipo base  -->
+                    <h2>Equipo Extra</h2>';
+        foreach ($categories as $category) {
+            $aux=0;
+            for ($i = 0; $i<count($items); $i++){
+                    $section = $items[$i]['pjtvr_section'];
+                    if ($section == '2' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
+                        $aux=$aux+1;
+                    }
+            }
+            if ($aux>0) {
+            $html .= '
+                    
+                    <h3 class="" style="color:#008000">'.$category['sbc_name'].'</h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                         <thead>
                             <tr>
@@ -304,6 +362,7 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
+                            if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
                             $section        = $items[$i]['pjtvr_section'] ;
         
                             if ($section == '2') {
@@ -353,6 +412,7 @@ $html = '
                             </tr>
                             ';
                             }
+                        }
         
                         }
         $html .= '
@@ -368,6 +428,32 @@ $html = '
                         </tbody>
                     </table>
                     <!-- End Tabla de costo equipo extra  -->';
+            }}
+            $html .= '
+            <!-- Start Tabla de totales  -->
+            <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+                <thead>
+                    <tr>
+                        <th class="tit-figure" colspan="9">&nbsp;</th>
+                        <th class="tit-figure amou" >&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>';
+         
+// Total
+$html .= '
+                    <tr>
+                        <td class="tot-main totl" colspan="9">Total de equipo base</td>
+                        <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
+                    </tr>
+                    ';
+                    
+
+                
+$html .= '
+                </tbody>
+            </table>
+            <!-- End Tabla de costo equipo subarrendo  -->';
         
     }
 /* Tabla de equipo extra -------------------------  */
@@ -375,11 +461,24 @@ $html = '
 
 /* Tabla de equipo dias -------------------------  */
     if ($equipoDias == '1'){
-        $html .= '
-        
-        
+        $sumaEquipo = 0;
+        $totalEquipo =0;
+            $html .= '
+            
                     <!-- Start Tabla de equipo dias  -->
-                    <h2>Equipo Dias</h2>
+                    <h2>Equipo Días</h2>';
+            foreach ($categories as $category) {
+                $aux=0;
+                for ($i = 0; $i<count($items); $i++){
+                    $section = $items[$i]['pjtvr_section'];
+                    if ($section == '3' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
+                        $aux=$aux+1;
+                    }
+                }
+            if ($aux>0) {
+            $html .= '
+    
+                    <h3 class="" style="color:#008000">'.$category['sbc_name'].'</h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                         <thead>
                             <tr>
@@ -404,6 +503,7 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
+                            if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
                             $section        = $items[$i]['pjtvr_section'] ;
         
                             if ($section == '3') {
@@ -453,6 +553,7 @@ $html = '
                             </tr>
                             ';
                             }
+                        }
         
                         }
         $html .= '
@@ -468,6 +569,32 @@ $html = '
                         </tbody>
                     </table>
                     <!-- End Tabla de costo equipo extra  -->';
+            }} 
+            $html .= '
+            <!-- Start Tabla de totales  -->
+            <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+                <thead>
+                    <tr>
+                        <th class="tit-figure" colspan="9">&nbsp;</th>
+                        <th class="tit-figure amou" >&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>';
+         
+// Total
+$html .= '
+                    <tr>
+                        <td class="tot-main totl" colspan="9">Total de equipo base</td>
+                        <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
+                    </tr>
+                    ';
+                    
+
+                
+$html .= '
+                </tbody>
+            </table>
+            <!-- End Tabla de costo equipo subarrendo  -->';
         
     }
 /* Tabla de equipo dias -------------------------  */
@@ -475,11 +602,24 @@ $html = '
 
 /* Tabla de equipo subarrendo -------------------------  */
     if ($equipoSubarrendo == '1'){
+        $sumaEquipo = 0;
+        $totalEquipo =0;
         $html .= '
         
-        
-                    <!-- Start Tabla de equipo subarrendo  -->
-                    <h2>Equipo Subarrendo</h2>
+            <!-- Start Tabla de equipo subarrendo  -->
+            <h2>Equipo Subarrendo</h2>';
+        foreach ($categories as $category) {
+            $aux=0;
+            for ($i = 0; $i<count($items); $i++){
+                $section = $items[$i]['pjtvr_section'];
+                if ($section == '4' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
+                    $aux=$aux+1;
+                }
+            }
+        if ($aux>0) {
+        $html .= '
+
+                    <h3 class="" style="color:#008000">'.$category['sbc_name'].'</h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                         <thead>
                             <tr>
@@ -504,6 +644,7 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
+                            if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
                             $section        = $items[$i]['pjtvr_section'] ;
         
                             if ($section == '4') {
@@ -553,6 +694,7 @@ $html = '
                             </tr>
                             ';
                             }
+                        }
         
                         }
         $html .= '
@@ -568,6 +710,33 @@ $html = '
                         </tbody>
                     </table>
                     <!-- End Tabla de costo equipo subarrendo  -->';
+        }
+    }
+    $html .= '
+    <!-- Start Tabla de totales  -->
+    <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
+        <thead>
+            <tr>
+                <th class="tit-figure" colspan="9">&nbsp;</th>
+                <th class="tit-figure amou" >&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>';
+ 
+// Total
+$html .= '
+            <tr>
+                <td class="tot-main totl" colspan="9">Total de equipo base</td>
+                <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
+            </tr>
+            ';
+            
+
+        
+$html .= '
+        </tbody>
+    </table>
+    <!-- End Tabla de costo equipo subarrendo  -->';
         
     }
 /* Tabla de equipo subarrendo -------------------------  */
@@ -677,7 +846,7 @@ $html .= '
         <tbody>
             <tr>
                 <td>
-                <ul style="font-size: 0.8em;">
+                <ul style="font-size: 0.9em;">
                     <li>Toda cotización, considera las condiciones estipuladas en la solicitud de servicio, en caso de que éstas varíen, los costos finales deberán asentarse una vez finalizado el proyecto</li>
                     <li>Ninguna cotización, tiene valor fiscal, ni legal, ni implica obligación alguna para la empresa SIMPLEMENTE SERVICIOS S.A. DE C.V. y/o su personal</li>
                     <li> Los montos referidos en esta cotización tienen una vigencia de 30 dias a partir de la fecha del envio de la misma al cliente. Posteriormente a este periodo de tiempo los montos pueden variar</li>
@@ -728,9 +897,6 @@ $html .= '
 /* Tabla firmas -------------------------  */
 
 
-
-
-
 // Pie de pagina
 $foot = '
     <footer>
@@ -740,27 +906,40 @@ $foot = '
                 <td>
                     <table width="100%">
                         <tr>
-                            <td class="td-foot foot-date" width="25%">{DATE F j, Y}</td>
+                            <td class="td-foot foot-date" width="25%"></td>
                             <td class="td-foot foot-page" width="25%" align="center">{PAGENO}/{nbpg}</td>
-                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Elaboró: '. $uname . '</td>
-                            <td class="td-foot foot-rept" width="25%" style="text-align: right">Versión '. $items[0]['ver_code'].'</td>
+                            <td class="td-foot foot-rept" width="25%" style="text-align: right"></td>
                         </tr>
                     </table>
-
                 </td>
-            </tr>
-            
+            </tr> 
         </table>
+        
         <table class="table-address">
             <tr>
-            <td class="addData" align="center">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
-            <td class="addIcon addColor02" align="center"><img class="img-logo" src="../../../app/assets/img/icon-location.png" style="width:4mm; height:auto;" /></td>
-        
+                <td class="addData">
+                    reservaciones@cttrentals.com, 
+                
+                </td>
+                <td class="addData">
+                    presupuestos@cttrentals.com,
+                </td>
+                <td class="addData">
+                
+                    proyectos@cttrentals.com,
+                </td>
+                <td class="addData">
+                    cotizaciones@cttrentals.com.
+                </td>
+            </tr>
+        </table>
+        <table class="table-address">            
+            <tr>
+                <td class="addData">Av Guadalupe I. Ramírez 763, Tepepan Xochimilco, 16020, CDMX</td>
             </tr>
         </table>
     </footer>
 ';
-
 
 
 $css = file_get_contents('../../assets/css/reports_p.css');
@@ -770,12 +949,12 @@ ob_get_contents();
 $mpdf= new \Mpdf\Mpdf([
     'mode' => 'utf-8',
     'format' => 'Letter',
-    'margin_left' => 0,
-    'margin_right' => 0,
-    'margin_top' => 5,
-    'margin_bottom' => 30,
-    'margin_header' => 0,
-    'margin_footer' => 0, 
+    'margin_left' => 5,
+    'margin_right' => 5,
+    'margin_top' => 25,
+    'margin_bottom' => 35,
+    'margin_header' => 5,
+    'margin_footer' => 4, 
     'orientation' => 'P'
     ]);
 
@@ -791,7 +970,6 @@ $mpdf->Output(
 
 
 // "Cotizacion-". $items[0]['ver_code'].".pdf",
-
 function decodificar($dato) {
     $resultado = base64_decode($dato);
     list($resultado, $letra) = explode('+', $resultado);

@@ -112,6 +112,17 @@ ALTER TABLE `ctt_projects`
 ALTER TABLE `ctt_subcategories`
 	ADD COLUMN `sbc_order_print` INT(11) NOT NULL AFTER `cat_id`;
 
+CREATE TABLE `ctt_estados_mex` (
+	`edos_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`edos_name` VARCHAR(50) NULL DEFAULT NULL COMMENT 'nombre del estado' COLLATE 'utf8mb4_general_ci',
+	`edos_abrev` VARCHAR(5) NULL DEFAULT NULL COMMENT 'abreviatura del estado' COLLATE 'utf8mb4_general_ci',
+	`edos_capital` VARCHAR(50) NULL DEFAULT NULL COMMENT 'capital del estado' COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`edos_id`) USING BTREE
+)
+COMMENT='Catalogo de los estados de la republica mexicana'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
 
 CREATE TABLE `ctt_freelances` (
 	`free_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id del Freelance',

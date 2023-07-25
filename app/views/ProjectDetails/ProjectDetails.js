@@ -193,13 +193,24 @@ function eventsAction() {
                 let verId = $('.version_current').attr('data-version');
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
                 if (verId != undefined){
+                    // var today = new Date();
+ 
+                    // // obtener la fecha de hoy en formato `MM/DD/YYYY`
+                    // var now = today.toLocaleDateString('en-US');
+                    // console.log(now);
+                    // let moment = require(today);
+                    // obtener el nombre del mes, día del mes, año, hora
+                    // let now = moment().format("DD/MM/YYYY HH:mm:ss A");
+                    let now = "2023-02-28 18:25:25";
+                    console.log('Fecha y Hora Actual',now);
                     modalLoading('S');
                     let par = `
                     [{
                         "pjtId"     : "${pjtId}",
                         "verId"     : "${verId}",
                         "discount"  : "${discount}",
-                        "action"    : "${interfase}"
+                        "action"    : "${interfase}",
+                        "dateact"    : "${now}"
                     }]`;
                     // console.log('Salvando Solo',par);
                     var pagina = 'ProjectDetails/SaveBudget';
@@ -229,9 +240,18 @@ function eventsAction() {
                 let vr = parseInt(verCurr.substring(1, 10));
                 let verNext = 'P' + refil(vr + 1, 4);
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
-                let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  // agregado por jjr
+                // let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  // agregado por jjr
+                let lastmov = '';  // agregado por jjr
                 // console.log('FECHA- ', lastmov);
                 if (vr != undefined){   //agregado por jjr
+                    var today = new Date();
+                    // var now = today.toLocaleDateString('en-US');
+                    // console.log(now);
+                    // let moment = require(SYSDATE);
+                    // obtener el nombre del mes, día del mes, año, hora
+                    // let now = date.now().format("DD/MM/YYYY HH:mm:ss");
+                    // let now = Date.now().parse("2012-01-26T13:51:50.417-07:00");
+                    // console.log('Fecha y Hora Actual',now);
                     modalLoading('S');
                     let par = `
                     [{
@@ -980,9 +1000,9 @@ function putProducts(dt) {
                 <th class="col_product" title="${u.prd_name}">
                 <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
-                <td class="col_type">${u.prd_level}</td>
-                <td class="col_category">${u.sbc_name}</td>
+                <td class="col_category">${u.cat_name}</td>
                 <td class="col_category">${u.prd_price}</td>
+                <td class="col_type">${u.prd_level}</td>
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
@@ -1157,14 +1177,6 @@ function fillBudgetProds(jsn, days, stus) {
     let pds = JSON.parse(jsn);
     
     let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',').replace(/\¿/g, '\'');
-            /* if (u.pjt_status == 4)
-            { valstage='color:#008000'; }
-            else if (u.pjt_status == 7)
-            { valstage='color:#FFA500'; }
-            else
-            { valstage='color:#CC0000'; }
-            console.log(valstage); */
-    
     let H = `
     <tr id="bdg${pds.prd_id}" 
         data-sku     = "${pds.pjtvr_prod_sku}" 
@@ -1587,10 +1599,9 @@ function putProductsRelated(dt) {
                 <td><span class="${pending}">${u.pjtdt_prod_sku.toUpperCase()}</span></td>
                 <td>${u.prd_level}</td>
                 <td>${u.prd_name}</td>
-                <td>${u.ser_comments}</td>
                 <td>${u.cat_name}</td>
+                <td>${u.ser_comments}</td>
             </tr>
-           
         `;
             $('.invoice__modal-general table tbody').append(H);
         }
@@ -2252,6 +2263,7 @@ function printBudget(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
+    console.log('printBudget',v,u,n);
     if (theredaytrip != 0){ // agregado jjr cambiar impresion c-s
         window.open(
             `${url}app/views/ProjectDetails/ProjectDetailsReport-c-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
@@ -2259,7 +2271,7 @@ function printBudget(verId) {
         );
     } else{
         window.open(
-            `${url}app/views/ProjectPlans/ProjectPlansReport-s-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+            `${url}app/views/ProjectDetails/ProjectDetailsReport-s-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
             '_blank'
         );   
     }

@@ -168,16 +168,16 @@ class ProjectDetailsModel extends Model
 /** ====== Listado de productos ==============================================================  */
     public function listProducts($params)
     {
-
         $word = $this->db->real_escape_string($params['word']);
         $dstr = $this->db->real_escape_string($params['dstr']);
         $dend = $this->db->real_escape_string($params['dend']);
 
         $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, 
-                        sb.sbc_name,
+                        sb.sbc_name,cat_name,
                 CASE 
                     WHEN prd_level ='K' THEN 
-                        (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
+                        (SELECT prd_stock
+                                FROM ctt_products WHERE prd_id = pd.prd_id)
                     WHEN prd_level ='P' THEN 
                         (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
@@ -185,6 +185,7 @@ class ProjectDetailsModel extends Model
                     END AS stock
             FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+            INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
             WHERE (upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%') 
                     AND pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
             ORDER BY pd.prd_name ;";
@@ -199,10 +200,11 @@ public function listProductsSub($params)
     $dend = $this->db->real_escape_string($params['dend']);
 
     $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, 
-                    sb.sbc_name,
+                    sb.sbc_name, ct.cat_name, sbl.sub_price,
             CASE 
                 WHEN prd_level ='K' THEN 
-                    (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
+                    (SELECT prd_stock
+                                FROM ctt_products WHERE prd_id = pd.prd_id)
                 WHEN prd_level ='P' THEN 
                     (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                 ELSE 
@@ -210,19 +212,18 @@ public function listProductsSub($params)
                 END AS stock
         FROM ctt_products AS pd
         INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+        INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
         INNER JOIN ctt_subletting AS sbl ON sbl.prd_id = pd.prd_id
         WHERE (upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%')
                  AND pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
-        ORDER BY pd.prd_name ;";
+        ORDER BY pd.prd_name;";
     return $this->db->query($qry);
 } 
-
 
 /** ====== Listado de comentarios registrados al proyecto ====================================  */
     public function listComments($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjId']);
-
 
         $qry = "SELECT com_id, com_date,com_user, com_comment 
                 FROM ctt_comments 
@@ -250,7 +251,6 @@ public function promoteToProject($params)
 /** ====== Listado de productos relacionados como accesosrios ================================  */
     public function listProductsRelated($params)
     {
-
         $type = $this->db->real_escape_string($params['type']);
         $prdId = $this->db->real_escape_string($params['prdId']);
         $verId = $this->db->real_escape_string($params['verId']);
@@ -279,7 +279,7 @@ public function promoteToProject($params)
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
                 INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
-                WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId 
+                WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId AND substr(pj.pjtdt_prod_sku,8,1) !='R'
                 ORDER BY reng, pr.prd_sku, pr.prd_level DESC;";
         return $this->db->query($qry);
 
@@ -288,7 +288,6 @@ public function promoteToProject($params)
 /** ====== Muestra el inventario de productos en almacen =====================================  */
     public function stockProducts($params)
     {
-
         $prdId = $this->db->real_escape_string($params['prdId']);
 
         $qry = "SELECT  ifnull(pdt.pjtdt_prod_sku,'') as pjtdt_prod_sku, 

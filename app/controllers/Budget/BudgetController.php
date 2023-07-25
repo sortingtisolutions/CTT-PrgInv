@@ -348,10 +348,9 @@ public function stockProdcuts($request_params)
         $name = $group[2]; 
 
         $resultIns = $this->model->SaveBudget($request_params);
-        $result = $this->reOrdenList($request_params);
+        $resReorder = $this->reOrdenList($request_params);
 
-        echo $resultIns . '|' . $name . '|' . $result;
-        
+        echo $resultIns . ' | ' . $name ;
     } 
 
 // Guarda el comentario
@@ -736,6 +735,7 @@ public function ProcessProjectProduct($request_params)
     {
         $params =  $this->session->get('user');
         $result = $this->model->listReordering($request_params);
+
         $valnew=1;
         while($row = $result->fetch_assoc())
         {
@@ -751,8 +751,7 @@ public function ProcessProjectProduct($request_params)
             $bandReOrder = $this->model->upReorderingProducts($paramup);
             $valnew=$valnew + 1;
         }
-
-        echo $bandReOrder ; 
+        // echo $bandReOrder ; 
     } 
 
 }

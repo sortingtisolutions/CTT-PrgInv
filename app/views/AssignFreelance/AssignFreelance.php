@@ -87,8 +87,7 @@
                             <th style="width: 200px">Comentarios</th>
                         </tr>
                     </thead>
-                    <tbody>	
-                    </tbody>
+                    <tbody>	</tbody>
                 </table>
             </div>        
         </div>
@@ -103,7 +102,6 @@
             <div class="modal-header ">
             </div>
             <div class="modal-body" style="padding: 0px !important;">
-
 
             <div class="row">
                 <div class="col-12 text-center">

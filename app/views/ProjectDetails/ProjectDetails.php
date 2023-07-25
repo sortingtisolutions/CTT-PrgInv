@@ -345,9 +345,9 @@
                 <tr>
                     <th>Producto</th>
                     <th>Existencias</th>
-                    <th>Tipo</th>
-                    <th>Sub-categoría</th>
+                    <th>Categoría</th>
                     <th>Precio</th>
+                    <th>Tipo</th>
                 </tr>
             </thead>
             <tbody></tbody>

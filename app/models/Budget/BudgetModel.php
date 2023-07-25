@@ -192,11 +192,11 @@ public function listDiscounts($params)
     public function listProducts($params)
     {
         $word = $this->db->real_escape_string($params['word']);
-        $dstr = $this->db->real_escape_string($params['dstr']);
-        $dend = $this->db->real_escape_string($params['dend']);
+        // $dstr = $this->db->real_escape_string($params['dstr']);
+        // $dend = $this->db->real_escape_string($params['dend']);
 //(SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
         $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
-                        pd.prd_insured, sb.sbc_name,
+                        pd.prd_insured, sb.sbc_name,cat_name,
                 CASE 
                     WHEN prd_level ='K' THEN 
                         (SELECT prd_stock
@@ -210,6 +210,7 @@ public function listDiscounts($params)
                     END AS stock
             FROM ctt_products AS pd
             INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+            INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
             WHERE (upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%')
                 AND pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
             ORDER BY pd.prd_name;";
@@ -376,14 +377,14 @@ public function stockProdcuts($params)
         $bdg_order              = $params['bdgOrder'];
         $ver_id                 = $params['verId'];
         $prd_id                 = $params['prdId'];
-        $pjt_id                 = $params['pjtId'];
+        $pjtId                 = $params['pjtId'];
 
         $qry = "INSERT INTO ctt_budget (
                     bdg_prod_sku, bdg_prod_name, bdg_prod_price, bdg_prod_level, bdg_section, 
                     bdg_quantity, bdg_days_base, bdg_days_cost, bdg_discount_base, bdg_discount_insured, 
                     bdg_days_trip, bdg_discount_trip, bdg_days_test, bdg_discount_test,bdg_insured, 
-                    bdg_order, ver_id, prd_id 
-                ) VALUES (
+                    bdg_order, ver_id, prd_id ) 
+                VALUES (
                     '$bdg_prod_sku', REPLACE('$bdg_prod_name','\¿','\''),    
                     '$bdg_prod_price', '$bdg_prod_level', 
                     '$bdg_section',  '$bdg_quantity', 
@@ -393,12 +394,11 @@ public function stockProdcuts($params)
                     '$bdg_days_test', '$bdg_discount_test', 
                     '$bdg_insured', '$bdg_order', 
                     '$ver_id', 
-                    '$prd_id'
-                );
+                    '$prd_id' );
                 ";
             $this->db->query($qry);
             $result = $this->db->insert_id;
-            return $pjt_id;
+        return $pjtId;
     }
 
 
@@ -451,7 +451,7 @@ public function stockProdcuts($params)
         $this->db->query($qry02);
         $pjtId = $this->db->insert_id;
 
-        $pjt_number = 'P' . str_pad($pjtId, 7, "0", STR_PAD_LEFT);
+        $pjt_number = 'P' . str_pad($pjtId, 4, "0", STR_PAD_LEFT);
 
         $qry03 = "UPDATE ctt_projects SET pjt_number = '$pjt_number'
                   WHERE pjt_id = $pjtId;";

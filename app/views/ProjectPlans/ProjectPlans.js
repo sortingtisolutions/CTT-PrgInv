@@ -969,9 +969,9 @@ function putProducts(dt) {
                 <th class="col_product" title="${u.prd_name}">
                 <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
-                <td class="col_type">${u.prd_level}</td>
-                <td class="col_category">${u.sbc_name}</td>
+                <td class="col_category">${u.cat_name}</td>
                 <td class="col_category">${u.prd_price}</td>
+                <td class="col_type">${u.prd_level}</td>
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
