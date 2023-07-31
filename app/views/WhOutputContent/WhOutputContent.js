@@ -27,7 +27,6 @@ function inicial() {
     getDetailProds(prjid,em);
     getFreelances(prjid);
 
-
     // Boton para registrar la salida del proyecto y los productos
     $('#recordOutPut').on('click', function () {
         confirm_to_GetOut(prjid); 
@@ -84,6 +83,7 @@ function getSerieDetail(serid, serorg) {
     var selector = putSerieDetails;
     fillField(pagina, par, tipo, selector);
 }
+
 // Solicita los comentarios al proyecto
 function getComments(prjid) {
     //console.log(prjid)

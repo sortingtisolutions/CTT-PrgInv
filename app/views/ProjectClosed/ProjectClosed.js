@@ -5,11 +5,13 @@ const exp = $('#txtExpendab');
 const man = $('#txtMaintenance');
 const dis = $('#txtDiscount');
 const com = $('#txtComments');
+const extd = $('#txtDiesel');
 
 const tblprod = $('#tblProducts');
 const totprj = $('#totProject');
 const totexp = $('#totExpendab');
 const totman = $('#totMaintenance');
+const totdie = $('#totDiesel');
 const totdis = $('#totDiscount');
 const totals = $('#totals');
 
@@ -100,6 +102,7 @@ function getProjects() {
         activaCampos(pjtId);
         findExpenda(pjtId);
         findMaintenance(pjtId);
+        findExtraDiesel(pjtId);
         findDiscount(pjtId);
 
         setTimeout(() => {
@@ -241,10 +244,23 @@ function findDiscount(pjtId) {
     });
 }
 
+function findExtraDiesel(pjtId) {
+    let cfr = 0;
+    extd.unbind('keyup').on('keyup', function () {
+        let val = $(this).val();
+        if (val == '') {
+            val = cfr;
+        }
+        totdie.html(fnm(val, 2, '.', ','));
+        updateTotals();
+    });
+}
+
 function updateTotals() {
     let total = parseFloat(totprj.html().replace(',', ''));
     total += parseFloat(totexp.html().replace(',', ''));
     total += parseFloat(totman.html().replace(',', ''));
+    total += parseFloat(totdie.html().replace(',', ''));
     total -= parseFloat(totdis.html().replace(',', ''));
     // console.log(total);
     // totals.html(total);

@@ -13,7 +13,7 @@ class ProjectClosedModel extends Model
     public function listProjects($params)
     {
         $qry = "SELECT pjt_id, pjt_name FROM ctt_projects 
-                WHERE pjt_status IN (3,4);"; /* AND pjt_date_start < curdate();"; */
+                WHERE pjt_status IN (8,9);"; /* AND pjt_date_start < curdate();"; */
         return $this->db->query($qry);
 
     }

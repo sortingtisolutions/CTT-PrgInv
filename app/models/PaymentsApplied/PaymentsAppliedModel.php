@@ -14,9 +14,9 @@ class PaymentsAppliedModel extends Model
     public function listPaymentsApplied($params)
     {
         $qry = "SELECT * FROM ctt_payments_applied AS pym
-                INNER JOIN ctt_collect_accounts AS clt ON clt.clt_id=pym.clt_id
-                INNER JOIN ctt_projects AS pjt ON pjt.pjt_id=pym.pjt_id
-                INNER JOIN ctt_way_topay AS wtp ON wtp.wtp_id=pym.wtp_id
+                LEFT JOIN ctt_collect_accounts AS clt ON clt.clt_id=pym.clt_id
+                LEFT JOIN ctt_projects AS pjt ON pjt.pjt_id=pym.pjt_id
+                LEFT JOIN ctt_way_topay AS wtp ON wtp.wtp_id=pym.wtp_id
                 ORDER BY pym.pym_id DESC;";
 
         return $this->db->query($qry);
@@ -25,7 +25,7 @@ class PaymentsAppliedModel extends Model
 // Obtiene el listado de las subcategorias activas
     public function listProjects($params)
     {
-        $qry = "SELECT * FROM ctt_projects WHERE pjt_status='4'
+        $qry = "SELECT * FROM ctt_projects WHERE pjt_status='8'
                 ORDER BY 1 DESC;";
 
         return $this->db->query($qry);

@@ -22,8 +22,8 @@ class CollectAccountsModel extends Model
         //$catId = $this->db->real_escape_string($params['catId']);
 
         $qry = "SELECT * FROM ctt_collect_accounts AS clt
-                INNER JOIN ctt_customers AS cus ON cus.cus_id=clt.cus_id
-                INNER JOIN ctt_projects AS pjt ON pjt.pjt_id=clt.pjt_id
+                LEFT JOIN ctt_customers AS cus ON cus.cus_id=clt.cus_id
+                LEFT JOIN ctt_projects AS pjt ON pjt.pjt_id=clt.pjt_id
                 ORDER BY clt.clt_date_generated,clt.clt_deadline ASC;";
         return $this->db->query($qry);
     }
@@ -33,7 +33,7 @@ class CollectAccountsModel extends Model
         /* $prdId = $this->db->real_escape_string($params['prdId']); */
         $qry = "SELECT pjtcn_id,pjtcn_prod_sku,pjtcn_prod_name,pjtcn_quantity,pjtcn_prod_level
                 FROM ctt_projects_content AS pj
-                WHERE pj.pjt_id = 1 limit 1;";
+                WHERE pj.pjt_id IN ('8','9') limit 1;";
 
         return $this->db->query($qry);
     }

@@ -1131,7 +1131,7 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    $('tbody.sections_products').sortable({
+    /* $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
         axis: 'y',
@@ -1151,7 +1151,7 @@ function putBudgets(dt) {
             showButtonVersion('S');
             OrderMice(1);
         },
-    });
+    }); */
 
     reOrdering();
 }
@@ -1862,6 +1862,7 @@ function putStockProjects(dt) {
 // Edita los datos del proyecto
 function editProject(pjtId) {
     let inx = findIndex(pjtId, proj);
+    console.log('INX',inx);
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#dataProjectTemplate');
@@ -1932,14 +1933,14 @@ function fillContent() {
     // Llena el selector de clientes
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
-            let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
+            let H = `<option value="${u.cus_id}">${u.cus_id} - ${u.cus_name}</option>`;
             $('#txtCustomerEdt').append(H);
         }
     });
     // Llena el selector de relacion de clientes
     $.each(cust, function (v, u) {
         if (u.cut_id == 2) {
-            let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
+            let H = `<option value="${u.cus_id}">${u.cus_id} - ${u.cus_name}</option>`;
             $('#txtCustomerRelEdt').append(H);
         }
     });
@@ -2080,7 +2081,7 @@ function fillData(inx) {
                     "pjtTestLook"    : "${testLook}"
                 }]
                 `;
-
+                console.log('Update-Proyect',par);
                 var pagina = 'ProjectDetails/UpdateProject';
                 var tipo = 'html';
                 var selector = loadProject;

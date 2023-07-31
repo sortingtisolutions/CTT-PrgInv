@@ -2056,7 +2056,7 @@ function actionNewProject() {
                         "empname"        : "${empname}",                       
                         "edos_id"        : "${edos_id}"
                     }] `;
-                // console.log(par);
+                console.log(par);
                 var pagina = 'Budget/SaveProject';
                 var tipo = 'html';
                 var selector = loadProject;

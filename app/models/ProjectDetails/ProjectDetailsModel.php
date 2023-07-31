@@ -173,7 +173,7 @@ class ProjectDetailsModel extends Model
         $dend = $this->db->real_escape_string($params['dend']);
 
         $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, 
-                        sb.sbc_name,cat_name,
+                        sb.sbc_name, ct.cat_name,
                 CASE 
                     WHEN prd_level ='K' THEN 
                         (SELECT prd_stock
@@ -445,7 +445,6 @@ public function promoteToProject($params)
         $pjt_to_carry_out       = $this->db->real_escape_string($params['pjtToCarryOut']);
         $pjt_test_tecnic        = $this->db->real_escape_string($params['pjtTestTecnic']);
         $pjt_test_look          = $this->db->real_escape_string($params['pjtTestLook']);
-
 
         $qry02 = "UPDATE    ctt_projects
                     SET     pjt_name            = '$pjt_name', 

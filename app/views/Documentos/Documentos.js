@@ -111,13 +111,6 @@ function SaveDocumento() {
    var tipoDocumento = $('#selectRowTipoDocumento option:selected').attr('id');
    var tipoDocumentoText = $('#selectRowTipoDocumento option:selected').text();
   
-   console.log('1', tipoDocumento);
-   console.log('2', CodDocumento);
-   console.log('3', NomDocumento);
-   console.log('4', ExtDocumento);
-   console.log('5', Fechaadmision);
-
-
    var data = new FormData();
    data.append("file",archivo);
    data.append("NomDocumento", NomDocumento);

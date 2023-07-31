@@ -50,7 +50,7 @@
                     </div>
 
                     <div class="row list-finder pos3 hide-items"> 
-                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos5 hide-items">
+                        <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating ">   <!-- pos5 hide-items -->
                         <input id="txtDiesel" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
                             <label for="txtDiesel">Extras Diesel</label>
                         </div>
