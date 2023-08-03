@@ -137,10 +137,10 @@ class WorkInputContentController extends Controller
         echo $result;
     }
 
-    public function regManteince($request_params)
+    public function regMaintenance($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->regManteince($request_params);
+        $result = $this->model->regMaintenance($request_params);
         echo $result;
     }
 

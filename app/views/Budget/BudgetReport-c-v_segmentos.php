@@ -27,8 +27,8 @@ $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 $qry = "SELECT *, ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) as ver_date_real,
-CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), date_format(pj.pjt_date_end, '%d-%b-%Y')) as period
-, vr.ver_discount_insured
+CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
+date_format(pj.pjt_date_end, '%d-%b-%Y')) as period , vr.ver_discount_insured
 FROM ctt_budget AS bg
 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
 INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
@@ -36,7 +36,8 @@ INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
 INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
 INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id 
-INNER JOIN ctt_categories AS ct ON ct.cat_id = sb.cat_id
+INNER JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
+INNER JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
 LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
 LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
 WHERE bg.ver_id = $verId  ORDER BY sbc_order_print, bdg_section;";
@@ -46,18 +47,21 @@ $res = $conn->query($qry);
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
-$query="SELECT DISTINCT sb.sbc_id, sb.sbc_name FROM ctt_subcategories AS sb 
+// OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
+$query="SELECT cr.crp_id, cr.crp_name, sb.sbc_name, sb.sbc_order_print 
+FROM ctt_subcategories AS sb 
+INNER JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
+INNER JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
 INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
 INNER JOIN ctt_budget AS bg ON bg.prd_id = pd.prd_id 
-WHERE bg.ver_id = $verId ORDER BY sbc_order_print, bdg_section;";
+WHERE bg.ver_id = $verId GROUP BY cr.crp_id ORDER BY sbc_order_print, bdg_section";
 $res2 = $conn->query($query);
-$subcategories=array();
+$categories=array();
 $rr = 0;
 
-while ($row = $res2->fetch_assoc()) {
-    
-    $subcategories[$rr]["sbc_id"] = $row["sbc_id"];
-    $subcategories[$rr]["sbc_name"] = $row["sbc_name"];
+while ($row2 = $res2->fetch_assoc()) {
+    $categories[$rr]["crp_id"] = $row2["crp_id"];
+    $categories[$rr]["crp_name"] = $row2["crp_name"];
     $rr++;
 }
 $conn->close();
@@ -70,14 +74,9 @@ $header = '
             <table class="table-main" border="0">
                 <tr>
                     <td class="box-logo side-color">
-                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:42mm; height:16mm; margin: 3mm 2.5mm 0 2.5mm;"/>
+                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:25mm; height:auto; margin: 3mm 2.5mm 0 2.5mm;"/>
                     </td>
-                    <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
-                    <p>
-                        <span class="number">Proyecto: '. $items[0]['pjt_name'] . '   #' . $items[0]['pjt_number'] .'</span>
-                        <br><span class="date">'.'</span>
-                    </p>
-                    </td>
+
                 </tr>
             </table>
         </div>
@@ -218,12 +217,12 @@ $html = '
         
                     <!-- Start Tabla de equipo base  -->
                     <h2>Equipo Base</h2>';
-        foreach ( $subcategories as $category) {
+        foreach ( $categories as $category) {
             $aux=0;
             $sub =0;
             for ($i = 0; $i<count($items); $i++){
                 $section = $items[$i]['bdg_section'];
-                if ($section == '1' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
+                if ($section == '1' && $items[$i]['crp_id'] == $category["crp_id"]) {
                     $aux=$aux+1;
                     $sub = $i;
                 }
@@ -231,7 +230,7 @@ $html = '
         if ($aux>0) {
         $html .= '
                     
-                    <h3 class="" style="color:#008000">'.$category['sbc_name'].'</h3>
+                    <h3 class="" style="color:#008000">'.$category['crp_name'].'</h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                         <thead>
                             <tr>
@@ -256,7 +255,7 @@ $html = '
                         $amountGralTotal    = 0;
 
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
+                            if ($items[$i]['crp_id'] ==$category["crp_id"]) {
                             $section        = $items[$i]['bdg_section'] ;
 
                             if ($section == '1') {
@@ -289,6 +288,7 @@ $html = '
                                 $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
                                 $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
+                                $totalEquipo += $amountGral;
 
         $html .= '
                             <tr>
@@ -311,7 +311,7 @@ $html = '
                     
         $html .= '
                         <tr>
-                            <td class="tot-figure totl" colspan="4">Total Equipo Base</td>
+                            <td class="tot-figure totl" colspan="4">Subtotal Base</td>
                             <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                             <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
                             <td class="tot-figure days"></td>
@@ -339,7 +339,7 @@ $html = '
     // Total
     $html .= '
                         <tr>
-                            <td class="tot-main totl" colspan="9">Total de equipo base</td>
+                            <td class="tot-main totl" colspan="9">Total Equipo Base</td>
                             <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                         </tr>
                         ';
@@ -363,12 +363,12 @@ $html = '
         
                     <!-- Start Tabla de equipo extra  -->
                     <h2>Equipo Extra</h2>';
-                    foreach ( $subcategories as $category) {
+                    foreach ( $categories as $category) {
                         $aux=0;
                         $sub =0;
                         for ($i = 0; $i<count($items); $i++){
                             $section = $items[$i]['bdg_section'];
-                            if ($section == '2' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
+                            if ($section == '2' && $items[$i]['crp_id'] == $category["crp_id"]) {
                                 $aux=$aux+1;
                                 $sub = $i;
                             }
@@ -376,7 +376,7 @@ $html = '
                     if ($aux>0) {
             $html .= '
             
-                        <h3 class="" style="color:#4682B4">'.$category['sbc_name'].'</h3>
+                        <h3 class="" style="color:#008000">'.$category['crp_name'].'</h3>
                         <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                             <thead>
                             <tr>
@@ -401,7 +401,7 @@ $html = '
                             $amountGralTotal    = 0;
             
                             for ($i = 0; $i<count($items); $i++){
-                                if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
+                                if ($items[$i]['crp_id'] ==$category["crp_id"]) {
                                 $section        = $items[$i]['bdg_section'] ;
             
                                 if ($section == '2') {
@@ -434,6 +434,7 @@ $html = '
                                     $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
                                     $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                     $totalInsr         += $totalInsured;
+                                    $totalEquipo += $amountGral;
             
             
             $html .= '
@@ -457,7 +458,7 @@ $html = '
         
         $html .= '
                             <tr>
-                                <td class="tot-figure totl" colspan="4">Total Equipo Extra</td>
+                                <td class="tot-figure totl" colspan="4">Subtotal Extra</td>
                                 <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure days"></td>
@@ -484,7 +485,7 @@ $html = '
     // Total
     $html .= '
                         <tr>
-                            <td class="tot-main totl" colspan="9">Total de equipo base</td>
+                            <td class="tot-main totl" colspan="9">Total Equipo Extra</td>
                             <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                         </tr>
                         ';
@@ -509,12 +510,12 @@ $html = '
         
                 <!-- Start Tabla de equipo dias  -->
                 <h2>Equipo Días</h2>';
-                foreach ( $subcategories as $category) {
+                foreach ( $categories as $category) {
                     $aux=0;
                     $sub =0;
                     for ($i = 0; $i<count($items); $i++){
                         $section = $items[$i]['bdg_section'];
-                        if ($section == '3' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
+                        if ($section == '3' && $items[$i]['crp_id'] == $category["crp_id"]) {
                             $aux=$aux+1;
                             $sub = $i;
                         }
@@ -522,7 +523,7 @@ $html = '
                 if ($aux>0) {
         $html .= '
 
-                    <h3 class="">'.$category['sbc_name'].'</h3>
+                    <h3 class="" style="color:#008000">'.$category['crp_name'].'</h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                         <thead>
                             <tr>    
@@ -547,7 +548,7 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
+                            if ($items[$i]['crp_id'] ==$category["crp_id"]) {
                             $section        = $items[$i]['bdg_section'] ;
         
                             if ($section == '3') {
@@ -580,6 +581,7 @@ $html = '
                                 $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
                                 $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
+                                $totalEquipo += $amountGral;
         
         
         $html .= '
@@ -602,7 +604,7 @@ $html = '
                 }
         $html .= '
                             <tr>
-                                <td class="tot-figure totl" colspan="4">Total Equipo Dias</td>
+                                <td class="tot-figure totl" colspan="4">Subtotal Dias</td>
                                 <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure days"></td>
@@ -629,7 +631,7 @@ $html = '
     // Total
     $html .= '
                         <tr>
-                            <td class="tot-main totl" colspan="9">Total de equipo base</td>
+                            <td class="tot-main totl" colspan="9">Total Equipo Días</td>
                             <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                         </tr>
                         ';
@@ -654,12 +656,12 @@ $html = '
         
         <!-- Start Tabla de equipo subarrendo  -->
         <h2>Equipo Subarrendo</h2>';
-        foreach ( $subcategories as $category) {
+        foreach ( $categories as $category) {
             $aux=0;
             $sub =0;
             for ($i = 0; $i<count($items); $i++){
                 $section = $items[$i]['bdg_section'];
-                if ($section == '4' && $items[$i]['sbc_id'] == $category["sbc_id"]) {
+                if ($section == '4' && $items[$i]['crp_id'] == $category["crp_id"]) {
                     $aux=$aux+1;
                     $sub = $i;
                 }
@@ -667,7 +669,7 @@ $html = '
         if ($aux>0) {
     $html .= '
 
-                <h3 class="">'.$category['sbc_name'].'</h3>
+                <h3 class="" style="color:#008000">'.$category['crp_name'].'</h3>
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                         <thead>
                             <tr>
@@ -692,7 +694,7 @@ $html = '
                         $amountGralTotal    = 0;
         
                         for ($i = 0; $i<count($items); $i++){
-                            if ($items[$i]['sbc_id'] ==$category["sbc_id"]) {
+                            if ($items[$i]['crp_id'] ==$category["crp_id"]) {
                             $section        = $items[$i]['bdg_section'] ;
         
                             if ($section == '4') {
@@ -725,6 +727,7 @@ $html = '
                                 $amountDescInsured  = $amountinsured * $discoInsured;   //  ------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
                                 $totalInsured       = $amountinsured - $amountDescInsured ; //  --------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
+                                $totalEquipo += $amountGral;
         
         
         $html .= '
@@ -748,7 +751,7 @@ $html = '
                         
         $html .= '
                             <tr>
-                                <td class="tot-figure totl" colspan="4">Total Equipo Subarrendo</td>
+                                <td class="tot-figure totl" colspan="4">Subtotal Subarrendo</td>
                                 <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure days"></td>
@@ -775,7 +778,7 @@ $html .= '
 // Total
 $html .= '
                 <tr>
-                    <td class="tot-main totl" colspan="9">Total de equipo base</td>
+                    <td class="tot-main totl" colspan="9">Total Equipo Subarrendos</td>
                     <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                 </tr>
                 ';

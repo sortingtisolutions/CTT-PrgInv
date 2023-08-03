@@ -107,19 +107,21 @@ function putProjects(dt) {
     // console.log('DOS',dt);
     let valstage='';
     let valicon='';
-    $('#tblProyects tbody').html('');
+    
     if (dt[0].pjt_id != '0') {
+        $('#tblProyects tbody').html('');
         // <td class="date">${u.pjt_date_project}</td>
         // <td class="supply editable">${u.pjt_location}</td>
         // <td class="sku"><i class='fas fa-edit detail'></i><i class='fas fa-door-open toWork'></i></td>
         
         $.each(dt, function (v, u) {
-            if (u.pjt_status == 7)
-            { valstage='color:#008000';
+            if (u.pjt_status == 8)
+            { valstage='color:#CC0000';
               valicon='fa fa-cog toWork'; }
             else 
-             { valstage='color:#CC0000';
+             { valstage='color:#FFA500';
              valicon='fa fa-solid fa-edit detail'; }
+
             console.log(valstage);
             var H = `
                 <tr id="${u.pjt_id}" style='${valstage}'>

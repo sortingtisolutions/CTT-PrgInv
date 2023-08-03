@@ -13,7 +13,7 @@
             <div class="row mvst_group">
                 <div class="mvst_list tblProdMaster">
                     <div class="row rowTop">
-                        <h1>Seleccion de Entrada de Proyecto</h1>
+                        <h1>Seleccion de Proyecto para registro de Entrada</h1>
                         
                      </div>
                     <table class="display compact nowrap"  id="tblProyects" style="min-width: 1000px">

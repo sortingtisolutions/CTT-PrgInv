@@ -8,6 +8,7 @@ class MaintenanceController extends Controller
     private $session;
     public $model;
 
+
     public function __construct()
     {
         $this->model = new MaintenanceModel();
@@ -59,6 +60,22 @@ class MaintenanceController extends Controller
         echo $res;
     } 
     //
+    public function listEstatusMantenimiento($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listEstatusMantenimiento($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"mst_id":"0"}]';	
+        }
+        echo $res;
+    } 
 
     public function listChangeReasons($request_params)
     {

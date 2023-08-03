@@ -141,7 +141,7 @@ function putProducts(dt) {
         settingTable();
         activeIcons();
     } else {
-        settingTable();
+        // settingTable();
     }
 }
 

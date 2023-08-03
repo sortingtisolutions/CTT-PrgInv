@@ -138,15 +138,15 @@
             <div class="mvst_table">
                 <div class="mvst_list tblProdMaster">
                         <h1>Asignacion de Productos</h1>
-                        <table class="display compact nowrap"  id="tblAsignedProd" style="width:100%">
+                        <table class="display compact nowrap"  id="tblAsignedProd" style="width:95%">
                             <thead>
                                 <tr>
                                     <th style="width:  20px"></th>
                                     <th style="width:  60px">SKU</th>
                                     <th style="width:  auto">Descripcion</th>
 									<th style="width:  60px">Cantidad</th>
-                                    <th style="width:  70px">Tipo Producto</th>
-                                    <th style="width:  40px">Status</th>
+                                    <th style="width:  60px">Equipo</th>
+                                    <th style="width:  30px">Tipo</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -158,7 +158,7 @@
 </div>
 
 <!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
-<div class="overlay_background overlay_hide" id="SerieModal" style="width: 45%; left:15%;">
+<div class="overlay_background overlay_hide" id="SerieModal" style="width: 65%; left:15%;">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
             <table class="display compact nowrap"  id="tblSerie" style="width: 90%">
@@ -166,13 +166,13 @@
                     <tr>
                         <th style="width:  30px"></th>
                         <th style="width:  80px">SKU</th>
-                        <!-- <th style="width: 350px">Descripcion Producto</th> -->
-                        <th style="width:  70px">Num Serie</th>
-                        <th style="width:  40px">Tipo de <br>Producto</th>
-                        <!-- <th style="width:  50px">Status</th> -->
+                        <th style="width:  70px">Num <br>Economico</th>
+                        <th style="width:  70px">Serie</th>
+                        <th style="width:  40px">Fecha Salida</th>
+                        <th style="width:  40px">Fecha Ingreso</th>
                     </tr>
                 </thead>
-                <!-- <tbody></tbody> -->
+                <tbody></tbody>
             </table>
         </div>
     </div>

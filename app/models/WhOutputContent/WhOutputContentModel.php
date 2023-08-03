@@ -24,7 +24,6 @@ class WhOutputContentModel extends Model
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
                 WHERE pj.pjt_id=$pjt_id ORDER BY pjt_date_start ASC;";
-
         return $this->db->query($qry);
     }
 
@@ -36,21 +35,34 @@ class WhOutputContentModel extends Model
 
         if ($empid==1){
             $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
-            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order
-            FROM ctt_projects_content WHERE pjt_id=$pjt_id order by pjtcn_order;";
+            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order, 
+             case 
+                 when pjtcn_section=1 then 'Base'
+                 when pjtcn_section=2 then 'Extra'
+                 when pjtcn_section=3 then 'Por dia'
+                 else 'Subarrendo'
+                 END AS section
+            FROM ctt_projects_content 
+            WHERE pjt_id=$pjt_id ORDER BY pjtcn_section, pjtcn_prod_sku ASC;";
         }
         else{
             $qry = "SELECT pjtcn_id, pjtcn_prod_sku, pjtcn_prod_name, pjtcn_quantity, 
-            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order,SUBSTR(pjc.pjtcn_prod_sku,1,2)
+            pjtcn_prod_level, pjt_id, pjtcn_status, pjtcn_order, SUBSTR(pjc.pjtcn_prod_sku,1,2), 
+            case 
+                 when pjtcn_section=1 then 'Base'
+                 when pjtcn_section=2 then 'Extra'
+                 when pjtcn_section=3 then 'Por dia'
+                 else 'Subarrendo'
+                 END AS section
             FROM ctt_projects_content AS pjc
             INNER JOIN ctt_categories AS cat ON lpad(cat.cat_id,2,'0')=SUBSTR(pjc.pjtcn_prod_sku,1,2)
             INNER JOIN ctt_employees AS em ON em.are_id=cat.are_id
             WHERE pjc.pjt_id=$pjt_id AND em.emp_id=$empid
-            ORDER BY pjc.pjtcn_order;";
+            ORDER BY pjc.pjtcn_section, pjc.pjtcn_prod_sku ASC;";
         }
         return $this->db->query($qry);
     }
-
+    // Listado de freelances x areas
     public function listFreelances($params)
     {
         $pjt_id = $this->db->real_escape_string($params['pjt_id']);
@@ -68,12 +80,14 @@ class WhOutputContentModel extends Model
    {
         $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
        
-        $qry = "SELECT pdt.pjtdt_id, pdt.pjtdt_prod_sku, prd.prd_name, prd.prd_level, prd.prd_status, pdt.ser_id, pdt.pjtvr_id, 
-                sr.ser_sku, sr.ser_serial_number, sr.ser_situation, sr.ser_stage
+        $qry = " SELECT pdt.pjtdt_id, pdt.pjtdt_prod_sku, prd.prd_name, prd.prd_level, prd.prd_status, 
+                    pdt.ser_id, pdt.pjtvr_id, sr.ser_sku, sr.ser_serial_number, sr.ser_situation, 
+                    sr.ser_stage, sr.ser_no_econo, per.pjtpd_day_start,per.pjtpd_day_end
                 FROM ctt_projects_content AS pcn
                 INNER JOIN ctt_projects_version as pjv ON pcn.pjtvr_id=pjv.pjtvr_id
                 INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
                 INNER JOIN ctt_series AS sr ON pdt.ser_id=sr.ser_id
+                LEFT JOIN ctt_projects_periods AS per ON per.pjtdt_id=pdt.pjtdt_id
                 LEFT JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
                 WHERE pcn.pjtcn_id=$pjtcnid AND prd.prd_level!='A' 
                 ORDER BY pdt.pjtdt_prod_sku;";
@@ -257,7 +271,7 @@ class WhOutputContentModel extends Model
     {
         $pjtid = $this->db->real_escape_string($params['pjtid']);
         
-        $updt = "UPDATE ctt_projects SET pjt_status = '8' 
+        $updt = "UPDATE ctt_projects SET pjt_status = '9' 
                 WHERE pjt_id = '$pjtid' ";
 
          /* $this->db->query($updt); */

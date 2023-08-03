@@ -143,9 +143,10 @@
                         <th style="width:  30px"></th>
                         <th style="width:  80px">SKU</th>
                         <!-- <th style="width: 350px">Descripcion Producto</th> -->
-                        <th style="width:  70px">Num Serie</th>
+                        <th style="width:  70px">Serial Number</th>
+                        <th style="width:  50px">Numero <br>Economico</th>
                         <th style="width:  40px">Tipo de <br>Producto</th>
-                        <!-- <th style="width:  50px">Status</th> -->
+                        
                     </tr>
                 </thead>
                 <!-- <tbody></tbody> -->

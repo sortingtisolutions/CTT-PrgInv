@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class MaintenanceModel extends Model
 {
+
     public function __construct()
     {
       parent::__construct();
@@ -12,7 +13,14 @@ class MaintenanceModel extends Model
 public function listProyects($store)
 {
     $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status = 8 ;";
+    $qry = "SELECT * FROM ctt_projects WHERE pjt_status = 9 ;";
+    return $this->db->query($qry);
+}    
+
+public function listEstatusMantenimiento($params)
+{
+    
+    $qry = "SELECT * FROM ctt_maintenance_status";
     return $this->db->query($qry);
 }    
 
@@ -20,16 +28,17 @@ public function listProyects($store)
     public function listProducts($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);
-        $qry = "SELECT pd.prd_name,pd.prd_sku, pd.prd_id, ser.ser_id, ser.ser_sku, ser.ser_serial_number, ser.ser_status, ser.ser_situation, ser.ser_stage, pjd.pjtdt_id,
-        pj.pjt_name, pj.pjt_id, pj.pjt_date_start, pj.pjt_date_end, ifnull(pdm.pmt_id,0) as pmt_id, ifnull(pdm.pmt_days,0) AS pmt_days, ifnull(pdm.pmt_hours,0) AS pmt_hours, ifnull(pdm.pmt_date_start,'') AS pmt_date_start, ifnull(pdm.pmt_date_end,'') AS pmt_date_end, ifnull(pdm.pmt_comments,'') AS pmt_comments, ifnull(pdm.pjtcr_id,0) AS pjtcr_id, ifnull(mts.mts_description,'') AS mts_description, ifnull(pdm.mts_id,0) AS mts_id
+        $qry = "SELECT pd.prd_name,pd.prd_sku, pd.prd_id, ser.ser_id, ser.ser_sku, ser.ser_serial_number, ser.ser_status, ser.ser_situation, ser.ser_stage, 
+        pj.pjt_name, pj.pjt_id, pj.pjt_date_start, pj.pjt_date_end, ifnull(pdm.pmt_id,0) as pmt_id, ifnull(pdm.pmt_days,0) AS pmt_days, ifnull(pdm.pmt_hours,0) AS pmt_hours, ifnull(pdm.pmt_date_start,'') AS pmt_date_start, ifnull(pdm.pmt_date_end,'') AS pmt_date_end, ifnull(pdm.pmt_comments,'') AS pmt_comments, ifnull(pdm.pjtcr_id,0) AS pjtcr_id, ifnull(mts.mts_description,'') AS mts_description, ifnull(pdm.mts_id,0) AS mts_id,
+        ifnull(pdm.pmt_price,0) AS pmt_price, ser.ser_sku, ser.ser_serial_number, ser.ser_no_econo, ifnull(pjcr.pjtcr_id,0) as pjtcr_id, ifnull(pjcr.pjtcr_definition,'') as pjtcr_definition
         from ctt_products as pd 
         INNER JOIN ctt_series AS ser ON ser.prd_id = pd.prd_id
-        INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id = ser.ser_id
-        INNER JOIN ctt_projects_content AS pjc ON pjc.pjtvr_id = pjd.pjtvr_id
-        INNER JOIN ctt_projects AS pj ON pjc.pjt_id = pj.pjt_id 
-        LEFT JOIN ctt_products_maintenance AS pdm ON pdm.ser_id = ser.ser_id
-        LEFT JOIN ctt_maintenance_status AS mts ON mts.mts_id = pdm.mts_id
-        WHERE pj.pjt_id='$pjtId' AND ser.ser_situation='M' ";
+        INNER JOIN ctt_products_maintenance AS pdm ON pdm.ser_id = ser.ser_id
+        INNER JOIN ctt_maintenance_status AS mts ON mts.mts_id = pdm.mts_id
+        INNER JOIN ctt_projects AS pj ON pj.pjt_id = pdm.pjt_id
+        LEFT JOIN ctt_project_change_reason AS pjcr ON pjcr.pjtcr_id= pdm.pjtcr_id
+        WHERE pj.pjt_id='$pjtId' AND ser.ser_situation='M'";
+        //
         
         return $this->db->query($qry);
     }    
@@ -273,7 +282,8 @@ public function listProyects($store)
         $projChange 	= $this->db->real_escape_string($params['projChange']);
         
         $idMaintain 	= $this->db->real_escape_string($params['idMaintain']);
-
+        $cost 	= $this->db->real_escape_string($params['cost']);
+        $idProject 	= $this->db->real_escape_string($params['idProject']);
         
         if($status ==3){
             $qry1 = "UPDATE ctt_series 
@@ -293,7 +303,10 @@ public function listProyects($store)
                         pmt_date_start = '$dtResIni',
                         pmt_date_end = '$dtResFin',
                         pmt_comments = '$comments',
-                        mts_id = '$status'
+                        pmt_price = '$cost',
+                        mts_id = '$status',
+                        pjt_id = '$idProject', 
+                        pjtcr_id = '$projChange'
                     WHERE pmt_id = '$idMaintain'";
         $this->db->query($qry2);
 
@@ -330,6 +343,8 @@ public function listProyects($store)
         $status 		= $this->db->real_escape_string($params['status']);
         $serieId	    = $this->db->real_escape_string($params['serieId']);
         $projChange 	= $this->db->real_escape_string($params['projChange']);
+        $cost 	= $this->db->real_escape_string($params['cost']);
+        $idProject 	= $this->db->real_escape_string($params['idProject']);
 
         // Obtiene el ultimo sku registrado para el producto seleccionado
        /* $qry = "SELECT ifnull(max(ser_sku),0) as last_sku, ifnull(ser_serial_number,0) as last_serie FROM ctt_series WHERE prd_id = $producId AND LEFT(RIGHT(ser_sku, 4),1) ='R';";
@@ -347,9 +362,9 @@ public function listProyects($store)
 
         // Agrega la nueva serie
         $qry1 = "INSERT INTO ctt_products_maintenance (
-            pmt_days, pmt_hours, pmt_date_start, pmt_date_end, pmt_comments,mts_id, ser_id, pjtcr_id
+            pmt_days, pmt_hours, pmt_date_start, pmt_date_end, pmt_price, pmt_comments,pmt_date_register, mts_id, ser_id, pjtcr_id,pjt_id
         )  VALUES
-        ('$days', '$hrs', '$dtResIni', '$dtResFin', '$comments','$status', '$serieId','$projChange')";
+        ('$days', '$hrs', '$dtResIni', '$dtResFin','$cost', '$comments',CURRENT_TIME(),'$status', '$serieId','$projChange','$idProject')";
                 
         $this->db->query($qry1);
 

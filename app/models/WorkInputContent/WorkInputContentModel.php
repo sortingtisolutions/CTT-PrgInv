@@ -117,19 +117,27 @@ class WorkInputContentModel extends Model
 
          $this->db->query($updt);
          return $serId;
-        
     }
 
-    public function regManteince($params)
+    public function regMaintenance($params)
     {
         $serId = $this->db->real_escape_string($params['serId']);
         $codstag = $this->db->real_escape_string($params['codstag']);
+        $codmot = $this->db->real_escape_string($params['codmot']);
+        $prjid = $this->db->real_escape_string($params['prjid']);
+
+        $qryins = "INSERT INTO ctt_products_maintenance 
+                                (pmt_date_register,ser_id, pjt_id, pjtcr_id, mts_id) 
+                    VALUES (CURRENT_TIMESTAMP, $serId, $prjid, $codmot, 1);";
+        $this->db->query($qryins);
+        $mainId = $this->db->insert_id;
 
         $updt = "UPDATE ctt_series 
-                SET ser_situation='M', ser_stage = '$codstag', pjtdt_id=0
+                    SET ser_situation='M', ser_stage = '$codstag'
                 WHERE ser_id = $serId;";
-
+        
          $this->db->query($updt);
+
          return $serId;
         
     }

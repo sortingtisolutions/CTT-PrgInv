@@ -14,6 +14,8 @@ function inicial() {
     get_suppliers();
     get_stores();
     fillContent();
+    get_Estatus_Mant();// agregado por Edna
+    get_changes(); // agregado por Edna
 
     $('#txtPeriod').on('blur', function () {
         validator();
@@ -25,6 +27,15 @@ function inicial() {
         validator();
     });
     $('#txtHrs').on('blur', function () {
+        validator();
+    });
+    $('#txtComments').on('blur', function () {
+        validator();
+    });
+    $('#txtCost').on('blur', function () {
+        validator();
+    });
+    $('#txtMotivo').on('blur', function () {
         validator();
     });
     $('#btn_subletting').on('click', function () {
@@ -127,13 +138,22 @@ function setting_table() {
             },
             {
                 // Boton aplicar cambios
+                text: 'Reportes',
+                footer: true,
+                className: 'btn-apply',
+                action: function (e, dt, node, config) {
+                    view_report();
+                },
+            },
+             /* {
+                // Boton aplicar cambios
                 text: 'Aplicar subarrendos',
                 footer: true,
                 className: 'btn-apply hidden-field',
                 action: function (e, dt, node, config) {
                     read_ProductForSubletting_table();
                 },
-            },
+            },  */
         ],
         pagingType: 'simple_numbers',
         language: {
@@ -143,15 +163,18 @@ function setting_table() {
         scrollX: true,
         fixedHeader: true,
         columns: [
-            { data: 'editable', class: 'edit' },
+            { data: 'editable', class: 'edit objHidden' },
             { data: 'prodname', class: 'product-name' },
+            { data: 'cost', class: 'sku' },
             { data: 'days', class: 'sku' },
             { data: 'hours', class: 'date' },
             { data: 'datestar', class: 'date' },
             { data: 'dateend', class: 'date' },
+            { data: 'no_econo', class: 'status' },
             { data: 'comments', class: 'status' },
-            { data: 'status', class: 'status' },
             { data: 'situation', class: 'date' },
+            { data: 'status', class: 'status' },
+            { data: 'no_serie', class: 'status' },
         ],
     });
     $('#tblMotivoMantenimiento').DataTable({
@@ -166,7 +189,7 @@ function setting_table() {
             [100, 200, 300, 'Todos'],
         ],
         buttons: [
-            {
+            /* {
                 //Botón para Excel
                 extend: 'excel',
                 footer: true,
@@ -195,7 +218,7 @@ function setting_table() {
 
                 //Aquí es donde generas el botón personalizado
                 text: '<button class="btn btn-print"><i class="fas fa-print"></i></button>',
-            },
+            }, */
             {
                 // Boton aplicar cambios
                 text: 'Aplicar subarrendos',
@@ -227,6 +250,20 @@ function get_Proyectos() {
     var par = `[{"store":""}]`;
     var tipo = 'json';
     var selector = put_Proyectos;
+    fillField(pagina, par, tipo, selector);
+}
+function get_Estatus_Mant() {
+    var pagina = 'Maintenance/listEstatusMantenimiento';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = put_status_mant;
+    fillField(pagina, par, tipo, selector);
+}
+function get_changes() {
+    var pagina = 'Maintenance/listChangeReasons';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = put_changes;
     fillField(pagina, par, tipo, selector);
 }
 /**  +++++ Obtiene los datos de los productos activos +++++  */
@@ -264,6 +301,7 @@ function get_stores() {
     fillField(pagina, par, tipo, selector);
 }
 
+
 function get_change_reasons(pd) {
     var pagina = 'Maintenance/listChangeReasons';
     var par = `[{"prod_id":""}]`;
@@ -287,7 +325,38 @@ function put_Proyectos(dt) {
         get_products(pj[px].pjt_id);
     });
 }
+function put_status_mant(dt) {
 
+    //console.log(dt);
+    $.each(dt, function (v, u) {
+        let H = `<option data_indx="${v}" value="${u.mts_id}">${u.mts_description}</option>`;
+        $('#txtStatus').append(H);
+    });
+    $('#txtStatus').on('change', function () {
+        px = parseInt($('#txtStatus option:selected').attr('data_indx'));
+        //console.log($('#txtStatus').val());
+        //$('#txtStatus').val(pj[px].pjt_id);
+        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
+        //$('.objet').addClass('objHidden');
+        //get_products(pj[px].pjt_id);
+    }); 
+}
+function put_changes(dt) {
+
+    //console.log(dt);
+    $.each(dt, function (v, u) {
+        let H = `<option data_indx="${v}" value="${u.pjtcr_id}">${u.pjtcr_definition}</option>`;
+        $('#txtMotivo').append(H);
+    });
+    $('#txtMotivo').on('change', function () {
+        px = parseInt($('#txtMotivo option:selected').attr('data_indx'));
+        //console.log($('#txtStatus').val());
+        //$('#txtStatus').val(pj[px].pjt_id);
+        // let period = pj[px].pjt_date_start + ' - ' + pj[px].pjt_date_end;
+        //$('.objet').addClass('objHidden');
+        //get_products(pj[px].pjt_id);
+    }); 
+}
 function put_change_reasons(dt){
     //console.log(dt);
     
@@ -297,13 +366,19 @@ function put_change_reasons(dt){
         $.each(dt, function (v, u) {
             tabla.row
             .add({
-                editable: `<i id="k${u.pjtdt_id}" class="fas fa-certificate"></i>`,
+                editable: `<i id="${u.pjtcr_id}" class="fas fa-certificate serie motivo"></i>`,
                 prodname: u.pjtcr_definition,
                 prod_sku: u.pjtcr_description,
             })
             .draw();
+            
         });
     }
+    $('#tblProductForSubletting tbody tr')
+        .unbind('click')
+        .on('click', function (){
+            activeIconsSerie2();
+        });
 }
 
 /**  ++++   Coloca los productos en el listado del input */
@@ -311,13 +386,13 @@ function put_Products(dt) {
     // console.log(pj);
     // console.log(dt);
     pd = dt;
-    title= 'Lista de Motivos';
+    
     let largo = $('#tblProductForSubletting tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla'
         ? $('#tblProductForSubletting tbody tr').remove()
         : '';
     let tabla = $('#tblProductForSubletting').DataTable();
-    $('.overlay_closer .title').html(title);
+    
     tabla.rows().remove().draw();
     let cn = 0;
     if(dt[0].prd_id!=0){
@@ -350,25 +425,28 @@ function put_Products(dt) {
             }
     
             
-            // editable: `<i id="k${u.pjtdt_id}" class="fas fa-times-circle kill"></i>`,
+            // editable: `<i id="k${u.pjt_id}" class="fas fa-times-circle kill"></i>`,
             tabla.row
                 .add({
-                    editable: `<i id="k${u.pjtdt_id}" class="fas fa-certificate serie modif"></i>`,
+                    editable: `<i id="k${u.ser_id}" class="fas fa-certificate serie modif"></i>`,
                     prodname: u.prd_name,
+                    cost: u.pmt_price,
                     days: u.pmt_days,
                     hours: u.pmt_hours,
                     datestar: u.pmt_date_start,
                     dateend: u.pmt_date_end,
+                    no_econo: u.ser_no_econo,
                     comments: u.pmt_comments,
+                    situation: u.pjtcr_definition,
                     status: u.mts_description,
-                    situation: u.ser_situation
+                    no_serie: u.ser_serial_number
                 })
                 .draw();
                 
-            $('#k' + u.pjtdt_id)
+            $('#k' + u.ser_id)
                 .parents('tr')
                 .attr({
-                    id: u.pjtdt_id,
+                    id: u.ser_id,
                     data_serie: u.ser_id,
                     data_proj_change: u.pjtcr_id,
                     data_maintain: u.pmt_id,
@@ -390,30 +468,37 @@ function put_Products(dt) {
                 let ix = rw[0].attributes[2].value;
 
                 let prodname = rw[0].cells[1].outerText;
-                let days = rw[0].cells[2].outerText;
-                let hours = rw[0].cells[3].outerText;
-                let datestar = rw[0].cells[4].outerText;
-                let dateend = rw[0].cells[5].outerText;
-                let comments = rw[0].cells[6].outerText;
-                let situation = rw[0].cells[7].outerText;
-                let status = rw[0].cells[8].outerText;
+                let costo = rw[0].cells[2].outerText;
+                let days = rw[0].cells[3].outerText;
+                let hours = rw[0].cells[4].outerText;
+                let datestar = rw[0].cells[5].outerText;
+                let dateend = rw[0].cells[6].outerText;
+                let no_econo = rw[0].cells[7].outerText;
+                let comments = rw[0].cells[8].outerText;
+                
+                let situation = rw[0].cells[10].outerText;
+                let status = rw[0].cells[11].outerText;
+                //let no_serie = rw[0].cells[12].outerText;
 
 
                 let seriesId = rw[0].attributes[2].value;
                 let dataProjChange = rw[0].attributes[3].value;
                 let datamaintain = rw[0].attributes[4].value;
                 let idStatus = rw[0].attributes[5].value;
+                
                 let dayIni = moment(datestar).format('DD/MM/YYYY');
                 let dayFin = moment(dateend).format('DD/MM/YYYY');
-
-
-                if (datestar) {
+                
+                if(dayIni =='Invalid date' || dayFin=='Invalid date'){
+                    $('#txtPeriod').val('DD/MM/YYYY - DD/MM/YYYY');
+                }else{
                     $('#txtPeriod').val(dayIni + ' - ' + dayFin);
                 }
                 
                 $('.nameProduct').html(prodname);
                 $('#txtIdSerie').val(seriesId);
-                $('#txtIdProjectChange').val(dataProjChange);
+                $('#txtMotivo').val(dataProjChange);
+                $('#txtCost').val(costo);
                 
                 $('#txtComments').val(comments);
                 $('#txtDays').val(days);
@@ -436,7 +521,7 @@ function put_Products(dt) {
             } else {
                 $('.objet').addClass('objHidden');
             }
-            get_change_reasons();
+            // get_change_reasons();
             activeIconsSerie();
         });
         
@@ -473,7 +558,7 @@ function put_stores(dt) {
 }
 
 function updating_serie(acc) {
-    let projChange = $('#txtIdProjectChange').val();
+    let projChange = $('#txtMotivo').val();
     let serieId = $('#txtIdSerie').val();
     let status = $('#txtStatus').val();
     let dtResIni = moment(
@@ -488,6 +573,9 @@ function updating_serie(acc) {
     let days = $('#txtDays').val();
     let hrs = $('#txtHrs').val();
     
+    let cost = $('#txtCost').val();
+    let idProject = $('#txtIdProject').val();
+    
     let idMaintain = $('#txtIdMaintain').val();
 
     let par = `
@@ -500,9 +588,11 @@ function updating_serie(acc) {
         "status"  :   "${status}",
         "serieId"  :   "${serieId}",
         "projChange" : "${projChange}",
-        "idMaintain" : "${idMaintain}"
+        "idMaintain" : "${idMaintain}",
+        "cost" : "${cost}",
+        "idProject" : "${idProject}"
     }]`;
-    console.log(par);
+   
     
     if (acc == 'add') {
         var pagina = 'Maintenance/saveMaintain';
@@ -519,7 +609,7 @@ function updating_serie(acc) {
 function put_save_subleting(dt) {
     //console.log(dt);
     /*
-    let tr = $('#' + dt[0].pjtdt_id);
+    let tr = $('#' + dt[0].pjt_id);
     $($(tr[0].cells[2])).html(dt[0].pjtdt_prod_sku);
     $($(tr[0].cells[3])).html(dt[0].sub_price);
     $($(tr[0].cells[4])).html(dt[0].sup_business_name);
@@ -574,7 +664,59 @@ function validator() {
     }
     // console.log(msg);
 }
+function view_report(){
+    title= 'Generar reporte';
+    $('.overlay_closer .title').html(title);
 
+    $('#ReportModal').removeClass('overlay_hide');
+    $('#ReportModal .btn_close')
+        .unbind('click')
+        .on('click', function () {
+            $('.overlay_background').addClass('overlay_hide');
+
+        });
+    $('#GenerarReporte').unbind('click')
+    .on('click', function () {
+        let ky = validarDatosReporte();
+        if(ky == 0){
+            let fi = $('#fechaIncial').val();
+            let fe = $('#fechaFinal').val();
+            console.log(fi);
+            let pjt = $('#txtProject').val();
+            getReport(fi, fe, pjt);
+        }
+    })    
+    
+}
+function getReport(fi, fe, pjt){
+    let user = Cookies.get('user').split('|');
+    let u = user[0];
+    let n = user[2];
+    let h = localStorage.getItem('host');
+    window.open(
+        `${url}app/views/Maintenance/MaintenanceReport.php?p=${pjt}&fi=${fi}&fe=${fe}&u=${u}&n=${n}&h=${h}`,
+        '_blank'
+    );
+    cleanFechas();
+    $('#ReportModal').addClass('overlay_hide');
+}
+function validarDatosReporte(){
+    let ky = 0;
+    $('.required2').each(function () {
+        if ($(this).val() == '' || $(this).val() == 0) {
+            ky = 1;
+            $(this).addClass('fail').parent().children('.fail_note');
+        }else{
+            $(this).removeClass('fail').parent().children('.fail_note');
+            ky = 0;
+        }
+    });
+    return ky;
+}
+function cleanFechas(){
+    $('#fechaIncial').val('');
+    $('#fechaFinal').val('');
+}
 /*  ********* Define las fechas de inicio y de fin   +++++++ */
 function define_days(st, dt, db, dr, ds) {
     let dats = '';
@@ -646,6 +788,7 @@ function fillContent() {
                 start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY')
             );
             looseAlert($('#txtPeriod').parent());
+
             // $('#txtPeriodProject').parent().children('span').html('');
             // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
         }
@@ -657,23 +800,41 @@ function fillContent() {
     }); */
     // Llena el selector de tipo de llamados
 
+
+    //
+    
+
 }
 
 
 function activeIconsSerie() {
+    
     $('.serie.modif')
         .unbind('click')
         .on('click', function () {
             let serId = $(this).attr('id').slice(1, 10);
 
             $('#mantenimientoModal').removeClass('overlay_hide');
-
+            title= 'Lista de Motivos';
+            $('.overlay_closer .title').html(title);
             $('#mantenimientoModal .btn_close')
                 .unbind('click')
                 .on('click', function () {
                     $('#mantenimientoModal').addClass('overlay_hide');
                 });
+            
             //getSelectSerie(serId);
         });
+}
+
+function activeIconsSerie2() {
     
+    $('.serie.motivo')
+        .unbind('click')
+        .on('click', function () {
+            let id = $(this).attr('id');
+            //console.log(id);
+
+        });
+            
 }

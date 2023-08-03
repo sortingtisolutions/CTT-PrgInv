@@ -235,3 +235,23 @@ COMMENT='Tabla de situación de subarrendos'
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
+
+--******* 02-ago-23 ********************
+CREATE TABLE `ctt_products_maintenance` (
+	`pmt_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Id de la tabla',
+	`pmt_days` INT(11) NULL DEFAULT '0' COMMENT 'Dias de duracion de reparacion si existe',
+	`pmt_hours` INT(11) NULL DEFAULT '0' COMMENT 'Horas de duracion de reparacion, si existe',
+	`pmt_date_start` DATE NULL DEFAULT NULL COMMENT 'Fecha de comienzo de la reparación ',
+	`pmt_date_end` DATE NULL DEFAULT NULL COMMENT 'Fecha final de la reparacion',
+	`pmt_price` DECIMAL(20,2) NULL DEFAULT 0 COMMENT 'Costo del mantenimiento',
+	`pmt_comments` VARCHAR(50) NULL DEFAULT '' COMMENT 'Comentarios sobre la reparacion' COLLATE 'utf8mb4_general_ci',
+	`pmt_date_register` DATETIME NULL DEFAULT NULL COMMENT 'Fecha de registro de mantenimiento',
+	`ser_id` INT(11) NULL DEFAULT '0' COMMENT 'Id en relacion con la tabla ctt_series',
+	`pjt_id` INT(11) NULL DEFAULT '0' COMMENT 'Id en relacion a la tabla ctt_projects',
+	`pjtcr_id` INT(11) NULL DEFAULT '0' COMMENT 'Id en relacion con la tabla ctt_project_change_reason',
+	`mts_id` INT(11) NULL DEFAULT '0' COMMENT '1. Sin Atender 2. atendiendose 3. concluido',
+	PRIMARY KEY (`pmt_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;

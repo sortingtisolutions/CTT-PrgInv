@@ -26,7 +26,6 @@ function inicial() {
     getFreelances(prjid);
     getReason();
     
-
     $('#recordInPut').on('click', function () {
         alert('Actualizar Registros');
         createTblRespaldo(prjid,glbprjnum)
@@ -211,7 +210,7 @@ function activeIcons() {
 //**************  NIVEL 2 DE DATOS  *****************************************
 function putSeries(dt) {
     // console.log('putSeries');
-    settingSeries(dt);
+    settingSeries();
     build_modal_serie(dt);
 }
 
@@ -219,18 +218,35 @@ function putCreateTbl(dt) {
     console.log('putCreateTbl',dt);
     let result=dt;
 }
-function settingSeries(dt){
+function settingSeries(){
     $('#SerieModal').removeClass('overlay_hide');
     $('#tblSerie').DataTable({
         // retrieve: true,
         bDestroy: true,
-        order: [[1, 'asc']],
         dom: 'Blfrtip',
+        order: [[1, 'asc']],
         lengthMenu: [
             [100, 200, -1],
             [100, 200, 'Todos'],
         ],
-
+        buttons: [
+            {
+                // Boton imprimir contenido jjr
+                text: 'Select All OK',
+                className: 'btn-apply',
+                action: function (e, dt, node, config) {
+                    readAceptTable();
+                },
+            },
+            /* {
+                // Boton imprimir detalle jjr
+                text: ' Print Detalle ',
+                className: 'btn-apply',
+                action: function (e, dt, node, config) {
+                    printDetail(prjid);;
+                },
+            }, */
+        ],
         pagingType: 'simple_numbers',
         language: {
             url: 'app/assets/lib/dataTable/spanish.json',
@@ -243,8 +259,9 @@ function settingSeries(dt){
             {data: 'seriesku', class: 'sku left'},
             /* {data: 'sername', class: 'supply left'}, */
             {data: 'sernumber', class: 'sku'},
+            {data: 'sereconum', class: 'sku'},
             {data: 'sertype', class: 'sku'},
-            /* {data: 'serstat', class: 'sku'}, */
+            
         ],
     });
 
@@ -264,9 +281,11 @@ function build_modal_serie(dt) {
         //  console.log('build_modal_serie',dt);
         let valstage='';
         let valmant='';
-         let tabla = $('#tblSerie').DataTable();
+        let tabla = $('#tblSerie').DataTable();
+        // $('#tblSerie').DataTable();
         $('.overlay_closer .title').html(`ASIGNADAS: ${dt[0].prd_name}`);
          tabla.rows().remove().draw();
+        //  $('#tblSerie tbody').html('');
          $.each(dt, function (v, u){
              let skufull = u.pjtdt_prod_sku;
              let sku = u.pjtdt_prod_sku.slice(0, 7);
@@ -286,10 +305,11 @@ function build_modal_serie(dt) {
                                 <i class="fas fa-check-circle toAcept" id="${u.ser_id}" data-content="${skufull}|${u.pjtdt_id}|${u.ser_id}" style="${valstage}"></i>`,
                      seriesku: skufull,
                      sernumber: u.ser_serial_number,
+                     sereconum: u.ser_serial_number,
                      sertype: u.prd_level,
                  })
                  .draw();
-             $(`#${u.pjtdt_id}`).parents('tr').attr('id',u.pjtdt_id);
+             $(`#${u.ser_id}`).parents('tr').attr('id', u.ser_id);
          });
          activeIconsSer();
 }
@@ -335,6 +355,23 @@ function myCheck(dt){
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
 }
 
+function readAceptTable() {
+    $('#tblSerie tbody tr').each(function (v, u) {
+        
+        // console.log("DENTRO EACH: ", $(this).find('td')[0].children);
+        let serId = $(this).attr('id');
+         let serdata = $(this).attr('data');
+        console.log("readAceptTable: ", serId);
+        checkSerie(serId);
+        setTimeout(function(){
+            console.log('');
+        }, 3000);
+        /* $('.overlay_background').addClass('overlay_hide');
+        $('.overlay_closer .title').html('');
+        $('#tblSerie').DataTable().destroy; */
+    });
+}
+
 // ### LISTO ### Llena prepara la table dentro del modal para series ### LISTO -- MODAL 1###
 function putReason(dt) {
     settingReason();
@@ -373,8 +410,6 @@ function settingReason(){
             $('.overlay_closer .title').html('');
             $('#tblMaintenance').remove;
             $('#tblMaintenance').DataTable().destroy;
-           /*  let Dtable=$('#tblMaintenance').DataTable();
-            Dtable.rows().remove().draw(); */
             
         });
         activeIcons();
@@ -399,7 +434,6 @@ function build_modalReason(dt) {
 }
 
 function openReason(serId){
-
     $('#ReasonMtModal').removeClass('overlay_hide');
     $('#ReasonMtModal .overlay_closer .title').html('LISTADO DE MOTIVOS:');
     let tabla = $('#tblMaintenance').DataTable().draw();
@@ -412,11 +446,11 @@ function activeIconsReason(serId) {
     $('.toCheck')
         .unbind('click')
         .on('click', function () {
-        let serprd = $(this).attr('id');
+        let codmot = $(this).attr('id');
         let motdesc = $(this).attr('data').split('|')[0];
         let codstag = $(this).attr('data').split('|')[1];
-        console.log('Cierra Motivo seleccionado',serprd ,motdesc,'TR',glbcnid, 'SER-ID',serId);
-        regManteince(serId,codstag);
+        console.log('Cierra Motivo seleccionado',codmot ,motdesc,'TR',glbcnid, 'SER-ID',serId);
+        regMaintenance(serId,codmot,codstag);
 
         let el = $(`#tblAsigInput tr[id="${glbcnid}"]`);
         $(el.find('td')[5]).html(motdesc);
@@ -427,14 +461,21 @@ function activeIconsReason(serId) {
     });
 }
 
-function regManteince(serId,codstag) {
-    console.log('regManteince', serId,codstag);
-    var pagina = 'WorkInputContent/regManteince';
-    var par = `[{"serId":"${serId}"},{"codstag":"${codstag}"}]`;
+function regMaintenance(serId,codmot,codstag) {
+    var par = `[  {"serId":     "${serId}"},
+                  {"codmot":    "${codmot}"},
+                  {"codstag":   "${codstag}"},
+                  {"prjid":     "${prjid}"}
+               ]`;
+    // console.log('regMaintenance', serId,codmot,codstag,prjid);
+    var pagina = 'WorkInputContent/regMaintenance';
+    // var par = `[{"serId":"${serId}"},{"codmot":"${codmot}"},{"codstag":"${codstag}"}]`;
     var tipo = 'html';
     var selector = myCheck; 
     fillField(pagina, par, tipo, selector);
 }
+
+
 //**************  NIVEL 3 DE DATOS  *****************************************
 
 function settingChangeSerie(){

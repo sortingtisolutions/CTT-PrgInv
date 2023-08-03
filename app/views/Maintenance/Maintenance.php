@@ -21,7 +21,7 @@
 							</div>
 						</div>
 						<hr>
-						<h6	class="nameProduct objet objHidden">Producto</h6>
+						<h6	class="nameProduct objet objHidden" style="font-size: 1rem; font-weight: bold; text-align: center">Producto</h6>
 						<input type="hidden" id="txtIdProject" class="form-control">
 						<input type="hidden" id="txtIdProduct" class="form-control">
 						<input type="hidden" id="txtIdProjectChange" class="form-control">
@@ -58,20 +58,42 @@
 								<span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
 							</div>
 							<div style="height:20px;"></div> <!-- Agregar un espacio -->
+							<div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating">
+								<input id="txtCost" type="text" class="form-control form-control-sm text-center number" data-mesage="Debes Agregar las horas de reparacion" >
+								<label for="txtCost">Costo de Reparación</label>
+							</div>
+							
 						</div>
-
 						<div class="row objet objHidden">
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 								<select id="txtStatus" class="form-select form-select-sm  required" aria-label="Floating label select" data-mesage="Debes seleccionar el tipo de moneda">
 									<option value="0" selected>Selecciona el estatus</option>
-									<option value="1">En revision</option>
+								</select>
+								<label for="txtStatus">Estatus</label>
+							</div>
+						</div>
+						<div class="row objet objHidden">
+							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+								<select id="txtMotivo" class="form-select form-select-sm  required" aria-label="Floating label select" data-mesage="Debes seleccionar el tipo de moneda">
+									<option value="0" selected>Selecciona el motivo de mantenimiento</option>
+								</select>
+								<label for="txtMotivo">Motivo de Mantenimiento</label>
+							</div>
+						</div>
+						<!-- <div class="row objet objHidden">
+							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
+								<select id="txtStatus" class="form-select form-select-sm  required" aria-label="Floating label select" data-mesage="Debes seleccionar el tipo de moneda">
+									<option value="0" selected>Selecciona el estatus</option>
+									<option value="1">Por revisar</option>
 									<option value="2">Atendiendose</option>
 									<option value="3">Concluido</option>
 								</select>
 								<label for="txtStatus">Estatus</label>
 							</div>
-						</div>
+						</div> -->
 <!--
+						
+	
 						<div class="row objet objHidden">
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
 								<select id="txtSupplier" class="form-select form-select-sm required" aria-label="Floating label select"  data-mesage="Debes seleccionar un proveedor">
@@ -89,6 +111,8 @@
 							</div>
 						</div>-->
 
+						
+
 						<div class="row objet objHidden">
 							<div class="col-md-8 mb-5">
 								<button type="button" class="btn btn-sm btn-primary disabled" data_accion="add" id="btn_subletting">Agregar</button>
@@ -103,14 +127,17 @@
 						<thead>
 							<tr>
 								<th style="width:  30px"></th>
-								<th style="width: 150px">Producto</th>
+								<th style="width: 120px">Producto</th>
+								<th style="width:  30px">Costo</th>
 								<th style="width:  30px">Dias <br>Reparacion</th>
 								<th style="width:  30px">Horas <br>Reparacion</th>
 								<th style="width:  60px">Fecha Inicio</th>
 								<th style="width:  60px">Fecha Fin</th>
-								<th style="width:  250px">Comentarios</th>
+								<th style="width:  20px">No. Eco</th>
+								<th style="width:  150px">Comentarios</th>
+								<th style="width:  50px">Motivo</th>
 								<th style="width: 40px">Estatus</th>
-								<th style="width:  30px">Situacion</th>
+								<th style="width: 50px">No. Serie</th>
 							</tr>
 						</thead>
 						<tbody>						
@@ -146,7 +173,7 @@
 </div>
 
 <!-- Start Ventana modal AGREGA O MODIFICA  -->
-<div class="overlay_background overlay_hide"id="mantenimientoModal" style="height: 600px; width:600px;">
+<div class="overlay_background overlay_hide" id="mantenimientoModal" style="height: 600px; width:600px;">
         <div class="overlay_modal">
             <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
 			<!--
@@ -194,7 +221,28 @@
             </div>
     </div>
 </div>
-
+	<div class="overlay_background overlay_hide" id="ReportModal" style="max-width:45%;max-height:45%; margin-left: 35%;">
+		<div class="overlay_modal">
+			<div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+			<div class="row">
+				<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
+					<input id="fechaIncial" name="fechaIncial" type="date"  class="form-control form-control-sm required2" style="text-transform: uppercase" >
+					<label for="fechaadmision">Fecha Inicial</label>
+				</div>
+				<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
+					<input id="fechaFinal" name="fechaFinal" type="date"  class="form-control form-control-sm required2" style="text-transform: uppercase" >
+					<label for="fechaadmision">Fecha Final</label>
+				</div>
+			</div>
+			<div class="row mt-4">
+				<div class="col-md-8 col-lg-8 col-xl-10 ">
+				</div>
+				<div class="col-md-2 col-lg-2 col-xl-2 mt-4">
+					<button type="button"  class="btn btn-primary btn-sm btn-block" style="font-size: 0.8rem !important;" id="GenerarReporte">Generar</button>
+				</div>
+			</div>
+        </div>
+	</div>
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
