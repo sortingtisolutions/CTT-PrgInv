@@ -1240,7 +1240,7 @@ function putSelectSerie(dt) {
     );
 }
 
-function resEdtSeries(dt) {
+function resEdtSeries(dt) {  //AQUI ACTUALIZA TABLA SERIES
     // console.log('AQUI ACTUALIZA TABLA SERIES',dt);
     let serId = $('#txtSerIdSerie').val();
     let serSr = $('#txtSerSerialNumber').val();

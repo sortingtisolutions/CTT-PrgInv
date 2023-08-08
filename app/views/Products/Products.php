@@ -49,8 +49,6 @@
     </div>
 <!-- End Contenedor Listado de PRODUCTOS  -->
 
-
-
 <!-- Start Ventana modal SERIES -->
     <div class="overlay_background overlay_hide "id="SerieModal">
         <div class="overlay_modal">
