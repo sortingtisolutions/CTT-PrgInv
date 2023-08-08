@@ -209,3 +209,18 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
     RETURN valant;
 	
 END //
+
+DELIMITER //
+CREATE FUNCTION `fun_maxcontent`(`pprjId` INT) RETURNS int(11)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
+BEGIN
+	DECLARE max_content INT;
+	
+	SELECT MAX(pjtcn_order) INTO max_content FROM ctt_projects_content WHERE pjt_id=pprjId;
+	
+	RETURN max_content;
+END //

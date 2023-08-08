@@ -1,5 +1,5 @@
-let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral;
-let gblsku, glbpjtid;
+let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral, glbpjtid;
+let gblsku;
 var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
@@ -193,24 +193,13 @@ function eventsAction() {
                 let verId = $('.version_current').attr('data-version');
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
                 if (verId != undefined){
-                    // var today = new Date();
- 
-                    // // obtener la fecha de hoy en formato `MM/DD/YYYY`
-                    // var now = today.toLocaleDateString('en-US');
-                    // console.log(now);
-                    // let moment = require(today);
-                    // obtener el nombre del mes, día del mes, año, hora
-                    // let now = moment().format("DD/MM/YYYY HH:mm:ss A");
-                    let now = "2023-02-28 18:25:25";
-                    console.log('Fecha y Hora Actual',now);
                     modalLoading('S');
                     let par = `
                     [{
                         "pjtId"     : "${pjtId}",
                         "verId"     : "${verId}",
                         "discount"  : "${discount}",
-                        "action"    : "${interfase}",
-                        "dateact"    : "${now}"
+                        "action"    : "${interfase}"
                     }]`;
                     // console.log('Salvando Solo',par);
                     var pagina = 'ProjectDetails/SaveBudget';
@@ -240,18 +229,9 @@ function eventsAction() {
                 let vr = parseInt(verCurr.substring(1, 10));
                 let verNext = 'P' + refil(vr + 1, 4);
                 let discount = parseFloat($('#insuDesctoPrc').text()) / 100;
-                // let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  // agregado por jjr
-                let lastmov = '';  // agregado por jjr
+                let lastmov = moment().format("YYYY-MM-DD HH:mm:ss");  // agregado por jjr
                 // console.log('FECHA- ', lastmov);
                 if (vr != undefined){   //agregado por jjr
-                    var today = new Date();
-                    // var now = today.toLocaleDateString('en-US');
-                    // console.log(now);
-                    // let moment = require(SYSDATE);
-                    // obtener el nombre del mes, día del mes, año, hora
-                    // let now = date.now().format("DD/MM/YYYY HH:mm:ss");
-                    // let now = Date.now().parse("2012-01-26T13:51:50.417-07:00");
-                    // console.log('Fecha y Hora Actual',now);
                     modalLoading('S');
                     let par = `
                     [{
@@ -436,9 +416,9 @@ function getDiscounts() {
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de relacionados al prducto*/
-function getProductsRelated(id, tp, vr) {
+function getProductsRelated(id, tp, vr,sec) {// *** Ed
     var pagina = 'ProjectDetails/listProductsRelated';
-    var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}"}]`;
+    var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}","section":"${sec}"}]`;
     var tipo = 'json';
     console.log(par);
     var selector = putProductsRelated;
@@ -1000,9 +980,9 @@ function putProducts(dt) {
                 <th class="col_product" title="${u.prd_name}">
                 <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
-                <td class="col_category">${u.cat_name}</td>
-                <td class="col_category">${u.prd_price}</td>
                 <td class="col_type">${u.prd_level}</td>
+                <td class="col_category">${u.sbc_name}</td>
+                <td class="col_category">${u.prd_price}</td>
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
@@ -1131,7 +1111,7 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    /* $('tbody.sections_products').sortable({
+    $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
         axis: 'y',
@@ -1151,7 +1131,7 @@ function putBudgets(dt) {
             showButtonVersion('S');
             OrderMice(1);
         },
-    }); */
+    });
 
     reOrdering();
 }
@@ -1177,6 +1157,14 @@ function fillBudgetProds(jsn, days, stus) {
     let pds = JSON.parse(jsn);
     
     let prdName = pds.pjtvr_prod_name.replace(/°/g, '"').replace(/\^/g, ',').replace(/\¿/g, '\'');
+            /* if (u.pjt_status == 4)
+            { valstage='color:#008000'; }
+            else if (u.pjt_status == 7)
+            { valstage='color:#FFA500'; }
+            else
+            { valstage='color:#CC0000'; }
+            console.log(valstage); */
+    
     let H = `
     <tr id="bdg${pds.prd_id}" 
         data-sku     = "${pds.pjtvr_prod_sku}" 
@@ -1305,7 +1293,8 @@ function fillBudgetProds(jsn, days, stus) {
     expandCollapseSection();
     activeInputSelector();
 
-    if (pds.comments > 0) {
+    /******************** Comentarios en la seccion de subarrendos *********************/
+    if (pds.comments > 0 && (pds.comments != pds.sbl_comments ||  pds.pjtvr_section ==4)) { // Agregado por Edna
         $(`#bdg${pds.prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-comment')
@@ -1460,13 +1449,14 @@ function activeInputSelector() {
             let event = $(this).attr('class');
             let bdgId = id.parents('tr').attr('id');
             let type = id.parents('tr').attr('data-level');
+            let sec = id.parents('tr').attr('data-sect');
             if (type != 'K') {
                 switch (event) {
                     case 'event_killProduct':
                         killProduct(bdgId);
                         break;
                     case 'event_InfoProduct':
-                        infoProduct(bdgId, type);
+                        infoProduct(bdgId, type,sec);// *** Ed
                         break;
                     case 'event_PerdProduct':
                         periodProduct(bdgId);
@@ -1491,7 +1481,7 @@ function activeInputSelector() {
                         killProduct(bdgId);
                         break;
                     case 'event_InfoProduct':
-                        infoProduct(bdgId, type);
+                        infoProduct(bdgId, type,sec); // *** Ed
                         break;
                     case 'event_PerdProduct':
                         /* periodProduct(bdgId);
@@ -1550,7 +1540,7 @@ function killProduct(bdgId) {
 }
 
 // Muestra la información del producto seleccionado
-function infoProduct(bdgId, type) {
+function infoProduct(bdgId, type,sec) { // *** Ed
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#infoProductTemplate');
@@ -1562,7 +1552,7 @@ function infoProduct(bdgId, type) {
     closeModals();
     setTimeout(() => {
         let verId = $('.version_current').data('version');
-        getProductsRelated(bdgId.substring(3, 20), type, verId);
+        getProductsRelated(bdgId.substring(3, 20), type, verId,sec);
     }, 500);
 }
 
@@ -1570,7 +1560,7 @@ function infoPackage(bdgId, type) {
     setTimeout(() => {
         let verId = $('.version_current').data('version');
         // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
-        getProductsRelatedPk(bdgId.substring(3, 20), type, verId);
+        getProductsRelatedPk(bdgId.substring(3, 20), type, verId); //*** Faltaria hacer lo mismo que con el resto de productos */
     }, 500);
 }
 
@@ -1602,6 +1592,7 @@ function putProductsRelated(dt) {
                 <td>${u.cat_name}</td>
                 <td>${u.ser_comments}</td>
             </tr>
+           
         `;
             $('.invoice__modal-general table tbody').append(H);
         }
@@ -1862,7 +1853,6 @@ function putStockProjects(dt) {
 // Edita los datos del proyecto
 function editProject(pjtId) {
     let inx = findIndex(pjtId, proj);
-    console.log('INX',inx);
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#dataProjectTemplate');
@@ -1933,14 +1923,14 @@ function fillContent() {
     // Llena el selector de clientes
     $.each(cust, function (v, u) {
         if (u.cut_id == 1) {
-            let H = `<option value="${u.cus_id}">${u.cus_id} - ${u.cus_name}</option>`;
+            let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
             $('#txtCustomerEdt').append(H);
         }
     });
     // Llena el selector de relacion de clientes
     $.each(cust, function (v, u) {
         if (u.cut_id == 2) {
-            let H = `<option value="${u.cus_id}">${u.cus_id} - ${u.cus_name}</option>`;
+            let H = `<option value="${u.cus_id}"> ${u.cus_name}</option>`;
             $('#txtCustomerRelEdt').append(H);
         }
     });
@@ -2081,7 +2071,7 @@ function fillData(inx) {
                     "pjtTestLook"    : "${testLook}"
                 }]
                 `;
-                console.log('Update-Proyect',par);
+
                 var pagina = 'ProjectDetails/UpdateProject';
                 var tipo = 'html';
                 var selector = loadProject;
@@ -2264,7 +2254,6 @@ function printBudget(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-    console.log('printBudget',v,u,n);
     if (theredaytrip != 0){ // agregado jjr cambiar impresion c-s
         window.open(
             `${url}app/views/ProjectDetails/ProjectDetailsReport-c-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
@@ -2272,7 +2261,7 @@ function printBudget(verId) {
         );
     } else{
         window.open(
-            `${url}app/views/ProjectDetails/ProjectDetailsReport-s-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+            `${url}app/views/ProjectPlans/ProjectPlansReport-s-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
             '_blank'
         );   
     }

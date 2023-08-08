@@ -520,7 +520,7 @@ public function ProcessProjectProduct($request_params)
             $ttlqty = $prdexp == '2'? $quanty: 1;
             $quanty = $prdexp == '2'? 1: $quanty;
 
-            if ( $bdglvl == 'A' ){
+           /*  if ( $bdglvl == 'A' ){
                 echo 'Accesorio';
                 for ($i = 1; $i<=$quanty; $i++){   // VALIDA LA CANTIDAD A REALIZA POR CONCEPTO 
 
@@ -548,7 +548,7 @@ public function ProcessProjectProduct($request_params)
                     $serie = $this->model->SettingSeries($params);
                     // echo $serie . ' - ' ;
                 }
-            } else if ( $bdglvl == 'P' ){
+            } else */ if ( $bdglvl == 'P' ){
                 for ($i = 1; $i<=$quanty; $i++){
                     
                     $params = array(

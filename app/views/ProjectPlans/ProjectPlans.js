@@ -42,6 +42,7 @@ function discountInsuredEvent() {
         .unbind('click')
         .on('click', function () {
             let elm = $(this);
+
             let posLeft = elm.offset().left - 90;
             let posTop = elm.offset().top - 80;
 
@@ -418,9 +419,9 @@ function getDiscounts() {
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de relacionados al prducto*/
-function getProductsRelated(id, tp, vr) {
+function getProductsRelated(id, tp, vr,sec) {
     var pagina = 'ProjectPlans/listProductsRelated';
-    var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}"}]`;
+    var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}","section":"${sec}"}]`;
     var tipo = 'json';
     var selector = putProductsRelated;
     fillField(pagina, par, tipo, selector);
@@ -969,9 +970,9 @@ function putProducts(dt) {
                 <th class="col_product" title="${u.prd_name}">
                 <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
-                <td class="col_category">${u.cat_name}</td>
-                <td class="col_category">${u.prd_price}</td>
                 <td class="col_type">${u.prd_level}</td>
+                <td class="col_category">${u.sbc_name}</td>
+                <td class="col_category">${u.prd_price}</td>
             </tr> `;
         $('#listProductsTable table tbody').append(H);
     });
@@ -1274,7 +1275,7 @@ function fillBudgetProds(jsn, days, stus) {
     expandCollapseSection();
     activeInputSelector();
 
-    if (pds.comments > 0) {
+    if (pds.comments > 0 && (pds.comments != pds.sbl_comments ||  pds.pjtvr_section ==4)) { // Agregado por Edna
         $(`#bdg${pds.prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-comment')
@@ -1429,13 +1430,14 @@ function activeInputSelector() {
             let event = $(this).attr('class');
             let bdgId = id.parents('tr').attr('id');
             let type = id.parents('tr').attr('data-level');
+            let sec = id.parents('tr').attr('data-sect');
             if (type != 'K') {
                 switch (event) {
                     case 'event_killProduct':
                         killProduct(bdgId);
                         break;
                     case 'event_InfoProduct':
-                        infoProduct(bdgId, type);
+                        infoProduct(bdgId, type,sec);
                         break;
                     case 'event_PerdProduct':
                         periodProduct(bdgId);
@@ -1460,7 +1462,7 @@ function activeInputSelector() {
                         killProduct(bdgId);
                         break;
                     case 'event_InfoProduct':
-                        infoProduct(bdgId, type);
+                        infoProduct(bdgId, type,sec);
                         break;
                     case 'event_PerdProduct':
                         /* periodProduct(bdgId);
@@ -1521,7 +1523,7 @@ function killProduct(bdgId) {
 }
 
 // Muestra la información del producto seleccionado
-function infoProduct(bdgId, type) {
+function infoProduct(bdgId, type,sec) {
     $('.invoice__modalBackgound').fadeIn('slow');
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#infoProductTemplate');
@@ -1534,7 +1536,7 @@ function infoProduct(bdgId, type) {
     setTimeout(() => {
         let verId = $('.version_current').data('version');
         // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
-        getProductsRelated(bdgId.substring(3, 20), type, verId);
+        getProductsRelated(bdgId.substring(3, 20), type, verId,sec);
     }, 500);
 }
 

@@ -991,7 +991,7 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    /* $('tbody.sections_products').sortable({
+    $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
         axis: 'y',
@@ -1010,7 +1010,7 @@ function putBudgets(dt) {
                 });
             showButtonVersion('S');
         },
-    }); */
+    });
 
     reOrdering();
 }
@@ -2243,7 +2243,7 @@ function saveBudget(dt) {
                 "prdId"           : "${prdId}",
                 "pjtId"           : "${pjtId}"
             }]`;
-            console.log(par);
+            // console.log(par);
             var pagina = 'Budget/SaveBudget';
             var tipo = 'html';
             var selector = respBudget;

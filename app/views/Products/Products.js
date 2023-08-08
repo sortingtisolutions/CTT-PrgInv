@@ -511,7 +511,6 @@ function fillProducts(ft) {
     }
 }
 
-
 function getModalSeries(id) {
     let qty = $(`#${id}`).children('td.prodqtty').text();
     if (qty > 0) {

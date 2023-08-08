@@ -51,7 +51,6 @@
                 <ul></ul>
             </div>
         </div>
-        
         <div class="invoice__box-table" id="invoiceTable">
             <table >
             <!-- HEADERS DE LA TABLA DE COTIZACIONES START -->
@@ -345,9 +344,9 @@
                 <tr>
                     <th>Producto</th>
                     <th>Existencias</th>
-                    <th>Categoría</th>
-                    <th>Precio</th>
                     <th>Tipo</th>
+                    <th>Sub-categoría</th>
+                    <th>Precio</th>
                 </tr>
             </thead>
             <tbody></tbody>

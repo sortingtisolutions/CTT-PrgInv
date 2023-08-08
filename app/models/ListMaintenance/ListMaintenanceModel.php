@@ -9,70 +9,59 @@ class ListMaintenanceModel extends Model
 		parent::__construct();
 	}
 
-
-// Obtiene el listado de las subcategorias activas   *****
-    public function listCategories($params)
+    // Obtiene el listado de las subcategorias activas
+    public function listReasons($params)
     {
         $qry = "SELECT * FROM ctt_project_change_reason ORDER BY 1;";
 
         return $this->db->query($qry);
     }
 
-    
-// Obtiene el listado de las subcategorias activas
-    public function listWaytoPay($params)
+    // Obtiene el listado de las subcategorias activas
+    public function saveReasons($params)
     {
-
-        $qry = "SELECT * FROM ctt_project_change_reason ORDER BY 1;";
-
-        return $this->db->query($qry);
-    }
-
-    
-// Obtiene el listado de las subcategorias activas
-    public function SaveSubcategory($params)
-    {
-        $sbcName = $this->db->real_escape_string($params['sbcName']);
-        $sbcCode = $this->db->real_escape_string($params['sbcCode']);
-        $catId = $this->db->real_escape_string($params['catId']);
+        $descReas = $this->db->real_escape_string($params['descReas']);
+        $defReas = $this->db->real_escape_string($params['defReas']);
+        $codeMotiv = $this->db->real_escape_string($params['codeMotiv']);
 
 
-        $qry = "INSERT INTO ctt_subcategories(sbc_code, sbc_name, sbc_status, cat_id)
-                VALUES('$sbcCode',UPPER('$sbcName'),1,'$catId')";
+        $qry = "INSERT INTO ctt_project_change_reason (pjtcr_definition, 
+                        pjtcr_description, pjtcr_code_stage) 
+                VALUES ('$defReas', '$descReas', '$codeMotiv');";
         $this->db->query($qry);	
-        $sbcId = $this->db->insert_id;
-		return $sbcId;
+        $pjtcr_id = $this->db->insert_id;
+		return $pjtcr_id;
     }
 
-// Actualiza la subcategorias seleccionada
-    public function UpdateSubcategory($params)
+    // Actualiza la subcategorias seleccionada
+    public function updateReasons($params)
     {
-        $sbcId      = $this->db->real_escape_string($params['sbcId']);
-        $sbcName    = $this->db->real_escape_string($params['sbcName']);
-        $sbcCode    = $this->db->real_escape_string($params['sbcCode']);
-        $catId      = $this->db->real_escape_string($params['catId']);
+        $pjtcrId      = $this->db->real_escape_string($params['pjtcrId']);
+        $descReas    = $this->db->real_escape_string($params['descReas']);
+        $defReas    = $this->db->real_escape_string($params['defReas']);
+        $codeMotiv      = $this->db->real_escape_string($params['codeMotiv']);
 
-        $qry = "UPDATE ctt_subcategories
+        $qry = "UPDATE ctt_project_change_reason
                 SET 
-                      sbc_name  = UPPER('$sbcName'),
-                      sbc_code  = '$sbcCode',
-                      cat_id    = '$catId'
-                WHERE sbc_id    = '$sbcId';";
+                    pjtcr_description  = UPPER('$descReas'),
+                    pjtcr_definition  = '$defReas',
+                    pjtcr_code_stage    = '$codeMotiv'
+                WHERE pjtcr_id = '$pjtcrId';";
 
         $this->db->query($qry);	
-        return $sbcId;
+        return $pjtcrId;
     }
 
-// Actualiza el status de la subcategorias a eliminar
-    public function DeleteSubcategory($params)
+    // Actualiza el status de la subcategorias a eliminar
+    public function deleteReason($params)
     {
-        $sbcid      = $this->db->real_escape_string($params['sbcId']);
+        $pjtcrId  = $this->db->real_escape_string($params['pjtcrId']);
 
-        $qry = "UPDATE ctt_subcategories SET sbc_status = '0'
-                WHERE sbc_id  = '$sbcid';";
+        $qry = "DELETE FROM ctt_project_change_reason
+                WHERE pjtcr_id  = '$pjtcrId';";
 
         $this->db->query($qry);	
-        return $sbcid;
+        return $pjtcrId;
     }
 
 }

@@ -26,7 +26,6 @@
         <span class="invoice_button" id="newQuote"><i class="fas fa-plus"></i>nueva cotización</span>
     </div>
 
-
     <!-- Parilla de productos seleccionado -->
     <div class="invoice__section invoice__section-grid invoice-border">
         <div class="invoice_controlPanel">
@@ -123,7 +122,6 @@
         </div>
     </div>
 
-
     <!-- Totales y versiones -->
     <div class="invoice__section invoice__section-sidebar">
 
@@ -186,7 +184,6 @@
         </div>
     </div>
     
-    
     <!-- Informacion del proyecto y cliente seleccionado -->
     <div class="invoice__section-details invoice-border">
         <div class="detail__box detail__box-project ">
@@ -217,7 +214,6 @@
             </table>
 
             <hr>
-
             <table>
                 <tr>
                     <td class="concept">Cliente:</td>
@@ -248,12 +244,9 @@
                     <td class="data" id="CustomerQualification"></td>
                 </tr>
             </table>
-
-
         </div>
         
     </div>
-
 
     <!-- Buscador de clientes y proyectos -->
     <div class="invoice__section-finder invoice-border">
@@ -661,7 +654,7 @@
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
-<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
+<!-- <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script> -->
 <script src="<?=  PATH_VIEWS . 'Budget/Budget.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

@@ -671,21 +671,6 @@ public function saveBudgetList($params)
 
         }
 
-        /* $qry2 = "INSERT INTO ctt_projects_detail (
-                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id ) 
-                VALUES ('$detlId', '$sersku', '$serie',  '$prodId',  '$pjetId'
-                ); ";
-
-        $this->db->query($qry2);
-        $pjtdtId = $this->db->insert_id;
-
-        if ( $serie != null){
-            $qry3 = "UPDATE ctt_series 
-                    SET pjtdt_id = '$pjtdtId'
-                    WHERE ser_id = $serie;";
-            $this->db->query($qry3);
-        } */
-
         $qry4 = "INSERT INTO ctt_projects_periods 
                     (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
                 VALUES ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId');";

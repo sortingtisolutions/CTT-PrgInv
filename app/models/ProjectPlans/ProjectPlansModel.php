@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No se permite acceso directo');
 
 class ProjectPlansModel extends Model
 {
+
     public function __construct()
     {
         parent::__construct();
@@ -44,7 +45,7 @@ class ProjectPlansModel extends Model
                     , pj.pjt_status
                 FROM ctt_projects AS pj
                 LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
-                INNER JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
+                LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
                 WHERE pj.pjt_status in ('2','40') ORDER BY pj.pjt_id DESC;
                 ";
@@ -113,13 +114,16 @@ class ProjectPlansModel extends Model
                             WHERE pf.pjtvr_id =  pc.pjtvr_id and pf.prd_id = pd.prd_id
                         )
                     else pc.pjtvr_days_base end  as daybasereal,
-                    (select count(ser_comments)  from ctt_series where prd_id = pc.prd_id group by prd_id) as comments
+                    (SELECT count(ser_comments)  FROM ctt_series where prd_id = pc.prd_id group by prd_id) as comments,
+      					(SELECT COUNT(*) FROM ctt_series AS sr 
+                        INNER JOIN ctt_subletting AS sbl ON sbl.ser_id = sr.ser_id 
+                        where sr.prd_id = pc.prd_id group by sr.prd_id) AS sbl_comments
                 FROM ctt_projects_version AS pc
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
                 WHERE pc.ver_id = $verId ORDER BY pc.pjtvr_order asc;";           
-        return $this->db->query($qry5);
+        return $this->db->query($qry5); //**modificado por ed */
     } 
 
 /** ====== Listado clientes ==================================================================  */
@@ -173,11 +177,10 @@ class ProjectPlansModel extends Model
         $dend = $this->db->real_escape_string($params['dend']);
 
         $qry = "SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, pd.prd_insured, 
-                        sb.sbc_name,cat_name,
+                        sb.sbc_name,
                 CASE 
                     WHEN prd_level ='K' THEN 
-                        (SELECT prd_stock
-                                FROM ctt_products WHERE prd_id = pd.prd_id)
+                        (SELECT count(*) FROM ctt_products_packages WHERE prd_parent = pd.prd_id)
                     WHEN prd_level ='P' THEN 
                         (SELECT prd_stock-fun_buscarentas(pd.prd_sku) FROM ctt_products WHERE prd_id = pd.prd_id)
                     ELSE 
@@ -185,7 +188,6 @@ class ProjectPlansModel extends Model
                     END AS stock
                 FROM ctt_products AS pd
                 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
                 WHERE (upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%') 
                         AND pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
                 ORDER BY pd.prd_name ;";
@@ -254,6 +256,7 @@ class ProjectPlansModel extends Model
         $type = $this->db->real_escape_string($params['type']);
         $prdId = $this->db->real_escape_string($params['prdId']);
         $verId = $this->db->real_escape_string($params['verId']);
+        $section = $this->db->real_escape_string($params['section']);// *** Modificado por Ed
 
 /*         $qry = "SELECT pr.prd_id, sr.ser_id, pr.prd_sku, pj.pjtdt_prod_sku, pr.prd_name,
                     pr.prd_level, ct.cat_name, ac.ser_parent,
@@ -278,8 +281,8 @@ class ProjectPlansModel extends Model
                 INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
                 LEFT JOIN ctt_series as sr ON sr.prd_id = pj.prd_id AND sr.pjtdt_id = pj.pjtdt_id
                 INNER JOIN ctt_projects_version AS cn ON cn.pjtvr_id = pj.pjtvr_id and pj.pjtdt_belongs = 0
-                WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId 
-                ORDER BY reng, pr.prd_sku, pr.prd_level DESC;";
+                WHERE  cn.prd_id  = $prdId  and cn.ver_id = $verId AND cn.pjtvr_section = $section
+                ORDER BY reng, pr.prd_sku, pr.prd_level DESC;";// ***Modificado por Ed
 
         return $this->db->query($qry);
 
@@ -350,7 +353,8 @@ class ProjectPlansModel extends Model
 
         $qry1 = "UPDATE ctt_projects_mice 
                 SET $field = $value,  pjtvr_action = '$action'
-                WHERE pjt_id = $pjtId AND prd_id = $prdId AND pjtvr_section = $section AND (pjtvr_action = 'N' OR pjtvr_action = 'U');";
+                WHERE pjt_id = $pjtId AND prd_id = $prdId AND pjtvr_section = $section 
+                AND (pjtvr_action = 'N' OR pjtvr_action = 'U');";
         $this->db->query($qry1);
 
         $qry2 = "UPDATE ctt_projects_mice 
@@ -540,6 +544,7 @@ class ProjectPlansModel extends Model
     }
 
 
+
 /** ====== Agrega producto a la tabla temporal ===============================================  */
     public function AddProductMice($params)
     {
@@ -641,11 +646,11 @@ class ProjectPlansModel extends Model
         $qry2 = "INSERT INTO ctt_projects_version (
                     pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
                     pjtvr_discount_base, pjtvr_discount_insured, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, 
-                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id,pjtvr_action)  
+                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id)  
                 SELECT 
                     pjtvr_id, pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, 
                     pjtvr_discount_base, pjtvr_discount_insured, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, 
-                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id,pjtvr_action 
+                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id 
                 FROM ctt_projects_mice WHERE pjtvr_action != 'D' AND pjt_id = $pjtId;";
         return $this->db->query($qry2);
 
@@ -659,11 +664,11 @@ class ProjectPlansModel extends Model
         $qry2 = "INSERT INTO ctt_projects_content (
                     pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, 
                     pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
-                    pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id,pjtvr_action)
+                    pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id)
                 SELECT 
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, 
                     pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, 
-                    pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id, pjtvr_id,pjtvr_action 
+                    pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id, pjtvr_id 
                 FROM ctt_projects_version WHERE ver_id = $verId;";
         return $this->db->query($qry2);
 
@@ -699,12 +704,12 @@ class ProjectPlansModel extends Model
         $qry = "INSERT INTO ctt_projects_version (
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost,
                     pjtvr_discount_base, pjtvr_discount_insured, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,
-                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id,pjtvr_action
+                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id
                 )
                 SELECT 
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost,
                     pjtvr_discount_base, pjtvr_discount_insured, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,
-                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, '$verId' as ver_id, prd_id, pjt_id,pjtvr_action
+                    pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, '$verId' as ver_id, prd_id, pjt_id
                 FROM ctt_projects_mice WHERE pjtvr_action != 'D' AND pjt_id = $pjtId;";
 
         return $this->db->query($qry);

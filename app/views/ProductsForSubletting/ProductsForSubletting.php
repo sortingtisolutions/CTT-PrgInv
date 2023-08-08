@@ -23,6 +23,7 @@
 						</div>
 
 						<hr>
+
 						<h6	class="nameProduct objet objHidden">Producto</h6>
 						<input type="hidden" id="txtIdProject" class="form-control">
 						<input type="hidden" id="txtIdProduct" class="form-control">
@@ -30,21 +31,22 @@
 						<input type="hidden" id="txtSkuSerie" class="form-control">
 						<input type="hidden" id="txtIdSerie" class="form-control">
 						<input type="hidden" id="txtProjectDetail" class="form-control">
+						<input type="hidden" id="txtIdProjectCont" class="form-control">
 
 						<div class="row objet objHidden">
-							<div class="col-md-8 col-lg-8 col-xl-8 mb-2 form-floating">
+							<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
 								<input id="txtPeriod" type="text" class="form-control form-control-sm text-center"  data-mesage="Debes elegir un periodo">
 								<label for="txtPeriod" >Periodo</label>
 							</div>
-							<div class="col-md-4 col-lg-4 col-xl-4 mb-2 form-floating">
-								<input id="txtPrice" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
-								<label for="txtPrice">Costo</label>
+							<div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
+								<input id="txtPrice" type="text" class="form-control form-control-sm text-center number" data-mesage="Debes Agregar el precio" >
+								<label for="txtPrice">Costo Subarrendo</label>
 							</div>
 						</div>
 
 						<div class="row objet objHidden">
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtCoinType" class="form-select form-select-sm  required" aria-label="Floating label select" data-mesage="Debes seleccionar el tipo de moneda">
+								<select id="txtCoinType" class="form-select form-select-sm " aria-label="Floating label select" data-mesage="Debes seleccionar el tipo de moneda">
 									<option value="0" selected>Selecciona el tipo de moneda</option>
 								</select>
 								<label for="txtCoinType">Tipo de moneda</label>
@@ -53,7 +55,7 @@
 
 						<div class="row objet objHidden">
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtSupplier" class="form-select form-select-sm required" aria-label="Floating label select"  data-mesage="Debes seleccionar un proveedor">
+								<select id="txtSupplier" class="form-select form-select-sm" aria-label="Floating label select"  data-mesage="Debes seleccionar un proveedor">
 									<option value="0" selected>Selecciona el proveedor</option>
 								</select>
 								<label for="txtSupplier">Proveedor</label>
@@ -62,7 +64,7 @@
 
 						<div class="row objet objHidden">
 							<div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-								<select id="txtStoreSource" class="form-select form-select-sm required"aria-label="Floating label select"  data-mesage="Debes seleccionar un almacen">
+								<select id="txtStoreSource" class="form-select form-select-sm"aria-label="Floating label select"  data-mesage="Debes seleccionar un almacen">
 									<option value="0" selected>Selecciona almacen</option></select>
 								<label for="txtStoreSource" class="form-label">Almacen</label>
 							</div>
@@ -104,7 +106,7 @@
 						</tbody>
 					</table>
 				</div>
-			</div>	
+			</div>
 	</div>
 </div>
 

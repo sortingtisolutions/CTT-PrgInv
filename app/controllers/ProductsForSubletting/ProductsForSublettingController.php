@@ -8,6 +8,7 @@ class ProductsForSublettingController extends Controller
     private $session;
     public $model;
 
+
     public function __construct()
     {
         $this->model = new ProductsForSublettingModel();
@@ -161,6 +162,7 @@ class ProductsForSublettingController extends Controller
 
         if ($sku == 0){
             $pjtId = $this->model->addNewSku($request_params);
+            //$pjtId = $this->model->pruebaStore($request_params);
             $setData = $this->model->getPjtDetail($pjtId);
             $i = 0;
             while($row = $setData->fetch_assoc()){
@@ -170,10 +172,10 @@ class ProductsForSublettingController extends Controller
             if ($i>0){
                 $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
             } else {
-                $res =  '[{"pjdt_id_id":"0"}]';	
+                $res =  '[{"pjdt_id":"0"}]';	
             }
         } else {
-            $res =  '[{"pjdt_id_id":"0"}]';	
+            $res =  '[{"pjdt_id":"0"}]';	
         }
         echo $res;
     }
@@ -194,7 +196,7 @@ class ProductsForSublettingController extends Controller
             if ($i>0){
                 $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
             } else {
-                $res =  '[{"pjdt_id_id":"0"}]';	
+                $res =  '[{"pjdt_id":"0"}]';	
             }
             
         echo $res;

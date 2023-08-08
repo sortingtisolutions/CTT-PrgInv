@@ -176,6 +176,7 @@ function setting_table() {
     });
 }
 
+
 /**  ++++   Coloca los proyectos en el listado del input */
 function put_Proyectos(dt) {
     pj = dt;
@@ -203,7 +204,7 @@ function put_Products(dt) {
         ? $('#tblProductForSubletting tbody tr').remove()
         : '';
     let tabla = $('#tblProductForSubletting').DataTable();
-    // tabla.rows().remove().draw();
+     tabla.rows().remove().draw();
     let cn = 0;
     if (pd[0].prd_name != undefined) {
         $.each(pd, function (v, u) 
@@ -290,6 +291,7 @@ function put_Products(dt) {
                 let tpcoinId = rw[0].attributes[8].value;
                 let produSku = rw[0].attributes[9].value;
                 let seriesId = rw[0].attributes[10].value;
+                let projContId = rw[0].attributes[3].value;
 
                 $('.nameProduct').html(prodname);
                 $('#txtIdProduct').val(producId);
@@ -302,6 +304,7 @@ function put_Products(dt) {
                 $('#txtIdSerie').val(seriesId);
                 $('#txtProjectDetail').val(projdeta);
                 $('#txtComments').val(comments);
+                $('#txtIdProjectCont').val(projContId);
                 setting_datepicket($('#txtPeriod'), datestar, datesend);
 
                 if (serieSku == 'Pendiente') {
@@ -365,6 +368,7 @@ function updating_serie(acc) {
     let pjDetail = $('#txtProjectDetail').val();
     let projecId = $('#txtIdProject').val();
     let seriesId = $('#txtIdSerie').val();
+    let projContId = $('#txtIdProjectCont').val();
 
     let par = `
     [{
@@ -379,7 +383,8 @@ function updating_serie(acc) {
         "tpCoinId"  :   "${tpCoinId}",
         "pjDetail"  :   "${pjDetail}",
         "seriesId"  :   "${seriesId}",
-        "projecId"  :   "${projecId}"
+        "projecId"  :   "${projecId}",
+        "projContId"  :   "${projContId}"
     }]`;
     console.log(acc);
     if (acc == 'add') {
@@ -428,7 +433,7 @@ function validator() {
     let b = moment(period[0], 'DD/MM/YYYY');
     let dif = a.diff(b, 'days');
     if (dif < 1) {
-        ky = 1;
+        ky = 0;
         msg += 'La fecha final debe ser por lo menos de un día de diferencia';
     }
     if (ky == 0) {
