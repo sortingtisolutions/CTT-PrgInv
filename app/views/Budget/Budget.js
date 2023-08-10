@@ -1956,6 +1956,12 @@ function newProject() {
                 // );
             }
         });
+
+        $('#txtEdosRepublic')
+        .unbind('change')
+        .on('change', function () {
+            let edoId=$(this).attr('id');
+        });
 }
 
 function actionNewProject() {

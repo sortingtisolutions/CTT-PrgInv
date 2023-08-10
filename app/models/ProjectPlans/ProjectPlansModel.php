@@ -122,7 +122,8 @@ class ProjectPlansModel extends Model
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
                 LEFT JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
-                WHERE pc.ver_id = $verId ORDER BY pc.pjtvr_order asc;";           
+                WHERE pc.ver_id = $verId ORDER BY pc.pjtvr_order asc;"; 
+
         return $this->db->query($qry5); //**modificado por ed */
     } 
 
@@ -291,7 +292,6 @@ class ProjectPlansModel extends Model
 /** ====== Muestra el inventario de productos en almacen =====================================  */
     public function stockProducts($params)
     {
-
         $prdId = $this->db->real_escape_string($params['prdId']);
 
         $qry = "SELECT  ifnull(pdt.pjtdt_prod_sku,'') as pjtdt_prod_sku, 
@@ -314,7 +314,6 @@ class ProjectPlansModel extends Model
 /** ====== cuenta los productos que no se tiene en existencia y estan solicitados  ===========  */
     public function countPending($params)
     {
-
         $pjtvrId    = $this->db->real_escape_string($params['pjtvrId']);
         $prdId      = $this->db->real_escape_string($params['prdId']);
 
@@ -380,7 +379,6 @@ class ProjectPlansModel extends Model
     }    
 
 
-
 /** ====== Agrega un nuevo comentario ========================================================  */
     public function InsertComment($params, $userParam)
     {
@@ -412,11 +410,7 @@ class ProjectPlansModel extends Model
                     FROM ctt_comments 
                     WHERE com_id = $comId;";
         return $this->db->query($qry2);
-
-
     }
-
-
 
 /** ====== Promueve el presupuesto proyecto ==================================================  */
     public function UpdateProject($params)
@@ -471,7 +465,6 @@ class ProjectPlansModel extends Model
         $this->db->query($qry02);
 
         return $pjt_id;
-
     }
 
 /** ====== Actualiza las fechas del proyecto =================================================  */
@@ -491,7 +484,6 @@ class ProjectPlansModel extends Model
 
     }
 
-
 /** ====== Promueve proyecto ==================================================================  */
     public function PromoteProject($params)
     {
@@ -502,7 +494,6 @@ class ProjectPlansModel extends Model
         $this->db->query($qry);
 
         return $pjtId;
-
     }
 
     
@@ -542,7 +533,6 @@ class ProjectPlansModel extends Model
 
         return $result . '|' . $pjtId;
     }
-
 
 
 /** ====== Agrega producto a la tabla temporal ===============================================  */
@@ -700,7 +690,6 @@ class ProjectPlansModel extends Model
 /** ====== Agrega contenido de la nueva version ==============================================  */ // JJR agrego pjtvr_action != 'D' AND
     public function settinProjectVersion($pjtId, $verId )
     {
- 
         $qry = "INSERT INTO ctt_projects_version (
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost,
                     pjtvr_discount_base, pjtvr_discount_insured, pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured,
@@ -760,7 +749,6 @@ class ProjectPlansModel extends Model
         return $this->db->query($qry);
     }
 
-
 /** ====== Agrega los registros del contenido del proyecto  ==================================  */
     public function restoreContent($params)
     {
@@ -810,7 +798,6 @@ class ProjectPlansModel extends Model
 
             $qry4 = "DELETE FROM ctt_projects_periods WHERE pjtdt_id = $pjtdtId;";
             $this->db->query($qry4);
-
         }
         return '1';
     }
@@ -866,7 +853,6 @@ class ProjectPlansModel extends Model
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
         }
-        
             /*     if ( $serie != null){
             // Asigna el id del detalle en la serie correspondiente
             $qry4 = "UPDATE ctt_series 
@@ -883,7 +869,6 @@ class ProjectPlansModel extends Model
         $this->db->query($qry5);
 
         return  $pjtdtId;
-        
     }
 
     public function GetAccesories($params)
@@ -991,5 +976,35 @@ class ProjectPlansModel extends Model
         return  $joinval;
     }    
 
+    public function listReordering($params)
+    {
+        // $pjtId      = $this->db->real_escape_string($params['pjtId']);
+        $verId = $this->db->real_escape_string($params);
+
+        $qry = "SELECT pcn.pjtvr_id, pcn.pjtcn_id, pcn.pjtcn_prod_sku,pcn.pjtcn_section,pcn.pjtcn_order 
+                FROM ctt_projects_content AS pcn 
+                INNER JOIN ctt_subcategories AS sb 
+                    ON sb.cat_id=substr(pcn.pjtcn_prod_sku,1,2) 
+                    AND sb.sbc_code=substr(pcn.pjtcn_prod_sku,3,2)
+                WHERE ver_id=$verId 
+                GROUP BY pcn.ver_id, pcn.pjtcn_id, pcn.pjtcn_prod_sku,pcn.pjtcn_section,pcn.pjtcn_order
+                ORDER BY pcn.pjtcn_section, SUBSTR(pcn.pjtcn_prod_sku,1,4),pjtcn_order;";
+
+        $result =  $this->db->query($qry);
+                
+        return $this->db->query($qry);
+    } 
+
+    public function upReorderingProducts($params)
+    {
+        $valnew      = $this->db->real_escape_string($params['valnew']);
+        $verid      = $this->db->real_escape_string($params['verid']);
+
+        $qry = "UPDATE ctt_projects_version 
+                SET pjtvr_order=$valnew
+        WHERE pjtvr_id=$verid;";
+    
+        return $this->db->query($qry);
+    } 
 }
 

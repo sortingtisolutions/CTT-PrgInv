@@ -466,6 +466,7 @@ public function getNewProdChg($request_params)
             $result             = $this->model->getProjectVersion($pjtId);
             $dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->setSeries($result);
+            $resReorder = $this->reOrdenList($verId);
             $opt1='Opcion1';
         } else {
             //MST actualiza los datos de una version maestra 
@@ -475,6 +476,7 @@ public function getNewProdChg($request_params)
             $result             = $this->model->getVersionMice($pjtId);
             $dateproject        = $this->model->saveDateProject($pjtId);
             $response           = $this->updateSeries($result);
+            $resReorder = $this->reOrdenList($verId);
             $opt1='Opcion2';
         }
 
@@ -783,6 +785,7 @@ public function getNewProdChg($request_params)
         $result         = $this->model->getProjectVersion($pjtId);
         $response       = $this->setSeries($result);
         $dateproject    = $this->model->saveDateProject($pjtId);  // comentado por jjr
+        $resReorder = $this->reOrdenList($pjtId);
         // echo $verId . '|'. $pjtId . '|'. $user . '|'. $name . '|'. $otrov . '|-Paso '. $Locpaso;
         echo $verId . '|'. $pjtId . '|'. $dateproject;
 
@@ -897,4 +900,28 @@ public function getNewProdChg($request_params)
     }
 
 /** ==========================================================================================  */
+
+public function reOrdenList($request_params)
+{
+    $params =  $this->session->get('user');
+    $result = $this->model->listReordering($request_params);
+
+    $valnew=1;
+    while($row = $result->fetch_assoc())
+    {
+        $prdsku = $row["pjtcn_prod_sku"];
+        $docsec = $row["pjtcn_section"];
+        $verid = $row["pjtvr_id"];
+        $docord = $row["pjtcn_order"];
+        $paramup = array(
+            'valnew' => $valnew,
+            'verid' => $verid,
+        );
+
+        $bandReOrder = $this->model->upReorderingProducts($paramup);
+        $valnew=$valnew + 1;
+    }
+    // echo $bandReOrder ; 
+} 
+
 }

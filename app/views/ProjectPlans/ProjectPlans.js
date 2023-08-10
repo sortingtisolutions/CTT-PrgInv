@@ -204,7 +204,7 @@ function eventsAction() {
                         "discount"  : "${discount}",
                         "action"    : "${interfase}"
                     }]`;
-                    console.log(par);
+                    console.log('SaveBudget',par);
                     var pagina = 'ProjectPlans/SaveBudget';
                     var tipo = 'html';
                     var selector = putsaveBudget;
@@ -419,7 +419,7 @@ function getDiscounts() {
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de relacionados al prducto*/
-function getProductsRelated(id, tp, vr,sec) {
+function getProductsRelated(id, tp, vr, sec) {
     var pagina = 'ProjectPlans/listProductsRelated';
     var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}","section":"${sec}"}]`;
     var tipo = 'json';
@@ -427,9 +427,9 @@ function getProductsRelated(id, tp, vr,sec) {
     fillField(pagina, par, tipo, selector);
 }
 /**  Obtiene el listado de projectos del paquete  */
-function getProductsRelatedPk(id, tp, vr) {
+function getProductsRelatedPk(id, tp, vr, sec) {
     var pagina = 'ProjectPlans/listProductsRelated';
-    var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}"}]`;
+    var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}","section":"${sec}"}]`;
     var tipo = 'json';
     var selector = putProductsRelatedPk;
     fillField(pagina, par, tipo, selector);
@@ -921,7 +921,7 @@ function selProduct(res) {
         if (res.length == 3) {
             $('.toCharge').removeClass('hide-items');  //jjr
             if (glbSec != 4) {  //IF agragado por jjr
-                console.log('Normal');
+                // console.log('Normal');
                 getProducts(res.toUpperCase(), dstr, dend);
             } else {
                 console.log('Subarrendo');
@@ -1052,7 +1052,7 @@ function loadBudget(inx, bdgId) {
 }
 
 function putAddProductMice(dt) {
-    console.log('putAddProductMice-',dt);
+    // console.log('putAddProductMice-',dt);
     $('#bdg0').attr('id', 'bdg' + dt);
 }
 
@@ -1431,13 +1431,41 @@ function activeInputSelector() {
             let bdgId = id.parents('tr').attr('id');
             let type = id.parents('tr').attr('data-level');
             let sec = id.parents('tr').attr('data-sect');
-            if (type != 'K') {
+            console.log('Sec->',sec);
+            if (type != 'K' && sec =='1') {
                 switch (event) {
                     case 'event_killProduct':
                         killProduct(bdgId);
                         break;
                     case 'event_InfoProduct':
-                        infoProduct(bdgId, type,sec);
+                        infoProduct(bdgId, type,sec);// *** Ed
+                        break;
+                    case 'event_PerdProduct':
+                        window.alert('ES EQUIPO BASE, NO SE MODIFICAN LAS FECHAS INDIVUDUALES');
+                        // periodProduct(bdgId);
+                        break;
+                    case 'event_StokProduct':
+                        stockProduct(bdgId);
+                        break;
+                    case 'event_ChangePakt':
+                        if(type!='K'){
+                            window.alert('ESTE NO ES UN PAQUETE');
+                        }else{
+                            // infoPackage(bdgId, type);
+                            // console.log('ESTE SI ES UN PAQUETE');
+                        }
+                        break;
+                    default:
+                }
+            }
+            else if(type != 'K' && sec != '1' )
+            {  // agregado por JJR, que hace en caso de PAQUETE ???
+                switch (event) {
+                    case 'event_killProduct':
+                        killProduct(bdgId);
+                        break;
+                    case 'event_InfoProduct':
+                        infoProduct(bdgId, type,sec); // *** Ed
                         break;
                     case 'event_PerdProduct':
                         periodProduct(bdgId);
@@ -1447,7 +1475,7 @@ function activeInputSelector() {
                         break;
                     case 'event_ChangePakt':
                         if(type!='K'){
-                            alert('ESTE NO ES UN PAQUETE');
+                            window.alert('ESTE NO ES UN PAQUETE');
                         }else{
                             // infoPackage(bdgId, type);
                             // console.log('ESTE SI ES UN PAQUETE');
@@ -1456,13 +1484,14 @@ function activeInputSelector() {
                     default:
                 }
             }
-            else{  // agregado por JJR, que hace en caso de PAQUETE ???
+            else if(type == 'K' && sec == '1' )
+            {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
                         killProduct(bdgId);
                         break;
                     case 'event_InfoProduct':
-                        infoProduct(bdgId, type,sec);
+                        infoProduct(bdgId, type,sec); // *** Ed
                         break;
                     case 'event_PerdProduct':
                         /* periodProduct(bdgId);
@@ -1472,16 +1501,15 @@ function activeInputSelector() {
                         break;
                     case 'event_ChangePakt':
                         if(type!='K'){
-                            alert('ESTE NO ES UN PAQUETE');
+                            window.alert('ESTE NO ES UN PAQUETE');
                         }else{
-                            infoPackage(bdgId, type);
+                            infoPackage(bdgId, type, sec);
                             // console.log('ESTE SI ES UN PAQUETE');
                         }
                         break;
                     default:
                 }
             }
-            
         });
 }
 
@@ -1540,11 +1568,11 @@ function infoProduct(bdgId, type,sec) {
     }, 500);
 }
 
-function infoPackage(bdgId, type) {
+function infoPackage(bdgId, type, sec) {
     setTimeout(() => {
         let verId = $('.version_current').data('version');
         // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
-        getProductsRelatedPk(bdgId.substring(3, 20), type, verId);
+        getProductsRelatedPk(bdgId.substring(3, 20), type, verId, sec);
     }, 500);
 }
 

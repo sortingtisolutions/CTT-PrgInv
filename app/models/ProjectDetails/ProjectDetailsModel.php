@@ -1018,4 +1018,36 @@ public function promoteToProject($params)
 
 /** ==========================================================================================  */
 
+    public function listReordering($params)
+    {
+        // $pjtId      = $this->db->real_escape_string($params['pjtId']);
+        $verId = $this->db->real_escape_string($params);
+
+        $qry = "SELECT pcn.pjtvr_id, pcn.pjtcn_id, pcn.pjtcn_prod_sku,
+                        pcn.pjtcn_section,  pcn.pjtcn_order 
+                FROM ctt_projects_content AS pcn 
+                INNER JOIN ctt_subcategories AS sb 
+                    ON sb.cat_id=substr(pcn.pjtcn_prod_sku,1,2) 
+                    AND sb.sbc_code=substr(pcn.pjtcn_prod_sku,3,2)
+                WHERE ver_id=$verId 
+                GROUP BY pcn.ver_id, pcn.pjtcn_id, pcn.pjtcn_prod_sku,
+                        pcn.pjtcn_section, pcn.pjtcn_order
+                ORDER BY pcn.pjtcn_section, SUBSTR(pcn.pjtcn_prod_sku,1,4),pjtcn_order;";
+
+        $result =  $this->db->query($qry);
+                
+        return $this->db->query($qry);
+    } 
+
+    public function upReorderingProducts($params)
+    {
+        $valnew      = $this->db->real_escape_string($params['valnew']);
+        $verid      = $this->db->real_escape_string($params['verid']);
+
+        $qry = "UPDATE ctt_projects_version 
+                SET pjtvr_order=$valnew
+        WHERE pjtvr_id=$verid;";
+    
+        return $this->db->query($qry);
+    } 
 }

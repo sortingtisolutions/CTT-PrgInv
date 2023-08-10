@@ -36,8 +36,8 @@ $qry = "SELECT *, ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) as ver_date_
         INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
         INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
         INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id 
-        INNER JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
-        INNER JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+        LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
+        LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
         LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
         WHERE bg.ver_id = $verId  ORDER BY sbc_order_print, bdg_section;";
@@ -51,8 +51,8 @@ while($row = $res->fetch_assoc()){
 // OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
 $query="SELECT cr.crp_id, cr.crp_name, sb.sbc_name, sb.sbc_order_print 
 FROM ctt_subcategories AS sb 
-INNER JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
-INNER JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
+LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
 INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
 INNER JOIN ctt_budget AS bg ON bg.prd_id = pd.prd_id 
 WHERE bg.ver_id = $verId GROUP BY cr.crp_id ORDER BY sbc_order_print, bdg_section";
@@ -267,6 +267,7 @@ $html = '
                                 $subtotalBase   = $price * $quantity * $daysBase;   //  ----------------------- Importe base = (precio x cantidad) dias de costo
                                 $discountAmount = $subtotalBase * $discountBase;    //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
                                 $amountBase     = $subtotalBase - $discountAmount;  //  ----------------------- Costo base = importe base - importe de desucuento base
+                                $valdiscount    = $discountBase * 100;              //  ----------------------- Porcentaje de descuento convertido jjr
 
                                 $daysTrip       = $items[$i]['bdg_days_trip'];  //  --------------------------- Dias de viaje
                                 $discountTrip   = $items[$i]['bdg_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
@@ -296,7 +297,7 @@ $html = '
                                 <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
                                 <td class="dat-figure qnty">' . $quantity                                   . '</td>
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>
-                                <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
+                                <td class="dat-figure disc">' . number_format($valdiscount , 2,'.',',')  . '</td>   <-- discountAmount jjr -->
                                 <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
@@ -726,9 +727,6 @@ $html .= '
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>
                                 <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
                                 <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
-                                 
-                                 
-                                  
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
@@ -879,9 +877,9 @@ $html .= '
         <tbody>
             <tr>
                 <td>
-                <ul style="font-size: 0.8em;">
-                    <li>Toda cotización, considera las condiciones estipuladas en la solicitud de servicio, en caso de que éstas varíen, los costos finales deberán asentarse una vez finalizado el proyecto</li>
-                    <li>Ninguna cotización, tiene valor fiscal, ni legal, ni implica obligación alguna para la empresa SIMPLEMENTE SERVICIOS S.A. DE C.V. y/o su personal</li>
+                <ul style="font-size: 0.9em;">
+                    <li style="font-size: 0.9em;>Toda cotización, considera las condiciones estipuladas en la solicitud de servicio, en caso de que éstas varíen, los costos finales deberán asentarse una vez finalizado el proyecto</li>
+                    <li style="font-size: 0.9em;>Ninguna cotización, tiene valor fiscal, ni legal, ni implica obligación alguna para la empresa SIMPLEMENTE SERVICIOS S.A. DE C.V. y/o su personal</li>
                     <li> Los montos referidos en esta cotización tienen una vigencia de 30 dias a partir de la fecha del envio de la misma al cliente. Posteriormente a este periodo de tiempo los montos pueden variar</li>
                     <li>Las cancelaciones deberán hacerse al menos 48 horas antes de la entrega del equipo. De lo contrario, se cobrará el 30% del monto total del equipo solicitado.</li>
                     <li>La alimentacion del personal técnico cotizado durante el horario de trabajo contratado corre por cuenta del cliente</li>

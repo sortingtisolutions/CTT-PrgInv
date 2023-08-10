@@ -353,7 +353,6 @@
         <div class="modal__body"></div>
     </div>
 
-
     <!-- input de cantidad y descuentos -->
     <div class="invoiceMainInput withShadow">
         <input type="text" name="txtMainInput"  id="txtMainInput" class="input_invoice">
@@ -402,6 +401,7 @@
             <tbody></tbody>
         </table>
      </div>
+     
     <div id="dataProjectTemplate" class="table_hidden box_template">
         <div class="project_data-box">
             <div class="project_data-table">

@@ -426,9 +426,9 @@ function getProductsRelated(id, tp, vr,sec) {// *** Ed
 }
 
 /**  Obtiene el listado de projectos del paquete  */
-function getProductsRelatedPk(id, tp, vr) {
-    var pagina = 'ProjectPlans/listProductsRelated';
-    var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}"}]`;
+function getProductsRelatedPk(id, tp, vr, sec) {
+    var pagina = 'ProjectDetails/listProductsRelated';
+    var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}","section":"${sec}"}]`;
     var tipo = 'json';
     var selector = putProductsRelatedPk;
     fillField(pagina, par, tipo, selector);
@@ -1111,7 +1111,7 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    $('tbody.sections_products').sortable({
+    /* $('tbody.sections_products').sortable({
         items: 'tr:not(tr.blocked)',
         cursor: 'pointer',
         axis: 'y',
@@ -1131,7 +1131,7 @@ function putBudgets(dt) {
             showButtonVersion('S');
             OrderMice(1);
         },
-    });
+    }); */
 
     reOrdering();
 }
@@ -1450,13 +1450,42 @@ function activeInputSelector() {
             let bdgId = id.parents('tr').attr('id');
             let type = id.parents('tr').attr('data-level');
             let sec = id.parents('tr').attr('data-sect');
-            if (type != 'K') {
+            console.log('Sec->',sec,bdgId,type);
+            if (type != 'K' && sec =='1') {
                 switch (event) {
                     case 'event_killProduct':
                         killProduct(bdgId);
                         break;
                     case 'event_InfoProduct':
                         infoProduct(bdgId, type,sec);// *** Ed
+                        break;
+                    case 'event_PerdProduct':
+                        window.alert('EQUIPO BASE, No se modifican las fechas individuales');
+                        // periodProduct(bdgId);
+                        break;
+                    case 'event_StokProduct':
+                        stockProduct(bdgId);
+                        break;
+                    case 'event_ChangePakt':
+                        if(type!='K'){
+                            window.alert('ESTE NO ES UN PAQUETE');
+                            // alert('ESTE NO ES UN PAQUETE');
+                        }else{
+                            // infoPackage(bdgId, type);
+                            // console.log('ESTE SI ES UN PAQUETE');
+                        }
+                        break;
+                    default:
+                }
+            }
+            else if(type != 'K' && sec != '1' )
+            {  // agregado por JJR, que hace en caso de PAQUETE ???
+                switch (event) {
+                    case 'event_killProduct':
+                        killProduct(bdgId);
+                        break;
+                    case 'event_InfoProduct':
+                        infoProduct(bdgId, type,sec); // *** Ed
                         break;
                     case 'event_PerdProduct':
                         periodProduct(bdgId);
@@ -1466,7 +1495,7 @@ function activeInputSelector() {
                         break;
                     case 'event_ChangePakt':
                         if(type!='K'){
-                            alert('ESTE NO ES UN PAQUETE');
+                            window.alert('ESTE NO ES UN PAQUETE');
                         }else{
                             // infoPackage(bdgId, type);
                             // console.log('ESTE SI ES UN PAQUETE');
@@ -1475,7 +1504,8 @@ function activeInputSelector() {
                     default:
                 }
             }
-            else{  // agregado por JJR, que hace en caso de PAQUETE ???
+            else if(type == 'K' && sec == '1' )
+            {  // agregado por JJR, que hace en caso de PAQUETE ???
                 switch (event) {
                     case 'event_killProduct':
                         killProduct(bdgId);
@@ -1491,9 +1521,9 @@ function activeInputSelector() {
                         break;
                     case 'event_ChangePakt':
                         if(type!='K'){
-                            alert('ESTE NO ES UN PAQUETE');
+                            window.alert('ESTE NO ES UN PAQUETE');
                         }else{
-                            infoPackage(bdgId, type);
+                            infoPackage(bdgId, type, sec);
                             // console.log('ESTE SI ES UN PAQUETE');
                         }
                         break;
@@ -1556,11 +1586,11 @@ function infoProduct(bdgId, type,sec) { // *** Ed
     }, 500);
 }
 
-function infoPackage(bdgId, type) {
+function infoPackage(bdgId, type, sec) {
     setTimeout(() => {
         let verId = $('.version_current').data('version');
         // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
-        getProductsRelatedPk(bdgId.substring(3, 20), type, verId); //*** Faltaria hacer lo mismo que con el resto de productos */
+        getProductsRelatedPk(bdgId.substring(3, 20), type, verId, sec); //*** Faltaria hacer lo mismo que con el resto de productos */
     }, 500);
 }
 
@@ -2261,7 +2291,7 @@ function printBudget(verId) {
         );
     } else{
         window.open(
-            `${url}app/views/ProjectPlans/ProjectPlansReport-s-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
+            `${url}app/views/ProjectDetails/ProjectDetailsReport-s-v.php?v=${v}&u=${u}&n=${n}&h=${h}`,
             '_blank'
         );   
     }

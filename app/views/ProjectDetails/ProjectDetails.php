@@ -363,6 +363,7 @@
             <li class="event_InfoProduct"><i class="fas fa-info-circle"></i> Información</li>
             <li class="event_PerdProduct"><i class="fas fa-calendar-week"></i> Periodos</li>
             <li class="event_StokProduct"><i class="fas fa-layer-group"></i> Inventario</li>
+            <li class="event_ChangePakt"><i class="fas fa-edit"></i> Cambia Paquete</li>
         </ul>
     </div>
 <!-- Mini menu de opciones de producto -->

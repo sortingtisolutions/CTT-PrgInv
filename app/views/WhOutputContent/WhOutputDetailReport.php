@@ -16,12 +16,13 @@ $h = explode("|",$conkey);
 
 $conn = new mysqli($h[0],$h[1],$h[2],$h[3]);
 if ($empid == '1'){
-$qry = "SELECT pjtcn_prod_name, pdt.pjtdt_prod_sku, sr.ser_serial_number, pj.pjt_number, 
-                pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo
+$qry = "SELECT pjtcn_prod_name, prd.prd_name, pdt.pjtdt_prod_sku, sr.ser_serial_number, pj.pjt_number, 
+        pj.pjt_name, pj.pjt_date_start, '1' AS dt_cantidad, sr.ser_no_econo
         FROM ctt_projects_content AS pcn
         INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
         INNER JOIN ctt_series AS sr ON sr.ser_id=pdt.ser_id
         INNER JOIN ctt_projects AS pj ON pj.pjt_id=pcn.pjt_id
+        INNER JOIN ctt_products AS prd ON prd.prd_id=pdt.prd_id
         WHERE pcn.pjt_id=$prdId AND substr(pdt.pjtdt_prod_sku,11,1)!='A' 
         ORDER BY pdt.pjtdt_prod_sku;";
 } else{
@@ -116,7 +117,7 @@ if ($equipoBase == '1'){
                             $section     = 1;
 
                             if ($section == '1') {
-                                $prodname     = $items[$i]['pjtcn_prod_name'] ;  //  ------------
+                                $prodname     = $items[$i]['prd_name'] ;  //  ------------
                                 $prodsku      = $items[$i]['pjtdt_prod_sku'] ; //  ------------
                                 $quantity     = $items[$i]['dt_cantidad'] ;  //  ------------
                                 $sernum       = $items[$i]['ser_no_econo'] ; //  -------- 
@@ -201,7 +202,7 @@ $mpdf->SetHTMLFooter($foot);
 $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 $mpdf->Output(
-    "Salida_Almacen.pdf",
+    "Salida_Store_detail.pdf",
     \Mpdf\Output\Destination::INLINE
 );
 

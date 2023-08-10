@@ -35,8 +35,8 @@ INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
 INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
 INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id 
-INNER JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
-INNER JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
+LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
 LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
 LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
 WHERE bg.ver_id = $verId order by   sbc_order_print, bg.pjtvr_section;";
@@ -46,8 +46,8 @@ $res = $conn->query($qry);
 // OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
 $query="SELECT cr.crp_id, cr.crp_name
 FROM ctt_subcategories AS sb 
-INNER JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
-INNER JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
+LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
 INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
 INNER JOIN ctt_projects_version AS bg on bg.prd_id = pd.prd_id 
 WHERE bg.ver_id = $verId GROUP BY cr.crp_id ORDER BY sbc_order_print, bg.pjtvr_section";
@@ -69,24 +69,31 @@ date_default_timezone_set('America/Mexico_City');
 $hoy=new DateTime();
 // Cabezal de la página
 $header = '
-    <header>
-        <div class="cornisa">
-            <table class="table-main" border="0">
-                <tr>
-                    <td class="box-logo side-color">
-                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:25mm; height:auto; margin: 3mm 2.5mm 0 2.5mm;"/>
-                    </td>
+<header>
+    <div class="cornisa">
+        <table class="table-main" border="0">
+            <tr>
+                <td class="box-logo side-color">
+                    <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:42mm; height:16mm; margin: 3mm 2.5mm 0 2.5mm;"/>
+                </td>
+                <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
+                <p>
+                    <span class="number">Proyecto: '. $items[0]['pjt_name'] . '   #' . $items[0]['pjt_number'] .'</span>
+                    <br><span class="date">'.'</span>
+                </p>
+                </td>
+            </tr>
+        </table>
+    
+    </div>
 
-                </tr>
-            </table>
-        </div>
-    </header>';
+</header>';
 
     $costBase = 0;
     $subtotalAmount = 0;
     
     for ($i = 0; $i<count($items); $i++){
-        $amountBase = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'] * $items[$i]['pjtvr_days_base'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de cobro 
+        $amountBase = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'] * $items[$i]['pjtvr_days_cost'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de cobro 
         $amountTrip = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'] * $items[$i]['pjtvr_days_trip'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de viaje
         $amountTest = $items[$i]['pjtvr_prod_price'] * $items[$i]['pjtvr_quantity'] * $items[$i]['pjtvr_days_test'];    // ---------------------------------------  Importe del producto = (cantidad x precio) dias de prueba
         
@@ -107,14 +114,6 @@ $header = '
 $html = '
     <section>
         <div class="container">
-            <div class="name-report">
-                <p>
-                    <span class="number">Nombre de proyecto: '. $items[0]['pjt_name'] . '  # ' .$items[0]['pjt_number'] .' </span>
-                <br>
-                    <!--<span class="date">'.  $items[0]['ver_date_real'] .'</span>-->
-                    <span class="date">' . '</span>
-                </p>
-            </div>
 
             <table class="table-data bline-d tline">
                 <tr>
@@ -445,7 +444,7 @@ $html = '
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
                                 <!--<td class="tot-figure days"></td>
                                 <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
-                            <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td> -->
+                                <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td> -->
                                 <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                             </tr>
                         </tbody>
@@ -471,9 +470,7 @@ $html .= '
                     <td class="tot-main amou">' . number_format($totalEquipo , 2,'.',',')       . '</td>
                 </tr>
                 ';
-                
-
-            
+                         
 $html .= '
             </tbody>
         </table>
@@ -556,8 +553,8 @@ $html .= '
                                 
                                 $amountDescInsured  = $amountinsured * $discoInsured;   //  --------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
                                 $totalInsured       = $amountinsured - $amountDescInsured ; //  ----------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
-                                $totalInsr         += $totalInsured;
-                                $totalEquipo += $amountGral;
+                                $totalInsr          += $totalInsured;
+                                $totalEquipo        += $amountGral;
         
         
         $html .= '
@@ -580,9 +577,9 @@ $html .= '
                                 <td class="tot-figure totl" colspan="4">Subtotal Dias</td>
                                 <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
-                                <td class="tot-figure days"></td>
-                                <!--<td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
-                            <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td> -->
+                                <!--<td class="tot-figure days"></td>
+                                <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td> -->
                                 <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                             </tr>
                         </tbody>
@@ -643,13 +640,13 @@ $html .= '
                     <table autosize="1" style="page-break-inside:void" class="table-data bline-d">
                         <thead>
                             <tr>
-                            <th class="tit-figure prod">Equipo</th>
-                            <th class="tit-figure pric">Precio</th>
-                            <th class="tit-figure qnty">Cant.</th>
-                            <th class="tit-figure days">Días</th>
-                            <th class="tit-figure disc">Dcto %</th>
-                            <th class="tit-figure amou">Precio por día</th>
-                            <th class="tit-figure amou">Total</th>
+                                <th class="tit-figure prod">Equipo</th>
+                                <th class="tit-figure pric">Precio</th>
+                                <th class="tit-figure qnty">Cant.</th>
+                                <th class="tit-figure days">Días</th>
+                                <th class="tit-figure disc">Dcto %</th>
+                                <th class="tit-figure amou">Precio por día</th>
+                                <th class="tit-figure amou">Total</th>
                             </tr>
                         </thead>
                         <tbody>';
@@ -694,18 +691,18 @@ $html .= '
                                 $amountDescInsured  = $amountinsured * $discoInsured;   //  --------------------  Importe de descuento sobre seguro = importe de seguro * porcentaje de descuento sobre seguro
                                 $totalInsured       = $amountinsured - $amountDescInsured ; //  ----------------  Importe total del seguro sobre el producto = importe de seguro - importe de descuento sobre seguro
                                 $totalInsr         += $totalInsured;
-                                $totalEquipo += $amountGral;
+                                $totalEquipo    += $amountGral;
         
         
         $html .= '
                             <tr>
-                            <td class="dat-figure prod">' . $product                                    . '</td>
-                            <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
-                            <td class="dat-figure qnty">' . $quantity                                   . '</td>
-                            <td class="dat-figure days">' . $daysBase                                   . '</td>
-                            <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
-                            <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
-                            <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
+                                <td class="dat-figure prod">' . $product                                    . '</td>
+                                <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
+                                <td class="dat-figure qnty">' . $quantity                                   . '</td>
+                                <td class="dat-figure days">' . $daysBase                                   . '</td>
+                                <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
+                                <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
                             }
@@ -717,8 +714,8 @@ $html .= '
                                 <td class="tot-figure totl" colspan="4">Subtotal Subarrendo</td>
                                 <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
-                                <td class="tot-figure days"></td>
-                                <!--<td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
+                                <!-- <td class="tot-figure days"></td>
+                                <td class="tot-figure amou">' . number_format($discountTripTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountTripTotal, 2,'.',',') . '</td> -->
                                 <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                             </tr>
@@ -863,7 +860,7 @@ $html .= '
         <tbody>
             <tr>
                 <td>
-                <ul style="font-size: 0.8em;">
+                <ul style="font-size: 0.9em;">
                     <li>Toda cotización, considera las condiciones estipuladas en la solicitud de servicio, en caso de que éstas varíen, los costos finales deberán asentarse una vez finalizado el proyecto</li>
                     <li>Ninguna cotización, tiene valor fiscal, ni legal, ni implica obligación alguna para la empresa SIMPLEMENTE SERVICIOS S.A. DE C.V. y/o su personal</li>
                     <li> Los montos referidos en esta cotización tienen una vigencia de 30 dias a partir de la fecha del envio de la misma al cliente. Posteriormente a este periodo de tiempo los montos pueden variar</li>
