@@ -546,7 +546,7 @@ public function saveBudgetList($params)
 }
 
 
-/** ==== Promueve la cotizacion a presupuesto ==========================================================  */
+/** ==== PROMUEVE LA COTIZACION A PRESUPUESTO ==========================================================  */
 /** ==== Proyecto ======================================================================================  */
     public function PromoteProject($params)
     {
@@ -580,8 +580,7 @@ public function saveBudgetList($params)
         $qry1 = "INSERT INTO ctt_projects_version (
                     pjtvr_prod_sku,  pjtvr_prod_name,  pjtvr_prod_price, pjtvr_prod_level,   pjtvr_section,  pjtvr_quantity, 
                     pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, pjtvr_days_trip, pjtvr_discount_trip, 
-                    pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_order, ver_id, prd_id,  pjt_id
-                )
+                    pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_order, ver_id, prd_id, pjt_id)
                 SELECT 
                     bg.bdg_prod_sku, bg.bdg_prod_name, bg.bdg_prod_price, bg.bdg_prod_level, bg.bdg_section, bg.bdg_quantity,  
                     bg.bdg_days_base, bg.bdg_days_cost, bg.bdg_discount_base, bg.bdg_discount_insured, bg.bdg_days_trip, bg.bdg_discount_trip,
@@ -594,8 +593,7 @@ public function saveBudgetList($params)
         $qry2 = "INSERT INTO ctt_projects_content (
                     pjtcn_prod_sku, pjtcn_prod_name, pjtcn_prod_price, pjtcn_quantity, pjtcn_days_base, pjtcn_days_cost, pjtcn_discount_base, pjtcn_discount_insured, 
                     pjtcn_days_trip, pjtcn_discount_trip, pjtcn_days_test, pjtcn_discount_test, pjtcn_insured, pjtcn_prod_level, pjtcn_section, 
-                    pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id
-                )
+                    pjtcn_status, pjtcn_order, ver_id, prd_id, pjt_id, pjtvr_id)
                 SELECT 
                     pjtvr_prod_sku, pjtvr_prod_name, pjtvr_prod_price, pjtvr_quantity, pjtvr_days_base, pjtvr_days_cost, pjtvr_discount_base, pjtvr_discount_insured, 
                     pjtvr_days_trip, pjtvr_discount_trip, pjtvr_days_test, pjtvr_discount_test, pjtvr_insured, pjtvr_prod_level, pjtvr_section, 
@@ -613,7 +611,16 @@ public function saveBudgetList($params)
         $pjtId        = $this->db->real_escape_string($params['pjtId']);
         $verId        = $this->db->real_escape_string($params['verId']);
 
-        $qry = "SELECT * 
+        /* $qry = "SELECT * 
+                FROM ctt_projects_content AS pc
+                INNER JOIN ctt_version AS vr ON vr.ver_id = pc.ver_id
+                INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
+                INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
+                WHERE pc.ver_id = $verId;"; */
+
+        $qry = "SELECT pc.pjtcn_id, pj.pjt_date_start, pc.pjtcn_days_base, pc.pjtcn_days_trip, 
+                    pc.pjtcn_days_test, pc.pjtcn_quantity, pd.prd_id, pc.pjtvr_id,
+                    pc.pjtcn_prod_level, pd.srv_id, vr.ver_id, pc.pjtcn_prod_name                
                 FROM ctt_projects_content AS pc
                 INNER JOIN ctt_version AS vr ON vr.ver_id = pc.ver_id
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
@@ -625,16 +632,15 @@ public function saveBudgetList($params)
 /** ==== Realiza los ajustes a las series, periodos y detalle del proyecto  ============================  */
     public function SettingSeries($params)
     {
+        $pjetId   = $this->db->real_escape_string($params['pjetId']);  // este es el valor pjtvr_id
         $prodId   = $this->db->real_escape_string($params['prodId']);
         $dtinic   = $this->db->real_escape_string($params['dtinic']);
         $dtfinl   = $this->db->real_escape_string($params['dtfinl']);
-        $pjetId   = $this->db->real_escape_string($params['pjetId']);
         $detlId   = $this->db->real_escape_string($params['detlId']);
 
         $qry = "SELECT ser_id, ser_sku, (ser_reserve_count + 1) as ser_reserve_count  
                 FROM ctt_series WHERE prd_id = $prodId 
-                AND pjtdt_id = 0
-                ORDER BY ser_reserve_count asc LIMIT 1;";  // solo trae un registro
+                AND pjtdt_id = 0 LIMIT 1;";  // solo trae un registro
         $result =  $this->db->query($qry);
         
         $series = $result->fetch_object();
@@ -650,8 +656,7 @@ public function saveBudgetList($params)
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
 
-            $qry1 = "UPDATE ctt_series 
-                    SET ser_situation = 'EA', ser_stage = 'R',
+            $qry1 = "UPDATE ctt_series SET ser_situation = 'EA', ser_stage = 'R',
                         ser_reserve_count = $ser_reserve_count,
                         pjtdt_id = '$pjtdtId'
                     WHERE ser_id = $serie;";
@@ -668,7 +673,6 @@ public function saveBudgetList($params)
 
             $this->db->query($qry2);
             $pjtdtId = $this->db->insert_id;
-
         }
 
         $qry4 = "INSERT INTO ctt_projects_periods 
@@ -676,15 +680,20 @@ public function saveBudgetList($params)
                 VALUES ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId');";
         $this->db->query($qry4);
 
-        return  $pjtdtId;
-        
+        return  $serie;
     }
 
-    
+
     public function GetAccesories($params)
     {
         $prodId   = $this->db->real_escape_string($params['prodId']);
         $serId   = $this->db->real_escape_string($params['serId']);
+
+        $qry1 = "SELECT ser_id, prd_id_acc 
+                FROM ctt_series 
+                WHERE prd_id_acc = $serId;";
+
+        return $this->db->query($qry1);
 
         /* $prodId        = $this->db->real_escape_string($params);
         $serId        = $this->db->real_escape_string($localvar); */
@@ -696,7 +705,7 @@ public function saveBudgetList($params)
             
         return $this->db->query($qry); */
 
-        $qry = "SELECT ser_id FROM ctt_projects_detail 
+        /* $qry = "SELECT ser_id FROM ctt_projects_detail 
                 WHERE pjtdt_id = $serId LIMIT 1;";
         $result =  $this->db->query($qry);
 
@@ -704,18 +713,20 @@ public function saveBudgetList($params)
         if ($locserid != null){
             $locser  = $locserid->ser_id; 
             
-            $qry1 = "SELECT pr.* 
+            $qry1 = "SELECT pr.prd_id,pr.prd_name,pr.prd_price 
             FROM ctt_products AS pr
             INNER JOIN ctt_accesories AS ac ON ac.ser_parent = pr.prd_id 
             WHERE ac.prd_parent = $prodId AND ac.prd_id=$locser;";
-        }
         
-        return $this->db->query($qry1);
+        } */
+
+      
     }
 // **************************
     public function GetProducts($params)
     {
         $prodId        = $this->db->real_escape_string($params);
+
         $qry = "SELECT pd.* , pk.pck_quantity
                 FROM ctt_products_packages AS pk 
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pk.prd_id

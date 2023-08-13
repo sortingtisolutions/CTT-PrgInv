@@ -17,7 +17,7 @@
         </div>
         <div class="panel__title">COTIZACIÓN</div>
         <div class="panel__finder">
-            <i class="fas fa-search projectfinder"></i>
+            <i class="fas fa-search projectfinder"> look </i>
         </div>
     </div>
 

@@ -824,7 +824,7 @@ function selProduct(res) {
     if (res.length > 2) {
         let dstr = 0;
         let dend = 0;
-        if (res.length == 3) {
+        if (res.length == 5) {
             // $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');  //jjr
             if (glbSec != 4) {
@@ -2062,7 +2062,7 @@ function actionNewProject() {
                         "empname"        : "${empname}",                       
                         "edos_id"        : "${edos_id}"
                     }] `;
-                console.log(par);
+                // console.log(par);
                 var pagina = 'Budget/SaveProject';
                 var tipo = 'html';
                 var selector = loadProject;
@@ -2536,7 +2536,7 @@ function promoteProject(pjtId) {
         'data-version'
     );
 
-    var pagina = 'Budget/ProcessProjectProduct';
+    var pagina = 'Budget/ProcessProjectProductFAST';
     var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
     var tipo = 'html';
     var selector = showResult;
