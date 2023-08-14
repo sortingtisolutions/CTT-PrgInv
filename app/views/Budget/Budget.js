@@ -1739,7 +1739,7 @@ function fillData(inx) {
     $(`#txtTypeCalled option[value = "${pj[inx].pjttc_id}"]`).attr(
         'selected',
         'selected');
-    $(`#txtEdosRepublic option[value = "${pj[inx].loc_id}"]`).attr(
+    $(`#txtEdosRepublic option[value = "${pj[inx].edos_id}"]`).attr(
         'selected',
         'selected');
     $('#txtHowRequired').val(pj[inx].pjt_how_required);
@@ -1869,7 +1869,8 @@ function fillData(inx) {
                     "pjtToCarryOn"   : "${toCarryOn}",
                     "pjtToCarryOut"  : "${toCarryOut}",
                     "pjtTestTecnic"  : "${testTecnic}",
-                    "pjtTestLook"    : "${testLook}"
+                    "pjtTestLook"    : "${testLook}",
+					"edos_id"        : "${projEdosValue}"
                 }]`;
 
                 console.log(par);
@@ -2027,7 +2028,7 @@ function actionNewProject() {
                     }
                 });
 
-                if(projLocationTypeValue==2){ edos_id=7; }
+                if(projLocationTypeValue==1){ edos_id=7; }
 
                 let user = Cookies.get('user').split('|');
                 // console.log('Datos Usuario-',user);
@@ -2536,7 +2537,7 @@ function promoteProject(pjtId) {
         'data-version'
     );
 
-    var pagina = 'Budget/ProcessProjectProductFAST';
+    var pagina = 'Budget/ProcessProjectProduct';
     var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
     var tipo = 'html';
     var selector = showResult;

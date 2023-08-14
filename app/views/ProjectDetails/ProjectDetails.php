@@ -400,8 +400,8 @@
             <thead>
                 <tr>
                     <th style = "width: 150px">SKU</th>
-                    <th style = "width:  90px"></th>
-                    <th style = "width:  50px">Tipo</th>
+                    <th style = "width:  100px"></th>
+                    <th style = "width:  40px">Tipo</th>
                     <th style = "width: 400px;">Nombre del producto</th>
                     <th style = "width: 200px">Catálogo</th>
                     <th style = "width: 500px;">Comentarios</th>

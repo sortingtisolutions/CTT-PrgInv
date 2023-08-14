@@ -4,6 +4,7 @@ var swpjt = 0;
 let rowsTotal = 0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 let glbSec=0;  // jjr
+let product_name=''; // Ed
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -929,7 +930,7 @@ function selProduct(res) {
     if (res.length > 2) {
         let dstr = 0;
         let dend = 0;
-        if (res.length == 3) {
+        if (res.length == 5) {
             $('.toCharge').removeClass('hide-items');  //jjr
             if (glbSec != 4) {  //IF agragado por jjr
                 // console.log('Normal');
@@ -1294,7 +1295,7 @@ function fillBudgetProds(jsn, days, stus) {
     activeInputSelector();
 
     /******************** Comentarios en la seccion de subarrendos *********************/
-    if (pds.comments > 0 && (pds.comments != pds.sbl_comments ||  pds.pjtvr_section ==4)) { // Agregado por Edna
+    if (pds.comments > 0) { // Agregado por Edna
         $(`#bdg${pds.prd_id} .col_quantity-led`)
             .removeAttr('class')
             .addClass('col_quantity-led col_quantity-comment')
@@ -1450,6 +1451,7 @@ function activeInputSelector() {
             let bdgId = id.parents('tr').attr('id');
             let type = id.parents('tr').attr('data-level');
             let sec = id.parents('tr').attr('data-sect');
+			let nameProd = id.parents('tr').find('th').eq(0).find('.elipsis').text();// *** Agregado por Ed
             console.log('Sec->',sec,bdgId,type);
             if (type != 'K' && sec =='1') {
                 switch (event) {
@@ -1464,7 +1466,7 @@ function activeInputSelector() {
                         // periodProduct(bdgId);
                         break;
                     case 'event_StokProduct':
-                        stockProduct(bdgId);
+                        stockProduct(bdgId,nameProd);
                         break;
                     case 'event_ChangePakt':
                         if(type!='K'){
@@ -1488,15 +1490,16 @@ function activeInputSelector() {
                         infoProduct(bdgId, type,sec); // *** Ed
                         break;
                     case 'event_PerdProduct':
-                        periodProduct(bdgId);
+                        periodProduct(bdgId,nameProd);
                         break;
                     case 'event_StokProduct':
-                        stockProduct(bdgId);
+                        stockProduct(bdgId,nameProd);
                         break;
                     case 'event_ChangePakt':
                         if(type!='K'){
                             window.alert('ESTE NO ES UN PAQUETE');
                         }else{
+                            //product_name = nameProd;
                             // infoPackage(bdgId, type);
                             // console.log('ESTE SI ES UN PAQUETE');
                         }
@@ -1517,7 +1520,7 @@ function activeInputSelector() {
                         /* periodProduct(bdgId);
                         break; */
                     case 'event_StokProduct':
-                        stockProduct(bdgId);
+                        stockProduct(bdgId,nameProd);
                         break;
                     case 'event_ChangePakt':
                         if(type!='K'){
@@ -1611,12 +1614,20 @@ function putProductsRelated(dt) {
         let prodSku =
             u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
         let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
-        let skushort=u.pjtdt_prod_sku.substring(0,7);
+		let sku_prod = u.pjtdt_prod_sku;
+        let skushort;
+        if (sku_prod=='Pendiente') {
+            skushort = 'No Existe Serie';
+        }else{
+            skushort=u.pjtdt_prod_sku.substring(0,7);
+        }
+        let prod_sku= prodSku == 'PENDIENTE' ? 'SIN SERIE': u.pjtdt_prod_sku.toUpperCase();
+        		  
         if (u.prd_level != 'K') {
             let H = `
             <tr ${levelProduct}>
                 <td>${skushort}</td>
-                <td><span class="${pending}">${u.pjtdt_prod_sku.toUpperCase()}</span></td>
+                <td><span class="${pending}">${prod_sku}</span></td>
                 <td>${u.prd_level}</td>
                 <td>${u.prd_name}</td>
                 <td>${u.cat_name}</td>
@@ -1835,7 +1846,7 @@ function putNewProdChg(dt) {
 }
 
 // Muestra el inventario de productos
-function stockProduct(bdgId, type) {
+function stockProduct(bdgId,nameProd) {
     getStockProjects(bdgId.substring(3, 20));
 
     $('.invoice__modalBackgound').fadeIn('slow');
@@ -1843,7 +1854,7 @@ function stockProduct(bdgId, type) {
     let template = $('#stockProductTemplate');
     $('.invoice__modal-general .modal__body').append(template.html());
     $('.invoice__modal-general .modal__header-concept')
-        .html('inventarios del producto');
+        .html('inventarios del producto'+nameProd);
     closeModals();
 }
 function putStockProjects(dt) {
@@ -2863,7 +2874,7 @@ function OrderMice(m) {
 /* ************************************************************************ */
 
 /* ==== Define los periodos de cada serie ======================== */
-function periodProduct(prd) {
+function periodProduct(prd,nameProd) {
     let prdId = prd.substring(3, 10);
     let pjtId = $('.version_current').attr('data-project');
 
@@ -2871,7 +2882,7 @@ function periodProduct(prd) {
     $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
     let template = $('#PeriodsTemplates');
     $('.invoice__modal-general .modal__body').append(template.html());
-    $('.invoice__modal-general .modal__header-concept').html('Periodos ');
+    $('.invoice__modal-general .modal__header-concept').html('Periodos '+nameProd);
     $('#periodBox').html('');
     $('#periodBox').attr('data-project', pjtId).attr('data-product', prdId);
 
