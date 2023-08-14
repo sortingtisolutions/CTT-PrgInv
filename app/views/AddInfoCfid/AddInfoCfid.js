@@ -5,7 +5,8 @@ $(document).ready(function () {
    verifica_usuario();
    inicial();
 });
-//INICIO DE PROCESOS
+
+//INICIO DE PROCESOS MACRO
 function inicial() 
 {
    getProjectsCfdi();

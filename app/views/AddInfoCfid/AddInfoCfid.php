@@ -84,6 +84,7 @@
 									<button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.7rem !important;" id="LimpiarFormulario">Limpiar</button>
 								</div>
 							</div>
+							
 						</form>
 					</div>
 				</div>

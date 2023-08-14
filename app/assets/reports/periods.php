@@ -41,6 +41,5 @@
         <script src="../lib/sticky.js?v=1.0.0.0"></script>
         <script src="../lib/resizer.js?v=1.0.0.0"></script>
 
-
     </body>
 </html>

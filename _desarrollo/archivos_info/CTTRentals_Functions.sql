@@ -210,6 +210,7 @@ DECLARE CONTINUE HANDLER FOR NOT FOUND SET @find = TRUE;
 	
 END //
 
+--*******************************
 DELIMITER //
 CREATE FUNCTION `fun_maxcontent`(`pprjId` INT) RETURNS int(11)
 LANGUAGE SQL

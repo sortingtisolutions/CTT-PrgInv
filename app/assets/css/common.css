@@ -12,6 +12,7 @@ div.dt-button-info {
   text-align: center;
   z-index: 21;
 }
+
 div.dt-button-info h2 {
   padding: 0.5em;
   margin: 0;
@@ -19,6 +20,7 @@ div.dt-button-info h2 {
   border-bottom: 1px solid #ddd;
   background-color: #f3f3f3;
 }
+
 div.dt-button-info > div {
   padding: 1em;
 }

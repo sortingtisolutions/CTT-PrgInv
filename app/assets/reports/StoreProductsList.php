@@ -2,8 +2,6 @@
 <?php
 
 
-
-
 function getTemplate($getFile){
    
     $numProject = '';
@@ -89,6 +87,5 @@ function getTemplate($getFile){
 
         </section>
 ';
-
     return $template;
 }

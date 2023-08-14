@@ -61,29 +61,4 @@
 			echo $res;
 		}
 
-		/* public function SaveProveedores($request_params)
-		{
-		  if($request_params['IdProveedor'] == ""){
-			$result = $this->model->SaveProveedores($request_params);	  
-		  }else{
-			$result = $this->model->ActualizaProveedor($request_params);	  
-		  }
-		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
-		}
-
-		public function GetProveedor($request_params)
-		{
-	      $result = $this->model->GetProveedor($request_params);
-		  echo json_encode($result,JSON_UNESCAPED_UNICODE);	
-		}
-
-
-
-		public function GetTipoProveedores($request_params)
-		{
-		  $result = $this->model->GetTipoProveedores($request_params);	  
-		  echo json_encode($result ,JSON_UNESCAPED_UNICODE);	
-		}
- */
-	  
 	}

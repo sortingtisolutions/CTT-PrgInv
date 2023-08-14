@@ -112,10 +112,6 @@ class AssignProjectsController extends Controller
     }
     public function updateUsers($request_params)
     {
-       /*  $params =  $this->session->get('user');
-        $result = $this->model->updateUsers($request_params);
-        
-        echo $result; */
         $params =  $this->session->get('user');
         $result = $this->model->updateUsers($request_params);
         $i = 0;

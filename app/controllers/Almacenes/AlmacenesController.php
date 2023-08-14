@@ -70,6 +70,7 @@
             echo $strId;
 		}
 
+		// Obtiene encargados de almacen
 		public function GetEncargadosAlmacen($request_params)
 		{
 	      $result = $this->model->GetEncargadosAlmacen($request_params);

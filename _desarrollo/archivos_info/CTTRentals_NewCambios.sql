@@ -210,7 +210,7 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
-
+--*******************************
 DROP TABLE IF EXISTS
 CREATE TABLE `ctt_subletting` (
 	`sub_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID del subarrendo',

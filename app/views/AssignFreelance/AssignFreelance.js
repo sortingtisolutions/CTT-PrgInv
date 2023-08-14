@@ -11,7 +11,7 @@ $(document).ready(function () {
     }
 });
 
-//INICIO DE PROCESOS
+//INICIO DE PROCESOS MACRO
 function inicial() {
     if (altr == 1) {
     getlistProyect();
@@ -193,7 +193,6 @@ function putProject(dt) {
         get_Freelances(id);
     });
 }
-
 
 // Dibuja los almacenes
 function putStores(dt) {
