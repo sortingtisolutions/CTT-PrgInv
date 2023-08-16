@@ -449,8 +449,8 @@
                         <td>Tipo de locación</td>
                         <td>
                             <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox required" >
-                                <option value = "1" selected> LOCAL</option>
-                                <option value = "2"> FORANEO</option>
+                                <option value = "0" selected></option>
+                                
                             </select>
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de locación</span>
                         </td>

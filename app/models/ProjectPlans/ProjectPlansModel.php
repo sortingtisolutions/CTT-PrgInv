@@ -1009,5 +1009,11 @@ class ProjectPlansModel extends Model
     
         return $this->db->query($qry);
     } 
+    public function getLocationType(){
+        $qry = "SELECT loc_id, loc_type_location
+        FROM ctt_location;
+        ";
+        return $this->db->query($qry);
+    } 
 }
 

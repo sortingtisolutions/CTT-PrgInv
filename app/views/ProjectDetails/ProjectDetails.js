@@ -1,4 +1,4 @@
-let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral, glbpjtid;
+let cust, proj, prod, vers, budg, tpprd, relc, proPar, interfase, tpcall, dstgral, glbpjtid,loct;
 let gblsku;
 var swpjt = 0;
 let rowsTotal = 0;
@@ -24,6 +24,7 @@ function inicial() {
     getProjectTypeCalled();
     getCalendarPeriods();
     discountInsuredEvent();
+    getLocationType();
 }
 
 function stickyTable() {
@@ -501,7 +502,13 @@ function getExistTrip(pjtvrId, prdId) {
     var selector = putExistTrip;
     fillField(pagina, par, tipo, selector);
 }
-
+function getLocationType() {
+    var pagina = 'ProjectPlans/getLocationType';
+    var par = `[{"prm":""}]`;
+    var tipo = 'json';
+    var selector = putLocationType;
+    fillField(pagina, par, tipo, selector);
+}
 /** LLENA DE DATOS */
 /**  Llena el listado de proyectos */
 function putProjects(dt) {
@@ -578,6 +585,14 @@ function putDiscounts(dt) {
         $('#selDiscount').append(H);
         $('#selDiscInsr').append(H);
     });
+}
+
+function putLocationType(dt) {
+    loct =dt;
+/* 
+    $('#txtTypeLocationEdt').on('change', function () {
+        validator();
+    }); */
 }
 
 /**  Llena el listado de versiones */
@@ -1955,6 +1970,10 @@ function fillContent() {
     $.each(tpprd, function (v, u) {
         let H = `<option value="${u.pjttp_id}"> ${u.pjttp_name}</option>`;
         $('#txtTypeProjectEdt').append(H);
+    });
+    $.each(loct, function (v, u) {
+        let H = `<option value="${u.loc_id}">${u.loc_type_location}</option>`;
+        $('#txtTypeLocationEdt').append(H);
     });
     // Llena el selector de tipo de llamados
     $.each(tpcall, function (v, u) {

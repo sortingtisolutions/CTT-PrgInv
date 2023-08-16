@@ -53,6 +53,13 @@ class BudgetModel extends Model
                 ";
         return $this->db->query($qry);
     }    
+	
+	public function getLocationType(){
+        $qry = "SELECT loc_id, loc_type_location
+        FROM ctt_location;
+        ";
+        return $this->db->query($qry);
+    } 		
 
     // Listado de proyectos padre
     public function listProjectsParents($params)
@@ -108,8 +115,7 @@ class BudgetModel extends Model
         } else {
             $subQry = "SELECT cuo_id, cus_parent AS cus_id, $cutId AS cut_id FROM ctt_customers_owner WHERE cus_id = $cusId";
         }
-
-
+        
         $qry = $subQry;
         return $this->db->query($qry);
     }    
@@ -215,6 +221,14 @@ public function listDiscounts($params)
             WHERE (upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%')
                 AND pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
             ORDER BY pd.prd_name;";
+        return $this->db->query($qry);
+    } 
+
+    public function listProducts2($params)
+    {
+        $word = $this->db->real_escape_string($params['word']);
+        $qry = "SELECT * from ctt_vw_list_products
+            WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%');";
         return $this->db->query($qry);
     } 
 
@@ -439,16 +453,23 @@ public function stockProdcuts($params)
         $pjt_test_look          = $this->db->real_escape_string($params['pjtTestLook']);
         $usr                    = $this->db->real_escape_string($params['usr']);
         $empid                  = $this->db->real_escape_string($params['empid']);
-        $empname                = $this->db->real_escape_string($params['empname']);
-        $edos_id                = $this->db->real_escape_string($params['edos_id']);
+        $empname                = $this->db->real_escape_string($params['empname']);/* 
+        $edos_id                = $this->db->real_escape_string($params['edos_id']); */
 
-        $qry02 = "INSERT INTO ctt_projects (pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
+        /* $qry02 = "INSERT INTO ctt_projects (pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
                     pjt_how_required, pjt_trip_go, pjt_trip_back, pjt_to_carry_on, pjt_to_carry_out, pjt_test_tecnic, pjt_test_look,
                     pjttp_id, pjttc_id, cuo_id, loc_id, edos_id) 
                  VALUES ('$pjt_parent', '$pjt_name', '$pjt_date_start', '$pjt_date_end', '$pjt_time', 
                     '$pjt_location', '$pjt_status', '$pjt_how_required', '$pjt_trip_go', '$pjt_trip_back',
                     '$pjt_to_carry_on', '$pjt_to_carry_out', '$pjt_test_tecnic', '$pjt_test_look',
-                    '$pjt_type', $pjttc_id, $cuo_id, $loc_id, $edos_id );";
+                    '$pjt_type', $pjttc_id, $cuo_id, $loc_id, $edos_id );"; */
+        $qry02 = "INSERT INTO ctt_projects (pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
+                    pjt_how_required, pjt_trip_go, pjt_trip_back, pjt_to_carry_on, pjt_to_carry_out, pjt_test_tecnic, pjt_test_look,
+                    pjttp_id, pjttc_id, cuo_id, loc_id) 
+                 VALUES ('$pjt_parent', '$pjt_name', '$pjt_date_start', '$pjt_date_end', '$pjt_time', 
+                    '$pjt_location', '$pjt_status', '$pjt_how_required', '$pjt_trip_go', '$pjt_trip_back',
+                    '$pjt_to_carry_on', '$pjt_to_carry_out', '$pjt_test_tecnic', '$pjt_test_look',
+                    '$pjt_type', $pjttc_id, $cuo_id, $loc_id);";
         $this->db->query($qry02);
         $pjtId = $this->db->insert_id;
 
@@ -463,6 +484,14 @@ public function stockProdcuts($params)
         $this->db->query($qry04);
 
         $wtaId = $this->db->insert_id; 
+
+        if ($loc_id == 2) {
+            $qry5 = "UPDATE    ctt_locacion_estado
+            SET    pjt_id            = '$pjtId'
+            WHERE   pjt_id              =  '0';";
+            $this->db->query($qry5); 
+        }
+       /*  */
 
         return $pjtId;
 
@@ -605,6 +634,18 @@ public function saveBudgetList($params)
 
         return $this->db->query($qry2);
 
+    }
+
+    public function SaveLocations($params){
+        $loc        = $this->db->real_escape_string($params['loc']);
+        $edo        = $this->db->real_escape_string($params['edo']);
+
+        $qry1 = "INSERT INTO ctt_locacion_estado(
+                    lce_location,  edos_id)
+                VALUES('$loc','$edo');";
+        $this->db->query($qry1);
+
+        return $loc;
     }
 
     

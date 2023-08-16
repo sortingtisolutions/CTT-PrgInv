@@ -255,3 +255,38 @@ CREATE TABLE `ctt_products_maintenance` (
 COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
+
+
+--******* 15-ago-23 ********************
+ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ctt_vw_list_products` AS SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
+            pd.prd_insured, sb.sbc_name,cat_name,
+    CASE 
+        WHEN prd_level ='K' THEN 
+            (SELECT prd_stock
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        WHEN prd_level ='P' THEN 
+            (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        ELSE 
+            (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        END AS stock
+FROM ctt_products AS pd
+INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
+WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
+ORDER BY pd.prd_name  ;
+
+
+
+CREATE TABLE `ctt_locacion_estado` (
+	`lce_id` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID de la tabla',
+	`lce_location` VARCHAR(50) NULL DEFAULT '' COMMENT 'Lugar de la locacion' COLLATE 'utf8mb4_general_ci',
+	`edos_id` INT(11) NULL DEFAULT '0' COMMENT 'Relacion con la tabla estados_mex',
+	`pjt_id` INT(11) NULL DEFAULT '0' COMMENT 'Relacion con la tabla project',
+	PRIMARY KEY (`lce_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=19
+;

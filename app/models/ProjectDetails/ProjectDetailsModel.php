@@ -551,7 +551,12 @@ public function promoteToProject($params)
     }
 
 
-
+    public function getLocationType(){
+        $qry = "SELECT loc_id, loc_type_location
+        FROM ctt_location;
+        ";
+        return $this->db->query($qry);
+    } 
 /** ====== Agrega producto a la tabla temporal ===============================================  */
     public function AddProductMice($params)   /** ===jjr  Agrega obtener el maximo en el orden ==  */
     {
