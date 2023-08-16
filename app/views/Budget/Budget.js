@@ -23,6 +23,7 @@ function inicial() {
     getEdosRepublic();
     getProjectTypeCalled();
     discountInsuredEvent();
+    
 }
 
 function stickyTable() {
@@ -2546,11 +2547,41 @@ function promoteProject(pjtId) {
 function showResult(dt) {
     console.log(dt);
     let pjtId = dt.split('|')[0];
+    let verId = dt.split('|')[1];
     $('#P' + pjtId).remove();
     modalLoading('H');
+    // ProcessBackAccesories
+    setTimeout(() => {
+        console.log('TERMINO FASE 1 LANZA SIGUIENTE FASE');
+        var pagina = 'Budget/ProcessBackAccesories';
+        var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
+        var tipo = 'html';
+        var selector = showResAcc;
+        fillField(pagina, par, tipo, selector);
+        // putUpdateCategory(dt);
+    }, 1000);
+
     // console.log('TERMINO PROMO-COTIZ-2');
     // promoteProject2(pjtId);
     cleanFormat();
+}
+
+/* function TempoAcce(){
+    console.log('TempoAcce');
+        let verId=3;
+        let pjtId=2;
+        var pagina = 'Budget/ProcessBackAccesories';
+        var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
+        var tipo = 'html';
+        var selector = showResAcc;
+        fillField(pagina, par, tipo, selector);
+}
+ */
+function showResAcc(dt) {
+    console.log('TERMINO showResAcc', dt);
+    var resultAcc=dt;
+    // let pjtId = dt.split('|')[0];
+    // let verId = dt.split('|')[1];
 }
 
 /* PROMUEVE COTIZACION A PRESUPUESTO 2.0                                       */

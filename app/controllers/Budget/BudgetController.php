@@ -793,34 +793,34 @@ public function ProcessProjectProduct($request_params)
                         'detlId' => 0,
                     );
                     $detlId = $this->model->SettingSeries($params);
-                    $serId=$detlId;
-                    $paramacc = array(
-                        'prodId' => $prodId, 
-                        'serId' => $serId,
-                    );
-                    //echo 'VAR_ '. $prodId . ' - ' . $serId . 'END ';
-                    $accesory = $this->model->GetAccesories($paramacc); //SE TRAE LOS ACCESORIOS DEL PRODUCTO
-                    while($acc = $accesory->fetch_assoc()){
-                        $acceId =  $acc["ser_id"];
-                        /* $acceNm =  $acc["prd_name"];
-                        $accePc =  $acc["prd_price"]; */
-                        $accparams = array(
-                            'pjetId' => $pjetId, 
-                            'prodId' => $acceId, 
-                            'dtinic' => $dtinic, 
-                            'dtfinl' => $dtfinl,
-                            /* 'bdgnme' => $acceNm,
-                            'bdgprc' => $accePc, */
-                            'bdglvl' => 'A',
-                            /* 'bdgqty' => $ttlqty,
-                            'dybase' => $dybase,
-                            'dytrip' => $dytrip,
-                            'dytest' => $dytest,
-                            'versId' => $versId, */
-                            'detlId' => $detlId,
-                        );
-                        $serie = $this->model->SettingSeries($accparams);
-                    }
+                    // $serId=$detlId;
+                    // $paramacc = array(
+                    //     'prodId' => $prodId, 
+                    //     'serId' => $serId,
+                    // );
+                    // //echo 'VAR_ '. $prodId . ' - ' . $serId . 'END ';
+                    // $accesory = $this->model->GetAccesories($paramacc); //SE TRAE LOS ACCESORIOS DEL PRODUCTO
+                    // while($acc = $accesory->fetch_assoc()){
+                    //     $acceId =  $acc["ser_id"];
+                    //     /* $acceNm =  $acc["prd_name"];
+                    //     $accePc =  $acc["prd_price"]; */
+                    //     $accparams = array(
+                    //         'pjetId' => $pjetId, 
+                    //         'prodId' => $acceId, 
+                    //         'dtinic' => $dtinic, 
+                    //         'dtfinl' => $dtfinl,
+                    //         /* 'bdgnme' => $acceNm,
+                    //         'bdgprc' => $accePc, */
+                    //         'bdglvl' => 'A',
+                    //         /* 'bdgqty' => $ttlqty,
+                    //         'dybase' => $dybase,
+                    //         'dytrip' => $dytrip,
+                    //         'dytest' => $dytest,
+                    //         'versId' => $versId, */
+                    //         'detlId' => $detlId,
+                    //     );
+                    //     $serie = $this->model->SettingSeries($accparams);
+                    // }
                 }
             } else if ( $bdglvl == 'K' ){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
                 for ($i = 1; $i<=$quanty; $i++){
@@ -847,45 +847,79 @@ public function ProcessProjectProduct($request_params)
                             'detlId' => 0,
                         );
                         $detlId = $this->model->SettingSeries($prodparams);
-                        $serId=$detlId;
-                        $paramaccpk = array(
-                            'prodId' => $pkpdId, 
-                            'serId' => $serId,
-                        );
-                        $accesory = $this->model->GetAccesories($paramaccpk);
-                        while($acc = $accesory->fetch_assoc()){
+                        // $serId=$detlId;
+                        // $paramaccpk = array(
+                        //     'prodId' => $pkpdId, 
+                        //     'serId' => $serId,
+                        // );
+                        // $accesory = $this->model->GetAccesories($paramaccpk);
+                        // while($acc = $accesory->fetch_assoc()){
     
-                            $acceId =  $acc["prd_id"];
-                            $acceNm =  $acc["prd_name"];
-                            $accePc =  $acc["prd_price"];
+                        //     $acceId =  $acc["prd_id"];
+                        //     $acceNm =  $acc["prd_name"];
+                        //     $accePc =  $acc["prd_price"];
     
-                            $accparams = array(
-                                'pjetId' => $pjetId, 
-                                'prodId' => $acceId, 
-                                'dtinic' => $dtinic, 
-                                'dtfinl' => $dtfinl,
-                                'bdgnme' => $acceNm,
-                                'bdgprc' => $accePc,
-                                'bdglvl' => 'A',
-                                'bdgqty' => $ttlqty,
-                                'dybase' => $dybase,
-                                'dytrip' => $dytrip,
-                                'dytest' => $dytest,
-                                'versId' => $versId,
-                                'detlId' => $detlId,
-                            );
-                            $serie = $this->model->SettingSeries($accparams);
-                        }
+                        //     $accparams = array(
+                        //         'pjetId' => $pjetId, 
+                        //         'prodId' => $acceId, 
+                        //         'dtinic' => $dtinic, 
+                        //         'dtfinl' => $dtfinl,
+                        //         'bdgnme' => $acceNm,
+                        //         'bdgprc' => $accePc,
+                        //         'bdglvl' => 'A',
+                        //         'bdgqty' => $ttlqty,
+                        //         'dybase' => $dybase,
+                        //         'dytrip' => $dytrip,
+                        //         'dytest' => $dytest,
+                        //         'versId' => $versId,
+                        //         'detlId' => $detlId,
+                        //     );
+                        //     $serie = $this->model->SettingSeries($accparams);
+                        // }
                     }
                 }
             }
         }
 
         $pjtId  = $this->model->PromoteProject($request_params);
-
-        echo $pjtId . '|' . $dtinic . '|' . $dtfinl;
+        
+        echo $pjtId . '|' . $versId . '|' . $dtinic . '|' . $dtfinl;
     
     } 
 
+    public function ProcessBackAccesories($request_params)
+    {  
+        $params = $this->session->get('user');        
+        $result = $this->model->GetContentDetails($request_params);
+       
+        while($row = $result->fetch_assoc()){
+            $pjtdtid = $row["pjtdt_id"];
+            $serid = $row["ser_id"];
+            $prodId = $row["prd_id"];
+            $pjtvrid = $row["pjtvr_id"];
+            $dtstar = $row["pjt_date_start"];
+            $dybase = $row["pjtcn_days_base"];
+            $dytrip = $row["pjtcn_days_trip"] / 2;
+            $dytest = $row["pjtcn_days_test"];
+           
+            $dyinic = $dytrip + $dytest;
+            $dyfinl = $dytrip + $dybase;
+            $dtinic = date('Y-m-d',strtotime($dtstar . '-'. $dyinic .' days'));
+            $dtfinl = date('Y-m-d',strtotime($dtstar . '+'. ($dyfinl-1) .' days')); 
+
+                $params = array(
+                    'pjtdtid' => $pjtdtid,
+                    'serid' => $serid,
+                    'prodId' => $prodId,
+                    'pjtvrid' => $pjtvrid, 
+                    'dtinic' => $dtinic, 
+                    'dtfinl' => $dtfinl,
+                    
+                );
+            $detlId = $this->model->SettingSeriesAcc($params);
+       
+        }
+        echo $pjtvrid . '|' . $dtinic . '|' . $dtfinl;
+    } 
 
 }
