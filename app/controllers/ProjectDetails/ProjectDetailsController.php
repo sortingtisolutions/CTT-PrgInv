@@ -23,7 +23,23 @@ class ProjectDetailsController extends Controller
         $params = array('user' => $this->session->get('user'));
         $this->render(__CLASS__, $params);
     }
-
+    
+    public function getLocationType($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->getLocationType();
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"loc_id":"0"}]';	
+        }
+        echo $res;
+    } 
 
     // LISTA LOS PROYECTOS
     public function listProjects($request_params)

@@ -439,9 +439,9 @@
                         <td>Tipo de locación</td>
                         <td>
                             <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox required" >
-                                <option value = "1" selected> LOCAL</option>
-                                <option value = "2"> FORANEO</option>
-                                <option value = "3"> FORO</option>
+                                <option value = "0" selected></option>
+                                <!-- <option value = "2"> FORANEO</option>
+                                <option value = "3"> FORO</option> -->
                             </select>
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de locación</span>
                         </td>
@@ -455,7 +455,7 @@
                         </td>
                     </tr>
 
-                    <tr class="hide">
+                    <!-- <tr class="hide">
                         <td>Estado de la República</td>
                         <td>
                             <select id="txtEdosRepublic" name="txtEdosRepublic" class="textbox wt5">
@@ -463,7 +463,20 @@
                             </select>
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el estado</span>
                         </td>
+                    </tr> -->
+					<tr class="hide"> <!--  -->
+                        <td></td>
+                        <td>
+                            <button class="bn btn-add" id="addLocation"></button>
+                        </td>
+                        
                     </tr>
+                    <!-- <tr class="hide">
+                        <td></td>
+                        <td>
+                            <button class="bn btn-see" id="seeLocation"></button>
+                        </td>
+                    </tr> -->		   
 
                     <tr class="hide">
                         <td>Días de viaje de ida</td>
@@ -634,6 +647,93 @@
     </div>
 <!-- End Ventana modal SERIES -->
 
+
+<div class="overlay_background overlay_hide" id="addLocationModal" style="width: 60%; left:25%; background-color: rgba(255, 255, 255, 0); z-index: 500;">
+    <div class="overlay_modal" style="z-index: 50;">
+        <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+        <div class="" style="position: absolute; top: 10px; height: 60px; padding: 10px;">
+            <button type="button" class="btn btn-sm btn-primary" id="btn_save_locations">Guardar</button>
+        </div>
+        <div class="container-fluid" >
+            <div class="contenido">
+                <div class="row">
+                    <div class="" style="width: 100%; height: 100vh; padding: 50px 10px 10px 10px; overflow: auto; padding: 4px; ">
+                        <div class="row">
+                            
+                            <!-- <button class="bn btn-ok" id="addLocationEdos">Agregar</button> -->
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="background-color: #ffffff; border: 2px solid #eeeeee; border-radius: 10px;">
+                                <table id="" class="table_information form-floating ">
+                                    <tr>
+                                        <td>Locación</td>
+                                        <td>
+                                            <input type="text" id="txtLocationExtra" name="txtLocationExtra" class="textbox wtf" autocomplete="off"><br>
+                                            <span class="textAlert"></span>
+                                        </td>
+                                        <td>Estado de la República</td>
+                                        <td>
+                                            <select id="txtEdosRepublic_2" name="txtEdosRepublic_2" class="textbox ">
+                                                <option value="0"></option>
+                                            </select>
+                                            <!-- <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el estado</span> -->
+                                        </td>
+                                        <td colspan=2>
+                                            <button class="bn btn-ok" id="addLocationEdos">Agregar</button>
+                                        </td>
+                                    </tr>
+                                    
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row mt-2" >
+                            <table class="display compact nowrap" style = "width: 100%" id="listLocationsTable">
+                                <thead>
+                                    <tr>
+                                        <th style = "width: 30px"></th>
+                                        <th style = "width: 100px">Locación</th>
+                                        <th style = "width:  100px">Estado de la Republica</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="overlay_background overlay_hide" id="seeLocationModal" style="width: 60%; left:25%; background-color: rgba(255, 255, 255, 0); z-index: 500;">
+    <div class="overlay_modal" style="z-index: 50;">
+        <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
+        <div class="" style="position: absolute; top: 10px; height: 60px; padding: 10px;">
+            <button type="button" class="btn btn-sm btn-primary" id="btn_save_locations">Guardar</button>
+        </div>
+        <div class="container-fluid" >
+            <div class="contenido">
+                <div class="row">
+                    <div class="" style="width: 100%; height: 100vh; padding: 50px 10px 10px 10px; overflow: auto; padding: 4px; ">
+                        <div class="row mt-2" >
+                            <table class="display compact nowrap" style = "width: 100%" id="listLocationsTable2">
+                                <thead>
+                                    <tr>
+                                        <th style = "width: 30px"></th>
+                                        <th style = "width: 100px">Locación</th>
+                                        <th style = "width:  100px">Estado de la Republica</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
 <div class="overlay_background overlay_hide" id="SerieData" style="width: 60%; left:25%;">
         <div class="overlay_modal">
@@ -654,7 +754,7 @@
 
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
-<!-- <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script> -->
+<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script> 
 <script src="<?=  PATH_VIEWS . 'Budget/Budget.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

@@ -114,10 +114,11 @@ class ProjectPlansModel extends Model
                             WHERE pf.pjtvr_id =  pc.pjtvr_id and pf.prd_id = pd.prd_id
                         )
                     else pc.pjtvr_days_base end  as daybasereal,
-                    (SELECT count(ser_comments)  FROM ctt_series where prd_id = pc.prd_id group by prd_id) as comments,
-      					(SELECT COUNT(*) FROM ctt_series AS sr 
-                        INNER JOIN ctt_subletting AS sbl ON sbl.ser_id = sr.ser_id 
-                        where sr.prd_id = pc.prd_id group by sr.prd_id) AS sbl_comments
+                    (Select count(ser_comments)  from ctt_series AS ser
+							INNER JOIN ctt_projects_detail AS pjd ON pjd.ser_id = ser.ser_id
+							INNER JOIN ctt_projects_version AS pjv ON pjv.pjtvr_id = pjd.pjtvr_id
+							where ser.prd_id = pc.prd_id AND pjv.pjt_id=pj.pjt_id AND pjv.ver_id=pc.ver_id AND ser.ser_comments!='' AND pjv.pjtvr_section = pc.pjtvr_section
+							ORDER BY ser.prd_id) as comments
                 FROM ctt_projects_version AS pc
                 INNER JOIN ctt_projects AS pj ON pj.pjt_id = pc.pjt_id
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
@@ -930,7 +931,7 @@ class ProjectPlansModel extends Model
         {
             $catsub = $this->db->real_escape_string($params['catsub']);
 
-            $qry = "SELECT prd_id, prd_sku, prd_name 
+            $qry = "SELECT prd_id, prd_sku, prd_name, prd_stock-fun_buscarentas(prd_sku) AS stock
                     FROM ctt_products 
                     WHERE substr(prd_sku,1,4)='$catsub' AND prd_level='P'
                     ORDER BY prd_id;";
@@ -981,14 +982,16 @@ class ProjectPlansModel extends Model
         // $pjtId      = $this->db->real_escape_string($params['pjtId']);
         $verId = $this->db->real_escape_string($params);
 
-        $qry = "SELECT pcn.pjtvr_id, pcn.pjtcn_id, pcn.pjtcn_prod_sku,pcn.pjtcn_section,pcn.pjtcn_order 
+        $qry = "SELECT pcn.pjtvr_id, pcn.pjtcn_id, pcn.pjtcn_prod_sku,pcn.pjtcn_section,pcn.pjtcn_order, sb.sbc_order_print
                 FROM ctt_projects_content AS pcn 
                 INNER JOIN ctt_subcategories AS sb 
                     ON sb.cat_id=substr(pcn.pjtcn_prod_sku,1,2) 
                     AND sb.sbc_code=substr(pcn.pjtcn_prod_sku,3,2)
+                LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
+        		LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
                 WHERE ver_id=$verId 
                 GROUP BY pcn.ver_id, pcn.pjtcn_id, pcn.pjtcn_prod_sku,pcn.pjtcn_section,pcn.pjtcn_order
-                ORDER BY pcn.pjtcn_section, SUBSTR(pcn.pjtcn_prod_sku,1,4),pjtcn_order;";
+                ORDER BY pcn.pjtcn_section, sb.sbc_order_print, cr.crp_id, cs.cts_id, SUBSTR(pcn.pjtcn_prod_sku,1,4),pjtcn_order;";
 
         $result =  $this->db->query($qry);
                 
@@ -1004,6 +1007,12 @@ class ProjectPlansModel extends Model
                 SET pjtvr_order=$valnew
         WHERE pjtvr_id=$verid;";
     
+        return $this->db->query($qry);
+    } 
+    public function getLocationType(){
+        $qry = "SELECT loc_id, loc_type_location
+        FROM ctt_location;
+        ";
         return $this->db->query($qry);
     } 
 }

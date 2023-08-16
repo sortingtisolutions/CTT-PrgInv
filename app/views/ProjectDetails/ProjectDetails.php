@@ -400,8 +400,8 @@
             <thead>
                 <tr>
                     <th style = "width: 150px">SKU</th>
-                    <th style = "width:  90px"></th>
-                    <th style = "width:  50px">Tipo</th>
+                    <th style = "width:  100px"></th>
+                    <th style = "width:  40px">Tipo</th>
                     <th style = "width: 400px;">Nombre del producto</th>
                     <th style = "width: 200px">Catálogo</th>
                     <th style = "width: 500px;">Comentarios</th>
@@ -473,8 +473,8 @@
                             <td>Tipo de locación</td>
                             <td>
                                 <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox required" >
-                                    <option value = "1" selected> LOCAL</option>
-                                    <option value = "2"> FORANEO</option>
+                                    <option value = "0" selected> </option>
+                                    
                                 </select>
                                 <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de locación</span>
                             </td>

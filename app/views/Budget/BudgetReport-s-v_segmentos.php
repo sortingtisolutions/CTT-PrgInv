@@ -75,7 +75,7 @@ $header = '
             <table class="table-main" border="0">
                 <tr>
                     <td class="box-logo side-color">
-                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:42mm; height:16mm; margin: 3mm 2.5mm 0 2.5mm;"/>
+                        <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:48mm; height:auto; margin: 3mm 2.5mm 0 2.5mm;"/>
                     </td>
                     <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
                     <p>
@@ -992,7 +992,7 @@ $mpdf= new \Mpdf\Mpdf([
     'margin_left' => 5,
     'margin_right' => 5,
     'margin_top' => 25,
-    'margin_bottom' => 35,
+    'margin_bottom' => 38,
     'margin_header' => 5,
     'margin_footer' => 4, 
     'orientation' => 'P'

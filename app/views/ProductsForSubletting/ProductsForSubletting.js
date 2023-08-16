@@ -233,7 +233,7 @@ function put_Products(dt) {
             }
             let sku = u.pjtdt_prod_sku;
             if (sku == 'Pendiente') {
-                sku = `<span class="pending">${sku}</sku>`;
+                sku = `<span class="pending">No Existe Serie</sku>`;
             }
             // editable: `<i id="k${u.pjtdt_id}" class="fas fa-times-circle kill"></i>`,
             tabla.row
@@ -307,7 +307,7 @@ function put_Products(dt) {
                 $('#txtIdProjectCont').val(projContId);
                 setting_datepicket($('#txtPeriod'), datestar, datesend);
 
-                if (serieSku == 'Pendiente') {
+                if (serieSku == 'No Existe Serie') {
                     $('#btn_subletting').attr('data_accion', 'add');
                 } else {
                     $('#btn_subletting').attr('data_accion', 'chg');
