@@ -288,10 +288,11 @@ public function listProyects($store)
         $this->db->query($qry4);
 
         $query = "SELECT pjtcn_quantity From ctt_projects_content where pjtcn_id = '$projContId' LIMIT 1";
-        $quantity = $this->db->query($query);
-        $qty = $quantity->fetch_object();
+        $res = $this->db->query($query);
+        $qry_q = $res->fetch_object();
+        $qty = intval($qry_q->pjtcn_quantity);
         
-        if ($qty->pjtcn_quantity > 1) {
+        if ($qty > 1) {
             // Actualiza la seccion del proyecto con la serie
             $qry5 = "UPDATE ctt_projects_content AS pd
                 SET pd.pjtcn_quantity = pd.pjtcn_quantity-1
@@ -310,9 +311,11 @@ public function listProyects($store)
             INNER JOIN ctt_projects_content 
             ON ctt_projects_content.pjtvr_id = ctt_projects_version.pjtvr_id
             WHERE ctt_projects_content.pjtcn_id = $projContId and ctt_projects_content.pjtcn_quantity=1;";
+			$this->db->query($qryDel3);
 
             $qryDel2 = "DELETE from ctt_projects_content 
             where pjtcn_quantity=1 and pjtcn_id = $projContId;";
+			$this->db->query($qryDel2);
 
         }
         

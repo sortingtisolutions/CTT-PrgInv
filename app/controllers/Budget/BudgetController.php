@@ -280,6 +280,22 @@ class BudgetController extends Controller
         }
         echo $res;
     } 
+    public function listProducts2($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProducts($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
 
 // Lista los productos con Subarrendo
 public function listProductsSub($request_params)
@@ -318,6 +334,23 @@ public function listProductsRelated($request_params)
     }
     echo $res;
 } 
+	public function getLocationType($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->getLocationType();
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"loc_id":"0"}]';	
+        }
+        echo $res;
+    } 
+												
 
 
 // Lista los proyectos en donde se encuentra un producto
@@ -337,6 +370,13 @@ public function stockProdcuts($request_params)
     }
     echo $res;
 } 
+
+public function SaveLocations($request_params){
+    $params =  $this->session->get('user');
+    $result = $this->model->SaveLocations($request_params);
+    $res = $result;
+    echo $res;
+}
 
 
 // Guarda la cotización

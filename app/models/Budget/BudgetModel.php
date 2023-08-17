@@ -32,7 +32,7 @@ class BudgetModel extends Model
                     , DATE_FORMAT(pj.pjt_date_project,'%d/%m/%Y') AS pjt_date_project 
                     , DATE_FORMAT(pj.pjt_date_start,'%d/%m/%Y') AS pjt_date_start 
                     , DATE_FORMAT(pj.pjt_date_end,'%d/%m/%Y') AS pjt_date_end 
-                    , pj.pjt_time, pj.pjt_location 
+                    , pj.pjt_time, pj.pjt_location, ed.edos_id
                     , pj.pjt_status 
                     , pj.cuo_id, pj.loc_id 
                     , co.cus_id, co.cus_parent 
@@ -47,11 +47,19 @@ class BudgetModel extends Model
                 FROM ctt_projects AS pj
                 LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                 LEFT JOIN ctt_location AS lo ON lo.loc_id = pj.loc_id
+				LEFT JOIN ctt_estados_mex AS ed ON ed.edos_id = pj.edos_id		
                 LEFT JOIN ctt_projects_type As pt ON pt.pjttp_id = pj.pjttp_id
                 WHERE pj.pjt_status in ('1', '40') ORDER BY pj.pjt_id DESC;
                 ";
         return $this->db->query($qry);
     }    
+	
+	public function getLocationType(){
+        $qry = "SELECT loc_id, loc_type_location
+        FROM ctt_location;
+        ";
+        return $this->db->query($qry);
+    } 		
 
     // Listado de proyectos padre
     public function listProjectsParents($params)
@@ -107,8 +115,7 @@ class BudgetModel extends Model
         } else {
             $subQry = "SELECT cuo_id, cus_parent AS cus_id, $cutId AS cut_id FROM ctt_customers_owner WHERE cus_id = $cusId";
         }
-
-
+        
         $qry = $subQry;
         return $this->db->query($qry);
     }    
@@ -214,6 +221,14 @@ public function listDiscounts($params)
             WHERE (upper(pd.prd_name) LIKE '%$word%' OR upper(pd.prd_sku) LIKE '%$word%')
                 AND pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
             ORDER BY pd.prd_name;";
+        return $this->db->query($qry);
+    } 
+
+    public function listProducts2($params)
+    {
+        $word = $this->db->real_escape_string($params['word']);
+        $qry = "SELECT * from ctt_vw_list_products
+            WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%');";
         return $this->db->query($qry);
     } 
 
@@ -438,16 +453,23 @@ public function stockProdcuts($params)
         $pjt_test_look          = $this->db->real_escape_string($params['pjtTestLook']);
         $usr                    = $this->db->real_escape_string($params['usr']);
         $empid                  = $this->db->real_escape_string($params['empid']);
-        $empname                = $this->db->real_escape_string($params['empname']);
-        $edos_id                = $this->db->real_escape_string($params['edos_id']);
+        $empname                = $this->db->real_escape_string($params['empname']);/* 
+        $edos_id                = $this->db->real_escape_string($params['edos_id']); */
 
-        $qry02 = "INSERT INTO ctt_projects (pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
+        /* $qry02 = "INSERT INTO ctt_projects (pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
                     pjt_how_required, pjt_trip_go, pjt_trip_back, pjt_to_carry_on, pjt_to_carry_out, pjt_test_tecnic, pjt_test_look,
                     pjttp_id, pjttc_id, cuo_id, loc_id, edos_id) 
                  VALUES ('$pjt_parent', '$pjt_name', '$pjt_date_start', '$pjt_date_end', '$pjt_time', 
                     '$pjt_location', '$pjt_status', '$pjt_how_required', '$pjt_trip_go', '$pjt_trip_back',
                     '$pjt_to_carry_on', '$pjt_to_carry_out', '$pjt_test_tecnic', '$pjt_test_look',
-                    '$pjt_type', $pjttc_id, $cuo_id, $loc_id, $edos_id );";
+                    '$pjt_type', $pjttc_id, $cuo_id, $loc_id, $edos_id );"; */
+        $qry02 = "INSERT INTO ctt_projects (pjt_parent, pjt_name, pjt_date_start, pjt_date_end, pjt_time, pjt_location, pjt_status, 
+                    pjt_how_required, pjt_trip_go, pjt_trip_back, pjt_to_carry_on, pjt_to_carry_out, pjt_test_tecnic, pjt_test_look,
+                    pjttp_id, pjttc_id, cuo_id, loc_id) 
+                 VALUES ('$pjt_parent', '$pjt_name', '$pjt_date_start', '$pjt_date_end', '$pjt_time', 
+                    '$pjt_location', '$pjt_status', '$pjt_how_required', '$pjt_trip_go', '$pjt_trip_back',
+                    '$pjt_to_carry_on', '$pjt_to_carry_out', '$pjt_test_tecnic', '$pjt_test_look',
+                    '$pjt_type', $pjttc_id, $cuo_id, $loc_id);";
         $this->db->query($qry02);
         $pjtId = $this->db->insert_id;
 
@@ -462,6 +484,14 @@ public function stockProdcuts($params)
         $this->db->query($qry04);
 
         $wtaId = $this->db->insert_id; 
+
+        if ($loc_id == 2) {
+            $qry5 = "UPDATE    ctt_locacion_estado
+            SET    pjt_id            = '$pjtId'
+            WHERE   pjt_id              =  '0';";
+            $this->db->query($qry5); 
+        }
+       /*  */
 
         return $pjtId;
 
@@ -498,6 +528,7 @@ public function UpdateProject($params)
     $pjt_to_carry_out       = $this->db->real_escape_string($params['pjtToCarryOut']);
     $pjt_test_tecnic        = $this->db->real_escape_string($params['pjtTestTecnic']);
     $pjt_test_look          = $this->db->real_escape_string($params['pjtTestLook']);
+	$edos_id                 = $this->db->real_escape_string($params['edos_id']);																																																								
 
 
     $qry02 = "UPDATE    ctt_projects
@@ -516,7 +547,8 @@ public function UpdateProject($params)
                         pjttp_id            = '$pjt_type',  
                         cuo_id              = '$cuo_id',
                         loc_id              = '$loc_id',
-                        pjttc_id            = '$pjttc_id'
+                        pjttc_id            = '$pjttc_id',
+                        edos_id             = '$edos_id'
                 WHERE   pjt_id              =  $pjt_id;
                 ";
     $this->db->query($qry02);
@@ -604,6 +636,18 @@ public function saveBudgetList($params)
 
     }
 
+    public function SaveLocations($params){
+        $loc        = $this->db->real_escape_string($params['loc']);
+        $edo        = $this->db->real_escape_string($params['edo']);
+
+        $qry1 = "INSERT INTO ctt_locacion_estado(
+                    lce_location,  edos_id)
+                VALUES('$loc','$edo');";
+        $this->db->query($qry1);
+
+        return $loc;
+    }
+
     
 /** ==== Obtiene el contenido del proyecto =============================================================  */
     public function GetProjectContent($params)
@@ -618,14 +662,12 @@ public function saveBudgetList($params)
                 INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
                 WHERE pc.ver_id = $verId;"; */
 
-        $qry = "SELECT pc.pjtcn_id, pj.pjt_date_start, pc.pjtcn_days_base, pc.pjtcn_days_trip, 
-                    pc.pjtcn_days_test, pc.pjtcn_quantity, pd.prd_id, pc.pjtvr_id,
-                    pc.pjtcn_prod_level, pd.srv_id, vr.ver_id, pc.pjtcn_prod_name                
-                FROM ctt_projects_content AS pc
-                INNER JOIN ctt_version AS vr ON vr.ver_id = pc.ver_id
-                INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-                INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
-                WHERE pc.ver_id = $verId;";
+        $qry = "SELECT *               
+            FROM ctt_projects_content AS pc
+            INNER JOIN ctt_version AS vr ON vr.ver_id = pc.ver_id
+            INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
+            INNER JOIN ctt_products AS pd ON pd.prd_id = pc.prd_id
+            WHERE pc.ver_id = $verId;";
         return $this->db->query($qry);
     }
 
@@ -680,7 +722,7 @@ public function saveBudgetList($params)
                 VALUES ('$dtinic', '$dtfinl', '$pjtdtId', '$detlId');";
         $this->db->query($qry4);
 
-        return  $serie;
+        return  $pjtdtId;
     }
 
 
@@ -689,23 +731,17 @@ public function saveBudgetList($params)
         $prodId   = $this->db->real_escape_string($params['prodId']);
         $serId   = $this->db->real_escape_string($params['serId']);
 
-        $qry1 = "SELECT ser_id, prd_id_acc 
-                FROM ctt_series 
-                WHERE prd_id_acc = $serId;";
-
-        return $this->db->query($qry1);
-
         /* $prodId        = $this->db->real_escape_string($params);
         $serId        = $this->db->real_escape_string($localvar); */
         
-      /*   $qry = "SELECT pr.* 
+      /*$qry = "SELECT pr.* 
                 FROM ctt_products AS pr
                 INNER JOIN ctt_accesories AS ac ON ac.ser_parent = pr.prd_id 
                 WHERE ac.prd_parent = $prodId AND ac.prd_id=$serId;";
             
         return $this->db->query($qry); */
 
-        /* $qry = "SELECT ser_id FROM ctt_projects_detail 
+        $qry = "SELECT ser_id FROM ctt_projects_detail 
                 WHERE pjtdt_id = $serId LIMIT 1;";
         $result =  $this->db->query($qry);
 
@@ -718,9 +754,11 @@ public function saveBudgetList($params)
             INNER JOIN ctt_accesories AS ac ON ac.ser_parent = pr.prd_id 
             WHERE ac.prd_parent = $prodId AND ac.prd_id=$locser;";
         
-        } */
+        } 
 
       
+	  
+        return $this->db->query($qry1);
     }
 // **************************
     public function GetProducts($params)
@@ -787,9 +825,11 @@ public function UpdatePeriodProject($params)
                 FROM ctt_budget AS bg
                 INNER JOIN ctt_subcategories AS sb 
                 ON sb.cat_id=substr(bdg_prod_sku,1,2) AND sb.sbc_code=substr(bdg_prod_sku,3,2)
+                LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
+        		LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
                 WHERE ver_id=$verId
                 GROUP BY bdg_id,bdg_prod_sku,bdg_section,bdg_order 
-                ORDER BY bdg_section, SUBSTR(bdg_prod_sku,1,4);";
+                ORDER BY bdg_section,sb.sbc_order_print, cr.crp_id, cs.cts_id, SUBSTR(bdg_prod_sku,1,4);";
 
         $result =  $this->db->query($qry);
                 

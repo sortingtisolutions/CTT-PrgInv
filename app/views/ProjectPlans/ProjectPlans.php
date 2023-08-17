@@ -374,7 +374,7 @@
             <thead>
                 <tr>
                     <th style = "width: 150px">SKU</th>
-                    <th style = "width:  90px"></th>
+                    <th style = "width:  100px"></th>
                     <th style = "width:  50px">Tipo</th>
                     <th style = "width: 400px;">Nombre del producto</th>
                     <th style = "width: 200px">Catálogo</th>
@@ -449,8 +449,8 @@
                         <td>Tipo de locación</td>
                         <td>
                             <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox required" >
-                                <option value = "1" selected> LOCAL</option>
-                                <option value = "2"> FORANEO</option>
+                                <option value = "0" selected></option>
+                                
                             </select>
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de locación</span>
                         </td>
@@ -636,8 +636,9 @@
                 <thead>
                     <tr>
                         <th style="width:  15px"></th>
-                        <th style="width:  80px">SKU</th>
+                        <th style="width:  30px">SKU</th>
                         <th style="width: 180px">Descripcion Producto</th>
+						<th style="width: 50px">Existencias</th>				
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -647,7 +648,7 @@
 <!-- End Ventana modal SERIES -->
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
-<!-- <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script> -->
+<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_VIEWS  . 'ProjectPlans/ProjectPlans.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>
