@@ -302,6 +302,15 @@ function expandCollapseSection() {
 }
 
 /**************** OBTENCION DE DATOS *****************/
+
+function getLocationsEdos(prj_id){
+    var pagina = 'Budget/ListLocationsEdos';
+    var par = `[{"prj_id":"${prj_id}"}]`;
+    var tipo = 'json';
+    var selector = putLocationsEdos;
+    fillField(pagina, par, tipo, selector);
+}
+
 /**  Obtiene el listado de proyectos */
 function getProjects(pjId) {
     swpjt = 0;
@@ -616,7 +625,29 @@ function putProjectsType(dt) {
 function putProjectsTypeCalled(dt) {
     tpcall = dt;
 }
+function putLocationsEdos(dt){
+    console.log(dt);
+    let tabla = $('#listLocationsTable').DataTable();
+    tabla.rows().remove().draw();
+    $.each(dt, function (v, u) {
+        tabla.row
+        .add({
+            editable: `<i class="fas fa-times-circle kill" id ="md${u.lce_id}"></i>`,
+            loc:u.lce_location,
+            edoRep: u.edos_id,
+        })
+        .draw();
+        $('#md' + u.lce_id)
+        .parents('tr')
+        .attr('id', u.lce_id);
 
+        $('.edit')
+        .unbind('click')
+        .on('click', function () {
+            tabla.row($(this).parent('tr')).remove().draw();
+        });
+    });
+}
 function selectorProjects(pjId) {
     $('.finder_list-projects ul li')
         .unbind('click')
@@ -1781,8 +1812,8 @@ function fillData(inx) {
         /* $('#txtEdosRepublic').parents('tr').removeAttr('class'); */
         $('#txtTripGo').parents('tr').removeAttr('class');
         $('#txtTripBack').parents('tr').removeAttr('class');
-        $('#addLocation').parents('tr').removeAttr('class');
-
+        $('#seeLocation').parents('tr').removeAttr('class');
+        
     }
             // $('#txtEdosRepublic').parents('tr').removeAttr('class');
             $('#txtTripGo').parents('tr').removeAttr('class');
@@ -1798,7 +1829,7 @@ function fillData(inx) {
             $('#txtTripGo').parents('tr').removeAttr('class');
             $('#txtTripBack').parents('tr').removeAttr('class');
 			$('#txtLocationEdt').parents('tr').addClass('hide');
-            $('#addLocation').parents('tr').removeAttr('class');
+            $('#seeLocation').parents('tr').removeAttr('class');														
             // $('#txtLocationEdt').val('');
         } else {
             console.log('Otro');
@@ -1806,7 +1837,7 @@ function fillData(inx) {
             /* $('#txtEdosRepublic').parents('tr').addClass('hide'); */
             $('#txtTripGo').parents('tr').addClass('hide');
             $('#txtTripBack').parents('tr').addClass('hide');
-            $('#addLocation').parents('tr').addClass('hide');
+            $('#seeLocation').parents('tr').addClass('hide');	
             // $(`#txtTypeLocationEdt option[value = "1"]`).attr(
             //     'selected',
             //     'selected'
@@ -1837,16 +1868,18 @@ function fillData(inx) {
         $('#txtProjectParent').parents('tr').addClass('hide');
         $(`#txtProjectParent option[value = "0"]`).attr('selected', 'selected');
     }
-    $('#addLocation')
-        .html('Añadir Locación')
+    $('#seeLocation')
+        .html('Ver Locación')
         .removeAttr('class')
         .addClass('bn btn-ok insert');
 
-    $('#addLocation')
+    $('#seeLocation')
         .unbind('click')
         .on('click', function(){
+            let prj_id = $('#txtProjectIdEdt').val();
             settingTable();
-
+            getLocationsEdos(prj_id);
+            
         });
     $('#saveProject')
         .html('Guardar cambios')
@@ -2014,6 +2047,7 @@ function newProject() {
     .unbind('click')
     .on('click', function(){
 		settingTable();
+
     });
 
 }
@@ -2078,6 +2112,7 @@ function settingTable(){
         }); */
     //** AGREGO ED */
 }
+
 function putLocations(){ //** AGREGO ED */
     let loc=$('#txtLocationExtra').val();
     let edo =$('#txtEdosRepublic_2').val();

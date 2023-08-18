@@ -60,7 +60,11 @@ class BudgetModel extends Model
         ";
         return $this->db->query($qry);
     } 		
-
+    public function ListLocationsEdos($params){
+        $pjtId = $this->db->real_escape_string($params['prj_id']);
+        $qry = "SELECT * FROM ctt_locacion_estado WHERE pjt_id='$pjtId';";
+        return $this->db->query($qry);
+    } 
     // Listado de proyectos padre
     public function listProjectsParents($params)
     {

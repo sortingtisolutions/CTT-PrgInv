@@ -471,12 +471,12 @@
                         </td>
                         
                     </tr>
-                    <!-- <tr class="hide">
+                    <tr class="hide">
                         <td></td>
                         <td>
-                            <button class="bn btn-see" id="seeLocation"></button>
+                            <button class="bn btn-add" id="seeLocation"></button>
                         </td>
-                    </tr> -->		   
+                    </tr>	   
 
                     <tr class="hide">
                         <td>Días de viaje de ida</td>
