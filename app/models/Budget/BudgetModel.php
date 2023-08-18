@@ -905,5 +905,16 @@ public function UpdatePeriodProject($params)
         return  $pjtdtid;
     }
 
+    public function SettingSeriesFUN($params)
+    {
+        $pjtId        = $this->db->real_escape_string($params['pjtId']);
+        $verId        = $this->db->real_escape_string($params['verId']);
+    
+        $qry = "SELECT fun_RegistraAccesorios('$verId', '$pjtId') as bandsucess
+                FROM DUAL;";  // solo trae un registro
+        $result =  $this->db->query($qry);
+        
+        return  $result;
+    }
 
 }

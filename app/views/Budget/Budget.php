@@ -438,7 +438,7 @@
                     <tr>
                         <td>Tipo de locación</td>
                         <td>
-                            <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox required" >
+                            <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox" >
                                 <option value = "0" selected></option>
                                 <!-- <option value = "2"> FORANEO</option>
                                 <option value = "3"> FORO</option> -->

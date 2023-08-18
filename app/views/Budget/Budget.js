@@ -24,8 +24,7 @@ function inicial() {
     getProjectTypeCalled();
     discountInsuredEvent();
     getLocationType();
-
-   
+    
 }
 
 function stickyTable() {
@@ -531,11 +530,11 @@ function putEdosRepublic(dt) {
 }
 function putLocationType(dt) {
     loct =dt;
-/* 
+/*
     $('#txtTypeLocationEdt').on('change', function () {
         validator();
     }); */
-}		
+}
 
 /**  Llena el listado de prductores */
 function putCustomersOwner(dt) {
@@ -1009,26 +1008,26 @@ function putBudgets(dt) {
     updateTotals();
     sectionShowHide();
 
-    $('tbody.sections_products').sortable({
-        items: 'tr:not(tr.blocked)',
-        cursor: 'pointer',
-        axis: 'y',
-        dropOnEmpty: false,
-        start: function (e, ui) {
-            ui.item.addClass('selected');
-        },
-        stop: function (e, ui) {
-            ui.item.removeClass('selected');
-            $(this)
-                .find('tr')
-                .each(function (index) {
-                    if (index > 0) {
-                        $(this).find('i.move_item').attr('data-order', index);
-                    }
-                });
-            showButtonVersion('S');
-        },
-    });
+    // $('tbody.sections_products').sortable({
+    //     items: 'tr:not(tr.blocked)',
+    //     cursor: 'pointer',
+    //     axis: 'y',
+    //     dropOnEmpty: false,
+    //     start: function (e, ui) {
+    //         ui.item.addClass('selected');
+    //     },
+    //     stop: function (e, ui) {
+    //         ui.item.removeClass('selected');
+    //         $(this)
+    //             .find('tr')
+    //             .each(function (index) {
+    //                 if (index > 0) {
+    //                     $(this).find('i.move_item').attr('data-order', index);
+    //                 }
+    //             });
+    //         showButtonVersion('S');
+    //     },
+    // });
 
     reOrdering();
 }
@@ -1783,7 +1782,7 @@ function fillData(inx) {
         $('#txtTripGo').parents('tr').removeAttr('class');
         $('#txtTripBack').parents('tr').removeAttr('class');
         $('#addLocation').parents('tr').removeAttr('class');
-        
+
     }
             // $('#txtEdosRepublic').parents('tr').removeAttr('class');
             $('#txtTripGo').parents('tr').removeAttr('class');
@@ -1797,9 +1796,9 @@ function fillData(inx) {
             console.log('Foraneo');
             /* $('#txtEdosRepublic').parents('tr').removeAttr('class');*/
             $('#txtTripGo').parents('tr').removeAttr('class');
-            $('#txtTripBack').parents('tr').removeAttr('class'); 
+            $('#txtTripBack').parents('tr').removeAttr('class');
 			$('#txtLocationEdt').parents('tr').addClass('hide');
-            $('#addLocation').parents('tr').removeAttr('class');														
+            $('#addLocation').parents('tr').removeAttr('class');
             // $('#txtLocationEdt').val('');
         } else {
             console.log('Otro');
@@ -1807,7 +1806,7 @@ function fillData(inx) {
             /* $('#txtEdosRepublic').parents('tr').addClass('hide'); */
             $('#txtTripGo').parents('tr').addClass('hide');
             $('#txtTripBack').parents('tr').addClass('hide');
-            $('#addLocation').parents('tr').addClass('hide');	
+            $('#addLocation').parents('tr').addClass('hide');
             // $(`#txtTypeLocationEdt option[value = "1"]`).attr(
             //     'selected',
             //     'selected'
@@ -1847,7 +1846,7 @@ function fillData(inx) {
         .unbind('click')
         .on('click', function(){
             settingTable();
-            
+
         });
     $('#saveProject')
         .html('Guardar cambios')
@@ -1878,7 +1877,7 @@ function fillData(inx) {
                 let toCarryOn = $('#txtCarryOn').val();
                 let toCarryOut = $('#txtCarryOut').val();
                 let testTecnic = $('#txtTestTecnic').val();
-                let testLook = $('#txtTestLook').val();/* 
+                let testLook = $('#txtTestLook').val();/*
                 let projEdosValue = $('#txtEdosRepublic option:selected').val(); */
 
                 let projDateStart = moment(
@@ -1962,8 +1961,8 @@ function newProject() {
         .html('Añadir Locación')
         .removeAttr('class')
         .addClass('bn btn-ok insert');
-    
-    
+
+
     $('.textbox__result').hide();
     $('.project__selection').show();
     $('#txtLocationEdt').val('CDMX');
@@ -1982,7 +1981,7 @@ function newProject() {
                 );
             }
         });
-        
+
         $('#txtTypeLocationEdt')
         .unbind('change')
         .on('change', function () {
@@ -1993,9 +1992,9 @@ function newProject() {
                 $('#txtLocationEdt').val('');*/
                 $('#txtTripGo').parents('tr').removeAttr('class');
                 $('#txtTripBack').parents('tr').removeAttr('class');
-                 
+
 				$('#txtLocationEdt').parents('tr').addClass('hide');
-                $('#addLocation').parents('tr').removeAttr('class');													
+                $('#addLocation').parents('tr').removeAttr('class');
             } else {
                 // console.log('Otro');
                 $('#txtLocationEdt').val('CDMX');
@@ -2004,7 +2003,7 @@ function newProject() {
 
                 $('#txtTripGo').parents('tr').addClass('hide');
                 $('#txtTripBack').parents('tr').addClass('hide');
-                /* $('#txtLocationEdt').parents('tr').removeAttr('class');	 */											 
+                /* $('#txtLocationEdt').parents('tr').removeAttr('class');	 */
                 // $(`#txtTypeLocationEdt option[value = "1"]`).attr(
                 //     'selected',
                 //     'selected'
@@ -2016,11 +2015,11 @@ function newProject() {
     .on('click', function(){
 		settingTable();
     });
-       
+
 }
 
 function settingTable(){
-    
+
         $('#addLocationModal').removeClass('overlay_hide');
 
         $('#addLocationEdos')
@@ -2049,15 +2048,15 @@ function settingTable(){
                 { data: 'edoRep', class: 'sku' },
             ],
         });
-        
+
         $('#addLocationModal .btn_close')
             .unbind('click')
             .on('click', function () {
                 $('#addLocationModal').addClass('overlay_hide');
-                /* $('#listLocationsTable').DataTable().destroy; //** Es como si no hiciera caso a esta instruccion 
+                /* $('#listLocationsTable').DataTable().destroy; //** Es como si no hiciera caso a esta instruccion
                 let tabla=$('#listLocationsTable').DataTable();
                 tabla.rows().remove().draw();*/
-            }); 
+            });
 
         $('#btn_save_locations')
         .unbind('click')
@@ -2102,7 +2101,7 @@ function fill_table(par) { //** AGREGO ED */
     par = JSON.parse(par);
 
     let tabla = $('#listLocationsTable').DataTable();
-    
+
     tabla.row
         .add({
             editable: `<i class="fas fa-times-circle kill" id ="md${par[0].support}"></i>`,
@@ -2134,7 +2133,7 @@ function build_data_structure(pr) {
 }
 function save_exchange(pr) {
     //   console.log(pr);
-    
+
     var pagina = 'Budget/SaveLocations';
     var par = pr;
     var tipo = 'html';
@@ -2266,7 +2265,7 @@ function actionNewProject() {
                         "empid"          : "${empid}",
                         "empname"        : "${empname}"
                     }] `;
-                    /* ,                       
+                    /* ,
                         "edos_id"        : "${edos_id}" */ //colocar en linea 2245
                 // console.log(par);
                 var pagina = 'Budget/SaveProject';
@@ -2471,7 +2470,7 @@ function respBudget(dt) {
     let UserN = dt.split('|')[1];
     // console.log('--',pjtId,UserN);
     getVersion(pjtId);
-    
+
 }
 
 /**  ++++  Obtiene los días definidos para el proyectos */
@@ -2664,7 +2663,7 @@ function closeModals(table) {
         .unbind('click')
         .on('click', function () {
             automaticCloseModal();
-            
+
         });
 }
 
@@ -2673,7 +2672,7 @@ function automaticCloseModal() {
     $('.invoice__modal-general').slideUp(400, function () {
         $('.invoice__modalBackgound').fadeOut(400);
         $('.invoice__modal-general .modal__body').html('');
-        $('#listLocationsTable').DataTable().destroy; 
+        $('#listLocationsTable').DataTable().destroy;
         let tabla=$('#listLocationsTable').DataTable();
         tabla.rows().remove().draw();
     });
@@ -2745,8 +2744,10 @@ function promoteProject(pjtId) {
     let verId = $('.invoice_controlPanel .version_current').attr(
         'data-version'
     );
+    let fechaini = new Date();
+    console.log('Hora click', fechaini);
 
-    var pagina = 'Budget/ProcessProjectProduct';
+    var pagina = 'Budget/ProcessProjectProductFAST';
     var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
     var tipo = 'html';
     var selector = showResult;
@@ -2758,16 +2759,19 @@ function showResult(dt) {
     let pjtId = dt.split('|')[0];
     let verId = dt.split('|')[1];
     $('#P' + pjtId).remove();
+    let fechaacc = new Date();
+    console.log('Hora Acce', fechaacc);
     modalLoading('H');
     // ProcessBackAccesories
     setTimeout(() => {
         console.log('TERMINO FASE 1 LANZA SIGUIENTE FASE');
+        // var pagina = 'Budget/ProcessFuncAccesories';
         var pagina = 'Budget/ProcessBackAccesories';
         var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
         var tipo = 'html';
         var selector = showResAcc;
         fillField(pagina, par, tipo, selector);
-        // putUpdateCategory(dt);
+            // putUpdateCategory(dt);
     }, 1000);
 
     // console.log('TERMINO PROMO-COTIZ-2');
@@ -2787,7 +2791,9 @@ function showResult(dt) {
 }
  */
 function showResAcc(dt) {
-    console.log('TERMINO showResAcc', dt);
+    console.log('TERMINO SETTIMEOUT showResAcc', dt);
+    let fechaend = new Date();
+    console.log('Hora END', fechaend);
     var resultAcc=dt;
     // let pjtId = dt.split('|')[0];
     // let verId = dt.split('|')[1];
