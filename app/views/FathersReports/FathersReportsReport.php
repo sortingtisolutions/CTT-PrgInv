@@ -42,13 +42,19 @@ while($row1 = $res3->fetch_assoc()){
 }
 
 $num = $result[0]['pjt_number'];
-$qry = "SELECT *, ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) as ver_date_real,
-                CONCAT_WS(' - ' , date_format(pj.pjt_date_start, '%d-%b-%Y'), 
-        date_format(pj.pjt_date_end, '%d-%b-%Y')) as period , vr.ver_discount_insured
-        FROM ctt_budget AS bg
+$qry = "SELECT bdg_id, bdg_section, crp_id, crp_name, bdg_prod_price, 
+bdg_quantity,bdg_days_base, bdg_days_cost, bdg_discount_base, 
+bdg_discount_insured, bdg_days_trip, bdg_discount_trip,bdg_insured, bdg_days_test,
+bdg_prod_sku, bdg_prod_name, bdg_prod_price, sbc_order_print,section, bdg_discount_test, ver_discount_insured,prd_id 
+
+FROM (SELECT bg.bdg_id, bg.bdg_section, cr.crp_id, cr.crp_name,bg.bdg_prod_price, 
+bg.bdg_quantity,bg.bdg_days_base, bg.bdg_days_cost, bg.bdg_discount_base, 
+bg.bdg_discount_insured, bg.bdg_days_trip, bg.bdg_discount_trip,bg.bdg_insured, bg.bdg_days_test,
+bg.bdg_prod_sku, bdg_prod_name, sb.sbc_order_print, bg.bdg_section AS section, bg.bdg_discount_test, vr.ver_discount_insured,pd.prd_id
+FROM ctt_budget AS bg
         INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
         INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
-        INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+		  INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
         INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
         INNER JOIN ctt_products AS pd ON pd.prd_id = bg.prd_id
         INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id 
@@ -56,18 +62,36 @@ $qry = "SELECT *, ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) as ver_date_
         LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
         LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE pj.pjt_id IN ($proj_ids) AND bg.ver_id = (SELECT MAX(ver_id) FROM ctt_budget WHERE bdg_id=bg.bdg_id) ORDER BY sbc_order_print, bdg_section;";
+        WHERE pj.pjt_id IN ($proj_ids) AND bg.ver_id = (SELECT MAX(ver_id) FROM ctt_budget WHERE bdg_id=bg.bdg_id) GROUP BY prd_id
+UNION 
+SELECT pv.pjtvr_id AS bdg_id, pv.pjtvr_section AS bdg_section,cr.crp_id, cr.crp_name,pv.pjtvr_prod_price AS bdg_prod_price,
+pv.pjtvr_quantity AS bdg_quantity,pv.pjtvr_days_base as bdg_days_base,pv.pjtvr_days_cost as bdg_days_cost, pv.pjtvr_discount_base as bdg_discount_base, 
+pv.pjtvr_discount_insured as bdg_discount_insured, pv.pjtvr_days_trip as bdg_days_trip, pv.pjtvr_discount_trip as bdg_discount_trip, pv.pjtvr_insured, pv.pjtvr_days_test,
+pv.pjtvr_prod_sku as bdg_prod_sku, pjtvr_prod_name as bdg_prod_name, sb.sbc_order_print, pv.pjtvr_section AS section, pv.pjtvr_discount_test, vr.ver_discount_insured,pd.prd_id 
+FROM ctt_projects_version AS pv
+INNER JOIN ctt_version AS vr ON vr.ver_id = pv.ver_id
+INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
+INNER JOIN ctt_projects_type AS pt ON pt.pjttp_id = pj.pjttp_id
+INNER JOIN ctt_location AS lc ON lc.loc_id = pj.loc_id
+INNER JOIN ctt_products AS pd ON pd.prd_id = pv.prd_id
+INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id 
+LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
+LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
+LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+LEFT JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
+WHERE pj.pjt_id IN ($proj_ids) AND pv.ver_id = (SELECT MAX(ver_id) 
+FROM ctt_projects_version WHERE pjtvr_id=pv.pjtvr_id) GROUP BY prd_id) AS result
+GROUP BY prd_id
+ORDER BY sbc_order_print, section";
 
 $res = $conn->query($qry);
-
-
 
 
 while($row = $res->fetch_assoc()){
     $items[] = $row;
 }
 // OBTENER LAS CLASIFICACIONES DE LOS PRODUCTOS 
-$query="SELECT cr.crp_id, cr.crp_name, sb.sbc_name, sb.sbc_order_print 
+$query="SELECT cr.crp_id, cr.crp_name 
 FROM ctt_subcategories AS sb 
 LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id 
 LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
@@ -75,6 +99,7 @@ INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id
 INNER JOIN ctt_budget AS bg ON bg.prd_id = pd.prd_id 
 INNER JOIN ctt_version AS vr ON vr.ver_id = bg.ver_id
 INNER JOIN ctt_projects AS pj ON pj.pjt_id = vr.pjt_id
+LEFT JOIN ctt_projects_version AS pv on pv.prd_id = pd.prd_id 
 WHERE pj.pjt_id IN ($proj_ids) GROUP BY cr.crp_id ORDER BY sbc_order_print, bdg_section";
 $res2 = $conn->query($query);
 $categories=array();

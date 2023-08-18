@@ -6,7 +6,11 @@
 <header>
 	<?php require ROOT . FOLDER_PATH . "/app/assets/menu.php"; ?>
 </header>
-
+<style>
+    .hiddenElement {
+        visibility: hidden !important;
+    }
+</style>
 <!-- CUERPO DE LA PAGINA -->
 <div class="invoice__container">
 <!-- Nombre del proyecto y tablero de control -->
@@ -438,7 +442,7 @@
                     <tr>
                         <td>Tipo de locación</td>
                         <td>
-                            <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox required" >
+                            <select id="txtTypeLocationEdt" name="txtTypeLocationEdt" class="textbox" >
                                 <option value = "0" selected></option>
                                 <!-- <option value = "2"> FORANEO</option>
                                 <option value = "3"> FORO</option> -->

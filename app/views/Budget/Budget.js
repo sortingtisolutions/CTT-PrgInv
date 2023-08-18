@@ -3,6 +3,7 @@ var swpjt = 0;
 let theredaytrip=0;
 let viewStatus = 'C'; // Columns Trip & Test C-Colalapsed, E-Expanded
 let glbSec=0;  // jjr
+let add = 0;
 
 $('document').ready(function () {
     url = getAbsolutePath();
@@ -12,6 +13,7 @@ $('document').ready(function () {
 
 //INICIO DE PROCESOS
 function inicial() {
+    if (altr == 1) {
     stickyTable();
     eventsAction();
     getProjects('0');
@@ -24,7 +26,13 @@ function inicial() {
     getProjectTypeCalled();
     discountInsuredEvent();
     getLocationType();
-
+    
+    confirm_alert();
+    }else {
+        setTimeout(() => {
+            inicial();
+        }, 100);
+    }
    
 }
 
@@ -630,24 +638,55 @@ function putLocationsEdos(dt){
     console.log(dt);
     let tabla = $('#listLocationsTable').DataTable();
     tabla.rows().remove().draw();
-    $.each(dt, function (v, u) {
-        tabla.row
-        .add({
-            editable: `<i class="fas fa-times-circle kill" id ="md${u.lce_id}"></i>`,
-            loc:u.lce_location,
-            edoRep: u.edos_id,
-        })
-        .draw();
-        $('#md' + u.lce_id)
-        .parents('tr')
-        .attr('id', u.lce_id);
-
-        $('.edit')
-        .unbind('click')
-        .on('click', function () {
-            tabla.row($(this).parent('tr')).remove().draw();
+    if (dt[0]['loc_id']!=0) {
+        $.each(dt, function (v, u) {
+            tabla.row
+            .add({
+                editable: `<i class="fas fa-times-circle kill delete" id ="md${u.lce_id}"></i>`,
+                loc:u.lce_location,
+                edoRep: u.edos_name,
+            })
+            .draw();
+            $('#md' + u.lce_id)
+            .parents('tr')
+            .attr('id', u.lce_id);
+    
+            $('.delete')
+            .unbind('click')
+            .on('click', function () {
+                console.log($(this).parents('tr').attr('id'));
+                let locId = $(this).parents('tr').attr('id');
+                $('#confirmModal').modal('show');
+    
+                $('#confirmModalLevel').html('¿Seguro que desea borrar la locacion?');
+                $('#N').html('Cancelar');
+                $('#confirmButton').html('Borrar locacion').css({display: 'inline'});
+                $('#Id').val(locId); 
+    
+                //   $('#BorrarAlmacenModal').modal('show');
+                //$('#IdAlmacenBorrar').val(locId);
+    
+                $('#confirmButton').on('click', function () {
+                    var pagina = 'Budget/DeleteLocation';
+                    var par = `[{"loc_id":"${locId}"}]`;
+                    var tipo = 'html';
+                    var selector = putDeleteLocation;
+                    fillField(pagina, par, tipo, selector); 
+                }); 
+                //tabla.row($(this).parent('tr')).remove().draw();
+            });
         });
-    });
+    }
+    
+}
+function putDeleteLocation(dt) {
+    //getLocationsEdos();
+    let tabla = $('#listLocationsTable').DataTable();
+     tabla
+        .row($(`#${dt}`))
+        .remove()
+        .draw();
+    $('#confirmModal').modal('hide');  
 }
 function selectorProjects(pjId) {
     $('.finder_list-projects ul li')
@@ -1748,6 +1787,7 @@ function fillContent() {
     $.each(loct, function (v, u) {
         let H = `<option value="${u.loc_id}">${u.loc_type_location}</option>`;
         $('#txtTypeLocationEdt').append(H);
+        $('#txtTypeLocationEdt').val(1);
     });
     // Llena el selector de Estados
     /* $.each(edosRep, function (v, u) {
@@ -1814,6 +1854,8 @@ function fillData(inx) {
         $('#txtTripGo').parents('tr').removeAttr('class');
         $('#txtTripBack').parents('tr').removeAttr('class');
         $('#seeLocation').parents('tr').removeAttr('class');
+        add = 2;
+        $('#btn_save_locations').addClass('hide');
         
     }
             // $('#txtEdosRepublic').parents('tr').removeAttr('class');
@@ -1830,7 +1872,9 @@ function fillData(inx) {
             $('#txtTripGo').parents('tr').removeAttr('class');
             $('#txtTripBack').parents('tr').removeAttr('class'); 
 			$('#txtLocationEdt').parents('tr').addClass('hide');
-            $('#seeLocation').parents('tr').removeAttr('class');														
+            $('#seeLocation').parents('tr').removeAttr('class');	
+            add = 2;							
+            $('#btn_save_locations').addClass('hide');						
             // $('#txtLocationEdt').val('');
         } else {
             console.log('Otro');
@@ -1995,7 +2039,7 @@ function newProject() {
         .html('Añadir Locación')
         .removeAttr('class')
         .addClass('bn btn-ok insert');
-    
+        $('#btn_save_locations').removeClass('hide');
     
     $('.textbox__result').hide();
     $('.project__selection').show();
@@ -2028,7 +2072,8 @@ function newProject() {
                 $('#txtTripBack').parents('tr').removeAttr('class');
                  
 				$('#txtLocationEdt').parents('tr').addClass('hide');
-                $('#addLocation').parents('tr').removeAttr('class');													
+                $('#addLocation').parents('tr').removeAttr('class');
+                add = 1;													
             } else {
                 // console.log('Otro');
                 $('#txtLocationEdt').val('CDMX');
@@ -2038,10 +2083,10 @@ function newProject() {
                 $('#txtTripGo').parents('tr').addClass('hide');
                 $('#txtTripBack').parents('tr').addClass('hide');
                 /* $('#txtLocationEdt').parents('tr').removeAttr('class');	 */											 
-                // $(`#txtTypeLocationEdt option[value = "1"]`).attr(
-                //     'selected',
-                //     'selected'
-                // );
+                $(`#txtTypeLocationEdt option[value = "1"]`).attr(
+                  'selected',
+                     'selected'
+                 );
             }
         });
     $('#addLocation')
@@ -2060,8 +2105,10 @@ function settingTable(){
         $('#addLocationEdos')
         .unbind('click')
         .on('click', function () {
+            
             putLocations();
-
+            
+            
         });
 
         $('#listLocationsTable').DataTable({
@@ -2118,17 +2165,30 @@ function putLocations(){ //** AGREGO ED */
     let loc=$('#txtLocationExtra').val();
     let edo =$('#txtEdosRepublic_2').val();
     let name_edo =$(`#txtEdosRepublic_2 option[value="${edo}"]`).text(); // por alguna razon cada que se cierra el modal principal, y se reabre para generar un nuevo proyecto se genera una repeticion de datos
-    //console.log(edo, name_edo);
+    
     par = `
-        [{
-            "support"  : "${edo}",
-            "loc"       : "${loc}",
-            "edoRep"       : "${name_edo}"
-        }]`;
-
+            [{
+                "support"  : "${edo}",
+                "loc"       : "${loc}",
+                "edoRep"       : "${name_edo}"
+            }]`;
+    
     console.log(par);
-   fill_table(par);
-    clean_selectors();
+    if (add ==2) {
+        let prjId = $('#txtProjectIdEdt').val();
+        let par = `
+        [{
+            "loc" :  "${loc}",
+            "edo" :  "${edo}",
+            "prjId" : "${prjId}"
+        }]`;
+        save_exchange(par);
+    }else{
+        
+        fill_table(par);
+        clean_selectors();
+    }
+    
 
 }
 function fill_table(par) { //** AGREGO ED */
@@ -2162,7 +2222,8 @@ function build_data_structure(pr) {
     let par = `
     [{
         "loc" :  "${el[0]}",
-        "edo" :  "${el[1]}"
+        "edo" :  "${el[1]}",
+        "prjId" : "0"
     }]`;
     console.log(' Antes de Insertar', par);
     save_exchange(par);
@@ -2181,12 +2242,19 @@ function save_exchange(pr) {
 
 function exchange_result(dt) {
     console.log(dt);
-
-    $('#listLocationsTable').DataTable().destroy; //** Es como si no hiciera caso a esta instruccion */
-    /* let tabla=$('#listLocationsTable').DataTable();
-    tabla.rows().remove().draw(); */
-    $('#addLocationModal').addClass('overlay_hide');
-
+    if (add ==1) {
+        $('#listLocationsTable').DataTable().destroy; //** Es como si no hiciera caso a esta instruccion */
+        /* let tabla=$('#listLocationsTable').DataTable();
+        tabla.rows().remove().draw(); */
+        $('#addLocationModal').addClass('overlay_hide');
+    
+    }else{
+        let prj_id = $('#txtProjectIdEdt').val();
+            
+        getLocationsEdos(prj_id);
+        clean_selectors();
+    }
+   
     /* //$('.resFolio').text(refil(folio, 7));
     $('#MoveResultModal').modal('show');
     $('#btnHideModal').on('click', function () {

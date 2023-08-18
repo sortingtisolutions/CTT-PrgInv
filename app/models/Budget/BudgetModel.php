@@ -62,7 +62,8 @@ class BudgetModel extends Model
     } 		
     public function ListLocationsEdos($params){
         $pjtId = $this->db->real_escape_string($params['prj_id']);
-        $qry = "SELECT * FROM ctt_locacion_estado WHERE pjt_id='$pjtId';";
+        $qry = "SELECT * FROM ctt_locacion_estado AS ldo 
+        INNER JOIN ctt_estados_mex AS edo ON ldo.edos_id=edo.edos_id WHERE ldo.pjt_id='$pjtId';";
         return $this->db->query($qry);
     } 
     // Listado de proyectos padre
@@ -643,10 +644,11 @@ public function saveBudgetList($params)
     public function SaveLocations($params){
         $loc        = $this->db->real_escape_string($params['loc']);
         $edo        = $this->db->real_escape_string($params['edo']);
+        $prjId        = $this->db->real_escape_string($params['prjId']);
 
         $qry1 = "INSERT INTO ctt_locacion_estado(
-                    lce_location,  edos_id)
-                VALUES('$loc','$edo');";
+                    lce_location,  edos_id, pjt_id)
+                VALUES('$loc','$edo','$prjId');";
         $this->db->query($qry1);
 
         return $loc;
@@ -850,4 +852,13 @@ public function UpdatePeriodProject($params)
     
         return $this->db->query($qry);
     } 
+    // eliminar locacion
+    function DeleteLocation($params){
+        $loc_id = $this->db->real_escape_string($params['loc_id']);
+        $qry1 = "DELETE FROM ctt_locacion_estado 
+        WHERE lce_id = '$loc_id';
+        ";
+        $this->db->query($qry1);
+        return $loc_id;
+    }
 }

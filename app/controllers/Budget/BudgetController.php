@@ -530,7 +530,13 @@ public function saveBudgetList($request_params)
 
     echo $user . '|' . $name;
 } 
-
+public function DeleteLocation($request_params){
+    {   
+        $params =  $this->session->get('user');
+        $result = $this->model->DeleteLocation($request_params);
+        echo $result;
+    } 
+}
 /** +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   */
 
 /** +++++  PROCESO DE GENERACION DEL PROYECTO                 +++++++   */
@@ -942,6 +948,7 @@ public function ProcessProjectProduct($request_params)
         echo $pjtId . '|' . $dtinic . '|' . $dtfinl;
     
     } 
+    
 
 
 }
