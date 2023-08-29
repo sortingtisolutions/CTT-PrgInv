@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="contenido ">
         <div class="row">
-            <div class="block_01">
+            <div class="block_01" style="width: 100%;">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 blocks">
                         <span class="titleSection">Datos Generales del Proyecto</span>
@@ -27,45 +27,41 @@
                                         <div class="form_group">
                                             <label for="lstProject">Nombre de proyecto:</label> 
                                             <select id="lstProject" name="lstProject" >
-                                                <option value="">Selecciona...</option>
+                                                <option value="0">Selecciona...</option>
                                             </select>
-                                        </div>
-
-                                        <div class="form_group">
-                                            <label for="lstStore">Representante:</label> 
-                                            <select id="lstStore" name="lstStore" class="required" ></select>
                                         </div>
 
                                         <div class="form_group">
                                             <label for="txtCustomer">Nombre Cliente:</label> 
-                                            <input id="txtCustomer" name="txtCustomer" type="text" class="textbox required">
+                                            <input id="txtCustomer" name="txtCustomer" type="text" class="textbox ">
                                         </div>
 
                                         <div class="form_group">
-                                            <label for="lstProject">Direccion:</label> 
-                                            <select id="lstProject" name="lstProject" >
-                                                <option value="">Selecciona...</option>
+                                            <label for="txtRepresent">Representante:</label> 
+                                            <input id="txtRepresent" name="txtRepresent" type="text" class="textbox ">
+                                        </div>
+
+                                        <div class="form_group">
+                                            <label for="txtTypeProj">Tipo de Proyecto:</label> 
+                                            <input id="txtTypeProj" name="txtTypeProj" type="text" class="textbox ">
                                             </select>
                                         </div>
 
                                         <div class="form_group">
-                                            <label for="lstProject">Direccion:</label> 
-                                            <select id="lstProject" name="lstProject" >
-                                                <option value="">Selecciona...</option>
+                                            <label for="txtStart">Fecha de Inicio:</label> 
+                                            <input id="txtStart" name="txtStart" type="text" class="textbox ">
                                             </select>
                                         </div>
 
                                         <div class="form_group">
-                                            <label for="lstProject">Analista:</label> 
-                                            <select id="lstProject" name="lstProject" >
-                                                <option value="">Selecciona...</option>
+                                            <label for="txtEnd">Fecha Final:</label> 
+                                            <input id="txtEnd" name="txtEnd" type="text" class="textbox ">
                                             </select>
                                         </div>
 
-                                        <div class="form_group">
-                                            <label for="lstProject">Fecha:</label> 
-                                            <select id="lstProject" name="lstProject" >
-                                                <option value="">Selecciona...</option>
+                                        <!-- <div class="form_group">
+                                            <label for="txtadress">Direccion:</label> 
+                                            <input id="txtadress" name="txtadress" type="text" class="textbox ">
                                             </select>
                                         </div>
 
@@ -76,7 +72,7 @@
                                                 <option value="EFECTIVO">EFECTIVO</option>
                                                 <option value="TARJETA DE CREDITO">TARJETA DE CREDITO</option>
                                             </select>
-                                        </div>
+                                        </div> -->
 
                                         <div class="form_group hide">
                                             <label for="txtProject">Proyecto:</label> 
@@ -100,15 +96,32 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 blocks">
                         <div class="block_01-02">
-                            <div class="menu_control"></div>
-                            <div id="tbl_dynamic" class="tbl_dynamic"></div>
+                            <h6 style="color:#008000">Versiones de documentos</h6>
+                        <div class="mvst_list tblProdMaster">
+                            <table class="display compact nowrap"  id="tblProyects" style="min-width: 99%">
+                                <thead>
+                                    <tr>
+                                        <th style="width:  30px">Acciones</th>
+                                        <th style="width: 200px">Total Proyecto</th>
+                                        <th style="width:  60px">Total Mantenimiento</th>
+                                        <th style="width: 100px">Total Expendables</th>
+                                        <th style="width:  40px">Total Descuentos</th>
+                                        <th style="width:  40px">Total Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                         </div>
+
+                            <!-- <div class="menu_control"></div> -->
+                           <!--  <div id="tbl_dynamic" class="tbl_dynamic"></div> -->
                         </div>   
                     </div>
                 </div>
 
             </div>
 
-            <div class="block_02">
+           <!--  <div class="block_02">
                 <div class="blocks">
                     <button class="btn-add" id="newQuote"> + nueva venta</button>
                 </div>
@@ -143,22 +156,25 @@
                     <button class="btn-add" id="newComment"> + agregar observaciones</button>
                 </div>
                 <hr>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
-
+            
 
 <!-- Start Lista de productos -->
 <div class="box_list_products" id="Products" >
+           
     <div class="sel_product" contenteditable="true"></div>
     <div class="list_products">
         <ul></ul>
     </div>
+    
 </div>
 <!-- End Lista de productos -->
 
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script> 
 <script src="<?=  PATH_VIEWS . 'ClosedProyectChange/ClosedProyectChange.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

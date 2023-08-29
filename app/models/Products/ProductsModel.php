@@ -50,7 +50,7 @@ class ProductsModel extends Model
 // Listado de facturas
 public function listInvoice()
 {
-    $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id IN (1,4,5);";
+    $qry = "SELECT doc_id, doc_name FROM ctt_documents WHERE dot_id IN (1,4,5) order by doc_name;";
     return $this->db->query($qry);
 }
 

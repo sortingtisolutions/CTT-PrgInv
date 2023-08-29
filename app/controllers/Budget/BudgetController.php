@@ -283,7 +283,7 @@ class BudgetController extends Controller
     public function listProducts2($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProducts($request_params);
+        $result = $this->model->listProducts2($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
