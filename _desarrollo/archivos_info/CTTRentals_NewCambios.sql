@@ -258,7 +258,8 @@ ENGINE=InnoDB
 
 
 --******* 15-ago-23 ********************
-ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `ctt_vw_list_products` AS SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
+CREATE VIEW ctt_vw_list_products AS
+SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
             pd.prd_insured, sb.sbc_name,cat_name,
     CASE 
         WHEN prd_level ='K' THEN 
@@ -275,7 +276,7 @@ FROM ctt_products AS pd
 INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
 INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
 WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
-ORDER BY pd.prd_name  ;
+ORDER BY pd.prd_name;
 
 
 

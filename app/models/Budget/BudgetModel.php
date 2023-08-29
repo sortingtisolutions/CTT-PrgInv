@@ -60,7 +60,11 @@ class BudgetModel extends Model
         ";
         return $this->db->query($qry);
     } 		
-
+    public function ListLocationsEdos($params){
+        $pjtId = $this->db->real_escape_string($params['prj_id']);
+        $qry = "SELECT * FROM ctt_locacion_estado WHERE pjt_id='$pjtId';";
+        return $this->db->query($qry);
+    } 
     // Listado de proyectos padre
     public function listProjectsParents($params)
     {
@@ -846,4 +850,75 @@ public function UpdatePeriodProject($params)
     
         return $this->db->query($qry);
     } 
+
+    /** ==== Obtiene el contenido del proyecto =============================================================  */
+    public function GetContentDetails($params)
+    {
+        $pjtId        = $this->db->real_escape_string($params['pjtId']);
+        $verId        = $this->db->real_escape_string($params['verId']);
+
+        $qry = "SELECT pd.pjtdt_id, pd.pjtdt_prod_sku, pd.ser_id,
+                        pd.prd_id, pd.pjtvr_id, pj.pjt_date_start,pc.pjtcn_days_base,
+                        pc.pjtcn_days_trip, pc.pjtcn_days_test 
+                FROM ctt_projects_detail AS pd
+                INNER JOIN ctt_projects_content AS pc ON pc.pjtvr_id=pd.pjtvr_id
+                INNER JOIN ctt_projects AS pj ON pj.pjt_id=pc.pjt_id
+                WHERE pc.ver_id = $verId AND pd.ser_id>0; ";
+        return $this->db->query($qry);
+    }
+
+    public function SettingSeriesAcc($params)
+    {
+        $pjtdtid   = $this->db->real_escape_string($params['pjtdtid']);
+        $serId   = $this->db->real_escape_string($params['serid']);
+        $prodId   = $this->db->real_escape_string($params['prodId']);
+        $pjtvrid   = $this->db->real_escape_string($params['pjtvrid']);  // este es el valor pjtvr_id
+        $dtinic   = $this->db->real_escape_string($params['dtinic']);
+        $dtfinl   = $this->db->real_escape_string($params['dtfinl']);
+    
+        $qry = "SELECT count(ser_id) as ser_id  
+                FROM ctt_series WHERE prd_id_acc = $serId ;";  // solo trae un registro
+        $result =  $this->db->query($qry);
+        
+        $series = $result->fetch_object();
+        $countserie  = $series->ser_id; 
+        if ($countserie != 0){
+
+            $qry2 = "INSERT INTO ctt_projects_detail (
+                pjtdt_belongs, pjtdt_prod_sku, ser_id, prd_id, pjtvr_id )
+                SELECT '$pjtdtid', a.ser_sku, a.ser_id, a.prd_id, '$pjtvrid'
+                FROM ctt_series a WHERE a.prd_id_acc='$serId'; ";
+            $this->db->query($qry2);
+            $pjtdtId = $this->db->insert_id;
+
+            $qry1 = "UPDATE ctt_series SET ser_situation = 'EA', ser_stage = 'R',
+                        ser_reserve_count = ser_reserve_count + 1
+                    WHERE prd_id_acc = $serId;";
+            $this->db->query($qry1);
+
+            $qry4 = "INSERT INTO ctt_projects_periods 
+                        (pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
+                    SELECT '$dtinic','$dtfinl', dt.pjtdt_id, dt.pjtdt_belongs
+                    FROM ctt_projects_detail dt 
+                    INNER JOIN ctt_series sr ON sr.ser_id=dt.ser_id
+                    WHERE sr.prd_id_acc=$serId;";
+            $this->db->query($qry4);
+
+        } 
+
+        return  $pjtdtid;
+    }
+
+    public function SettingSeriesFUN($params)
+    {
+        $pjtId        = $this->db->real_escape_string($params['pjtId']);
+        $verId        = $this->db->real_escape_string($params['verId']);
+    
+        $qry = "SELECT fun_RegistraAccesorios('$verId', '$pjtId') as bandsucess
+                FROM DUAL;";  // solo trae un registro
+        $result =  $this->db->query($qry);
+        
+        return  $result;
+    }
+
 }

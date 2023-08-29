@@ -13,9 +13,11 @@ $('document').ready(function () {
 function inicial() {
     if (altr == 1) {
         get_stores();
-        get_projects();
-        fill_dinamic_table();
-        get_products(5);
+        getListProyects();
+        getProjects(0);
+
+        // fill_dinamic_table();
+        // get_products(5);
 
         $('#lstPayForm')
             .unbind('change')
@@ -74,12 +76,20 @@ function get_products(strId) {
 }
 
 /**  Obtiene el listado de proyectos */
-function get_projects() {
+function getListProyects() {
     var pagina = 'ClosedProyectChange/listProjects';
     var par = `[{"strId":""}]`;
     var tipo = 'json';
-    var selector = put_projects;
-    caching_events('get_projects');
+    var selector = put_listprojects;
+    caching_events('getListProyects');
+    fillField(pagina, par, tipo, selector);
+}
+
+function getProjects(catId) {
+    var pagina = 'ClosedProyectChange/listProjects';
+    var par = `[{"catId":"${catId}"}]`;
+    var tipo = 'json';
+    var selector = putProducts;
     fillField(pagina, par, tipo, selector);
 }
 
@@ -91,13 +101,13 @@ function put_stores(dt) {
     if (dt[0].str_id > 0) {
         $.each(dt, function (v, u) {
             let H = ` <option value="${u.str_id}">${u.str_name}</option>`;
-            $('#lstStore').append(H);
+            $('#txtRepresent').append(H);
         });
     } else {
-        $('#lstStore').html('');
+        $('#txtRepresent').html('');
     }
 
-    $('#lstStore')
+    $('#txtRepresent')
         .unbind('change')
         .on('change', function () {
             let strId = $(this).val();
@@ -105,11 +115,12 @@ function put_stores(dt) {
         });
 }
 
-function put_projects(dt) {
+function put_listprojects(dt) {
+    console.log('put_listprojects', dt);
     proj = dt;
     if (dt[0].pjt_id > 0) {
         $.each(proj, function (v, u) {
-            let H = ` <option value="${v + 1}">${u.pjt_number}</option>`;
+            let H = ` <option value="${u.pjt_id}">${u.pjt_number} - ${u.pjt_name}</option>`;
             $('#lstProject').append(H);
         });
     } else {
@@ -121,10 +132,13 @@ function put_projects(dt) {
         .on('change', function () {
             console.log($(this).val());
             var ix = $(this).val();
+
             if (ix > 0) {
-                $('#txtProject').parents('div.form_group').removeClass('hide');
-                $('#txtProject').val(proj[ix - 1].pjt_name.toUpperCase());
-                $('#txtCustomer').val(proj[ix - 1].cus_name.toUpperCase());
+                // $('#txtProject').parents('div.form_group').removeClass('hide');
+                $('#txtCustomer').val(proj[ix-1].cus_name.toUpperCase());
+                $('#txtTypeProj').val(proj[ix-1].pjttp_name.toUpperCase());
+                $('#txtStart').val(proj[ix-1].pjt_date_start);
+                $('#txtEnd').val(proj[ix-1].pjt_date_end);
             } else {
                 $('#txtProject').parents('div.form_group').addClass('hide');
                 $('#txtProject').val('');
@@ -162,8 +176,39 @@ function put_products(dt) {
     }
 }
 
+function putProducts(dt) {
+    console.log(dt);
+    let valstage='';
+    let valicon='';
+    
+    if (dt[0].pjt_id > 0) {        
+        $('#tblProyects tbody').html('');
+        $.each(dt, function (v, u) {
+            // <i class="fa-solid fa-dolly"></i>
+            valstage='color:#CC0000';
+            var H = `
+                <tr id="${u.pjt_id}" >
+                    <td class="sku"><i class="fa fa-solid fa-dolly detail"></i></td>
+                    <td class="supply">${u.pjt_name}</td>
+                    <td class="sku">${u.pjt_number}</td>
+                    <td class="supply">${u.pjttp_name}</td>
+                    <td class="date">${u.pjt_date_start}</td>
+                    <td class="date">${u.pjt_date_end}</td>
+ 
+                </tr>`;
+            $('#tblProyects tbody').append(H);
+        });
+        settingTable();
+        // activeIcons();
+    } else {
+        // settingTable();
+    }
+}
+
 /**  +++++   Arma el escenario de la cotizacion  */
 function fill_dinamic_table() {
+    settingTable();
+
     caching_events('fill_dinamic_table');
     let H = `
         <table class="table_control" id="tblControl" style="width: 900px;">
@@ -173,10 +218,10 @@ function fill_dinamic_table() {
                     <th colspan="3" class="zone_01 headrow" >&nbsp;</th>
                 </tr>
                 <tr class="headrow">
-                    <th class="w4 zone_01" >CANTIDAD </th>
-                    <th class="w3 zone_01" >DESCRIPCION </th>
-                    <th class="w3 zone_03" >PRECIO</th>
-                    <th class="w3 zone_03" >DESCUENTO</th>
+                    <th class="w4 zone_01" >TOTAL PROYECTO </th>
+                    <th class="w3 zone_01" >TOTAL MANTENIMIENTO </th>
+                    <th class="w3 zone_03" >TOTAL EXPENDABLES</th>
+                    <th class="w3 zone_03" >MONTO DESCUENTO</th>
                     <th class="w3 zone_03" >TOTAL</th>
                 </tr>
             </thead>
@@ -403,7 +448,7 @@ function saleApply() {
             let customer = $('#txtCustomer').val().toUpperCase();
             let pjtName = pix == '' ? '' : proj[pix - 1].pjt_name.toUpperCase();
             let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
-            let strId = $('#lstStore').val();
+            let strId = $('#txtRepresent').val();
 
             let par = `
 [{
@@ -445,7 +490,7 @@ function putNextExchangeNumber(dt) {
 function saleDetailApply(dt) {
     let pix = $('#lstProject').val();
     let pjtId = pix == '' ? 0 : proj[pix - 1].pjt_id;
-    let strId = $('#lstStore').val();
+    let strId = $('#txtRepresent').val();
 
     console.log(pix, pjtId, strId);
 
@@ -533,4 +578,34 @@ function saveComment(scc, mid, cmm) {
 
 function setSaveComment(dt) {
     comids.push(dt);
+}
+
+function settingTable() {
+    let title = 'Control salida de proyectos';
+    let filename = title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
+    $('#tblProyects').DataTable({
+        order: [[1, 'asc']],
+        dom: 'rtip',     // Blfrtip
+        lengthMenu: [
+            [10, 50,  -1],
+            [10, 50, 'Todos'],
+        ],
+        pagingType: 'simple_numbers',
+        language: {
+            url: 'app/assets/lib/dataTable/spanish.json',
+        },
+        scrollY: 'calc(100vh - 200px)',
+        scrollX: true,
+        fixedHeader: true,
+        columns: [
+            {data: 'editable',      class: 'edit', orderable: false},      
+            {data: 'pjt_name',      class: 'supply'},
+            {data: 'pjt_number',    class: 'sku'},
+            {data: 'pjttp_name',    class: 'supply'},
+            {data: 'pjt_date_start', class: 'date'},
+            {data: 'pjt_date_end',  class: 'date'},
+        ],
+    });
+
+
 }

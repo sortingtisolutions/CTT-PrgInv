@@ -127,8 +127,8 @@ class WorkInputContentModel extends Model
         $prjid = $this->db->real_escape_string($params['prjid']);
 
         $qryins = "INSERT INTO ctt_products_maintenance 
-                                (pmt_date_register,ser_id, pjt_id, pjtcr_id, mts_id) 
-                    VALUES (CURRENT_TIMESTAMP, $serId, $prjid, $codmot, 1);";
+                                (ser_id, pjt_id, pjtcr_id, mts_id) 
+                    VALUES ( $serId, $prjid, $codmot, 1);";
         $this->db->query($qryins);
         $mainId = $this->db->insert_id;
 
