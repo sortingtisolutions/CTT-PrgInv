@@ -1708,8 +1708,8 @@ function activeInputSelector() {
                         infoProduct(bdgId, type,sec); // *** Ed
                         break;
                     case 'event_PerdProduct':
-                        /* periodProduct(bdgId);
-                        break; */
+                        /* periodProduct(bdgId);*/
+                        break; 
                     case 'event_StokProduct':
                         stockProduct(bdgId,nameProd);
                         break;

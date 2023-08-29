@@ -683,15 +683,28 @@ function read_exchange_table() {
             let prodname = $($(u).find('td')[2]).text();
             let quantity = $($(u).find('td')[3]).text();
             let sericost = $($(u).find('td')[4]).text();
-            let serienum = $($(u).find('td')[5]).children('.serprod').val();
+            let serienum=0;
+            let numecono=0;
+            let costpeti=0;
+            if($($(u).find('td')[5]).text()!=''){
+                serienum = $($(u).find('td')[5]).text();
+                numecono = $($(u).find('td')[14]).text();
+                costpeti = $($(u).find('td')[7]).text();
+            }else{
+                serienum = $($(u).find('td')[5]).children('.serprod').val();
+                numecono = $($(u).find('td')[14]).children('.serecono').val();
+                costpeti= $($(u).find('td')[7]).children('.sercpet').val();
+                console.log(serienum, numecono, costpeti);
+            }
+            
             //let serienum = $('.serprod').val();
             let petition = $($(u).find('td')[6]).text();
-            let costpeti = $($(u).find('td')[7]).children('.sercpet').val();
+            
             let costtota = $($(u).find('td')[8]).text();
             let codeexch = $($(u).find('td')[9]).text();
             let storname = $($(u).find('td')[10]).text();
             let serbrand = $($(u).find('td')[13]).text();
-            let numecono = $($(u).find('td')[14]).children('.serecono').val();
+            
             let comments = $($(u).find('td')[15]).text();
            
             let producid = $(this).attr('data-content').split('|')[0];
@@ -759,7 +772,7 @@ function build_data_structure(pr) {
 
 /** Graba intercambio de almacenes */
 function save_exchange(pr) {
-    //   console.log(pr);
+    console.log(pr);
     var pagina = 'MoveStoresIn/SaveExchange';
     var par = pr;
     var tipo = 'html';

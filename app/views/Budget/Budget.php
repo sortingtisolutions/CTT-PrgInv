@@ -287,7 +287,7 @@
     </div>
 
     <!-- Listado de productos -->
-    <div class="invoice__section-products invoice-border modalTable" style="width:80%; height: 80%; position: absolute;">
+    <div class="invoice__section-products invoice-border modalTable" style="width:80%; height: 80%; position: absolute; top:2px; left:250px;right:10px;bottom:80px;">
         <div class="modal__header  invoice-border">
             <div class="modal__header-concept">&nbsp;Listados de productos</div>
             <!-- <span class="invoice_button toCharge">Cargando....</span> -->

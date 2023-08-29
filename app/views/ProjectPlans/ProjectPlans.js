@@ -3272,14 +3272,17 @@ function putPeriods(dt) {
 }
 
 function purgeInterfase() {
+    
     switch (interfase) {
         case 'MST':
+            console.log('MST');
             showButtonToPrint('S');
             showButtonToSave('S');
             showMenuProduct('S');
             showLedPending('S');
             break;
         case 'ACT':
+            console.log('ACT');
             showButtonToSave('H');
             showMenuProduct('H');
             showLedPending('H');

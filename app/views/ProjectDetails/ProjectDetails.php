@@ -326,7 +326,7 @@
 <!-- Buscador de clientes y proyectos -->
 
 <!-- Listado de productos -->
-    <div class="invoice__section-products invoice-border modalTable" style="width:80%; height: 80%; position: absolute;">
+    <div class="invoice__section-products invoice-border modalTable" style="width:80%; height: 80%; position: absolute; top:2px; left:250px;right:10px;bottom:80px;">
         <div class="modal__header  invoice-border">
             <div class="modal__header-concept">&nbsp;Listados de productos</div>
             <div class="modal__header-concept">&nbsp;<span class="invoice_button toCharge hide-items" style="color:#008000">Cargando....</span></div>
@@ -343,7 +343,7 @@
                 <!-- <label for="txtSubCategory">Subcategorias</label> -->
 			</div>
             <div class="col-md-2 col-lg-2 col-xl-2 mb-2">
-                <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 1rem !important;" id="LimpiarFormulario">Limpiar</button>
+                <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="LimpiarFormulario">Limpiar</button>
 			</div>
         </div>
 

@@ -374,7 +374,12 @@ function putNextSku(dt) {
     //let sku_after = $('#txtSKUproduct').val();
     if(dt[0].modelo){
         
-        $('#txtSKUproduct').val(parseInt(dt[0].modelo)+1);
+        if ($('#txtProducts').val()) {
+            $('#txtSKUproduct').val(parseInt(dt[0].modelo));
+        }else{
+            $('#txtSKUproduct').val(parseInt(dt[0].modelo)+1);
+        }
+        
     }else{
         $('#txtSKUproduct').val(1);
     }
@@ -524,7 +529,7 @@ function putProducts(dt) {
         let prdSku = $(this).attr('data_complement').split('|')[6];
         let serNext = $(this).attr('data_complement').split('|')[7];
         //console.log('selecciona elemento', prdId,'---', prdNm);
-
+        
         $('#txtProducts').val(prdNm);
         $('#txtIdProducts').val(prdId);
         $('#txtPrice').val(price);
@@ -883,7 +888,7 @@ function validator() {
 // Aplica la seleccion para la tabla de movimientos
 function exchange_apply() {
     console.log($('#txtIdProducts').val());
-    //console.log(parseInt($('#txtNextSerie').val()));
+    console.log(parseInt($('#txtNextSerie').val()));
     let prdName;
     let price = $('#txtPrice').val();
     

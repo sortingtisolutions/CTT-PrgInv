@@ -644,7 +644,7 @@ class ProjectPlansModel extends Model
                     pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id 
                 FROM ctt_projects_mice WHERE pjtvr_action != 'D' AND pjt_id = $pjtId;";
         return $this->db->query($qry2);
-
+            
     }
     
     public function settingProjectContent($pjtId, $verId)
