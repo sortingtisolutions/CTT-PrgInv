@@ -29,7 +29,7 @@ public function listEstatusMantenimiento($params)
     {
         $pjtId = $this->db->real_escape_string($params['pjtId']);
         $qry = "SELECT * FROM ctt_projects AS pj
-        INNER JOIN ctt_location AS lc ON lc.loc_id=pj.loc_id WHERE pjt_parent='$pjtId'";
+        INNER JOIN ctt_location AS lc ON lc.loc_id=pj.loc_id WHERE pjt_parent='$pjtId' ORDER BY pjt_id";
         //
         
         return $this->db->query($qry);

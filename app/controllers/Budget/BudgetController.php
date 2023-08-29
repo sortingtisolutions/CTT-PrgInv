@@ -280,10 +280,11 @@ class BudgetController extends Controller
         }
         echo $res;
     } 
+    // LISTAR PRODUCTOS ***ED
     public function listProducts2($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->listProducts($request_params);
+        $result = $this->model->listProducts2($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
@@ -293,6 +294,75 @@ class BudgetController extends Controller
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
             $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
+    //LISTAR PRODUCTOS  ***ED
+    public function listProducts3($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProducts3($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
+    // LISTAR CATEGORIAS ***ED
+    public function listCategories($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listCategories($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
+
+    //  ***ED
+    public function listSubCategories($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listSubCategories($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
+    // Datos del proyecto padre ***ED
+    public function getProjectParent($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->getProjectParent($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"pjt_id":"0"}]';	
         }
         echo $res;
     } 
@@ -537,6 +607,7 @@ public function DeleteLocation($request_params){
         echo $result;
     } 
 }
+
 /** +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   */
 
 /** +++++  PROCESO DE GENERACION DEL PROYECTO                 +++++++   */
@@ -948,7 +1019,6 @@ public function ProcessProjectProduct($request_params)
         echo $pjtId . '|' . $dtinic . '|' . $dtfinl;
     
     } 
+
     
-
-
 }

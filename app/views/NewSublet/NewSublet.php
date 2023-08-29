@@ -96,11 +96,20 @@
 
                     <!-- Costo,Cantidad,Serie posición 5,4 y 6 -->
                     <div class="row list-finder pos2">
+                            <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating">
+                                <input id="txtSKUproduct" type="hidden" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos" value=0>
+                                <!-- <label for="txtSKUproduct">SKUproduct</label> -->
+                            </div> 
+                            <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating">
+                                <input id="txtNproduct" type="hidden" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos" value=0>
+                                <!-- <label for="txtNproduct">SKUproduct</label> -->
+                            </div>
+                            
                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating">
-                                    <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" autocomplete="off">
+                                    <input id="txtProducts" type="text" class="form-control form-control-sm required" data-mesage="Debes seleccionar un proveedor" style="text-transform:uppercase" autocomplete="off">
                                     <label for="txtProducts">Productos</label>
                                     <input type="hidden" id="txtIdProducts" name="txtIdProducts">
-                                    <input type="hidden" id="txtNextSerie" name="txtNextSerie">
+                                    <input type="hidden" id="txtNextSerie" name="txtNextSerie" value=0>
                             </div>
                             <div id="listProduct" class="list-group list-hide">
                                 <div class="list-items" ></div>
@@ -114,10 +123,6 @@
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating">
                             <input id="txtOffer" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos">
                             <label for="txtOffer">Precio de subarrendo</label>
-                        </div>
-                        <div class="col-md-6 col-lg-6 col-xl-6 mb-2 pos4 form-floating">
-                            <input id="txtSkuProduct" type="hidden" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la cantidad de productos" style="text-transform:uppercase">
-                            <!-- <label for="txtSkuProduct">Sku Producto</label> -->
                         </div>
                         
                         <!-- <div class="pos6">
@@ -197,8 +202,8 @@
 						</div>
                         
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6">
-                            <input id="txtCollectionTime" type="text" class="form-control form-control-sm text-center number required serie"  data-mesage="Debes agregar la serie de productos" style="text-transform:uppercase" autocomplete="off">
-                            <label for="txtCollectionTime">Horario de recolección</label>
+                            <input id="txtCollectionTime" type="time" class="form-control form-control-sm text-center required"  data-mesage="Debes agregar la serie de productos" >
+                            <label for="txtCollectionTime">Horario recoleccion</label>
                             
                         </div> 
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating">
@@ -206,8 +211,8 @@
 							<label for="txtFechaEnt">Fecha de entrega</label>
 						</div>
                         <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos4 ">
-                            <input id="txtDeliveryTime" type="text" class="form-control form-control-sm text-center number required skuserie" data-mesage="Debes Agregar el precio" >
-                            <label for="txtDeliveryTime">Horario de entrega</label>
+                            <input id="txtDeliveryTime" type="time" class="form-control form-control-sm text-center required" data-mesage="Debes Agregar el precio">
+                            <label for="txtDeliveryTime">Horario entrega</label>
                         </div>
                         
                     </div>
@@ -233,8 +238,12 @@
                             <input id="txtQuantity" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" value=1>
                             <label for="txtQuantity">Cantidad</label>
                         </div>
+                        <!-- <div class="col-md-6 col-lg-6 col-xl-6 mb-2 form-floating pos6">
+                            <input id="txtSerie" type="text" class="form-control form-control-sm text-center number required"  data-mesage="Debes agregar la serie de productos" style="text-transform:uppercase" autocomplete="off" >
+                            <label for="txtSerie">Serie</label>
+                        </div> -->
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 ">
-                            <input id="txtLocation" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" >
+                            <input id="txtLocation" type="text" class="form-control form-control-sm text-center number required" data-mesage="Debes Agregar el precio" style="text-transform:uppercase" >
                             <label for="txtLocation">Ubicacion del proveedor</label>
                         </div>
                         <div class="col-md-12 col-lg-12 col-xl-12 mb-2 form-floating pos6 ">
@@ -258,9 +267,12 @@
 
                     <!-- Boton posición 4 -->
                         <div class="row pos1 ">
-                            <div class="col-md-12 mb-5">
+                            <div class="col-md-6 mb-5">
                                 <button id="btn_exchange" type="button" class="btn btn-sm btn-primary" >Agregar</button>
                             </div>
+                            <div class="col-md-6 mb-5">
+                                    <button type="button"  class="btn btn-danger btn-sm" id="LimpiarFormulario">Limpiar</button>
+                                </div>
                         </div>
                 </div>
             </div>
@@ -271,12 +283,12 @@
                     <thead>
                         <tr>
                             <th style="width:  20px"></th>
-                            <th style="width:  80px">Sku Producto</th>
+                            <!-- <th style="width:  80px">Sku Producto</th> -->
                             <th style="width: 300px">Nombre <br>del Producto</th>
                             <th style="width: 80px">Precio <br> de Renta</th>
                             <th style="width:  80px">Precio <br> de subarrendo</th>
 
-                            <th style="width: 90px">Serie</th>
+                            <th style="width: 90px">Cantidad</th>
                             <th style="width:  50px">Horario <br> de recolección</th>
                             <th style="width:  60px">Horario <br> de entrega</th>
                             <th style="width:  50px">Fecha Inicial</th>

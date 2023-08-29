@@ -26,8 +26,10 @@ function inicial() {
     getProjectTypeCalled();
     discountInsuredEvent();
     getLocationType();
-    
+    getCategories();
     confirm_alert();
+
+    
     }else {
         setTimeout(() => {
             inicial();
@@ -364,7 +366,7 @@ function getVersion(pjtId) {
 }
 /**  Obtiene el listado de productos */
 function getProducts(word, dstr, dend) {
-    var pagina = 'Budget/listProducts2';
+    var pagina = 'Budget/listProducts3';
     var par = `[{"word":"${word}","dstr":"${dstr}","dend":"${dend}"}]`;
     var tipo = 'json';
     var selector = putProducts;
@@ -386,6 +388,50 @@ function getBudgets() {
     var selector = putBudgets;
     fillField(pagina, par, tipo, selector);
 }
+// ** Ed
+function getCategories() {
+    //console.log('categos');
+    var pagina = 'Budget/listCategories';
+    var par = `[{"store":""}]`;
+    var tipo = 'json';
+    var selector = putCategories;
+    fillField(pagina, par, tipo, selector);
+}
+// ** Ed
+function getSubCategories(catId) {
+    //console.log(catId);
+    var pagina = 'Budget/listSubCategories';
+    var par = `[{"catId":"${catId}"}]`;
+    var tipo = 'json';
+    var selector = putSubCategories;
+    fillField(pagina, par, tipo, selector);
+}
+// ** Ed
+function putSubCategories(dt) {
+    //console.log('putSubCategories',dt);
+    
+    $('#txtSubCategory').append('');
+    if (dt[0].sbc_id != 0) {
+        let word = $('#txtProductFinder').val();
+        let subcatId = $('#txtSubCategory').val();
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.sbc_id}" data-code="${u.sbc_code}"> ${u.sbc_name}</option>`;
+            $('#txtSubCategory').append(H);
+            
+        });
+        console.log(dt[0].sbc_id);
+        getProducts(word,dt[0].sbc_id);
+        $('#txtSubCategory').on('change', function () {
+            let subcatId = $(this).val();
+            //let word = $('txtProductFinder').val();
+
+            //console.log(word);
+            getProducts(word,subcatId);
+            
+        });
+    }
+}
+
 /**  Obtiene el listado de descuentos */
 function getDiscounts() {
     var pagina = 'Budget/listDiscounts';
@@ -483,6 +529,15 @@ function getExistTrip(pjtvrId, prdId) {
     fillField(pagina, par, tipo, selector);
 }
 
+// Buscar los datos del producto padre
+function getProjectParent(id) {
+    var pagina = 'Budget/getProjectParent';
+    var par = `[{"projId":"${id}"}]`;
+    var tipo = 'json';
+    var selector = putProjectParent;
+    fillField(pagina, par, tipo, selector);
+}
+
 function putRelPrdAcc(dt){
     console.log(dt);
 }
@@ -491,8 +546,56 @@ function putExistTrip(dt) {
     theredaytrip = dt[0].existrip;
     // console.log('putExistTrip',theredaytrip)
 }
+// ** Ed
+function putCategories(dt) {
+    
+    $('#txtCategory').append('');
+    if (dt[0].cat_id != 0) {
+        $.each(dt, function (v, u) {
+            let H = `<option value="${u.cat_id}"> ${u.cat_name}</option>`;
+            $('#txtCategory').append(H);
+        });
 
+        $('#txtCategory').on('change', function () {
+            let catId = $(this).val();
+            $('#txtSubCategory').html('');
+            $('#txtSubCategory').val('Selecciona la subategoria');
+            
+            /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
+            // $('#txtProducts').val('     Cargando Informacion . . . .');
+            getSubCategories(catId);
+        });
+    }
+}
 /******************* LLENA DE DATOS **********************/
+
+function putProjectParent(dt) {
+    let projType = dt[0].pjttp_id;
+    let duration= dt[0].pjt_time;
+    let customer= dt[0].cus_id;
+    let producer= dt[0].cus_parent;
+    let whrequest= dt[0].pjt_how_required;
+    let location = dt[0].loc_id;
+    // console.log(dt);
+    if(location == 2 || location == 4){
+        $('#txtProjectIdEdt').val(dt[0].pjt_id);
+        
+        $('#addLocation').parents('tr').removeAttr('class');
+        $('#addLocation').unbind().on('click', function(){
+            let prj_id = $('#txtProjectIdEdt').val();
+            settingTable();
+            getLocationsEdos(prj_id);
+        });
+    }
+
+    $(`#txtTypeProjectEdt`).val(projType);
+    $('#txtTypeLocationEdt').val(location);
+    $('#txtTimeProject').val(duration);
+    $(`#txtCustomerEdt`).val(customer);
+    $(`#txtCustomerRelEdt`).val(producer);
+    $('#txtHowRequired').val(whrequest);
+
+}
 /**  Llena el listado de proyectos */
 function putProjects(dt) {
     if (dt[0].pjt_id > 0) {
@@ -520,6 +623,7 @@ function putProjects(dt) {
 /**  Llena el listado de proyectos padre */
 function putProjectsParents(dt) {
     proPar = dt;
+    
     $('#txtProjectParent').html('');
     if (dt[0].pjt_id > 0) {
         $.each(dt, function (v, u) {
@@ -527,6 +631,14 @@ function putProjectsParents(dt) {
             $('#txtProjectParent').append(H);
         });
     }
+    $('#txtProjectParent')
+        .unbind('change')
+        .on('change', function () {
+            let prjId = $(this).val();
+            console.log(prjId);
+            cleanInputs();
+            getProjectParent(prjId);
+        });
 }
 
 /**  Llena el listado de prductores */
@@ -545,6 +657,10 @@ function putCustomers(dt) {
 function putEdosRepublic(dt) {
     // console.log(dt);
     edosRep = dt;
+    $.each(edosRep, function (v, u) {
+        let H = `<option value="${u.edos_id}">${u.edos_name}</option>`;
+        $('#txtEdosRepublic_2').append(H);
+    });
 }
 function putLocationType(dt) {
     loct =dt;
@@ -880,11 +996,13 @@ function fillProducer(cusId) {
 
 // Muestra el listado de productos disponibles para su seleccion en la cotización
 function showListProducts(item) {
-
+    
     $('.invoice__section-products').fadeIn('slow');
 
     $('.productos__box-table').attr('data-section', item);
-
+    $('.invoice__section-products').draggable({
+        handle: ".modal__header"
+    });
     $('#txtProductFinder')
         .unbind('keyup')
         .on('keyup', function () {
@@ -898,30 +1016,42 @@ function showListProducts(item) {
             $('#listProductsTable table tbody').html('');
             $('#txtProductFinder').val('');
             showButtonToCharge('S');
+            limpiar_form();
         });
     });
+    $('#LimpiarFormulario').unbind('click')
+    .on('click', function () {
+        limpiar_form();
+    });
+   
 }
-
+function limpiar_form(){
+    $('#txtProductFinder').val('');
+    $('#txtCategory').val(0);
+    $('#txtSubCategory').val(0);
+    getProducts('', 0);
+    
+}
 /** ++++++ Selecciona los productos del listado */
 function selProduct(res) {
 
     res = res.toUpperCase();
     let rowCurr = $('#listProductsTable table tbody tr');
     let hearCnt = $('#listProductsTable table tbody tr th');
-
-    if (res.length > 2) {
+    let sub_id = $('#txtSubCategory').val();
+    if (res.length > 0) {
         let dstr = 0;
         let dend = 0;
-        if (res.length == 5) {
+        if (res.length == 1) {
             // $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');  //jjr
             if (glbSec != 4) {
                 // console.log('Normal');
-                getProducts(res.toUpperCase(), dstr, dend);
+                getProducts(res.toUpperCase(), sub_id);
             } else {
                 // console.log('Subarrendo');
-                // getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
-                getProducts(res.toUpperCase(), dstr, dend);
+                getProductsSub(res.toUpperCase(), dstr, dend); //considerar que en cotizacion no debe haber subarrendos
+                //getProducts(res.toUpperCase(), sub_id);
             }
         } else {
             rowCurr.css({ display: 'none' });
@@ -940,7 +1070,7 @@ function selProduct(res) {
         }
         // rowCurr.show();
     } else {
-        $(`#listProductsTable table tbody`).html('');
+        //$(`#listProductsTable table tbody`).html('');
         rowCurr.addClass('oculto');
     }
 }
@@ -1549,6 +1679,24 @@ function putProductsRelatedPk(dt){
 
 }
 
+function cleanInputs(){
+    let location = $('#txtTypeLocationEdt').val();
+    if(location==2 || location==4){
+        $('#addLocation').parents('tr').addClass('hide');
+    }
+    $(`#txtTypeProjectEdt`).val(0);
+    $('#txtTimeProject').val('');
+    $(`#txtCustomerEdt option[value = "0"]`).attr(
+            'selected',
+            'selected');
+    $(`#txtCustomerRelEdt option[value = "0"]`).attr(
+            'selected',
+            'selected');
+    $('#txtHowRequired').val('');
+    $('#txtTypeLocationEdt').val(0);
+    $('#txtProjectIdEdt').val('');
+
+}
 function ActiveChangePKT(){
 
     $('.changePk')
@@ -1760,6 +1908,8 @@ function fillContent() {
             // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
         }
     );
+
+   
     // Llena el selector de tipo de proyecto
     $.each(tpprd, function (v, u) {
         let H = `<option value="${u.pjttp_id}"> ${u.pjttp_name}</option>`;
@@ -1794,10 +1944,7 @@ function fillContent() {
             let H = `<option value="${u.edos_id}"> ${u.edos_name}</option>`;
             $('#txtEdosRepublic').append(H);
     }); */
-	$.each(edosRep, function (v, u) {
-        let H = `<option value="${u.edos_id}">${u.edos_name}</option>`;
-        $('#txtEdosRepublic_2').append(H);
-    });
+	
     $('.textbox')
         .unbind('focus')
         .on('focus', function () {
@@ -1849,32 +1996,32 @@ function fillData(inx) {
 
     // valida si el proyecto es unico y tiene documento adjunto
     let foreing = pj[inx].edos_id;
-    if (pj[inx].loc_id == 2 ){
+    if (pj[inx].loc_id == 2 || pj[inx].loc_id == 4){
         /* $('#txtEdosRepublic').parents('tr').removeAttr('class'); */
         $('#txtTripGo').parents('tr').removeAttr('class');
         $('#txtTripBack').parents('tr').removeAttr('class');
-        $('#seeLocation').parents('tr').removeAttr('class');
+        $('#addLocation').parents('tr').removeAttr('class');
         add = 2;
-        $('#btn_save_locations').addClass('hide');
+        //$('#btn_save_locations').addClass('hide');
         
     }
-            // $('#txtEdosRepublic').parents('tr').removeAttr('class');
-            $('#txtTripGo').parents('tr').removeAttr('class');
-            $('#txtTripBack').parents('tr').removeAttr('class');
+         // $('#txtEdosRepublic').parents('tr').removeAttr('class');
+        $('#txtTripGo').parents('tr').removeAttr('class');
+        $('#txtTripBack').parents('tr').removeAttr('class');
 
         $('#txtTypeLocationEdt')
         .unbind('change')
         .on('change', function () {
         let selectiontl = $(this).val();
-        if (selectiontl == 2) {
-            console.log('Foraneo');
+        if (selectiontl == 2 || selectiontl == 4) {
+            //console.log('Foraneo');
             /* $('#txtEdosRepublic').parents('tr').removeAttr('class');*/
             $('#txtTripGo').parents('tr').removeAttr('class');
             $('#txtTripBack').parents('tr').removeAttr('class'); 
 			$('#txtLocationEdt').parents('tr').addClass('hide');
-            $('#seeLocation').parents('tr').removeAttr('class');	
+            $('#addLocation').parents('tr').removeAttr('class');	
             add = 2;							
-            $('#btn_save_locations').addClass('hide');						
+            //$('#btn_save_locations').addClass('hide');						
             // $('#txtLocationEdt').val('');
         } else {
             console.log('Otro');
@@ -1882,7 +2029,7 @@ function fillData(inx) {
             /* $('#txtEdosRepublic').parents('tr').addClass('hide'); */
             $('#txtTripGo').parents('tr').addClass('hide');
             $('#txtTripBack').parents('tr').addClass('hide');
-            $('#seeLocation').parents('tr').addClass('hide');	
+            $('#addLocation').parents('tr').addClass('hide');	
             // $(`#txtTypeLocationEdt option[value = "1"]`).attr(
             //     'selected',
             //     'selected'
@@ -1909,16 +2056,18 @@ function fillData(inx) {
             }
         });
         $('#resProjectParent').html(parent);
+       
     } else {
         $('#txtProjectParent').parents('tr').addClass('hide');
         $(`#txtProjectParent option[value = "0"]`).attr('selected', 'selected');
+        
     }
-    $('#seeLocation')
+    $('#addLocation')
         .html('Ver Locación')
         .removeAttr('class')
         .addClass('bn btn-ok insert');
 
-    $('#seeLocation')
+    $('#addLocation')
         .unbind('click')
         .on('click', function(){
             let prj_id = $('#txtProjectIdEdt').val();
@@ -1926,6 +2075,8 @@ function fillData(inx) {
             getLocationsEdos(prj_id);
             
         });
+
+    
     $('#saveProject')
         .html('Guardar cambios')
         .removeAttr('class')
@@ -2049,22 +2200,27 @@ function newProject() {
         .unbind('change')
         .on('change', function () {
             let selection = $(this).val();
+            let prjId = $('#txtProjectParent').val();
+            //console.log(selection);
             if (selection == 1) {
                 $('#txtProjectParent').parents('tr').removeAttr('class');
+                getProjectParent(prjId);
             } else {
                 $('#txtProjectParent').parents('tr').addClass('hide');
                 $(`#txtProjectParent option[value = "0"]`).attr(
                     'selected',
                     'selected'
                 );
+                cleanInputs();
             }
         });
+    
         
         $('#txtTypeLocationEdt')
         .unbind('change')
         .on('change', function () {
             let selection = $(this).val();
-            if (selection == 2) {
+            if (selection == 2 || selection == 4) {
                 // console.log('Foraneo');
                 /* $('#txtEdosRepublic').parents('tr').removeAttr('class');
                 $('#txtLocationEdt').val('');*/
@@ -2099,16 +2255,12 @@ function newProject() {
 }
 
 function settingTable(){
-    
         $('#addLocationModal').removeClass('overlay_hide');
 
         $('#addLocationEdos')
         .unbind('click')
         .on('click', function () {
-            
             putLocations();
-            
-            
         });
 
         $('#listLocationsTable').DataTable({
@@ -2146,10 +2298,13 @@ function settingTable(){
             $('#listLocationsTable tbody tr').each(function (v, u) {
                 let loc=$($(u).find('td')[1]).text();
                 let edo =$(this).attr('id');
-                //console.log(loc, edo);
+                let  aux = $(this).attr('data-content');
                 let truk = `${loc}|${edo}`;
-                console.log(truk);
-                build_data_structure(truk);
+                //console.log(truk);
+                console.log(aux);
+                if(aux == 1){
+                    build_data_structure(truk);
+                }
             });
         });
        /*  $('#txtEdosRepublic_2')
@@ -2174,7 +2329,7 @@ function putLocations(){ //** AGREGO ED */
             }]`;
     
     console.log(par);
-    if (add ==2) {
+    /* if (add ==2) {
         let prjId = $('#txtProjectIdEdt').val();
         let par = `
         [{
@@ -2182,12 +2337,12 @@ function putLocations(){ //** AGREGO ED */
             "edo" :  "${edo}",
             "prjId" : "${prjId}"
         }]`;
-        save_exchange(par);
-    }else{
+        //save_exchange(par);
+    }else{ */
         
         fill_table(par);
         clean_selectors();
-    }
+    //}
     
 
 }
@@ -2208,7 +2363,8 @@ function fill_table(par) { //** AGREGO ED */
 
     $('#md' + par[0].support)
         .parents('tr')
-        .attr('id', par[0].support);
+        .attr('id', par[0].support)
+        .attr('data-content', 1);
 
     $('.edit')
     .unbind('click')
@@ -2219,12 +2375,24 @@ function fill_table(par) { //** AGREGO ED */
 }
 function build_data_structure(pr) {
     let el = pr.split('|');
-    let par = `
-    [{
-        "loc" :  "${el[0]}",
-        "edo" :  "${el[1]}",
-        "prjId" : "0"
-    }]`;
+    let par ;
+    if (add ==2) {
+        let prjId = $('#txtProjectIdEdt').val();
+        par = `
+        [{
+            "loc" :  "${el[0]}",
+            "edo" :  "${el[1]}",
+            "prjId" : "${prjId}"
+        }]`;
+        
+    }else{
+        par = `
+        [{
+            "loc" :  "${el[0]}",
+            "edo" :  "${el[1]}",
+            "prjId" : "0"
+        }]`;
+    }
     console.log(' Antes de Insertar', par);
     save_exchange(par);
 }

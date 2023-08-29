@@ -287,7 +287,7 @@
     </div>
 
     <!-- Listado de productos -->
-    <div class="invoice__section-products invoice-border modalTable">
+    <div class="invoice__section-products invoice-border modalTable" style="width:80%; height: 80%; position: absolute;">
         <div class="modal__header  invoice-border">
             <div class="modal__header-concept">&nbsp;Listados de productos</div>
             <!-- <span class="invoice_button toCharge">Cargando....</span> -->
@@ -295,8 +295,20 @@
             <i class="far fa-window-close close_listProducts"></i>
         </div>
         <div class="modal__header  invoice-border">
-            <input type="text" name="txtProductFinder" id="txtProductFinder" autocomplete="off" placeholder="buscar producto" class="finderInput wt5">
             
+            <input type="text" name="txtProductFinder" id="txtProductFinder" autocomplete="off" placeholder="buscar producto" class="finderInput wt4">
+            
+            <div class="col-md-3 col-lg-3 col-xl-3">
+                <select id="txtCategory" class="form-select form-select-sm"><option value="0" selected>Catálogo</option></select>
+                <!-- <label for="txtCategory">Catálogo</label> -->
+			</div>
+            <div class="col-md-3 col-lg-3 col-xl-3">
+                <select id="txtSubCategory" class="form-select form-select-sm"><option value='0' selected>Selecciona la subcategoria</option></select>
+                <!-- <label for="txtSubCategory">Subcategorias</label> -->
+			</div>
+            <div class="col-md-2 col-lg-2 col-xl-2">
+                <button type="button"  class="btn btn-danger btn-sm btn-block" style="font-size: 0.8rem !important;" id="LimpiarFormulario">Limpiar</button>
+			</div>
         </div>
 
         <div class="productos__box-table" id="listProductsTable">
@@ -420,6 +432,28 @@
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes agregar las fechas del projecto</span>
                         </td>
                     </tr>
+                    <tr>
+                        <td>Tipo de dependencia</td>
+                        <td>
+                            <select id="txtProjectDepend" class="textbox wt5 project__selection">
+                                <option value="0" selected>PROYECTO UNICO</option>
+                                <option value="1">PROYECTO ADJUNTO</option>
+                                <option value="2">PROYECTO PADRE</option>
+                            </select>
+                            <p class = "textbox__result" id="resProjectDepend"></p>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
+                    <tr class="hide">
+                        <td>Proyecto padre</td>
+                        <td>
+                            <select id="txtProjectParent" class="textbox wtf project__selection" >
+                                <option value="0"></option>
+                            </select>
+                            <p class="textbox__result" id="resProjectParent"></p>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
 
                     <tr>
                         <td>Tipo de proyecto</td>
@@ -475,28 +509,7 @@
                         </td>
                         
                     </tr>
-                    <tr class="hide">
-                        <td></td>
-                        <td>
-                            <button class="bn btn-add" id="seeLocation"></button>
-                        </td>
-                    </tr>	   
-
-                    <tr class="hide">
-                        <td>Días de viaje de ida</td>
-                        <td>
-                            <input type="text" id="txtTripGo" name="txtTripGo" class="textbox wt2" autocomplete="off"><br>
-                            <span class="textAlert"></span>
-                        </td>
-                    </tr>
-                    
-                    <tr class="hide">
-                        <td>Días viaje de regreso</td>
-                        <td>
-                            <input type="text" id="txtTripBack" name="txtTripBack" class="textbox wt2" autocomplete="off"><br>
-                            <span class="textAlert"></span>
-                        </td>
-                    </tr>
+                      
 
                     <tr>
                         <td>Selecciona cliente</td>
@@ -526,7 +539,21 @@
                             <span class="textAlert"></span>
                         </td>
                     </tr>
+                    <tr class="hide">
+                        <td>Días de viaje de ida</td>
+                        <td>
+                            <input type="text" id="txtTripGo" name="txtTripGo" class="textbox wt2" autocomplete="off"><br>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
                     
+                    <tr class="hide">
+                        <td>Días viaje de regreso</td>
+                        <td>
+                            <input type="text" id="txtTripBack" name="txtTripBack" class="textbox wt2" autocomplete="off"><br>
+                            <span class="textAlert"></span>
+                        </td>
+                    </tr>
                     <tr>
                         <td>Días de Carga</td>
                         <td>
@@ -564,30 +591,6 @@
                         <td>
                             <select id="txtTypeCalled" name="txtTypeCalled" class="textbox" ></select>
                             <span class="textAlert"><i class="fas fa-exclamation-triangle"></i> Debes seleccionar el tipo de llamado</span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Tipo de dependencia</td>
-                        <td>
-                            <select id="txtProjectDepend" class="textbox wt5 project__selection">
-                                <option value="0" selected>PROYECTO UNICO</option>
-                                <option value="1">PROYECTO ADJUNTO</option>
-                                <option value="2">PROYECTO PADRE</option>
-                            </select>
-                            <p class = "textbox__result" id="resProjectDepend"></p>
-                            <span class="textAlert"></span>
-                        </td>
-                    </tr>
-
-                    <tr class="hide">
-                        <td>Proyecto padre</td>
-                        <td>
-                            <select id="txtProjectParent" class="textbox wtf project__selection" >
-                                <option value="0"></option>
-                            </select>
-                            <p class="textbox__result" id="resProjectParent"></p>
-                            <span class="textAlert"></span>
                         </td>
                     </tr>
 
@@ -708,36 +711,6 @@
     </div>
 </div>
 
-
-<div class="overlay_background overlay_hide" id="seeLocationModal" style="width: 60%; left:25%; background-color: rgba(255, 255, 255, 0); z-index: 500;">
-    <div class="overlay_modal" style="z-index: 50;">
-        <div class="overlay_closer"><span class="title"></span><span class="btn_close">Cerrar</span></div>
-        <div class="" style="position: absolute; top: 10px; height: 60px; padding: 10px;">
-            <button type="button" class="btn btn-sm btn-primary" id="btn_save_locations">Guardar</button>
-        </div>
-        <div class="container-fluid" >
-            <div class="contenido">
-                <div class="row">
-                    <div class="" style="width: 100%; height: 100vh; padding: 50px 10px 10px 10px; overflow: auto; padding: 4px; ">
-                        <div class="row mt-2" >
-                            <table class="display compact nowrap" style = "width: 100%" id="listLocationsTable2">
-                                <thead>
-                                    <tr>
-                                        <th style = "width: 30px"></th>
-                                        <th style = "width: 100px">Locación</th>
-                                        <th style = "width:  100px">Estado de la Republica</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Start Ventana modal de SERIES seleccionadas del producto MODAL 1 -->
 <div class="overlay_background overlay_hide" id="SerieData" style="width: 60%; left:25%;">
         <div class="overlay_modal">
@@ -760,5 +733,6 @@
 <script src="<?=  PATH_ASSETS . 'lib/functions.js?v=1.0.0.0' ?>"></script>
 <script src="<?=  PATH_ASSETS . 'lib/dataTable/datatables.min.js?v=1.0.0.0' ?>"></script> 
 <script src="<?=  PATH_VIEWS . 'Budget/Budget.js?v=1.0.0.0' ?>"></script>
+<script src="<?=  PATH_ASSETS . 'lib/jquery-ui.js?v=1.0.0.0' ?>"></script>
 
 <?php require ROOT . FOLDER_PATH . "/app/assets/footer.php"; ?>

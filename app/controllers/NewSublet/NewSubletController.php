@@ -114,6 +114,7 @@ public function listSubCategories($request_params)
         }
         echo $res;
     } 
+    
     public function listProducts2($request_params)
 	{
 		$params =  $this->session->get('user');
@@ -193,6 +194,23 @@ public function listSubCategories($request_params)
 		$res = $result;
         echo $res;
 	} 
+    // Obtiene el folio del movimiento 
+	public function NextSkuProduct($request_params)
+	{
+		$params =  $this->session->get('user');
+		$result = $this->model->NextSkuProduct($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"cin_id":"0"}]';	
+        }
+        echo $res;
+	} 
 
 // Registra los movimientos entre almacenes
     public function SaveSubletting($request_params)
@@ -202,5 +220,14 @@ public function listSubCategories($request_params)
         $res = $result;
         echo $res;
     } 
+    // GUARDAR EL PRODUCTO ***ED
+    public function SaveProduct($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->SaveProduct($request_params, $params);
+        $res = $result;
+        echo $res;
+    } 
+    
 
 }
