@@ -112,7 +112,7 @@ function setting_table() {
         title.replace(/ /g, '_') + '-' + moment(Date()).format('YYYYMMDD');
 
     table = $('#tblProductForSubletting').DataTable({
-        order: [[1, 'desc']],
+        order: [[1, 'asc']],
         dom: 'Blfrtip',
         select: {
             style: 'multi',
@@ -643,7 +643,7 @@ function getReport(idSelected,projecto,id_prj){
     let n = user[2];
     let h = localStorage.getItem('host');
     window.open(
-        `${url}app/views/FathersReports/FathersReportsReport.php?p=${idSelected}&prj=${projecto}&i=${id_prj}&u=${u}&n=${n}&h=${h}`,
+        `${url}app/views/FathersReports/FathersReportsReport.php?p=${idSelected}&u=${u}&n=${n}&h=${h}`,
         '_blank'
     );
     cleanFechas();

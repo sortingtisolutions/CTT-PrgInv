@@ -40,7 +40,7 @@ $qry = "SELECT *, ucase(date_format(vr.ver_date, '%d-%b-%Y %H:%i')) as ver_date_
         LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
         LEFT  JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
         LEFT  JOIN ctt_customers AS cu ON cu.cus_id = co.cus_id
-        WHERE bg.ver_id = $verId  ORDER BY sbc_order_print, bdg_section;";
+        WHERE bg.ver_id = $verId  ORDER BY sbc_order_print, bdg_section, bdg_id;"; // ***Ed
 
 $res = $conn->query($qry);
 //$conn->close();
@@ -55,7 +55,7 @@ LEFT JOIN ctt_category_subcategories AS cs ON cs.sbc_id = sb.sbc_id
 LEFT JOIN ctt_category_report AS cr ON cr.crp_id = cs.crp_id 
 INNER JOIN ctt_products AS pd ON pd.sbc_id = sb.sbc_id 
 INNER JOIN ctt_budget AS bg ON bg.prd_id = pd.prd_id 
-WHERE bg.ver_id = $verId GROUP BY cr.crp_id ORDER BY sbc_order_print, bdg_section";
+WHERE bg.ver_id = $verId GROUP BY cr.crp_id ORDER BY sbc_order_print, bdg_section, bdg_id";
 $res2 = $conn->query($query);
 $categories=array();
 $rr = 0;
@@ -241,8 +241,8 @@ $html = '
                                 <th class="tit-figure pric">Precio</th>
                                 <th class="tit-figure qnty">Cant.</th>
                                 <th class="tit-figure days">Días</th>
+                                <th class="tit-figure amou">Precio <br> por día</th>
                                 <th class="tit-figure disc">Dcto %</th>
-                                <th class="tit-figure amou">Precio por día</th>
                                 <th class="tit-figure amou">Total</th>
                             </tr>
                         </thead>
@@ -276,7 +276,7 @@ $html = '
                                 $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
 
                                 $discountBaseTotal  += $discountAmount;     //  ------------------------------- Descuento total base
-                                $amountBaseTotal    += $amountBase;         //  ------------------------------- Importe total base
+                                $amountBaseTotal    += $subtotalBase;         //  ------------------------------- Importe total base
                                 $discountTripTotal  += $discAmountTrip;     //  ------------------------------- Importe de descuento viaje
                                 $amountTripTotal    += $amountTrip;         //  ------------------------------- Importe por viaje
                                 $amountGralTotal    += $amountGral;         //  ------------------------------- Importe total
@@ -297,8 +297,8 @@ $html = '
                                 <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
                                 <td class="dat-figure qnty">' . $quantity                                   . '</td>
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>
-                                <td class="dat-figure disc">' . number_format($valdiscount , 2,'.',',')  . '</td>   <-- discountAmount jjr -->
-                                <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($subtotalBase  , 2,'.',',')      . '</td>
+                                <td class="dat-figure disc">' .$valdiscount . '%</td>
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
@@ -310,8 +310,8 @@ $html = '
         $html .= '
                             <tr>
                             <td class="dat-figure totl" style="font-weight: bold;" colspan="4">Subtotal Base</td>
-                            <td class="dat-figure amou" style="font-weight: bold;">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                             <td class="dat-figure amou" style="font-weight: bold;">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
+                            <td class="dat-figure amou" style="font-weight: bold;">' . $valdiscount . '%</td>
                             
                             <td class="dat-figure amou" style="font-weight: bold;">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                         </tr>
@@ -381,8 +381,8 @@ $html = '
                                     <th class="tit-figure pric">Precio</th>
                                     <th class="tit-figure qnty">Cant.</th>
                                     <th class="tit-figure days">Días</th>
+                                    <th class="tit-figure amou">Precio <br> por día</th>
                                     <th class="tit-figure disc">Dcto %</th>
-                                    <th class="tit-figure amou">Precio por día</th>
                                     <th class="tit-figure amou">Total</th>
                                 </tr>
                             </thead>
@@ -407,7 +407,8 @@ $html = '
                                     $subtotalBase   = $price * $quantity * $daysBase;   //  ----------------------- Importe base = (precio x cantidad) dias de costo
                                     $discountAmount = $subtotalBase * $discountBase;    //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
                                     $amountBase     = $subtotalBase - $discountAmount;  //  ----------------------- Costo base = importe base - importe de desucuento base
-    
+                                    $valdiscount    = $discountBase * 100;     
+                                    
                                     $daysTrip       = $items[$i]['bdg_days_trip'];  //  --------------------------- Dias de viaje
                                     $discountTrip   = $items[$i]['bdg_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
                                     $amountTrip     = $price * $quantity * $daysTrip;   //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
@@ -415,7 +416,7 @@ $html = '
                                     $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
     
                                     $discountBaseTotal  += $discountAmount;     //  ------------------------------- Descuento total base
-                                    $amountBaseTotal    += $amountBase;         //  ------------------------------- Importe total base
+                                    $amountBaseTotal    += $subtotalBase;         //  ------------------------------- Importe total base
                                     $discountTripTotal  += $discAmountTrip;     //  ------------------------------- Importe de descuento viaje
                                     $amountTripTotal    += $amountTrip;         //  ------------------------------- Importe por viaje
                                     $amountGralTotal    += $amountGral;         //  ------------------------------- Importe total
@@ -438,10 +439,8 @@ $html = '
                                     <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
                                     <td class="dat-figure qnty">' . $quantity                                   . '</td>
                                     <td class="dat-figure days">' . $daysBase                                   . '</td>
-                                    <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
-                                    <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
-                                     
-                                     
+                                    <td class="dat-figure amou">' . number_format($subtotalBase , 2,'.',',')      . '</td>
+                                    <td class="dat-figure disc">' .$valdiscount . '%</td>
                                      
                                     <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                                 </tr>
@@ -454,8 +453,8 @@ $html = '
         $html .= '
                             <tr>
                                 <td class="dat-figure totl" style="font-weight: bold;" colspan="4">Subtotal Extra</td>
-                                <td class="dat-figure amou" style="font-weight: bold;">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="dat-figure amou" style="font-weight: bold;">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
+                                <td class="dat-figure amou" style="font-weight: bold;">' . $valdiscount . '%</td>
                                 
                                 <td class="dat-figure amou" style="font-weight: bold;">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                             </tr>
@@ -524,8 +523,8 @@ $html = '
                                 <th class="tit-figure pric">Precio</th>
                                 <th class="tit-figure qnty">Cant.</th>
                                 <th class="tit-figure days">Días</th>
+                                <th class="tit-figure amou">Precio <br> por día</th>
                                 <th class="tit-figure disc">Dcto %</th>
-                                <th class="tit-figure amou">Precio por día</th>
                                 <th class="tit-figure amou">Total</th>
                             </tr>
                         </thead>
@@ -550,6 +549,7 @@ $html = '
                                 $subtotalBase   = $price * $quantity * $daysBase;   //  ----------------------- Importe base = (precio x cantidad) dias de costo
                                 $discountAmount = $subtotalBase * $discountBase;    //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
                                 $amountBase     = $subtotalBase - $discountAmount;  //  ----------------------- Costo base = importe base - importe de desucuento base
+                                $valdiscount    = $discountBase * 100;   
 
                                 $daysTrip       = $items[$i]['bdg_days_trip'];  //  --------------------------- Dias de viaje
                                 $discountTrip   = $items[$i]['bdg_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
@@ -558,7 +558,7 @@ $html = '
                                 $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
 
                                 $discountBaseTotal  += $discountAmount;     //  ------------------------------- Descuento total base
-                                $amountBaseTotal    += $amountBase;         //  ------------------------------- Importe total base
+                                $amountBaseTotal    += $subtotalBase;         //  ------------------------------- Importe total base
                                 $discountTripTotal  += $discAmountTrip;     //  ------------------------------- Importe de descuento viaje
                                 $amountTripTotal    += $amountTrip;         //  ------------------------------- Importe por viaje
                                 $amountGralTotal    += $amountGral;         //  ------------------------------- Importe total
@@ -580,8 +580,9 @@ $html = '
                                 <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
                                 <td class="dat-figure qnty">' . $quantity                                   . '</td>
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>
-                                <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
-                                <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($subtotalBase , 2,'.',',')      . '</td>
+                                <td class="dat-figure disc">' .$valdiscount . '%</td>
+                                
                                  
                                  
                                  
@@ -595,8 +596,8 @@ $html = '
         $html .= '
                             <tr>
                                 <td class="tot-figure totl" colspan="4">Subtotal Dias</td>
-                                <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . $valdiscount. '%</td>
                                 
                                 <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                             </tr>
@@ -669,8 +670,8 @@ $html .= '
                                 <th class="tit-figure pric">Precio</th>
                                 <th class="tit-figure qnty">Cant.</th>
                                 <th class="tit-figure days">Días</th>
+                                <th class="tit-figure amou">Precio <br> por día</th>
                                 <th class="tit-figure disc">Dcto %</th>
-                                <th class="tit-figure amou">Precio por día</th>
                                 <th class="tit-figure amou">Total</th>
                             </tr>
                         </thead>
@@ -695,7 +696,8 @@ $html .= '
                                 $subtotalBase   = $price * $quantity * $daysBase;   //  ----------------------- Importe base = (precio x cantidad) dias de costo
                                 $discountAmount = $subtotalBase * $discountBase;    //  ----------------------- Importe de descuento base = importe base x porcentaje de descuento base
                                 $amountBase     = $subtotalBase - $discountAmount;  //  ----------------------- Costo base = importe base - importe de desucuento base
-
+                                $valdiscount    = $discountBase * 100;   
+                                
                                 $daysTrip       = $items[$i]['bdg_days_trip'];  //  --------------------------- Dias de viaje
                                 $discountTrip   = $items[$i]['bdg_discount_trip'];  //  ----------------------- Porcentaje de descuento viaje
                                 $amountTrip     = $price * $quantity * $daysTrip;   //  ----------------------- Importe de viaje = (precio x cantidad) dias de viaje
@@ -703,7 +705,7 @@ $html .= '
                                 $amountGral     = $amountBase + $amountTrip - $discAmountTrip;  //  ----------- Costo viaje = importe de viaje - importe de descuento viaje
 
                                 $discountBaseTotal  += $discountAmount;     //  ------------------------------- Descuento total base
-                                $amountBaseTotal    += $amountBase;         //  ------------------------------- Importe total base
+                                $amountBaseTotal    += $subtotalBase;         //  ------------------------------- Importe total base
                                 $discountTripTotal  += $discAmountTrip;     //  ------------------------------- Importe de descuento viaje
                                 $amountTripTotal    += $amountTrip;         //  ------------------------------- Importe por viaje
                                 $amountGralTotal    += $amountGral;         //  ------------------------------- Importe total
@@ -725,8 +727,8 @@ $html .= '
                                 <td class="dat-figure pric">' . number_format($price , 2,'.',',')           . '</td>
                                 <td class="dat-figure qnty">' . $quantity                                   . '</td>
                                 <td class="dat-figure days">' . $daysBase                                   . '</td>
-                                <td class="dat-figure disc">' . number_format($discountAmount , 2,'.',',')  . '</td>
-                                <td class="dat-figure amou">' . number_format($amountBase , 2,'.',',')      . '</td>
+                                <td class="dat-figure amou">' . number_format($subtotalBase , 2,'.',',')      . '</td>
+                                <td class="dat-figure disc">' .$valdiscount . '%</td>
                                 <td class="dat-figure amou">' . number_format($amountGral , 2,'.',',')      . '</td>
                             </tr>
                             ';
@@ -738,8 +740,8 @@ $html .= '
         $html .= '
                             <tr>
                                 <td class="tot-figure totl" colspan="4">Subtotal Subarrendo</td>
-                                <td class="tot-figure amou">' . number_format($discountBaseTotal, 2,'.',',') . '</td>
                                 <td class="tot-figure amou">' . number_format($amountBaseTotal, 2,'.',',') . '</td>
+                                <td class="tot-figure amou">' . $valdiscount . '%</td>
                                 
                                 <td class="tot-figure amou">' . number_format($amountGralTotal, 2,'.',',') . '</td>
                             </tr>
