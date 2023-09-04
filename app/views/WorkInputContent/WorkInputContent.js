@@ -29,7 +29,7 @@ function inicial() {
     $('#recordInPut').on('click', function () {
         alert('Actualizar Registros');
         createTblRespaldo(prjid,glbprjnum)
-        // confirm_to_GetOut(prjid);
+        confirm_to_GetOut(prjid);
      });
 
      $('#printInPut').on('click', function () {

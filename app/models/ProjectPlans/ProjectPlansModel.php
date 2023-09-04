@@ -644,7 +644,7 @@ class ProjectPlansModel extends Model
                     pjtvr_prod_level, pjtvr_section, pjtvr_status, pjtvr_order, ver_id, prd_id, pjt_id 
                 FROM ctt_projects_mice WHERE pjtvr_action != 'D' AND pjt_id = $pjtId;";
         return $this->db->query($qry2);
-
+            
     }
     
     public function settingProjectContent($pjtId, $verId)
@@ -937,7 +937,36 @@ class ProjectPlansModel extends Model
                     ORDER BY prd_id;";
 
             return $this->db->query($qry);
-        }    
+        }  
+        // Listado de estados de la republica ***Ed
+        public function getEdosRepublic($params)
+    {
+        $prd = $this->db->real_escape_string($params['prm']);
+        
+        $qry = "SELECT edos_id,edos_name,edos_abrev
+                FROM ctt_estados_mex ORDER BY edos_id;";
+        return $this->db->query($qry);
+    }    
+    // Listado de locaciones de estados
+    public function ListLocationsEdos($params){
+        $pjtId = $this->db->real_escape_string($params['prj_id']);
+        $qry = "SELECT * FROM ctt_locacion_estado AS ldo 
+        INNER JOIN ctt_estados_mex AS edo ON ldo.edos_id=edo.edos_id WHERE ldo.pjt_id='$pjtId';";
+        return $this->db->query($qry);
+    } 
+    // Guardar locaciones 
+    public function SaveLocations($params){
+        $loc        = $this->db->real_escape_string($params['loc']);
+        $edo        = $this->db->real_escape_string($params['edo']);
+        $prjId        = $this->db->real_escape_string($params['prjId']);
+
+        $qry1 = "INSERT INTO ctt_locacion_estado(
+                    lce_location,  edos_id, pjt_id)
+                VALUES('$loc','$edo','$prjId');";
+        $this->db->query($qry1);
+
+        return $loc;
+    }  
 
     // Listado los comentarios del proyecto
     public function updateNewProdChg($params)
@@ -1015,5 +1044,37 @@ class ProjectPlansModel extends Model
         ";
         return $this->db->query($qry);
     } 
+    // eliminar locacion
+    function DeleteLocation($params){
+        $loc_id = $this->db->real_escape_string($params['loc_id']);
+        $qry1 = "DELETE FROM ctt_locacion_estado 
+        WHERE lce_id = '$loc_id';
+        ";
+        $this->db->query($qry1);
+        return $loc_id;
+    }
+    public function listProducts3($params)
+    {
+        $word = $this->db->real_escape_string($params['word']);
+        $sbc_id = $this->db->real_escape_string($params['dstr']);
+        $qry = "SELECT * from ctt_vw_list_products2
+            WHERE (upper(prd_name) LIKE '%$word%' OR upper(prd_sku) LIKE '%$word%') AND sbc_id = '$sbc_id';";
+        return $this->db->query($qry);
+    } 
+    // Listado de categorias
+    public function listCategories()
+    {
+        $qry = "SELECT * FROM ctt_categories 
+                WHERE cat_status  = 1 ";
+        return $this->db->query($qry);
+    }
+    // Listado de subcategoria
+    public function listSubCategories($param)
+    {
+        $catId = $this->db->real_escape_string($param['catId']);
+        $qry = "SELECT * FROM ctt_subcategories 
+                WHERE sbc_status = 1 AND cat_id=$catId;";
+        return $this->db->query($qry);
+    }
 }
 

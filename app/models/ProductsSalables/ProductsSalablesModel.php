@@ -50,7 +50,7 @@ class ProductsSalablesModel extends Model
                     FROM ctt_projects AS pj
                     LEFT JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
                     LEFT JOIN ctt_customers AS cu On cu.cus_id = co.cus_id
-                    WHERE pjt_status in (1,2,4,7,8) ORDER BY pj.pjt_number;";
+                    WHERE pjt_status in (1,2,4,7,8,9) ORDER BY pj.pjt_number;";
             return $this->db->query($qry);
         }    
 

@@ -13,7 +13,7 @@ $('document').ready(function () {
 
 //INICIO DE PROCESOS
 function inicial() {
-    if (altr == 1) {
+    // if (altr == 1) {
     stickyTable();
     eventsAction();
     getProjects('0');
@@ -27,14 +27,13 @@ function inicial() {
     discountInsuredEvent();
     getLocationType();
     getCategories();
-    confirm_alert();
+    // confirm_alert();
 
-    
-    }else {
-        setTimeout(() => {
-            inicial();
-        }, 100);
-    }
+    // }else {
+    //     setTimeout(() => {
+    //         inicial();
+    //     }, 100);
+    // }
    
 }
 
@@ -1039,10 +1038,10 @@ function selProduct(res) {
     let rowCurr = $('#listProductsTable table tbody tr');
     let hearCnt = $('#listProductsTable table tbody tr th');
     let sub_id = $('#txtSubCategory').val();
-    if (res.length > 0) {
+    if (res.length > 1) {
         let dstr = 0;
         let dend = 0;
-        if (res.length == 1) {
+        if (res.length == 2) {
             // $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');  //jjr
             if (glbSec != 4) {
@@ -3103,4 +3102,28 @@ function subaccion() {
     console.log('');
 }
 
+// function confirm_alert() {
+//     let H = `
+//     <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModal" aria-hidden="true">
+//         <div class="modal-dialog modal-dialog-centered modal-sm">
+//             <div class="modal-content">
+//                 <div class="modal-header "></div>
+//                     <div class="modal-body" style="padding: 0px !important;">
+//                         <div class="row">
+//                             <input type="hidden" class="form-control" id="Id" aria-describedby="basic-addon3">
+//                             <div class="col-12 text-center">
+//                                 <span class="modal-title text-center" style="font-size: 1.2rem;" id="confirmModalLevel"></span>
+//                             </div>
+//                         </div>
+//                     </div>
+//                     <div class="modal-footer">
+//                         <button type="button" class="btn btn-secondary" id="N" data-bs-dismiss="modal"></button>
+//                         <button type="button" class="btn btn-danger" id="confirmButton"></button>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     `;
 
+//     $('body').append(H);
+// }

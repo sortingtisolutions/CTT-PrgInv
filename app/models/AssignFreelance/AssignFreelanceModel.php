@@ -39,7 +39,7 @@ class AssignFreelanceModel extends Model
     {
         $catId = $this->db->real_escape_string($param['catId']);
         $qry = "SELECT free.free_id, free.free_cve, free.free_name, free.free_area_id, 
-                free.free_rfc, free.free_adress, free.free_phone, free.free_email, 
+                free.free_rfc, free.free_address, free.free_phone, free.free_email, 
                 free.free_unit, free.free_plates, free.free_license, free.free_fed_perm, 
                 free.free_clase, free.`free_año` 
                 FROM ctt_freelances AS free 
@@ -54,7 +54,7 @@ class AssignFreelanceModel extends Model
     {
         $catId = $this->db->real_escape_string($param['catId']);
         $qry = "SELECT free.free_id, free.free_cve, free.free_name, free.free_area_id, 
-                free.free_rfc, free.free_adress, free.free_phone, free.free_email, free.free_unit, 
+                free.free_rfc, free.free_address, free.free_phone, free.free_email, free.free_unit, 
                 free.free_plates, free.free_license, free.free_fed_perm, free.free_clase, free.`free_año` 
                 FROM ctt_freelances AS free 
                 LEFT JOIN ctt_assign_proyect AS ass ON ass.free_id=free.free_id 
@@ -131,7 +131,7 @@ public function NextExchange()
     public function listAssign()
     {
         $qry = "SELECT free.free_id, free.free_cve, free.free_name, free.free_area_id, 
-                free.free_rfc, free.free_adress, free.free_phone, free.free_email, 
+                free.free_rfc, free.free_address, free.free_phone, free.free_email, 
                 free.free_unit, free.free_plates, free.free_license, free.free_fed_perm, 
                 free.free_clase, free.`free_año`, prd.pjt_id, prd.pjt_name, are.are_id, are.are_name,
                 ass.ass_id,ass.ass_date_start, ass.ass_date_end, ass.ass_coments
@@ -166,6 +166,7 @@ public function NextExchange()
         return $ass_id;
        
     }
+
     // ACTUALIZA ESTATUS DE UN FREELANCE
     public function DeleteAssignFreelance($params)
 	{

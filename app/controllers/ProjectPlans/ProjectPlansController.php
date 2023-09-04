@@ -96,6 +96,15 @@ class ProjectPlansController extends Controller
         echo $res;
     } 
 
+     // ELIMINAR LAS LOCACIONES Y ESTADOS DE UN PROYECTO ***ED
+        public function DeleteLocation($request_params){
+        {   
+            $params =  $this->session->get('user');
+            $result = $this->model->DeleteLocation($request_params);
+            echo $result;
+        } 
+    }
+
 /** ==== Lista de clientes ===================================================================  */
     public function listCustomers($request_params)
     {
@@ -110,6 +119,58 @@ class ProjectPlansController extends Controller
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
         } else {
             $res =  '[{"cus_id":"0"}]';	
+        }
+        echo $res;
+    } 
+    // LISTAR CATEGORIAS ***ED
+    public function listCategories($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listCategories($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
+
+    //  ***ED
+    public function listSubCategories($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listSubCategories($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
+        }
+        echo $res;
+    } 
+    //LISTAR PRODUCTOS  ***ED
+    public function listProducts3($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->listProducts3($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"prd_id":"0"}]';	
         }
         echo $res;
     } 
@@ -927,6 +988,47 @@ public function getLocationType($request_params)
     {
         $params =  $this->session->get('user');
         $result = $this->model->getLocationType();
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"loc_id":"0"}]';	
+        }
+        echo $res;
+    } 
+    // GUARDAR LOCACIONES EN EL PROYECTO. ***ED
+    public function SaveLocations($request_params){
+        $params =  $this->session->get('user');
+        $result = $this->model->SaveLocations($request_params);
+        $res = $result;
+        echo $res;
+    }
+// LISTAR LOS ESTADOS DE LA REPUBLICA ***ED
+    public function getEdosRepublic($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->getEdosRepublic($request_params);
+        $i = 0;
+        while($row = $result->fetch_assoc()){
+            $rowdata[$i] = $row;
+            $i++;
+        }
+        if ($i>0){
+            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
+        } else {
+            $res =  '[{"edos_id":"0"}]';	
+        }
+        echo $res;
+    } 
+    // LISTAR LOS DATOS DE LAS LOCACIONES Y ESTADOS GUARDADOS POR PROYECTO
+    public function ListLocationsEdos($request_params)
+    {
+        $params =  $this->session->get('user');
+        $result = $this->model->ListLocationsEdos($request_params);
         $i = 0;
         while($row = $result->fetch_assoc()){
             $rowdata[$i] = $row;
