@@ -266,6 +266,8 @@ function EditProveedores(id) {
 function ConfirmDeletProveedor(id) {
    $('#BorrarProveedorModal').modal('show');
    $('#IdProveedorBorrar').val(id);
+   
+   /* getProveedoresTable(); */
 }
 
 function UnSelectRowTable() {
@@ -296,6 +298,7 @@ function DeleteProveedor() {
             } else {
                table.rows({selected: true}).remove().draw();
             }
+            getProveedoresTable();
             $('#BorrarProveedorModal').modal('hide');
          }
          LimpiaModal();

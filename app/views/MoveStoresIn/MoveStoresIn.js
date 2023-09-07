@@ -138,6 +138,7 @@ function getSuppliers() {
 }
 // Solicita los documentos factura
 function getInvoice(id) {
+    console.log(id);
     var pagina = 'MoveStoresIn/listInvoice';
     var par = `[{"extId":"${id}"}]`;
     var tipo = 'json';
@@ -506,7 +507,7 @@ function exchange_apply() {
     let sernumeco = $('#txtNoEco').val();
 
     serie++;
-    // console.log('Paso exchange_apply', quantity);
+    console.log(prdName);
     mthseries=quantity;
     if (quantity > 1) {
         for (var i = 0; i < quantity; i++) {

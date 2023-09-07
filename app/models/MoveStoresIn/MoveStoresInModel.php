@@ -122,7 +122,7 @@ public function NextExchange()
                     ser_behaviour, prd_id, sup_id, cin_id,ser_brand,ser_cost_import,ser_import_petition,
                     ser_sum_ctot_cimp,ser_no_econo,str_id,ser_comments) 
                 VALUES ('$exc_sku_product', '$exc_serie_product', '$ser_cost', '$ser_status', '$ser_situation', 
-                '$ser_stage', '$ser_behaviour', '$prd_id', '$sup_id', '$cin_id', '$bra_id', '$cpe_id', '$pet_id',
+                '$ser_stage', '$ser_behaviour', '$prd_id', '$sup_id', '$cin_id',  UPPER('$bra_id'), '$cpe_id', '$pet_id',
                 '$ctotal', '$necono','$str_id','$exc_comments');";
 
         $this->db->query($qry1);

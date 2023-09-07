@@ -221,7 +221,7 @@ class MaintenanceController extends Controller
 
         $result = $this->model->getPjtDetail($pjtId);
 
-        $i = 0;
+        /* $i = 0;
             while($row = $result->fetch_assoc()){
                 $rowdata[$i] = $row;
                 $i++;
@@ -232,7 +232,8 @@ class MaintenanceController extends Controller
                 $res =  '[{"pjdt_id_id":"0"}]';	
             }
             
-        echo $res;
+        echo $res; */
+        echo $pjtId;
     }
 
     function saveMaintain($request_params){

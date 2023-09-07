@@ -117,7 +117,7 @@ if ($equipoBase == '1'){
                             $section     = 1;
 
                             if ($section == '1') {
-                                $prodname     = $items[$i]['prd_name'] ;  //  ------------
+                                $prodname     = $items[$i]['pjtcn_prod_name'] ;  //  ------------
                                 $prodsku      = $items[$i]['pjtdt_prod_sku'] ; //  ------------
                                 $quantity     = $items[$i]['dt_cantidad'] ;  //  ------------
                                 $sernum       = $items[$i]['ser_no_econo'] ; //  -------- 

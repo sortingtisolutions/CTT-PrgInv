@@ -29,7 +29,6 @@ function inicial() {
     getCategories();
     confirm_alert();
 
-    
     }else {
         setTimeout(() => {
             inicial();
@@ -183,10 +182,12 @@ function eventsAction() {
     $('.version__button')
         .unbind('click')
         .on('click', function () {
+            
             let nRows = $(
                 '.invoice__box-table table tbody tr.budgetRow'
             ).length;
             if (nRows > 0) {
+                modalLoading('S');
                 let pjtId = $('.version_current').attr('data-project');
                 let verCurr = $(
                     '.sidebar__versions .version__list ul li:first'
@@ -210,6 +211,8 @@ function eventsAction() {
                 var selector = saveBudget;
                 fillField(pagina, par, tipo, selector);
             }
+            modalLoading('H');
+
         });
 
     // Edita los datos del proyecto
@@ -426,6 +429,9 @@ function putSubCategories(dt) {
             //let word = $('txtProductFinder').val();
 
             //console.log(word);
+			showButtonToCharge('S');
+            $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');										 
             getProducts(word,subcatId);
             
         });
@@ -560,7 +566,9 @@ function putCategories(dt) {
             let catId = $(this).val();
             $('#txtSubCategory').html('');
             $('#txtSubCategory').val('Selecciona la subategoria');
-            
+            showButtonToCharge('S');
+            $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');
             /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
             // $('#txtProducts').val('     Cargando Informacion . . . .');
             getSubCategories(catId);
@@ -778,10 +786,7 @@ function putLocationsEdos(dt){
                 $('#N').html('Cancelar');
                 $('#confirmButton').html('Borrar locacion').css({display: 'inline'});
                 $('#Id').val(locId); 
-    
-                //   $('#BorrarAlmacenModal').modal('show');
-                //$('#IdAlmacenBorrar').val(locId);
-    
+       
                 $('#confirmButton').on('click', function () {
                     var pagina = 'Budget/DeleteLocation';
                     var par = `[{"loc_id":"${locId}"}]`;
@@ -1039,11 +1044,11 @@ function selProduct(res) {
     let rowCurr = $('#listProductsTable table tbody tr');
     let hearCnt = $('#listProductsTable table tbody tr th');
     let sub_id = $('#txtSubCategory').val();
-    if (res.length > 0) {
+    if (res.length > 1) {
         let dstr = 0;
         let dend = 0;
-        if (res.length == 1) {
-            // $('.invoice_button .toCharge').show();
+        if (res.length == 2) {
+            $('.invoice_button .toCharge').show();
             $('.toCharge').removeClass('hide-items');  //jjr
             if (glbSec != 4) {
                 // console.log('Normal');
@@ -1097,7 +1102,7 @@ function putProducts(dt) {
                 <div class="elipsis">${u.prd_name}</div></th>
                 <td class="col_quantity">${u.stock}</td>
                 <td class="col_category">${u.cat_name}</td>
-                <td class="col_category">${u.prd_price}</td>
+                <td class="col_type">${u.prd_price}</td>
                 <td class="col_type">${u.prd_level}</td>
             </tr> `;
         $('#listProductsTable table tbody').append(H);
@@ -1171,8 +1176,7 @@ function registeredProduct(id, section) {  // parametro de section agregado por 
     $('#invoiceTable table tbody tr').each(function () {
         let idp = $(this).attr('id');
         let isec = $(this).attr('data-sect');  // agregado por jjr
-        // console.log('Parametros- ', id, section);
-        // console.log('Valores THIS- ', idp, isec);
+
         if (id == idp && section==isec) {  // modificado por jjr
             // console.log('Agrega Cantidad');
             let qty =
@@ -1253,11 +1257,7 @@ function fillBudgetProds(jsn, days) {
     let pds = JSON.parse(jsn);
     // console.log(pds.bdg_prod_name);
 
-    // AQUI Aplicar el porcentaje de descuento al seguro 15-ago-2022 8:52 am
     let prdName = pds.bdg_prod_name.replace(/°/g, '"').replace(/\^/g, ',');
-    /* if(pds.bdg_prod_level=='K'){
-        console.log('ES UN PAQUETE-',pds.bdg_prod_sku);
-    } */
 
     let H = `
     <tr id="bdg${pds.prd_id}"
@@ -1515,29 +1515,11 @@ function infoProduct(bdgId, type) {
 function infoPackage(bdgId, type) {
     getProductsRelatedPk(bdgId.substring(3, 20), type);
 
-/*     $('.invoice__modalBackgound').fadeIn('slow');
-    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
-    let template = $('#infoProductTemplate');
-    $('.invoice__modal-general .modal__body').append(template.html());
-    // template.show();
-    $('.invoice__modal-general .modal__header-concept').html(
-        'Productos del Paquete posible cambio');
-
-    closeModals(); */
 }
 
 function infoDetallePkt(lcatsub) {
     getChangeProd(lcatsub);
 
- /*    // $('.invoice__modalBackgound').fadeIn('slow');
-    $('.invoice__modal-general').slideDown('slow').css({ 'z-index': 401 });
-    let template = $('#infoDetProdTemplate');
-    $('.invoice__modal-general .modal__body').append(template.html());
-    // template.show();
-    $('.invoice__modal-general .modal__header-concept').html(
-        'Productos del Paquete posible cambio');
-
-    closeModals(); */
 }
 
 // Muestra la información de productos relacionados
@@ -1561,37 +1543,6 @@ function putProductsRelated(dt) {
 
 /// Muestra la información de los productos a poder cambiar
 function putProductsRelatedPk_old(dt) {
-    /* $.each(dt, function (v, u) {
-        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
-        let cat=u.prd_sku.substring(0,2);
-        let catsub=u.prd_sku.substring(0,4);
-        console.log('CATSUB',catsub);
-        if(cat=='01'){
-        let H = `
-            <tr ${levelProduct} data_cat="${catsub}">
-                <td>${u.prd_sku}</td>
-                <td>${u.prd_level}</td>
-                <td>${u.prd_name}</td>
-                <td data_cat=${catsub}><i class="fas fa-edit changePk"  data_cat="${catsub}"></i></td>
-            </tr>
-        `;
-        $('#tblChangeSerie tbody').append(H);
-        }else{
-            let H = `
-                <tr ${levelProduct} data_cat="${catsub}">
-                    <td>${u.prd_sku}</td>
-                    <td>${u.prd_level}</td>
-                    <td>${u.prd_name}</td>
-                    <td data_cat=${catsub}></td>
-                </tr>
-            `;
-            $('#tblChangeSerie tbody').append(H);
-        }
-    }); */
-
-/*     $(`.invoice__modal-general table`).sticky({
-        top: 'thead tr:first-child',
-    }); */
     ActiveChangePKT();
 }
 
@@ -1633,7 +1584,6 @@ function settingChangeSerie(){
 }
 
 function putProductsRelatedPk(dt){
-
     // console.log('putProductsRelatedPk', dt);
     settingChangeSerie();
     let tabla = $('#tblChangeSerie').DataTable();
@@ -1672,9 +1622,6 @@ function putProductsRelatedPk(dt){
         }
     });
 
-  /*   $(`.invoice__modal-general table`).sticky({
-        top: 'thead tr:first-child',
-    }); */
     ActiveChangePKT();
 
 }
@@ -1704,8 +1651,6 @@ function ActiveChangePKT(){
     .on('click', function () {
         let id = $(this).attr('data_cat');
         let lcatsub=id;
-        // console.log('THIS-', id);
-        // settingProdChg();
 
         $('#SerieData').removeClass('overlay_hide');
 
@@ -1718,7 +1663,6 @@ function ActiveChangePKT(){
                 });
 
         infoDetallePkt(lcatsub);
-
         // alert('Seleccion de Producto a cambiar ' + lcatsub + ' disponible');
     });
 
@@ -1748,16 +1692,6 @@ function settingProdChg(){
         ],
     });
 
-   /*  $('#SerieData .btn_close')
-        .unbind('click')
-        .on('click', function () {
-            //console.log('Cierra Series');
-            $('.overlay_background').addClass('overlay_hide');
-            $('.overlay_closer .title').html('');
-            // let Dtable=$('#tblDataChg').DataTable();
-            // Dtable.rows().remove().draw();
-            // Dtable.destroy();
-    }); */
 }
 
 function putChangeProd(dt) {
@@ -1903,9 +1837,6 @@ function fillContent() {
                 start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY')
             );
             looseAlert($('#txtPeriodProjectEdt').parent());
-
-            // $('#txtPeriodProject').parent().children('span').html('');
-            // console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
         }
     );
 
@@ -1939,11 +1870,7 @@ function fillContent() {
         $('#txtTypeLocationEdt').append(H);
         $('#txtTypeLocationEdt').val(1);
     });
-    // Llena el selector de Estados
-    /* $.each(edosRep, function (v, u) {
-            let H = `<option value="${u.edos_id}"> ${u.edos_name}</option>`;
-            $('#txtEdosRepublic').append(H);
-    }); */
+ 
 	
     $('.textbox')
         .unbind('focus')
@@ -2287,9 +2214,7 @@ function settingTable(){
             .unbind('click')
             .on('click', function () {
                 $('#addLocationModal').addClass('overlay_hide');
-                /* $('#listLocationsTable').DataTable().destroy; //** Es como si no hiciera caso a esta instruccion 
-                let tabla=$('#listLocationsTable').DataTable();
-                tabla.rows().remove().draw();*/
+
             }); 
 
         $('#btn_save_locations')
@@ -2307,13 +2232,7 @@ function settingTable(){
                 }
             });
         });
-       /*  $('#txtEdosRepublic_2')
-        .unbind('change')
-        .on('change', function () {
-            let edoId=$(this).val();
-            console.log($(`#txtEdosRepublic_2 option[value = "${edoId}"]`));
-        }); */
-    //** AGREGO ED */
+
 }
 
 function putLocations(){ //** AGREGO ED */
@@ -2329,23 +2248,12 @@ function putLocations(){ //** AGREGO ED */
             }]`;
     
     console.log(par);
-    /* if (add ==2) {
-        let prjId = $('#txtProjectIdEdt').val();
-        let par = `
-        [{
-            "loc" :  "${loc}",
-            "edo" :  "${edo}",
-            "prjId" : "${prjId}"
-        }]`;
-        //save_exchange(par);
-    }else{ */
         
         fill_table(par);
         clean_selectors();
-    //}
     
-
 }
+
 function fill_table(par) { //** AGREGO ED */
     let largo = $('#listLocationsTable tbody tr td').html();
     largo == 'Ningún dato disponible en esta tabla' ? $('#listLocationsTable tbody tr').remove() : '';
@@ -2398,7 +2306,6 @@ function build_data_structure(pr) {
 }
 function save_exchange(pr) {
     //   console.log(pr);
-    
     var pagina = 'Budget/SaveLocations';
     var par = pr;
     var tipo = 'html';
@@ -2423,15 +2330,6 @@ function exchange_result(dt) {
         clean_selectors();
     }
    
-    /* //$('.resFolio').text(refil(folio, 7));
-    $('#MoveResultModal').modal('show');
-    $('#btnHideModal').on('click', function () {
-        window.location = 'NewSublet';
-    });
-    $('#btnPrintReport').on('click', function () {
-        // $('.btn-print').trigger('click');
-        printInfoGetOut(folio);
-    }); */
 }
 
 
@@ -2604,8 +2502,6 @@ function putComments(dt) {
     }
 }
 
-
-
 function fillCommnetElements(u) {
     console.log(u.com_comment);
     let H = `
@@ -2635,10 +2531,6 @@ function printBudget(verId) {
     let u = user[0];
     let n = user[2];
     let h = localStorage.getItem('host');
-    /* window.open(
-        `${url}app/views/Budget/BudgetReport.php?v=${v}&u=${u}&n=${n}&h=${h}`,
-        '_blank'
-    ); */
 
     if (theredaytrip != 0){ // agregado jjr cambiar impresion c-s
         window.open(
@@ -2659,7 +2551,7 @@ function printBudget(verId) {
 function saveBudget(dt) {
     let verId = dt.split('|')[0];
     let pjtId = dt.split('|')[1];
-
+   
     $('#invoiceTable table tbody tr.budgetRow').each(function () {
         let tr = $(this);
         let prdId = tr.attr('id').substring(3, 10);
@@ -2727,22 +2619,43 @@ function saveBudget(dt) {
                 "pjtId"           : "${pjtId}"
             }]`;
             // console.log(par);
+           
             var pagina = 'Budget/SaveBudget';
             var tipo = 'html';
             var selector = respBudget;
             fillField(pagina, par, tipo, selector);
         }
     });
+    reOrderDatatbl(verId,pjtId);
     getExistTrip(verId,pjtId);
+    getVersion(pjtId);
 }
 
 function respBudget(dt) {
-    console.log('respBudget', dt);
+    // console.log('respBudget', dt);
     let pjtId = dt.split('|')[0];
     let UserN = dt.split('|')[1];
-    // console.log('--',pjtId,UserN);
-    getVersion(pjtId);
-    
+
+}
+
+
+function reOrderDatatbl(verId,pjtId) {
+    let par = `
+    [{
+        "verId"           : "${verId}",
+        "pjtId"           : "${pjtId}"
+    }]`;
+    // console.log(par);
+   
+    var pagina = 'Budget/reOrdenList';
+    var tipo = 'html';
+    var selector = putreOrderDatatbl;
+    fillField(pagina, par, tipo, selector);
+}
+
+function putreOrderDatatbl(dt) {
+    console.log('putreOrderDatatbl', dt);
+
 }
 
 /**  ++++  Obtiene los días definidos para el proyectos */
@@ -3006,6 +2919,54 @@ function validatorFields(frm) {
 /* ************************************************************************ */
 function promoteProject(pjtId) {
     // console.log('TERMINO PROMO-COTIZ-1');
+    let fechaini = new Date();
+    console.log('Hora click promoteProject', fechaini);
+
+    modalLoading('S');
+    let verId = $('.invoice_controlPanel .version_current').attr(
+        'data-version'
+    );
+    var pagina = 'Budget/ProcessProjectProductFAST';
+    var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
+    var tipo = 'html';
+    var selector = showResult;
+    fillField(pagina, par, tipo, selector);
+}
+
+function showResult(dt) {
+    // console.log(dt);
+    let pjtId = dt.split('|')[0];
+    let verId = dt.split('|')[1];
+    $('#P' + pjtId).remove();
+    modalLoading('H');
+    let fechaacc = new Date();
+    console.log('Hora Acce', fechaacc);
+    // ProcessBackAccesories
+    // cleanFormat();
+    setTimeout(() => {
+        console.log('TERMINO FASE 1 LANZA SIGUIENTE FASE');
+
+        // var pagina = 'Budget/ProcessBackAccesories';
+        var pagina = 'Budget/ProcessFuncAccesories';
+        var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
+        var tipo = 'html';
+        var selector = showResAcc;
+        fillField(pagina, par, tipo, selector);
+    
+    }, 2000);
+    cleanFormat();
+    // showResAcc(dt);
+}
+
+function showResAcc(dt) {
+    console.log('TERMINO SETTIMEOUT showResAcc', dt);
+    let fechaend = new Date();
+    console.log('Hora END', fechaend);
+    var resultAcc=dt;
+}
+
+function promoteProject_old(pjtId) {
+    // console.log('TERMINO PROMO-COTIZ-1');
     modalLoading('S');
 
     /* let locprdid=520;  // codigo para probar funcion
@@ -3024,7 +2985,7 @@ function promoteProject(pjtId) {
     fillField(pagina, par, tipo, selector);
 }
 
-function showResult(dt) {
+function showResult_old(dt) {
     console.log(dt);
     let pjtId = dt.split('|')[0];
     $('#P' + pjtId).remove();
@@ -3033,48 +2994,6 @@ function showResult(dt) {
     // promoteProject2(pjtId);
     cleanFormat();
 }
-
-/* PROMUEVE COTIZACION A PRESUPUESTO 2.0                                       */
-/* function promoteProject2(pjtId) {
-    modalLoading('S');
-    let verId = $('.invoice_controlPanel .version_current').attr(
-        'data-version'
-    );
-
-    var pagina = 'Budget/ProcessProjectProm';
-    var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
-    var tipo = 'html';
-    var selector = showResult2;
-    fillField(pagina, par, tipo, selector);
-} */
-
-/* function showResult2(dt) {
-    let pjtId = dt.split('|')[0];
-    $('#P' + pjtId).remove();
-    modalLoading('H');
-    cleanFormat();
-} */
-
-/* PROMUEVE COTIZACION A PRESUPUESTO 3.0                                       */
-/* function promoteProject3(pjtId) {
-    modalLoading('S');
-    let verId = $('.invoice_controlPanel .version_current').attr(
-        'data-version'
-    );
-
-    var pagina = 'Budget/ProcessProjectProduct';
-    var par = `[{"verId":"${verId}", "pjtId":"${pjtId}"}]`;
-    var tipo = 'html';
-    var selector = showResult3;
-    fillField(pagina, par, tipo, selector);
-}
-
-function showResult3(dt) {
-    let pjtId = dt.split('|')[0];
-    $('#P' + pjtId).remove();
-    modalLoading('H');
-    cleanFormat();
-} */
 
 /* ************************************************************************ */
 
@@ -3095,12 +3014,10 @@ function findIndex(id, dt) {
             inx = v;
         }
     });
-
     return inx;
 }
 
 function subaccion() {
     console.log('');
 }
-
 

@@ -82,7 +82,7 @@ class WhOutputContentModel extends Model
        
         $qry = " SELECT pdt.pjtdt_id, pdt.pjtdt_prod_sku, prd.prd_name, prd.prd_level, prd.prd_status, 
                     pdt.ser_id, pdt.pjtvr_id, sr.ser_sku, sr.ser_serial_number, sr.ser_situation, 
-                    sr.ser_stage, sr.ser_no_econo, per.pjtpd_day_start,per.pjtpd_day_end
+                    sr.ser_stage, sr.ser_no_econo, per.pjtpd_day_start,per.pjtpd_day_end, pjv.pjtvr_section
                 FROM ctt_projects_content AS pcn
                 INNER JOIN ctt_projects_version as pjv ON pcn.pjtvr_id=pjv.pjtvr_id
                 INNER JOIN ctt_projects_detail AS pdt ON pcn.pjtvr_id=pdt.pjtvr_id
@@ -124,12 +124,12 @@ class WhOutputContentModel extends Model
     // check de Productos
     public function checkSeries($params)
     {
-        $pjtcnid = $this->db->real_escape_string($params['pjtcnid']);
+        $pjtcnid = $this->db->real_escape_string($params['serId']);
         /* $updt = "update ctt_series set ser_situation = 'TA', ser_stage = 'TA' 
                 where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
  */
         $updt = "UPDATE ctt_series set ser_stage = 'TR' 
-                where ser_sku = '$pjtcnid' and ser_situation = 'EA'";
+                where ser_id = '$pjtcnid' and ser_situation = 'EA'";
 
          $this->db->query($updt);
          return $pjtcnid;

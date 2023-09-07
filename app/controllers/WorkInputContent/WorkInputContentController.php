@@ -98,18 +98,30 @@ class WorkInputContentController extends Controller
     public function checkSeries($request_params)
     {
         $params =  $this->session->get('user');
-        $result = $this->model->checkSeries($request_params);
-        /*$i = 0;
+        //$result = $this->model->checkSeries($request_params);
+        $result = $this->model->getSeries($request_params);
+        $i = 0;
+        $serie=0;
         while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
+            $serid = $row["ser_id"];
+            if($row["prd_level"]=='P'){
+                $serie=$serid;
+            }
+            $paramsdet = array(
+                'serid' => $serid,
+                
+            );
+
+            $ActSeries = $this->model->ActualizaSeries($paramsdet);
+            
         }
-        if ($i>0){
+       /*  if ($i>0){
             $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);
         } else {
             $res =  '[{"ser_id":"0"}]';
-        }*/
-        echo $result;
+        } */
+        //echo $result; 
+        echo $serie;
     }
 
 

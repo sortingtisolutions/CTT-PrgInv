@@ -435,6 +435,7 @@ function getDiscounts() {
 }
 /**  Obtiene el listado de relacionados al prducto*/
 function getProductsRelated(id, tp, vr,sec) {// *** Ed
+    console.log('sec: ',sec, ' Id:', id );
     var pagina = 'ProjectDetails/listProductsRelated';
     var par = `[{"prdId":"${id}","type":"${tp}","verId":"${vr}","section":"${sec}"}]`;
     var tipo = 'json';
@@ -577,6 +578,8 @@ function putCategories(dt) {
             $('#txtSubCategory').html('');
             $('#txtSubCategory').val('Selecciona la subategoria');
             
+            $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');
             /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
             // $('#txtProducts').val('     Cargando Informacion . . . .');
             getSubCategories(catId);
@@ -602,6 +605,10 @@ function putSubCategories(dt) {
         getProducts(word,dt[0].sbc_id);
         $('#txtSubCategory').on('change', function () {
             let subcatId = $(this).val();
+            
+            $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');
+            
             getProducts(word,subcatId);
            
         });
@@ -1140,7 +1147,9 @@ function selProduct(res) {
         }
         // rowCurr.show();
     } else {
-        $(`#listProductsTable table tbody`).html('');
+        //$(`#listProductsTable table tbody`).html('');
+        
+        getProducts('',sub_id);
         rowCurr.addClass('oculto');
     }
 }
@@ -1775,14 +1784,15 @@ function infoProduct(bdgId, type,sec) { // *** Ed
     );
     closeModals();
     setTimeout(() => {
-        let verId = $('.version_current').data('version');
+        let verId = $('.version_current').attr('data-version');
+        //console.log($('.version_current').attr('data-version'));
         getProductsRelated(bdgId.substring(3, 20), type, verId,sec);
     }, 500);
 }
 
 function infoPackage(bdgId, type, sec) {
     setTimeout(() => {
-        let verId = $('.version_current').data('version');
+        let verId = $('.version_current').attr('data-version');
         // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
         getProductsRelatedPk(bdgId.substring(3, 20), type, verId, sec); //*** Faltaria hacer lo mismo que con el resto de productos */
     }, 500);
@@ -1801,33 +1811,36 @@ function putProductsRelated(dt) {
     console.log('putProductsRelated',dt);
     $('.invoice__modal-general table tbody').html('');
     $.each(dt, function (v, u) {
-        let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
-        let prodSku =
-            u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
-        let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
-		let sku_prod = u.pjtdt_prod_sku;
-        let skushort;
-        if (sku_prod=='Pendiente') {
-            skushort = 'No Existe Serie';
-        }else{
-            skushort=u.pjtdt_prod_sku.substring(0,7);
+        if(u.prd_id != '0'){
+            let levelProduct = u.prd_level == 'P' ? 'class="levelProd"' : '';
+            let prodSku =
+                u.pjtdt_prod_sku == '' ? '' : u.pjtdt_prod_sku.toUpperCase();
+            let pending = prodSku == 'PENDIENTE' ? 'pending' : 'free';
+            let sku_prod = u.pjtdt_prod_sku;
+            let skushort;
+            if (sku_prod=='Pendiente') {
+                skushort = 'No Existe Serie';
+            }else{
+                skushort=u.pjtdt_prod_sku.substring(0,7);
+            }
+            let prod_sku= prodSku == 'PENDIENTE' ? 'SIN SERIE': u.pjtdt_prod_sku.toUpperCase();
+                      
+            if (u.prd_level != 'K') {
+                let H = `
+                <tr ${levelProduct}>
+                    <td>${skushort}</td>
+                    <td><span class="${pending}">${prod_sku}</span></td>
+                    <td>${u.prd_level}</td>
+                    <td>${u.prd_name}</td>
+                    <td>${u.cat_name}</td>
+                    <td>${u.ser_comments}</td>
+                </tr>
+               
+            `;
+                $('.invoice__modal-general table tbody').append(H);
+            }
         }
-        let prod_sku= prodSku == 'PENDIENTE' ? 'SIN SERIE': u.pjtdt_prod_sku.toUpperCase();
-        		  
-        if (u.prd_level != 'K') {
-            let H = `
-            <tr ${levelProduct}>
-                <td>${skushort}</td>
-                <td><span class="${pending}">${prod_sku}</span></td>
-                <td>${u.prd_level}</td>
-                <td>${u.prd_name}</td>
-                <td>${u.cat_name}</td>
-                <td>${u.ser_comments}</td>
-            </tr>
-           
-        `;
-            $('.invoice__modal-general table tbody').append(H);
-        }
+        
     });
     $(`.invoice__modal-general table`).sticky({
         top: 'thead tr:first-child',
@@ -3336,7 +3349,7 @@ function findIndex(id, dt) {
 
 function subaccion() {
     let pjtId = $('.version_current').data('project');
-    let verId = $('.version_current').data('version');
+    let verId = $('.version_current').attr('data-version');
 
     getBudgets(pjtId, verId);
 }

@@ -4,7 +4,7 @@ let prjid, serIdNew;
 let serIdAnt=0;
 let user,v,u,n,em;  //datos de usuaria para impresion
 //var prjid;
-
+let aux=0;
 $(document).ready(function () {
     if (verifica_usuario()) {
         // let temporal=Cookies.get('user');
@@ -50,11 +50,12 @@ function getProjects(prjid) {
 
 // Solicita los productos del proyecto  OK
 function getDetailProds(prjid,empid) {
+    console.log(empid);
     var pagina = 'WhOutputContent/listDetailProds';
     var par = `[{"pjt_id":"${prjid}", "empid":"${empid}"}]`;
     var tipo = 'json';
     var selector = putDetailsProds;
-    fillField(pagina, par, tipo, selector);
+    fillField(pagina, par, tipo, selector); 
 }
 
 function getFreelances(prjid) {
@@ -205,7 +206,7 @@ function putProjects(dt) {
 
 // ### LISTO ### Llena la TABLA INICIAL de los detalles del proyecto
 function putDetailsProds(dt) {
-    
+    console.log(dt);
     if (dt[0].pjtpd_id != '0')
     {
         let valstage='';
@@ -306,6 +307,7 @@ function settingSeries(dt){
                 text: 'Select All OK',
                 className: 'btn-apply',
                 action: function (e, dt, node, config) {
+                    readAceptTable();
                     // printContent(prjid);
                 },
             },
@@ -332,6 +334,7 @@ function settingSeries(dt){
             {data: 'sertype', class: 'sku'},
             {data: 'serfchout', class: 'sku'},
             {data: 'serfchin', class: 'sku'},
+            {data: 'serlevel', class: 'sku'},
         ],
     });
 
@@ -345,7 +348,47 @@ function settingSeries(dt){
     });
    
 }
+function readAceptTable() {
+    $('#tblSerie tbody tr').each(function (v, u) {
+        
+        // console.log("DENTRO EACH: ", $(this).find('td')[0].children);
+        let serId = $(this).attr('id');
+        let serdata = $(this).attr('data');
+        console.log("readAceptTable: ", serId);
+        checkSerie(serId);
+        /* let tabla = $('#tblSerie').DataTable();
+        let numRows = tabla.rows().count();
+        aux++;
+        if (numRows==1 || aux==numRows) {
+            $('.overlay_background').addClass('overlay_hide');
+            $('.overlay_closer .title').html('');
+            $('#tblSerie').DataTable().destroy;
+            aux=0;
+        }else{
+            console.log(numRows, aux);
+        } */
+        setTimeout(function(){
+            console.log('');
+        }, 3000);
+        /* $('.overlay_background').addClass('overlay_hide');
+        $('.overlay_closer .title').html('');
+        $('#tblSerie').DataTable().destroy; */
+    });
+}
+/* function checkSerie(serId) {
+    // console.log('ID-Producto-Check', pjtcnid);
+    var pagina = 'WorkOutputContent/checkSeries';
+    var par = `[{"serId":"${serId}"}]`;
+    var tipo = 'html';
+    var selector = myCheck; 
+    fillField(pagina, par, tipo, selector);
+}
 
+function myCheck(dt){
+    // console.log('myCheck', dt);
+    $('#'+dt).css({"color":"#CC0000"});
+    $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
+} */
 // ### LISTO ### Llena con datos de series la tabla del modal --- MODAL 1
 function build_modal_serie_old(dt) {
         //  console.log('build_modal_serie_old',dt);
@@ -358,19 +401,26 @@ function build_modal_serie_old(dt) {
              let sku = u.pjtdt_prod_sku.slice(0, 7);
              let acc = u.pjtdt_prod_sku.slice(7,8) == 'A' ? skufull : sku;
              let valstage = u.ser_stage == 'TR' ? 'color:#CC0000' : 'color:#3c5777';
+             let level;
+             if(u.pjtvr_section == 4){
+                level = "Subarrendo";
+             }else{
+                level="Interno"
+             }
              //console.log(dt);
              tabla.row
                  .add({
                      sermodif: `<i class="fas fa-edit toChange" data-content="${acc}|${skufull}|${u.pjtdt_id}|${u.ser_id}"></i> 
-                                <i class="fas fa-check-circle toCheck" id="${skufull}" style="${valstage}"></i>`,
+                                <i class="fas fa-check-circle toCheck" id="${u.ser_id}" style="${valstage}"></i>`,
                      seriesku: skufull,
                      sernumber: u.ser_no_econo,
                      sertype: u.ser_serial_number,
                      serfchout: u.pjtpd_day_start,
                      serfchin: u.pjtpd_day_end,
+                     serlevel: level,
                  })
                  .draw();
-             $(`#${u.pjt_id}`).parents('tr').attr('id',u.pjt_id);
+             $(`#${u.ser_id}`).parents('tr').attr('id',u.ser_id);
          });
 }
 
@@ -396,23 +446,34 @@ function activeIconsSerie() {
         let serprd = $(this).attr('id');
         // console.log("Para validar: "+serprd);
             checkSerie(serprd);
-       
+            let tabla = $('#tblSerie').DataTable();
+            let numRows = tabla.rows().count();
+            aux++;
+            if (numRows==1 || aux==numRows) {
+                $('.overlay_background').addClass('overlay_hide');
+                $('.overlay_closer .title').html('');
+                $('#tblSerie').DataTable().destroy;
+                aux=0;
+            }
+               
         });
 }
 
 function checkSerie(pjtcnid) {
-    // console.log('ID-Producto-Check', pjtcnid);
+    //console.log('ID-Producto-Check', pjtcnid);
     var pagina = 'WhOutputContent/checkSeries';
-    var par = `[{"pjtcnid":"${pjtcnid}"}]`;
+    var par = `[{"serId":"${pjtcnid}"}]`;
     var tipo = 'html';
     var selector = myCheck; 
     fillField(pagina, par, tipo, selector);
 }
 
 function myCheck(dt){
-    // console.log('myCheck',dt);
+    //console.log(dt);
     $('#'+dt).css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
+    $('#'+dt).find('.toCheck').css({"color":"#CC0000"});
+    $('#'+dt).find('.toChange').css({"color":"#3c5878"});
     /* $('#'+dt).attr("id",NuevoSku).children("td.nombreclase").text(NuevoSku);
     $('#'+dt).attr("id",sernumber).children("td.nombreclase").text(sernumber);
     $('#'+dt).attr("id",sertype).children("td.nombreclase").text(NuevoSku); */
@@ -544,13 +605,13 @@ function confirm_to_GetOut(pjtid) {
         $('#starClosure').modal('hide');
 
         console.log('Datos CLICK',pjtid);
-        modalLoading('S');
-        
+         modalLoading('S');
+      
         var pagina = 'WhOutputContent/ProcessGetOutProject';
         var par = `[{"pjtid":"${pjtid}"}]`;
         var tipo = 'json';
         var selector = putToWork;
-        fillField(pagina, par, tipo, selector);
+        fillField(pagina, par, tipo, selector); 
         /* let Arg='23|56|PASO1,PASO2 ';
         putToWork(Arg); */
     });

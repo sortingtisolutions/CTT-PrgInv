@@ -580,6 +580,8 @@ function putCategories(dt) {
             $('#txtSubCategory').html('');
             $('#txtSubCategory').val('Selecciona la subategoria');
             
+            $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');
             /* NOTA EN EL CAMPO DE PRODUCTOS PARA QUE NO ESCRIBAN */
             // $('#txtProducts').val('     Cargando Informacion . . . .');
             getSubCategories(catId);
@@ -605,6 +607,10 @@ function putSubCategories(dt) {
         getProducts(word,dt[0].sbc_id);
         $('#txtSubCategory').on('change', function () {
             let subcatId = $(this).val();
+            
+            $('.invoice_button .toCharge').show();
+            $('.toCharge').removeClass('hide-items');
+            
             getProducts(word,subcatId);
            
         });
@@ -1141,7 +1147,9 @@ function selProduct(res) {
         }
         // rowCurr.show();
     } else {
-        $(`#listProductsTable table tbody`).html('');
+        
+        getProducts('',sub_id);
+        //$(`#listProductsTable table tbody`).html('');
         rowCurr.addClass('oculto');
     }
 }
@@ -1765,15 +1773,15 @@ function infoProduct(bdgId, type,sec) {
     );
     closeModals();
     setTimeout(() => {
-        let verId = $('.version_current').data('version');
-        // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
+        let verId = $('.version_current').attr('data-version');
+        console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
         getProductsRelated(bdgId.substring(3, 20), type, verId,sec);
     }, 500);
 }
 
 function infoPackage(bdgId, type, sec) {
     setTimeout(() => {
-        let verId = $('.version_current').data('version');
+        let verId = $('.version_current').attr('data-version');
         // console.log('Dat-Info-',bdgId.substring(3, 20), type, verId);
         getProductsRelatedPk(bdgId.substring(3, 20), type, verId, sec);
     }, 500);
@@ -3304,7 +3312,7 @@ function findIndex(id, dt) {
 
 function subaccion() {
     let pjtId = $('.version_current').data('project');
-    let verId = $('.version_current').data('version');
+    let verId = $('.version_current').attr('data-version');
 
     getBudgets(pjtId, verId);
 }

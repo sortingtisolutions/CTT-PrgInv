@@ -125,9 +125,9 @@ class MoveStoresOutModel extends Model
 		$qry = "SELECT fun_reststock($prdid) FROM DUAL; ";
 		$resultfun = $this->db->query($qry);
 
-		$qry1 = "UPDATE ctt_series SET ser_status=0 
+		/* $qry1 = "UPDATE ctt_series SET ser_status=0 
 				 WHERE ser_id=$idSer;";
-        $resultup = $this->db->query($qry1); 
+        $resultup = $this->db->query($qry1);  */
 				
 		$qry2 = "UPDATE ctt_stores_products 
 				SET stp_quantity = stp_quantity - $quantity 
@@ -155,6 +155,8 @@ class MoveStoresOutModel extends Model
 		$idStrSrc 		= $this->db->real_escape_string($param['strid']);
 		$quantity 		= $this->db->real_escape_string($param['qty']);
 
+		
+
 		$qry = "UPDATE ctt_stores_products 
 				SET stp_quantity = stp_quantity + {$quantity} 
 				WHERE str_id = {$idStrSrc} and  ser_id = {$idSer};";
@@ -167,9 +169,11 @@ class MoveStoresOutModel extends Model
 		$idSer 			= $this->db->real_escape_string($param['serid']);
 		$idStrSrc 		= $this->db->real_escape_string($param['strid']);
 		$quantity 		= $this->db->real_escape_string($param['qty']);
+		$prd_id		= $this->db->real_escape_string($param['prdid']);
 
-		$qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id) 
-				VALUES ($quantity, $idStrSrc, $idSer);";
+
+		$qry = "INSERT INTO ctt_stores_products (stp_quantity, str_id, ser_id, prd_id ) 
+				VALUES ($quantity, $idStrSrc, $idSer, $prd_id);";
 		return $this->db->query($qry);
 	}
 

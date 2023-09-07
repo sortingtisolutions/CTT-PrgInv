@@ -87,7 +87,7 @@ public function listProductsPack($params)
 
         $qry = "INSERT INTO ctt_products (prd_sku, prd_name, prd_model, prd_price, prd_visibility, 
         prd_comments, prd_status, prd_level, sbc_id, srv_id, cin_id, prd_insured, prd_stock) 
-        VALUES ('$prd_sku', '$prd_name', '$prd_model', '$prd_price', '$prd_visibility', '$prd_comments',
+        VALUES ('$prd_sku', UPPER('$prd_name'), '$prd_model', '$prd_price', '$prd_visibility', '$prd_comments',
          '$prd_status', '$prd_level', '$sbc_id', '$srv_id', '$cin_id','$prd_insured','$prd_stock');
         ";
          $this->db->query($qry);

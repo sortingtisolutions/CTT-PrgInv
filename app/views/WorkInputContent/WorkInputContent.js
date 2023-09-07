@@ -4,7 +4,7 @@ let prjid;
 let glbcnid,glbprjnum;
 let motmanteince;
 let user,v,u,n,em;  //datos de usuaria para impresion
-
+let aux=0;
 $(document).ready(function () {
     if (verifica_usuario()) {
         // let temporal=Cookies.get('user');
@@ -13,7 +13,7 @@ $(document).ready(function () {
         inicial();
     }
 });
-//INICIO DE PROCESOS
+//INICIO DE PROCESOSprjid
 function inicial() {
     user = Cookies.get('user').split('|');
     u = user[0];
@@ -299,6 +299,7 @@ function build_modal_serie(dt) {
                 valstage='color:#3c5777';
                 valmant='color:#3c5777';
              }
+             
              tabla.row
                  .add({
                      sermodif: `<i class="fas fa-wrench toChange" data-content="${skufull}|${u.pjtdt_id}|${u.ser_id}" style="${valmant}"></i> 
@@ -336,22 +337,35 @@ function activeIconsSer() {
             let serorg = $(this).attr('data-content').split('|')[1];
             let serId = $(this).attr('data-content').split('|')[2];
             console.log("Para aceptar: ",serprd, serorg, serId);
-            checkSerie(serId);
+            checkSerie(serId, serprd);
+
+            let tabla = $('#tblSerie').DataTable();
+            let numRows = tabla.rows().count();
+            aux++;
+            if (numRows==1 || aux==numRows) {
+                $('.overlay_background').addClass('overlay_hide');
+                $('.overlay_closer .title').html('');
+                $('#tblSerie').DataTable().destroy;
+                aux=0;
+            }else{
+                console.log(numRows, aux);
+            }
         });
 }
 
-function checkSerie(serId) {
-    // console.log('ID-Producto-Check', pjtcnid);
+function checkSerie(serId, serSku) {
+    //console.log('ID-Producto-Check', serId);
     var pagina = 'WorkInputContent/checkSeries';
-    var par = `[{"serId":"${serId}"}]`;
+    var par = `[{"serId":"${serId}", "serSku":"${serSku}", "prjid":${prjid}}]`;
     var tipo = 'html';
     var selector = myCheck; 
     fillField(pagina, par, tipo, selector);
 }
 
 function myCheck(dt){
-    // console.log('myCheck', dt);
+    console.log('myCheck', dt);
     $('#'+dt).css({"color":"#CC0000"});
+    $('#'+dt).find('.toAcept').css({"color":"#CC0000"});
     $('#'+dt).children(".claseElemento").css({"color":"#CC0000"});
 }
 
@@ -360,9 +374,9 @@ function readAceptTable() {
         
         // console.log("DENTRO EACH: ", $(this).find('td')[0].children);
         let serId = $(this).attr('id');
-         let serdata = $(this).attr('data');
-        console.log("readAceptTable: ", serId);
-        checkSerie(serId);
+        let serdata = $($(this).find('td')[1]).text();
+        console.log("readAceptTable: ", serId, serdata);
+        //checkSerie(serId);
         setTimeout(function(){
             console.log('');
         }, 3000);

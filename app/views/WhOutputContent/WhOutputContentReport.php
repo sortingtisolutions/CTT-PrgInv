@@ -8,7 +8,7 @@ require_once '../../../vendor/autoload.php';
 $prdId = $_GET['v'];
 $usrId = $_GET['u'];
 $uname = $_GET['n'];
-$empid = $_GET['em'];
+$empid = $_GET['u'];
 
 $conkey = decodificar($_GET['h']) ;
 

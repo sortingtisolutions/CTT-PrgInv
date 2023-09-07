@@ -13,7 +13,7 @@ class ProductsForSublettingModel extends Model
 public function listProyects($store)
 {
     $store = $this->db->real_escape_string($store);
-    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (1,2,4) ;";
+    $qry = "SELECT * FROM ctt_projects WHERE pjt_status in (2,4,7,8) ;";
     return $this->db->query($qry);
 }    
 
@@ -58,8 +58,6 @@ public function listProyects($store)
         and str_name like 'SUBARRENDO%';";
         return $this->db->query($qry);
     }
-
-
 
 // Agrega el serial del producto en subarrendo
     public function addSerie($params)

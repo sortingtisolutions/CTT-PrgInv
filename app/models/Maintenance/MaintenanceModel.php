@@ -312,7 +312,7 @@ public function listEstatusMantenimiento($params)
 
         
 
-        return $idMaintain;
+        return $idProject;
     }
 
 // Lista el productomodificado

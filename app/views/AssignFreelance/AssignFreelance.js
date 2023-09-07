@@ -144,14 +144,14 @@ function getFreelance(catId) {
     var selector = putFreelance;
     fillField(pagina, par, tipo, selector);
 }
-function getFreelance2(catId) {
+/* function getFreelance2(catId) {
     //console.log(catId);
     var pagina = 'AssignFreelance/listFreelance2';
     var par = `[{"catId":"${catId}"}]`;
     var tipo = 'json';
     var selector = putFreelance2;
     fillField(pagina, par, tipo, selector);
-}
+} */
 function getAssign() {
     //console.log(catId);
     var pagina = 'AssignFreelance/listAssign';
@@ -432,7 +432,7 @@ function putSupplierList(dt) {
 
 /**  ++++   Coloca los productos en el listado del input */
 function put_Freelances(dt) {
-    // console.log(pj);
+    console.log(dt);
     pd = dt;
     
     let largo = $('#tblExchanges tbody tr td').html();

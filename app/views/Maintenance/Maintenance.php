@@ -23,9 +23,9 @@
 						<hr>
 						<h6	class="nameProduct objet objHidden" style="font-size: 1rem; font-weight: bold; text-align: center">Producto</h6>
 						<input type="hidden" id="txtIdProject" class="form-control">
-						<input type="hidden" id="txtIdProduct" class="form-control">
-						<input type="hidden" id="txtIdProjectChange" class="form-control">
-						<input type="hidden" id="txtSkuSerie" class="form-control">
+						<!-- <input type="hidden" id="txtIdProduct" class="form-control"> -->
+						<!-- <input type="hidden" id="txtIdProjectChange" class="form-control"> -->
+						<!-- <input type="hidden" id="txtSkuSerie" class="form-control"> -->
 						<input type="hidden" id="txtIdSerie" class="form-control">
 						<input type="hidden" id="txtIdStatus" class="form-control">
 						<input type="hidden" id="txtIdMaintain" class="form-control">

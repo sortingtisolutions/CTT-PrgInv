@@ -225,3 +225,104 @@ BEGIN
 	
 	RETURN max_content;
 END //
+
+
+DROP FUNCTION IF EXISTS `Fun_ProcessBackAccesories`;
+DELIMITER //
+CREATE FUNCTION Fun_ProcessBackAccesories(pverid INT(4), ppjtid INT(4)) RETURNS INT(2)
+BEGIN
+declare ssku 		CHAR(15);
+declare tcont 		INT DEFAULT 0;
+
+declare pjtdtid		INT;
+declare pjtvrid		INT;
+declare serid		INT;
+declare prodId		INT;
+declare dtstar		DATE;
+declare dtinic		DATE;
+declare dtfinl		DATE;
+
+declare dybase		INT;
+declare dytrip		INT;
+declare dytest		INT;
+declare ressettacc 	INT;
+
+
+declare dyinic		INT;
+declare dyfinl	 	INT;
+declare lconta	 	INT;
+declare asku 		CHAR(15);
+declare lmensa		CHAR(30);
+declare datos		CHAR(230);
+declare acount	 	INT;
+
+
+DECLARE cbase_content CURSOR FOR
+SELECT pd.pjtdt_id, pd.pjtdt_prod_sku, pd.ser_id, pd.prd_id, pd.pjtvr_id, 
+pj.pjt_date_start, pc.pjtcn_days_base, pc.pjtcn_days_trip, pc.pjtcn_days_test,
+SUBDATE(pj.pjt_date_start, (pc.pjtcn_days_trip+pc.pjtcn_days_test)) AS resdate,
+ADDDATE(pj.pjt_date_start, (pc.pjtcn_days_base+pc.pjtcn_days_trip)) AS sumtotal 
+FROM ctt_projects_detail AS pd
+INNER JOIN ctt_projects_content AS pc ON pc.pjtvr_id=pd.pjtvr_id
+INNER JOIN ctt_projects AS pj ON pj.pjt_id=pc.pjt_id
+WHERE pc.ver_id = pverid AND pd.ser_id>0 AND substr(pd.pjtdt_prod_sku,11,1)!='A';
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET @done=TRUE;
+
+	SET lmensa = "start";
+	set lconta=0;
+	set ressettacc=0;
+	
+	OPEN cbase_content;
+		loop1: LOOP
+	FETCH cbase_content INTO pjtdtid,ssku,serid,prodId,pjtvrid,dtstar,dybase,dytrip,dytest,dtinic,dtfinl;
+
+	IF @done THEN
+		SET lmensa = "END CONTENT";
+		INSERT INTO ctt_activity_log (log_event,emp_number,emp_fullname) VALUES(pverid,pverid,lmensa);
+		LEAVE loop1;
+	END IF;
+	
+	/* set dyinic = dytrip + dytest;
+	set dyfinl = dytrip + dybase;
+	set dtinic = date_SUB(dtstar . '-'. dyinic .' days'));
+    set dtfinl = date_ADD(dtstar . '-'. dyfinl .' days')); */
+	
+	SELECT count(ser_id) INTO acount FROM ctt_series WHERE prd_id_acc = serid;
+	
+	SET datos = CONCAT(ssku,' --- ', pjtdtid,' - ',serid,' - ',dtinic,' - ',dtfinl);
+	
+	IF acount>0 THEN
+		
+		INSERT INTO ctt_projects_detail(
+				pjtdt_belongs, pjtdt_prod_sku,ser_id, prd_id, pjtvr_id )
+		SELECT  pjtdtid , a.ser_sku, a.ser_id, a.prd_id, pjtvrid
+		FROM ctt_series a WHERE a.prd_id_acc=serid;
+		
+		UPDATE ctt_series SET ser_situation = 'EA', ser_stage = 'R',
+				ser_reserve_count = ser_reserve_count + 1
+		WHERE prd_id_acc = serid;
+		
+		INSERT INTO ctt_projects_periods 
+			(pjtpd_day_start, pjtpd_day_end, pjtdt_id, pjtdt_belongs ) 
+		SELECT dtinic , dtfinl , dt.pjtdt_id, dt.pjtdt_belongs
+		FROM ctt_projects_detail dt 
+		INNER JOIN ctt_series sr ON sr.ser_id=dt.ser_id
+		WHERE sr.prd_id_acc = serid;
+		
+		INSERT INTO ctt_actions (acc_description,acc_type,mod_id) 
+		VALUES(datos,serid,acount);
+		set ressettacc=0;
+		set lconta=lconta+1;
+		
+	ELSE 
+		SET lmensa = "ERROR";
+		INSERT INTO ctt_activity_log (log_event,emp_number,emp_fullname) 
+		VALUES(serid,pjtvrid,lmensa);
+	END IF;	
+	
+END LOOP loop1;
+CLOSE cbase_content;
+
+return lconta;
+END //

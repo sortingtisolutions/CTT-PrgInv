@@ -170,6 +170,7 @@
                         <th style="width:  70px">Serie</th>
                         <th style="width:  40px">Fecha Salida</th>
                         <th style="width:  40px">Fecha Ingreso</th>
+                        <th style="width:  40px">Nivel</th>
                     </tr>
                 </thead>
                 <tbody></tbody>

@@ -107,7 +107,7 @@ class AlmacenesModel extends Model
 			FROM ctt_products as prd
 			INNER JOIN ctt_series as se ON prd.prd_id=se.prd_id
 			INNER JOIN ctt_stores_products AS sp ON sp.ser_id = se.ser_id
-			where sp.str_id IN ($prodId) and se.ser_status=1
+			where sp.str_id IN ($prodId) and se.ser_status=1 AND sp.stp_quantity>0
 			group by prd.prd_sku, prd.prd_name, prd.prd_level
 			ORDER BY se.ser_sku;";
         return $this->db->query($qry);
@@ -119,7 +119,7 @@ class AlmacenesModel extends Model
         $qry = "SELECT sp.str_id, ifnull(sum(sp.stp_quantity),0) AS cantidad
 				FROM  ctt_stores_products AS sp
 				INNER JOIN ctt_series AS sr ON sr.ser_id = sp.ser_id
-				WHERE sp.str_id = $strId AND sr.pjtdt_id = 0;";
+				WHERE sp.str_id = $strId AND (sr.pjtdt_id = 0 OR ISNULL(sr.pjtdt_id)) AND sp.stp_quantity>0;";
         return $this->db->query($qry);
     }
 

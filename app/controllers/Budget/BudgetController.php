@@ -474,7 +474,7 @@ public function SaveLocations($request_params){
         $name = $group[2]; 
 
         $resultIns = $this->model->SaveBudget($request_params);
-        $resReorder = $this->reOrdenList($request_params);
+        //$resReorder = $this->reOrdenList($request_params);
 
         echo $resultIns . ' | ' . $name ;
     } 
@@ -652,36 +652,7 @@ public function ProcessProjectProduct($request_params)
 
             $ttlqty = $prdexp == '2'? $quanty: 1;
             $quanty = $prdexp == '2'? 1: $quanty;
-
-           /*  if ( $bdglvl == 'A' ){
-                echo 'Accesorio';
-                for ($i = 1; $i<=$quanty; $i++){   // VALIDA LA CANTIDAD A REALIZA POR CONCEPTO 
-
-                    $params = array(
-                        'pjetId' => $pjetId, 
-                        'prodId' => $prodId, 
-                        'dtinic' => $dtinic, 
-                        'dtfinl' => $dtfinl,
-                        'bdgsku' => $bdgsku,
-                        'bdgnme' => $bdgnme,
-                        'bdgprc' => $bdgprc,
-                        'bdglvl' => $bdglvl,
-                        'bdgqty' => $ttlqty,
-                        'dybase' => $dybase,
-                        'dycost' => $dycost,
-                        'dsbase' => $dsbase,
-                        'dytrip' => $dytrip,
-                        'dstrip' => $dstrip,
-                        'dytest' => $dytest,
-                        'dstest' => $dstest,
-                        'bdgIns' => $bdgIns,
-                        'versId' => $versId,
-                        'detlId' => 0,
-                    );
-                    $serie = $this->model->SettingSeries($params);
-                    // echo $serie . ' - ' ;
-                }
-            } else */ if ( $bdglvl == 'P' ){
+			if ( $bdglvl == 'P' ){
                 for ($i = 1; $i<=$quanty; $i++){
                     
                     $params = array(
@@ -818,34 +789,6 @@ public function ProcessProjectProduct($request_params)
     
     } 
 
-   /*  public function ProcessProjectProm($request_params)
-    {  
-        $params = $this->session->get('user');
-        $pjtId  = $this->model->PromoteProject($request_params);
-        $versin = $this->model->PromoteVersion($request_params);
-        $pjtcnt = $this->model->SaveProjectContent($request_params);
-
-        echo $pjtId ;
-    } */
-
-    /* public function GetAccesories($request_params)
-    {
-        $params =  $this->session->get('user');
-        $result = $this->model->GetAccesories($request_params);
-        $i = 0;
-        while($row = $result->fetch_assoc()){
-            $rowdata[$i] = $row;
-            $i++;
-        }
-        if ($i>0){
-            $res =  json_encode($rowdata,JSON_UNESCAPED_UNICODE);	
-        } else {
-            $res =  '[{"prd_id":"0"}]';	
-        }
-        echo $res;
-    }  */
-    
-
 // Lista los comentarios del proyecto
     public function listChangeProd($request_params)
     {
@@ -926,34 +869,7 @@ public function ProcessProjectProduct($request_params)
                         'detlId' => 0,
                     );
                     $detlId = $this->model->SettingSeries($params);
-                    $serId=$detlId;
-                    $paramacc = array(
-                        'prodId' => $prodId, 
-                        'serId' => $serId,
-                    );
-                    //echo 'VAR_ '. $prodId . ' - ' . $serId . 'END ';
-                    $accesory = $this->model->GetAccesories($paramacc); //SE TRAE LOS ACCESORIOS DEL PRODUCTO
-                    while($acc = $accesory->fetch_assoc()){
-                        $acceId =  $acc["ser_id"];
-                        /* $acceNm =  $acc["prd_name"];
-                        $accePc =  $acc["prd_price"]; */
-                        $accparams = array(
-                            'pjetId' => $pjetId, 
-                            'prodId' => $acceId, 
-                            'dtinic' => $dtinic, 
-                            'dtfinl' => $dtfinl,
-                            /* 'bdgnme' => $acceNm,
-                            'bdgprc' => $accePc, */
-                            'bdglvl' => 'A',
-                            /* 'bdgqty' => $ttlqty,
-                            'dybase' => $dybase,
-                            'dytrip' => $dytrip,
-                            'dytest' => $dytest,
-                            'versId' => $versId, */
-                            'detlId' => $detlId,
-                        );
-                        $serie = $this->model->SettingSeries($accparams);
-                    }
+                    
                 }
             } else if ( $bdglvl == 'K' ){  // AÑADIR LA CANTIDAD QUE SE REQUIERE POR CADA PRODUCTO DEL PAQUETE
                 for ($i = 1; $i<=$quanty; $i++){
@@ -980,35 +896,7 @@ public function ProcessProjectProduct($request_params)
                             'detlId' => 0,
                         );
                         $detlId = $this->model->SettingSeries($prodparams);
-                        $serId=$detlId;
-                        $paramaccpk = array(
-                            'prodId' => $pkpdId, 
-                            'serId' => $serId,
-                        );
-                        $accesory = $this->model->GetAccesories($paramaccpk);
-                        while($acc = $accesory->fetch_assoc()){
-    
-                            $acceId =  $acc["prd_id"];
-                            $acceNm =  $acc["prd_name"];
-                            $accePc =  $acc["prd_price"];
-    
-                            $accparams = array(
-                                'pjetId' => $pjetId, 
-                                'prodId' => $acceId, 
-                                'dtinic' => $dtinic, 
-                                'dtfinl' => $dtfinl,
-                                'bdgnme' => $acceNm,
-                                'bdgprc' => $accePc,
-                                'bdglvl' => 'A',
-                                'bdgqty' => $ttlqty,
-                                'dybase' => $dybase,
-                                'dytrip' => $dytrip,
-                                'dytest' => $dytest,
-                                'versId' => $versId,
-                                'detlId' => $detlId,
-                            );
-                            $serie = $this->model->SettingSeries($accparams);
-                        }
+                       
                     }
                 }
             }

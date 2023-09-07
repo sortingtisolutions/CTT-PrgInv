@@ -348,7 +348,7 @@
         </div>
 
 
-        <div class="productos__box-table" id="listProductsTable">
+        <div class="productos__box-table" id="listProductsTable" style="height: 80%;">
         <table>
             <thead>
                 <tr>

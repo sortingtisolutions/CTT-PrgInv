@@ -606,36 +606,20 @@ function updating_serie(acc) {
     var selector = put_save_subleting;
     fillField(pagina, par, tipo, selector);
 }
-function put_save_subleting(dt) {
-    //console.log(dt);
-    /*
-    let tr = $('#' + dt[0].pjt_id);
-    $($(tr[0].cells[2])).html(dt[0].pjtdt_prod_sku);
-    $($(tr[0].cells[3])).html(dt[0].sub_price);
-    $($(tr[0].cells[4])).html(dt[0].sup_business_name);
-    $($(tr[0].cells[5])).html(dt[0].str_name);
-    $($(tr[0].cells[6])).html(dt[0].sub_date_start);
-    $($(tr[0].cells[7])).html(dt[0].sub_date_end);
-    $($(tr[0].cells[8])).html(dt[0].sub_comments);
-
-    tr[0].attributes[5].value = dt[0].str_id;
-    tr[0].attributes[7].value = dt[0].sup_id;
-    tr[0].attributes[8].value = dt[0].cin_id;
-    tr[0].attributes[10].value = dt[0].ser_id;
-
-    tr.trigger('click');
-    tr.removeClass('selected');
-    $('.objet').addClass('objHidden');*/
-
-    $('#MoveResultModal').modal('show');
-    $('#btnHideModalM').on('click', function () {
-        window.location = 'Maintenance';
-    });
-    /*
-    $('#btnPrintReport').on('click', function () {
-        // $('.btn-print').trigger('click');
-        printInfoGetOut(folio);
-    });*/
+function put_save_subleting(dt) { 
+    console.log(dt);
+    get_products(dt);
+    /* $('#txtIdSerie').val(0);
+    $('#txtIdStatus').val(0);
+    $('#txtIdMaintain').val(0); */
+    $('#txtIdProject').val('');
+    $('#txtComments').val('');
+    $('#txtDays').val('');
+    $('#txtHrs').val('');
+    $('#txtPeriod').val('DD/MM/YYYY - DD/MM/YYYY');
+    $('#txtCost').val('0.00');
+    $('#txtStatus').val(0);
+    $('#txtMotivo').val(0);
 }
 
 /*  ++++++++ Valida los campos  +++++++ */

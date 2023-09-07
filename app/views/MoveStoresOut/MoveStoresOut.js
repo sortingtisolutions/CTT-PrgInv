@@ -186,6 +186,7 @@ function putStores(dt) {
         $('#boxProducts').parents('.list-finder').removeClass('hide-items');
         let id = $(this).val();
         idstr=id;
+        console.log(idstr);
         $(`#txtStoreTarget option`).css({display: 'block'});
         $(`#txtStoreTarget option[value="${id}"]`).css({display: 'none'});
        //console.log('ID Almacen', id);
@@ -493,7 +494,7 @@ function build_update_store_data(pr) {
         "prdid" :  "${el[3]}",
         "mov"   :  "${el[4]}"
     }]`;
-    // console.log('STORE-DATA',par);
+    console.log('STORE-DATA',par);
     update_store(par);
 }
 
@@ -650,7 +651,7 @@ function eventsAction() {
         .unbind('keyup')
         .on('keyup', function () {
             let text = $(this).val().toUpperCase();
-
+            console.log(text);
             sel_products(text);
         });
 }

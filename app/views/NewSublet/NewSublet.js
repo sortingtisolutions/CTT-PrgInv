@@ -996,7 +996,7 @@ function exchange_apply() {
         $('#txtNproduct').val(nextprod);
         par = `
         [{
-            "support"  : "${strid}|${idCategoria}|${idSubCategoria}|${supplier}|${prdId}|${quantity}|${prodSku}",
+            "support"  : "${strid}|${idCategoria}|${idSubCategoria}|${supplier}|${prdId}|${quantity}|${prodSku}|${serie}",
             "prdName"       : "${prdName}",
             "prdSku"       : "${sersku}",
             "price"        : "${price}",
@@ -1027,6 +1027,7 @@ function exchange_apply() {
             "prodqty"  : "${quantity}"
             
         }]`;
+
         fill_table(par);
     //}
     clean_selectors();
@@ -1188,9 +1189,10 @@ function read_exchange_table() {
             let id_supplier =$(this).attr('data-content').split('|')[3];
             let prdId = $(this).attr('data-content').split('|')[4];
             let prodsku = $(this).attr('data-content').split('|')[6];
+            let serie = $(this).attr('data-content').split('|')[7];
 
             let truk;
-            truk = `${prodsku}|${price}|${subPrice}|${subCollectiontime}|${subDeliveryTime}|${subLocation}|${nameProvider}|${nameProviderCtt}|${dateStart}|${dateEnd}|${store}|${id_cat}|${id_subc}|${id_supplier}|${comments}|${supplier}|${productName}|${prdId}|${prdQty}`;
+            truk = `${prodsku}|${price}|${subPrice}|${subCollectiontime}|${subDeliveryTime}|${subLocation}|${nameProvider}|${nameProviderCtt}|${dateStart}|${dateEnd}|${store}|${id_cat}|${id_subc}|${id_supplier}|${comments}|${supplier}|${productName}|${prdId}|${prdQty}|${serie}`;
             build_data_struct_new_prod(truk);
 
             /* if((prdId=='') && skuProducto!=prodsku){
@@ -1204,7 +1206,7 @@ function read_exchange_table() {
                 build_data_structure(truk);
                 
             } */
-            
+            console.log(truk);
             skuProducto = prodsku;
         });
    
@@ -1277,10 +1279,11 @@ function build_data_structure(pr) {
         "sup" :  "${el[15]}",
         "pnm" :  "${el[16]}",
         "prd" :  "${el[17]}",
-        "prdqty": "${el[18]}"
+        "prdqty": "${el[18]}",
+        "srsk": "${el[19]}"
     }]`;
-    //console.log(' Antes de Insertar', par);
-    save_exchange(par);
+    console.log(' Antes de Insertar', par);
+    //save_exchange(par);
 }
 function build_data_struct_new_prod(pr) {
     let el = pr.split('|');
@@ -1308,10 +1311,11 @@ function build_data_struct_new_prod(pr) {
         "sup" :  "${el[15]}",
         "pnm" :  "${el[16]}",
         "prd" :  "${el[17]}",
-        "prdqty": "${el[18]}"
+        "prdqty": "${el[18]}",
+        "srsk": "${el[19]}"
     }]`;
     console.log(' Antes de Insertar', par);
-    save_exchange2(par);
+   save_exchange2(par);
 }
 /* function build_update_store_data(pr) {
     let el = pr.split('|');

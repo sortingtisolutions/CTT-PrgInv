@@ -51,31 +51,43 @@ $conn->close();
 
 $header = '
     <header>
-        <div class="cornisa">
-            <table class="table-main" border="0">
-                <tr>
-                    <td class="box-logo side-color">
-                        <img class="img-logo" src="../../../app/assets/img/logo-blanco.jpg"  style="width:20mm; height:auto; margin: 3mm 2.5mm 0 2.5mm;"/>
-                    </td>
-
-                </tr>
-            </table>
-        </div>
+    <div class="cornisa">
+        <table class="table-main" border="0">
+            <tr>
+                <td class="box-logo side-color">
+                    <img class="img-logo" src="../../../app/assets/img/Logoctt_h.png"  style="width:37mm; height:13mm; margin: 3mm 2.5mm 0 2.5mm;"/>
+                </td>
+                <td class="name-report bline" style="witdh:77mm;  font-size: 13pt; text-align: right; padding-right: 30px; padding-top: 25px">
+                <p>
+                    <span class="number">Proyecto: '. $items[0]['pjt_name'] .'</span>
+                    <br><span style=" font-size: 8pt; color: #191970">Rango: '. $fechaIni. ' - '. $fechaFin  .'</span>
+                </p>
+                </td>
+            </tr>
+        </table>
+    </div>
     </header>';
 
            
 $html = '
 <section>
 <div class="container">
-    <div class="name-report">
-        <p>
-            <span class="number">Nombre de proyecto: '. $items[0]['pjt_name'].'</span>
-        
-        </p>
-    </div>
-
     
+<!-- <div style="height:20px;"></div>-->
+    <table class="table-data bline tline" style="text-align: center">
+        <tr>
+            <td>
+                <p class="tit-rep" style="font-size: 15pt; font-variant: small-caps; font-weight: bold; text-align: center">
+                INFORME DE MANTENIMIENTO
+                </p>
+            </td>
+     
+        </tr>
+       
+        
+    </table>
     <!-- End Datos de identificación  -->
+    
 ';
 
 
@@ -198,7 +210,7 @@ $mpdf->SetHTMLFooter($foot);
 $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 $mpdf->Output(
-    "Presupuesto.pdf",
+    "Mantenimiento.pdf",
     \Mpdf\Output\Destination::INLINE
 );
 
