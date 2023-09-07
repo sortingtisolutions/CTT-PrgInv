@@ -270,6 +270,7 @@ function activeIcons() {
         .on('click', function () {
             //let selected = $(this).parent().attr('id');
             let pjtcnid = $(this).attr('id');
+            // traer cantidad
             // console.log('Click Nivel 2', pjtcnid);
             if (pjtcnid > 0) {
                 getSeries(pjtcnid);
@@ -396,9 +397,11 @@ function activeIconsSerie() {
         let serprd = $(this).attr('id');
         // console.log("Para validar: "+serprd);
             checkSerie(serprd);
+            // si cantidad = 1
             $('.overlay_background').addClass('overlay_hide');
             $('.overlay_closer .title').html('');
             $('#tblSerie').DataTable().destroy;
+            // si es mayor a 1 no cierro
         });
         
 }

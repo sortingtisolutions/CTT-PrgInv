@@ -291,3 +291,16 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 AUTO_INCREMENT=19
 ;
+
+--************** 06 sep 23 *****************
+CREATE TABLE `prc_into_crontab` (
+	`prc_id` INT NULL COMMENT 'Id del proceso a ejecutar',
+	`pjt_id` INT NULL COMMENT 'Id del Proyecto',
+	`ver_id` INT NULL COMMENT 'Id del  version del documento',
+	`pjtvr_id` INT NULL COMMENT 'Id de la version del proyecto',
+	`date_register` DATETIME NULL DEFAULT CURRENT_TIMESTAMP() COMMENT 'Fecha y Hora actualizada',
+	`prc_status` INT NULL DEFAULT 0 COMMENT 'Status del Proceso'
+)
+COMMENT='Tabla que registra los procesos a ejecutar en crontab para accesorios'
+COLLATE='utf8mb4_general_ci'
+;

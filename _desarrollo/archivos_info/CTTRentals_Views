@@ -1,0 +1,136 @@
+/****************** VISTAS  ********************************/
+
+/* VISTA DE PRODUCTOS  */
+DROP VIEW ctt_vw_products;
+CREATE VIEW ctt_vw_products AS
+SELECT
+    CONCAT('<i class="fas fa-pen modif" data="', pr.prd_id,'"></i><i class="fas fa-times-circle kill" data="', pr.prd_id, '"></i> ') AS editable,
+    pr.prd_id AS producid, pr.prd_sku AS produsku, pr.prd_name AS prodname, pr.prd_price AS prodpric,
+    CONCAT('<span class="toLink">', prd_stock, '</span> ') AS prodqtty,
+    pr.prd_level AS prodtype, sv.srv_name AS typeserv, cn.cin_code AS prodcoin,
+    CONCAT('<i class="fas fa-file-invoice" id="', dc.doc_id, '"></i> ') AS prddocum,
+    sc.sbc_name AS subcateg, ct.cat_name AS categori, pr.prd_english_name AS prodengl, pr.prd_comments AS prdcomme,  ct.cat_id
+FROM ctt_products AS pr
+    INNER JOIN ctt_coins AS cn ON cn.cin_id = pr.cin_id
+    INNER JOIN ctt_services AS sv ON sv.srv_id = pr.srv_id AND sv.srv_status = '1'
+    INNER JOIN ctt_subcategories AS sc ON sc.sbc_id = pr.sbc_id AND sc.sbc_status = '1'
+    INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id AND ct.cat_status = '1'
+    LEFT JOIN ctt_products_documents AS dc ON dc.prd_id = pr.prd_id AND dc.dcp_source = 'P'
+WHERE pr.prd_status = 1 AND pr.prd_level IN ('A', 'P');
+
+
+
+/* VISTA DE PROJECTOS  */
+DROP VIEW ctt_vw_projects;
+CREATE VIEW ctt_vw_projects AS
+SELECT
+    CASE    WHEN cu.cus_fill <= 16 THEN concat('<span class="rng rng1">', cu.cus_fill,'%</span>')
+            WHEN cu.cus_fill > 16 AND cu.cus_fill <= 33 THEN concat( '<span class="rng rng2">', cu.cus_fill, '%</span>')
+            WHEN cu.cus_fill > 33 AND cu.cus_fill <= 50 THEN concat( '<span class="rng rng3">', cu.cus_fill, '%</span>')
+            WHEN cu.cus_fill > 50 AND cu.cus_fill <= 66 THEN concat( '<span class="rng rng4">', cu.cus_fill, '%</span>')
+            WHEN cu.cus_fill > 66 AND cu.cus_fill <= 90 THEN concat( '<span class="rng rng5">', cu.cus_fill, '%</span>')
+            WHEN cu.cus_fill > 99 THEN concat('<span class="rng rng6">', cu.cus_fill, '%</span>')
+    ELSE '' END AS custfill,
+    CASE    WHEN cu.cus_fill < 100 THEN concat('<i class="fas fa-address-card kill" id="', cu.cus_id, '"></i>')
+    ELSE '' END AS editable,
+    CASE    WHEN pj.pjt_status = '2' THEN concat('<i class="fas fa-toggle-off toggle-icon" title="liberado" id="', pj.pjt_id,'"></i>')
+            WHEN pj.pjt_status = '3' THEN concat('<i class="fas fa-toggle-on toggle-icon" title="bloqueado" id="', pj.pjt_id,'"></i>')
+            WHEN pj.pjt_status = '4' THEN concat('<i class="fas fa-toggle-off toggle-icon" title="liberado" id="', pj.pjt_id,'"></i>')
+    ELSE '' END AS smarlock,
+    pj.pjt_id AS projecid, pj.pjt_number AS projnumb, pj.pjt_name AS projname, pj.pjt_location AS projloca, date_format(pj.pjt_date_start, '%Y/%m/%d') AS dateinit,
+    date_format(pj.pjt_date_end, '%Y/%m/%d') AS datefnal, cu.cus_name AS custname
+FROM    ctt_projects AS pj
+    INNER JOIN ctt_customers_owner AS co ON co.cuo_id = pj.cuo_id
+    INNER JOIN ctt_customers as cu ON cu.cus_id = co.cus_id
+WHERE pj.pjt_status IN (2, 3, 4);
+
+
+
+/* VISTA DE SUBCATEGORIA  */
+DROP VIEW ctt_vw_subcategories;
+CREATE VIEW ctt_vw_subcategories AS
+SELECT CONCAT('<i class="fas fa-pen modif" data="', sc.sbc_id, '"></i><i class="fas fa-times-circle kill" data="', sc.sbc_id, '"></i>') AS editable,
+  sc.sbc_id AS subcatid, sc.sbc_code AS subccode, sc.sbc_name AS subcname, ct.cat_name AS catgname, ct.cat_id AS catgcode,
+  CONCAT('<span class="toLink">', IFNULL(SUM(sc.sbc_quantity), 0),'</span>') AS quantity, sbc_order_print AS ordprint
+FROM ctt_subcategories AS sc
+    INNER JOIN ctt_categories AS ct ON ct.cat_id = sc.cat_id
+WHERE sc.sbc_status = '1' AND ct.cat_status = '1'
+GROUP BY sc.sbc_id;
+
+
+
+/* VISTA DE SUBARRENDO  */
+DROP VIEW ctt_vw_subletting;
+CREATE VIEW ctt_vw_subletting AS
+SELECT
+  pr.cin_id, pr.doc_id, sr.emp_id, pc.pjt_id, pc.pjtcn_days_base, pc.pjtcn_days_test, pc.pjtcn_days_trip, pc.pjtcn_discount_base, pc.pjtcn_discount_test,
+  pc.pjtcn_discount_trip, pc.pjtcn_id, pc.pjtcn_insured, pc.pjtcn_prod_level, pc.pjtcn_prod_name, pc.pjtcn_prod_price, pc.pjtcn_prod_sku, pc.pjtcn_quantity, 
+  pc.pjtcn_status, pd.pjtdt_id, pd.pjtdt_prod_sku, pr.prd_code_provider, pr.prd_coin_type, pr.prd_comments, pr.prd_english_name, pr.prd_id, pr.prd_insured, 
+  pr.prd_level, pr.prd_lonely, pr.prd_model, pr.prd_name, pr.prd_name_provider, pr.prd_price, pr.prd_sku, pr.prd_status, pr.prd_visibility, sb.prj_id, pr.sbc_id, 
+  pd.ser_id, pr.srv_id, sr.str_id, sr.str_name, sr.str_status, sr.str_type, sb.sub_comments, sb.sub_date_end, sb.sub_date_start, sb.sub_id, sb.sub_price, 
+  sb.sub_quantity, sp.sup_business_name, sp.sup_comments, sp.sup_contact, sp.sup_credit, sp.sup_credit_days, sp.sup_email, sp.sup_id, sp.sup_money_advance, 
+  sp.sup_phone, sp.sup_phone_extension, sp.sup_rfc, sp.sup_status, sp.sup_trade_name, sp.sut_id, pc.ver_id,
+  ROW_NUMBER() OVER ( partition by pr.prd_sku ORDER BY pr.prd_name asc ) AS num
+FROM ctt_projects_content AS pc
+    INNER JOIN ctt_projects_detail AS pd ON pd.pjtvr_id = pc.pjtvr_id
+    INNER JOIN ctt_products AS pr ON pr.prd_id = pd.prd_id
+    LEFT JOIN ctt_subletting AS sb ON sb.ser_id = pd.ser_id
+    LEFT JOIN ctt_suppliers AS sp ON sp.sup_id = sb.sup_id
+    LEFT JOIN ctt_stores_products AS st ON st.ser_id = pd.ser_id
+    LEFT JOIN ctt_stores AS sr ON sr.str_id = st.str_id
+WHERE ( pd.pjtdt_prod_sku = 'Pendiente' OR LEFT(RIGHT(pd.pjtdt_prod_sku, 4), 1) = 'R');
+
+/* VISTA DE PROYETCOS EN SUBARRENDO  */
+DROP VIEW ctt_vw_project_subletting;
+CREATE VIEW ctt_vw_project_subletting AS
+SELECT num, pjt_id, prd_name, prd_sku, pjtdt_prod_sku, sub_price, sup_business_name, str_name, ser_id, DATE_FORMAT(sub_date_start, '%d/%m/%Y') AS sub_date_start, 
+    DATE_FORMAT(sub_date_end, '%d/%m/%Y') AS sub_date_end, sub_comments, pjtcn_days_base, pjtcn_days_trip, pjtcn_days_test, ifnull(prd_id, 0) AS prd_id, 
+    ifnull(sup_id, 0) AS sup_id, ifnull(str_id, 0) AS str_id, ifnull(sub_id, 0) AS sub_id, ifnull(sut_id, 0) AS sut_id, ifnull(pjtdt_id, 0) AS pjtdt_id, 
+    ifnull(pjtcn_id, 0) AS pjtcn_id, ifnull(cin_id, 0) AS cin_id
+FROM  ctt_vw_subletting;
+
+
+--******* 15-ago-23 ********************
+DROP VIEW ctt_vw_list_products;
+CREATE VIEW ctt_vw_list_products AS
+SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
+            pd.prd_insured, sb.sbc_name,cat_name,
+    CASE 
+        WHEN prd_level ='K' THEN 
+            (SELECT prd_stock
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        WHEN prd_level ='P' THEN 
+            (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        ELSE 
+            (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        END AS stock
+FROM ctt_products AS pd
+INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
+WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
+ORDER BY pd.prd_name;
+
+
+--******* 24-ago-23 ********************
+DROP VIEW ctt_vw_list_products2;
+CREATE VIEW ctt_vw_list_products2 AS 
+SELECT pd.prd_id, pd.prd_sku, pd.prd_name, pd.prd_price, pd.prd_level, 
+            pd.prd_insured, sb.sbc_name,cat_name,
+    CASE 
+        WHEN prd_level ='K' THEN 
+            (SELECT prd_stock
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        WHEN prd_level ='P' THEN 
+            (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        ELSE 
+            (SELECT prd_stock-fun_buscarentas(pd.prd_sku) 
+                    FROM ctt_products WHERE prd_id = pd.prd_id)
+        END AS stock, pd.sbc_id
+FROM ctt_products AS pd
+INNER JOIN ctt_subcategories AS sb ON sb.sbc_id = pd.sbc_id
+INNER JOIN ctt_categories AS ct ON ct.cat_id=sb.cat_id
+WHERE pd.prd_status = 1 AND pd.prd_visibility = 1 AND sb.cat_id NOT IN (16)
+ORDER BY pd.prd_name;
